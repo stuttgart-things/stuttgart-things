@@ -1,12 +1,11 @@
 name: linting
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-    
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      config-path:
+        required: true
+        type: string
+        
 jobs:
   linting:
     continue-on-error: true
