@@ -1,0 +1,10 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: bitnami
+  namespace: flux2
+spec:
+  interval: 5m0s
+  url: oci://registry-1.docker.io/bitnamicharts/nginx
+  type: "oci"
