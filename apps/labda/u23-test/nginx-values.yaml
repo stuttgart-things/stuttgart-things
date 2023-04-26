@@ -9,4 +9,4 @@ spec:
       version: 14.0.0
   values:
     service:
-      type: ClusterIP
+      type: NodePort
