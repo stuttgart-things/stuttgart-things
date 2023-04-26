@@ -1,0 +1,12 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: nginx
+  namespace: nginx
+spec:
+  chart:
+    spec:
+      version: 14.0.0
+  values:
+    service:
+      type: LoadBalancer
