@@ -12,7 +12,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: bitnami
-        namespace: nginx-flux
+        namespace: nginx
   interval: 50m
   install:
     remediation:
