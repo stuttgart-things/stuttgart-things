@@ -13,7 +13,7 @@ spec:
         kind: HelmRepository
         name: bitnami
         namespace: nginx
-  interval: 50m
+  interval: 10m
   install:
     remediation:
       retries: 3
