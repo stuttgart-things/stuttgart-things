@@ -11,7 +11,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: stuttgart-things
-  path: ./apps/apps/labda/u23-test
+  path: ./apps/labda/u23-test
   prune: true
   wait: true
   timeout: 5m0s
