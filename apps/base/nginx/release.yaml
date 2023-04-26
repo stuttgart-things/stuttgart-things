@@ -1,0 +1,24 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: nginx
+  namespace: nginx
+spec:
+  releaseName: nginx
+  chart:
+    spec:
+      chart: nginx
+      version: 14.0.0
+      sourceRef:
+        kind: HelmRepository
+        name: bitnami
+        namespace: nginx-flux
+  interval: 50m
+  install:
+    remediation:
+      retries: 3
+  # Default values
+  # https://artifacthub.io/packages/helm/bitnami/nginx?modal=values
+  values:
+    service:
+      type: NodePort
