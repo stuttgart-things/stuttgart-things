@@ -14,9 +14,6 @@ spec:
   path: ./infrastructure/controllers
   prune: true
   wait: true
-  postBuild:
-    substitute:
-      IP_RANGE: 10.100.136.220-10.100.136.221
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
