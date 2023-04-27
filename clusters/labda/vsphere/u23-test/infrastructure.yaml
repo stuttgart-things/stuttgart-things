@@ -16,4 +16,4 @@ spec:
   wait: true
   postBuild:
     substitute:
-      CLUSTER_NAME: "developer-enablement"
+      SECRET_HOST: "developer-enablement"
