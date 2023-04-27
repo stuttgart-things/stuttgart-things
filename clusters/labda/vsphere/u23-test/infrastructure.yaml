@@ -14,3 +14,6 @@ spec:
   path: ./infrastructure/controllers
   prune: true
   wait: true
+  postBuild:
+    substitute:
+      CLUSTER_NAME: "developer-enablement"
