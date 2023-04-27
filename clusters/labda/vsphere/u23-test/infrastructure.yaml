@@ -17,3 +17,4 @@ spec:
   postBuild:
     substitute:
       SECRET_HOST: "developer-enablement"
+      IP_RANGE: 10.100.136.220-10.100.136.221
