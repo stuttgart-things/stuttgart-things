@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-multi-env-files
+  namespace: default
+data:
+  allowed: '"true"'
