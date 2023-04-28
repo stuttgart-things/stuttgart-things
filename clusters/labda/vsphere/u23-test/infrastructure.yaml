@@ -17,26 +17,26 @@ spec:
   postBuild:
     substitute:
       IP_RANGE: 10.100.136.220-10.100.136.221
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: infra-configs
-  namespace: flux-system
-spec:
-  dependsOn:
-    - name: infra-controllers
-  interval: 1h
-  retryInterval: 1m
-  timeout: 5m
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: ./infrastructure/configuration
-  prune: true
-  postBuild:
-    substitute:
-      IP_RANGE: 10.100.136.220-10.100.136.221
     substituteFrom:
       - kind: Secret
         name: developer-enablement-secret
+# ---
+# apiVersion: kustomize.toolkit.fluxcd.io/v1
+# kind: Kustomization
+# metadata:
+#   name: infra-configs
+#   namespace: flux-system
+# spec:
+#   dependsOn:
+#     - name: infra-controllers
+#   interval: 1h
+#   retryInterval: 1m
+#   timeout: 5m
+#   sourceRef:
+#     kind: GitRepository
+#     name: flux-system
+#   path: ./infrastructure/configuration
+#   prune: true
+#   postBuild:
+#     substitute:
+#       IP_RANGE: 10.100.136.220-10.100.136.221
