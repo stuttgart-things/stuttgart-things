@@ -35,9 +35,3 @@ spec:
   type: oci
   interval: 1h
   url: oci://eu.gcr.io/stuttgart-things
----
-
-
-      #   chart: sthings-cluster
-      # repoURL:
-      # targetRevision: 0.2.5
