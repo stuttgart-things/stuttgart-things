@@ -20,7 +20,6 @@ spec:
     substituteFrom:
       - kind: Secret
         name: vault
-# ---
 # apiVersion: kustomize.toolkit.fluxcd.io/v1
 # kind: Kustomization
 # metadata:
