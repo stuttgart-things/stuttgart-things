@@ -37,3 +37,6 @@ spec:
   postBuild:
     substitute:
       IP_RANGE: 10.100.136.220-10.100.136.221
+    substituteFrom:
+      - kind: Secret
+        name: developer-enablement-secret
