@@ -63,6 +63,9 @@ metadata:
   namespace: cert-manager
 spec:
   interval: 20m
+  dependsOn:
+    - name: metallb
+      namespace: metallb-system
   chart:
     spec:
       chart: cert-manager
