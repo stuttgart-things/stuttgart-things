@@ -34,7 +34,7 @@ metadata:
 spec:
   type: oci
   interval: 1h
-  url: eu.gcr.io/stuttgart-things
+  url: oci://eu.gcr.io/stuttgart-things
 ---
 
 
