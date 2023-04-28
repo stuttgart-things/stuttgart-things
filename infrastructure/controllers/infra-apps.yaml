@@ -138,7 +138,7 @@ spec:
           vault:
             path: pki/sign/${VAULT_PKI_PATH}
             server: ${VAULT_ADDR}
-            caBundle: ${VAULT_CA_BUNDLE}
+            caBundle: dfds
             auth:
               appRole:
                 path: approle
