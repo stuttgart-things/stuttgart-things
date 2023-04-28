@@ -11,7 +11,7 @@ kind: Namespace
 metadata:
   name: ingress-nginx
   labels:
-    toolkit.fluxcd.io/tenant: ${AZURE_SUBSCRIPTION_ID}
+    toolkit.fluxcd.io/tenant: sthings-team
 ---
 apiVersion: v1
 kind: Namespace
