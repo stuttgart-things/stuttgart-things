@@ -33,7 +33,7 @@ metadata:
   namespace: flux-system
 spec:
   type: oci
-  interval: 24h
+  interval: 1h
   url: eu.gcr.io/stuttgart-things
 
 
