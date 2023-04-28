@@ -45,8 +45,7 @@ metadata:
 spec:
   interval: 30m
   dependsOn:
-    - kind: HelmRelease
-      name: metallb
+    - name: metallb
       namespace: metallb-system
   chart:
     spec:
