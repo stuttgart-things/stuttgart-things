@@ -25,3 +25,19 @@ metadata:
 spec:
   interval: 24h
   url: https://kubernetes.github.io/ingress-nginx
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: stuttgart-things
+  namespace: flux-system
+spec:
+  type: oci
+  interval: 24h
+  url: eu.gcr.io/stuttgart-things
+
+
+
+      #   chart: sthings-cluster
+      # repoURL:
+      # targetRevision: 0.2.5

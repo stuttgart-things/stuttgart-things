@@ -18,6 +18,28 @@ spec:
   values:
     installCRDs: true
 ---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  labels:
+    argocd.argoproj.io/instance: metallb-configuration-app
+  name: pool-advertisement
+  namespace: metallb-system
+spec:
+  ipAddressPools:
+    - ip-pool
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  labels:
+    argocd.argoproj.io/instance: metallb-configuration-app
+  name: ip-pool
+  namespace: metallb-system
+spec:
+  addresses:
+    - ${IP_RANGE}
+---
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
