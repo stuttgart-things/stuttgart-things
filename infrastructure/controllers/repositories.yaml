@@ -35,3 +35,12 @@ spec:
   type: oci
   interval: 1h
   url: oci://eu.gcr.io/stuttgart-things
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: longhorn
+  namespace: flux-system
+spec:
+  interval: 24h
+  url: https://charts.longhorn.io

@@ -146,3 +146,28 @@ spec:
                 secretRef:
                   name: cert-manager-vault-approle
                   key: approle
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: longhorn
+  namespace: longhorn-system
+spec:
+  interval: 20m
+  chart:
+    spec:
+      chart: longhorn
+      version: "1.4.x"
+      sourceRef:
+        kind: HelmRepository
+        name: longhorn
+        namespace: flux-system
+      interval: 12h
+  values:
+    installCRDs: true
+    persistence:
+      defaultClass: true
+      defaultFsType: ext4
+      defaultMkfsParams: ""
+      defaultDataLocality: disabled
+      reclaimPolicy: Delete
