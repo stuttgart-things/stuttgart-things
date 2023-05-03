@@ -6,12 +6,12 @@ metadata:
   namespace: flux-system
 spec:
   interval: 10m0s
-  # dependsOn:
-  #   - name: infra-configs
+  dependsOn:
+    - name: infra-controllers
   sourceRef:
     kind: GitRepository
     name: stuttgart-things
-  path: ./apps/labda/u23-test
+  path: ./apps/argocd
   prune: true
   wait: true
   timeout: 5m0s
