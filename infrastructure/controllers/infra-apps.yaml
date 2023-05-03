@@ -6,9 +6,6 @@ metadata:
   namespace: metallb-system
 spec:
   interval: 30m
-  dependsOn:
-    - name: metallb-configuration
-      namespace: metallb-system
   chart:
     spec:
       chart: metallb
@@ -28,6 +25,9 @@ metadata:
   namespace: metallb-system
 spec:
   interval: 30m
+  dependsOn:
+    - name: metallb
+      namespace: metallb-system
   chart:
     spec:
       chart: sthings-cluster
@@ -88,9 +88,6 @@ metadata:
   namespace: cert-manager
 spec:
   interval: 20m
-  dependsOn:
-    - name: metallb
-      namespace: metallb-system
   chart:
     spec:
       chart: cert-manager
