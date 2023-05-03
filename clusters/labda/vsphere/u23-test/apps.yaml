@@ -6,11 +6,13 @@ metadata:
   namespace: flux-system
 spec:
   interval: 10m0s
+  retryInterval: 1m
+  timeout: 5m
   dependsOn:
     - name: infra-controllers
   sourceRef:
     kind: GitRepository
-    name: stuttgart-things
+    name: flux-system
   path: ./apps/argocd
   prune: true
   wait: true
