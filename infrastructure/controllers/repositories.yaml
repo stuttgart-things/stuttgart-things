@@ -8,6 +8,8 @@ spec:
   interval: 30m0s
   url: https://github.com/fluxcd/flux2
   timeout: 60s
+  ref:
+    branch: master
 ---
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: HelmRepository
