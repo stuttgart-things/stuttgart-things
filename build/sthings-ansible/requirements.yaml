@@ -1,0 +1,20 @@
+---
+collections:
+  - name: community.crypto
+    version: 2.10.0
+  - name: community.general
+    version: 6.2.0
+  - name: ansible.posix
+    version: 1.5.1
+  - name: community.kubernetes
+    version: 2.0.1
+
+roles:
+  - src: https://artifacts.tiab.labda.sva.de/roles/install-upgrade-rke.tar.gz
+    name: install-upgrade-rke
+  - src: https://artifacts.tiab.labda.sva.de/roles/prepare-rancher-node.tar.gz
+    name: prepare-rancher-node
+  - src: https://artifacts.tiab.labda.sva.de/roles/download-install-binary.tar.gz
+    name: download-install-binary
+  - src: https://artifacts.tiab.labda.sva.de/roles/install-requirements.tar.gz
+    name: install-requirements
