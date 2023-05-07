@@ -5,5 +5,8 @@ dependencies:
 - name: redis
   repository: https://charts.bitnami.com/bitnami
   version: 17.10.2
-digest: sha256:43309861ae79cc4e235a39118a4c65397574f28d0db42aa8d0864d8764826274
-generated: "2023-05-07T05:46:10.235485907Z"
+- name: yacht-application-server
+  repository: oci://eu.gcr.io/stuttgart-things
+  version: 0.3.6
+digest: sha256:03e6bb2a24ef1ec23556533fa9d73af1be38e9767d4721ae5d48c6786c93a935
+generated: "2023-05-07T19:21:30.91009507Z"
