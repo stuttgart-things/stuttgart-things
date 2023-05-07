@@ -11,3 +11,6 @@ redis:
     persistence:
       enabled: false
       medium: ""
+
+yacht-application-server:
+  enabled: false
