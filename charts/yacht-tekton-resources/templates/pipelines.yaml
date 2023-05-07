@@ -1,0 +1,12 @@
+{{ if .Values.enablePipelines }}
+{{- $envVar := . -}}
+{{- range $pipelineName, $pipelineTpl := .Values.pipelines -}}
+{{ include "sthings-k8s-toolkit.pipeline" (list $envVar $pipelineName $pipelineTpl) }}
+{{ end -}}
+{{ end -}}
+{{ if .Values.enableExtraPipelines }}
+{{- $envVar := . -}}
+{{- range $taskName, $taskTpl := .Values.extraPipelines -}}
+{{ include "sthings-k8s-toolkit.task" (list $envVar $taskName $taskTpl) }}
+{{ end -}}
+{{ end }}

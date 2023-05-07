@@ -1,0 +1,12 @@
+{{ if .Values.enableTasks }}
+{{- $envVar := . -}}
+{{- range $taskName, $taskTpl := .Values.tasks -}}
+{{ include "sthings-k8s-toolkit.task" (list $envVar $taskName $taskTpl) }}
+{{ end -}}
+{{ end }}
+{{ if .Values.enableExtraTasks }}
+{{- $envVar := . -}}
+{{- range $taskName, $taskTpl := .Values.extraTasks -}}
+{{ include "sthings-k8s-toolkit.task" (list $envVar $taskName $taskTpl) }}
+{{ end -}}
+{{ end }}

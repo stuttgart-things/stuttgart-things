@@ -1,0 +1,6 @@
+{{ if .Values.enableRuns }}
+{{- $envVar := . -}}
+{{- range $runName, $runTpl := .Values.runs -}}
+{{ include "sthings-k8s-toolkit.run" (list $envVar $runName $runTpl) }}
+{{ end -}}
+{{ end }}

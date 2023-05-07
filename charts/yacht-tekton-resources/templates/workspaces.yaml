@@ -1,0 +1,6 @@
+{{ if .Values.enableWorkspaces }}
+{{- $envVar := . -}}
+{{- range $pvcName, $pvcTpl := .Values.workspaces -}}
+{{ include "sthings-k8s-toolkit.pvc" (list $envVar $pvcName $pvcTpl) }}
+{{ end -}}
+{{ end }}
