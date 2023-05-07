@@ -1,0 +1,13 @@
+---
+redis:
+  enabled: true
+  master:
+    persistence:
+      enabled: false
+      medium: ""
+
+  replica:
+    replicaCount: 2
+    persistence:
+      enabled: false
+      medium: ""

@@ -1,0 +1,24 @@
+---
+apiVersion: v2
+name: yacht
+description: Yacht umbrella chart
+type: application
+version: 0.0.47
+appVersion: "0.0.47"
+
+dependencies:
+# - name: sthings-tekton
+#   version: 0.4.3-helm
+#   repository: oci://scr.tiab.labda.sva.de/sthings-tekton
+#   condition: sthings-tekton.enabled
+- name: sthings-helm-toolkit
+  version: 2.4.27
+  repository: oci://eu.gcr.io/stuttgart-things
+- name: redis
+  repository: https://charts.bitnami.com/bitnami
+  version: 17.10.2
+  condition: redis.enabled
+
+maintainers:
+  - name: Patrick Hermann
+    email: patrick.hermann@sva.de
