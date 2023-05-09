@@ -9,7 +9,7 @@ spec:
   url: https://github.com/fluxcd/flux2
   timeout: 60s
   ref:
-    branch: master
+    branch: main
 ---
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: HelmRepository
