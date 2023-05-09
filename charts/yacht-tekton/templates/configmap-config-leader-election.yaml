@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-leader-election
+  namespace: {{ .Values.pipelinesNamespace }}
+  labels:
+    app.kubernetes.io/instance: default
+    app.kubernetes.io/part-of: tekton-pipelines
+data:
+  _example: |
+    lease-duration: "60s"
+    renew-deadline: "40s"
+    retry-period: "10s"
+    buckets: "1"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-leader-election
+  namespace: {{ .Values.resolversNamespace }}
+  labels:
+    app.kubernetes.io/component: resolvers
+    app.kubernetes.io/instance: default
+    app.kubernetes.io/part-of: tekton-pipelines
+data:
+  _example: |
+    lease-duration: "60s"
+    renew-deadline: "40s"
+    retry-period: "10s"
+    buckets: "1"

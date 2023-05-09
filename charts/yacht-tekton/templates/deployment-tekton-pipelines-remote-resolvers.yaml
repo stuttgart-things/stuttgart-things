@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tekton-pipelines-remote-resolvers
+  namespace: {{ .Values.resolversNamespace }}
+  labels:
+    app.kubernetes.io/name: resolvers
+    app.kubernetes.io/component: resolvers
+    app.kubernetes.io/instance: default
+    app.kubernetes.io/version: "v0.47.0"
+    app.kubernetes.io/part-of: tekton-pipelines
+    pipeline.tekton.dev/release: "v0.47.0"
+    version: "v0.47.0"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: resolvers
+      app.kubernetes.io/component: resolvers
+      app.kubernetes.io/instance: default
+      app.kubernetes.io/part-of: tekton-pipelines
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: resolvers
+        app.kubernetes.io/component: resolvers
+        app.kubernetes.io/instance: default
+        app.kubernetes.io/version: "v0.47.0"
+        app.kubernetes.io/part-of: tekton-pipelines
+        # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
+        pipeline.tekton.dev/release: "v0.47.0"
+        # labels below are related to istio and should not be used for resource lookup
+        app: tekton-pipelines-resolvers
+        version: "v0.47.0"
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: resolvers
+                    app.kubernetes.io/component: resolvers
+                    app.kubernetes.io/instance: default
+                    app.kubernetes.io/part-of: tekton-pipelines
+                topologyKey: kubernetes.io/hostname
+              weight: 100
+      serviceAccountName: tekton-pipelines-resolvers
+      containers:
+        - name: controller
+          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/resolvers:v0.47.0@sha256:179051f8000aab6702bd0b60a36e0768c7435a66543006a8851d569bbc7937c4
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 1000m
+              memory: 4Gi
+          ports:
+            - name: metrics
+              containerPort: 9090
+          env:
+            - name: SYSTEM_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            # If you are changing these names, you will also need to update
+            # the controller's Role in 200-role.yaml to include the new
+            # values in the "configmaps" "get" rule.
+            - name: CONFIG_LOGGING_NAME
+              value: config-logging
+            - name: CONFIG_OBSERVABILITY_NAME
+              value: config-observability
+            - name: CONFIG_FEATURE_FLAGS_NAME
+              value: feature-flags
+            - name: CONFIG_LEADERELECTION_NAME
+              value: config-leader-election
+            - name: METRICS_DOMAIN
+              value: tekton.dev/resolution
+            # Override this env var to set a private hub api endpoint
+            - name: ARTIFACT_HUB_API
+              value: "https://artifacthub.io/"
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            capabilities:
+              drop:
+                - "ALL"
+            seccompProfile:
+              type: RuntimeDefault
