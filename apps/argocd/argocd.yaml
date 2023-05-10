@@ -52,11 +52,11 @@ spec:
     nameOverride: ""
     repoServer:
       image:
-        repository: eu.gcr.io/stuttgart-things/sthings-argocd
-        tag: v2.7.1
+        repository: ${IMAGE_REPOSITORY}
+        tag: ${IMAGE_TAG}
     server:
       image:
-        repository: eu.gcr.io/stuttgart-things/sthings-argocd
-        tag: v2.7.1
+        repository: ${IMAGE_REPOSITORY}
+        tag: ${IMAGE_TAG}
     service:
-      type: LoadBalancer
+      type: ${SERVICE_TYPE}
