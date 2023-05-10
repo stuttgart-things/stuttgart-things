@@ -17,6 +17,19 @@ spec:
       interval: 12h
   values:
     customresources:
+      secrets:
+        argocd-vault-plugin-credentials:
+          name: argocd-vault-plugin-credentials
+          namespace: argocd
+          secretKVs:
+            AVP_TYPE: vault
+            TYPE: vault
+            AVP_AUTH_TYPE: approle
+            AVP_VAULT_ADDR: ${VAULT_ADDR}
+            VAULT_ADDR: ${VAULT_ADDR}
+            VAULT_NAMESPACE: ${VAULT_NAMESPACE}
+            AVP_ROLE_ID: ${VAULT_ROLE_ID}
+            AVP_SECRET_ID: ${VAULT_SECRET_ID}
       argocd-certificate:
         apiVersion: cert-manager.io/v1
         kind: Certificate
