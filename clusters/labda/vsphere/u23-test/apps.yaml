@@ -16,3 +16,11 @@ spec:
   prune: true
   wait: true
   timeout: 5m0s
+  postBuild:
+    substitute:
+      IMAGE_REPOSITORY: eu.gcr.io/stuttgart-things/sthings-argocd
+      IMAGE_TAG: v2.7.1
+      SERVICE_TYPE: LoadBalancer
+    # substituteFrom:
+    #   - kind: Secret
+    #     name: vault
