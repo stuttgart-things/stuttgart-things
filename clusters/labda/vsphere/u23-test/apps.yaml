@@ -21,15 +21,15 @@ spec:
       IMAGE_REPOSITORY: eu.gcr.io/stuttgart-things/sthings-argocd
       IMAGE_TAG: v2.7.1
       SERVICE_TYPE: LoadBalancer
-  # patches:
-  #   - patch: |
-  #       - op: add
-  #         path: /data/hello
-  #         value: sthings
-  #     target:
-  #       kind: ConfigMap
-  #       name: argocd-cm
-  #       namespace: argocd
+  patches:
+    - patch: |
+        - op: add
+          path: /data/hello
+          value: sthings
+      target:
+        kind: ConfigMap
+        name: argocd-cm
+        namespace: argocd
 
     # substituteFrom:
     #   - kind: Secret
