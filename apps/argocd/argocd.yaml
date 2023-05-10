@@ -58,3 +58,5 @@ spec:
       image:
         repository: eu.gcr.io/stuttgart-things/sthings-argocd
         tag: v2.7.1
+    service:
+      type: LoadBalancer
