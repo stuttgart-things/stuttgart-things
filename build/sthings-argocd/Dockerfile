@@ -1,16 +1,30 @@
-ARG FROM_TAG=3-alpine3.17
-FROM python:${FROM_TAG}
-
+FROM quay.io/argoproj/argocd:v2.7.1
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 
-RUN apk update && apk add ca-certificates && rm -rf /var/cache/apk/* \
-  mkdir /usr/local/share/ca-certificates/extra
+ARG ARGOCD_VAULT_PLUGIN_VERSION=1.14.0
+
+# Switch to root for the ability to perform install
+USER root
+
+# Install tools needed for your repo-server to retrieve & decrypt secrets, render manifests
+RUN apt-get update && \
+    apt-get install -y \
+        curl \
+        wget \
+        awscli \
+        gpg && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# Install the AVP plugin (as root so we can copy to /usr/local/bin)
+RUN curl -L -o argocd-vault-plugin https://github.com/IBM/argocd-vault-plugin/releases/download/v${ARGOCD_VAULT_PLUGIN_VERSION}/argocd-vault-plugin_${ARGOCD_VAULT_PLUGIN_VERSION}_linux_amd64
+RUN chmod +x argocd-vault-plugin
+RUN mv argocd-vault-plugin /usr/local/bin
 
 # VAULT LEGACY
 ARG VAULT_URL_LABUL=https://vault.labul.sva.de:8200
 ARG VAULT_URL_LABDA=https://vault.tiab.labda.sva.de:8200
 ARG VAULT_URL_SSC=https://vault.sthings.tiab.ssc.sva.de:8200
-
 # VAULT INGRESS
 ARG VAULT_URL_LABUL_VSPHERE=https://vault-vsphere.labul.sva.de:8200
 ARG VAULT_URL_LABUL_PVE=https://vault-pve.labul.sva.de:8200
@@ -26,28 +40,5 @@ RUN rm -rf /usr/local/share/ca-certificates/* \
     && wget -O /usr/local/share/ca-certificates/labul-pve.crt ${VAULT_URL_LABUL_PVE}/v1/pki/ca/pem --no-check-certificate \
     && update-ca-certificates
 
-# base os packages
-RUN apk add --no-cache build-base sudo libc6-compat openssl libffi-dev openssl-dev openssh sshpass tar unzip jq curl ca-certificates wget \
-   && apk add --update bash \
-       && rm -rf /var/cache/apk/*
-
-# install glibc
-RUN wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub \
-   && wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.35-r0/glibc-2.35-r0.apk \
-       && apk add --force-overwrite glibc-2.35-r0.apk \
-       && rm -rf glibc-2.35-r0.apk
-
-# CREATE NON ROOT USER
-ENV USER_ID=65532
-ENV GROUP_ID=65532
-ENV USER_NAME=nonroot
-ENV GROUP_NAME=nonroot
-ENV USER_HOME=/home/nonroot
-
-RUN addgroup -g $GROUP_ID $GROUP_NAME && \
-     adduser --shell /bin/bash --disabled-password -h ${USER_HOME} \
-     --uid $USER_ID --ingroup $GROUP_NAME $USER_NAME
-
-RUN mkdir -p /home/nonroot
-
-RUN chown -R ${USER_ID}:${GROUP_ID} ${USER_HOME}
+# Switch back to non-root user
+USER 999
