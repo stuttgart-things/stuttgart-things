@@ -1,16 +1,36 @@
 ---
-redis:
+tektonPipelines:
   enabled: true
-  master:
-    persistence:
-      enabled: false
-      medium: ""
+  pipelinesNamespace: tekton-pipelines
+  resolversNamespace: tekton-pipelines-resolvers
 
-  replica:
-    replicaCount: 2
-    persistence:
-      enabled: false
-      medium: ""
+  # namespaces:
+  #   tekton-pipelines:
+  #     name: tekton-pipelines
+  #     labels:
+  #       app: tekton-pipelines
+  #     annotations:
+  #       "helm.sh/hook": "pre-install"
+  #   tekton-pipelines-resolvers:
+  #     name: tekton-pipelines-resolvers
+  #     labels:
+  #       app: tekton-pipelines-resolvers
+  #     annotations:
+  #       "helm.sh/hook": "pre-install"
 
-yacht-application-server:
-  enabled: false
+
+# redis:
+#   enabled: true
+#   master:
+#     persistence:
+#       enabled: false
+#       medium: ""
+
+#   replica:
+#     replicaCount: 2
+#     persistence:
+#       enabled: false
+#       medium: ""
+
+# yacht-application-server:
+#   enabled: false

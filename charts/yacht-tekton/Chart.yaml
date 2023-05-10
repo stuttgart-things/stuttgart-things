@@ -3,7 +3,7 @@ apiVersion: v2
 name: yacht-tekton-base
 description: yacht-tekton-base
 type: application
-version: "v0.47.0"
+version: v0.47.0
 appVersion: "v0.47.0"
 
 dependencies:
