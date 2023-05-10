@@ -60,3 +60,6 @@ spec:
         tag: ${IMAGE_TAG}
       service:
         type: ${SERVICE_TYPE}
+      configs:
+        cm:
+          create: false
