@@ -58,5 +58,5 @@ spec:
       image:
         repository: ${IMAGE_REPOSITORY}
         tag: ${IMAGE_TAG}
-    service:
-      type: ${SERVICE_TYPE}
+      service:
+        type: ${SERVICE_TYPE}

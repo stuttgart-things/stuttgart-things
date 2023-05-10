@@ -14,10 +14,10 @@ dependencies:
 # - name: sthings-helm-toolkit
 #   version: 2.4.27
 #   repository: oci://eu.gcr.io/stuttgart-things
-# - name: redis
-#   repository: https://charts.bitnami.com/bitnami
-#   version: 17.10.2
-#   condition: redis.enabled
+- name: redis
+  repository: https://charts.bitnami.com/bitnami
+  version: 17.10.2
+  condition: redis.enabled
 # - name: yacht-application-server
 #   version: 0.3.6
 #   repository: oci://eu.gcr.io/stuttgart-things

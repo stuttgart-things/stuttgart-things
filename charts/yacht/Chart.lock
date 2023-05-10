@@ -2,8 +2,8 @@ dependencies:
 - name: yacht-tekton-base
   repository: oci://eu.gcr.io/stuttgart-things
   version: v0.47.0
-- name: sthings-helm-toolkit
-  repository: oci://eu.gcr.io/stuttgart-things
-  version: 2.4.27
-digest: sha256:d913d305e97f826c358169b3f5cff0f4fa1925f1d319dd4891f2ae8961d34ebb
-generated: "2023-05-10T07:27:40.774169898Z"
+- name: redis
+  repository: https://charts.bitnami.com/bitnami
+  version: 17.10.2
+digest: sha256:bfd707c02322c753dd08bbd9e1467ad3cf5401ee8192d0bf86a75e55be5a238f
+generated: "2023-05-10T08:01:31.121619018Z"
