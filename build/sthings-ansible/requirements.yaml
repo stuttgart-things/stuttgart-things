@@ -21,3 +21,5 @@ roles:
   - src: https://github.com/stuttgart-things/deploy-configure-rke.git
     scm: git
     version: rke2r2-1.26.0
+  - src: https://github.com/stuttgart-things/manage-filesystem.git
+    scm: git

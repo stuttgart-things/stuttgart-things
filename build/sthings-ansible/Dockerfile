@@ -9,6 +9,8 @@ LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 ARG ANSIBLE_VERSION=7.5.0
 
 # OS + PIP PACKAGES
+RUN apk add --no-cache git
+
 RUN /usr/local/bin/python -m pip install --upgrade pip && pip install pip --upgrade
 RUN pip install --no-cache-dir cryptography hvac "hvac[parser]" jmespath openshift kubernetes boto3 passlib kubernetes-validate proxmoxer netaddr setuptools requests pyVim PyVmomi python.dateutil dnspython pycrypto pywinrm pytz ansible==${ANSIBLE_VERSION}
 
