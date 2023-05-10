@@ -23,3 +23,5 @@ roles:
     version: rke2r2-1.26.0
   - src: https://github.com/stuttgart-things/manage-filesystem.git
     scm: git
+  - src: https://github.com/stuttgart-things/install-configure-powerdns.git
+    scm: git

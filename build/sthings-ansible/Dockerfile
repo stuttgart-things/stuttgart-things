@@ -16,4 +16,5 @@ RUN pip install --no-cache-dir cryptography hvac "hvac[parser]" jmespath openshi
 
 ADD requirements.yaml /home/nonroot/requirements.yaml
 
+USER 65532
 RUN ansible-galaxy install -r /home/nonroot/requirements.yaml
