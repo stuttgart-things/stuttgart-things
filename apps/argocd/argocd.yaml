@@ -62,6 +62,9 @@ spec:
         namespace: flux-system
       interval: 12h
   values:
+    configs:
+      cm:
+        create: false
     nameOverride: ""
     repoServer:
       image:
@@ -73,18 +76,16 @@ spec:
         tag: ${IMAGE_TAG}
       service:
         type: ${SERVICE_TYPE}
-    ingress:
-      enabled: true
-      annotations:
-        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-        nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-      ingressClassName: nginx
-      hosts:
-        - ${INGRESS_HOST}
-      tls:
-        - secretName: ${INGRESS_SECRET_NAME}
-          hosts:
-            - ${INGRESS_HOST}
-    configs:
-      cm:
-        create: false
+      ingress:
+        enabled: true
+        annotations:
+          nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+          nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+        ingressClassName: nginx
+        hosts:
+          - ${INGRESS_HOST}
+        tls:
+          - secretName: ${INGRESS_SECRET_NAME}
+            hosts:
+              - ${INGRESS_HOST}
+
