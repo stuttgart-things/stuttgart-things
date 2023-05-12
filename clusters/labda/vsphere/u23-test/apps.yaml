@@ -20,7 +20,9 @@ spec:
     substitute:
       IMAGE_REPOSITORY: eu.gcr.io/stuttgart-things/sthings-argocd
       IMAGE_TAG: v2.7.1
-      SERVICE_TYPE: LoadBalancer
+      SERVICE_TYPE: ClusterIP
+      INGRESS_HOST: argocd.mgmt.4sthings.tiab.ssc.sva.de 
+      INGRESS_SECRET_NAME: argocd-ingress-ingress-tls
     substituteFrom:
       - kind: Secret
         name: vault
