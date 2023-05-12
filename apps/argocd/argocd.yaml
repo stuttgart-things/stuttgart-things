@@ -37,13 +37,13 @@ spec:
           name: argocd-ingress
           namespace: argocd
         spec:
-          commonName: argocd.mgmt.4sthings.tiab.ssc.sva.de
+          commonName: ${INGRESS_HOST}
           dnsNames:
-          - argocd.mgmt.4sthings.tiab.ssc.sva.de
+          - ${INGRESS_HOST}
           issuerRef:
             name: cluster-issuer-approle
             kind: ClusterIssuer
-          secretName: argocd-ingress-ingress-tls
+          secretName: ${INGRESS_SECRET_NAME}
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
@@ -73,6 +73,18 @@ spec:
         tag: ${IMAGE_TAG}
       service:
         type: ${SERVICE_TYPE}
+    ingress:
+      enabled: true
+      annotations:
+        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+        nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+      ingressClassName: nginx
+      hosts:
+        - ${INGRESS_HOST}
+      tls:
+        - secretName: ${INGRESS_SECRET_NAME}
+          hosts:
+            - ${INGRESS_HOST}
     configs:
       cm:
         create: false
