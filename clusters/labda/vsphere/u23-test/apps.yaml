@@ -21,8 +21,27 @@ spec:
       IMAGE_REPOSITORY: eu.gcr.io/stuttgart-things/sthings-argocd
       IMAGE_TAG: v2.7.1
       SERVICE_TYPE: ClusterIP
-      INGRESS_HOST: argocd.mgmt.4sthings.tiab.ssc.sva.de 
+      INGRESS_HOST: argocd.mgmt.4sthings.tiab.ssc.sva.de
       INGRESS_SECRET_NAME: argocd-ingress-ingress-tls
     substituteFrom:
       - kind: Secret
         name: vault
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: nfs-csi
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  retryInterval: 1m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./apps/nfs-csi
+  prune: true
+  wait: true
+  timeout: 5m0s
+  postBuild:
+    substitute:
+      NFS_SERVER_FQDN: sthings-pve1.labul.sva.de
