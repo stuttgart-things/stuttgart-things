@@ -1,9 +1,4 @@
 ---
-tektonPipelines:
-  enabled: true
-  pipelinesNamespace: tekton-pipelines
-  resolversNamespace: tekton-pipelines-resolvers
-
 redis:
   enabled: true
   master:
@@ -15,6 +10,17 @@ redis:
     persistence:
       enabled: false
       medium: ""
+
+tektonPipelines:
+  enabled: true
+  pipelinesNamespace: tekton-pipelines
+  resolversNamespace: tekton-pipelines-resolvers
+
+tektonResources:
+  enabled: true
+  enableTasks: false
+
+
 
   # namespaces:
   #   tekton-pipelines:

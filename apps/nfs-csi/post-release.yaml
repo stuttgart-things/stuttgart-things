@@ -24,7 +24,7 @@ spec:
         name: nfs3-csi
         provisioner: nfs.csi.k8s.io
         parameters:
-          server: sthings-pve1.labul.sva.de
+          server: ${NFS_SERVER_FQDN}
           share: /
           mountPermissions: "0777"
         backendType: ontap-nas
@@ -36,7 +36,7 @@ spec:
         name: nfs4-csi
         provisioner: nfs.csi.k8s.io
         parameters:
-          server: sthings-pve1.labul.sva.de
+          server: ${NFS_SERVER_FQDN}
           share: /
           mountPermissions: "0777"
         backendType: ontap-nas

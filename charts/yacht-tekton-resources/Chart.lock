@@ -1,6 +1,6 @@
 dependencies:
-- name: sthings-k8s-toolkit
-  repository: file:///home/sthings/projects/stuttgart-things/gitops/apps/sthings-k8s-toolkit
-  version: 2.4.6
-digest: sha256:aaa25d20509f4e16f799a94ad36c9942a86735ab12ccc3ea7519c11be31dce5c
-generated: "2023-02-20T10:44:51.372155239Z"
+- name: sthings-helm-toolkit
+  repository: oci://eu.gcr.io/stuttgart-things
+  version: 2.4.27
+digest: sha256:6f604bd243399ad6074140ae4a7e355d744e98437ae1fd01d15824b2e2eeee69
+generated: "2023-05-13T07:49:39.052429137Z"

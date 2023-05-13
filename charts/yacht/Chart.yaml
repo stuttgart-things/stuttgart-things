@@ -11,6 +11,10 @@ dependencies:
   version: v0.47.0
   repository: oci://eu.gcr.io/stuttgart-things
   condition: tektonPipelines.enabled
+- name: yacht-tekton-resources
+  version: v0.47.0
+  repository: oci://eu.gcr.io/stuttgart-things
+  condition: tektonResources.enabled
 # - name: sthings-helm-toolkit
 #   version: 2.4.27
 #   repository: oci://eu.gcr.io/stuttgart-things

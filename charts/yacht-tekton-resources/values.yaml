@@ -43,32 +43,32 @@ enableExtraPipelines: false
 #       dockerconfig:
 #         workspaceKind: secret
 #         workspaceRef: scr-labda
-runs:
-  packagesthings-cluster-0.2.1HelmChart:
-    name: helm-sthings-cluster-0.2.1
-    addRandomDateToRunName: false
-    namespace: yacht-tekton
-    kind: Pipeline
-    ref: package-publish-helmchart
-    params:
-      git-repo-url: git@codehub.sva.de:Lab/stuttgart-things/stuttgart-things.git
-      git-revision: master
-      gitWorkspaceSubdirectory: /helm/sthings-cluster
-      helm-chart-path: gitops/apps
-      helm-chart-name: sthings-cluster
-      helm-chart-tag: 0.2.1
-      registry: scr.tiab.labda.sva.de
-      working-image: scr.tiab.labda.sva.de/sthings-k8s-workspace/sthings-k8s-workspace:281126-1644
-    workspaces:
-      ssh-credentials:
-        workspaceKind: secret
-        workspaceRef: codehub-ssh
-      source:
-        workspaceKind: persistentVolumeClaim
-        workspaceRef: tekton-kaniko-workspace
-      dockerconfig:
-        workspaceKind: secret
-        workspaceRef: scr-labda
+# runs:
+#   packagesthings-cluster-0.2.1HelmChart:
+#     name: helm-sthings-cluster-0.2.1
+#     addRandomDateToRunName: false
+#     namespace: yacht-tekton
+#     kind: Pipeline
+#     ref: package-publish-helmchart
+#     params:
+#       git-repo-url: git@codehub.sva.de:Lab/stuttgart-things/stuttgart-things.git
+#       git-revision: master
+#       gitWorkspaceSubdirectory: /helm/sthings-cluster
+#       helm-chart-path: gitops/apps
+#       helm-chart-name: sthings-cluster
+#       helm-chart-tag: 0.2.1
+#       registry: scr.tiab.labda.sva.de
+#       working-image: scr.tiab.labda.sva.de/sthings-k8s-workspace/sthings-k8s-workspace:281126-1644
+#     workspaces:
+#       ssh-credentials:
+#         workspaceKind: secret
+#         workspaceRef: codehub-ssh
+#       source:
+#         workspaceKind: persistentVolumeClaim
+#         workspaceRef: tekton-kaniko-workspace
+#       dockerconfig:
+#         workspaceKind: secret
+#         workspaceRef: scr-labda
 
 workspaces:
  sthings-kaniko-workspace:
@@ -304,8 +304,6 @@ pipelines:
           $(tasks.status):
             operator: in
             values: Failed
-
-
 
 tasks:
   create-publish-helm-chart:
