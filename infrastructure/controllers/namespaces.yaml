@@ -19,10 +19,10 @@ metadata:
   name: metallb-system
   labels:
     toolkit.fluxcd.io/tenant: sthings-team
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: longhorn-system
-  labels:
-    toolkit.fluxcd.io/tenant: sthings-team
+# ---
+# apiVersion: v1
+# kind: Namespace
+# metadata:
+#   name: longhorn-system
+#   labels:
+#     toolkit.fluxcd.io/tenant: sthings-team
