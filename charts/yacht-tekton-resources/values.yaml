@@ -11,7 +11,6 @@ enableRegistryCredentials: false
 enableWorkspaces: false
 enablePipelines: false
 enableRuns: false
-enableWorkspaces: false
 enableExtraPipelines: false
 #extraPipelines: {}
 
