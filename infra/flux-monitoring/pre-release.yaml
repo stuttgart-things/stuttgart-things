@@ -22,7 +22,7 @@ spec:
         kind: Certificate
         metadata:
           name: grafana-ingress
-          namespace: argocd
+          namespace: monitoring
         spec:
           commonName: ${INGRESS_HOST}
           dnsNames:
@@ -31,6 +31,21 @@ spec:
             name: cluster-issuer-approle
             kind: ClusterIssuer
           secretName: ${INGRESS_SECRET_NAME}
+      ingress:
+        sthings-slides:
+          name: sthings-slides
+          namespace: sthings-slides
+          ingressClassName: nginx
+          annotations:
+            nginx.ingress.kubernetes.io/ssl-redirect: "false"
+          service:
+            name: sthings-slides-service
+            port: 8000
+            path: /
+            pathType: ImplementationSpecific
+          hostname: sthings-slides
+          clusterName: silence2
+          domain: sthings.tiab.ssc.sva.de
 
 
 # apiVersion: networking.k8s.io/v1
