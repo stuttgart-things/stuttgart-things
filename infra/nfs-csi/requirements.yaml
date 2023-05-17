@@ -1,15 +1,9 @@
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: longhorn-system
-  labels:
-    toolkit.fluxcd.io/tenant: sthings-team
+
 ---
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: HelmRepository
 metadata:
-  name: stuttgart-things
+  name: csi-driver-nfs
   namespace: kube-system
 spec:
   interval: 24h
