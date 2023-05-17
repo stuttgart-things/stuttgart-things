@@ -34,3 +34,22 @@ spec:
     name: flux-monitoring
   timeout: 5m
   wait: true
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: monitoring-config
+  namespace: flux-system
+spec:
+  force: false
+  interval: 1h
+  path: ./manifests/monitoring/monitoring-config
+  prune: true
+  retryInterval: 1m
+  dependsOn:
+    - name: kube-prometheus-stack
+  sourceRef:
+    kind: GitRepository
+    name: flux-monitoring
+  timeout: 5m
+  wait: true
