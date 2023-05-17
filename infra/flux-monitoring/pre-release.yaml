@@ -5,7 +5,7 @@ metadata:
   name: loki-configuration
   namespace: monitoring
 spec:
-  interval: 30m
+  interval: 40m
   chart:
     spec:
       chart: sthings-cluster
