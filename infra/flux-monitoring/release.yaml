@@ -16,9 +16,21 @@ spec:
   timeout: 5m
   wait: true
 ---
-apiVersion: v1
-kind: Namespace
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
 metadata:
-  name: monitoring
-  labels:
-    toolkit.fluxcd.io/tenant: sthings-team
+  name: loki-stack
+  namespace: flux-system
+spec:
+  force: false
+  interval: 1h
+  path: ./manifests/monitoring/loki-stack
+  prune: true
+  retryInterval: 1m
+  dependsOn:
+    - name: kube-prometheus-stack
+  sourceRef:
+    kind: GitRepository
+    name: flux-monitoring
+  timeout: 5m
+  wait: true

@@ -19,3 +19,10 @@ spec:
   type: oci
   interval: 1h
   url: oci://eu.gcr.io/stuttgart-things
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: monitoring
+  labels:
+    toolkit.fluxcd.io/tenant: sthings-team
