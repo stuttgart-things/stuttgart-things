@@ -1,0 +1,15 @@
+apiVersion: notification.toolkit.fluxcd.io/v1beta2
+kind: Alert
+metadata:
+  name: upstream-labda-vsphere
+  namespace: flux-system
+spec:
+  summary: upstream labda vsphere
+  providerRef:
+    name: msteams
+  eventSeverity: info
+  eventSources:
+    - kind: GitRepository
+      name: '*'
+    - kind: Kustomization
+      name: '*'
