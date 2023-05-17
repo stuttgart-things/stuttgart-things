@@ -32,9 +32,9 @@ spec:
             kind: ClusterIssuer
           secretName: ${INGRESS_SECRET_NAME}
       # ingress:
-      #   sthings-slides:
-      #     name: sthings-slides
-      #     namespace: sthings-slides
+      #   loki-ingress:
+      #     name: loki-stack-grafana
+      #     namespace: monitoring
       #     ingressClassName: nginx
       #     annotations:
       #       nginx.ingress.kubernetes.io/ssl-redirect: "false"
