@@ -1,7 +1,8 @@
+---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: flux-monitoring
+  name: kube-prometheus-stack
   namespace: flux-system
 spec:
   force: false
@@ -14,3 +15,4 @@ spec:
     name: flux-monitoring
   timeout: 5m
   wait: true
+---
