@@ -32,21 +32,19 @@ spec:
             name: cluster-issuer-approle
             kind: ClusterIssuer
           secretName: ${INGRESS_SECRET_NAME}
-      # ingress:
-      #   loki-ingress:
-      #     name: loki-stack-grafana
-      #     namespace: monitoring
-      #     ingressClassName: nginx
-      #     annotations:
-      #       nginx.ingress.kubernetes.io/ssl-redirect: "false"
-      #     service:
-      #       name: sthings-slides-service
-      #       port: 8000
-      #       path: /
-      #       pathType: ImplementationSpecific
-      #     hostname: sthings-slides
-      #     clusterName: silence2
-      #     domain: sthings.tiab.ssc.sva.de
+      ingress:
+        grafana-ingress:
+          name: loki-stack-grafana
+          namespace: monitoring
+          ingressClassName: nginx
+          service:
+            name: kube-prometheus-stack-grafana
+            port: 80
+            path: /
+            pathType: Prefix
+          hostname: grafana
+          clusterName: upstream
+          domain: 4sthings.tiab.ssc.sva.de
 
 
 # apiVersion: networking.k8s.io/v1
