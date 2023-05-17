@@ -106,3 +106,7 @@ spec:
   path: ./infra/flux-monitoring
   prune: true
   wait: true
+  postBuild:
+    substitute:
+      INGRESS_HOST: grafana.mgmt.4sthings.tiab.ssc.sva.de
+      INGRESS_SECRET_NAME: grafana-ingress-ingress-tls

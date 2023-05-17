@@ -1,0 +1,57 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: argocd-configuration
+  namespace: argocd
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: sthings-cluster
+      version: 0.2.5
+      sourceRef:
+        kind: HelmRepository
+        name: stuttgart-things
+        namespace: argocd
+      interval: 12h
+  values:
+    customresources:
+      grafana-certificate:
+        apiVersion: cert-manager.io/v1
+        kind: Certificate
+        metadata:
+          name: grafana-ingress
+          namespace: argocd
+        spec:
+          commonName: ${INGRESS_HOST}
+          dnsNames:
+          - ${INGRESS_HOST}
+          issuerRef:
+            name: cluster-issuer-approle
+            kind: ClusterIssuer
+          secretName: ${INGRESS_SECRET_NAME}
+
+
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: loki-stack-grafana
+#   namespace: loki-stack
+# spec:
+#   ingressClassName: nginx
+#   rules:
+#   - host: loki.dev2.sthings-pve.labul.sva.de
+#     http:
+#       paths:
+#       - backend:
+#           service:
+#             name: loki-stack-grafana
+#             port:
+#               number: 80
+#         path: /
+#         pathType: Prefix
+#   tls:
+#   - hosts:
+#     - loki.dev2.sthings-pve.labul.sva.de
+#     secretName: loki-application-server-ingress-tls
