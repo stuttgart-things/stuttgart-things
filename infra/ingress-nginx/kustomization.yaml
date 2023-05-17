@@ -4,4 +4,3 @@ kind: Kustomization
 resources:
   - requirements.yaml
   - release.yaml
-  - post-release.yaml
