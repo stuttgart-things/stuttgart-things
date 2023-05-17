@@ -1,10 +1,22 @@
+---
+apiVersion: notification.toolkit.fluxcd.io/v1beta2
+kind: Provider
+metadata:
+  name: slack
+  namespace: flux-system
+spec:
+  type: msteams
+  channel: stuttgart-things
+  secretRef:
+    name: msteams
+---
 apiVersion: notification.toolkit.fluxcd.io/v1beta2
 kind: Alert
 metadata:
   name: upstream-labda-vsphere
   namespace: flux-system
 spec:
-  summary: upstream labda vsphere
+  summary: upstream cluster labda vsphere
   providerRef:
     name: msteams
   eventSeverity: info
