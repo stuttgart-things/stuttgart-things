@@ -8,4 +8,5 @@ spec:
   interval: 5m0s
   url: https://github.com/fluxcd/flux2
   ref:
-    branch: master
+    branch: main
+---
