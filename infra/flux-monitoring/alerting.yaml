@@ -16,7 +16,7 @@ metadata:
   name: upstream-labda-vsphere
   namespace: flux-system
 spec:
-  summary: upstream cluster labda vsphere
+  summary: upstream-cluster-labda-vsphere
   providerRef:
     name: msteams
   eventSeverity: info

@@ -1,0 +1,4 @@
+{{- $envVar := . -}}
+{{- range $customResourceName, $customResourceTpl := .Values.customresources -}}
+{{ include "sthings-helm-toolkit.customResource" (list $envVar $customResourceName $customResourceTpl) }}
+{{ end -}}

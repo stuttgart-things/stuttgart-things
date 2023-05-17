@@ -1,0 +1,4 @@
+{{- $envVar := . -}}
+{{- range $storageClassName, $storageClassTpl := .Values.scs -}}
+{{ include "sthings-helm-toolkit.storageclass" (list $envVar $storageClassName $storageClassTpl) }}
+{{ end -}}

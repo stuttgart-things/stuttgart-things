@@ -1,0 +1,4 @@
+{{- $envVar := . -}}
+{{- range $namespaceName, $namespaceTpl := .Values.namespaces -}}
+{{ include "sthings-helm-toolkit.namespace" (list $envVar $namespaceName $namespaceTpl) }}
+{{ end -}}

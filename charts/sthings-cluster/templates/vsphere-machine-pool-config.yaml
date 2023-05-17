@@ -1,0 +1,4 @@
+{{- $envVar := . -}}
+{{- range $vsphereConfigNameName, $vsphereConfigNameTpl := .Values.vsphereMachinePools -}}
+{{ include "sthings-helm-toolkit.vsphere-machine-pool-config" (list $envVar $vsphereConfigNameName $vsphereConfigNameTpl) }}
+{{ end -}}

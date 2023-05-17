@@ -1,0 +1,4 @@
+{{- $envVar := . -}}
+{{- range $applicationName, $applicationTpl := .Values.applications -}}
+{{ include "sthings-helm-toolkit.argocd-application" (list $envVar $applicationName $applicationTpl) }}
+{{ end -}}

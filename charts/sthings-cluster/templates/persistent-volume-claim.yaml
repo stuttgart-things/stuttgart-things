@@ -1,0 +1,4 @@
+{{- $envVar := . -}}
+{{- range $pvcName, $pvcTpl := .Values.pvcs -}}
+{{ include "sthings-helm-toolkit.pvc" (list $envVar $pvcName $pvcTpl) }}
+{{ end -}}

@@ -1,0 +1,4 @@
+{{- $envVar := . -}}
+{{- range $rancherClusterConfig, $rancherCluster := .Values.downstreamClusters -}}
+{{ include "sthings-helm-toolkit.rancher-cluster-config" (list $envVar $rancherClusterConfig $rancherCluster) }}
+{{ end -}}

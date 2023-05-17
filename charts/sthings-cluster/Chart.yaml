@@ -1,0 +1,14 @@
+---
+apiVersion: v2
+version: 0.3.1
+appVersion: "0.3.1"
+dependencies:
+- name: sthings-helm-toolkit
+  version: 2.4.27
+  repository: oci://eu.gcr.io/stuttgart-things
+description: A Helm chart for Kubernetes
+name: sthings-cluster
+type: application
+maintainers:
+  - name: Patrick Hermann
+    email: patrick.hermann@sva.de

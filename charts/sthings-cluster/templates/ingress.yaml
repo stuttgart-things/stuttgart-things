@@ -1,0 +1,4 @@
+{{- $envVar := . -}}
+{{- range $ingress, $ingressDefinition := .Values.ingress -}}
+{{ include "sthings-helm-toolkit.ingress" (list $envVar $ingress $ingressDefinition) }}
+{{ end -}}
