@@ -1,5 +1,4 @@
 ---
-# HelmRelease
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
@@ -47,3 +46,4 @@ spec:
         tls:
           host: ${INGRESS_HOSTNAME}
           secretName: ${INGRESS_HOSTNAME}-ingress-tls
+# admin/prom-operator
