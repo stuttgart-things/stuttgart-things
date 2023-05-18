@@ -47,7 +47,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./apps/argocd
+  path: ./apps/argo-cd
   prune: true
   wait: true
   timeout: 5m0s
