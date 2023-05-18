@@ -47,27 +47,3 @@ spec:
         tls:
           host: ${INGRESS_HOSTNAME}
           secretName: ${INGRESS_HOSTNAME}-ingress-tls
-
-
-# apiVersion: networking.k8s.io/v1
-# kind: Ingress
-# metadata:
-#   name: loki-stack-grafana
-#   namespace: loki-stack
-# spec:
-#   ingressClassName: nginx
-#   rules:
-#   - host: loki.dev2.sthings-pve.labul.sva.de
-#     http:
-#       paths:
-#       - backend:
-#           service:
-#             name: loki-stack-grafana
-#             port:
-#               number: 80
-#         path: /
-#         pathType: Prefix
-#   tls:
-#   - hosts:
-#     - loki.dev2.sthings-pve.labul.sva.de
-#     secretName: loki-application-server-ingress-tls
