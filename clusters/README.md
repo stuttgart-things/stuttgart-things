@@ -2,7 +2,7 @@
 
 ## CREATE SECRETS FOR POST RENDER
 
-<details><summary>EXAMPLE SECRET STRUCTURE</summary>
+<details><summary>SECRET MANIFESTS</summary>
 
 ```
 apiVersion: v1
@@ -33,12 +33,16 @@ stringData:
 
 ## ADD CLUSTER / INSTALL FLUX ON CLUSTER
 
-```
-# create/edit cluster config clusters/<LAB>/<CLOUD>/<CLUSTERNAME>
+* Create/edit cluster config clusters/<LAB>/<CLOUD>/<CLUSTERNAME>
 
+* Export Token + kubeconfig
+```
 export GITHUB_TOKEN=<TOKENDATA>
 export KUBECONFIG=<PATH-TO-KUBECONFIGFILE>
+```
 
+* Bootstrap cluster
+```
 flux bootstrap github --owner=stuttgart-things --repository=stuttgart-things --path=clusters/<LAB>/<CLOUD>/<CLUSTERNAME>
 ```
 
