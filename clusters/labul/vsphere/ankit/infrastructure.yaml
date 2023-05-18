@@ -112,3 +112,7 @@ spec:
       INGRESS_DOMAIN: upstream.4sthings.tiab.ssc.sva.de
       CLUSTER_NAME: ankit-test
       CLUSTER_DESCRIPTION: upstream-cluster-labda-vsphere
+  postBuild:
+    substituteFrom:
+      - kind: Secret
+        name: github

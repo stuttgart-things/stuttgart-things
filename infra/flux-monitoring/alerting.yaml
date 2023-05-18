@@ -25,3 +25,29 @@ spec:
       name: '*'
     - kind: Kustomization
       name: '*'
+---
+apiVersion: notification.toolkit.fluxcd.io/v1beta2
+kind: Provider
+metadata:
+  name: flux-system
+  namespace: flux-system
+spec:
+  type: github
+  address: ${GIT_REPO_URL}
+  secretRef:
+    name: github
+---
+apiVersion: notification.toolkit.fluxcd.io/v1beta2
+kind: Alert
+metadata:
+  name: stuttgart-things
+  namespace: flux-system
+spec:
+  providerRef:
+    name: flux-system
+  eventSeverity: info
+  eventSources:
+    - kind: GitRepository
+      name: '*'
+    - kind: Kustomization
+      name: '*'

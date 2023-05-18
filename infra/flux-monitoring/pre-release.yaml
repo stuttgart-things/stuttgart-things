@@ -47,3 +47,19 @@ spec:
           host: ${INGRESS_HOSTNAME}
           secretName: ${INGRESS_HOSTNAME}-ingress-tls
 # admin/prom-operator
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: msteams
+  namespace: flux-system
+data:
+  address: ${MS_TEAMS_URL}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: github
+  namespace: flux-system
+data:
+  token: ${GITHUB_TOKEN}

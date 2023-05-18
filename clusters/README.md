@@ -22,18 +22,20 @@ stringData:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: msteams
+  name: github
   namespace: flux-system
 type: Opaque
 stringData:
-  address: <MS-TEAMS-CHANNELURL>
+  MS_TEAMS_URL: https://365sva.webhook.office.com/webhookb2/2f14a9f8-4736-46dd-9c8c-31547ec37180@0a65cb1e-37d5-41ff-980a-647d9d0e4f0b/IncomingWebhook/623bf0daab3d404baea9858fc689cf02/dc3a27ed-396c-40b7-a9b2-f1a2b6b44efe
+  GITHUB_TOKEN: <GITHUB_TOKEN>
+  PRIVATE_KEY: <PRIVATE_KEY_BASE64>
 ```
 
 </details>
 
 ## ADD CLUSTER / INSTALL FLUX ON CLUSTER
 
-* Create/edit cluster config 
+* Create/edit cluster config
   ```
   clusters/<LAB>/<CLOUD>/<CLUSTERNAME>
   ```
