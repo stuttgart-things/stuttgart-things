@@ -64,7 +64,7 @@ stringData:
   address: <MS-TEAMS-CHANNELURL>
 ```
 
-</details>
+    </details>
 
 
 * Export Token + kubeconfig
