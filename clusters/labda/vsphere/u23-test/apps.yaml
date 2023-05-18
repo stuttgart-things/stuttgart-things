@@ -79,5 +79,7 @@ spec:
   wait: true
   postBuild:
     substitute:
-      INGRESS_HOST: grafana.mgmt.4sthings.tiab.ssc.sva.de
-      INGRESS_SECRET_NAME: grafana-ingress-ingress-tls
+      INGRESS_HOSTNAME: grafana
+      INGRESS_DOMAIN: mgmt.4sthings.tiab.ssc.sva.de
+      CLUSTER_NAME: u23-test
+      CLUSTER_DESCRIPTION: upstream-cluster-labda-vsphere

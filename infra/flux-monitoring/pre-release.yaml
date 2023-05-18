@@ -25,13 +25,13 @@ spec:
           name: grafana-ingress
           namespace: monitoring
         spec:
-          commonName: ${INGRESS_HOST}
+          commonName: ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}
           dnsNames:
-          - ${INGRESS_HOST}
+          - ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}
           issuerRef:
             name: cluster-issuer-approle
             kind: ClusterIssuer
-          secretName: ${INGRESS_SECRET_NAME}
+          secretName: ${INGRESS_HOSTNAME}-ingress-tls
     ingress:
       grafana-ingress:
         name: loki-stack-grafana
@@ -42,9 +42,9 @@ spec:
           port: 80
           path: /
           pathType: Prefix
-        hostname: grafana
-        clusterName: upstream
-        domain: 4sthings.tiab.ssc.sva.de
+        hostname: ${INGRESS_HOSTNAME}
+        domain: ${INGRESS_DOMAIN}
+
 
 
 # apiVersion: networking.k8s.io/v1

@@ -13,10 +13,10 @@ spec:
 apiVersion: notification.toolkit.fluxcd.io/v1beta2
 kind: Alert
 metadata:
-  name: upstream-labda-vsphere
+  name: ${CLUSTER_NAME}
   namespace: flux-system
 spec:
-  summary: upstream-cluster-labda-vsphere
+  summary: ${CLUSTER_DESCRIPTION}
   providerRef:
     name: msteams
   eventSeverity: info
