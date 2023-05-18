@@ -44,7 +44,9 @@ spec:
           pathType: Prefix
         hostname: ${INGRESS_HOSTNAME}
         domain: ${INGRESS_DOMAIN}
-
+        tls:
+          host: ${INGRESS_HOSTNAME}
+          secretName: ${INGRESS_HOSTNAME}-ingress-tls
 
 
 # apiVersion: networking.k8s.io/v1
