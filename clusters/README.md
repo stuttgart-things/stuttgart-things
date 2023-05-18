@@ -3,6 +3,7 @@
 ## CREATE SECRETS FOR POST RENDER
 
 <details><summary>EXAMPLE SECRET STRUCTURE</summary>
+
 ```
 apiVersion: v1
 kind: Secret
@@ -27,6 +28,7 @@ type: Opaque
 stringData:
   address: <MS-TEAMS-CHANNELURL>
 ```
+
 </details>
 
 ## ADD CLUSTER / INSTALL FLUX ON CLUSTER
