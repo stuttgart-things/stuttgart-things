@@ -41,6 +41,9 @@ releases:
   namespace: yacht
   chart: stuttgart-things/yacht-application-server
   version: 0.3.7
-
+  values:
+    - ingress:
+        yacht-application-server:
+          domain: mgmt.4sthings.tiab.ssc.sva.de
   # needs:
   #   - yacht/redis
