@@ -89,7 +89,7 @@ spec:
   postBuild:
     substituteFrom:
       - kind: Secret
-        name: vault
+        name: vault-flux-secrets
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -114,4 +114,4 @@ spec:
       CLUSTER_DESCRIPTION: upstream-cluster-labda-vsphere
     substituteFrom:
       - kind: Secret
-        name: github
+        name: github-flux-secrets

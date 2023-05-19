@@ -60,9 +60,9 @@ spec:
       INGRESS_SECRET_NAME: argocd-ingress-ingress-tls
     substituteFrom:
       - kind: Secret
-        name: vault
+        name: vault-flux-secrets
       - kind: Secret
-        name: scr
+        name: scr-flux-secrets
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
