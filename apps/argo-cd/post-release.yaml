@@ -29,20 +29,6 @@ stringData:
 ---
 apiVersion: v1
 kind: Secret
-data:
-  type: Z2l0
-  url: aHR0cHM6Ly9jb2RlaHViLnN2YS5kZS9MYWIvc3R1dHRnYXJ0LXRoaW5ncy9zdHV0dGdhcnQtdGhpbmdzLmdpdA==
-metadata:
-  annotations:
-    managed-by: argocd.argoproj.io
-  labels:
-    argocd.argoproj.io/secret-type: repository
-  name: repo-171146349
-  namespace: {{ call .GetGlobalValue "namespace" }}
-type: Opaque
----
-apiVersion: v1
-kind: Secret
 metadata:
   name: stuttgart-things
   namespace: argocd
