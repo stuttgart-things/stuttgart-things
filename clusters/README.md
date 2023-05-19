@@ -26,9 +26,21 @@ metadata:
   namespace: flux-system
 type: Opaque
 stringData:
+  GIT_REPO_URL: https://github.com/stuttgart-things/stuttgart-things
   MS_TEAMS_URL: https://365sva.webhook.office.com/webhookb2/2f14a9f8-4736-46dd-9c8c-31547ec37180@0a65cb1e-37d5-41ff-980a-647d9d0e4f0b/IncomingWebhook/623bf0daab3d404baea9858fc689cf02/dc3a27ed-396c-40b7-a9b2-f1a2b6b44efe
   GITHUB_TOKEN: <GITHUB_TOKEN>
   PRIVATE_KEY: <PRIVATE_KEY_BASE64>
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: scr
+  namespace: flux-system
+type: Opaque
+stringData:
+  SCR_HOSTNAME: scr.tiab.labda.sva.de
+  SCR_USERNAME: <SCR_USERNAME>
+  SCR_PASSWORD: <SCR_PASSWORD>
 ```
 
 </details>

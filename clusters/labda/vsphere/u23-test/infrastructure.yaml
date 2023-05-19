@@ -20,5 +20,3 @@ spec:
     substituteFrom:
       - kind: Secret
         name: vault
-      - kind: Secret
-        name: scr
