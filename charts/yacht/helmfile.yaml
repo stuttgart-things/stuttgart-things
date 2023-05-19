@@ -8,7 +8,7 @@ repositories:
 
 releases:
 - name: yacht-redis
-  namespace: redis
+  namespace: redis # should be changed
   chart: redis/redis
   values:
     - master:
@@ -36,3 +36,11 @@ releases:
       enablePipelines: false
   # needs:
   #   - tekton-pipelines/yacht-tekton-base
+
+- name: yacht-application-server
+  namespace: yacht
+  chart: stuttgart-things/yacht-application-server
+  version: 0.3.7
+
+  # needs:
+  #   - yacht/redis
