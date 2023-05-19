@@ -76,7 +76,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./apps/argo-cd
+  path: ./apps/minio
   prune: true
   wait: true
   postBuild:
