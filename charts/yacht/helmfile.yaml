@@ -21,14 +21,18 @@ releases:
           enabled: false
           medium: ""
 
-- name: yacht-tekton-base
-  namespace: tekton-pipelines
-  chart: stuttgart-things/yacht-tekton-base
-  version: v0.47.0-2
+# - name: yacht-tekton-base
+#   namespace: tekton-pipelines
+#   chart: stuttgart-things/yacht-tekton-base
+#   version: v0.47.0-2
 
 - name: yacht-tekton-resources
   namespace: yacht-tekton
-  chart: stuttgart-things/yacht-tekton-base
-  version: v0.47.0
-  needs:
-    - tekton-pipelines/yacht-tekton-base
+  chart: stuttgart-things/yacht-tekton-resources
+  version: v0.47.0-2
+  values:
+    - enableTasks: true
+      enableWorkspaces: false
+      enablePipelines: false
+  # needs:
+  #   - tekton-pipelines/yacht-tekton-base
