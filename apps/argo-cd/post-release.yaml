@@ -42,18 +42,18 @@ metadata:
 type: Opaque
 ---
 apiVersion: v1
+kind: Secret
+metadata:
+  name: stuttgart-things
+  namespace: argocd
+  annotations:
+    managed-by: argocd.argoproj.io
+  labels:
+    argocd.argoproj.io/secret-type: repository
 data:
   username: ""
   password: ""
   project: ""
   type: Z2l0
   url: aHR0cHM6Ly9naXRodWIuY29tL3N0dXR0Z2FydC10aGluZ3Mvc3R1dHRnYXJ0LXRoaW5ncy5naXQ=
-kind: Secret
-metadata:
-  annotations:
-    managed-by: argocd.argoproj.io
-  labels:
-    argocd.argoproj.io/secret-type: repository
-  name: stuttgart-things
-  namespace: argocd
 type: Opaque
