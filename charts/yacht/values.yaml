@@ -1,6 +1,6 @@
 ---
 redis:
-  enabled: false
+  enabled: true
   master:
     persistence:
       enabled: false
@@ -12,7 +12,7 @@ redis:
       medium: ""
 
 tektonBase:
-  enabled: false
+  enabled: true
   pipelinesNamespace: tekton-pipelines
   resolversNamespace: tekton-pipelines-resolvers
 

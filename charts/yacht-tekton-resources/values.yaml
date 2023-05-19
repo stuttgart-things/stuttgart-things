@@ -309,6 +309,7 @@ tasks:
     labels:
       app.kubernetes.io/version: "0.2"
     annotations:
+      "helm.sh/hook": post-install
       tekton.dev/pipelines.minVersion: "0.45.0"
       tekton.dev/categories: helm chart Build
       tekton.dev/tags: helm-chart-build
@@ -353,6 +354,7 @@ tasks:
     labels:
       app.kubernetes.io/version: "0.6"
     annotations:
+      "helm.sh/hook": post-install
       tekton.dev/pipelines.minVersion: "0.45.0"
       tekton.dev/categories: Image Build
       tekton.dev/tags: image-build
@@ -420,6 +422,7 @@ tasks:
     labels:
       app.kubernetes.io/version: "0.1"
     annotations:
+      "helm.sh/hook": post-install
       tekton.dev/pipelines.minVersion: "0.45.0"
       tekton.dev/categories: Messaging
       tekton.dev/tags: messaging
@@ -456,6 +459,7 @@ tasks:
     labels:
       app.kubernetes.io/version: "0.8"
     annotations:
+      "helm.sh/hook": post-install
       tekton.dev/pipelines.minVersion: "0.45.0"
       tekton.dev/categories: Git
       tekton.dev/tags: git

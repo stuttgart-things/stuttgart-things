@@ -8,18 +8,18 @@ appVersion: "0.0.47"
 
 dependencies:
 - name: yacht-tekton-base
-  version: v0.47.0
+  version: v0.47.0-2
   repository: oci://eu.gcr.io/stuttgart-things
   alias: tektonBase
   condition: tektonBase.enabled
 - name: yacht-tekton-resources
-  version: v0.47.0
+  version: v0.47.0-2
   repository: oci://eu.gcr.io/stuttgart-things
   condition: tektonResources.enabled
   alias: tektonResources
-# - name: sthings-helm-toolkit
-#   version: 2.4.27
-#   repository: oci://eu.gcr.io/stuttgart-things
+- name: sthings-helm-toolkit
+  version: 2.4.29
+  repository: oci://eu.gcr.io/stuttgart-things
 - name: redis
   repository: https://charts.bitnami.com/bitnami
   version: 17.10.2

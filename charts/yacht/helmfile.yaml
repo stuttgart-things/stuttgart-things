@@ -1,0 +1,28 @@
+---
+repositories:
+- name: redis
+  url: https://charts.bitnami.com/bitnami
+- name: stuttgart-things
+  url: eu.gcr.io/stuttgart-things
+  oci: true
+
+releases:
+- name: yacht-redis
+  namespace: redis
+  chart: redis/redis
+  values:
+    - master:
+        persistence:
+          enabled: false
+          medium: ""
+      replica:
+        replicaCount: 2
+        persistence:
+          enabled: false
+          medium: ""
+- name: yacht-tekton-base
+  namespace: tekton-pipelines
+  chart: stuttgart-things/yacht-tekton-base
+  version: v0.47.0
+  needs:
+    - redis/yacht-redis

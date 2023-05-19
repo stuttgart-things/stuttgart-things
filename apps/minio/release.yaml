@@ -1,1 +1,57 @@
+
 ---
+# apiVersion: helm.toolkit.fluxcd.io/v2beta1
+# kind: HelmRelease
+# metadata:
+#   name: minio-deployment
+#   namespace: minio
+# spec:
+#   dependsOn:
+#     - name: minio-certificate-configuration
+#       namespace: minio
+#   interval: 30m
+#   chart:
+#     spec:
+#       chart: minio
+#       version: 12.x
+#       sourceRef:
+#         kind: HelmRepository
+#         name: bitnami
+#         namespace: minio
+#       interval: 12h
+#   values:
+    # image:
+    #   registry: {{ call .SingleSelectSurvey "image registry|scr.tiab.labda.sva.de;docker.io" }}
+    #   repository: {{ call .SingleSelectSurvey "image repository|sthings-minio/sthings-minio;bitnami/minio" }}
+    #   tag: {{ call .SingleSelectSurvey "image tag|2023.2.17-debian-11-r1;2023.2.17-debian-11-r0" }}
+    # networkPolicy:
+    #   enabled: true
+    #   allowExternal: true
+    # auth:
+    #   rootUser: admin
+    #   rootPassword: {{ call .SingleInputSurvey "adminPassword|SuperSecret12" }}
+    # ingress:
+    #   enabled: true
+    #   ingressClassName: "nginx"
+    #   tls: true
+    #   extraTls:
+    #     - hosts:
+    #         - {{ call .GetGlobalValue "ingressHostName" }}-console.{{ call .GetGlobalValue "clusterName" }}.{{ call .GetGlobalValue "ingressDomainName" }}
+    #       secretName: {{ call .GetGlobalValue "ingressHostName" }}-console-server-ingress-tls
+    #   hostname: {{ call .GetGlobalValue "ingressHostName" }}-console.{{ call .GetGlobalValue "clusterName" }}.{{ call .GetGlobalValue "ingressDomainName" }}
+    # apiIngress:
+    #   enabled: true
+    #   ingressClassName: "nginx"
+    #   tls: true
+    #   extraTls:
+    #     - hosts:
+    #         - {{ call .GetGlobalValue "ingressHostName" }}.{{ call .GetGlobalValue "clusterName" }}.{{ call .GetGlobalValue "ingressDomainName" }}
+    #       secretName: {{ call .GetGlobalValue "ingressHostName" }}-api-server-ingress-tls
+    #   hostname: {{ call .GetGlobalValue "ingressHostName" }}.{{ call .GetGlobalValue "clusterName" }}.{{ call .GetGlobalValue "ingressDomainName" }}
+    # persistence:
+    #   enabled: false
+    # extraEnvVars:
+    #   - name: MINIO_SERVER_URL
+    #     value: https://{{ call .GetGlobalValue "ingressHostName" }}.{{ call .GetGlobalValue "clusterName" }}.{{ call .GetGlobalValue "ingressDomainName" }}
+    #   - name: MINIO_BROWSER_REDIRECT_URL
+    #     value: https://{{ call .GetGlobalValue "ingressHostName" }}-console.{{ call .GetGlobalValue "clusterName" }}.{{ call .GetGlobalValue "ingressDomainName" }}:9001
