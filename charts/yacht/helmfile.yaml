@@ -20,9 +20,15 @@ releases:
         persistence:
           enabled: false
           medium: ""
+
 - name: yacht-tekton-base
   namespace: tekton-pipelines
   chart: stuttgart-things/yacht-tekton-base
+  version: v0.47.0-2
+
+- name: yacht-tekton-resources
+  namespace: yacht-tekton
+  chart: stuttgart-things/yacht-tekton-base
   version: v0.47.0
   needs:
-    - redis/yacht-redis
+    - tekton-pipelines/yacht-tekton-base
