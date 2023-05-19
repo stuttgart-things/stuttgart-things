@@ -1,0 +1,46 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: argocd-configuration
+  namespace: argocd
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: sthings-cluster
+      version: 0.2.5
+      sourceRef:
+        kind: HelmRepository
+        name: stuttgart-things
+        namespace: argocd
+      interval: 12h
+  values:
+    secrets:
+      argocd-vault-plugin-credentials:
+        name: argocd-vault-plugin-credentials
+        namespace: argocd
+        secretKVs:
+          AVP_TYPE: vault
+          TYPE: vault
+          AVP_AUTH_TYPE: approle
+          AVP_VAULT_ADDR: ${VAULT_ADDR}
+          VAULT_ADDR: ${VAULT_ADDR}
+          VAULT_NAMESPACE: ${VAULT_NAMESPACE}
+          AVP_ROLE_ID: ${VAULT_ROLE_ID}
+          AVP_SECRET_ID: ${VAULT_SECRET_ID}
+    customresources:
+      argocd-certificate:
+        apiVersion: cert-manager.io/v1
+        kind: Certificate
+        metadata:
+          name: argocd-ingress
+          namespace: argocd
+        spec:
+          commonName: ${INGRESS_HOST}
+          dnsNames:
+          - ${INGRESS_HOST}
+          issuerRef:
+            name: cluster-issuer-approle
+            kind: ClusterIssuer
+          secretName: ${INGRESS_SECRET_NAME}
