@@ -53,7 +53,7 @@ kind: Secret
 metadata:
   name: msteams
   namespace: flux-system
-data:
+stringData:
   address: ${MS_TEAMS_URL}
 ---
 apiVersion: v1
@@ -61,5 +61,5 @@ kind: Secret
 metadata:
   name: github
   namespace: flux-system
-data:
+stringData:
   token: ${GITHUB_TOKEN}
