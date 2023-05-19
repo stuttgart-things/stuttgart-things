@@ -28,7 +28,7 @@ spec:
           dnsNames:
           - ${INGRESS_HOSTNAME_CONSOLE}.${INGRESS_DOMAIN}
           issuerRef:
-            name: cluster-issuer-approle
+            name: ${CLUSTER_ISSUER}
             kind: ClusterIssuer
           secretName: ${INGRESS_HOSTNAME_CONSOLE}-ingress-tls
       ingress-certificate-api:
@@ -42,6 +42,6 @@ spec:
           dnsNames:
           - ${INGRESS_HOSTNAME_API}.${INGRESS_DOMAIN}
           issuerRef:
-            name: cluster-issuer-approle
+            name: ${CLUSTER_ISSUER}
             kind: ClusterIssuer
           secretName: ${INGRESS_HOSTNAME_API}-ingress-tls
