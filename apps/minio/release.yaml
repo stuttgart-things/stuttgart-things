@@ -37,7 +37,7 @@ spec:
       extraTls:
         - hosts:
             - ${INGRESS_HOSTNAME_CONSOLE}.${INGRESS_DOMAIN}
-          secretName: ${INGRESS_HOSTNAME_CONSOLE}-server-ingress-tls
+          secretName: ${INGRESS_HOSTNAME_CONSOLE}-ingress-tls
       hostname: ${INGRESS_HOSTNAME_CONSOLE}.${INGRESS_DOMAIN}
     apiIngress:
       enabled: true
@@ -46,7 +46,7 @@ spec:
       extraTls:
         - hosts:
             - ${INGRESS_HOSTNAME_API}.${INGRESS_DOMAIN}
-          secretName: ${INGRESS_HOSTNAME_API}-api-server-ingress-tls
+          secretName: ${INGRESS_HOSTNAME_API}-ingress-tls
       hostname: ${INGRESS_HOSTNAME_API}.${INGRESS_DOMAIN}
     persistence:
       enabled: false

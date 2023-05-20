@@ -2,3 +2,16 @@
 global:
   commonLabels:
     env: default
+
+yacht-redis:
+  master:
+    persistence:
+      enabled: false
+      medium: ""
+  replica:
+    replicaCount: 2
+    persistence:
+      enabled: false
+      medium: ""
+  auth:
+    password: teststring

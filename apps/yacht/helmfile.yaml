@@ -6,27 +6,30 @@ repositories:
   url: eu.gcr.io/stuttgart-things
   oci: true
 
+environments:
+  default:
+    values:
+      - environments/default.yaml
+  labda-vsphere:
+    values:
+      - environments/default.yaml
+      - environments/labda-vsphere.yaml
+
 releases:
 - name: yacht-redis
   namespace: yacht # should be changed
   chart: redis/redis
+  installed: true
   values:
-    - master:
-        persistence:
-          enabled: false
-          medium: ""
-      replica:
-        replicaCount: 2
-        persistence:
-          enabled: false
-          medium: ""
-      auth:
-        password: teststring
+    - &env globals.gotmpl
 
 - name: yacht-tekton-base
   namespace: tekton-pipelines
   chart: stuttgart-things/yacht-tekton-base
   version: v0.47.0-2
+  installed: true
+  values:
+    - *env
 
 - name: yacht-tekton-resources
   namespace: yacht-tekton
@@ -36,29 +39,33 @@ releases:
     - enableTasks: true
       enableWorkspaces: false
       enablePipelines: true
-  # needs:
-  #   - tekton-pipelines/yacht-tekton-base
+  installed: false
+  needs:
+    - tekton-pipelines/yacht-tekton-base
 
 - name: yacht-application-server
   namespace: yacht
   chart: stuttgart-things/yacht-application-server
   version: 0.3.7
+  installed: true
   values:
-    - ingress:
-        yacht-application-server:
-          hostname: yas
-          clusterName: mgmt
-          domain: 4sthings.tiab.ssc.sva.de
-          tls:
-            host: yas.mgmt.4sthings.tiab.ssc.sva.de
-      customresources:
-        yas-ingress-certificate:
-          spec:
-            commonName: yas.mgmt.4sthings.tiab.ssc.sva.de
-            dnsNames:
-            - yas.mgmt.4sthings.tiab.ssc.sva.de
-            issuerRef:
-              name: cluster-issuer-approle
+    - *env
+  # values:
+  #   - ingress:
+  #       yacht-application-server:
+  #         hostname: yas
+  #         clusterName: mgmt
+  #         domain: 4sthings.tiab.ssc.sva.de
+  #         tls:
+  #           host: yas.mgmt.4sthings.tiab.ssc.sva.de
+  #     customresources:
+  #       yas-ingress-certificate:
+  #         spec:
+  #           commonName: yas.mgmt.4sthings.tiab.ssc.sva.de
+  #           dnsNames:
+  #           - yas.mgmt.4sthings.tiab.ssc.sva.de
+  #           issuerRef:
+  #             name: cluster-issuer-approle
       # secrets:
       #   redis-connection:
       #     dataType: stringData
