@@ -8,7 +8,7 @@ repositories:
 
 releases:
 - name: yacht-redis
-  namespace: redis # should be changed
+  namespace: yacht # should be changed
   chart: redis/redis
   values:
     - master:
@@ -20,11 +20,13 @@ releases:
         persistence:
           enabled: false
           medium: ""
+      auth:
+        password: teststring
 
-# - name: yacht-tekton-base
-#   namespace: tekton-pipelines
-#   chart: stuttgart-things/yacht-tekton-base
-#   version: v0.47.0-2
+- name: yacht-tekton-base
+  namespace: tekton-pipelines
+  chart: stuttgart-things/yacht-tekton-base
+  version: v0.47.0-2
 
 - name: yacht-tekton-resources
   namespace: yacht-tekton
@@ -33,7 +35,7 @@ releases:
   values:
     - enableTasks: true
       enableWorkspaces: false
-      enablePipelines: false
+      enablePipelines: true
   # needs:
   #   - tekton-pipelines/yacht-tekton-base
 
@@ -44,6 +46,26 @@ releases:
   values:
     - ingress:
         yacht-application-server:
-          domain: mgmt.4sthings.tiab.ssc.sva.de
+          hostname: yas
+          clusterName: mgmt
+          domain: 4sthings.tiab.ssc.sva.de
+          tls:
+            host: yas.mgmt.4sthings.tiab.ssc.sva.de
+      customresources:
+        yas-ingress-certificate:
+          spec:
+            commonName: yas.mgmt.4sthings.tiab.ssc.sva.de
+            dnsNames:
+            - yas.mgmt.4sthings.tiab.ssc.sva.de
+            issuerRef:
+              name: cluster-issuer-approle
+      # secrets:
+      #   redis-connection:
+      #     dataType: stringData
+      #     secretKVs:
+      #       REDIS_SERVER: MTAuMzEuMTAxLjEzOA==
+      #       REDIS_PORT: NjM3OQ==
+      #       REDIS_QUEUE: cmVkaXNxdWV1ZTp5YWNodC1yZXZpc2lvbnJ1bnM=
+
   # needs:
   #   - yacht/redis
