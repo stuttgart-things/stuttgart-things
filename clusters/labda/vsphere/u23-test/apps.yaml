@@ -85,6 +85,9 @@ spec:
       INGRESS_HOSTNAME_CONSOLE: artifacts-console
       INGRESS_DOMAIN: mgmt.4sthings.tiab.ssc.sva.de
       CLUSTER_ISSUER: cluster-issuer-approle
+    substituteFrom:
+      - kind: Secret
+        name: s3-flux-secrets
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
