@@ -15,3 +15,8 @@ yacht-redis:
       medium: ""
   auth:
     password: teststring
+
+yacht-tekton-resources:
+  enableTasks: true
+  enableWorkspaces: false
+  enablePipelines: true

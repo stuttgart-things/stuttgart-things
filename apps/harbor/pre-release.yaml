@@ -1,0 +1,33 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: harbor-certificate-configuration
+  namespace: harbor
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: sthings-cluster
+      version: 0.3.1
+      sourceRef:
+        kind: HelmRepository
+        name: stuttgart-things
+        namespace: harbor
+      interval: 12h
+  values:
+    customresources:
+      ingress-certificate-console:
+        apiVersion: cert-manager.io/v1
+        kind: Certificate
+        metadata:
+          name: harbor-ingress-console
+          namespace: harbor
+        spec:
+          commonName: ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}
+          dnsNames:
+          - ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}
+          issuerRef:
+            name: ${CLUSTER_ISSUER}
+            kind: ClusterIssuer
+          secretName: ${INGRESS_HOSTNAME}-ingress-tls
