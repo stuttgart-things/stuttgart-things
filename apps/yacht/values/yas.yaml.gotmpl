@@ -1,0 +1,30 @@
+---
+configmaps:
+  yas-configuration:
+    PIPELINE_WORKSPACE: yacht-tekton
+ingress:
+  yacht-application-server:
+    hostname: {{ .Values.hostname }}
+    clusterName: {{ .Values.clusterName }}
+    domain: {{ .Values.domain }}
+    tls:
+      host: {{ .Values.hostname }}.{{ .Values.clusterName }}.{{ .Values.domain }}
+customresources:
+  yas-ingress-certificate:
+    spec:
+      commonName: {{ .Values.hostname }}.{{ .Values.clusterName }}.{{ .Values.domain }}
+      dnsNames:
+      - {{ .Values.hostname }}.{{ .Values.clusterName }}.{{ .Values.domain }}
+      issuerRef:
+        name: {{ .Values.clusterIssuer }}
+secrets:
+  redis-connection:
+    name: redis-connection
+    labels:
+      app: yacht-application-server
+    dataType: StringData
+    secretKVs:
+      REDIS_SERVER: yacht-redis-headless
+      REDIS_PORT: 6379
+      REDIS_QUEUE: redisqueue:yacht-revisionruns
+      REDIS_PASSWORD: {{ .Values.redisPassword }}
