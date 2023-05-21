@@ -1,7 +1,6 @@
 ---
 global:
-  commonLabels:
-    env: default
+  env: dev
 
 yacht-redis:
   master:
@@ -14,7 +13,7 @@ yacht-redis:
       enabled: false
       medium: ""
   auth:
-    password: teststring
+    password: hellothere
 
 yacht-tekton-resources:
   enableTasks: true
