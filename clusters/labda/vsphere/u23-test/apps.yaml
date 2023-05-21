@@ -131,3 +131,7 @@ spec:
       INGRESS_HOSTNAME: scr
       INGRESS_DOMAIN: mgmt.4sthings.tiab.ssc.sva.de
       CLUSTER_ISSUER: cluster-issuer-approle
+      STORAGE_CLASS: nfs4-csi
+    substituteFrom:
+      - kind: Secret
+        name: harbor-flux-secrets
