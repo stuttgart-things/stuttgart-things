@@ -70,5 +70,16 @@ releases:
             - {{ .Values.hostname }}.{{ .Values.clusterName }}.{{ .Values.domain }}
             issuerRef:
               name: {{ .Values.clusterIssuer }}
+      secrets:
+        redis-connection:
+          name: redis-connection
+          labels:
+            app: yacht-application-server
+          dataType: StringData
+          secretKVs:
+            REDIS_SERVER: yacht-redis-headless
+            REDIS_PORT: 6379
+            REDIS_PASSWORD: {{ .Values.redisPassword }}
+            REDIS_QUEUE: redisqueue:yacht-revisionruns
   # needs:
   #   - yacht/redis
