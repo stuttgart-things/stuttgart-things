@@ -5,3 +5,22 @@ metadata:
   name: cattle-system
   labels:
     toolkit.fluxcd.io/tenant: sthings-team
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: rancher
+  namespace: cattle-system
+spec:
+  interval: 24h
+  url: https://releases.rancher.com/server-charts/latest
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: stuttgart-things
+  namespace: cattle-system
+spec:
+  type: oci
+  interval: 1h
+  url: oci://eu.gcr.io/stuttgart-things
