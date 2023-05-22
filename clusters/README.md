@@ -82,7 +82,14 @@ stringData:
   flux bootstrap github --owner=stuttgart-things --repository=stuttgart-things \
   --path=clusters/<LAB>/<CLOUD>/<CLUSTERNAME>
   ```
-
+  
+* Check Flux status 
+  ```
+  kubectl get Kustomization -A
+  kubectl get hr -A
+  ```
+  
+  
 ## INSTALL FLUX-CLI
 
 ```
