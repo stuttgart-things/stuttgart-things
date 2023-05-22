@@ -1,0 +1,26 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: trident
+  labels:
+    toolkit.fluxcd.io/tenant: sthings-team
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: stuttgart-things
+  namespace: trident
+spec:
+  interval: 24h
+  url: https://netapp.github.io/trident-helm-chart
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: stuttgart-things
+  namespace: trident
+spec:
+  type: oci
+  interval: 1h
+  url: oci://eu.gcr.io/stuttgart-things
