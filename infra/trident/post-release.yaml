@@ -2,13 +2,13 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: nfs-csi-configuration
-  namespace: kube-system
+  name: trident-configuration
+  namespace: trident
 spec:
   interval: 30m
   dependsOn:
-    - name: nfs-csi
-      namespace: kube-system
+    - name: trident-deployment
+      namespace: trident
   chart:
     spec:
       chart: sthings-cluster
@@ -19,28 +19,51 @@ spec:
         namespace: kube-system
       interval: 12h
   values:
-    scs:
-      nfs3-csi:
-        name: nfs3-csi
-        provisioner: nfs.csi.k8s.io
-        parameters:
-          server: ${NFS_SERVER_FQDN}
-          share: /
-          mountPermissions: "0777"
-        backendType: ontap-nas
-        volumeBindingMode: Immediate
-        reclaimPolicy: Delete
-        mountOptions:
-          - nfsvers=3
-      nfs4-csi:
-        name: nfs4-csi
-        provisioner: nfs.csi.k8s.io
-        parameters:
-          server: ${NFS_SERVER_FQDN}
-          share: /
-          mountPermissions: "0777"
-        backendType: ontap-nas
-        volumeBindingMode: Immediate
-        reclaimPolicy: Delete
-        mountOptions:
-          - nfsvers=4.1
+    customresources:
+      trident-backend-config:
+        apiVersion: trident.netapp.io/v1
+        kind: TridentBackendConfig
+        metadata:
+          name: ontap-nas-backend
+          namespace: trident
+        spec:
+          version: 1
+          backendName: ontap-nas-backend
+          storageDriverName: ontap-nas
+          managementLIF: ${TRIDENT_LIF}
+          dataLIF: ${TRIDENT_LIF}
+          svm: ""
+          nfsMountOptions: "nfsvers=3"
+          defaults:
+            spaceReserve: "none"
+            exportPolicy: ""
+            snapshotPolicy: default
+            snapshotReserve: "5"
+          credentials:
+            name: ontap-nas-backend
+
+    # scs:
+    #   nfs3-csi:
+    #     name: nfs3-csi
+    #     provisioner: nfs.csi.k8s.io
+    #     parameters:
+    #       server: ${NFS_SERVER_FQDN}
+    #       share: /
+    #       mountPermissions: "0777"
+    #     backendType: ontap-nas
+    #     volumeBindingMode: Immediate
+    #     reclaimPolicy: Delete
+    #     mountOptions:
+    #       - nfsvers=3
+    #   nfs4-csi:
+    #     name: nfs4-csi
+    #     provisioner: nfs.csi.k8s.io
+    #     parameters:
+    #       server: ${NFS_SERVER_FQDN}
+    #       share: /
+    #       mountPermissions: "0777"
+    #     backendType: ontap-nas
+    #     volumeBindingMode: Immediate
+    #     reclaimPolicy: Delete
+    #     mountOptions:
+    #       - nfsvers=4.1
