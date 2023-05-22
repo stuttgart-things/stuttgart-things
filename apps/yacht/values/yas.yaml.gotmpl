@@ -17,11 +17,11 @@ customresources:
       - {{ .Values.hostname }}.{{ .Values.clusterName }}.{{ .Values.domain }}
       issuerRef:
         name: {{ .Values.clusterIssuer }}
-secrets:
-  redis-connection:
-    name: redis-connection
-    labels:
-      app: yacht-application-server
-    secretKVs:
-      REDIS_SERVER: cmVkaXMtaGVhZGxlc3MueWFjaHQuc3ZjLmNsdXN0ZXIubG9jYWwK
-      REDIS_PASSWORD: {{ .Values.redisPassword | b64enc }}
+  #secrets:
+    #redis-connection:
+      #name: redis-connection
+      #labels:
+      #  app: yacht-application-server
+      #secretKVs:
+      #  REDIS_SERVER: MTAuMzEuMTAxLjEzOA==
+      #  #REDIS_PASSWORD: {{ .Values.redisPassword | b64enc }}
