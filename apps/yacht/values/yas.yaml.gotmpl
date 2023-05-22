@@ -23,5 +23,5 @@ secrets:
     labels:
       app: yacht-application-server
     secretKVs:
-      REDIS_SERVER: eWFjaHQtcmVkaXMtaGVhZGxlc3M=
+      REDIS_SERVER: cmVkaXMtaGVhZGxlc3MueWFjaHQuc3ZjLmNsdXN0ZXIubG9jYWwK
       REDIS_PASSWORD: {{ .Values.redisPassword | b64enc }}

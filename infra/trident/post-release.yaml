@@ -40,7 +40,7 @@ spec:
             snapshotPolicy: default
             snapshotReserve: "5"
           credentials:
-            name: ontap-nas-backend
+            name: trident-backend
 
     # scs:
     #   nfs3-csi:
