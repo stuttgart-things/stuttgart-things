@@ -22,9 +22,6 @@ secrets:
     name: redis-connection
     labels:
       app: yacht-application-server
-    dataType: StringData
     secretKVs:
-      REDIS_SERVER: yacht-redis-headless
-      REDIS_PORT: 6379
-      REDIS_QUEUE: redisqueue:yacht-revisionruns
-      REDIS_PASSWORD: {{ .Values.redisPassword }}
+      REDIS_SERVER: eWFjaHQtcmVkaXMtaGVhZGxlc3M=
+      REDIS_PASSWORD: {{ .Values.redisPassword | b64enc }}

@@ -2,7 +2,7 @@
 
 ## APPLY TO ENV
 ```
-helmfile template --environment labda
+helmfile apply --environment labda
 ```
 
 ## TEMPLATE ENV RELEASE
@@ -13,6 +13,11 @@ helmfile template --environment labda
 ## VERIFY VALUES
 ```
 helmfile write-values --environment labda
+```
+
+## CHECK DIFFS
+```
+helmfile diffs --environment labda
 ```
 
 Author Information
