@@ -16,7 +16,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: stuttgart-things
-        namespace: kube-system
+        namespace: trident
       interval: 12h
   values:
     customresources:
