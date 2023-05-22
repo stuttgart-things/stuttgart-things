@@ -9,7 +9,7 @@ metadata:
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: HelmRepository
 metadata:
-  name: stuttgart-things
+  name: trident
   namespace: trident
 spec:
   interval: 24h
