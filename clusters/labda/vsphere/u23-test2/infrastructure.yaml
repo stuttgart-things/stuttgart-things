@@ -95,3 +95,25 @@ spec:
     substituteFrom:
       - kind: Secret
         name: github-flux-secrets
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: trident
+  namespace: flux-system
+spec:
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infra/trident
+  prune: true
+  wait: true
+  postBuild:
+    substitute:
+      TRIDENT_LIF: 10.100.112.160
+    substituteFrom:
+      - kind: Secret
+        name: trident-flux-secrets
