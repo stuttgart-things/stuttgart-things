@@ -89,6 +89,11 @@ stringData:
   kubectl get hr -A
   ```
   
+* If install retries are exhausted
+  ```
+  flux suspend hr <HR> -n <NAMESPACE>
+  flux resume hr <HR> -n <NAMESPACE>
+  ```
   
 ## INSTALL FLUX-CLI
 
