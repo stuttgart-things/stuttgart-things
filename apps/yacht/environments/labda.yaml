@@ -1,7 +1,15 @@
 ---
+# ingress
 hostname: yas
 clusterName: mgmt
 domain: 4sthings.tiab.ssc.sva.de
+
+# cert-manager
 clusterIssuer: cluster-issuer-approle
 
+# redis
 redisPassword: helloWhatever2
+
+# tekton-resources
+enableTasks: true
+enablePipelines: false

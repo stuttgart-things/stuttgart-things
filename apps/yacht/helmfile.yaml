@@ -1,4 +1,36 @@
 ---
+releases:
+- name: tekton-base
+  namespace: tekton-pipelines
+  chart: stuttgart-things/yacht-tekton-base
+  version: v0.47.0-2
+  installed: true
+
+- name: tekton-resources
+  namespace: yacht
+  chart: stuttgart-things/yacht-tekton-resources
+  version: v0.47.0-2
+  installed: true
+  needs:
+    - tekton-pipelines/tekton-base
+  values:
+    - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
+
+- name: redis
+  namespace: yacht
+  chart: redis/redis
+  installed: false
+  values:
+    - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
+
+- name: yas
+  namespace: yacht
+  chart: stuttgart-things/yacht-application-server
+  version: 0.3.8
+  installed: false
+  values:
+    - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
+
 helmDefaults:
   kubeContext: default
   verify: false
@@ -21,19 +53,3 @@ repositories:
 - name: stuttgart-things
   url: eu.gcr.io/stuttgart-things
   oci: true
-
-releases:
-- name: redis
-  namespace: yacht
-  chart: redis/redis
-  installed: true
-  values:
-    - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
-
-- name: yas
-  namespace: yacht
-  chart: stuttgart-things/yacht-application-server
-  version: 0.3.8
-  installed: true
-  values:
-    - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"

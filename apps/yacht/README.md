@@ -1,5 +1,10 @@
 # stuttgart-things/yacht
 
+## ISSUES
+
+* tekton-pipelines-resolvers namespace
+* api version pipelines
+
 ## APPLY TO ENV
 ```
 helmfile apply --environment labda
