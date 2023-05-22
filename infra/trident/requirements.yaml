@@ -24,3 +24,14 @@ spec:
   type: oci
   interval: 1h
   url: oci://eu.gcr.io/stuttgart-things
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: external-snapshotter
+  namespace: trident
+spec:
+  interval: 5m0s
+  url: https://github.com/kubernetes-csi/external-snapshotter.git
+  ref:
+    tag: v6.2.1
