@@ -1,0 +1,7 @@
+---
+hostname: yas
+clusterName: mgmt
+domain: 4sthings.tiab.ssc.sva.de
+clusterIssuer: cluster-issuer-approle
+
+redisPassword: helloWhatever2

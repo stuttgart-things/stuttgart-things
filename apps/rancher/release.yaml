@@ -1,0 +1,31 @@
+---
+
+  # dependsOn:
+  #   - name: minio-certificate-configuration
+  #     namespace: minio
+# apiVersion: helm.toolkit.fluxcd.io/v2beta1
+# kind: HelmRelease
+# metadata:
+#   name: rancher-deployment
+#   namespace: cattle-system
+# spec:
+#   interval: 30m
+#   chart:
+#     spec:
+#       chart: minio
+#       version: 12.6.0
+#       sourceRef:
+#         kind: HelmRepository
+#         name: bitnami
+#         namespace: minio
+#       interval: 12h
+#   values:
+#     hostname: rancher-things.app.sthings-pve.labul.sva.de
+#     privateCA: true
+#     ingress:
+#       enabled: true
+#       ingressClassName: nginx
+#       servicePort: 80
+#       tls:
+#         source: secret
+#         secretName: rancher-application-server-ingress-tls
