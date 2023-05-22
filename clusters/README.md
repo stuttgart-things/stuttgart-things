@@ -34,13 +34,33 @@ stringData:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: scr
+  name: harbor-flux-secrets
   namespace: flux-system
 type: Opaque
 stringData:
   SCR_HOSTNAME: scr.tiab.labda.sva.de
   SCR_USERNAME: <SCR_USERNAME>
   SCR_PASSWORD: <SCR_PASSWORD>
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: s3-flux-secrets
+  namespace: flux-system
+type: Opaque
+stringData:
+  MINIO_ADMIN_USER: <MINIO_ADMIN_USER>
+  MINIO_ADMIN_PASSWORD: <MINIO_ADMIN_PASSWORD>
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: harbor-flux-secrets
+  namespace: flux-system
+type: Opaque
+stringData:
+  HARBOR_ADMIN_USER: <HARBOR_ADMIN_USER>
+  HARBOR_ADMIN_PASSWORD: <HARBOR_ADMIN_PASSWORD>
 ```
 
 </details>
