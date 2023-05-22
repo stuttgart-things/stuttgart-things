@@ -33,7 +33,7 @@ releases:
 - name: yas
   namespace: yacht
   chart: stuttgart-things/yacht-application-server
-  version: 0.3.7
+  version: 0.3.8
   installed: true
   values:
     - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
