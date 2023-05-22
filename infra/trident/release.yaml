@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: trident-operator
-      version: 23.1.x
+      version: 23.1.1
       sourceRef:
         kind: HelmRepository
         name: trident
