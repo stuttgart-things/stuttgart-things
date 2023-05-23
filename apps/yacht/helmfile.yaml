@@ -9,7 +9,7 @@ releases:
 - name: tekton-resources
   namespace: yacht
   chart: stuttgart-things/yacht-tekton-resources
-  version: v0.47.0-2
+  version: v0.47.1
   installed: true
   needs:
     - tekton-pipelines/tekton-base
@@ -27,7 +27,7 @@ releases:
   namespace: yacht
   chart: stuttgart-things/yacht-application-server
   version: 0.3.8
-  installed: false
+  installed: true
   values:
     - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 
@@ -35,9 +35,11 @@ releases:
   namespace: yacht
   chart: stuttgart-things/yacht-dispatcher
   version: 0.1.6
-  installed: false
+  installed: true
   values:
     - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
+  needs:
+    - yacht/yas
 
 helmDefaults:
   kubeContext: default
