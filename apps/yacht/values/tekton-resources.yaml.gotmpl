@@ -2,3 +2,48 @@
 defaultNamespace: yacht
 enableTasks: {{ .Values.enableTasks }}
 enablePipelines: {{ .Values.enablePipelines }}
+
+enableWorkspaces: true
+workspaces:
+ yacht-kaniko-workspace:
+   volumeMode: Filesystem
+   storageClassName: {{ .Values.tektonStorageClass }}
+   storage: 5Gi
+   accessModes:
+     - ReadWriteOnce
+
+enableGitSecretsSSH: true
+gitSecretsSSH:
+  codehub:
+    name: codehub-ssh
+    labels:
+      app: yacht-tekton
+    dataType: data
+    secretKVs:
+      id_rsa: {{ .Values.codehubSSH }}
+
+enableSecrets: true
+secrets:
+  gitlab-pipeline-token3:
+    name: gitlab-pipeline-token3
+    labels:
+      app: sthings-tekton
+    secretKVs:
+      token: {{ .Values.redisPassword }}
+
+enableRegistryCredentials: true
+registryCredentials:
+  scr-labda:
+    labels:
+      app: yacht-teton
+    dockerConfigJson: {{ .Values.scrDockerConfig }}
+
+enableGitSecretsBasicAuth: false
+gitSecretsBasicAuth:
+  codehub-basicauth:
+    labels:
+      app: sthings-tekton
+    namespace: tekton-cicd
+    hostname: codehub.sva.de
+    username: <path:git/data/codehub#git_token_username>
+    password: <path:git/data/codehub#git_token_password>

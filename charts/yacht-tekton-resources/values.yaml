@@ -69,66 +69,18 @@ enableExtraPipelines: false
 #         workspaceKind: secret
 #         workspaceRef: scr-labda
 
-workspaces:
- sthings-kaniko-workspace:
-   volumeMode: Filesystem
-   namespace: yacht-tekton
-   storageClassName: nfs4-csi
-   storage: 5Gi
-   accessModes:
-     - ReadWriteOnce
 
-secrets:
-  # gitlab-pipeline-token:
-  #   name: gitlab-pipeline-token
-  #   labels:
-  #     app: sthings-tekton
-  #   secretKVs:
-  #     token: <path:git/data/codehub#sthings_pipeline_token>
-  msteams:
-    name: msteams
-    namespace: yacht-tekton
-    labels:
-      app: sthings-tekton
-    secretKVs:
-      #url: <path:apps/data/tekton#ms_teams_webhookurl>
-      url: https://365sva.webhook.office.com/webhookb2/2f14a9f8-4736-46dd-9c8c-31547ec37180@0a65cb1e-37d5-41ff-980a-647d9d0e4f0b/IncomingWebhook/37a805a0a2624dc2ac1aedd7dec6ad49/dc3a27ed-396c-40b7-a9b2-f1a2b6b44efe
-registryCredentials:
-  scr-labda:
-    labels:
-      app: yacht-teton
-    namespace: yacht-tekton
-    #dockerConfigJson: <path:harbor/data/scr#dockerConfigJson>
-    dockerConfigJson: eyJhdXRocyI6IHsic2NyLnRpYWIubGFiZGEuc3ZhLmRlIjogeyJ1c2VybmFtZSI6ICJzdGhpbmdzIiwgInBhc3N3b3JkIjogIkF0bGFuN2lzIiwgImF1dGgiOiAiYzNSb2FXNW5jenBCZEd4aGJqZHBjdz09In19fQ==
-  scr-labda:
-    labels:
-      app: yacht-teton
-    namespace: yacht-tekton
-    #dockerConfigJson: <path:harbor/data/scr#dockerConfigJson>
-    dockerConfigJson: eyJhdXRocyI6IHsic2NyLnRpYWIubGFiZGEuc3ZhLmRlIjogeyJ1c2VybmFtZSI6ICJzdGhpbmdzIiwgInBhc3N3b3JkIjogIkF0bGFuN2lzIiwgImF1dGgiOiAiYzNSb2FXNW5jenBCZEd4aGJqZHBjdz09In19fQ==
-  scr-app-labda:
-    labels:
-      app: yacht-teton
-    namespace: yacht-tekton
-    #dockerConfigJson: <path:harbor/data/scr#dockerConfigJson>
-    dockerConfigJson: eyJhdXRocyI6IHsic2NyLmFwcC5zdGhpbmdzLnRpYWIuc3NjLnN2YS5kZSI6IHsidXNlcm5hbWUiOiAic3RoaW5ncyIsICJwYXNzd29yZCI6ICJBdGxhbjdpcyIsICJhdXRoIjogImMzUm9hVzVuY3pwQmRHeGhiamRwY3c9PSJ9fX19
-  scr-app-labul:
-    labels:
-      app: yacht-teton
-    namespace: yacht-tekton
-    #dockerConfigJson: <path:harbor/data/scr#dockerConfigJson>
-    dockerConfigJson: eyJhdXRocyI6IHsic2NyLmFwcC5zdGhpbmdzLXZzcGhlcmUubGFidWwuc3ZhLmRlIjogeyJ1c2VybmFtZSI6ICJzdGhpbmdzIiwgInBhc3N3b3JkIjogIkF0bGFuN2lzIiwgImF1dGgiOiAiYzNSb2FXNW5jenBCZEd4aGJqZHBjdz09In19fX0K
 
-gitSecretsSSH:
-  codehub:
-    name: codehub-ssh
-    namespace: yacht-tekton
-    labels:
-      app: yacht-tekton
-    dataType: data
-    secretKVs:
-      #id_rsa: <path:ssh/data/sthings#private_key>
-      id_rsa: LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlFb3dJQkFBS0NBUUVBckpROElsVHZ4TDFpMVZXTlU4S1hPeTRhL1pXaXo0THZvb2pycnpCSVBCT0laeEF4CjBUMmFYUSttSjV5V0xDNTFSMjR2R054RHcwTmxBMng1MzRIbUQydmVGeDNZUmtnckNGL3JRT2ZqeXhVaFlLTWcKclFPYUZuTjc2NXVmRVYrZzBGMyszejhyY01TQkVqNHlJQkE3OWdVemhIUHFaTkV0UFh0NDdiWmhiS3lzd2U3VApyclFkeFpMWEM1OFJnKytTWUFXdmY0dE01bjNISVJkbFRXWElHVVZ5ZVNZakJpb1dpZ2U2bWVnS0RFSlE1Z3I1ClpTMG5Rc1JpTWJ2NnJvZ1hCb1dpUVRKcVpFazNrYUxsTldGb05PY0JJOG9PT3c4Q2NzaERNNzJIdWl5QjhUZDgKd1Z6RXdjMUNpUXRiWVJqUXZjbWhYc3NLOC9vbWlKT3VrUm5JeXdJREFRQUJBb0lCQVFDSXlOVUF3U0ZwWmxJMwpsSjkzaS93aHcrRlFySkZtdC9rSGNrNmJoRUU4bko2NFVYV3F5cERXd2RpSC9PeHFDRWljWFJDbk82M1p6a2o1CjliaURGb29xSHV6Z2xaOGQxWVdHRmNCNHFWTTdXM3doQkNxWjl3amlVcFlkb0RMcnFrZmozeHhzQmIyQW03OVIKbmtwTWI1R1c1WGgzdXdoRThDWlRYTkgwVjJIUXA1Mmdha2U4djhsa2ZrUnBzQS83L1lUWVpub2JjaURobDJXKwp2anpucmhXN3YrdHU3OW5XaTRiTDcwbTQxTTcvdHdyR1lKeXdtNG5xeXJnTnA1RWU3Y0FTWDB4TmNGQ0x0L3dhCmhvRTN5N0pzLzdKT2pvQ1h2dWQ3NjVMSUp3M0doMkhUSktRcXhpZnl5RkpTWWpyMWF1YW9zU1V5TW0yM2JsYUEKMi9hNm84WEJBb0dCQU9YTVBCTW93RjArVTdhMjc0NzRBalQ5M3dTWjJWK2FSdVpwcjkrMmJvd0dJUHFUdlU3OQpZR1lRcXlkSS9oM2VJYjBxdTJMY3hPZVU1Z09ROHA0WXZJc1BzQnBaTmNFSHk5ZXgrREZnQm0rMDhlSDNZc28rCjkrb0pkT3NOTWQyMndjb2xLZ084TzhKaE9JMm91NWIvaUZWYUFDWjR5ek5yTnBDL3BlTWkrS28vQW9HQkFNQkIKeXYrNnlXcWlranZ1RXdRQlVGeXZHS2laMnh0ZW9CeW5uU29DeUxrMUQ3Rzl4T0w4THlYNEt5VThMcThxQ1ZlZQpQSWVWZnZKQXJCWUtmZy9lRWd3YUFaUFVTa09VZzFRdzM2eU1PN3ZIV1hlVDJ5VmJ5RDY0ZXVWbVFDdmw1bVloCms5ZjJtN3Q3bGt4RFNtRHlvSXhUWXVhM0N5aHQ3d0VtRlRsSDZZWjFBb0dBT2tzcC9pNDdSaXdXYm1aUHRQUGoKRTNCSFQ5SjdXdzQyNkNKdFZCSGlUekVLMHFZQnd2VHhyRktVS0Y0UzRKN0Y3a2ZWeTBsM3hjdDI0ZmEySlRiZgpOV09nWjc2enJTaitJOVJvd3BXNmJFSDVqam9FWEl2R3RoNzZBdHFSQ001Z3NKZm01Wld0anl5OGZPc04wMHMxCldYbUFTa0lnUWdYempKcWhTVkpJeEY4Q2dZQXhSeXZmREdOZi83ZDN3UGdDeU10dVZqcjl6Q0hMRENBQitEeGkKYmtCQXFJY1RTYzdUVjB4R2NTdXQ2WlVWdExLY1VLUzNJK3hiNzVPc09waEJQT3huU2FzcDF2b0tCR0Q5RFdIbgplakk5V1VWblR2Q1d6TVd3dmR4U1BEa3FoMHpjMUxKdVlubGNQcnN4WlBZRmoycnpUTlJHeXBnRGp0bjU4MmJ4ClBhdHZtUUtCZ0cwQmtJVGlIMmpUM3VrMHBrVm1wWXZLc3RhUlVGZGtZMS9rV3MzdzZXbVBId1ZpQkFrb21zU0oKMzF0TFJKWmovc1E0UElpRHdBcGRuL0Z0Rk1CRUFBNWcreW9QbU9pOTJmVHVkWTZ6L3YrYzRMbXV0M0JNajRoMwpxVmxJeGoyalgwaDIycmlwa2orODJBVXhHUXBGRm9zQUY3WTE2VUx2VmdCaXBqWC9nSjBrCi0tLS0tRU5EIFJTQSBQUklWQVRFIEtFWS0tLS0t
+# gitSecretsSSH:
+#   codehub:
+#     name: codehub-ssh
+#     namespace: yacht-tekton
+#     labels:
+#       app: yacht-tekton
+#     dataType: data
+#     secretKVs:
+#       #id_rsa: <path:ssh/data/sthings#private_key>
+
 # gitSecretsBasicAuth:
 #   codehub-basicauth:
 #     labels:

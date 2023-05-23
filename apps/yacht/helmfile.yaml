@@ -9,7 +9,7 @@ releases:
 - name: tekton-resources
   namespace: yacht
   chart: stuttgart-things/yacht-tekton-resources
-  version: v0.47.1
+  version: v0.47.3
   installed: true
   needs:
     - tekton-pipelines/tekton-base

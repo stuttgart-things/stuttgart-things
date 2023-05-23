@@ -8,8 +8,11 @@ domain: 4sthings.tiab.ssc.sva.de
 clusterIssuer: cluster-issuer-approle
 
 # redis
-redisPassword: helloWhatever2
+redisPassword: ref+vault://apps/yacht/redis-password
 
-# tekton-resources
+# tekton resources
+codehubSSH: ref+vault://apps/yacht/codehub-ssh
+scrDockerConfig: ref+vault://apps/yacht/scr-labda
+tektonStorageClass: ontap
 enableTasks: true
 enablePipelines: true
