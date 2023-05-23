@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: resolvers-feature-flags
+  namespace: {{ .Values.resolversNamespace }}
+  labels:
+    app.kubernetes.io/component: resolvers
+    app.kubernetes.io/instance: default
+    app.kubernetes.io/part-of: tekton-pipelines
+data:
+  enable-bundles-resolver: "true"
+  enable-hub-resolver: "true"
+  enable-git-resolver: "true"
+  enable-cluster-resolver: "true"
