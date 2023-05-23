@@ -31,6 +31,14 @@ releases:
   values:
     - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 
+- name: yd
+  namespace: yacht
+  chart: stuttgart-things/yacht-dispatcher
+  version: 0.1.6
+  installed: false
+  values:
+    - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
+
 helmDefaults:
   kubeContext: default
   verify: false

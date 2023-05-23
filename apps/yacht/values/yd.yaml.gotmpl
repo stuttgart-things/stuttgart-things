@@ -1,0 +1,6 @@
+---
+deployment:
+  containers:
+    yacht-dispatcher:
+      secretsEnvFrom:
+        - name: redis-connection
