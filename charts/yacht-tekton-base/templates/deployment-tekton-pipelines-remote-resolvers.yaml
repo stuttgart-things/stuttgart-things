@@ -2,15 +2,17 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: tekton-pipelines-remote-resolvers
-  namespace: {{ .Values.resolversNamespace }}
+  namespace: {{ .Values.pipelinesNamespace }}-resolvers
   labels:
     app.kubernetes.io/name: resolvers
     app.kubernetes.io/component: resolvers
     app.kubernetes.io/instance: default
-    app.kubernetes.io/version: "v0.47.0"
+    app.kubernetes.io/version: "v0.48.0"
     app.kubernetes.io/part-of: tekton-pipelines
-    pipeline.tekton.dev/release: "v0.47.0"
-    version: "v0.47.0"
+    # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
+    pipeline.tekton.dev/release: "v0.48.0"
+    # labels below are related to istio and should not be used for resource lookup
+    version: "v0.48.0"
 spec:
   replicas: 1
   selector:
@@ -25,13 +27,13 @@ spec:
         app.kubernetes.io/name: resolvers
         app.kubernetes.io/component: resolvers
         app.kubernetes.io/instance: default
-        app.kubernetes.io/version: "v0.47.0"
+        app.kubernetes.io/version: "v0.48.0"
         app.kubernetes.io/part-of: tekton-pipelines
         # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-        pipeline.tekton.dev/release: "v0.47.0"
+        pipeline.tekton.dev/release: "v0.48.0"
         # labels below are related to istio and should not be used for resource lookup
         app: tekton-pipelines-resolvers
-        version: "v0.47.0"
+        version: "v0.48.0"
     spec:
       affinity:
         podAntiAffinity:
@@ -48,7 +50,7 @@ spec:
       serviceAccountName: tekton-pipelines-resolvers
       containers:
         - name: controller
-          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/resolvers:v0.47.0@sha256:179051f8000aab6702bd0b60a36e0768c7435a66543006a8851d569bbc7937c4
+          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/resolvers:v0.48.0@sha256:10cebbc9a9177527cfb60539ce7db217d7dbc4e8ead2ef59e20c41b4085e8769
           resources:
             requests:
               cpu: 100m

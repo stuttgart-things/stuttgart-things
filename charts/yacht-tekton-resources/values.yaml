@@ -42,6 +42,7 @@ enableExtraPipelines: false
 #       dockerconfig:
 #         workspaceKind: secret
 #         workspaceRef: scr-labda
+
 # runs:
 #   packagesthings-cluster-0.2.1HelmChart:
 #     name: helm-sthings-cluster-0.2.1

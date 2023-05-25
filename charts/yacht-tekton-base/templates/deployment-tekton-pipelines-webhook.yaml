@@ -1,16 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  # Note: the Deployment name must be the same as the Service name specified in
+  # config/400-webhook-service.yaml. If you change this name, you must also
+  # change the value of WEBHOOK_SERVICE_NAME below.
   name: tekton-pipelines-webhook
   namespace: {{ .Values.pipelinesNamespace }}
   labels:
     app.kubernetes.io/name: webhook
     app.kubernetes.io/component: webhook
     app.kubernetes.io/instance: default
-    app.kubernetes.io/version: "v0.47.0"
+    app.kubernetes.io/version: "v0.48.0"
     app.kubernetes.io/part-of: tekton-pipelines
-    pipeline.tekton.dev/release: "v0.47.0"
-    version: "v0.47.0"
+    # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
+    pipeline.tekton.dev/release: "v0.48.0"
+    # labels below are related to istio and should not be used for resource lookup
+    version: "v0.48.0"
 spec:
   selector:
     matchLabels:
@@ -24,13 +29,13 @@ spec:
         app.kubernetes.io/name: webhook
         app.kubernetes.io/component: webhook
         app.kubernetes.io/instance: default
-        app.kubernetes.io/version: "v0.47.0"
+        app.kubernetes.io/version: "v0.48.0"
         app.kubernetes.io/part-of: tekton-pipelines
         # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-        pipeline.tekton.dev/release: "v0.47.0"
+        pipeline.tekton.dev/release: "v0.48.0"
         # labels below are related to istio and should not be used for resource lookup
         app: tekton-pipelines-webhook
-        version: "v0.47.0"
+        version: "v0.48.0"
     spec:
       affinity:
         nodeAffinity:
@@ -55,7 +60,10 @@ spec:
       serviceAccountName: tekton-pipelines-webhook
       containers:
         - name: webhook
-          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/webhook:v0.47.0@sha256:6760251cd71c33fa630d152c41bef0b1307acd50e9caf8cb34546cd8f860b33e
+          # This is the Go import path for the binary that is containerized
+          # and substituted here.
+          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/webhook:v0.48.0@sha256:f3b7b6681e67dad5b28d29da48a78b0d77b84cad58d9ff1e3a1355e1a5c9f528
+          # Resource request required for autoscaler to take any action for a metric
           resources:
             requests:
               cpu: 100m

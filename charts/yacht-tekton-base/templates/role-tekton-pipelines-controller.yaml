@@ -11,6 +11,7 @@ rules:
   - apiGroups: [""]
     resources: ["configmaps"]
     verbs: ["list", "watch"]
+  # The controller needs access to these configmaps for logging information and runtime configuration.
   - apiGroups: [""]
     resources: ["configmaps"]
     verbs: ["get"]

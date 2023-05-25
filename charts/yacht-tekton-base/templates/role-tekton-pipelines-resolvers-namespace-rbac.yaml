@@ -8,9 +8,11 @@ metadata:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
 rules:
+  # Needed to watch and load configuration and secret data.
   - apiGroups: [""]
     resources: ["configmaps", "secrets"]
     verbs: ["get", "list", "update", "watch"]
+  # This is needed by leader election to run the controller in HA.
   - apiGroups: ["coordination.k8s.io"]
     resources: ["leases"]
     verbs: ["get", "list", "create", "update", "delete", "patch", "watch"]

@@ -34,7 +34,7 @@ releases:
 - name: yd
   namespace: yacht
   chart: stuttgart-things/yacht-dispatcher
-  version: 0.1.6
+  version: 0.1.12
   installed: true
   values:
     - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
