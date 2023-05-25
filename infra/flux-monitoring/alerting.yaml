@@ -45,7 +45,7 @@ metadata:
 spec:
   providerRef:
     name: flux-system
-  eventSeverity: info
+  eventSeverity: error
   eventSources:
     - kind: GitRepository
       name: '*'
