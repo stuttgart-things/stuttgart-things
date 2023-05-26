@@ -31,3 +31,7 @@ spec:
             name: ${CLUSTER_ISSUER}
             kind: ClusterIssuer
           secretName: ${INGRESS_HOSTNAME}-tls
+      rancher-cacerts:
+        name: tls-ca
+        secretKVs:
+          cacerts.pem: ${VAULT_CA_BUNDLE}

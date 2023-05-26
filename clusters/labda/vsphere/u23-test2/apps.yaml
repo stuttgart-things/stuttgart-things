@@ -19,6 +19,6 @@ spec:
       INGRESS_HOSTNAME: rancher-things
       INGRESS_DOMAIN: test2.4sthings.tiab.ssc.sva.de
       CLUSTER_ISSUER: cluster-issuer-approle
-    # substituteFrom:
-    #   - kind: Secret
-    #     name: rancher-flux-secrets
+    substituteFrom:
+      - kind: Secret
+        name: rancher-flux-secrets

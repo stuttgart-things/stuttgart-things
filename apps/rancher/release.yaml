@@ -19,9 +19,8 @@ spec:
         namespace: cattle-system
       interval: 12h
   values:
-    kube-version: v1.25.9
-    kubeVersion: v1.25.9
-    hostname: rancher-things.test2.4sthings.tiab.ssc.sva.de
+    bootstrapPassword: ${BOOTSTRAP_PASSWORD}
+    hostname: ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}
     privateCA: true
     ingress:
       enabled: true
