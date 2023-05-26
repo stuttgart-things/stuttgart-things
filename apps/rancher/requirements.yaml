@@ -9,7 +9,7 @@ metadata:
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: HelmRepository
 metadata:
-  name: rancher
+  name: rancher-stable
   namespace: cattle-system
 spec:
   interval: 24h
