@@ -1,3 +1,4 @@
 ---
+# v0.48.0
 pipelinesNamespace: tekton-pipelines
 resolversNamespace: tekton-pipelines-resolvers
