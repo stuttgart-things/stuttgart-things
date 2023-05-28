@@ -17,7 +17,7 @@ spec:
   postBuild:
     substitute:
       INGRESS_HOSTNAME: rancher-things
-      INGRESS_DOMAIN: 4sthings.tiab.ssc.sva.de
+      INGRESS_DOMAIN: preapp.4sthings.tiab.ssc.sva.de
       CLUSTER_ISSUER: cluster-issuer-approle
     substituteFrom:
       - kind: Secret
