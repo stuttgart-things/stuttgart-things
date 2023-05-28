@@ -71,50 +71,50 @@ spec:
     substituteFrom:
       - kind: Secret
         name: vault-flux-secrets
-# ---
-# apiVersion: kustomize.toolkit.fluxcd.io/v1
-# kind: Kustomization
-# metadata:
-#   name: flux-monitoring
-#   namespace: flux-system
-# spec:
-#   interval: 1h
-#   retryInterval: 1m
-#   timeout: 5m
-#   sourceRef:
-#     kind: GitRepository
-#     name: flux-system
-#   path: ./infra/flux-monitoring
-#   prune: true
-#   wait: true
-#   postBuild:
-#     substitute:
-#       INGRESS_HOSTNAME: grafana
-#       INGRESS_DOMAIN: test2.4sthings.tiab.ssc.sva.de
-#       CLUSTER_NAME: test2
-#       CLUSTER_DESCRIPTION: test2-cluster-labda-vsphere
-#     substituteFrom:
-#       - kind: Secret
-#         name: github-flux-secrets
-# ---
-# apiVersion: kustomize.toolkit.fluxcd.io/v1
-# kind: Kustomization
-# metadata:
-#   name: trident
-#   namespace: flux-system
-# spec:
-#   interval: 1h
-#   retryInterval: 1m
-#   timeout: 5m
-#   sourceRef:
-#     kind: GitRepository
-#     name: flux-system
-#   path: ./infra/trident
-#   prune: true
-#   wait: true
-#   postBuild:
-#     substitute:
-#       TRIDENT_LIF: 10.100.112.160
-#     substituteFrom:
-#       - kind: Secret
-#         name: trident-flux-secrets
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: flux-monitoring
+  namespace: flux-system
+spec:
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infra/flux-monitoring
+  prune: true
+  wait: true
+  postBuild:
+    substitute:
+      INGRESS_HOSTNAME: grafana
+      INGRESS_DOMAIN: preapp.4sthings.tiab.ssc.sva.de
+      CLUSTER_NAME: preapp
+      CLUSTER_DESCRIPTION: preapp-cluster-labda-vsphere
+    substituteFrom:
+      - kind: Secret
+        name: github-flux-secrets
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: trident
+  namespace: flux-system
+spec:
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infra/trident
+  prune: true
+  wait: true
+  postBuild:
+    substitute:
+      TRIDENT_LIF: 10.100.112.160
+    substituteFrom:
+      - kind: Secret
+        name: trident-flux-secrets
