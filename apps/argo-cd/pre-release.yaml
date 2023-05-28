@@ -37,9 +37,9 @@ spec:
           name: argocd-ingress
           namespace: argocd
         spec:
-          commonName: ${INGRESS_HOST}
+          commonName: ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}
           dnsNames:
-          - ${INGRESS_HOST}
+          - ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}
           issuerRef:
             name: cluster-issuer-approle
             kind: ClusterIssuer
