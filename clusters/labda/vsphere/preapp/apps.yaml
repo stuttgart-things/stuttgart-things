@@ -72,3 +72,34 @@ spec:
     substituteFrom:
       - kind: Secret
         name: s3-flux-secrets
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: apps
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  retryInterval: 1m
+  dependsOn:
+    - name: infra-controllers
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./apps/argo-cd
+  prune: true
+  wait: true
+  timeout: 5m0s
+  postBuild:
+    substitute:
+      IMAGE_REPOSITORY: eu.gcr.io/stuttgart-things/sthings-argocd
+      IMAGE_TAG: v2.7.1
+      SERVICE_TYPE: ClusterIP
+      INGRESS_HOSTNAME: argo-cd
+      INGRESS_DOMAIN: 4sthings.tiab.ssc.sva.de
+      INGRESS_SECRET_NAME: argocd-ingress-tls
+    substituteFrom:
+      - kind: Secret
+        name: vault-flux-secrets
+      - kind: Secret
+        name: scr-flux-secrets

@@ -47,8 +47,8 @@ spec:
           nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
         ingressClassName: nginx
         hosts:
-          - ${INGRESS_HOST}
+          - ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}
         tls:
           - secretName: ${INGRESS_SECRET_NAME}
             hosts:
-              - ${INGRESS_HOST}
+              - ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}
