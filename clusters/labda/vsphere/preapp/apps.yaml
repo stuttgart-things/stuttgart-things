@@ -23,31 +23,31 @@ spec:
       - kind: Secret
         name: rancher-flux-secrets
 ---
-# apiVersion: kustomize.toolkit.fluxcd.io/v1
-# kind: Kustomization
-# metadata:
-#   name: harbor
-#   namespace: flux-system
-# spec:
-#   interval: 1h
-#   retryInterval: 1m
-#   timeout: 5m
-#   sourceRef:
-#     kind: GitRepository
-#     name: flux-system
-#   path: ./apps/harbor
-#   prune: true
-#   wait: true
-#   postBuild:
-#     substitute:
-#       INGRESS_HOSTNAME: scr
-#       INGRESS_DOMAIN: mgmt.4sthings.tiab.ssc.sva.de
-#       CLUSTER_ISSUER: cluster-issuer-approle
-#       STORAGE_CLASS: ontap
-#     substituteFrom:
-#       - kind: Secret
-#         name: harbor-flux-secrets
-# ---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: harbor
+  namespace: flux-system
+spec:
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./apps/harbor
+  prune: true
+  wait: true
+  postBuild:
+    substitute:
+      INGRESS_HOSTNAME: scr
+      INGRESS_DOMAIN: preapp.4sthings.tiab.ssc.sva.de
+      CLUSTER_ISSUER: cluster-issuer-approle
+      STORAGE_CLASS: ontap
+    substituteFrom:
+      - kind: Secret
+        name: harbor-flux-secrets
+---
 # apiVersion: kustomize.toolkit.fluxcd.io/v1
 # kind: Kustomization
 # metadata:
