@@ -90,9 +90,9 @@ spec:
   postBuild:
     substitute:
       INGRESS_HOSTNAME: grafana
-      INGRESS_DOMAIN: preapp.4sthings.tiab.ssc.sva.de
-      CLUSTER_NAME: preapp
-      CLUSTER_DESCRIPTION: preapp-cluster-labda-vsphere
+      INGRESS_DOMAIN: app.4sthings.tiab.ssc.sva.de
+      CLUSTER_NAME: app
+      CLUSTER_DESCRIPTION: app-labda-vsphere
     substituteFrom:
       - kind: Secret
         name: github-flux-secrets
