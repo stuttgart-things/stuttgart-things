@@ -19,6 +19,10 @@ spec:
         namespace: cattle-system
       interval: 12h
   values:
+    global:
+      cattle:
+        psp:
+          enabled: false
     bootstrapPassword: ${BOOTSTRAP_PASSWORD}
     hostname: ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}
     privateCA: true
