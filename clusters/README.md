@@ -5,10 +5,18 @@
 <details><summary>SECRET MANIFESTS</summary>
 
 ```
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: flux-system
+  labels:
+    app: flux
+---
 apiVersion: v1
 kind: Secret
 metadata:
-  name: vault
+  name: vault-flux-secrets
   namespace: flux-system
 type: Opaque
 stringData:
@@ -22,7 +30,7 @@ stringData:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: github
+  name: github-flux-secrets
   namespace: flux-system
 type: Opaque
 stringData:
@@ -34,7 +42,7 @@ stringData:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: harbor-flux-secrets
+  name: scr-flux-secrets
   namespace: flux-system
 type: Opaque
 stringData:
@@ -61,6 +69,25 @@ type: Opaque
 stringData:
   HARBOR_ADMIN_USER: <HARBOR_ADMIN_USER>
   HARBOR_ADMIN_PASSWORD: <HARBOR_ADMIN_PASSWORD>
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: trident-flux-secrets
+  namespace: flux-system
+type: Opaque
+stringData:
+  TRIDENT_USER: <TRIDENT_USER>
+  TRIDENT_PASSWORD: <TRIDENT_PASSWORD>
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: rancher-flux-secrets
+  namespace: flux-system
+type: Opaque
+stringData:
+  BOOTSTRAP_PASSWORD: <BOOTSTRAP_PASSWORD>
 ```
 
 </details>
@@ -82,19 +109,19 @@ stringData:
   flux bootstrap github --owner=stuttgart-things --repository=stuttgart-things \
   --path=clusters/<LAB>/<CLOUD>/<CLUSTERNAME>
   ```
-  
-* Check Flux status 
+
+* Check Flux status
   ```
   kubectl get Kustomization -A
   kubectl get hr -A
   ```
-  
+
 * If install retries are exhausted
   ```
   flux suspend hr <HR> -n <NAMESPACE>
   flux resume hr <HR> -n <NAMESPACE>
   ```
-  
+
 ## INSTALL FLUX-CLI
 
 ```
