@@ -25,6 +25,10 @@ spec:
       name: '*'
     - kind: Kustomization
       name: '*'
+    - kind: HelmRelease
+      name: '*'
+      matchLabels:
+        alerting: flux2
 ---
 apiVersion: notification.toolkit.fluxcd.io/v1beta2
 kind: Provider

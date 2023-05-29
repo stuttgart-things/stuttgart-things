@@ -4,6 +4,8 @@ kind: Kustomization
 metadata:
   name: rancher-things
   namespace: flux-system
+  labels:
+    alerting: flux2
 spec:
   dependsOn:
     - name: ingress-nginx
@@ -31,6 +33,8 @@ kind: Kustomization
 metadata:
   name: harbor
   namespace: flux-system
+  labels:
+    alerting: flux2
 spec:
   dependsOn:
     - name: ingress-nginx
@@ -60,6 +64,8 @@ kind: Kustomization
 metadata:
   name: minio
   namespace: flux-system
+  labels:
+    alerting: flux2
 spec:
   dependsOn:
     - name: ingress-nginx
@@ -90,6 +96,8 @@ kind: Kustomization
 metadata:
   name: argo-cd
   namespace: flux-system
+  labels:
+    alerting: flux2
 spec:
   dependsOn:
     - name: ingress-nginx
