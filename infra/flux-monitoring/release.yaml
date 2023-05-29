@@ -34,6 +34,8 @@ spec:
     name: flux-monitoring
   timeout: 5m
   wait: true
+# username: admin
+# password: prom-operator
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
