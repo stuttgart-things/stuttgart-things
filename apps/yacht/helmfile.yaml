@@ -19,7 +19,7 @@ releases:
 - name: redis
   namespace: yacht
   chart: redis/redis
-  installed: false
+  installed: true
   values:
     - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 

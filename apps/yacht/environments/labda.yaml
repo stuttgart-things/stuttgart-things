@@ -1,7 +1,7 @@
 ---
 # ingress
 hostname: yas
-clusterName: test2
+clusterName: dev7
 domain: 4sthings.tiab.ssc.sva.de
 
 # cert-manager

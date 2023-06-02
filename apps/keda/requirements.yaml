@@ -5,3 +5,12 @@ metadata:
   name: keda
   labels:
     toolkit.fluxcd.io/tenant: sthings-team
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: kedacore
+  namespace: keda
+spec:
+  interval: 24h
+  url: https://kedacore.github.io/charts
