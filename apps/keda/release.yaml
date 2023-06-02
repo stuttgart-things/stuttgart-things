@@ -3,14 +3,14 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: minio-deployment
+  name: keda-deployment
   namespace: keda
 spec:
   interval: 30m
   chart:
     spec:
-      chart: minio
-      version: 12.6.0
+      chart: keda
+      version: 2.x
       sourceRef:
         kind: HelmRepository
         name: kedacore
