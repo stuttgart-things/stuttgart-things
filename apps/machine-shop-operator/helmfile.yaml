@@ -3,7 +3,7 @@ releases:
 - name: machine-shop-operator
   namespace: machine-shop-operator-system
   chart: stuttgart-things/machine-shop-operator
-  version: v0.1.7
+  version: v0.1.11
   installed: true
   values:
     - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
