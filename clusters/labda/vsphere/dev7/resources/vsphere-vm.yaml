@@ -1,0 +1,45 @@
+---
+apiVersion: machineshop.sthings.tiab.ssc.sva.de/v1beta1
+kind: Terraform
+metadata:
+  name: srvfiles-test
+  labels:
+    app.kubernetes.io/name: terraform
+    app.kubernetes.io/part-of: machine-shop-operator
+    app.kubernetes.io/created-by: machine-shop-operator
+spec:
+  variables:
+    - vsphere_vm_name="srvfiles-test"
+    - vm_count=1
+    - vm_num_cpus=6
+    - vm_memory=8192
+    - vm_disk_size=256
+    - vsphere_vm_template="/NetApp-HCI-Datacenter/vm/stuttgart-things/vm-templates/ubuntu23"
+    - vsphere_vm_folder_path="stuttgart-things/testing"
+    - vsphere_network="/NetApp-HCI-Datacenter/network/tiab-prod"
+    - vsphere_datastore="/NetApp-HCI-Datacenter/datastore/DatastoreCluster/NetApp-HCI-Datastore-04"
+    - vsphere_resource_pool="Resources"
+    - vsphere_datacenter="/NetApp-HCI-Datacenter"
+  module:
+    - moduleName=srvfiles-test
+    - backendKey=srvfiles-test.tfstate
+    - moduleSourceUrl=https://artifacts.tiab.labda.sva.de/modules/vsphere-vm.zip
+    - backendEndpoint=https://artifacts.tiab.labda.sva.de
+    - backendRegion=main
+    - backendBucket=vsphere-vm
+    - tfProviderName=vsphere
+    - tfProviderSource=hashicorp/vsphere
+    - tfProviderVersion=2.3.1
+    - tfVersion=1.4.5
+  backend:
+    - access_key=apps/data/artifacts:accessKey
+    - secret_key=apps/data/artifacts:secretKey
+  secrets:
+    - vsphere_user=cloud/data/vsphere:username
+    - vsphere_password=cloud/data/vsphere:password
+    - vsphere_server=cloud/data/vsphere:ip
+    - vm_ssh_user=cloud/data/vsphere:vm_ssh_user
+    - vm_ssh_password=cloud/data/vsphere:vm_ssh_password
+  terraform-version: 1.4.5
+  template: vsphere-vm
+---
