@@ -1,0 +1,10 @@
+---
+secrets:
+  vault:
+    name: vault
+    dataType: stringData
+    secretKVs:
+      VAULT_NAMESPACE: {{ .Values.vaultNamespace }}
+      VAULT_ADDR: {{ .Values.vaultAddr}
+      VAULT_ROLE_ID: {{ .Values.vaultRoleID }}
+      VAULT_SECRET_ID: {{ .Values.vaultSecretID }}

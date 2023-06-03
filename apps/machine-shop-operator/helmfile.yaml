@@ -1,1 +1,25 @@
 ---
+releases:
+- name: machine-shop-operator
+  namespace: machine-shop-operator-system
+  chart: machine-shop-operator
+  version: v0.1.5
+  installed: true
+
+helmDefaults:
+  kubeContext: default
+  verify: false
+  wait: false
+  timeout: 600
+  recreatePods: false
+  force: true
+
+environments:
+  labda:
+    values:
+      - environments/{{ .Environment.Name }}.yaml
+
+repositories:
+- name: stuttgart-things
+  url: eu.gcr.io/stuttgart-things
+  oci: true
