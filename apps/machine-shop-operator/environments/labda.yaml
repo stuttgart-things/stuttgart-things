@@ -1,5 +1,5 @@
 ---
-VAULT_NAMESPACE: root
-VAULT_ADDR: https://vault-vsphere.tiab.labda.sva.de:8200
-VAULT_ROLE_ID: ref+vault://apps/vault/roleID
-VAULT_SECRET_ID: ref+vault://apps/vault/secretID
+vaultNamespace: root
+vaultAddr: https://vault-vsphere.tiab.labda.sva.de:8200
+vaultRoleID: ref+vault://apps/vault/roleID
+vaultSecretID: ref+vault://apps/vault/secretID

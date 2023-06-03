@@ -2,12 +2,13 @@
 releases:
 - name: machine-shop-operator
   namespace: machine-shop-operator-system
-  chart: machine-shop-operator
-  version: v0.1.5
+  chart: stuttgart-things/machine-shop-operator
+  version: v0.1.7
   installed: true
+  values:
+    - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 
 helmDefaults:
-  kubeContext: default
   verify: false
   wait: false
   timeout: 600
