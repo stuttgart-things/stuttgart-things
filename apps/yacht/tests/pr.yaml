@@ -1,0 +1,37 @@
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  name: kaniko-sthings-alpine-230604-0303
+  namespace: yacht
+spec:
+  pipelineRef:
+    name: build-kaniko-image
+  workspaces:
+    - name: dockerconfig
+      secret:
+        secretName: scr-labda
+    - name: shared-workspace
+      persistentVolumeClaim:
+        claimName: yacht-kaniko-workspace
+    - name: ssh-credentials
+      secret:
+        secretName: codehub-ssh
+  params:
+    - name: context
+      value: "/kaniko/sthings-alpine"
+    - name: dockerfile
+      value: "build/images/sthings-alpine/Dockerfile"
+    - name: git-revision
+      value: "master"
+    - name: gitRepoUrl
+      value: "git@codehub.sva.de:Lab/stuttgart-things/stuttgart-things.git"
+    - name: gitWorkspaceSubdirectory
+      value: "/kaniko/sthings-alpine"
+    - name: image
+      value: "scr.tiab.labda.sva.de/sthings-alpine/sthings-alpine/sthings-alpine/sthings-alpine"
+    - name: registry
+      value: "scr.tiab.labda.sva.de"
+    - name: tag
+      value: "230604-0303"
+    - name: trigger-external-pipeline
+      value: "false"

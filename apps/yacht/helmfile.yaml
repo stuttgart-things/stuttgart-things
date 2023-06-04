@@ -1,25 +1,25 @@
 ---
 releases:
 - name: tekton-base
+  installed: true
   namespace: tekton-pipelines
   chart: stuttgart-things/yacht-tekton-base
   version: v0.48.1
-  installed: true
 
 - name: tekton-resources
+  installed: true
   namespace: yacht
   chart: stuttgart-things/yacht-tekton-resources
   version: v0.47.3
-  installed: false
   needs:
     - tekton-pipelines/tekton-base
   values:
     - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 
 - name: redis
+  installed: false
   namespace: yacht
   chart: redis/redis
-  installed: false
   values:
     - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 

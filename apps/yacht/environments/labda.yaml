@@ -13,6 +13,6 @@ redisPassword: ref+vault://apps/yacht/redis-password
 # tekton resources
 codehubSSH: ref+vault://apps/yacht/codehub-ssh
 scrDockerConfig: ref+vault://apps/yacht/scr-labda
-tektonStorageClass: ontap
+tektonStorageClass: nfs4-csi
 enableTasks: true
 enablePipelines: true
