@@ -10,7 +10,7 @@ releases:
   namespace: yacht
   chart: stuttgart-things/yacht-tekton-resources
   version: v0.47.3
-  installed: true
+  installed: false
   needs:
     - tekton-pipelines/tekton-base
   values:
@@ -19,7 +19,7 @@ releases:
 - name: redis
   namespace: yacht
   chart: redis/redis
-  installed: true
+  installed: false
   values:
     - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 
@@ -27,7 +27,7 @@ releases:
   namespace: yacht
   chart: stuttgart-things/yacht-application-server
   version: 0.3.8
-  installed: true
+  installed: false
   values:
     - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 
@@ -35,14 +35,13 @@ releases:
   namespace: yacht
   chart: stuttgart-things/yacht-dispatcher
   version: 0.1.12
-  installed: true
+  installed: false
   values:
     - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
   needs:
     - yacht/yas
 
 helmDefaults:
-  kubeContext: default
   verify: false
   wait: false
   timeout: 600
