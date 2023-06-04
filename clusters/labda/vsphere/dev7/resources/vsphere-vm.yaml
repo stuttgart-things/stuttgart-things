@@ -3,6 +3,7 @@ apiVersion: machineshop.sthings.tiab.ssc.sva.de/v1beta1
 kind: Terraform
 metadata:
   name: srvfiles-test
+  namespace: default
   labels:
     app.kubernetes.io/name: terraform
     app.kubernetes.io/part-of: machine-shop-operator
