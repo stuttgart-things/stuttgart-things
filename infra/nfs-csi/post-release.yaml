@@ -25,7 +25,7 @@ spec:
         provisioner: nfs.csi.k8s.io
         parameters:
           server: ${NFS_SERVER_FQDN}
-          share: /
+          share: ${NFS_SHARE_PATH}
           mountPermissions: "0777"
         backendType: ontap-nas
         volumeBindingMode: Immediate
@@ -37,7 +37,7 @@ spec:
         provisioner: nfs.csi.k8s.io
         parameters:
           server: ${NFS_SERVER_FQDN}
-          share: /
+          share: ${NFS_SHARE_PATH}
           mountPermissions: "0777"
         backendType: ontap-nas
         volumeBindingMode: Immediate
