@@ -55,7 +55,7 @@ metadata:
     app.kubernetes.io/created-by: machine-shop-operator
 spec:
   variables:
-    - vsphere_vm_name="ankit-rke2"
+    - vsphere_vm_name="ankit2-rke2"
     - vm_count=1
     - vm_num_cpus=6
     - vm_memory=8192
