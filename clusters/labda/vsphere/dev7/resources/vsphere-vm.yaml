@@ -47,7 +47,7 @@ spec:
 apiVersion: machineshop.sthings.tiab.ssc.sva.de/v1beta1
 kind: Terraform
 metadata:
-  name: ankit-rke2
+  name: ankit2-rke2
   namespace: default
   labels:
     app.kubernetes.io/name: terraform
@@ -67,8 +67,8 @@ spec:
     - vsphere_resource_pool="Resources"
     - vsphere_datacenter="/NetApp-HCI-Datacenter"
   module:
-    - moduleName=ankit-rke2
-    - backendKey=ankit-rke2.tfstate
+    - moduleName=ankit2-rke2
+    - backendKey=ankit2-rke2.tfstate
     - moduleSourceUrl=https://artifacts.tiab.labda.sva.de/modules/vsphere-vm.zip
     - backendEndpoint=https://artifacts.tiab.labda.sva.de
     - backendRegion=main
