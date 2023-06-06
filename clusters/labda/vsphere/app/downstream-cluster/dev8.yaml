@@ -62,5 +62,3 @@ spec:
         ignoreDaemonSets: true
         skipWaitForDeleteTimeoutSeconds: 0
         timeout: 120
-  machineSelectorConfig:
-    - config: {}
