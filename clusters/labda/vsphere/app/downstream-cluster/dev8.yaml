@@ -33,8 +33,6 @@ spec:
       disable-kube-proxy: false
       etcd-expose-metrics: false
       profile: null
-    machinePools:
-      {}
     machineSelectorConfig:
       - config:
           protect-kernel-defaults: false
