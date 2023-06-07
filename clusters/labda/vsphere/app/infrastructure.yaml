@@ -10,7 +10,7 @@ spec:
   timeout: 5m
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: infra-june-2023
   path: ./infra/metallb
   prune: true
   wait: true
@@ -29,7 +29,7 @@ spec:
   timeout: 5m
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: infra-june-2023
   path: ./infra/ingress-nginx
   dependsOn:
     - name: metallb
@@ -47,7 +47,7 @@ spec:
   timeout: 5m
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: infra-june-2023
   path: ./infra/longhorn
   prune: true
   wait: true
@@ -63,7 +63,7 @@ spec:
   timeout: 5m
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: infra-june-2023
   path: ./infra/cert-manager
   prune: true
   wait: true
@@ -85,7 +85,7 @@ spec:
   timeout: 5m
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: infra-june-2023
   path: ./infra/flux-monitoring
   prune: true
   wait: true
@@ -110,7 +110,7 @@ spec:
   timeout: 5m
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: infra-june-2023
   path: ./infra/trident
   prune: true
   wait: true
