@@ -7,3 +7,32 @@ secrets:
       SCR_HOSTNAME: {{ .Values.scrHostname }}
       SCR_USERNAME: {{ .Values.scrUsername }}
       SCR_PASSWORD: {{ .Values.scrPassword }}
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: trident-flux-secrets
+  namespace: flux-system
+type: Opaque
+stringData:
+  TRIDENT_USER: svc-trident
+  TRIDENT_PASSWORD: netapp01
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: s3-flux-secrets
+  namespace: flux-system
+type: Opaque
+stringData:
+  MINIO_ADMIN_USER: sthings
+  MINIO_ADMIN_PASSWORD: Atlan7is
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: rancher-flux-secrets
+  namespace: flux-system
+type: Opaque
+stringData:
+  BOOTSTRAP_PASSWORD: Atlan7is2023
