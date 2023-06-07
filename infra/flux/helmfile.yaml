@@ -1,0 +1,26 @@
+---
+releases:
+- name: upstream
+  installed: true
+  namespace: tekton-pipelines
+  chart: stuttgart-things/sthings-cluster
+  version: 0.3.1
+  values:
+    - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
+
+helmDefaults:
+  verify: false
+  wait: false
+  timeout: 600
+  recreatePods: false
+  force: true
+
+environments:
+  upstream:
+    values:
+      - environments/{{ .Environment.Name }}.yaml
+
+repositories:
+- name: stuttgart-things
+  url: eu.gcr.io/stuttgart-things
+  oci: true
