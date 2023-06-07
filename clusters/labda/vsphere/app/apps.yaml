@@ -15,7 +15,7 @@ spec:
   timeout: 5m
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: infra-june-2023
   path: ./apps/rancher
   prune: true
   wait: true
@@ -45,7 +45,7 @@ spec:
   timeout: 5m
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: infra-june-2023
   path: ./apps/harbor
   prune: true
   wait: true
@@ -77,7 +77,7 @@ spec:
   timeout: 5m
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: infra-june-2023
   path: ./apps/minio
   prune: true
   wait: true
@@ -106,7 +106,7 @@ spec:
   retryInterval: 1m
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: infra-june-2023
   path: ./apps/argo-cd
   prune: true
   wait: true
