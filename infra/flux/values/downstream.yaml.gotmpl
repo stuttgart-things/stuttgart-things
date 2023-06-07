@@ -1,0 +1,25 @@
+---
+secrets:
+  scr:
+    name: scr-flux-secrets
+    namespace: flux-system
+    secretKVs:
+      SCR_HOSTNAME: {{ .Values.scrHostname }}
+      SCR_USERNAME: {{ .Values.scrUsername }}
+      SCR_PASSWORD: {{ .Values.scrPassword }}
+  trident:
+    name: trident-flux-secrets
+    namespace: flux-system
+    secretKVs:
+      TRIDENT_USER: {{ .Values.tridentUser }}
+      TRIDENT_PASSWORD: {{ .Values.tridentPassword }}
+  vault:
+    name: vault-flux-secrets
+    namespace: flux-system
+    secretKVs:
+      VAULT_ADDR: {{ .Values.vaultAddr }}
+      VAULT_ROLE_ID: {{ .Values.vaultRoleID }}
+      VAULT_SECRET_ID: {{ .Values.vaultSecretID }}
+      VAULT_NAMESPACE: {{ .Values.vaultNamespace }}
+      VAULT_CA_BUNDLE: {{ .Values.vaultCA }}
+      VAULT_PKI_PATH: {{ .Values.vaultPkiPath }}

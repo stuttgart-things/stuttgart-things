@@ -1,1 +1,9 @@
 ---
+secrets:
+  scr-flux-secrets:
+    name: scr-flux-secrets
+    namespace: flux-system
+    secretKVs:
+      SCR_HOSTNAME: {{ .Values.scrHostname }}
+      SCR_USERNAME: {{ .Values.scrUsername }}
+      SCR_PASSWORD: {{ .Values.scrPassword }}

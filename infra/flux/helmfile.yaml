@@ -1,8 +1,8 @@
 ---
 releases:
-- name: upstream
+- name: downstream
   installed: true
-  namespace: tekton-pipelines
+  namespace: flux-system
   chart: stuttgart-things/sthings-cluster
   version: 0.3.1
   values:
@@ -16,7 +16,7 @@ helmDefaults:
   force: true
 
 environments:
-  upstream:
+  labda:
     values:
       - environments/{{ .Environment.Name }}.yaml
 
