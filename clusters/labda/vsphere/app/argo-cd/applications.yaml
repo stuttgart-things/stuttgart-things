@@ -28,12 +28,12 @@ source:
                 VAULT_ROLE_ID: <path:apps/data/vault#roleID>
                 VAULT_SECRET_ID: <path:apps/data/grafana#secretID>
                 VAULT_NAMESPACE: <path:apps/data/grafana#namespace>
-syncPolicy:
-  automated:
-    prune: true
-    selfHeal: true
-  syncOptions:
-    - CreateNamespace=true
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
