@@ -10,24 +10,24 @@ spec:
     name: dev8
     namespace: machine-shop-operator-system
     # server: 'https://10.100.136.78:6443'
-source:
-  repoURL: eu.gcr.io/stuttgart-things
-  chart: sthings-cluster
-  targetRevision: 0.3.1
-  plugin:
-    name: argocd-vault-plugin-helm
-    env:
-      - name: HELM_VALUES
-        value: |
-          secrets:
-            vault:
-              name: vault
-              namespace: machine-shop-operator-system
-              secretKVs:
-                VAULT_ADDR: <path:apps/data/vault#addr>
-                VAULT_ROLE_ID: <path:apps/data/vault#roleID>
-                VAULT_SECRET_ID: <path:apps/data/grafana#secretID>
-                VAULT_NAMESPACE: <path:apps/data/grafana#namespace>
+  source:
+    repoURL: eu.gcr.io/stuttgart-things
+    chart: sthings-cluster
+    targetRevision: 0.3.1
+    plugin:
+      name: argocd-vault-plugin-helm
+      env:
+        - name: HELM_VALUES
+          value: |
+            secrets:
+              vault:
+                name: vault
+                namespace: machine-shop-operator-system
+                secretKVs:
+                  VAULT_ADDR: <path:apps/data/vault#addr>
+                  VAULT_ROLE_ID: <path:apps/data/vault#roleID>
+                  VAULT_SECRET_ID: <path:apps/data/grafana#secretID>
+                  VAULT_NAMESPACE: <path:apps/data/grafana#namespace>
   syncPolicy:
     automated:
       prune: true
