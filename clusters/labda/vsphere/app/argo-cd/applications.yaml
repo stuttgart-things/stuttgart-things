@@ -1,0 +1,23 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: machine-shop-operator-dev
+spec:
+  destination:
+    name: ''
+    namespace: machine-shop-operator-system
+    server: 'https://10.100.136.143:6443'
+  source:
+    path: helm/machine-shop-operator
+    repoURL: 'https://github.com/stuttgart-things/machine-shop-operator.git'
+    targetRevision: TF-OUTPUT-LOG
+    plugin:
+      name: argocd-vault-plugin-helm
+  sources: []
+  project: dev8
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: false
+---
