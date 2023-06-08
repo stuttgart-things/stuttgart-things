@@ -13,8 +13,9 @@ spec:
     path: helm/machine-shop-operator
     repoURL: 'https://github.com/stuttgart-things/machine-shop-operator.git'
     targetRevision: TF-OUTPUT-LOG
-    plugin:
-      name: argocd-vault-plugin-helm
+    helm:
+      valueFiles:
+        - values.yaml
   sources: []
   project: dev8
   syncPolicy:
