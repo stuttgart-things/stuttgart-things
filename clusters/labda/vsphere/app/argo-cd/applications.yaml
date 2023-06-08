@@ -1,38 +1,40 @@
 ---
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: machine-shop-operator-secret
-  namespace: argocd
-spec:
-  project: dev8
-  destination:
-    name: ''
-    namespace: machine-shop-operator-system
-    server: 'https://10.100.136.143:6443'
-source:
-  repoURL: eu.gcr.io/stuttgart-things
-  chart: sthings-cluster
-  targetRevision: 0.3.1
-  plugin:
-    name: argocd-vault-plugin-helm
-    env:
-      - name: HELM_VALUES
-        value: |
-          secrets:
-            grafana-admin:
-              name: grafana-admin
-              namespace: loki-stack
-              secretKVs:
-                admin-user: <path:apps/data/grafana#adminUser>
-                admin-password: <path:apps/data/grafana#adminPassword>
-destination:
-  server: 'https://10.31.103.139:6443'
-  namespace: kube-system
-syncPolicy:
-  automated:
-    prune: true
-    selfHeal: true
+# apiVersion: argoproj.io/v1alpha1
+# kind: Application
+# metadata:
+#   name: machine-shop-operator-secret
+#   namespace: argocd
+# spec:
+#   project: app
+#   destination:
+#     name: ''
+#     namespace: machine-shop-operator-system
+#     server: 'https://10.100.136.143:6443'
+# source:
+#   repoURL: eu.gcr.io/stuttgart-things
+#   chart: sthings-cluster
+#   targetRevision: 0.3.1
+#   plugin:
+#     name: argocd-vault-plugin-helm
+#     env:
+#       - name: HELM_VALUES
+#         value: |
+#           secrets:
+#             grafana-admin:
+#               name: grafana-admin
+#               namespace: loki-stack
+#               secretKVs:
+#                 VAULT_ROLE_ID: <path:apps/data/vault#roleID>
+#                 VAULT_SECRET_ID: <path:apps/data/grafana#secretID>
+#                 VAULT_ADDR: <path:apps/data/vault#vault>
+#                 VAULT_NAMESPACE: <path:apps/data/grafana#secretID>
+# destination:
+#   server: 'https://10.31.103.139:6443'
+#   namespace: kube-system
+# syncPolicy:
+#   automated:
+#     prune: true
+#     selfHeal: true
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -52,7 +54,7 @@ spec:
       valueFiles:
         - values.yaml
   sources: []
-  project: dev8
+  project: app
   syncPolicy:
     automated:
       prune: false
