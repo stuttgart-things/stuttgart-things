@@ -7,9 +7,9 @@ metadata:
 spec:
   project: dev8
   destination:
-    # name: dev8
+    name: dev8
     namespace: machine-shop-operator-system
-    server: 'https://10.100.136.78:6443'
+    #server: 'https://10.100.136.78:6443'
   source:
     repoURL: eu.gcr.io/stuttgart-things
     chart: sthings-cluster
@@ -52,6 +52,9 @@ spec:
     helm:
       valueFiles:
         - values.yaml
+      parameters:
+        - name: deployment.containers.manager.secretsEnvFrom[0].name
+          value: vault
   sources: []
   project: dev8
   syncPolicy:
