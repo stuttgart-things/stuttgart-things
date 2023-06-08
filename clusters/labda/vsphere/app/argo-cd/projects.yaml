@@ -2,7 +2,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
-  name: dev8
+  name: app
   namespace: argocd
 spec:
   clusterResourceBlacklist:
@@ -11,9 +11,9 @@ spec:
   clusterResourceWhitelist:
   - group: '*'
     kind: '*'
-  description: dev8
+  description: app
   destinations:
-  - name: dev8
+  - name: app
     namespace: '*'
     server: https://10.100.136.143:6443
   namespaceResourceBlacklist:
