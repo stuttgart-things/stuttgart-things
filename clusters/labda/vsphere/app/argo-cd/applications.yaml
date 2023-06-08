@@ -26,8 +26,8 @@ spec:
                 secretKVs:
                   VAULT_ADDR: <path:apps/data/vault#addr>
                   VAULT_ROLE_ID: <path:apps/data/vault#roleID>
-                  VAULT_SECRET_ID: <path:apps/data/grafana#secretID>
-                  VAULT_NAMESPACE: <path:apps/data/grafana#namespace>
+                  VAULT_SECRET_ID: <path:apps/data/vault#secretID>
+                  VAULT_NAMESPACE: <path:apps/data/vault#namespace>
   syncPolicy:
     automated:
       prune: true
@@ -42,9 +42,9 @@ metadata:
   namespace: argocd
 spec:
   destination:
-    name: ''
+    name: dev8
     namespace: machine-shop-operator-system
-    server: 'https://10.100.136.143:6443'
+    # server: 'https://10.100.136.143:6443'
   source:
     path: helm/machine-shop-operator
     repoURL: 'https://github.com/stuttgart-things/machine-shop-operator.git'
@@ -53,7 +53,7 @@ spec:
       valueFiles:
         - values.yaml
   sources: []
-  project: app
+  project: dev8
   syncPolicy:
     automated:
       prune: false
