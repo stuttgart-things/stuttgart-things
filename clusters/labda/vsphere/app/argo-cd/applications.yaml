@@ -9,7 +9,7 @@ spec:
   destination:
     name: dev8
     namespace: machine-shop-operator-system
-    server: 'https://10.100.136.78:6443'
+    # server: 'https://10.100.136.78:6443'
 source:
   repoURL: eu.gcr.io/stuttgart-things
   chart: sthings-cluster
