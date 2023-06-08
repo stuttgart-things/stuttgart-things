@@ -3,7 +3,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: machine-shop-operator-dev
-  name: argocd
+  namespace: argocd
 spec:
   destination:
     name: ''
