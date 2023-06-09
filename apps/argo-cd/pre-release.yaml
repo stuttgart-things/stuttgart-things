@@ -93,4 +93,4 @@ data:
         command: ["sh", "-c"]
         args: ["kustomize build . > all.yaml && argocd-vault-plugin generate all.yaml"]
 
-# fix syntax of generate args
+# # fix syntax of generate args
