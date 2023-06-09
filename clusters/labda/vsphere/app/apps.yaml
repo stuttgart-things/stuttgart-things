@@ -106,7 +106,7 @@ spec:
   retryInterval: 1m
   sourceRef:
     kind: GitRepository
-    name: infra-june-2023
+    name: argocd-274
   path: ./apps/argo-cd
   prune: true
   wait: true
@@ -119,6 +119,7 @@ spec:
       INGRESS_HOSTNAME: argo-cd
       INGRESS_DOMAIN: app.4sthings.tiab.ssc.sva.de
       INGRESS_SECRET_NAME: argocd-ingress-tls
+      VAULTPLUGIN_GENERATE_CMD: 'helm template "${ARGOCD_APP_NAME}" -f <(echo "${ARGOCD_ENV_HELM_VALUES}") --include-crds . -n ${ARGOCD_APP_NAMESPACE} | argocd-vault-plugin generate -'
     substituteFrom:
       - kind: Secret
         name: vault-flux-secrets
