@@ -14,3 +14,37 @@ spec:
   path: ./apps/keda
   prune: true
   wait: true
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: argo-cd
+  namespace: flux-system
+  labels:
+    alerting: flux2
+spec:
+  dependsOn:
+    - name: ingress-nginx
+    - name: cert-manager
+  interval: 10m0s
+  retryInterval: 1m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./apps/argo-cd
+  prune: true
+  wait: true
+  timeout: 5m0s
+  postBuild:
+    substitute:
+      IMAGE_REPOSITORY: eu.gcr.io/stuttgart-things/sthings-argocd
+      IMAGE_TAG: v2.7.4
+      SERVICE_TYPE: ClusterIP
+      INGRESS_HOSTNAME: argo-cd
+      INGRESS_DOMAIN: dev7.4sthings.tiab.ssc.sva.de
+      INGRESS_SECRET_NAME: argocd-ingress-tls
+    substituteFrom:
+      - kind: Secret
+        name: vault-flux-secrets
+      - kind: Secret
+        name: scr-flux-secrets
