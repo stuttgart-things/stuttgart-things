@@ -5,17 +5,15 @@ metadata:
   name: machine-shop-operator
   namespace: argocd
 spec:
-  project: dev8
+  project: app
   source:
     path: argocd
     repoURL: 'https://github.com/stuttgart-things/machine-shop-operator.git'
     targetRevision: TF-OUTPUT-LOG
   destination:
-    name: dev8
-    namespace: machine-shop-operator-system
+    name: app
+    namespace: argocd
   syncPolicy:
     automated:
       prune: false
       selfHeal: false
-    syncOptions:
-      - CreateNamespace=true
