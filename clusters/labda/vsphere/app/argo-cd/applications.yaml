@@ -2,23 +2,20 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: machine-shop-operator-dev
+  name: machine-shop-operator
   namespace: argocd
 spec:
-  destination:
-    name: dev8
-    namespace: machine-shop-operator-system
-    # server: 'https://10.100.136.143:6443'
+  project: dev8
   source:
     path: argocd
     repoURL: 'https://github.com/stuttgart-things/machine-shop-operator.git'
     targetRevision: TF-OUTPUT-LOG
-  sources: []
-  project: dev8
+  destination:
+    name: dev8
+    namespace: machine-shop-operator-system
   syncPolicy:
     automated:
       prune: false
       selfHeal: false
     syncOptions:
       - CreateNamespace=true
----
