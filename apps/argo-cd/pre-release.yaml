@@ -87,7 +87,7 @@ data:
         args: ['helm dependency update']
       generate:
         command: ["bash", "-c"]
-        args: ['helm template "${ARGOCD_APP_NAME}" -f <(echo "${ARGOCD_ENV_HELM_VALUES}") --include-crds . -n ${ARGOCD_APP_NAMESPACE} | argocd-vault-plugin generate -']
+        args: ['${VAULTPLUGIN_GENERATE_CMD}']
     - name: argocd-vault-plugin-kustomize
       generate:
         command: ["sh", "-c"]
