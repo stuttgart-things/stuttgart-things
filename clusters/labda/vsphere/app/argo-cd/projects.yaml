@@ -16,6 +16,9 @@ spec:
   - name: app
     namespace: '*'
     server: https://10.100.136.143:6443
+  - name: dev8
+    namespace: '*'
+    server: https://10.100.136.78:6443
   namespaceResourceBlacklist:
   - group: ""
     kind: ""
