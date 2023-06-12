@@ -9,7 +9,7 @@ spec:
   source:
     path: argocd
     repoURL: 'https://github.com/stuttgart-things/machine-shop-operator.git'
-    targetRevision: TF-OUTPUT-LOG
+    targetRevision: main
   destination:
     name: app
     namespace: argocd
