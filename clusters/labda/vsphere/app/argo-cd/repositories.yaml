@@ -15,3 +15,20 @@ data:
   username: ""
 kind: Secret
 type: Opaque
+---
+apiVersion: v1
+metadata:
+  name: yacht-application-server
+  namespace: argocd
+  annotations:
+    managed-by: argocd.argoproj.io
+  labels:
+    argocd.argoproj.io/secret-type: repository
+data:
+  password: ""
+  project: ""
+  type: Z2l0
+  url: aHR0cHM6Ly9naXRodWIuY29tL3N0dXR0Z2FydC10aGluZ3MveWFjaHQtYXBwbGljYXRpb24tc2VydmVyLmdpdA==
+  username: ""
+kind: Secret
+type: Opaque
