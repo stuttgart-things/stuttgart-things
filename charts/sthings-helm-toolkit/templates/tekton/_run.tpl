@@ -11,7 +11,7 @@
 {{- $runName := index . 1 -}}
 {{- $run := index . 2 -}}
 ---
-apiVersion: tekton.dev/{{ $pipeline.apiVersion | default "v1" }}
+apiVersion: tekton.dev/{{ $run.apiVersion | default "v1" }}
 kind: {{ $run.kind | default "Pipeline" }}Run
 metadata:
   name: {{ $run.name }}{{- if $run.addRandomDateToRunName }}-{{ now | date "060102-1504" }}{{- end }}
