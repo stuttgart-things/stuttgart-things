@@ -2,8 +2,8 @@ apiVersion: v2
 name: yacht-tekton-resources
 description: yacht tekton resources definitions for yacht
 type: application
-version: "v0.47.3"
-appVersion: v0.47.3
+version: "v0.47.5"
+appVersion: v0.47.5
 dependencies:
   - name: sthings-helm-toolkit
     version: 2.4.40

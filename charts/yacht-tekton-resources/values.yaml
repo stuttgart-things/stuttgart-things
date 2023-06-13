@@ -1,5 +1,5 @@
 ---
-defaultNamespace: yacht-tekton
+defaultNamespace: yacht
 
 enableTasks: false
 enableExtraTasks: false
@@ -14,7 +14,13 @@ enableRuns: false
 enableExtraPipelines: false
 #extraPipelines: {}
 
-#workspaces: {}
+workspaces:
+ tekton-kaniko-workspace:
+   volumeMode: Filesystem
+   storageClassName: nfs4-csi
+   storage: 5Gi
+   accessModes:
+     - ReadWriteOnce
 
 # runs:
 #   buildKanikosthings-alpine-230305-0403:
@@ -43,32 +49,32 @@ enableExtraPipelines: false
 #         workspaceKind: secret
 #         workspaceRef: scr-labda
 
-# runs:
-#   packagesthings-cluster-0.2.1HelmChart:
-#     name: helm-sthings-cluster-0.2.1
-#     addRandomDateToRunName: false
-#     namespace: yacht-tekton
-#     kind: Pipeline
-#     ref: package-publish-helmchart
-#     params:
-#       git-repo-url: git@codehub.sva.de:Lab/stuttgart-things/stuttgart-things.git
-#       git-revision: master
-#       gitWorkspaceSubdirectory: /helm/sthings-cluster
-#       helm-chart-path: gitops/apps
-#       helm-chart-name: sthings-cluster
-#       helm-chart-tag: 0.2.1
-#       registry: scr.tiab.labda.sva.de
-#       working-image: scr.tiab.labda.sva.de/sthings-k8s-workspace/sthings-k8s-workspace:281126-1644
-#     workspaces:
-#       ssh-credentials:
-#         workspaceKind: secret
-#         workspaceRef: codehub-ssh
-#       source:
-#         workspaceKind: persistentVolumeClaim
-#         workspaceRef: tekton-kaniko-workspace
-#       dockerconfig:
-#         workspaceKind: secret
-#         workspaceRef: scr-labda
+runs:
+  packagesthings-cluster-0.2.1HelmChart:
+    name: helm-sthings-cluster-0.2.1
+    addRandomDateToRunName: false
+    namespace: yacht-tekton
+    kind: Pipeline
+    ref: package-publish-helmchart
+    params:
+      git-repo-url: git@codehub.sva.de:Lab/stuttgart-things/stuttgart-things.git
+      git-revision: master
+      gitWorkspaceSubdirectory: /helm/sthings-cluster
+      helm-chart-path: gitops/apps
+      helm-chart-name: sthings-cluster
+      helm-chart-tag: 0.2.1
+      registry: scr.tiab.labda.sva.de
+      working-image: eu.gcr.io/stuttgart-things/sthings-k8s:1.127.2
+    workspaces:
+      ssh-credentials:
+        workspaceKind: secret
+        workspaceRef: codehub-ssh
+      source:
+        workspaceKind: persistentVolumeClaim
+        workspaceRef: tekton-kaniko-workspace
+      dockerconfig:
+        workspaceKind: secret
+        workspaceRef: scr-labda
 
 
 
@@ -154,17 +160,17 @@ pipelines:
             value: $(params.working-image)
           SUBDIRECTORY:
             value: $(params.gitWorkspaceSubdirectory)
-      send-webhook-msteams:
-        task: send-msteams-webhook
-        runAfter:
-          - build-package-helmchart
-        params:
-          message:
-            value: "helm chart $(params.helm-chart-name):$(params.helm-chart-tag) packaged & pushed successfully to oci://$(params.registry)/$(params.helm-chart-name)/"
-          webhook-url-secret:
-            value: msteams
-          webhook-url-secret-key:
-            value: url
+      # send-webhook-msteams:
+      #   task: send-msteams-webhook
+      #   runAfter:
+      #     - build-package-helmchart
+      #   params:
+      #     message:
+      #       value: "helm chart $(params.helm-chart-name):$(params.helm-chart-tag) packaged & pushed successfully to oci://$(params.registry)/$(params.helm-chart-name)/"
+      #     webhook-url-secret:
+      #       value: msteams
+      #     webhook-url-secret-key:
+      #       value: url
   # build-kaniko-image:
   #   workspaces:
   #     - shared-workspace
@@ -286,7 +292,7 @@ tasks:
         description: registry url, e.g. "scr.tiab.labda.sva.de"
       IMAGE:
         description: working image
-        default: scr.tiab.labda.sva.de/sthings-k8s-workspace/sthings-k8s-workspace:281126-1644
+        default: eu.gcr.io/stuttgart-things/sthings-k8s:1.127.2
       SUBDIRECTORY:
         description: subdirectory of workspace
         default: ""
