@@ -1,7 +1,0 @@
----
-- hosts: all
-  tasks:
-    - name: env lookup
-      ansible.builtin.shell: |
-        whoami
-        uptime
