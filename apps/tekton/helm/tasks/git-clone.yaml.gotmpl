@@ -1,0 +1,214 @@
+tasks:
+  git-clone:
+    labels:
+      app.kubernetes.io/version: "0.9"
+    annotations:
+      "helm.sh/hook": post-install
+      tekton.dev/pipelines.minVersion: "0.48.0"
+      tekton.dev/categories: Git
+      tekton.dev/tags: git
+      tekton.dev/displayName: "git clone"
+      tekton.dev/platforms: "linux/amd64,linux/s390x,linux/ppc64le,linux/arm64"
+    description: clone a git repo from the provided url
+    workspaces:
+      output:
+        description: the git repo will be cloned onto the volume backing this Workspace
+        optional: false
+      ssh-directory:
+        description: .ssh directory with private key, known_hosts, config..
+        optional: true
+      basic-auth:
+        description: workspace containing a .gitconfig and .git-credentials file
+        optional: true
+      ssl-ca-directory:
+        description: workspace containing CA certificates
+        optional: true
+    params:
+      url:
+        description: repository URL to clone from
+        type: string
+      revision:
+        description: Revision to checkout
+        type: string
+      refspec:
+        description: Refspec to fetch before checking out revision
+        type: string
+      submodules:
+        description: Initialize and fetch git submodules
+        type: string
+        default: "true"
+      depth:
+        description: Perform a shallow clone
+        type: string
+        default: "1"
+      sslVerify:
+        description: Set the `http.sslVerify` global git config
+        type: string
+        default: "true"
+      crtFileName:
+        description: file name of mounted crt using ssl-ca-directory workspace
+        type: string
+        default: "ca-bundle.crt"
+      subdirectory:
+        description: subdirectory inside the `output` workspace to clone the repo into
+        type: string
+      sparseCheckoutDirectories:
+        description: define the directory patterns to match or exclude
+        type: string
+      deleteExisting:
+        description: Clean out the contents of the destination directoryå
+        type: string
+        default: "true"
+      httpProxy:
+        description: HTTP proxy server for non-SSL requests
+        type: string
+      httpsProxy:
+        description: HTTPS proxy server for SSL requests
+        type: string
+      noProxy:
+        description: Opt out of proxying HTTP/HTTPS requests
+        type: string
+      verbose:
+        description: Log the commands that are executed during `git-clone`'s operation
+        type: string
+        default: "true"
+      gitInitImage:
+        description: the image providing the git-init binary that this Task runs
+        type: string
+        default: "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init:v0.40.2"
+      userHome:
+        description: absolute path to the user's home directory
+        type: string
+        default: "/home/git"
+    results:
+      commit:
+        description: the precise commit SHA
+      url:
+        description: the precise URL
+      committer-date:
+        description: The epoch timestamp of the commit that was fetched by this Task.
+    steps:
+      clone:
+        image: "$(params.gitInitImage)"
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 65532
+        env:
+          HOME:
+            value: $(params.userHome)
+          PARAM_URL:
+            value: $(params.url)
+          PARAM_REVISION:
+            value: $(params.revision)
+          PARAM_REFSPEC:
+            value: $(params.refspec)
+          PARAM_SUBMODULES:
+            value: $(params.submodules)
+          PARAM_DEPTH:
+            value: $(params.depth)
+          PARAM_SSL_VERIFY:
+            value: $(params.sslVerify)
+          PARAM_CRT_FILENAME:
+            value: $(params.crtFileName)
+          PARAM_SUBDIRECTORY:
+            value: $(params.subdirectory)
+          PARAM_DELETE_EXISTING:
+            value: $(params.deleteExisting)
+          PARAM_HTTP_PROXY:
+            value: $(params.httpProxy)
+          PARAM_HTTPS_PROXY:
+            value: $(params.httpsProxy)
+          PARAM_NO_PROXY:
+            value: $(params.noProxy)
+          PARAM_VERBOSE:
+            value: $(params.verbose)
+          PARAM_SPARSE_CHECKOUT_DIRECTORIES:
+            value: $(params.sparseCheckoutDirectories)
+          PARAM_USER_HOME:
+            value: $(params.userHome)
+          WORKSPACE_OUTPUT_PATH:
+            value: $(workspaces.output.path)
+          WORKSPACE_SSH_DIRECTORY_BOUND:
+            value: $(workspaces.ssh-directory.bound)
+          WORKSPACE_SSH_DIRECTORY_PATH:
+            value: $(workspaces.ssh-directory.path)
+          WORKSPACE_BASIC_AUTH_DIRECTORY_BOUND:
+            value: $(workspaces.basic-auth.bound)
+          WORKSPACE_BASIC_AUTH_DIRECTORY_PATH:
+            value: $(workspaces.basic-auth.path)
+          WORKSPACE_SSL_CA_DIRECTORY_BOUND:
+            value: $(workspaces.ssl-ca-directory.bound)
+          WORKSPACE_SSL_CA_DIRECTORY_PATH:
+            value: $(workspaces.ssl-ca-directory.path)
+        script: |
+          #!/usr/bin/env sh
+          set -eu
+
+          if [ "${PARAM_VERBOSE}" = "true" ] ; then
+            set -x
+          fi
+
+          if [ "${WORKSPACE_BASIC_AUTH_DIRECTORY_BOUND}" = "true" ] ; then
+            cp "${WORKSPACE_BASIC_AUTH_DIRECTORY_PATH}/.git-credentials" "${PARAM_USER_HOME}/.git-credentials"
+            cp "${WORKSPACE_BASIC_AUTH_DIRECTORY_PATH}/.gitconfig" "${PARAM_USER_HOME}/.gitconfig"
+            chmod 400 "${PARAM_USER_HOME}/.git-credentials"
+            chmod 400 "${PARAM_USER_HOME}/.gitconfig"
+          fi
+
+          if [ "${WORKSPACE_SSH_DIRECTORY_BOUND}" = "true" ] ; then
+            cp -R "${WORKSPACE_SSH_DIRECTORY_PATH}" "${PARAM_USER_HOME}"/.ssh
+            chmod 700 "${PARAM_USER_HOME}"/.ssh
+            chmod -R 400 "${PARAM_USER_HOME}"/.ssh/*
+          fi
+
+          if [ "${WORKSPACE_SSL_CA_DIRECTORY_BOUND}" = "true" ] ; then
+            export GIT_SSL_CAPATH="${WORKSPACE_SSL_CA_DIRECTORY_PATH}"
+            if [ "${PARAM_CRT_FILENAME}" != "" ] ; then
+                export GIT_SSL_CAINFO="${WORKSPACE_SSL_CA_DIRECTORY_PATH}/${PARAM_CRT_FILENAME}"
+            fi
+          fi
+          CHECKOUT_DIR="${WORKSPACE_OUTPUT_PATH}/${PARAM_SUBDIRECTORY}"
+
+          cleandir() {
+            # Delete any existing contents of the repo directory if it exists.
+            #
+            # We don't just "rm -rf ${CHECKOUT_DIR}" because ${CHECKOUT_DIR} might be "/"
+            # or the root of a mounted volume.
+            if [ -d "${CHECKOUT_DIR}" ] ; then
+              # Delete non-hidden files and directories
+              rm -rf "${CHECKOUT_DIR:?}"/*
+              # Delete files and directories starting with . but excluding ..
+              rm -rf "${CHECKOUT_DIR}"/.[!.]*
+              # Delete files and directories starting with .. plus any other character
+              rm -rf "${CHECKOUT_DIR}"/..?*
+            fi
+          }
+
+          if [ "${PARAM_DELETE_EXISTING}" = "true" ] ; then
+            cleandir || true
+          fi
+
+          test -z "${PARAM_HTTP_PROXY}" || export HTTP_PROXY="${PARAM_HTTP_PROXY}"
+          test -z "${PARAM_HTTPS_PROXY}" || export HTTPS_PROXY="${PARAM_HTTPS_PROXY}"
+          test -z "${PARAM_NO_PROXY}" || export NO_PROXY="${PARAM_NO_PROXY}"
+
+          git config --global --add safe.directory "${WORKSPACE_OUTPUT_PATH}"
+          /ko-app/git-init \
+            -url="${PARAM_URL}" \
+            -revision="${PARAM_REVISION}" \
+            -refspec="${PARAM_REFSPEC}" \
+            -path="${CHECKOUT_DIR}" \
+            -sslVerify="${PARAM_SSL_VERIFY}" \
+            -submodules="${PARAM_SUBMODULES}" \
+            -depth="${PARAM_DEPTH}" \
+            -sparseCheckoutDirectories="${PARAM_SPARSE_CHECKOUT_DIRECTORIES}"
+          cd "${CHECKOUT_DIR}"
+          RESULT_SHA="$(git rev-parse HEAD)"
+          EXIT_CODE="$?"
+          if [ "${EXIT_CODE}" != 0 ] ; then
+            exit "${EXIT_CODE}"
+          fi
+          RESULT_COMMITTER_DATE="$(git log -1 --pretty=%ct)"
+          printf "%s" "${RESULT_COMMITTER_DATE}" > "$(results.committer-date.path)"
+          printf "%s" "${RESULT_SHA}" > "$(results.commit.path)"
+          printf "%s" "${PARAM_URL}" > "$(results.url.path)"

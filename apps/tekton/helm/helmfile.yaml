@@ -1,0 +1,17 @@
+---
+releases:
+- name: package-publish-helmchart
+  installed: true
+  namespace: tekton
+  chart: stuttgart-things/yacht-tekton-resources
+  version: v0.47.6
+  values:
+    - "pipelines/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
+    - "workspaces/tekton-helm.yaml.gotmpl"
+    - "tasks/git-clone.yaml.gotmpl"
+    # - "tasks/create-publish-helm-chart.yaml.gotmpl"
+
+repositories:
+- name: stuttgart-things
+  url: eu.gcr.io/stuttgart-things
+  oci: true

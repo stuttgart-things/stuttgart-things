@@ -1,0 +1,8 @@
+---
+workspaces:
+ tekton-helm-workspace:
+   volumeMode: Filesystem
+   storageClassName: nfs4-csi
+   storage: 5Gi
+   accessModes:
+     - ReadWriteOnce

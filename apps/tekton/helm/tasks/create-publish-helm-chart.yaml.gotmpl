@@ -1,0 +1,57 @@
+tasks:
+  create-publish-helm-chart:
+    labels:
+      app.kubernetes.io/version: "0.2"
+    annotations:
+      tekton.dev/pipelines.minVersion: "0.48.0"
+      tekton.dev/categories: helm chart Build
+      tekton.dev/tags: helm-chart-build
+      tekton.dev/platforms: "linux/amd64"
+    description:
+      publish-helm-chart:
+        workingDir: $(workspaces.source.path)/$(params.SUBDIRECTORY)
+        image: $(params.IMAGE)
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 65532
+        script: |
+          #!/usr/bin/env sh
+          helm dependency update $(params.PATH)/$(params.CHARTNAME)
+          helm package --version $(params.CHARTTAG)-helm $(params.PATH)/$(params.CHARTNAME)
+          helm push $(params.CHARTNAME)-$(params.CHARTTAG)-helm.tgz oci://$(params.REGISTRY)/$(params.CHARTNAME)/
+  send-msteams-webhook:
+    labels:
+      app.kubernetes.io/version: "0.1"
+    annotations:
+      tekton.dev/pipelines.minVersion: "0.48.0"
+      tekton.dev/categories: Messaging
+      tekton.dev/tags: messaging
+      tekton.dev/displayName: "Send message to Microsoft Teams Channel"
+      tekton.dev/platforms: "linux/amd64,linux/s390x,linux/ppc64le"
+    description: sends simple message to a Microsoft Teams Channel
+    params:
+      webhook-url-secret:
+        type: string
+        description: name of the secret with incoming webhook URL
+      webhook-url-secret-key:
+        type: string
+        description: key in the secret
+      message:
+        type: string
+        description: message to notify about
+    steps:
+      post:
+        image: curlimages/curl:7.84.0
+        env:
+          MESSAGE:
+            value: $(params.message)
+          WEBHOOK_URL:
+            valueFrom:
+              secretKeyRef:
+                name: $(params.webhook-url-secret)
+                key: $(params.webhook-url-secret-key)
+        script: |
+          #!/usr/bin/env sh
+          MESSAGE=$(echo "${MESSAGE}" | sed -e 's/\"/\\\\"/g')
+          JSON="{\"text\": \"${MESSAGE}\" }"
+          curl -X POST -H 'Content-Type: application/json' -d "${JSON}" "${WEBHOOK_URL}"
