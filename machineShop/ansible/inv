@@ -1,9 +1,0 @@
-[all]
-10.100.136.72
-10.100.136.73
-
-# BEGIN ANSIBLE MANAGED BLOCK
-[all:vars]
-ansible_user=sthings
-host_key_checking=false
-# END ANSIBLE MANAGED BLOCK
