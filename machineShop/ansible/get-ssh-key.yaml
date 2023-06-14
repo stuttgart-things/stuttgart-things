@@ -14,17 +14,18 @@
 
   tasks:
   - name: Write vars on inv file
-    ansible.builtin.lineinfile:
+    ansible.builtin.blockinfile:
       path: "inv"
-      line: |
+      block: |
 
         [all:vars]
         ansible_user=sthings
         host_key_checking=false
 
-  - name: Creating ssh private key file
-    shell: |
-      mkdir {{ home_dir }}/.ssh/
+  - name: Creating ssh directory
+    ansible.builtin.file:
+      path: "{{ home_dir }}/.ssh/"
+      state: directory
 
   - name: Creating ssh private key file
     copy:
