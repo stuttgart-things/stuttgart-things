@@ -1,7 +1,40 @@
 ---
 - hosts: all
-  tasks:
-    - name: env lookup
-      ansible.builtin.shell: |
-        whoami
-        uptime
+  become: true
+  gather_facts: true
+    
+  vars:
+    manage_filesystem: "{{ lookup('env','MANAGE_FILESYSTEM') | default('true') }}"
+    update_os: "{{ lookup('env','UPDATE_OS') | default('true') }}"
+    install_requirements: "{{ lookup('env','INSTALL_REQUIREMENTS') | default('true') }}"
+    install_motd: "{{ lookup('env','INSTALL_MOTD') | default('true') }}"
+    username: "{{ lookup('env','USERNAME') | default('sthings') }}"
+    lvm_home_sizing: '15%'  
+    lvm_root_sizing: '35%'
+    lvm_var_sizing: '50%'
+    send_to_msteams: true 
+    msteams_webhook_url: https://365sva.webhook.office.com/webhookb2/2f14a9f8-4736-46dd-9c8c-31547ec37180@0a65cb1e-37d5-41ff-980a-647d9d0e4f0b/IncomingWebhook/3be54bc905c1492fb15073a81f644fef/dc3a27ed-396c-40b7-a9b2-f1a2b6b44efe
+    vault_instances:
+      - https://vault.tiab.labda.sva.de:8200
+      - https://vault.labul.sva.de:8200
+      - https://vault-vsphere.labul.sva.de:8200
+      - https://vault-pve.labul.sva.de:8200
+  roles:
+    - role: manage-filesystem
+      when: manage_filesystem|bool
+
+    - role: install-requirements
+      when: install_requirements|bool
+
+  post_tasks:
+    - name: Install vault ca certificate to local system from multiple instances
+      ansible.builtin.include_role:
+        name: install-configure-vault
+        tasks_from: install-ca-auth
+      vars:
+        vault_url: "{{ vault_instance }}"
+      loop: "{{ vault_instances }}"
+      loop_control:
+        loop_var: vault_instance
+      when: vault_instances is defined
+      
