@@ -41,5 +41,5 @@ spec:
     - vsphere_server=cloud/data/vsphere:ip
     - vm_ssh_user=cloud/data/vsphere:vm_ssh_user
     - vm_ssh_password=cloud/data/vsphere:vm_ssh_password
-  terraform-version: 1.4.5
+  terraform-version: 1.4.6
   template: vsphere-vm
