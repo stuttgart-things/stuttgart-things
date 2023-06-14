@@ -5,13 +5,13 @@
     
   vars:
     manage_filesystem: "{{ lookup('env','MANAGE_FILESYSTEM') | default('true') }}"
-    update_os: "{{ lookup('env','UPDATE_OS') | default('true') }}"
+    update_packages: "{{ lookup('env','UPDATE_PACKAGES') | default('true') }}"
     install_requirements: "{{ lookup('env','INSTALL_REQUIREMENTS') | default('true') }}"
     install_motd: "{{ lookup('env','INSTALL_MOTD') | default('true') }}"
     username: "{{ lookup('env','USERNAME') | default('sthings') }}"
-    lvm_home_sizing: '15%'  
-    lvm_root_sizing: '35%'
-    lvm_var_sizing: '50%'
+    lvm_home_sizing: "{{ lookup('env','LVM_HOME_SIZING') | default('15%') }}"
+    lvm_root_sizing: "{{ lookup('env','LVM_ROOT_SIZING') | default('35%') }}"
+    lvm_var_sizing: "{{ lookup('env','LVM_VAR_SIZING') | default('50%') }}"
     send_to_msteams: true 
     vault_instances:
       - https://vault.tiab.labda.sva.de:8200
