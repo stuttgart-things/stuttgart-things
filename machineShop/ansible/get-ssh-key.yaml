@@ -17,7 +17,6 @@
     ansible.builtin.blockinfile:
       path: "inv"
       block: |
-
         [all:vars]
         ansible_user=sthings
         host_key_checking=false
