@@ -30,8 +30,8 @@ spec:
     - backendBucket=vsphere-vm
     - tfProviderName=vsphere
     - tfProviderSource=hashicorp/vsphere
-    - tfProviderVersion=2.3.1
-    - tfVersion=1.4.5
+    - tfProviderVersion=2.4.0
+    - tfVersion=1.4.6
   backend:
     - access_key=apps/data/artifacts:accessKey
     - secret_key=apps/data/artifacts:secretKey
