@@ -2,7 +2,7 @@
 - hosts: all
   become: true
   gather_facts: true
-    
+
   vars:
     manage_filesystem: "{{ lookup('env','MANAGE_FILESYSTEM') | default('true') }}"
     update_packages: "{{ lookup('env','UPDATE_PACKAGES') | default('true') }}"
@@ -27,6 +27,7 @@
       when: install_requirements|bool
 
   post_tasks:
+
     - name: Install vault ca certificate to local system from multiple instances
       ansible.builtin.include_role:
         name: install-configure-vault
@@ -37,7 +38,7 @@
       loop_control:
         loop_var: vault_instance
       when: vault_instances is defined
-      
+
     - name: Send webhook when base-os setup was executed
       ansible.builtin.include_role:
         name: create-send-webhook
@@ -49,13 +50,12 @@
         act_title: "{{ quotes | random }}"
         act_text: "{{ quotes | random }}"
         os_facts: |
-          filesystem was {{ '' if manage_filesystem|bool else 'not' }} managed  
-          operating system {{ ansible_distribution }} {{ ansible_distribution_major_version }} was {{ '' if update_os|bool else 'not' }} updated  
-          vault-ca was {{ '' if install_vault_ca|bool else 'not' }} installed  
-          message of the day was {{ '' if motd|bool else 'not' }} installed  
-          metric beate was {{ '' if install_metric_beat|bool else 'not' }} installed  
+          filesystem was {{ '' if manage_filesystem|bool else 'not' }} managed
+          operating system {{ ansible_distribution }} {{ ansible_distribution_major_version }} was {{ '' if update_os|bool else 'not' }} updated
+          vault-ca was {{ '' if install_vault_ca|bool else 'not' }} installed
+          message of the day was {{ '' if motd|bool else 'not' }} installed
+          metric beate was {{ '' if install_metric_beat|bool else 'not' }} installed
         ms_teams_notification_type: "simple"
       tags: notify
       ignore_errors: true
       when: send_to_msteams|bool
-    
