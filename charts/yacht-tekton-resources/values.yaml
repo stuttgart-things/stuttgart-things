@@ -26,7 +26,7 @@ workspaces:
 #   buildKanikosthings-alpine-230305-0403:
 #     name: kaniko-sthings-alpine-230305-0403
 #     addRandomDateToRunName: false
-#     namespace: yacht-tekton
+#     namespace: yacht
 #     kind: Pipeline
 #     ref: build-kaniko-image
 #     params:
@@ -49,34 +49,32 @@ workspaces:
 #         workspaceKind: secret
 #         workspaceRef: scr-labda
 
-runs:
-  packagesthings-cluster-0.2.1HelmChart:
-    name: helm-sthings-cluster-0.2.1
-    addRandomDateToRunName: false
-    namespace: yacht-tekton
-    kind: Pipeline
-    ref: package-publish-helmchart
-    params:
-      git-repo-url: git@github.com:stuttgart-things/stuttgart-things.git
-      git-revision: main
-      gitWorkspaceSubdirectory: /helm/sthings-cluster
-      helm-chart-path: charts
-      helm-chart-name: sthings-cluster
-      helm-chart-tag: 0.2.1
-      registry: scr.tiab.labda.sva.de
-      working-image: eu.gcr.io/stuttgart-things/sthings-k8s:1.127.2
-    workspaces:
-      ssh-credentials:
-        workspaceKind: secret
-        workspaceRef: codehub-ssh
-      source:
-        workspaceKind: persistentVolumeClaim
-        workspaceRef: tekton-kaniko-workspace
-      dockerconfig:
-        workspaceKind: secret
-        workspaceRef: scr-labda
-
-
+# runs:
+#   packagesthings-cluster-0.2.1HelmChart:
+#     name: helm-sthings-cluster-0.2.1
+#     addRandomDateToRunName: false
+#     namespace: yacht-tekton
+#     kind: Pipeline
+#     ref: package-publish-helmchart
+#     params:
+#       git-repo-url: git@github.com:stuttgart-things/stuttgart-things.git
+#       git-revision: main
+#       gitWorkspaceSubdirectory: /helm/sthings-cluster
+#       helm-chart-path: charts
+#       helm-chart-name: sthings-cluster
+#       helm-chart-tag: 0.2.1
+#       registry: scr.tiab.labda.sva.de
+#       working-image: eu.gcr.io/stuttgart-things/sthings-k8s:1.127.2
+#     workspaces:
+#       ssh-credentials:
+#         workspaceKind: secret
+#         workspaceRef: codehub-ssh
+#       source:
+#         workspaceKind: persistentVolumeClaim
+#         workspaceRef: tekton-kaniko-workspace
+#       dockerconfig:
+#         workspaceKind: secret
+#         workspaceRef: scr-labda
 
 # gitSecretsSSH:
 #   codehub:
@@ -171,97 +169,98 @@ pipelines:
             value: msteams
           webhook-url-secret-key:
             value: url
-  # build-kaniko-image:
-  #   workspaces:
-  #     - shared-workspace
-  #     - ssh-credentials
-  #     - dockerconfig
-  #   params:
-  #     image:
-  #       description: reference of the image to build
-  #     tag:
-  #       description: reference of the tag of the image to build
-  #     registry:
-  #       description: registry FROM (base image)
-  #     gitRepoUrl:
-  #       description: source git repo
-  #     gitWorkspaceSubdirectory:
-  #       description: subdirectory on workspace
-  #       default: ""
-  #     git-revision:
-  #       description: revision of source git repo
-  #       default: "main"
-  #     context:
-  #       description: path to context
-  #     dockerfile:
-  #       description: path to dockerfile
-  #   tasks:
-  #     fetch-repository:
-  #       task: git-clone
-  #       workspaces:
-  #         output:
-  #           workspace: shared-workspace
-  #         ssh-directory:
-  #           workspace: ssh-credentials
-  #       params:
-  #         url:
-  #           value: $(params.gitRepoUrl)
-  #         subdirectory:
-  #           value: $(params.gitWorkspaceSubdirectory)
-  #         deleteExisting:
-  #           value: "'true'"
-  #         revision:
-  #           value: $(params.git-revision)
-  #     kaniko:
-  #       task: kaniko
-  #       runAfter:
-  #         - fetch-repository
-  #       workspaces:
-  #         source:
-  #           workspace: shared-workspace
-  #         dockerconfig:
-  #           workspace: dockerconfig
-  #       params:
-  #         SUBDIRECTORY:
-  #           value: $(params.gitWorkspaceSubdirectory)
-  #         IMAGE:
-  #           value: $(params.image)
-  #         TAG:
-  #           value: $(params.tag)
-  #         REGISTRY:
-  #           value: $(params.registry)
-  #         CONTEXT:
-  #           value: $(params.context)
-  #         DOCKERFILE:
-  #           value: $(params.dockerfile)
-  #         EXTRA_ARGS:
-  #           values:
-  #             - --skip-tls-verify
-  #     send-webhook-msteams:
-  #       task: send-msteams-webhook
-  #       runAfter:
-  #         - kaniko
-  #       params:
-  #         message:
-  #           value: "image $(params.image):$(params.tag) build & pushed successfully w/ kaniko ($(tasks.kaniko.results.IMAGE_DIGEST))"
-  #         webhook-url-secret:
-  #           value: msteams
-  #         webhook-url-secret-key:
-  #           value: url
-  #   finally:
-  #     notify-any-failure:
-  #       task: send-msteams-webhook
-  #       params:
-  #         message:
-  #           value: "kaniko image build for $(params.image):$(params.tag) failed!!"
-  #         webhook-url-secret:
-  #           value: msteams
-  #         webhook-url-secret-key:
-  #           value: url
-  #       when:
-  #         $(tasks.status):
-  #           operator: in
-  #           values: Failed
+
+  build-kaniko-image:
+    workspaces:
+      - shared-workspace
+      - ssh-credentials
+      - dockerconfig
+    params:
+      image:
+        description: reference of the image to build
+      tag:
+        description: reference of the tag of the image to build
+      registry:
+        description: registry FROM (base image)
+      gitRepoUrl:
+        description: source git repo
+      gitWorkspaceSubdirectory:
+        description: subdirectory on workspace
+        default: ""
+      git-revision:
+        description: revision of source git repo
+        default: "main"
+      context:
+        description: path to context
+      dockerfile:
+        description: path to dockerfile
+    tasks:
+      fetch-repository:
+        task: git-clone
+        workspaces:
+          output:
+            workspace: shared-workspace
+          ssh-directory:
+            workspace: ssh-credentials
+        params:
+          url:
+            value: $(params.gitRepoUrl)
+          subdirectory:
+            value: $(params.gitWorkspaceSubdirectory)
+          deleteExisting:
+            value: "'true'"
+          revision:
+            value: $(params.git-revision)
+      kaniko:
+        task: kaniko
+        runAfter:
+          - fetch-repository
+        workspaces:
+          source:
+            workspace: shared-workspace
+          dockerconfig:
+            workspace: dockerconfig
+        params:
+          SUBDIRECTORY:
+            value: $(params.gitWorkspaceSubdirectory)
+          IMAGE:
+            value: $(params.image)
+          TAG:
+            value: $(params.tag)
+          REGISTRY:
+            value: $(params.registry)
+          CONTEXT:
+            value: $(params.context)
+          DOCKERFILE:
+            value: $(params.dockerfile)
+          EXTRA_ARGS:
+            values:
+              - --skip-tls-verify
+      send-webhook-msteams:
+        task: send-msteams-webhook
+        runAfter:
+          - kaniko
+        params:
+          message:
+            value: "image $(params.image):$(params.tag) build & pushed successfully w/ kaniko ($(tasks.kaniko.results.IMAGE_DIGEST))"
+          webhook-url-secret:
+            value: msteams
+          webhook-url-secret-key:
+            value: url
+    finally:
+      notify-any-failure:
+        task: send-msteams-webhook
+        params:
+          message:
+            value: "kaniko image build for $(params.image):$(params.tag) failed!!"
+          webhook-url-secret:
+            value: msteams
+          webhook-url-secret-key:
+            value: url
+        when:
+          $(tasks.status):
+            operator: in
+            values: Failed
 
 tasks:
   create-publish-helm-chart:
@@ -308,74 +307,74 @@ tasks:
           helm dependency update $(params.PATH)/$(params.CHARTNAME)
           helm package --version $(params.CHARTTAG)-helm $(params.PATH)/$(params.CHARTNAME)
           helm push $(params.CHARTNAME)-$(params.CHARTTAG)-helm.tgz oci://$(params.REGISTRY)/$(params.CHARTNAME)/
-  # kaniko:
-  #   labels:
-  #     app.kubernetes.io/version: "0.6"
-  #   annotations:
-  #     "helm.sh/hook": post-install
-  #     tekton.dev/pipelines.minVersion: "0.45.0"
-  #     tekton.dev/categories: Image Build
-  #     tekton.dev/tags: image-build
-  #     tekton.dev/displayName: "Build and upload container image using Kaniko"
-  #     tekton.dev/platforms: "linux/amd64"
-  #   description: build Dockerfile w/ kaniko and push to a registry
-  #   workspaces:
-  #     source:
-  #       description: holds the context and Dockerfile
-  #       optional: false
-  #     dockerconfig:
-  #       description: includes a docker `config.json`
-  #       optional: true
-  #       mountPath: /kaniko/.docker
-  #   results:
-  #     IMAGE_DIGEST:
-  #       description: digest of the image just built
-  #     IMAGE_URL:
-  #       description: url of the image just built.
-  #   params:
-  #     IMAGE:
-  #       description: name (reference) of the image to build
-  #     TAG:
-  #       description: name (reference) of the image to build
-  #     REGISTRY:
-  #       description: registry FROM (base image)
-  #       default: scr.tiab.labda.sva.de
-  #     DOCKERFILE:
-  #       description: Path to the Dockerfile to build
-  #       default: ./Dockerfile
-  #     CONTEXT:
-  #       description: the build context used by Kaniko
-  #       default: ./
-  #     SUBDIRECTORY:
-  #       description: subdirectory of workspace
-  #       default: ""
-  #     EXTRA_ARGS:
-  #       type: array
-  #     BUILDER_IMAGE:
-  #       description: the image on which builds will run (default is v1.5.1)
-  #       default: gcr.io/kaniko-project/executor:v1.5.1@sha256:c6166717f7fe0b7da44908c986137ecfeab21f31ec3992f6e128fff8a94be8a5
-  #   steps:
-  #     build-and-push:
-  #       workingDir: $(workspaces.source.path)/$(params.SUBDIRECTORY)
-  #       image: $(params.BUILDER_IMAGE)
-  #       securityContext:
-  #         runAsNonRoot: false
-  #         runAsUser: 0
-  #       args:
-  #         - $(params.EXTRA_ARGS)
-  #         - --dockerfile=$(params.DOCKERFILE)
-  #         - --context=$(workspaces.source.path)/$(params.CONTEXT) # The user does not need to care the workspace and the source.
-  #         - --destination=$(params.IMAGE):$(params.TAG)
-  #         - --destination=$(params.IMAGE):latest
-  #         - --build-arg=REGISTRY=$(params.REGISTRY)
-  #         - --digest-file=$(results.IMAGE_DIGEST.path)
-  #         - --insecure
-  #     write-url:
-  #       image: docker.io/library/bash:5.1.4@sha256:b208215a4655538be652b2769d82e576bc4d0a2bb132144c060efc5be8c3f5d6
-  #       script: |
-  #         set -e
-  #         image="$(params.IMAGE)"
-  #         echo -n "${image}" | tee "$(results.IMAGE_URL.path)"
+  kaniko:
+    labels:
+      app.kubernetes.io/version: "0.6"
+    annotations:
+      tekton.dev/pipelines.minVersion: "0.45.0"
+      tekton.dev/categories: Image Build
+      tekton.dev/tags: image-build
+      tekton.dev/displayName: "Build and upload container image using Kaniko"
+      tekton.dev/platforms: "linux/amd64"
+    description: build Dockerfile w/ kaniko and push to a registry
+    workspaces:
+      source:
+        description: holds the context and Dockerfile
+        optional: false
+      dockerconfig:
+        description: includes a docker `config.json`
+        optional: true
+        mountPath: /kaniko/.docker
+    results:
+      IMAGE_DIGEST:
+        description: digest of the image just built
+      IMAGE_URL:
+        description: url of the image just built.
+    params:
+      IMAGE:
+        description: name (reference) of the image to build
+      TAG:
+        description: name (reference) of the image to build
+      REGISTRY:
+        description: registry FROM (base image)
+        default: scr.tiab.labda.sva.de
+      DOCKERFILE:
+        description: Path to the Dockerfile to build
+        default: ./Dockerfile
+      CONTEXT:
+        description: the build context used by Kaniko
+        default: ./
+      SUBDIRECTORY:
+        description: subdirectory of workspace
+        default: ""
+      EXTRA_ARGS:
+        type: array
+      BUILDER_IMAGE:
+        description: the image on which builds will run (default is v1.5.1)
+        default: gcr.io/kaniko-project/executor:v1.5.1@sha256:c6166717f7fe0b7da44908c986137ecfeab21f31ec3992f6e128fff8a94be8a5
+    steps:
+      build-and-push:
+        workingDir: $(workspaces.source.path)/$(params.SUBDIRECTORY)
+        image: $(params.BUILDER_IMAGE)
+        securityContext:
+          runAsNonRoot: false
+          runAsUser: 0
+        args:
+          - $(params.EXTRA_ARGS)
+          - --dockerfile=$(params.DOCKERFILE)
+          - --context=$(workspaces.source.path)/$(params.CONTEXT) # The user does not need to care the workspace and the source.
+          - --destination=$(params.IMAGE):$(params.TAG)
+          - --destination=$(params.IMAGE):latest
+          - --build-arg=REGISTRY=$(params.REGISTRY)
+          - --digest-file=$(results.IMAGE_DIGEST.path)
+          - --insecure
+      write-url:
+        image: docker.io/library/bash:5.1.4@sha256:b208215a4655538be652b2769d82e576bc4d0a2bb132144c060efc5be8c3f5d6
+        script: |
+          set -e
+          image="$(params.IMAGE)"
+          echo -n "${image}" | tee "$(results.IMAGE_URL.path)"
+
   send-msteams-webhook:
     labels:
       app.kubernetes.io/version: "0.1"
