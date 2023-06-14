@@ -1,0 +1,6 @@
+---
+- name: Playbook_1
+  import_playbook: get-ssh-key.yaml
+
+- name: Playbook_2
+  import_playbook: deploy-on-target.yaml

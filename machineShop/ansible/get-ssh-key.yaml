@@ -1,0 +1,35 @@
+---
+- hosts: localhost
+  become: false
+
+  vars:
+    home_dir: "{{ lookup('env','HOME') }}"
+    vault_approle_id: "{{ lookup('env', 'VAULT_ROLE_ID') }}"
+    vault_approle_secret: "{{ lookup('env', 'VAULT_SECRET_ID') }}"
+    vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
+
+    # pubKey: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=ssh/data/sthings:publicKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+    ssh_key: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=ssh/data/sthings:privateKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+
+
+  tasks:
+  - name: Write vars on inv file
+    ansible.builtin.lineinfile:
+      path: "inv"
+      line: |
+
+        [all:vars]
+        ansible_user=sthings
+        host_key_checking=false
+
+  - name: Creating ssh private key file
+    shell: |
+      mkdir {{ home_dir }}/.ssh/
+
+  - name: Creating ssh private key file
+    copy:
+      dest: "{{ home_dir }}/.ssh/id_rsa"
+      content: "{{ ssh_key | b64decode }}"
+      mode: '0600'
+
+  - meta: refresh_inventory
