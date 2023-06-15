@@ -3,7 +3,7 @@ runs:
   testRunHelmChart:
     name: {{ .Release.Name }}-testrun-{{ randAlphaNum 5 | lower }}
     addRandomDateToRunName: false
-    namespace: yacht-tekton
+    namespace: {{ .Release.Namespace }}
     kind: Pipeline
     ref: package-publish-helmchart
     params:
@@ -21,7 +21,7 @@ runs:
         workspaceRef: codehub-ssh
       source:
         workspaceKind: persistentVolumeClaim
-        workspaceRef: tekton-kaniko-workspace
+        workspaceRef: tekton-helm-workspace
       dockerconfig:
         workspaceKind: secret
         workspaceRef: scr-{{ .Environment.Name }}
