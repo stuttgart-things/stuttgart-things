@@ -12,9 +12,9 @@ releases:
     - "secrets/msteams-notification.yaml.gotmpl"
     - "tasks/git-clone.yaml.gotmpl"
     - "tasks/create-publish-helm-chart.yaml.gotmpl"
-    - "tasks/send-msteams-webhook.yaml.gotmpl"
+    - "tasks/send-msteams-notification.yaml.gotmpl"
     - "pipelines/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
-    # - "run-tests/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
+    - "run-tests/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 
 repositories:
 - name: stuttgart-things

@@ -2,11 +2,11 @@
 # defaultNamespace: tekton
 enableWorkspaces: true
 enableGitSecretsSSH: true
-enableSecrets: false
-enableRegistryCredentials: false
+enableSecrets: true
+enableRegistryCredentials: true
 enablePipelines: true
 enableTasks: true
-enableRuns: false
+enableRuns: true
 
 pipelines:
   package-publish-helmchart:
@@ -73,7 +73,7 @@ pipelines:
           SUBDIRECTORY:
             value: $(params.gitWorkspaceSubdirectory)
       send-webhook-msteams:
-        task: send-msteams-webhook
+        task: send-msteams-notification
         runAfter:
           - build-package-helmchart
         params:
