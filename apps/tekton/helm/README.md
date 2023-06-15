@@ -10,6 +10,7 @@ export VAULT_ADDR=https://vault-vsphere.tiab.labda.sva.de:8200
 ## TEMPLATE
 ```
 helmfile template --environment labda-vsphere
+helmfile template --environment labda-vsphere | grep kind: -A 2 -B 2 # check for rendered kinds
 ```
 
 ## APPLY

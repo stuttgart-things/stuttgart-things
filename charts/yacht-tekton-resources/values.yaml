@@ -14,13 +14,13 @@ enableRuns: false
 enableExtraPipelines: false
 #extraPipelines: {}
 
-workspaces:
- tekton-kaniko-workspace:
-   volumeMode: Filesystem
-   storageClassName: nfs4-csi
-   storage: 5Gi
-   accessModes:
-     - ReadWriteOnce
+# workspaces:
+#  tekton-kaniko-workspace:
+#    volumeMode: Filesystem
+#    storageClassName: nfs4-csi
+#    storage: 5Gi
+#    accessModes:
+#      - ReadWriteOnce
 
 # runs:
 #   buildKanikosthings-alpine-230305-0403:

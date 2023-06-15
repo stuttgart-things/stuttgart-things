@@ -4,13 +4,15 @@ releases:
   installed: true
   namespace: tekton
   chart: stuttgart-things/yacht-tekton-resources
-  version: v0.47.7
+  version: v0.47.10
   values:
     - "workspaces/tekton-helm.yaml.gotmpl"
     - "secrets/scr-registry-credentials.yaml.gotmpl"
     - "secrets/git-ssh-credentials.yaml.gotmpl"
+    - "secrets/msteams-notification.yaml.gotmpl"
     - "tasks/git-clone.yaml.gotmpl"
     - "tasks/create-publish-helm-chart.yaml.gotmpl"
+    - "tasks/send-msteams-webhook.yaml.gotmpl"
     - "pipelines/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
     # - "run-tests/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 

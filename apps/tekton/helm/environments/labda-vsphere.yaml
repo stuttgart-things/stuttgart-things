@@ -2,6 +2,7 @@
 scrDockerConfig: ref+vault://apps/yacht/scr-labda
 sshCodehubCredentials: ref+vault://apps/yacht/codehub-ssh
 sshGithubCredentials: ref+vault://apps/yacht/github-ssh
+msTeamsWebhook: ref+vault://apps/yacht/msteams
 storageClassName: nfs4-csi
 helmWorkspaceStorage: 5Gi
 helmWorkspaceAccessMode: ReadWriteOnce
