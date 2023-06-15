@@ -14,7 +14,7 @@ releases:
     - "tasks/create-publish-helm-chart.yaml.gotmpl"
     - "tasks/send-msteams-notification.yaml.gotmpl"
     - "pipelines/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
-    - "run-tests/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
+    - "test-runs/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 
 repositories:
 - name: stuttgart-things
