@@ -1,0 +1,21 @@
+---
+releases:
+- name: base-os-setup
+  namespace: ansible
+  chart: stuttgart-things/sthings-cluster
+  version: 0.3.3
+  installed: true
+  values:
+    - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
+
+repositories:
+- name: stuttgart-things
+  url: eu.gcr.io/stuttgart-things
+  oci: true
+
+helmDefaults:
+  verify: false
+  wait: false
+  timeout: 600
+  recreatePods: false
+  force: true
