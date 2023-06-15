@@ -163,7 +163,7 @@ spec:
           {{- if $v.configmapsEnvFrom }}
           {{- range $k, $v := $v.configmapsEnvFrom }}
           - configMapRef:
-              name: {{ $k }}
+              name: {{ $v.name }}
           {{- end }}{{- end }}{{- end }}
           {{- if $v.probes }}
             {{- toYaml $v.probes | nindent 10 }}
