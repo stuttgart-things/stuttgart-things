@@ -1,49 +1,85 @@
 ---
 defaultNamespace: tekton
-
-enableRuns: false
-enableGitSecretsSSH: false
+enableWorkspaces: true
+enableGitSecretsSSH: true
 enableSecrets: false
-enableWorkspaces: false
 enableRegistryCredentials: false
-enablePipelines: false
+enablePipelines: true
 enableTasks: true
+enableRuns: false
 
-runs:
-  packagesthings-cluster-0.2.1HelmChart:
-    name: helm-sthings-cluster-0.2.1
-    addRandomDateToRunName: false
-    namespace: yacht-tekton
-    kind: Pipeline
-    ref: package-publish-helmchart
-    params:
-      git-repo-url: git@github.com:stuttgart-things/stuttgart-things.git
-      git-revision: main
-      gitWorkspaceSubdirectory: /helm/sthings-cluster
-      helm-chart-path: charts
-      helm-chart-name: sthings-cluster
-      helm-chart-tag: 0.2.1
-      registry: scr.tiab.labda.sva.de
-      working-image: eu.gcr.io/stuttgart-things/sthings-k8s:1.127.2
+pipelines:
+  package-publish-helmchart:
+    namespace: {{ .Release.Namespace }}
     workspaces:
-      ssh-credentials:
-        workspaceKind: secret
-        workspaceRef: codehub-ssh
-      source:
-        workspaceKind: persistentVolumeClaim
-        workspaceRef: tekton-kaniko-workspace
-      dockerconfig:
-        workspaceKind: secret
-        workspaceRef: scr-labda
-
-
-
-gitSecretsSSH:
-  codehub:
-    name: codehub-ssh
-    namespace: yacht-tekton
-    labels:
-      app: yacht-tekton
-    dataType: data
-    secretKVs:
-      #id_rsa: <path:ssh/data/sthings#private_key>
+      - source
+      - ssh-credentials
+      - dockerconfig
+    params:
+      git-repo-url:
+        description: source git repo
+      git-revision:
+        description: revision of source git repo
+      gitWorkspaceSubdirectory:
+        description: subdirectory on workspace
+        default: ""
+      helm-chart-path:
+        description: directory to helm chart in repo, e.g. "helm"
+      helm-chart-name:
+        description: name of helm chart, e.g. "sthings-k8s-operator"
+      helm-chart-tag:
+        description: tag of helm chart, e.g. "0.1.0"
+      registry:
+        description: registry url, e.g. "scr.tiab.labda.sva.de"
+      working-image:
+        description: working image
+    tasks:
+      fetch-repository:
+        task: git-clone
+        workspaces:
+          output:
+            workspace: source
+          ssh-directory:
+            workspace: ssh-credentials
+        params:
+          url:
+            value: $(params.git-repo-url)
+          revision:
+            value: $(params.git-revision)
+          subdirectory:
+            value: $(params.gitWorkspaceSubdirectory)
+          deleteExisting:
+            value: "'true'"
+      build-package-helmchart:
+        task: create-publish-helm-chart
+        runAfter:
+          - fetch-repository
+        workspaces:
+          source:
+            workspace: source
+          dockerconfig:
+            workspace: dockerconfig
+        params:
+          PATH:
+            value: $(params.helm-chart-path)
+          CHARTNAME:
+            value: $(params.helm-chart-name)
+          CHARTTAG:
+            value: $(params.helm-chart-tag)
+          REGISTRY:
+            value: $(params.registry)
+          IMAGE:
+            value: $(params.working-image)
+          SUBDIRECTORY:
+            value: $(params.gitWorkspaceSubdirectory)
+      send-webhook-msteams:
+        task: send-msteams-webhook
+        runAfter:
+          - build-package-helmchart
+        params:
+          message:
+            value: "helm chart $(params.helm-chart-name):$(params.helm-chart-tag) packaged & pushed successfully to oci://$(params.registry)/$(params.helm-chart-name)/"
+          webhook-url-secret:
+            value: msteams
+          webhook-url-secret-key:
+            value: url

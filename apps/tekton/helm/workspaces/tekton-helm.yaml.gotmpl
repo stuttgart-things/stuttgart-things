@@ -1,8 +1,9 @@
 ---
 workspaces:
  tekton-helm-workspace:
+   namespace: {{ .Release.Namespace }}
    volumeMode: Filesystem
-   storageClassName: nfs4-csi
-   storage: 5Gi
+   storageClassName: {{ .Values.storageClassName }}
+   storage: {{ .Values.helmWorkspaceStorage }}
    accessModes:
-     - ReadWriteOnce
+     - {{ .Values.helmWorkspaceAccessMode }}

@@ -4,14 +4,22 @@ releases:
   installed: true
   namespace: tekton
   chart: stuttgart-things/yacht-tekton-resources
-  version: v0.47.6
+  version: v0.47.7
   values:
-    - "pipelines/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
     - "workspaces/tekton-helm.yaml.gotmpl"
+    - "secrets/scr-registry-credentials.yaml.gotmpl"
+    - "secrets/git-ssh-credentials.yaml.gotmpl"
     - "tasks/git-clone.yaml.gotmpl"
-    # - "tasks/create-publish-helm-chart.yaml.gotmpl"
+    - "tasks/create-publish-helm-chart.yaml.gotmpl"
+    - "pipelines/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
+    # - "run-tests/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 
 repositories:
 - name: stuttgart-things
   url: eu.gcr.io/stuttgart-things
   oci: true
+
+environments:
+  labda-vsphere:
+    values:
+      - environments/{{ .Environment.Name }}.yaml

@@ -1,0 +1,7 @@
+---
+scrDockerConfig: ref+vault://apps/yacht/scr-labda
+sshCodehubCredentials: ref+vault://apps/yacht/codehub-ssh
+sshGithubCredentials: ref+vault://apps/yacht/github-ssh
+storageClassName: nfs4-csi
+helmWorkspaceStorage: 5Gi
+helmWorkspaceAccessMode: ReadWriteOnce

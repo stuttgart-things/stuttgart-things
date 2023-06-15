@@ -1,5 +1,6 @@
 tasks:
   git-clone:
+    namespace: {{ .Release.Namespace }}
     labels:
       app.kubernetes.io/version: "0.9"
     annotations:
