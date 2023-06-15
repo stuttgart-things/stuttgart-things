@@ -1,0 +1,14 @@
+---
+configmaps:
+  ansible-playbooks:
+    play.yaml: |
+      ---
+      - name: Prepare env
+        ansible.builtin.import_playbook: prepare-env.yaml
+
+      - name: Execute playbook
+        ansible.builtin.import_playbook: {{`{{ "'{{ gude }}.yaml'" }}`}}
+    prepare-env.yaml: |
+      ---
+      - hosts: localhost
+        become: false

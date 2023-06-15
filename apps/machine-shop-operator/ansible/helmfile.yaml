@@ -1,12 +1,31 @@
 ---
 releases:
-- name: base-os-setup
+- name: secrets
   namespace: ansible
   chart: stuttgart-things/sthings-cluster
-  version: 0.3.3
+  version: 0.3.4
   installed: true
   values:
     - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
+
+- name: playbooks
+  namespace: ansible
+  chart: stuttgart-things/sthings-cluster
+  version: 0.3.4
+  installed: true
+  values:
+    - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
+
+- name: baseos-setup
+  namespace: ansible
+  chart: stuttgart-things/sthings-cluster
+  version: 0.3.4
+  installed: true
+  values:
+    - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
+  needs:
+    - "{{`{{ .Release.Namespace }}`}}/secrets"
+    - "{{`{{ .Release.Namespace }}`}}/playbooks"
 
 repositories:
 - name: stuttgart-things
@@ -19,3 +38,8 @@ helmDefaults:
   timeout: 600
   recreatePods: false
   force: true
+
+environments:
+  labda-vsphere:
+    values:
+      - environments/{{ .Environment.Name }}.yaml
