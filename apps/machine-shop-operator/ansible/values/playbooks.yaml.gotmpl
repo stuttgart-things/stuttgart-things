@@ -7,8 +7,110 @@ configmaps:
         ansible.builtin.import_playbook: prepare-env.yaml
 
       - name: Execute playbook
-        ansible.builtin.import_playbook: {{`{{ "'{{ gude }}.yaml'" }}`}}
+        ansible.builtin.import_playbook: {{`{{printf "%q" "{{ target_play }}.yaml" }}`}}
     prepare-env.yaml: |
       ---
       - hosts: localhost
         become: false
+
+        vars:
+          home_dir: {{`{{printf "%q" "{{ lookup('env','HOME') }}" }}`}}
+          targets: {{`{{printf "%q" "{{ lookup('env','TARGETS') }}" }}`}}
+          targets_list: {{`{{printf "%q" "{{ targets.split(';') }}" }}`}}
+          inv_path: {{`{{printf "%q" "{{ lookup('env','INV_PATH') }}" }}`}}
+
+          vault_approle_id: {{`{{printf "%q" "{{ lookup('env', 'VAULT_ROLE_ID') }}" }}`}}
+          vault_approle_secret: {{`{{printf "%q" "{{ lookup('env', 'VAULT_SECRET_ID') }}" }}`}}
+          vault_url: {{`{{printf "%q" "{{ lookup('env', 'VAULT_ADDR') }}" }}`}}
+          ssh_key: {{`{{printf "%q" "{{ lookup('community.hashi_vault.hashi_vault', 'secret=ssh/data/sthings:privateKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}" }}`}}
+
+        tasks:
+
+        - name: Create hosts
+          ansible.builtin.set_fact:
+            target_hosts: {{`{{printf "%q" "{{ targets_list | join('\n') }}" }}`}}
+
+        - name: Write vars on inv file
+          ansible.builtin.blockinfile:
+            path: {{`{{printf "%q" "{{ inv_path }}" }}`}}
+            block: |
+              [all]
+              {{`{{ "{{ target_hosts }}" }}`}}
+
+              [all:vars]
+              ansible_user=sthings
+              host_key_checking=false
+
+        - name: Creating ssh directory
+          ansible.builtin.file:
+            path: {{`{{printf "%q" "{{ home_dir }}/.ssh/" }}`}}
+            state: directory
+
+        - name: Creating ssh private key file
+          ansible.builtin.copy:
+            dest: {{`{{printf "%q" "{{ home_dir }}/.ssh/id_rsa" }}`}}
+            content: {{`{{printf "%q" "{{ ssh_key | b64decode }}" }}`}}
+            mode: '0600'
+
+        - ansible.builtin.meta: refresh_inventory
+    baseos-setup.yaml: |
+      - hosts: all
+        become: true
+        gather_facts: true
+
+        vars:
+          manage_filesystem: {{`{{printf "%q" "{{ lookup('env','MANAGE_FILESYSTEM') | default('true') }}" }}`}}
+          update_packages: {{`{{printf "%q" "{{ lookup('env','UPDATE_PACKAGES') | default('true') }}" }}`}}
+          install_requirements: {{`{{printf "%q" "{{ lookup('env','INSTALL_REQUIREMENTS') | default('true') }}" }}`}}
+          install_motd: {{`{{printf "%q" "{{ lookup('env','INSTALL_MOTD') | default('true') }}" }}`}}
+          username: {{`{{printf "%q" "{{ lookup('env','USERNAME') | default('sthings') }}" }}`}}
+          lvm_home_sizing: {{`{{printf "%q" "{{ lookup('env','LVM_HOME_SIZING') | default('15%') }}" }}`}}
+          lvm_root_sizing: {{`{{printf "%q" "{{ lookup('env','LVM_ROOT_SIZING') | default('35%') }}" }}`}}
+          lvm_var_sizing: {{`{{printf "%q" "{{ lookup('env','LVM_VAR_SIZING') | default('50%') }}" }}`}}
+          send_to_msteams: {{`{{printf "%q" "{{ lookup('env','SEND_TO_MSTEAMS') | default('false') }}" }}`}}
+          msteams_webhook_url: {{`{{printf "%q" "{{ lookup('env','MSTEAMS_WEBHOOK_URL') | default('') }}" }}`}}
+          vault_instances:
+            - https://vault.tiab.labda.sva.de:8200
+            - https://vault.labul.sva.de:8200
+            - https://vault-vsphere.labul.sva.de:8200
+            - https://vault-pve.labul.sva.de:8200
+        roles:
+          - role: manage-filesystem
+            when: manage_filesystem|bool
+
+          - role: install-requirements
+            when: install_requirements|bool
+
+        post_tasks:
+
+          - name: Install vault ca certificate to local system from multiple instances
+            ansible.builtin.include_role:
+              name: install-configure-vault
+              tasks_from: install-ca-auth
+            vars:
+              vault_url: {{`{{printf "%q" "{{ vault_instance }}" }}`}}
+            loop: {{`{{printf "%q" "{{ vault_instances }}" }}`}}
+            loop_control:
+              loop_var: vault_instance
+            when: vault_instances is defined
+
+          - name: Send webhook when base-os setup was executed
+            ansible.builtin.include_role:
+              name: create-send-webhook
+            vars:
+              summary_text: {{`{{printf "%q" "base-os-setup was executed on {{ ansible_fqdn }}" }}`}}
+              msteams_url: {{`{{printf "%q" "{{ msteams_webhook_url }}" }}`}}
+              card_title: {{`{{printf "%q" "base-os-setup was executed on {{ ansible_fqdn }}" }}`}}
+              act_image: {{`{{printf "%q" "{{ logo_pic }}" }}`}}
+              act_title: {{`{{printf "%q" "{{ quotes | random }}" }}`}}
+              act_text: {{`{{printf "%q" "{{ quotes | random }}" }}`}}
+              os_facts: |
+                filesystem was {{`{{ "{{ '' if manage_filesystem|bool else 'not' }}" }}`}} managed
+                operating system {{`{{ "{{ ansible_distribution }} {{ ansible_distribution_major_version }} was {{ '' if update_os|bool else 'not' }}" }}`}} updated
+                vault-ca was {{`{{ "{{ '' if install_vault_ca|bool else 'not' }}" }}`}} installed
+                message of the day was {{`{{ "{{ '' if motd|bool else 'not' }}" }}`}} installed
+                metric beate was {{`{{ "{{ '' if install_metric_beat|bool else 'not' }}" }}`}} installed
+              ms_teams_notification_type: "simple"
+            tags: notify
+            ignore_errors: true
+            when: send_to_msteams|bool

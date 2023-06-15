@@ -4,7 +4,7 @@ releases:
   namespace: ansible
   chart: stuttgart-things/sthings-cluster
   version: 0.3.4
-  installed: true
+  installed: false
   values:
     - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 
