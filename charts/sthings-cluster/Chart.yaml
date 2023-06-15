@@ -3,7 +3,7 @@ version: 0.3.4
 appVersion: 0.3.4
 dependencies:
   - name: sthings-helm-toolkit
-    version: 2.4.27
+    version: 2.4.45
     repository: oci://eu.gcr.io/stuttgart-things
 description: A Helm chart for Kubernetes
 name: sthings-cluster

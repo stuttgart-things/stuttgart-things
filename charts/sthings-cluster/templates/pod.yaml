@@ -1,0 +1,4 @@
+{{- $envVar := . -}}
+{{- range $podName, $podTpl := .Values.pods -}}
+{{ include "sthings-helm-toolkit.pod" (list $envVar $podName $podTpl) }}
+{{ end -}}

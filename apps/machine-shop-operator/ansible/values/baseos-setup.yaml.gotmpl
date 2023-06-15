@@ -1,1 +1,44 @@
 ---
+pods:
+  ansible-executor:
+    name: ansible-executor
+    namespace: ansible
+    labels:
+      app: machine-shop-operator
+      machine-shop-operator: ansible
+    volumes:
+      workdir:
+        volumeKind: emptyDir
+    containers:
+      manager:
+        image: scr.labul.sva.de/sthings-k8s-operator/sthings-k8s-operator
+        tag: v22.0913.144
+        imagePullPolicy: Always
+        env:
+          ANSIBLE_HOST_KEY_CHECKING: "False"
+          TARGETS: "10.100.136.72;10.100.136.73"
+          INV_PATH: "/tmp/inv"
+        securityContext:
+          runAsUser: 65532
+          allowPrivilegeEscalation: false
+          privileged: true
+          runAsNonRoot: true
+          readOnlyRootFilesystem: false
+        command:
+          - "/bin/sh"
+          - "-ec"
+          - "touch ${INV_PATH} && sleep 1000"
+        resources:
+          requests:
+            cpu: 10m
+            memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 768Mi
+        volumeMounts:
+          workdir:
+            mountPath: /work-dir
+        secretsEnvFrom:
+          - name: vault
+        configmapsEnvFrom:
+          - name: ansible-playbooks
