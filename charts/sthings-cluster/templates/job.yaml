@@ -1,0 +1,4 @@
+{{- $envVar := . -}}
+{{- range $jobName, $jobTpl := .Values.jobs -}}
+{{ include "sthings-helm-toolkit.job" (list $envVar $jobName $jobTpl) }}
+{{ end -}}
