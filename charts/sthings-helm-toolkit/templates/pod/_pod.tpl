@@ -133,22 +133,22 @@ spec:
 {{/*
 # exampleValues:
 examples:
-  - name: deployment-one-container
+  - name: ansible-pod
     values: |
       pods:
-        ansible-executor:
-          name: ansible-executor
-          namespace: ansible
+        baseos-setup:
+          name: baseos-setup
+          namespace: {{ .Release.Namespace }}
           labels:
             app: machine-shop-operator
             machine-shop-operator: ansible
           volumes:
-            workdir:
-              volumeKind: emptyDir
+            ansible-playbooks:
+              volumeKind: configMap
           containers:
             manager:
-              image: scr.labul.sva.de/sthings-k8s-operator/sthings-k8s-operator
-              tag: v22.0913.144
+              image: eu.gcr.io/stuttgart-things/sthings-ansible
+              tag: 7.5.0-54
               imagePullPolicy: Always
               env:
                 ANSIBLE_HOST_KEY_CHECKING: "False"
@@ -172,12 +172,10 @@ examples:
                   cpu: 500m
                   memory: 768Mi
               volumeMounts:
-                workdir:
-                  mountPath: /work-dir
+                ansible-playbooks:
+                  mountPath: /home/nonroot/ansible
               secretsEnvFrom:
                 - name: vault
-              configmapsEnvFrom:
-                - name: ansible-playbooks
 */}}
 
 {{/*

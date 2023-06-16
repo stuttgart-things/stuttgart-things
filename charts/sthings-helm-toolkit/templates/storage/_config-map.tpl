@@ -15,9 +15,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ $configmapName }}
-{{- if $envVar.Values.namespace }}
-  namespace: {{ $envVar.Values.namespace }}
-{{- end }}
+  namespace: {{ $configmapTpl.namespace | default $envVar.Values.namespace }}
 data:
 {{- if kindIs "map" $configmapTpl -}}
 {{- tpl (toYaml $configmapTpl) $envVar | nindent 2 }}

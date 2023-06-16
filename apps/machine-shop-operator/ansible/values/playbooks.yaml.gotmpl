@@ -1,6 +1,7 @@
 ---
 configmaps:
   ansible-playbooks:
+    namespace: {{ .Release.Namespace }}
     play.yaml: |
       ---
       - name: Prepare env
