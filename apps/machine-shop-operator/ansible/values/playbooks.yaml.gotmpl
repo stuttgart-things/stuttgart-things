@@ -60,7 +60,7 @@ configmaps:
         gather_facts: true
 
         vars:
-          username: {{`{{printf "%q" "{{ lookup('env','USERNAME') | default('sthings') }}" }}`}}
+          username: {{`{{printf "%q" "{{ lookup('env','TARGET_ANSIBLE_USERNAME') | default('sthings') }}" }}`}}
           manage_filesystem: {{`{{printf "%q" "{{ lookup('env','MANAGE_FILESYSTEM') | default('true') }}" }}`}}
           update_packages: {{`{{printf "%q" "{{ lookup('env','UPDATE_PACKAGES') | default('true') }}" }}`}}
           install_requirements: {{`{{printf "%q" "{{ lookup('env','INSTALL_REQUIREMENTS') | default('true') }}" }}`}}
