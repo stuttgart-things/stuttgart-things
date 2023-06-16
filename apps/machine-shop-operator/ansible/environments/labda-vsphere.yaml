@@ -3,11 +3,12 @@
 ansibleTargets: dev10.tiab.labda.sva.de;dev10-2.tiab.labda.sva.de;dev10-3.tiab.labda.sva.de;dev10-4.tiab.labda.sva.de
 ansiblePlaybook: baseos-setup
 ansibleImage: eu.gcr.io/stuttgart-things/sthings-ansible
-ansibleImageTag: 7.5.0-5
+ansibleImageTag: 8.0.0-1
 manageFilesystem: True
 installRequirements: True
 updatePackages: True
 installMotd: True
+ansibleUser: sthings
 
 # VAULT
 vaultNamespace: root

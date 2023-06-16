@@ -16,15 +16,13 @@ roles:
     name: prepare-rancher-node
   - src: https://artifacts.tiab.labda.sva.de/roles/download-install-binary.tar.gz
     name: download-install-binary
-  - src: https://artifacts.tiab.labda.sva.de/roles/manage-filesystem.tar.gz
-    name: manage-filesystem
   - src: https://artifacts.tiab.labda.sva.de/roles/install-configure-vault.tar.gz
     name: install-configure-vault
   - src: https://github.com/stuttgart-things/deploy-configure-rke.git
     scm: git
     version: rke2r2-1.26.0
-  - src: https://github.com/stuttgart-things/manage-filesystem.git
-    scm: git
+  - src: https://artifacts.tiab.labda.sva.de/roles/manage-filesystem.tar.gz
+    name: manage-filesystem
   - src: https://github.com/stuttgart-things/install-configure-powerdns.git
     scm: git
   - src: https://github.com/stuttgart-things/install-requirements.git
