@@ -1,25 +1,25 @@
 ---
 releases:
   - name: secrets
-    namespace: ansible2
+    namespace: sthings-ansible
     chart: stuttgart-things/sthings-cluster
-    version: 0.3.6
+    version: 0.3.7
     installed: true
     values:
       - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 
   - name: playbooks
-    namespace: ansible2
+    namespace: sthings-ansible
     chart: stuttgart-things/sthings-cluster
-    version: 0.3.6
+    version: 0.3.7
     installed: true
     values:
       - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 
-  - name: baseos-setup
-    namespace: ansible2
+  - name: job
+    namespace: sthings-ansible
     chart: stuttgart-things/sthings-cluster
-    version: 0.3.6
+    version: 0.3.7
     installed: true
     values:
       - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"

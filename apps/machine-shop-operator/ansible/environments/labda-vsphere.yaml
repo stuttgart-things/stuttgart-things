@@ -1,4 +1,11 @@
 ---
+# ANSIBLE
+ansibleTargets: 10.100.136.72;10.100.136.73
+ansiblePlaybook: baseos-setup
+ansibleImage: eu.gcr.io/stuttgart-things/sthings-ansible
+ansibleImageTag: 7.5.0-5
+
+# VAULT
 vaultNamespace: root
 vaultAddr: https://vault-vsphere.tiab.labda.sva.de:8200
 vaultRoleID: ref+vault://apps/vault/roleID

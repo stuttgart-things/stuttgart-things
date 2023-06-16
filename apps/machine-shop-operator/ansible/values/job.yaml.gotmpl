@@ -1,22 +1,23 @@
 ---
-pods:
-  baseos-setup:
+jobs:
+  ansible-job:
     name: baseos-setup
     namespace: {{ .Release.Namespace }}
     labels:
       app: machine-shop-operator
       machine-shop-operator: ansible
+    restartPolicy: Never
     volumes:
       ansible-playbooks:
         volumeKind: configMap
     containers:
       manager:
-        image: eu.gcr.io/stuttgart-things/sthings-ansible
-        tag: 7.5.0-54
+        image: {{ .Values.ansibleImage }}
+        tag: {{ .Values.ansibleImageTag }}
         imagePullPolicy: Always
         env:
           ANSIBLE_HOST_KEY_CHECKING: "False"
-          TARGETS: "10.100.136.72;10.100.136.73"
+          TARGETS: "{{ .Values.ansibleTargets }}"
           INV_PATH: "/tmp/inv"
         securityContext:
           runAsUser: 65532
@@ -27,7 +28,7 @@ pods:
         command:
           - "/bin/sh"
           - "-ec"
-          - "touch ${INV_PATH} && sleep 1000"
+          - "touch ${INV_PATH} && ansible-playbook -i $INV_PATH $HOME/ansible/play.yaml -vv -e target_play={{ .Values.ansiblePlaybook }}"
         resources:
           requests:
             cpu: 10m
@@ -40,5 +41,3 @@ pods:
             mountPath: /home/nonroot/ansible
         secretsEnvFrom:
           - name: vault
-
-#ansible-playbook -i $INV_PATH $HOME/ansible/play.yaml -e target_play=baseos-setup -vv
