@@ -1,27 +1,34 @@
 ---
 releases:
-- name: package-publish-helmchart
-  installed: true
-  namespace: tekton
-  chart: stuttgart-things/yacht-tekton-resources
-  version: v0.47.10
-  values:
-    - "workspaces/tekton-helm.yaml.gotmpl"
-    - "secrets/scr-registry-credentials.yaml.gotmpl"
-    - "secrets/git-ssh-credentials.yaml.gotmpl"
-    - "secrets/msteams-notification.yaml.gotmpl"
-    - "tasks/git-clone.yaml.gotmpl"
-    - "tasks/create-publish-helm-chart.yaml.gotmpl"
-    - "tasks/send-msteams-notification.yaml.gotmpl"
-    - "pipelines/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
-    - "test-runs/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
+  - name: package-publish-helmchart
+    installed: true
+    namespace: tekton-helm
+    chart: stuttgart-things/yacht-tekton-resources
+    version: v0.47.10
+    values:
+      - "workspaces/tekton-helm.yaml.gotmpl"
+      - "secrets/scr-registry-credentials.yaml.gotmpl"
+      - "secrets/git-ssh-credentials.yaml.gotmpl"
+      - "secrets/msteams-notification.yaml.gotmpl"
+      - "tasks/git-clone.yaml.gotmpl"
+      - "tasks/create-publish-helm-chart.yaml.gotmpl"
+      - "tasks/send-msteams-notification.yaml.gotmpl"
+      - "pipelines/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
+      - "test-runs/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 
 repositories:
-- name: stuttgart-things
-  url: eu.gcr.io/stuttgart-things
-  oci: true
+  - name: stuttgart-things
+    url: eu.gcr.io/stuttgart-things
+    oci: true
 
 environments:
   labda-vsphere:
     values:
       - environments/{{ .Environment.Name }}.yaml
+
+helmDefaults:
+  verify: false
+  wait: false
+  timeout: 600
+  recreatePods: false
+  force: true

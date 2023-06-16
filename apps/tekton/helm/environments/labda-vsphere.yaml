@@ -4,5 +4,9 @@ sshCodehubCredentials: ref+vault://apps/yacht/codehub-ssh
 sshGithubCredentials: ref+vault://apps/yacht/github-ssh
 msTeamsWebhook: ref+vault://apps/yacht/msteams
 storageClassName: nfs4-csi
+
 helmWorkspaceStorage: 5Gi
 helmWorkspaceAccessMode: ReadWriteOnce
+
+kanikoWorkspaceStorage: nfs4-csi
+kanikoWorkspaceAccessMode: 10Gi

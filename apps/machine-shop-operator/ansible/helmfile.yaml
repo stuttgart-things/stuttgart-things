@@ -1,36 +1,36 @@
 ---
 releases:
-- name: secrets
-  namespace: ansible2
-  chart: stuttgart-things/sthings-cluster
-  version: 0.3.6
-  installed: true
-  values:
-    - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
+  - name: secrets
+    namespace: ansible2
+    chart: stuttgart-things/sthings-cluster
+    version: 0.3.6
+    installed: true
+    values:
+      - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 
-- name: playbooks
-  namespace: ansible2
-  chart: stuttgart-things/sthings-cluster
-  version: 0.3.6
-  installed: true
-  values:
-    - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
+  - name: playbooks
+    namespace: ansible2
+    chart: stuttgart-things/sthings-cluster
+    version: 0.3.6
+    installed: true
+    values:
+      - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 
-- name: baseos-setup
-  namespace: ansible2
-  chart: stuttgart-things/sthings-cluster
-  version: 0.3.6
-  installed: true
-  values:
-    - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
-  needs:
-    - "{{`{{ .Release.Namespace }}`}}/secrets"
-    - "{{`{{ .Release.Namespace }}`}}/playbooks"
+  - name: baseos-setup
+    namespace: ansible2
+    chart: stuttgart-things/sthings-cluster
+    version: 0.3.6
+    installed: true
+    values:
+      - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
+    needs:
+      - "{{`{{ .Release.Namespace }}`}}/secrets"
+      - "{{`{{ .Release.Namespace }}`}}/playbooks"
 
 repositories:
-- name: stuttgart-things
-  url: eu.gcr.io/stuttgart-things
-  oci: true
+  - name: stuttgart-things
+    url: eu.gcr.io/stuttgart-things
+    oci: true
 
 helmDefaults:
   verify: false
