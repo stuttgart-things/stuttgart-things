@@ -19,41 +19,39 @@ configmaps:
           targets: {{`{{printf "%q" "{{ lookup('env','TARGETS') }}" }}`}}
           targets_list: {{`{{printf "%q" "{{ targets.split(';') }}" }}`}}
           inv_path: {{`{{printf "%q" "{{ lookup('env','INV_PATH') }}" }}`}}
-
           vault_approle_id: {{`{{printf "%q" "{{ lookup('env', 'VAULT_ROLE_ID') }}" }}`}}
           vault_approle_secret: {{`{{printf "%q" "{{ lookup('env', 'VAULT_SECRET_ID') }}" }}`}}
           vault_url: {{`{{printf "%q" "{{ lookup('env', 'VAULT_ADDR') }}" }}`}}
           ssh_key: {{`{{printf "%q" "{{ lookup('community.hashi_vault.hashi_vault', 'secret=ssh/data/sthings:privateKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}" }}`}}
 
         tasks:
+          - name: Create hosts
+            ansible.builtin.set_fact:
+              target_hosts: {{`{{printf "%q" "{{ targets_list | join('\n') }}" }}`}}
 
-        - name: Create hosts
-          ansible.builtin.set_fact:
-            target_hosts: {{`{{printf "%q" "{{ targets_list | join('\n') }}" }}`}}
+          - name: Write vars on inv file
+            ansible.builtin.blockinfile:
+              path: {{`{{printf "%q" "{{ inv_path }}" }}`}}
+              block: |
+                [all]
+                {{`{{ "{{ target_hosts }}" }}`}}
 
-        - name: Write vars on inv file
-          ansible.builtin.blockinfile:
-            path: {{`{{printf "%q" "{{ inv_path }}" }}`}}
-            block: |
-              [all]
-              {{`{{ "{{ target_hosts }}" }}`}}
+                [all:vars]
+                ansible_user=sthings
+                host_key_checking=false
 
-              [all:vars]
-              ansible_user=sthings
-              host_key_checking=false
+          - name: Creating ssh directory
+            ansible.builtin.file:
+              path: {{`{{printf "%q" "{{ home_dir }}/.ssh/" }}`}}
+              state: directory
 
-        - name: Creating ssh directory
-          ansible.builtin.file:
-            path: {{`{{printf "%q" "{{ home_dir }}/.ssh/" }}`}}
-            state: directory
+          - name: Creating ssh private key file
+            ansible.builtin.copy:
+              dest: {{`{{printf "%q" "{{ home_dir }}/.ssh/id_rsa" }}`}}
+              content: {{`{{printf "%q" "{{ ssh_key | b64decode }}" }}`}}
+              mode: '0600'
 
-        - name: Creating ssh private key file
-          ansible.builtin.copy:
-            dest: {{`{{printf "%q" "{{ home_dir }}/.ssh/id_rsa" }}`}}
-            content: {{`{{printf "%q" "{{ ssh_key | b64decode }}" }}`}}
-            mode: '0600'
-
-        - ansible.builtin.meta: refresh_inventory
+          - ansible.builtin.meta: refresh_inventory
 
     baseos-setup.yaml: |
       - hosts: all
@@ -117,3 +115,105 @@ configmaps:
             tags: notify
             ignore_errors: true
             when: send_to_msteams|bool
+
+
+{{- /*
+    power-dns-automation.yaml: |
+      ---
+      - hosts: localhost
+        gather_facts: no
+
+        vars:
+          pdns_api_executor: localhost
+          entry_zone: "4sthings.tiab.ssc.sva.de."
+          hostname: dev8
+          ip_address: 10.100.136.226
+
+          pdns_create_record:
+            - fqdn: "*.{{ hostname }}.{{ entry_zone }}"
+              content: "{{ ip_address }}"
+              record_type: A
+              zone: "{{ entry_zone }}"
+              state: present
+              ttl: 60
+              note: deployed w/ sthings-k8s-operator
+
+          pdns_url: https://pdns-vsphere.tiab.labda.sva.de:8443
+          pdns_token: password123
+
+        roles:
+          - install-configure-powerdns
+
+    install-configure-nfs.yaml: |
+      - hosts: all
+        gather_facts: true
+        become: true
+        vars:
+          kind: server
+          permanent: true
+          nfs_manage_firewall: true
+          nfs_export_path:      #optional use this or nfs_custom_exports
+            - /var/nfs/k8s
+
+        roles:
+          - install-configure-nfs
+
+
+    create-downstream-cluster.yaml: |
+      ---
+      - hosts: all
+        vars:
+          rancher_api_url: https://rancher-things.app.4sthings.tiab.ssc.sva.de/v3
+          cluster_name: dev8
+          rancher_access_key: token-bwbmg
+          rancher_secret_key: b2vd6qxl4vhzwqf2j8h97mm68h7sjs97r4mvm2wqfpcldlnb7mf5d2
+
+        tasks:
+          - name: Get cluster information
+            ansible.builtin.uri:
+              validate_certs: false
+              url: "{{ rancher_api_url }}/clusters?name={{ cluster_name }}"
+              user: "{{ rancher_access_key }}"
+              password: "{{ rancher_secret_key }}"
+              body_format: json
+              method: GET
+              force_basic_auth: yes
+              headers:
+                Content-Type: "application/json"
+            register: cluster_info
+
+          - name: Show clusterid
+            ansible.builtin.debug:
+              var:
+                cluster_info.json.data[0].id
+
+          - name: Set clusterid
+            ansible.builtin.set_fact:
+              cluster_id: "{{ cluster_info.json.data[0].id }}"
+
+          - name: Get cluster registration tokens
+            ansible.builtin.uri:
+              validate_certs: false
+              url: "{{ rancher_api_url }}/clusters/{{ cluster_id }}/clusterregistrationtokens?sort=insecureCommand"
+              user: "{{ rancher_access_key }}"
+              password: "{{ rancher_secret_key }}"
+              body_format: json
+              method: GET
+              force_basic_auth: yes
+              headers:
+                  Content-Type: "application/json"
+            register: cluster_registration_tokens
+
+          - name: Get node Command
+            ansible.builtin.debug:
+              var: cluster_registration_tokens.json.data[0].nodeCommand
+
+          - name: Set node Command
+            ansible.builtin.set_fact:
+              node_command: "{{ cluster_registration_tokens.json.data[0].nodeCommand }}"
+
+          - name: Execute node command
+            ansible.builtin.shell: |
+              {{ cluster_registration_tokens.json.data[0].nodeCommand }} --worker
+
+*/}}
