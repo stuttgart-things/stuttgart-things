@@ -3,15 +3,31 @@
 ansibleTargets: dev10.tiab.labda.sva.de;dev10-2.tiab.labda.sva.de;dev10-3.tiab.labda.sva.de;dev10-4.tiab.labda.sva.de
 ansiblePlaybook: baseos-setup
 ansibleImage: eu.gcr.io/stuttgart-things/sthings-ansible
-ansibleImageTag: 8.0.0-1
-manageFilesystem: True
-installRequirements: True
-updatePackages: True
-installMotd: True
+ansibleImageTag: 8.0.0-2
+manageFilesystem: true
+installRequirements: true
+updatePackages: true
+installMotd: true
 ansibleUser: sthings
+lvmHomeSizing: 15%
+lvmRootSizing: 35%
+lvmVarSizing: 50%
+
+
+# MS-TEAMS
+sendToMSteams: true
+msTeamsWebhookUrl: https://365sva.webhook.office.com/webhookb2/2f14a9f8-4736-46dd-9c8c-31547ec37180@0a65cb1e-37d5-41ff-980a-647d9d0e4f0b/IncomingWebhook/37a805a0a2624dc2ac1aedd7dec6ad49/dc3a27ed-396c-40b7-a9b2-f1a2b6b44efe
+
 
 # VAULT
 vaultNamespace: root
 vaultAddr: https://vault-vsphere.tiab.labda.sva.de:8200
 vaultRoleID: ref+vault://apps/vault/roleID
 vaultSecretID: ref+vault://apps/vault/secretID
+
+## CA
+installCAs:
+  - https://vault.tiab.labda.sva.de:8200
+  - https://vault.labul.sva.de:8200
+  - https://vault-vsphere.labul.sva.de:8200
+  - https://vault-pve.labul.sva.de:8200

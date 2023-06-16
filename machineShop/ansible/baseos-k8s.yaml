@@ -141,7 +141,7 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: ansible
-  namespace: ansible
+  namespace: sthings-ansible
   labels:
     app: machine-shop-operator
     machine-shop-operator: ansible
@@ -149,15 +149,25 @@ spec:
   containers:
     # 65532
   - name: ansible
-    image: eu.gcr.io/stuttgart-things/sthings-ansible:7.5.0-5
+    image: eu.gcr.io/stuttgart-things/sthings-ansible:8.0.0-2
     command: ["/bin/sh", "-ec", "touch ${INV_PATH} && sleep 1000"]
     env:
       - name: ANSIBLE_HOST_KEY_CHECKING
         value: "False"
       - name: TARGETS
-        value: "10.100.136.72;10.100.136.73"
+        value: "dev10.tiab.labda.sva.de;dev10-2.tiab.labda.sva.de;dev10-3.tiab.labda.sva.de;dev10-4.tiab.labda.sva.de"
       - name: INV_PATH
         value: /tmp/inv
+      - name: INSTALL_MOTD
+        value: "true"
+      - name: INSTALL_REQUIREMENTS
+        value: "true"
+      - name: MANAGE_FILESYSTEM
+        value: "true"
+      - name: TARGET_ANSIBLE_USERNAME
+        value: sthings
+      - name: UPDATE_PACKAG
+        value: "true"
     securityContext:
       runAsNonRoot: true
       runAsUser: 65532

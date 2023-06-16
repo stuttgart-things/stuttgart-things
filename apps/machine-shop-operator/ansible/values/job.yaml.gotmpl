@@ -16,14 +16,9 @@ jobs:
         tag: {{ .Values.ansibleImageTag }}
         imagePullPolicy: Always
         env:
-          TARGET_ANSIBLE_USERNAME: "{{ .Values.ansibleUser }}"
           ANSIBLE_HOST_KEY_CHECKING: "False"
           TARGETS: "{{ .Values.ansibleTargets }}"
           INV_PATH: "/tmp/inv"
-          MANAGE_FILESYSTEM: "{{ .Values.manageFilesystem }}"
-          UPDATE_PACKAGES: "{{ .Values.updatePackages }}"
-          INSTALL_REQUIREMENTS: "{{ .Values.installRequirements }}"
-          INSTALL_MOTD: "{{ .Values.installMotd }}"
         securityContext:
           runAsUser: 65532
           allowPrivilegeEscalation: false

@@ -54,28 +54,28 @@ configmaps:
             mode: '0600'
 
         - ansible.builtin.meta: refresh_inventory
+
     baseos-setup.yaml: |
       - hosts: all
         become: true
         gather_facts: true
 
         vars:
-          username: {{`{{printf "%q" "{{ lookup('env','TARGET_ANSIBLE_USERNAME') | default('sthings') }}" }}`}}
-          manage_filesystem: {{`{{printf "%q" "{{ lookup('env','MANAGE_FILESYSTEM') | default('true') }}" }}`}}
-          update_packages: {{`{{printf "%q" "{{ lookup('env','UPDATE_PACKAGES') | default('true') }}" }}`}}
-          install_requirements: {{`{{printf "%q" "{{ lookup('env','INSTALL_REQUIREMENTS') | default('true') }}" }}`}}
-          install_motd: {{`{{printf "%q" "{{ lookup('env','INSTALL_MOTD') | default('true') }}" }}`}}
-          username: {{`{{printf "%q" "{{ lookup('env','USERNAME') | default('sthings') }}" }}`}}
-          lvm_home_sizing: {{`{{printf "%q" "{{ lookup('env','LVM_HOME_SIZING') | default('15%') }}" }}`}}
-          lvm_root_sizing: {{`{{printf "%q" "{{ lookup('env','LVM_ROOT_SIZING') | default('35%') }}" }}`}}
-          lvm_var_sizing: {{`{{printf "%q" "{{ lookup('env','LVM_VAR_SIZING') | default('50%') }}" }}`}}
-          send_to_msteams: {{`{{printf "%q" "{{ lookup('env','SEND_TO_MSTEAMS') | default('false') }}" }}`}}
-          msteams_webhook_url: {{`{{printf "%q" "{{ lookup('env','MSTEAMS_WEBHOOK_URL') | default('') }}" }}`}}
+          manage_filesystem: {{ .Values.manageFilesystem }}
+          update_packages: {{ .Values.updatePackages }}
+          install_requirements: {{ .Values.installRequirements }}
+          install_motd: {{ .Values.installMotd }}
+          username: {{ .Values.ansibleUser }}
+          lvm_home_sizing: "{{ .Values.lvmHomeSizing }}"
+          lvm_root_sizing: "{{ .Values.lvmRootSizing }}"
+          lvm_var_sizing: "{{ .Values.lvmVarSizing }}"
+          send_to_msteams: {{ .Values.sendToMSteams }}
+          msteams_webhook_url: "{{ .Values.msTeamsWebhookUrl }}"
+
           vault_instances:
-            - https://vault.tiab.labda.sva.de:8200
-            - https://vault.labul.sva.de:8200
-            - https://vault-vsphere.labul.sva.de:8200
-            - https://vault-pve.labul.sva.de:8200
+            {{- range .Values.installCAs }}
+            - {{ . }}
+            {{- end }}
 
         roles:
           - role: manage-filesystem
@@ -84,7 +84,7 @@ configmaps:
           - role: install-requirements
             when: install_requirements|bool
 
-        post_tasks:
+        tasks:
 
           - name: Install vault ca certificate to local system from multiple instances
             ansible.builtin.include_role:
