@@ -84,7 +84,6 @@ configmaps:
             when: install_requirements|bool
 
         tasks:
-
           - name: Install vault ca certificate to local system from multiple instances
             ansible.builtin.include_role:
               name: install-configure-vault
@@ -113,7 +112,7 @@ configmaps:
             ignore_errors: true
             when: send_to_msteams|bool
 
-    power-dns-automation.yaml: |
+    power-dns.yaml: |
       ---
       - hosts: localhost
         gather_facts: no
@@ -126,7 +125,7 @@ configmaps:
           pdns_api_executor: localhost
           pdns_create_record:
             - fqdn: "*.{{ .Values.hostname }}.{{ .Values.entryZone }}"
-              content: "{{ .Values.ipAddress }}."
+              content: "{{ .Values.ipAddress }}"
               record_type: A
               zone: "{{ .Values.entryZone }}"
               state: present
@@ -135,7 +134,6 @@ configmaps:
 
           pdns_url: {{ .Values.pdnsUrl }}
           pdns_token: {{`{{printf "%q" "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps/data/powerdns:token validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}" }}`}}
-          vault_approle_secret:
 
         roles:
           - install-configure-powerdns

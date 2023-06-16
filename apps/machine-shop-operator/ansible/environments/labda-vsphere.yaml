@@ -1,7 +1,7 @@
 ---
 # ANSIBLE
 ansibleTargets: dev11.tiab.labda.sva.de;dev11-2.tiab.labda.sva.de;dev11-3.tiab.labda.sva.de;dev11-4.tiab.labda.sva.de
-ansiblePlaybook: baseos-setup
+ansiblePlaybook: power-dns #baseos-setup
 ansibleImage: eu.gcr.io/stuttgart-things/sthings-ansible
 ansibleImageTag: 8.0.0-3
 manageFilesystem: true
