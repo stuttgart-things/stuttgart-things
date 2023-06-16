@@ -3,7 +3,7 @@
 ansibleTargets: dev11.tiab.labda.sva.de;dev11-2.tiab.labda.sva.de;dev11-3.tiab.labda.sva.de;dev11-4.tiab.labda.sva.de
 ansiblePlaybook: baseos-setup
 ansibleImage: eu.gcr.io/stuttgart-things/sthings-ansible
-ansibleImageTag: 8.0.0-2
+ansibleImageTag: 8.0.0-3
 manageFilesystem: true
 installRequirements: true
 updatePackages: true
@@ -29,3 +29,9 @@ installCAs:
   - https://vault.labul.sva.de:8200
   - https://vault-vsphere.labul.sva.de:8200
   - https://vault-pve.labul.sva.de:8200
+
+## PDNS
+ipAddress: 10.100.136.226
+hostname: dev8
+entryZone: 4sthings.tiab.ssc.sva.de.
+pdnsUrl: https://pdns-vsphere.tiab.labda.sva.de:8443

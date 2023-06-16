@@ -9,6 +9,7 @@ configmaps:
 
       - name: Execute playbook
         ansible.builtin.import_playbook: {{`{{printf "%q" "{{ target_play }}.yaml" }}`}}
+
     prepare-env.yaml: |
       ---
       - hosts: localhost
@@ -95,55 +96,51 @@ configmaps:
               loop_var: vault_instance
             when: vault_instances is defined
 
-          - name: Send webhook when base-os setup was executed
+          - name: Send webhook to msteams
             ansible.builtin.include_role:
               name: create-send-webhook
             vars:
-              summary_text: {{`{{printf "%q" "base-os-setup was executed on {{ ansible_fqdn }}" }}`}}
-              msteams_url: {{`{{printf "%q" "{{ msteams_webhook_url }}" }}`}}
-              card_title: {{`{{printf "%q" "base-os-setup was executed on {{ ansible_fqdn }}" }}`}}
+              summary_text: base-os-setup was executed
+              msteams_url: "{{ .Values.msTeamsWebhookUrl }}"
+              card_title: base-os-setup was executed
               act_image: {{`{{printf "%q" "{{ logo_pic }}" }}`}}
               act_title: {{`{{printf "%q" "{{ quotes | random }}" }}`}}
               act_text: {{`{{printf "%q" "{{ quotes | random }}" }}`}}
               os_facts: |
-                filesystem was {{`{{ "{{ '' if manage_filesystem|bool else 'not' }}" }}`}} managed
-                operating system {{`{{ "{{ ansible_distribution }} {{ ansible_distribution_major_version }} was {{ '' if update_os|bool else 'not' }}" }}`}} updated
-                vault-ca was {{`{{ "{{ '' if install_vault_ca|bool else 'not' }}" }}`}} installed
-                message of the day was {{`{{ "{{ '' if motd|bool else 'not' }}" }}`}} installed
-                metric beate was {{`{{ "{{ '' if install_metric_beat|bool else 'not' }}" }}`}} installed
+                base-os-setup was executed on {{`{{printf "%q" "{{ ansible_fqdn }}" }}`}}
               ms_teams_notification_type: "simple"
             tags: notify
             ignore_errors: true
             when: send_to_msteams|bool
 
-
-{{- /*
     power-dns-automation.yaml: |
       ---
       - hosts: localhost
         gather_facts: no
 
         vars:
-          pdns_api_executor: localhost
-          entry_zone: "4sthings.tiab.ssc.sva.de."
-          hostname: dev8
-          ip_address: 10.100.136.226
+          vault_approle_id: {{`{{printf "%q" "{{ lookup('env', 'VAULT_ROLE_ID') }}" }}`}}
+          vault_approle_secret: {{`{{printf "%q" "{{ lookup('env', 'VAULT_SECRET_ID') }}" }}`}}
+          vault_url: {{`{{printf "%q" "{{ lookup('env', 'VAULT_ADDR') }}" }}`}}
 
+          pdns_api_executor: localhost
           pdns_create_record:
-            - fqdn: "*.{{ hostname }}.{{ entry_zone }}"
-              content: "{{ ip_address }}"
+            - fqdn: "*.{{ .Values.hostname }}.{{ .Values.entryZone }}"
+              content: "{{ .Values.ipAddress }}."
               record_type: A
-              zone: "{{ entry_zone }}"
+              zone: "{{ .Values.entryZone }}"
               state: present
               ttl: 60
-              note: deployed w/ sthings-k8s-operator
+              note: deployed w/ ansible container
 
-          pdns_url: https://pdns-vsphere.tiab.labda.sva.de:8443
-          pdns_token: password123
+          pdns_url: {{ .Values.pdnsUrl }}
+          pdns_token: {{`{{printf "%q" "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps/data/powerdns:token validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}" }}`}}
+          vault_approle_secret:
 
         roles:
           - install-configure-powerdns
 
+{{/*
     install-configure-nfs.yaml: |
       - hosts: all
         gather_facts: true
