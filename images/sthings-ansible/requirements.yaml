@@ -1,9 +1,9 @@
 ---
 collections:
   - name: community.crypto
-    version: 2.13.0
+    version: 2.14.0
   - name: community.general
-    version: 6.6.0
+    version: 7.0.1
   - name: ansible.posix
     version: 1.5.2
   - name: kubernetes.core
@@ -16,8 +16,6 @@ roles:
     name: prepare-rancher-node
   - src: https://artifacts.tiab.labda.sva.de/roles/download-install-binary.tar.gz
     name: download-install-binary
-  - src: https://artifacts.tiab.labda.sva.de/roles/install-requirements.tar.gz
-    name: install-requirements
   - src: https://artifacts.tiab.labda.sva.de/roles/manage-filesystem.tar.gz
     name: manage-filesystem
   - src: https://artifacts.tiab.labda.sva.de/roles/install-configure-vault.tar.gz
@@ -28,4 +26,6 @@ roles:
   - src: https://github.com/stuttgart-things/manage-filesystem.git
     scm: git
   - src: https://github.com/stuttgart-things/install-configure-powerdns.git
+    scm: git
+  - src: https://github.com/stuttgart-things/install-requirements.git
     scm: git

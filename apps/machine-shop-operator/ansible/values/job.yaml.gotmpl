@@ -1,7 +1,7 @@
 ---
 jobs:
   ansible-job:
-    name: baseos-setup
+    name: {{ now | date "2006-01-02"}}-baseos-setup
     namespace: {{ .Release.Namespace }}
     labels:
       app: machine-shop-operator
@@ -19,6 +19,10 @@ jobs:
           ANSIBLE_HOST_KEY_CHECKING: "False"
           TARGETS: "{{ .Values.ansibleTargets }}"
           INV_PATH: "/tmp/inv"
+          MANAGE_FILESYSTEM: "{{ .Values.manageFilesystem }}"
+          UPDATE_PACKAGES: "{{ .Values.updatePackages }}"
+          INSTALL_REQUIREMENTS: "{{ .Values.installRequirements }}"
+          INSTALL_MOTD: "{{ .Values.installMotd }}"
         securityContext:
           runAsUser: 65532
           allowPrivilegeEscalation: false
