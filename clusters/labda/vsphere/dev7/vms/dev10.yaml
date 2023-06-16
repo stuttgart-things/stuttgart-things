@@ -2,7 +2,7 @@
 apiVersion: machineshop.sthings.tiab.ssc.sva.de/v1beta1
 kind: Terraform
 metadata:
-  name: gude-ansible
+  name: dev10
   namespace: default
   labels:
     app.kubernetes.io/name: terraform
@@ -10,20 +10,20 @@ metadata:
     app.kubernetes.io/created-by: machine-shop-operator
 spec:
   variables:
-    - vsphere_vm_name="gude-ansible"
-    - vm_count=3
-    - vm_num_cpus=6
+    - vsphere_vm_name="dev10"
+    - vm_count=4
+    - vm_num_cpus=8
     - vm_memory=8192
     - vm_disk_size=96
     - vsphere_vm_template="/NetApp-HCI-Datacenter/vm/stuttgart-things/vm-templates/ubuntu23"
-    - vsphere_vm_folder_path="stuttgart-things/testing"
+    - vsphere_vm_folder_path="stuttgart-things/dev"
     - vsphere_network="/NetApp-HCI-Datacenter/network/tiab-prod"
     - vsphere_datastore="/NetApp-HCI-Datacenter/datastore/DatastoreCluster/NetApp-HCI-Datastore-04"
     - vsphere_resource_pool="Resources"
     - vsphere_datacenter="/NetApp-HCI-Datacenter"
   module:
-    - moduleName=gude-ansible
-    - backendKey=gude-ansible.tfstate
+    - moduleName=dev10
+    - backendKey=dev10.tfstate
     - moduleSourceUrl=https://artifacts.tiab.labda.sva.de/modules/vsphere-vm.zip
     - backendEndpoint=https://artifacts.app.4sthings.tiab.ssc.sva.de
     - backendRegion=main
