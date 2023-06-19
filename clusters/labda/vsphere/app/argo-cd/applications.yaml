@@ -35,3 +35,26 @@ spec:
     automated:
       prune: true
       selfHeal: false
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: downstream-cluster
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: fleet-default
+    server: 'https://10.100.136.143:6443'
+  source:
+    path: clusters/labda/vsphere/downstream
+    repoURL: 'https://github.com/stuttgart-things/stuttgart-things.git'
+    targetRevision: HEAD
+    directory:
+      recurse: true
+  sources: []
+  project: app
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: false
