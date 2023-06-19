@@ -21,7 +21,7 @@ runs:
         workspaceRef: github-ssh
       source:
         workspaceKind: persistentVolumeClaim
-        workspaceRef: tekton-helm-workspace
+        workspaceRef: {{ .Values.helmWorkspaceName }}
       dockerconfig:
         workspaceKind: secret
         workspaceRef: scr-{{ .Environment.Name }}
@@ -46,7 +46,7 @@ runs:
         workspaceRef: codehub-ssh
       source:
         workspaceKind: persistentVolumeClaim
-        workspaceRef: tekton-helm-workspace
+        workspaceRef: helm-workspace
       dockerconfig:
         workspaceKind: secret
         workspaceRef: scr-{{ .Environment.Name }}

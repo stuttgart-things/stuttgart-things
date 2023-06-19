@@ -6,3 +6,96 @@ enableRegistryCredentials: true
 enablePipelines: true
 enableTasks: true
 enableRuns: true
+
+pipelines:
+  build-kaniko-image:
+    workspaces:
+      - shared-workspace
+      - ssh-credentials
+      - dockerconfig
+    params:
+      image:
+        description: reference of the image to build
+      tag:
+        description: reference of the tag of the image to build
+      registry:
+        description: registry FROM (base image)
+      gitRepoUrl:
+        description: source git repo
+      gitWorkspaceSubdirectory:
+        description: subdirectory on workspace
+        default: ""
+      git-revision:
+        description: revision of source git repo
+        default: "main"
+      context:
+        description: path to context
+      dockerfile:
+        description: path to dockerfile
+    tasks:
+      fetch-repository:
+        task: git-clone
+        workspaces:
+          output:
+            workspace: shared-workspace
+          ssh-directory:
+            workspace: ssh-credentials
+        params:
+          url:
+            value: $(params.gitRepoUrl)
+          subdirectory:
+            value: $(params.gitWorkspaceSubdirectory)
+          deleteExisting:
+            value: "'true'"
+          revision:
+            value: $(params.git-revision)
+      kaniko:
+        task: kaniko
+        runAfter:
+          - fetch-repository
+        workspaces:
+          source:
+            workspace: shared-workspace
+          dockerconfig:
+            workspace: dockerconfig
+        params:
+          SUBDIRECTORY:
+            value: $(params.gitWorkspaceSubdirectory)
+          IMAGE:
+            value: $(params.image)
+          TAG:
+            value: $(params.tag)
+          REGISTRY:
+            value: $(params.registry)
+          CONTEXT:
+            value: $(params.context)
+          DOCKERFILE:
+            value: $(params.dockerfile)
+          EXTRA_ARGS:
+            values:
+              - --skip-tls-verify
+      send-webhook-msteams:
+        task: send-msteams-webhook
+        runAfter:
+          - kaniko
+        params:
+          message:
+            value: "image $(params.image):$(params.tag) build & pushed successfully w/ kaniko ($(tasks.kaniko.results.IMAGE_DIGEST))"
+          webhook-url-secret:
+            value: msteams
+          webhook-url-secret-key:
+            value: url
+    finally:
+      notify-any-failure:
+        task: send-msteams-webhook
+        params:
+          message:
+            value: "kaniko image build for $(params.image):$(params.tag) failed!!"
+          webhook-url-secret:
+            value: msteams
+          webhook-url-secret-key:
+            value: url
+        when:
+          $(tasks.status):
+            operator: in
+            values: Failed

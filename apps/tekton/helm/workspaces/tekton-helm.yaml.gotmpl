@@ -1,6 +1,6 @@
 ---
 workspaces:
- tekton-helm-workspace:
+ {{ .Values.helmWorkspaceName }}:
    namespace: {{ .Release.Namespace }}
    volumeMode: Filesystem
    storageClassName: {{ .Values.storageClassName }}
