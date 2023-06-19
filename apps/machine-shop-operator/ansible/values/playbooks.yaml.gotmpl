@@ -6,9 +6,15 @@ configmaps:
       ---
       - name: Prepare env
         ansible.builtin.import_playbook: prepare-env.yaml
+        when: prepare_env|bool
 
-      - name: Execute playbook
+      - name: Execute baseos playbook
         ansible.builtin.import_playbook: {{`{{printf "%q" "{{ target_play }}.yaml" }}`}}
+        when: execute_baseos|bool
+
+      - name: Execute {{`{{printf "%q" "{{ target_play }}.yaml" }}`}}
+        ansible.builtin.import_playbook: {{`{{printf "%q" "{{ target_play }}.yaml" }}`}}
+        when: target_play is defined
 
     prepare-env.yaml: |
       ---
@@ -138,6 +144,17 @@ configmaps:
         roles:
           - install-configure-powerdns
 
+    configure-rke-node.yaml: |
+      ---
+      - hosts: all
+        become: true
+        gather_facts: true
+
+        vars:
+          install_docker: false
+
+        roles:
+          - configure-rke-node
 {{/*
     install-configure-nfs.yaml: |
       - hosts: all
