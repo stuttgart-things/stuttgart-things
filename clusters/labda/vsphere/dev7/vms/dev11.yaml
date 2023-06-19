@@ -10,7 +10,7 @@ metadata:
     app.kubernetes.io/created-by: machine-shop-operator
 spec:
   variables:
-    - vsphere_vm_name="dev11"
+    - vsphere_vm_name="gude83"
     - vm_count=1
     - vm_num_cpus=8
     - vm_memory=8192
