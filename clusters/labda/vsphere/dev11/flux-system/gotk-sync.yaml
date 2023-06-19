@@ -25,3 +25,16 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: infra-june19
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  ref:
+    tag: flux-infra-june-2023
+  secretRef:
+    name: flux-system
+  url: ssh://git@github.com/stuttgart-things/stuttgart-things
