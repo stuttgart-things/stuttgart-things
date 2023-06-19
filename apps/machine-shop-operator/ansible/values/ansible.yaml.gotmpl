@@ -12,6 +12,17 @@ configmaps:
       {{- end }}
       {{- end }}
     {{- end }}
+    {{- if .Values.inventory.vars }}
+      {{- range $_, $item := .Values.inventory.vars }}
+      {{- range $k, $v := . }}
+      [{{ $k }}]
+      {{- range $_, $path := $v }}
+      {{ $path }}
+      {{- end }}
+      {{- end }}
+      {{- end }}
+    {{- end }}
+
 
     play.yaml: |
       ---

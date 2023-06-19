@@ -49,3 +49,6 @@ inventory:
       - 10.1.2.6
     - additional_master_nodes:
       - 192.1.2.6
+  vars:
+    - all:vars:
+      - ansible_ssh_common_args='-o StrictHostKeyChecking=no'
