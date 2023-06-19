@@ -38,3 +38,14 @@ ipAddress: 10.100.136.226
 hostname: dev8
 entryZone: 4sthings.tiab.ssc.sva.de.
 pdnsUrl: https://pdns-vsphere.tiab.labda.sva.de:8443
+
+createInventory: true
+
+copyInventory: true
+inventory:
+  groups:
+    - initial_master_node:
+      - 10.1.2.5
+      - 10.1.2.6
+    - additional_master_nodes:
+      - 192.1.2.6

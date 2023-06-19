@@ -8,7 +8,7 @@ jobs:
       machine-shop-operator: ansible
     restartPolicy: Never
     volumes:
-      ansible-playbooks:
+      ansible:
         volumeKind: configMap
     containers:
       manager:
@@ -37,7 +37,7 @@ jobs:
             cpu: 500m
             memory: 768Mi
         volumeMounts:
-          ansible-playbooks:
+          ansible:
             mountPath: /home/nonroot/ansible
         secretsEnvFrom:
           - name: vault

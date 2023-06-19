@@ -1,0 +1,3 @@
+{% for bla in item -%}
+{{ bla }}
+{% endfor %}
