@@ -3,7 +3,7 @@
 ansibleTargets: dev11.tiab.labda.sva.de;dev11-2.tiab.labda.sva.de;dev11-3.tiab.labda.sva.de;dev11-4.tiab.labda.sva.de
 prepareEnv: true
 executeBaseos: true
-ansiblePlaybook: configure-rke-node #power-dns #baseos-setup
+ansiblePlaybook: configure-rke-node #power-dnsx
 ansibleImage: eu.gcr.io/stuttgart-things/sthings-ansible
 ansibleImageTag: 8.0.0-4
 manageFilesystem: true
@@ -31,6 +31,7 @@ installCAs:
   - https://vault.labul.sva.de:8200
   - https://vault-vsphere.labul.sva.de:8200
   - https://vault-pve.labul.sva.de:8200
+  - https://vault-vsphere.tiab.labda.sva.de:8200
 
 ## PDNS
 ipAddress: 10.100.136.226

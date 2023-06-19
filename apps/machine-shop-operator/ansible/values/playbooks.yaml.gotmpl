@@ -9,7 +9,7 @@ configmaps:
         when: prepare_env|bool
 
       - name: Execute baseos playbook
-        ansible.builtin.import_playbook: {{`{{printf "%q" "{{ target_play }}.yaml" }}`}}
+        ansible.builtin.import_playbook: baseos-setup.yaml
         when: execute_baseos|bool
 
       - name: Execute {{`{{printf "%q" "{{ target_play }}.yaml" }}`}}
