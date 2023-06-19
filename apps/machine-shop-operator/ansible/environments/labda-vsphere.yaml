@@ -1,6 +1,6 @@
 ---
 # ANSIBLE
-ansibleTargets: dev11.tiab.labda.sva.de;dev11-2.tiab.labda.sva.de;dev11-3.tiab.labda.sva.de;dev11-4.tiab.labda.sva.de
+ansibleTargets: dev9-sthings-2.tiab.labda.sva.de;dev9-sthings-3.tiab.labda.sva.de
 prepareEnv: true
 executeBaseos: true
 ansiblePlaybook: configure-rke-node #power-dnsx

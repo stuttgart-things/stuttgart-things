@@ -19,8 +19,6 @@ jobs:
           ANSIBLE_HOST_KEY_CHECKING: "False"
           TARGETS: "{{ .Values.ansibleTargets }}"
           INV_PATH: "/tmp/inv"
-
-
         securityContext:
           runAsUser: 65532
           allowPrivilegeEscalation: false
@@ -30,7 +28,7 @@ jobs:
         command:
           - "/bin/sh"
           - "-ec"
-          - "touch ${INV_PATH} && ansible-playbook -i $INV_PATH $HOME/ansible/play.yaml -vv -e target_play={{ .Values.ansiblePlaybook }}"
+          - "touch ${INV_PATH} && ansible-playbook -i $INV_PATH $HOME/ansible/play.yaml -vv -e prepare_env={{ .Values.prepareEnv }} -e execute_baseos={{ .Values.executeBaseos }} -e target_play={{ .Values.ansiblePlaybook }}"
         resources:
           requests:
             cpu: 10m

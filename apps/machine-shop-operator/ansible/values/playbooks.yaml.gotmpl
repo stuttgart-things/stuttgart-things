@@ -60,6 +60,16 @@ configmaps:
 
           - ansible.builtin.meta: refresh_inventory
 
+          - name: Wait for SSH
+            ansible.builtin.wait_for:
+              host: {{`{{printf "%q" "{{ item }}" }}`}}
+              port: 22
+              delay: 1
+              timeout: 1200
+              sleep: 10
+            with_items:
+              - {{`{{printf "%q" "{{ groups['all'] }}" }}`}}
+
     baseos-setup.yaml: |
       - hosts: all
         become: true
