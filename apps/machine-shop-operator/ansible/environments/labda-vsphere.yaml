@@ -1,11 +1,21 @@
 ---
 # ANSIBLE
+ansiblePlaybook: configure-rke-node #power-dnsx
 ansibleTargets: dev9-sthings-2.tiab.labda.sva.de;dev9-sthings-3.tiab.labda.sva.de
+inventory:
+  groups:
+    - initial_master_node:
+      - 10.1.2.5
+      - 10.1.2.6
+    - additional_master_nodes:
+      - 192.1.2.6
+  vars:
+    - all:vars:
+      - ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 prepareEnv: true
 executeBaseos: true
-ansiblePlaybook: configure-rke-node #power-dnsx
-ansibleImage: eu.gcr.io/stuttgart-things/sthings-ansible
-ansibleImageTag: 8.0.0-4
+createInventory: true
+copyInventory: false
 manageFilesystem: true
 installRequirements: true
 updatePackages: true
@@ -14,6 +24,15 @@ ansibleUser: sthings
 lvmHomeSizing: 15%
 lvmRootSizing: 35%
 lvmVarSizing: 50%
+installCAs:
+  - https://vault.tiab.labda.sva.de:8200
+  - https://vault.labul.sva.de:8200
+  - https://vault-vsphere.labul.sva.de:8200
+  - https://vault-pve.labul.sva.de:8200
+  - https://vault-vsphere.tiab.labda.sva.de:8200
+
+ansibleImage: eu.gcr.io/stuttgart-things/sthings-ansible
+ansibleImageTag: 8.0.0-4
 
 # MS-TEAMS
 sendToMSteams: true
@@ -25,30 +44,8 @@ vaultAddr: https://vault-vsphere.tiab.labda.sva.de:8200
 vaultRoleID: ref+vault://apps/vault/roleID
 vaultSecretID: ref+vault://apps/vault/secretID
 
-## CA
-installCAs:
-  - https://vault.tiab.labda.sva.de:8200
-  - https://vault.labul.sva.de:8200
-  - https://vault-vsphere.labul.sva.de:8200
-  - https://vault-pve.labul.sva.de:8200
-  - https://vault-vsphere.tiab.labda.sva.de:8200
-
 ## PDNS
 ipAddress: 10.100.136.226
 hostname: dev8
 entryZone: 4sthings.tiab.ssc.sva.de.
 pdnsUrl: https://pdns-vsphere.tiab.labda.sva.de:8443
-
-createInventory: true
-
-copyInventory: true
-inventory:
-  groups:
-    - initial_master_node:
-      - 10.1.2.5
-      - 10.1.2.6
-    - additional_master_nodes:
-      - 192.1.2.6
-  vars:
-    - all:vars:
-      - ansible_ssh_common_args='-o StrictHostKeyChecking=no'
