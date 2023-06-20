@@ -1,0 +1,47 @@
+---
+customresources:
+  machineShopTerraform:
+    apiVersion: machineshop.sthings.tiab.ssc.sva.de/v1beta1
+    kind: Terraform
+    metadata:
+      name: {{ .Release.Name }}-{{ randAlphaNum 5 | lower }}"
+      namespace: {{ .Release.Namespace }}
+      labels:
+        app.kubernetes.io/name: terraform
+        app.kubernetes.io/part-of: machine-shop-operator
+        app.kubernetes.io/created-by: machine-shop-operator
+    spec:
+      variables:
+        - vsphere_vm_name="{{ .Release.Name }}-{{ randAlphaNum 5 | lower }}"
+        - vm_count={{ .Values.vmCount }}
+        - vm_num_cpus={{ .Values.vmNumCPUs }}
+        - vm_memory={{ .Values.vmMemory }}
+        - vm_disk_size={{ .Values.vmDiskSize }}
+        - vsphere_vm_template="/{{ .Values.datacenter }}/vm/{{ .Values.templatePath }}"
+        - vsphere_vm_folder_path="{{ .Values.vmFolderPath }}"
+        - vsphere_network="/{{ .Values.datacenter }}/network/{{ .Values.network }}"
+        - vsphere_datastore="/{{ .Values.datacenter }}/datastore/DatastoreCluster/{{ .Values.datastore }}"
+        - vsphere_resource_pool="{{ .Values.resourcePool }}"
+        - vsphere_datacenter="/{{ .Values.datacenter }}"
+      module:
+        - moduleName={{ .Release.Name }}-{{ randAlphaNum 5 | lower }}
+        - backendKey={{ .Release.Name }}-{{ randAlphaNum 5 | lower }}.tfstate
+        - moduleSourceUrl=https://artifacts.tiab.labda.sva.de/modules/vsphere-vm.zip
+        - backendEndpoint=https://artifacts.app.4sthings.tiab.ssc.sva.de
+        - backendRegion=main
+        - backendBucket=vsphere-vm
+        - tfProviderName=vsphere
+        - tfProviderSource={{ .Values.tfProviderName }}
+        - tfProviderVersion={{ .Values.tfProviderVersion }}
+        - tfVersion={{ .Values.tfVersion }}
+      backend:
+        - access_key=apps/data/artifacts:accessKey
+        - secret_key=apps/data/artifacts:secretKey
+      secrets:
+        - vsphere_user=cloud/data/vsphere:username
+        - vsphere_password=cloud/data/vsphere:password
+        - vsphere_server=cloud/data/vsphere:ip
+        - vm_ssh_user=cloud/data/vsphere:vm_ssh_user
+        - vm_ssh_password=cloud/data/vsphere:vm_ssh_password
+      terraform-version: {{ .Values.tfVersion }}
+      template: {{ .Values.tfTemplate }}

@@ -11,8 +11,6 @@ configmaps:
       {{- end }}
       {{- end }}
       {{- end }}
-    {{- end }}
-    {{- if .Values.inventory.vars }}
       {{- range $_, $item := .Values.inventory.vars }}
       {{- range $k, $v := . }}
       [{{ $k }}]
@@ -195,8 +193,9 @@ configmaps:
 
         roles:
           - configure-rke-node
-{{/*
+
     install-configure-nfs.yaml: |
+      ---
       - hosts: all
         gather_facts: true
         become: true
@@ -204,13 +203,12 @@ configmaps:
           kind: server
           permanent: true
           nfs_manage_firewall: true
-          nfs_export_path:      #optional use this or nfs_custom_exports
+          nfs_export_path:
             - /var/nfs/k8s
 
         roles:
           - install-configure-nfs
-
-
+{{/*
     create-downstream-cluster.yaml: |
       ---
       - hosts: all

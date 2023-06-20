@@ -1,21 +1,27 @@
 ---
-# ANSIBLE
-ansiblePlaybook: configure-rke-node #power-dnsx
+# ANSIBLE JOB SETTINGS
+ansibleImage: eu.gcr.io/stuttgart-things/sthings-ansible
+ansibleImageTag: 8.0.0-5
+
+# TARGETS/INVENTORY + PLAYBOOK
 ansibleTargets: dev9-sthings-2.tiab.labda.sva.de;dev9-sthings-3.tiab.labda.sva.de
+createInventory: true
+ansiblePlaybook: install-configure-nfs #configure-rke-node|power-dns
+copyInventory: false
 inventory:
   groups:
     - initial_master_node:
-      - 10.1.2.5
-      - 10.1.2.6
+        - 10.1.2.5
+        - 10.1.2.6
     - additional_master_nodes:
-      - 192.1.2.6
+        - 192.1.2.6
   vars:
     - all:vars:
       - ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+
+# BASEOS-SETUP PARAMETER
 prepareEnv: true
 executeBaseos: true
-createInventory: true
-copyInventory: false
 manageFilesystem: true
 installRequirements: true
 updatePackages: true
@@ -30,9 +36,6 @@ installCAs:
   - https://vault-vsphere.labul.sva.de:8200
   - https://vault-pve.labul.sva.de:8200
   - https://vault-vsphere.tiab.labda.sva.de:8200
-
-ansibleImage: eu.gcr.io/stuttgart-things/sthings-ansible
-ansibleImageTag: 8.0.0-4
 
 # MS-TEAMS
 sendToMSteams: true
@@ -49,3 +52,27 @@ ipAddress: 10.100.136.226
 hostname: dev8
 entryZone: 4sthings.tiab.ssc.sva.de.
 pdnsUrl: https://pdns-vsphere.tiab.labda.sva.de:8443
+
+# TERRAFORM
+
+
+
+## VM
+vmCount: 1
+vmNumCPUs: 8
+vmMemory: 8192
+vmDiskSize: 96
+vmFolderPath: stuttgart-things/testing
+
+## LAB
+datacenter: NetApp-HCI-Datacenter
+network: tiab-prod
+templatePath: stuttgart-things/vm-templates/ubuntu23
+datastore: NetApp-HCI-Datastore-04
+resourcePool: Resources
+
+## TF
+tfVersion: 1.4.6
+tfProviderName: hashicorp/vsphere
+tfProviderVersion: 2.4.0
+tfTemplate: vsphere-vm
