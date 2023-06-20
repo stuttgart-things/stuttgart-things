@@ -9,6 +9,7 @@ enableRuns: true
 
 pipelines:
   build-kaniko-image:
+    namespace: {{ .Release.Namespace }}
     workspaces:
       - shared-workspace
       - ssh-credentials
@@ -74,8 +75,8 @@ pipelines:
           EXTRA_ARGS:
             values:
               - --skip-tls-verify
-      send-webhook-msteams:
-        task: send-msteams-webhook
+      send-msteams-notification:
+        task: send-msteams-notification
         runAfter:
           - kaniko
         params:
@@ -87,7 +88,7 @@ pipelines:
             value: url
     finally:
       notify-any-failure:
-        task: send-msteams-webhook
+        task: send-msteams-notification
         params:
           message:
             value: "kaniko image build for $(params.image):$(params.tag) failed!!"

@@ -10,5 +10,5 @@ helmWorkspaceStorage: 5Gi
 helmWorkspaceAccessMode: ReadWriteOnce
 
 kanikoWorkspaceName: kaniko-workspace
-kanikoWorkspaceStorage: nfs3-csi2
-kanikoWorkspaceAccessMode: 10Gi
+kanikoWorkspaceStorage: 10Gi
+kanikoWorkspaceAccessMode: ReadWriteOnce

@@ -2,7 +2,7 @@
 releases:
   - name: package-publish-helmchart
     installed: false
-    namespace: tekton-ana
+    namespace: tekton-helm
     chart: stuttgart-things/yacht-tekton-resources
     version: v0.47.10
     values:
@@ -18,7 +18,7 @@ releases:
 
   - name: build-kaniko-image
     installed: true
-    namespace: tekton-helm
+    namespace: tekton-kaniko
     chart: stuttgart-things/yacht-tekton-resources
     version: v0.47.10
     values:

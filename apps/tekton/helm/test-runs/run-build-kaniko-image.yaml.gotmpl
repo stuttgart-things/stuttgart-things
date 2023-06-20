@@ -1,26 +1,51 @@
 runs:
-  buildKanikoImage:
+  buildKanikoImageGithub:
+    name: {{ .Release.Name }}-testrun-github-{{ randAlphaNum 5 | lower }}
+    addRandomDateToRunName: false
+    namespace: {{ .Release.Namespace }}
+    kind: Pipeline
+    ref: build-kaniko-image
+    params:
+      gitRepoUrl: git@github.com:stuttgart-things/stuttgart-things.git
+      git-revision: main
+      context: /kaniko/sthings-alpine
+      gitWorkspaceSubdirectory: /kaniko/sthings-alpine-github
+      image: scr.tiab.labda.sva.de/sthings-alpine/sthings-alpine
+      tag: 230305-0403
+      registry: scr.tiab.labda.sva.de
+      dockerfile: images/sthings-alpine/Dockerfile
+    workspaces:
+      ssh-credentials:
+        workspaceKind: secret
+        workspaceRef: github-ssh
+      shared-workspace:
+        workspaceKind: persistentVolumeClaim
+        workspaceRef: {{ .Values.kanikoWorkspaceName }}
+      dockerconfig:
+        workspaceKind: secret
+        workspaceRef: scr-{{ .Environment.Name }}
+  buildKanikoImageCodehub:
     name: {{ .Release.Name }}-testrun-codehub-{{ randAlphaNum 5 | lower }}
     addRandomDateToRunName: false
     namespace: {{ .Release.Namespace }}
     kind: Pipeline
     ref: build-kaniko-image
     params:
-      image: scr.tiab.labda.sva.de/sthings-alpine/sthings-alpine/sthings-alpine/sthings-alpine
-      tag: 230305-0403
-      gitWorkspaceSubdirectory: /kaniko/sthings-alpine
-      git-revision: master
-      registry: scr.tiab.labda.sva.de
       gitRepoUrl: git@codehub.sva.de:Lab/stuttgart-things/stuttgart-things.git
-      dockerfile: build/images/sthings-alpine/Dockerfile
+      git-revision: master
       context: /kaniko/sthings-alpine
+      gitWorkspaceSubdirectory: /kaniko/sthings-alpine-cosehub
+      image: scr.tiab.labda.sva.de/sthings-alpine/sthings-alpine
+      tag: 230305-0403
+      registry: scr.tiab.labda.sva.de
+      dockerfile: build/images/sthings-alpine/Dockerfile
     workspaces:
       ssh-credentials:
         workspaceKind: secret
         workspaceRef: codehub-ssh
       shared-workspace:
         workspaceKind: persistentVolumeClaim
-        workspaceRef: {{ .Values.helmWorkspaceName }}
+        workspaceRef: {{ .Values.kanikoWorkspaceName }}
       dockerconfig:
         workspaceKind: secret
         workspaceRef: scr-{{ .Environment.Name }}
