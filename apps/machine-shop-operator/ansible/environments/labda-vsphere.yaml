@@ -25,7 +25,7 @@ executeBaseos: true
 manageFilesystem: true
 installRequirements: true
 updatePackages: true
-installMotd: true
+installMotd:  true
 ansibleUser: sthings
 lvmHomeSizing: 15%
 lvmRootSizing: 35%
@@ -55,8 +55,6 @@ pdnsUrl: https://pdns-vsphere.tiab.labda.sva.de:8443
 
 # TERRAFORM
 
-
-
 ## VM
 vmCount: 1
 vmNumCPUs: 8
@@ -73,6 +71,13 @@ resourcePool: Resources
 
 ## TF
 tfVersion: 1.4.6
-tfProviderName: hashicorp/vsphere
+tfProviderName: vsphere
+tfProviderSource: hashicorp/vsphere
 tfProviderVersion: 2.4.0
 tfTemplate: vsphere-vm
+
+## STATE
+s3Endpoint: https://artifacts.app.4sthings.tiab.ssc.sva.de
+s3Region: main
+s3ModulePath: modules/vsphere-vm.zip
+s3BackendBucket: vsphere-vm

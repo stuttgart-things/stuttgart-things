@@ -26,12 +26,12 @@ customresources:
       module:
         - moduleName={{ .Release.Name }}-{{ randAlphaNum 5 | lower }}
         - backendKey={{ .Release.Name }}-{{ randAlphaNum 5 | lower }}.tfstate
-        - moduleSourceUrl=https://artifacts.tiab.labda.sva.de/modules/vsphere-vm.zip
-        - backendEndpoint=https://artifacts.app.4sthings.tiab.ssc.sva.de
-        - backendRegion=main
-        - backendBucket=vsphere-vm
-        - tfProviderName=vsphere
-        - tfProviderSource={{ .Values.tfProviderName }}
+        - moduleSourceUrl={{ .Values.s3Endpoint }}/{{ .Values.s3ModulePath }}
+        - backendEndpoint={{ .Values.s3Endpoint }}
+        - backendRegion={{ .Values.s3Endpoint }}
+        - backendBucket={{ .Values.s3Region }}
+        - tfProviderName={{ .Values.tfProviderName }}
+        - tfProviderSource={{ .Values.tfProviderSource }}
         - tfProviderVersion={{ .Values.tfProviderVersion }}
         - tfVersion={{ .Values.tfVersion }}
       backend:
