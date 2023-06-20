@@ -1,9 +1,9 @@
 ---
 workspaces:
- tekton-kaniko-workspace:
+ {{ .Values.kanikoWorkspaceName }}:
    namespace: {{ .Release.Namespace }}
    volumeMode: Filesystem
    storageClassName: {{ .Values.storageClassName }}
-   storage: {{ .Values.helmWorkspaceStorage }}
+   storage: {{ .Values.kanikoWorkspaceStorage }}
    accessModes:
-     - {{ .Values.helmWorkspaceAccessMode }}
+     - {{ .Values.kanikoWorkspaceAccessMode }}

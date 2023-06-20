@@ -1,7 +1,7 @@
 ---
 releases:
   - name: package-publish-helmchart
-    installed: true
+    installed: false
     namespace: tekton-ana
     chart: stuttgart-things/yacht-tekton-resources
     version: v0.47.10
@@ -14,10 +14,10 @@ releases:
       - "tasks/create-publish-helm-chart.yaml.gotmpl"
       - "tasks/send-msteams-notification.yaml.gotmpl"
       - "pipelines/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
-      - "test-runs/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
+      - "test-runs/run-{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 
   - name: build-kaniko-image
-    installed: false
+    installed: true
     namespace: tekton-helm
     chart: stuttgart-things/yacht-tekton-resources
     version: v0.47.10
@@ -30,7 +30,7 @@ releases:
       - "tasks/kaniko.yaml.gotmpl"
       - "tasks/send-msteams-notification.yaml.gotmpl"
       - "pipelines/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
-      # - "test-runs/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
+      - "test-runs/run-{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 
 repositories:
   - name: stuttgart-things

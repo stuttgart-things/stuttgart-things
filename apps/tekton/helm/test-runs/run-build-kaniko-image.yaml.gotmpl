@@ -1,0 +1,26 @@
+runs:
+  buildKanikoImage:
+    name: {{ .Release.Name }}-testrun-codehub-{{ randAlphaNum 5 | lower }}
+    addRandomDateToRunName: false
+    namespace: {{ .Release.Namespace }}
+    kind: Pipeline
+    ref: build-kaniko-image
+    params:
+      image: scr.tiab.labda.sva.de/sthings-alpine/sthings-alpine/sthings-alpine/sthings-alpine
+      tag: 230305-0403
+      gitWorkspaceSubdirectory: /kaniko/sthings-alpine
+      git-revision: master
+      registry: scr.tiab.labda.sva.de
+      gitRepoUrl: git@codehub.sva.de:Lab/stuttgart-things/stuttgart-things.git
+      dockerfile: build/images/sthings-alpine/Dockerfile
+      context: /kaniko/sthings-alpine
+    workspaces:
+      ssh-credentials:
+        workspaceKind: secret
+        workspaceRef: codehub-ssh
+      shared-workspace:
+        workspaceKind: persistentVolumeClaim
+        workspaceRef: {{ .Values.helmWorkspaceName }}
+      dockerconfig:
+        workspaceKind: secret
+        workspaceRef: scr-{{ .Environment.Name }}
