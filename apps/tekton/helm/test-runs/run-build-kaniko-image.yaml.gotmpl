@@ -8,12 +8,12 @@ runs:
     params:
       gitRepoUrl: git@github.com:stuttgart-things/stuttgart-things.git
       git-revision: main
-      context: /kaniko/sthings-alpine
-      gitWorkspaceSubdirectory: /kaniko/sthings-alpine-github
-      image: scr.tiab.labda.sva.de/sthings-alpine/sthings-alpine
-      tag: 230305-0403
-      registry: scr.tiab.labda.sva.de
-      dockerfile: images/sthings-alpine/Dockerfile
+      context: /kaniko/{{ .Values.kanikoTestRunImage }}-github/images/{{ .Values.kanikoTestRunImage }}
+      gitWorkspaceSubdirectory: /kaniko/{{ .Values.kanikoTestRunImage }}-github
+      image: {{ .Values.registry }}/{{ .Values.kanikoTestRunImage }}/ansible
+      tag: 8.0.0-5
+      registry: eu.gcr.io
+      dockerfile: images/{{ .Values.kanikoTestRunImage }}/Dockerfile
     workspaces:
       ssh-credentials:
         workspaceKind: secret
@@ -34,10 +34,10 @@ runs:
       gitRepoUrl: git@codehub.sva.de:Lab/stuttgart-things/stuttgart-things.git
       git-revision: master
       context: /kaniko/sthings-alpine
-      gitWorkspaceSubdirectory: /kaniko/sthings-alpine-cosehub
-      image: scr.tiab.labda.sva.de/sthings-alpine/sthings-alpine
+      gitWorkspaceSubdirectory: /kaniko/sthings-alpine-codehub
+      image: {{ .Values.registry }}/sthings-alpine/sthings-alpine
       tag: 230305-0403
-      registry: scr.tiab.labda.sva.de
+      registry: {{ .Values.registry }}
       dockerfile: build/images/sthings-alpine/Dockerfile
     workspaces:
       ssh-credentials:

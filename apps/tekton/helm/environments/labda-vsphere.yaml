@@ -5,6 +5,7 @@ sshGithubCredentials: ref+vault://apps/yacht/github-ssh
 msTeamsWebhook: ref+vault://apps/yacht/msteams
 storageClassName: nfs3-csi2
 
+registry: scr.app.4sthings.tiab.ssc.sva.de
 helmWorkspaceName: helm-workspace
 helmWorkspaceStorage: 5Gi
 helmWorkspaceAccessMode: ReadWriteOnce
@@ -12,3 +13,4 @@ helmWorkspaceAccessMode: ReadWriteOnce
 kanikoWorkspaceName: kaniko-workspace
 kanikoWorkspaceStorage: 10Gi
 kanikoWorkspaceAccessMode: ReadWriteOnce
+kanikoTestRunImage: sthings-ansible
