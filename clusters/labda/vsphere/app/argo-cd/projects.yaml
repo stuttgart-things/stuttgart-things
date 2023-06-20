@@ -19,6 +19,9 @@ spec:
   - name: dev8
     namespace: '*'
     server: https://10.100.136.78:6443
+  - name: dev11
+    namespace: '*'
+    server: https://10.100.136.53:6443
   namespaceResourceBlacklist:
   - group: ""
     kind: ""
@@ -31,7 +34,7 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
-  name: dev8
+  name: dev11
   namespace: argocd
 spec:
   clusterResourceBlacklist:
@@ -40,11 +43,11 @@ spec:
   clusterResourceWhitelist:
   - group: '*'
     kind: '*'
-  description: dev8
+  description: dev11
   destinations:
-  - name: dev8
+  - name: dev11
     namespace: '*'
-    server: https://10.100.136.78:6443
+    server: https://10.100.136.53:6443
   namespaceResourceBlacklist:
   - group: ""
     kind: ""
