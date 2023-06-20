@@ -9,7 +9,7 @@ spec:
   interval: 30m
   chart:
     spec:
-      chart: keda
+      chart: machine-shop-operator
       version: 2.x
       sourceRef:
         kind: HelmRepository

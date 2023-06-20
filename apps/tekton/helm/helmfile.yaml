@@ -1,7 +1,7 @@
 ---
 releases:
   - name: package-publish-helmchart
-    installed: false
+    installed: true
     namespace: tekton-helm
     chart: stuttgart-things/yacht-tekton-resources
     version: v0.47.10
@@ -17,7 +17,7 @@ releases:
       - "test-runs/run-{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 
   - name: build-kaniko-image
-    installed: true
+    installed: false
     namespace: tekton-kaniko
     chart: stuttgart-things/yacht-tekton-resources
     version: v0.47.10
