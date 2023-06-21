@@ -27,7 +27,7 @@ spec:
     enableTasks: false
     enableRuns: false
     defaultNamespace: ${TKN_NAMESPACE}
-
+    # WORKSPACES
     workspaces:
       kaniko-workspace:
         namespace: ${TKN_NAMESPACE}
@@ -43,10 +43,10 @@ spec:
         storage: ${TKN_HELM_STORAGE}
         accessModes:
           - ReadWriteOnce
-
-      # registryCredentials:
-      #   scr-${TKN_ENV}:
-      #     namespace: ${TKN_NAMESPACE}
-      #     labels:
-      #       app: tekton
-      #     dockerConfigJson: ${TKN_SCR_DOCKERCONFIG}
+    # REGISTRY CREDENTIALS
+    registryCredentials:
+      scr-${TKN_ENV}:
+        namespace: ${TKN_NAMESPACE}
+        labels:
+          app: tekton
+        dockerConfigJson: ${TKN_SCR_DOCKERCONFIG}
