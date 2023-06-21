@@ -84,7 +84,7 @@ spec:
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: tekton-tasks
+  name: tekton-tasks-resources
   namespace: tekton-cd
   annotations:
     kustomize.toolkit.fluxcd.io/substitute: disabled
@@ -472,7 +472,7 @@ spec:
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: tekton-pipelines
+  name: tekton-pipeline-resources
   namespace: tekton-cd
   annotations:
     kustomize.toolkit.fluxcd.io/substitute: disabled
