@@ -25,6 +25,6 @@ spec:
           VAULT_ADDR: ${VAULT_ADDR}
           VAULT_ROLE_ID: ${VAULT_ROLE_ID}
           VAULT_SECRET_ID: ${VAULT_SECRET_ID}
-        configmaps:
-          environment:
-            WEBHOOK_URL: "${TKN_TEAMS_URL}"
+    configmaps:
+      environment:
+        WEBHOOK_URL: "${TKN_TEAMS_URL}"
