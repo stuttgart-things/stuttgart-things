@@ -49,6 +49,6 @@ spec:
         namespace: ${TKN_NAMESPACE}
         labels:
           app: tekton
-        registryUrl: scr.app.4sthings.tiab.ssc.sva.de
-        registryUser: sthings
-        registryPassword: changemelater
+        registry: ${TKN_SCR_URL}
+        username: ${TKN_SCR_USER}
+        password: ${TKN_SCR_PASSWORD}
