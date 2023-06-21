@@ -49,4 +49,6 @@ spec:
         namespace: ${TKN_NAMESPACE}
         labels:
           app: tekton
-        dockerConfigJson: ${TKN_SCR_DOCKERCONFIG}
+        registryUrl: scr.app.4sthings.tiab.ssc.sva.de
+        registryUser: sthings
+        registryPassword: changemelater
