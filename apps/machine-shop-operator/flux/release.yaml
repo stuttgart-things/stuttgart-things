@@ -27,5 +27,5 @@ spec:
           VAULT_SECRET_ID: ${VAULT_SECRET_ID}
         configmaps:
           environment:
-            ENABLE_WEBHOOK: "yes"
+            ENABLE_WEBHOOK: "'yes'"
             WEBHOOK_URL: "${TKN_TEAMS_URL}"
