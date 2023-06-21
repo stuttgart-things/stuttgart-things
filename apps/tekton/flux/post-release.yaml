@@ -19,9 +19,10 @@ spec:
     - name: tekton-pipelines
       namespace: tekton-pipelines
   values:
+    # PARAMETERS
     enableWorkspaces: true
     enableRegistryCredentials: true
-    enableGitSecretsSSH: false
+    enableGitSecretsSSH: true
     enableSecrets: false
     enablePipelines: false
     enableTasks: false
@@ -52,3 +53,21 @@ spec:
         registry: ${TKN_SCR_URL}
         username: ${TKN_SCR_USER}
         password: ${TKN_SCR_PASSWORD}
+    # SSH CREDENTIALS
+    gitSecretsSSH:
+      codehub:
+        name: codehub-ssh
+        namespace: ${TKN_NAMESPACE}
+        labels:
+          app: tekton
+        dataType: data
+        secretKVs:
+          id_rsa: ${TKN_SSH_CODEHUB}
+      github:
+        name: github-ssh
+        namespace: ${TKN_NAMESPACE}
+        labels:
+          app: tekton
+        dataType: data
+        secretKVs:
+          id_rsa: ${TKN_SSH_GITHUB}
