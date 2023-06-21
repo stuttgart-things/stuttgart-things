@@ -23,9 +23,9 @@ spec:
     enableWorkspaces: true
     enableRegistryCredentials: true
     enableGitSecretsSSH: true
-    enableSecrets: false
-    enablePipelines: false
+    enableSecrets: true
     enableTasks: false
+    enablePipelines: false
     enableRuns: false
     defaultNamespace: ${TKN_NAMESPACE}
     # WORKSPACES
@@ -71,3 +71,12 @@ spec:
         dataType: data
         secretKVs:
           id_rsa: ${TKN_SSH_GITHUB}
+    # SECRETS
+    secrets:
+      msteams:
+        name: msteams
+        namespace: ${TKN_NAMESPACE}
+        labels:
+          app: tekton
+        secretKVs:
+          url: ${TKN_TEAMS_URL}
