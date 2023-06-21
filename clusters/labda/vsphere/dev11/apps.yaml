@@ -19,8 +19,8 @@ spec:
       TKN_NAMESPACE: tekton-cd
       TKN_STORAGE_CLASS: nfs3-csi2
       TKN_KANIKO_STORAGE: 10Gi
-    # substituteFrom:
-    #   - kind: Secret
-    #     name: vault-flux-secrets
-    #   - kind: Secret
-    #     name: scr-flux-secrets
+      TKN_HELM_STORAGE: 1Gi
+      TKN_ENV: labda-vsphere
+    substituteFrom:
+      - kind: Secret
+        name: tkn-flux-secrets

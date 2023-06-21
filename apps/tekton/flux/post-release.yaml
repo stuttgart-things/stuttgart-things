@@ -28,10 +28,24 @@ spec:
     enableRuns: false
 
     workspaces:
-      kanikoWorkspace:
+      kaniko-workspace:
         namespace: ${TKN_NAMESPACE}
         volumeMode: Filesystem
         storageClassName: ${TKN_STORAGE_CLASS}
         storage: ${TKN_KANIKO_STORAGE}
         accessModes:
           - ReadWriteOnce
+      helm-workspace:
+        namespace: ${TKN_NAMESPACE}
+        volumeMode: Filesystem
+        storageClassName: ${TKN_STORAGE_CLASS}
+        storage: ${TKN_HELM_STORAGE}
+        accessModes:
+          - ReadWriteOnce
+
+      registryCredentials:
+        scr-${TKN_ENV}:
+        namespace: ${TKN_NAMESPACE}
+          labels:
+            app: tekton
+          dockerConfigJson: {{ .Values.scrDockerConfig }}
