@@ -24,8 +24,8 @@ spec:
     enableRegistryCredentials: true
     enableGitSecretsSSH: true
     enableSecrets: true
-    enableTasks: true
-    enablePipelines: true
+    enableTasks: false
+    enablePipelines: false
     enableRuns: false
     defaultNamespace: ${TKN_NAMESPACE}
     # WORKSPACES
@@ -80,6 +80,32 @@ spec:
           app: tekton
         secretKVs:
           url: ${TKN_TEAMS_URL}
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: tekton-tasks
+  namespace: tekton-cd
+  annotations:
+    kustomize.toolkit.fluxcd.io/substitute: disabled
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: yacht-tekton-resources
+      version: v0.47.10
+      sourceRef:
+        kind: HelmRepository
+        name: stuttgart-things
+        namespace: tekton-pipelines
+      interval: 12h
+  dependsOn:
+    - name: tekton-pipelines
+      namespace: tekton-pipelines
+  values:
+    # PARAMETERS
+    enableTasks: true
+    defaultNamespace: tekton-cd
     # TASKS
     tasks:
       git-clone:
@@ -445,6 +471,32 @@ spec:
               MESSAGE=$(echo "${MESSAGE}" | sed -e 's/\"/\\\\"/g')
               JSON="{\"text\": \"${MESSAGE}\" }"
               curl -X POST -H 'Content-Type: application/json' -d "${JSON}" "${WEBHOOK_URL}"
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: tekton-pipelines
+  namespace: tekton-cd
+  annotations:
+    kustomize.toolkit.fluxcd.io/substitute: disabled
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: yacht-tekton-resources
+      version: v0.47.10
+      sourceRef:
+        kind: HelmRepository
+        name: stuttgart-things
+        namespace: tekton-pipelines
+      interval: 12h
+  dependsOn:
+    - name: tekton-pipelines
+      namespace: tekton-pipelines
+  values:
+    # PARAMETERS
+    enablePipelines: true
+    defaultNamespace: tekton-cd
     # PIPELINES
     pipelines:
       build-kaniko-image:
