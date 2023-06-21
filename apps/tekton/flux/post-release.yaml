@@ -44,9 +44,9 @@ spec:
         accessModes:
           - ReadWriteOnce
 
-      registryCredentials:
-        scr-${TKN_ENV}:
-          namespace: ${TKN_NAMESPACE}
-          labels:
-            app: tekton
-          dockerConfigJson: ${TKN_SCR_DOCKERCONFIG}
+      # registryCredentials:
+      #   scr-${TKN_ENV}:
+      #     namespace: ${TKN_NAMESPACE}
+      #     labels:
+      #       app: tekton
+      #     dockerConfigJson: ${TKN_SCR_DOCKERCONFIG}
