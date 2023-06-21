@@ -20,9 +20,9 @@ spec:
       namespace: tekton-pipelines
   values:
     enableWorkspaces: true
+    enableRegistryCredentials: true
     enableGitSecretsSSH: false
     enableSecrets: false
-    enableRegistryCredentials: false
     enablePipelines: false
     enableTasks: false
     enableRuns: false
