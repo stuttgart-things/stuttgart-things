@@ -322,7 +322,6 @@ spec:
               printf "%s" "${RESULT_SHA}" > "$(results.commit.path)"
               printf "%s" "${PARAM_URL}" > "$(results.url.path)"
       kaniko:
-        namespace: ${TKN_NAMESPACE}
         labels:
           app.kubernetes.io/version: "0.6"
         annotations:
@@ -390,7 +389,6 @@ spec:
               image="$(params.IMAGE)"
               echo -n "${image}" | tee "$(results.IMAGE_URL.path)"
       create-publish-helm-chart:
-        namespace: ${TKN_NAMESPACE}
         labels:
           app.kubernetes.io/version: "0.2"
         annotations:
@@ -500,7 +498,6 @@ spec:
     # PIPELINES
     pipelines:
       build-kaniko-image:
-        namespace: ${TKN_NAMESPACE}
         workspaces:
           - shared-workspace
           - ssh-credentials
@@ -592,7 +589,6 @@ spec:
                 operator: in
                 values: Failed
       package-publish-helmchart:
-        namespace: ${TKN_NAMESPACE}
         workspaces:
           - source
           - ssh-credentials
