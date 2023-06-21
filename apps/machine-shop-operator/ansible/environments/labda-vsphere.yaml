@@ -1,6 +1,4 @@
 ---
-
-
 # TARGETS/INVENTORY + PLAYBOOK
 vmName: mso-vm2
 vmCount: 1
@@ -63,8 +61,6 @@ ipAddress: 10.100.136.226
 hostname: dev8
 entryZone: 4sthings.tiab.ssc.sva.de.
 pdnsUrl: https://pdns-vsphere.tiab.labda.sva.de:8443
-
-# TERRAFORM
 
 ## LAB
 datacenter: NetApp-HCI-Datacenter

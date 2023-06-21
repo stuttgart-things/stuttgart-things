@@ -35,8 +35,6 @@ releases:
       - "{{`{{ .Release.Namespace }}`}}/secrets"
       - "{{`{{ .Release.Namespace }}`}}/ansible"
 
-
-
 repositories:
   - name: stuttgart-things
     url: eu.gcr.io/stuttgart-things
