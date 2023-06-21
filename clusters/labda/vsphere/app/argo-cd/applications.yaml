@@ -39,6 +39,24 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
+  name: yacht-dispatcher
+  namespace: argocd
+spec:
+  project: app
+  source:
+    path: argocd
+    repoURL: 'https://github.com/stuttgart-things/yacht-dispatcher'
+  destination:
+    name: app
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: false
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
   name: downstream-cluster
   namespace: argocd
 spec:
