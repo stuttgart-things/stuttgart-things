@@ -83,10 +83,10 @@ spec:
     # TASKS
     tasks:
       git-clone:
-        namespace: ${TKN_NAMESPACE}
         labels:
           app.kubernetes.io/version: "0.9"
         annotations:
+          kustomize.toolkit.fluxcd.io/substitute: disabled
           tekton.dev/pipelines.minVersion: "0.48.0"
           tekton.dev/categories: Git
           tekton.dev/tags: git
