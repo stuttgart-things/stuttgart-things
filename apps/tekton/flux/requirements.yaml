@@ -6,6 +6,13 @@ metadata:
   labels:
     toolkit.fluxcd.io/tenant: sthings-team
 ---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: tekton-cd
+  labels:
+    toolkit.fluxcd.io/tenant: sthings-team
+---
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: HelmRepository
 metadata:
