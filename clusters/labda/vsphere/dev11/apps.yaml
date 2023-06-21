@@ -21,6 +21,6 @@ spec:
       TKN_KANIKO_STORAGE: 10Gi
       TKN_HELM_STORAGE: 1Gi
       TKN_ENV: labda-vsphere
-    # substituteFrom:
-    #   - kind: Secret
-    #     name: tkn-flux-secrets
+    substituteFrom:
+      - kind: Secret
+        name: tkn-flux-secrets
