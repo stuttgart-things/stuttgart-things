@@ -26,6 +26,7 @@ spec:
     enablePipelines: false
     enableTasks: false
     enableRuns: false
+    defaultNamespace: ${TKN_NAMESPACE}
 
     workspaces:
       kaniko-workspace:
