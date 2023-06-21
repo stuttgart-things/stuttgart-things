@@ -433,7 +433,6 @@ spec:
               helm package --version $(params.CHARTTAG)-helm $(params.PATH)/$(params.CHARTNAME)
               helm push $(params.CHARTNAME)-$(params.CHARTTAG)-helm.tgz oci://$(params.REGISTRY)/$(params.CHARTNAME)/
       send-msteams-notification:
-        namespace: ${TKN_NAMESPACE}
         labels:
           app.kubernetes.io/version: "0.1"
         annotations:
