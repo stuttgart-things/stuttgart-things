@@ -1,7 +1,7 @@
 ---
 jobs:
   ansible-job:
-    name: {{ now | date "2006-01-02"}}-baseos-setup-{{ randAlphaNum 4 | lower }}
+    name: {{ now | date "2006-01-02"}}-{{ .Values.ansiblePlaybook }}-{{ randAlphaNum 4 | lower }}
     namespace: {{ .Release.Namespace }}
     labels:
       app: machine-shop-operator

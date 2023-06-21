@@ -1,12 +1,23 @@
 ---
-# ANSIBLE JOB SETTINGS
-ansibleImage: eu.gcr.io/stuttgart-things/sthings-ansible
-ansibleImageTag: 8.0.0-5
+
 
 # TARGETS/INVENTORY + PLAYBOOK
-ansibleTargets: dev9-sthings-2.tiab.labda.sva.de;dev9-sthings-3.tiab.labda.sva.de
+vmName: mso-vm2
+vmCount: 1
+vmNumCPUs: 8
+vmMemory: 8192
+vmDiskSize: 96
+vmFolderPath: stuttgart-things/testing
+
+ansibleTargets: mso-vm2.tiab.labda.sva.de
 createInventory: true
-ansiblePlaybook: install-configure-nfs #configure-rke-node|power-dns
+ansiblePlaybook: configure-rke-node #install-configure-nfs|power-dns
+
+# ANSIBLE JOB SETTINGS
+ansibleImage: eu.gcr.io/stuttgart-things/sthings-ansible
+ansibleImageTag: 8.0.0-4
+
+# CUSTOM INVENTORY
 copyInventory: false
 inventory:
   groups:
@@ -54,14 +65,6 @@ entryZone: 4sthings.tiab.ssc.sva.de.
 pdnsUrl: https://pdns-vsphere.tiab.labda.sva.de:8443
 
 # TERRAFORM
-
-## VM
-vmName: mso-vm2
-vmCount: 1
-vmNumCPUs: 8
-vmMemory: 8192
-vmDiskSize: 96
-vmFolderPath: stuttgart-things/testing
 
 ## LAB
 datacenter: NetApp-HCI-Datacenter
