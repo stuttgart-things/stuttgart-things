@@ -45,7 +45,7 @@ spec:
 
       registryCredentials:
         scr-${TKN_ENV}:
-        namespace: ${TKN_NAMESPACE}
+          namespace: ${TKN_NAMESPACE}
           labels:
             app: tekton
-          dockerConfigJson: {{ .Values.scrDockerConfig }}
+          dockerConfigJson: ${TKN_SCR_DOCKERCONFIG}
