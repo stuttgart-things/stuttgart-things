@@ -17,28 +17,17 @@ spec:
       interval: 12h
   values:
     global:
-      openshift: false
+      storageClass: ${VAULT_STORAGE_CLASS}
     injector:
       enabled: false
     server:
-      dataStorage:
-        enabled: true
-        size: ${VAULT_STORAGE_SIZE}
+      persistence:
         storageClass: ${VAULT_STORAGE_CLASS}
-    ingress:
-      enabled: true
-      labels: {}
-        # traffic: external
-      pathType: Prefix
-      activeService: true
-      ingressClassName: nginx
-      hosts:
-        - host: ${VAULT_INGRESS_HOSTNAME}.${VAULT_INGRESS_DOMAIN}
-    #   tls:
-    #   - hosts:
-    #     - vault-ent.dev2.sthings-pve.labul.sva.de
-    #     secretName: vault-ent-ingress-cert
-
+        size: ${VAULT_STORAGE_SIZE}
+      ingress:
+        enabled: true
+        ingressClassName: nginx
+        hostname: ${VAULT_INGRESS_HOSTNAME}.${VAULT_INGRESS_DOMAIN}
 # ---
 # global:
 #   openshift: false
