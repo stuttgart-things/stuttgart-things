@@ -1,7 +1,7 @@
 ---
 releases:
   - name: build-kaniko-image
-    installed: true
+    installed: false
     namespace: tekton-kaniko
     chart: stuttgart-things/yacht-tekton-resources
     version: v0.47.10
