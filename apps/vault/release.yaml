@@ -25,15 +25,15 @@ spec:
         enabled: true
         size: ${VAULT_STORAGE_SIZE}
         storageClass: ${VAULT_STORAGE_CLASS}
-    # ingress:
-    #   enabled: true
-    #   labels: {}
-    #     # traffic: external
-    #   pathType: Prefix
-    #   activeService: true
-    #   ingressClassName: nginx
-    #   hosts:
-    #     - host: vault-ent.dev2.sthings-pve.labul.sva.de
+    ingress:
+      enabled: true
+      labels: {}
+        # traffic: external
+      pathType: Prefix
+      activeService: true
+      ingressClassName: nginx
+      hosts:
+        - host: ${VAULT_INGRESS_HOSTNAME}.${VAULT_INGRESS_DOMAIN}
     #   tls:
     #   - hosts:
     #     - vault-ent.dev2.sthings-pve.labul.sva.de
