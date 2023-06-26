@@ -16,10 +16,8 @@ spec:
         namespace: vault
       interval: 12h
   values:
-    global:
-      storageClass: ${VAULT_STORAGE_CLASS}
-    injector:
-      enabled: false
+    # global:
+    #   storageClass: ${VAULT_STORAGE_CLASS}
     server:
       persistence:
         storageClass: ${VAULT_STORAGE_CLASS}
