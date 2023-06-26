@@ -1,22 +1,22 @@
-# ---
-# apiVersion: argoproj.io/v1alpha1
-# kind: Application
-# metadata:
-#   name: machine-shop-operator
-#   namespace: argocd
-# spec:
-#   project: app
-#   source:
-#     path: argocd
-#     repoURL: 'https://github.com/stuttgart-things/machine-shop-operator.git'
-#     targetRevision: main
-#   destination:
-#     name: app
-#     namespace: argocd
-#   syncPolicy:
-#     automated:
-#       prune: true
-#       selfHeal: false
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: machine-shop-operator
+  namespace: argocd
+spec:
+  project: app
+  source:
+    path: argocd
+    repoURL: 'https://github.com/stuttgart-things/machine-shop-operator.git'
+    targetRevision: main
+  destination:
+    name: app
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: false
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
