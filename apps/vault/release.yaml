@@ -24,7 +24,7 @@ spec:
       dataStorage:
         enabled: true
         size: ${VAULT_STORAGE_SIZE}
-        storageClass: ${VAULT_STORAGE_CLASS} nfs4-csi
+        storageClass: ${VAULT_STORAGE_CLASS}
     # ingress:
     #   enabled: true
     #   labels: {}
