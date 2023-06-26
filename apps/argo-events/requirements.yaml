@@ -5,3 +5,12 @@ metadata:
   name: argo-events
   labels:
     toolkit.fluxcd.io/tenant: sthings-team
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: argo
+  namespace: argo-events
+spec:
+  interval: 24h
+  url: https://argoproj.github.io/argo-helm

@@ -5,3 +5,12 @@ metadata:
   name: argo-workflows
   labels:
     toolkit.fluxcd.io/tenant: sthings-team
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: argo
+  namespace: argo-workflows
+spec:
+  interval: 24h
+  url: https://argoproj.github.io/argo-helm

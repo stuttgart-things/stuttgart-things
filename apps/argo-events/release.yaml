@@ -1,0 +1,18 @@
+
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: argo-events-deployment
+  namespace: argo-events
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: argo-events
+      version: 2.x.x
+      sourceRef:
+        kind: HelmRepository
+        name: argo
+        namespace: argo-events
+      interval: 12h
