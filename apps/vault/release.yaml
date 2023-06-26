@@ -16,78 +16,15 @@ spec:
         namespace: vault
       interval: 12h
   values:
-    # global:
-    #   storageClass: ${VAULT_STORAGE_CLASS}
+    injector:
+      enabled: false
     server:
-      persistence:
+      enabled: true
+      dataStorage:
+        enabled: true
         storageClass: ${VAULT_STORAGE_CLASS}
         size: ${VAULT_STORAGE_SIZE}
       ingress:
         enabled: true
         ingressClassName: nginx
         hostname: ${VAULT_INGRESS_HOSTNAME}.${VAULT_INGRESS_DOMAIN}
-# ---
-# global:
-#   openshift: false
-# injector:
-#   enabled: false
-# server:
-#   extraVolumes:
-#     - type: configMap
-#       name: ca-cert
-#       path: /vault
-#   dataStorage:
-#     enabled: true
-#     size: 10Gi
-#     storageClass: nfs4-csi
-#     accessMode: ReadWriteOnce
-#   enterpriseLicense:
-#     secretName: "vault-ent-license"
-#     secretKey: "license"
-#   image:
-#     pullPolicy: IfNotPresent
-#     repository: hashicorp/vault-enterprise
-#     tag: 1.13.2-ent
-#   ingress:
-#     enabled: true
-#     labels: {}
-#       # traffic: external
-#     pathType: Prefix
-#     activeService: true
-#     ingressClassName: nginx
-#     hosts:
-#       - host: vault-ent.dev2.sthings-pve.labul.sva.de
-#     tls:
-#     - hosts:
-#       - vault-ent.dev2.sthings-pve.labul.sva.de
-#       secretName: vault-ent-ingress-cert
-#   ha:
-#     apiAddr: null
-#     disruptionBudget:
-#       enabled: true
-#       maxUnavailable: null
-#     enabled: true
-#     raft:
-#       config: |
-#         ui = true
-#         listener "tcp" {
-#           tls_disable = 1
-#           address = "[::]:8200"
-#           cluster_address = "[::]:8201"
-#         }
-#         storage "raft" {
-#           path = "/vault/data"
-#           retry_join {
-#             leader_api_addr = http://vault-ent-0.vault-ent-internal.vault-ent.svc.cluster.local:8200
-#           }
-#           retry_join {
-#             leader_api_addr = http://vault-ent-1.vault-ent-internal.vault-ent.svc.cluster.local:8200
-#           }
-#           retry_join {
-#             leader_api_addr = http://vault-ent-2.vault-ent-internal.vault-ent.svc.cluster.local:8200
-#           }
-#         }
-#         service_registration "kubernetes" {}
-#       enabled: true
-#       setNodeId: true
-#     replicas: 3
