@@ -6,17 +6,18 @@ vars:
   REPOSITORY_NAME: stuttgart-things
   PROJECT:
     sh: echo ${PROJECT}
+  CONTAINER_RUNTIME_CMD: sudo nerdctl
 
 tasks:
 
   build:
     desc: Build & push image
     cmds:
-      - sudo nerdctl build -t {{ .REGISTRY }}/{{ .REPOSITORY_NAME }}/{{ .PROJECT }}:{{ .VERSION }} ./build/{{ .PROJECT }}
-      - sudo nerdctl push {{ .REGISTRY }}/{{ .REPOSITORY_NAME }}/{{ .PROJECT }}:{{ .VERSION }}
+      - '{{ .CONTAINER_RUNTIME_CMD }} build -t {{ .REGISTRY }}/{{ .REPOSITORY_NAME }}/{{ .PROJECT }}:{{ .VERSION }} ./images/{{ .PROJECT }}'
+      - '{{ .CONTAINER_RUNTIME_CMD }} push {{ .REGISTRY }}/{{ .REPOSITORY_NAME }}/{{ .PROJECT }}:{{ .VERSION }}'
     vars:
       VERSION:
-        sh: cat ./build/{{ .PROJECT }}/Dockerfile | grep version | awk -F= '{ print $2 }'
+        sh: cat ./images/{{ .PROJECT }}/Dockerfile | grep version | awk -F= '{ print $2 }'
 
   package:
     desc: Package & push chart
