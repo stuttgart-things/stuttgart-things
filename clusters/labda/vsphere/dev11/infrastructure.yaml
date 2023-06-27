@@ -91,3 +91,26 @@ spec:
     substitute:
       NFS_SERVER_FQDN: srvfiles-test.tiab.labda.sva.de
       NFS_SHARE_PATH: /var/nfs/k8s
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: velero
+  namespace: flux-system
+spec:
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infra/velero
+  prune: true
+  wait: true
+  postBuild:
+    substitute:
+      INGRESS_HOSTNAME_MINIO: artifacts
+      INGRESS_DOMAIN_MINIO: app.4sthings.tiab.ssc.sva.de
+    substituteFrom:
+      - kind: Secret
+        name: velero-flux-secrets
