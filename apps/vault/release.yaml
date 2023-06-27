@@ -6,6 +6,9 @@ metadata:
   namespace: vault
 spec:
   interval: 30m
+  dependsOn:
+    - name: vault-certificate-configuration
+      namespace: vault
   chart:
     spec:
       chart: vault
