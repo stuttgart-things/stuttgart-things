@@ -114,3 +114,5 @@ spec:
     substituteFrom:
       - kind: Secret
         name: velero-flux-secrets
+      - kind: Secret
+        name: vault-flux-secrets
