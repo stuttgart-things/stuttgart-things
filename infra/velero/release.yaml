@@ -34,8 +34,8 @@ spec:
         config:
           region: minio
           s3ForcePathStyle: true
-          s3Url: https://${INGRESS_HOSTNAME_MINIO}.${INGRESS_DOMAIN_MINIO}}
-          publicUrl: https://${INGRESS_HOSTNAME_MINIO}.${INGRESS_DOMAIN_MINIO}}
+          s3Url: https://${INGRESS_HOSTNAME_MINIO}.${INGRESS_DOMAIN_MINIO}
+          publicUrl: https://${INGRESS_HOSTNAME_MINIO}.${INGRESS_DOMAIN_MINIO}
     initContainers:
       - name: velero-plugin-for-aws
         image: velero/velero-plugin-for-aws:v1.7.0
