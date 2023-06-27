@@ -22,7 +22,7 @@ spec:
         kind: Certificate
         metadata:
           name: vault-ingress-tls
-          namespace: minio
+          namespace: vault
         spec:
           commonName: ${VAULT_INGRESS_HOSTNAME}.${VAULT_INGRESS_DOMAIN}
           dnsNames:
