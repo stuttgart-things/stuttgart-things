@@ -78,3 +78,4 @@ spec:
       VAULT_STORAGE_CLASS: nfs3-csi2
       VAULT_INGRESS_HOSTNAME: vault
       VAULT_INGRESS_DOMAIN: dev11.4sthings.tiab.ssc.sva.de
+      CLUSTER_ISSUER: cluster-issuer-approle
