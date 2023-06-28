@@ -8,7 +8,7 @@ jobs:
       machine-shop-operator: packer
     restartPolicy: Never
     volumes:
-      ansible:
+      ansible-packer:
         volumeKind: configMap
     containers:
       manager:
@@ -33,7 +33,7 @@ jobs:
             cpu: 500m
             memory: 768Mi
         volumeMounts:
-          ansible:
-            mountPath: /home/nonroot/packer
+          ansible-packer:
+            mountPath: /home/nonroot/ansible
         secretsEnvFrom:
           - name: vault
