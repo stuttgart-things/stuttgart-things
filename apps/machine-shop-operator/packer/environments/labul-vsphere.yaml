@@ -1,0 +1,4 @@
+---
+# PACKER JOB SETTINGS
+ansibleImage: eu.gcr.io/stuttgart-things/sthings-packer
+ansibleImageTag: 1.9.1

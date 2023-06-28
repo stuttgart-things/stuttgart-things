@@ -1,0 +1,39 @@
+---
+jobs:
+  packer-job:
+    name: {{ now | date "2006-01-02"}}-{{ .Values.osVersion }}-{{ .Values.osProvioning }}-{{ randAlphaNum 4 | lower }}
+    namespace: {{ .Release.Namespace }}
+    labels:
+      app: machine-shop-operator
+      machine-shop-operator: packer
+    restartPolicy: Never
+    volumes:
+      ansible:
+        volumeKind: configMap
+    containers:
+      manager:
+        image: {{ .Values.packerImage }}
+        tag: {{ .Values.packerImageTag }}
+        imagePullPolicy: Always
+        securityContext:
+          runAsUser: 65532
+          allowPrivilegeEscalation: false
+          privileged: true
+          runAsNonRoot: true
+          readOnlyRootFilesystem: false
+        command:
+          - "/bin/sh"
+          - "-ec"
+          - "<REPLACE-ME>"
+        resources:
+          requests:
+            cpu: 10m
+            memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 768Mi
+        volumeMounts:
+          ansible:
+            mountPath: /home/nonroot/packer
+        secretsEnvFrom:
+          - name: vault
