@@ -1,6 +1,6 @@
 ---
 releases:
-  - name: terraform
+  - name: packer
     namespace: machine-shop
     chart: stuttgart-things/sthings-cluster
     version: 0.3.7
@@ -33,6 +33,7 @@ releases:
       - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
     needs:
       - "{{`{{ .Release.Namespace }}`}}/secrets"
+      - "{{`{{ .Release.Namespace }}`}}/packer"
       - "{{`{{ .Release.Namespace }}`}}/ansible"
 
 repositories:
