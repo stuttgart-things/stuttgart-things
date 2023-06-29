@@ -26,11 +26,10 @@ jobs:
         command:
           - "/bin/sh"
           - "-c"
-          - "tail -f /dev/null"
-          #- packer init {{ .Values.packerConfigMountPath }}/{{ .Values.osVersion }}-{{ .Values.cloud }}.pkr.hc && packer build -force -var "username=phermann" -var "password=Atlan7is" {{ .Values.packerConfigMountPath }}/{{ .Values.osVersion }}-{{ .Values.cloud }}.pkr.hcl
+          - packer init {{ .Values.packerConfigMountPath }}/ && packer build -force -var "username=${USERNAME}" -var "password=${PASSWORD}" {{ .Values.packerConfigMountPath }}/{{ .Values.osVersion }}-{{ .Values.cloud }}.pkr.hcl
         resources:
           requests:
-            cpu: 10m
+            cpu: 150m
             memory: 256Mi
           limits:
             cpu: 500m
@@ -41,4 +40,4 @@ jobs:
           packer:
             mountPath: {{ .Values.packerConfigMountPath }}
         secretsEnvFrom:
-          - name: vault
+          - name: cloud

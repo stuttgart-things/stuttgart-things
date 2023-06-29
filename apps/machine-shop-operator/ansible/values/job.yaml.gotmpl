@@ -31,7 +31,7 @@ jobs:
           - "touch ${INV_PATH} && ansible-playbook -i $INV_PATH $HOME/ansible/play.yaml -vv -e prepare_env={{ .Values.prepareEnv }} -e execute_baseos={{ .Values.executeBaseos }} -e target_play={{ .Values.ansiblePlaybook }}"
         resources:
           requests:
-            cpu: 10m
+            cpu: 150m
             memory: 256Mi
           limits:
             cpu: 500m

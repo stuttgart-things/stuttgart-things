@@ -6,10 +6,18 @@ ansibleOsProvioning: baseos-setup
 rocky9PackerMinVersion: 1.8.6
 rocky9PackerVMwarePluginMinVersion: 1.0.7
 # VAULT
+
+vaultCloudPath: /cloud/data/vsphere
+vaultCloudKeyUsername: username
+vaultCloudKeyPassword: password
+
 vaultNamespace: root
 vaultAddr: https://vault-vsphere.tiab.labda.sva.de:8200
-vaultRoleID: ref+vault://apps/vault/roleID
-vaultSecretID: ref+vault://apps/vault/secretID
+
+cloudUsername: ref+vault://cloud/vsphere/username
+cloudPassword: ref+vault://cloud/vsphere/password
+tmpSSHUser: root
+tmpSSHPassword: ch0coLate
 
 ansibleUser: sthings
 sendToMSteams: true
