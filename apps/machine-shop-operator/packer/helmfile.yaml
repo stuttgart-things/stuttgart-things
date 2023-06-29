@@ -1,15 +1,7 @@
 ---
 releases:
   - name: packer
-    namespace: machine-shop
-    chart: stuttgart-things/sthings-cluster
-    version: 0.3.7
-    installed: false
-    values:
-      - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
-
-  - name: secrets
-    namespace: machine-shop
+    namespace: machine-shop-packer
     chart: stuttgart-things/sthings-cluster
     version: 0.3.7
     installed: true
@@ -17,7 +9,15 @@ releases:
       - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 
   - name: ansible
-    namespace: machine-shop
+    namespace: machine-shop-packer
+    chart: stuttgart-things/sthings-cluster
+    version: 0.3.7
+    installed: true
+    values:
+      - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
+
+  - name: secrets
+    namespace: machine-shop-packer
     chart: stuttgart-things/sthings-cluster
     version: 0.3.7
     installed: true
@@ -25,7 +25,7 @@ releases:
       - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 
   - name: job
-    namespace: machine-shop
+    namespace: machine-shop-packer
     chart: stuttgart-things/sthings-cluster
     version: 0.3.7
     installed: true
@@ -49,6 +49,6 @@ helmDefaults:
   force: true
 
 environments:
-  labda-vsphere:
+  labul-vsphere:
     values:
       - environments/{{ .Environment.Name }}.yaml

@@ -1,14 +1,16 @@
 ---
 jobs:
   packer-job:
-    name: {{ now | date "2006-01-02"}}-{{ .Values.osVersion }}-{{ .Values.osProvioning }}-{{ randAlphaNum 4 | lower }}
+    name: {{ now | date "2006-01-02"}}-{{ .Values.osVersion }}-{{ .Values.ansibleOsProvioning }}-{{ randAlphaNum 4 | lower }}
     namespace: {{ .Release.Namespace }}
     labels:
       app: machine-shop-operator
       machine-shop-operator: packer
     restartPolicy: Never
     volumes:
-      ansible-packer:
+      ansible:
+        volumeKind: configMap
+      packer:
         volumeKind: configMap
     containers:
       manager:
@@ -23,8 +25,8 @@ jobs:
           readOnlyRootFilesystem: false
         command:
           - "/bin/sh"
-          - "-ec"
-          - "<REPLACE-ME>"
+          - "-c"
+          - "tail -f /dev/null"
         resources:
           requests:
             cpu: 10m
@@ -33,7 +35,9 @@ jobs:
             cpu: 500m
             memory: 768Mi
         volumeMounts:
-          ansible-packer:
-            mountPath: /home/nonroot/ansible
+          ansible:
+            mountPath: {{ .Values.ansiblePlayMountPath }}
+          packer:
+            mountPath: {{ .Values.packerConfigMountPath }}
         secretsEnvFrom:
           - name: vault
