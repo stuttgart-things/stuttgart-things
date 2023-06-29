@@ -2,13 +2,21 @@
 # PACKER JOB SETTINGS
 packerImage: eu.gcr.io/stuttgart-things/sthings-packer
 packerImageTag: 1.9.1
-ansibleOsProvioning: baseos-setup
 
+cpu: 8
+ram: 8192
+
+ip_wait_timeout: 40m
+
+rocky9IsoUrl: https://download.rockylinux.org/pub/rocky/9/isos/x86_64/Rocky-9.2-x86_64-boot.iso
+rocky9IsoChecksum: sha256:11e42da96a7b336de04e60d05e54a22999c4d7f3e92c19ebf31f9c71298f5b42
+
+
+# ANSIBLE
 ansibleUser: sthings
 ansiblePlayMountPath: /home/nonroot/ansible
 packerConfigMountPath: /home/nonroot/packer
 
-## ansible
 osPrerequisites:
   - python3-pip
   - vim
