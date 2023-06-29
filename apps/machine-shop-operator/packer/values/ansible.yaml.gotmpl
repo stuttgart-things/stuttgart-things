@@ -111,10 +111,11 @@ configmaps:
                 ansible.builtin.file:
                   path: {{`{{printf "%q" "{{ item.path }}" }}`}}
                   state: absent
-                with_items: "{{`{{printf "%q" "{{ cfg_files_to_delete.files }}" }}`}}"
+                with_items: {{`{{printf "%q" "{{ cfg_files_to_delete.files }}" }}`}}
 
               - name: Reset may existing cloud config
                 ansible.builtin.shell: |
                   cloud-init clean -s -l
                 ignore_errors: true
+
             when: install_cloud_init is defined
