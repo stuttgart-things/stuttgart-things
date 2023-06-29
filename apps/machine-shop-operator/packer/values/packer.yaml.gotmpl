@@ -1,7 +1,6 @@
 ---
 configmaps:
   packer:
-    namespace: {{ .Release.Namespace }}
     rocky9-vsphere.pkr.hcl: |
       packer {
         required_version = ">= {{ .Values.rocky9PackerMinVersion }}"
@@ -75,7 +74,7 @@ configmaps:
           ansible_env_vars       = ["ANSIBLE_REMOTE_TEMP=/tmp", "ANSIBLE_HOST_KEY_CHECKING=False", "ANSIBLE_SSH_ARGS=-oForwardAgent=yes -oControlMaster=auto -oControlPersist=60s -oHostKeyAlgorithms=+ssh-rsa   -oPubkeyAcceptedKeyTypes=+ssh-rsa", "ANSIBLE_NOCOLOR=True"]
           extra_arguments        = ["--scp-extra-args", "'-O'"]
           keep_inventory_file    = "true"
-          playbook_file          = "./{{ .Values.ansibleOsProvioning }}.yaml"
+          playbook_file          = "{{ .Values.ansiblePlayMountPath }}/{{ .Values.ansibleOsProvioning }}.yaml"
           user                   = "root"
         }
       }

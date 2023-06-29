@@ -27,6 +27,7 @@ jobs:
           - "/bin/sh"
           - "-c"
           - "tail -f /dev/null"
+          #- packer init {{ .Values.packerConfigMountPath }}/{{ .Values.osVersion }}-{{ .Values.cloud }}.pkr.hc && packer build -force -var "username=phermann" -var "password=Atlan7is" {{ .Values.packerConfigMountPath }}/{{ .Values.osVersion }}-{{ .Values.cloud }}.pkr.hcl
         resources:
           requests:
             cpu: 10m

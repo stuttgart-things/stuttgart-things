@@ -1,21 +1,10 @@
 ---
-# PACKER JOB SETTINGS
-packerImage: eu.gcr.io/stuttgart-things/sthings-packer
-packerImageTag: 1.9.1
-
+## rocky9
 osVersion: rocky9
+cloud: vsphere
 ansibleOsProvioning: baseos-setup
-ansiblePlayMountPath: /home/nonroot/ansible
-packerConfigMountPath: /home/nonroot/packer
-
-## ansible
-installCAs:
-  - https://vault.tiab.labda.sva.de:8200
-  - https://vault.labul.sva.de:8200
-  - https://vault-vsphere.labul.sva.de:8200
-  - https://vault-pve.labul.sva.de:8200
-  - https://vault-vsphere.tiab.labda.sva.de:8200
-
+rocky9PackerMinVersion: 1.8.6
+rocky9PackerVMwarePluginMinVersion: 1.0.7
 # VAULT
 vaultNamespace: root
 vaultAddr: https://vault-vsphere.tiab.labda.sva.de:8200
@@ -25,16 +14,28 @@ vaultSecretID: ref+vault://apps/vault/secretID
 ansibleUser: sthings
 sendToMSteams: true
 msTeamsWebhookUrl: https://365sva.webhook.office.com/webhookb2/2f14a9f8-4736-46dd-9c8c-31547ec37180@0a65cb1e-37d5-41ff-980a-647d9d0e4f0b/IncomingWebhook/37a805a0a2624dc2ac1aedd7dec6ad49/dc3a27ed-396c-40b7-a9b2-f1a2b6b44efe
+
+# PACKER JOB SETTINGS
+packerImage: eu.gcr.io/stuttgart-things/sthings-packer
+packerImageTag: 1.9.1
+
+ansiblePlayMountPath: /home/nonroot/ansible
+packerConfigMountPath: /home/nonroot/packer
+
+## ansible
 osPrerequisites:
   - python3-pip
   - vim
-  - curl
+  - curls
   - git
   - unzip
   - zip
   - tmux
   - unzip
 
-## rocky9
-rocky9PackerMinVersion: 1.8.6
-rocky9PackerVMwarePluginMinVersion: 1.0.7
+installCAs:
+  - https://vault.tiab.labda.sva.de:8200
+  - https://vault.labul.sva.de:8200
+  - https://vault-vsphere.labul.sva.de:8200
+  - https://vault-pve.labul.sva.de:8200
+  - https://vault-vsphere.tiab.labda.sva.de:8200

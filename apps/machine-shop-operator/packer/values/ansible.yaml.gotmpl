@@ -1,7 +1,6 @@
 ---
 configmaps:
   ansible:
-    namespace: {{ .Release.Namespace }}
     {{ .Values.ansibleOsProvioning }}.yaml: |
       ---
       - name: Provision vm template during packer build w/ ansible (base profile)
@@ -92,7 +91,7 @@ configmaps:
         post_tasks:
           - ansible.builtin.copy:
               dest: /etc/netplan/00-installer-config.yaml
-              content: "{{`{{printf "%q" "{{ netconfig }}" }}`}}"
+              content: {{`{{printf "%q" "{{ netconfig }}" }}`}}
             when: ansible_os_family == 'Debian'
 
           - block:
@@ -104,13 +103,13 @@ configmaps:
 
               - name: Find all cfg files in {{`{{printf "%q" "{{ cloud_init_config_dir }}" }}`}}
                 ansible.builtin.find:
-                  paths: "{{`{{printf "%q" "{{ cloud_init_config_dir }}" }}`}}"
+                  paths: {{`{{printf "%q" "{{ cloud_init_config_dir }}" }}`}}
                   patterns: "*.cfg"
                 register: cfg_files_to_delete
 
               - name: Remove all may existing cloud config
                 ansible.builtin.file:
-                  path: "{{`{{printf "%q" "{{ item.path }}" }}`}}"
+                  path: {{`{{printf "%q" "{{ item.path }}" }}`}}
                   state: absent
                 with_items: "{{`{{printf "%q" "{{ cfg_files_to_delete.files }}" }}`}}"
 
