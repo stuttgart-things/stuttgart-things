@@ -51,4 +51,5 @@ helmDefaults:
 environments:
   labul-vsphere:
     values:
+      - environments/defaults.yaml
       - environments/{{ .Environment.Name }}.yaml

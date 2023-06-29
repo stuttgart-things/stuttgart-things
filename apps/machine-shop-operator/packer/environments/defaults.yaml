@@ -1,0 +1,27 @@
+---
+# PACKER JOB SETTINGS
+packerImage: eu.gcr.io/stuttgart-things/sthings-packer
+packerImageTag: 1.9.1
+ansibleOsProvioning: baseos-setup
+
+ansibleUser: sthings
+ansiblePlayMountPath: /home/nonroot/ansible
+packerConfigMountPath: /home/nonroot/packer
+
+## ansible
+osPrerequisites:
+  - python3-pip
+  - vim
+  - curls
+  - git
+  - unzip
+  - zip
+  - tmux
+  - unzip
+
+installCAs:
+  - https://vault.tiab.labda.sva.de:8200
+  - https://vault.labul.sva.de:8200
+  - https://vault-vsphere.labul.sva.de:8200
+  - https://vault-pve.labul.sva.de:8200
+  - https://vault-vsphere.tiab.labda.sva.de:8200
