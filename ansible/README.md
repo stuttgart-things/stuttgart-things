@@ -1,4 +1,4 @@
-# stuttgart-things/machine-shop-operator/ansible
+# stuttgart-things/ansible
 
 ## SET VAULT ENV VARS
 ```

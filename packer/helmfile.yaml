@@ -49,6 +49,10 @@ helmDefaults:
   force: true
 
 environments:
+  labda-vsphere:
+    values:
+      - environments/defaults.yaml
+      - environments/{{ .Environment.Name }}.yaml
   labul-vsphere:
     values:
       - environments/defaults.yaml

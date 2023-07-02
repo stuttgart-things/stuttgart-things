@@ -1,14 +1,21 @@
-# stuttgart-things/machine-shop-operator/packer
+# stuttgart-things/packer
 
 ## SET VAULT ENV VARS
 ```
 export VAULT_NAMESPACE=root
+
+# labul-vsphere
 export VAULT_ADDR=https://vault-vsphere.labul.sva.de:8200
+export VAULT_TOKEN=<VAULT_TOKEN>
+
+# labul-vsphere
+export VAULT_ADDR=https://vault-vsphere.tiab.labda.sva.de:8200
 export VAULT_TOKEN=<VAULT_TOKEN>
 ```
 
 ## APPLY
 ```
+# export KUBECONFIG=~/.kube/dev11
 helmfile apply --environment labul-vsphere
 ```
 
