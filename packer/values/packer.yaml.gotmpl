@@ -59,7 +59,7 @@ configmaps:
           disk_thin_provisioned = true
         }
         username       = "${var.username}"
-        vcenter_server = "10.31.101.51"
+        vcenter_server = "{{ .Values.vcenterServer }}"
         vm_name        = "rocky9-base-os"
       }
 
