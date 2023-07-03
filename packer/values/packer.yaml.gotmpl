@@ -42,8 +42,8 @@ configmaps:
         host                 = "{{ .Values.host }}"
         insecure_connection  = "true"
         ip_wait_timeout      = "{{ .Values.ip_wait_timeout }}"
-        iso_checksum         = "{{ .Values.rocky9IsoChecksum }}"
-        iso_urls             = ["{{ .Values.rocky9IsoUrl }}"]
+        iso_checksum         = "{{ .Values.ubuntu23IsoChecksum }}"
+        iso_urls             = ["{{ .Values.ubuntu23IsoUrl }}"]
         network_adapters {
           network      = "{{ .Values.network }}"
           network_card = "vmxnet3"
