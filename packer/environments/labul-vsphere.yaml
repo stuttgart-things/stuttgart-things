@@ -5,14 +5,14 @@ ansibleOsProvioning: baseos-setup
 ## ROCKY9
 rocky9PackerMinVersion: 1.8.6
 rocky9PackerVMwarePluginMinVersion: 1.0.7
-tmpSSHUser: root
-tmpSSHPassword: ch0coLate
+rocky9tmpSSHUser: root
+rocky9tmpSSHPassword: ch0coLate
 
 ## UBUNTU23
 ubuntu23PackerMinVersion: 1.8.6
 ubuntu23PackerVMwarePluginMinVersion: 1.0.7
-tmpSSHUser: ubuntu
-tmpSSHPassword: ubuntu
+ubuntu23tmpSSHUser: ubuntu
+ubuntu23tmpSSHPassword: ubuntu
 
 # CLOUD
 cloud: vsphere

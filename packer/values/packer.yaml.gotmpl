@@ -51,9 +51,9 @@ configmaps:
         notes                  = "stuttgart-things/ubuntu23\n\nBuild Date: ${local.packerstarttime} w/ packer\nOS: ubuntu23\nISO: https://releases.ubuntu.com/lunar/ubuntu-23.04-live-server-amd64.iso \nProvisioning: plays/packer-provisioning/base-os.yaml\n\n/Patrick Hermann (patrick.hermann@sva.de)\n/Christian Müller (christian.mueller@sva.de)\n/Marcel Zapf (marcel.zapf@sva.de)\n/Martin Wolf (martin.wolf@sva.de)"
         password               = "${ var.password }"
         ssh_handshake_attempts = "900"
-        ssh_password           = "{{ .Values.tmpSSHPassword }}"
+        ssh_password           = "{{ .Values.ubuntu23tmpSSHPassword }}"
         ssh_timeout            = "20m"
-        ssh_username           = "{{ .Values.tmpSSHUser }}"
+        ssh_username           = "{{ .Values.ubuntu23tmpSSHUser }}"
         storage {
           disk_size             = 15360
           disk_thin_provisioned = true
@@ -296,9 +296,9 @@ configmaps:
         notes                  = "stuttgart-things/rocky9\n\nBuild Date: ${local.packerstarttime} w/ packer\nOS: rocky9\nISO: https://  download.rockylinux.org/pub/rocky/9/isos/x86_64/Rocky-9.2-x86_64-boot.iso \nProvisioning: plays/packer-provisioning/baseos-setup.yaml\n\n/Patrick Hermann (patrick.hermann@sva.de)\n/Christian Müller (christian.mueller@sva.de)\n/Marcel Zapf (marcel.zapf@sva.  de)\n/Martin Wolf (martin.wolf@sva.de)"
         password               = "${var.password}"
         ssh_handshake_attempts = "900"
-        ssh_password           = "{{ .Values.tmpSSHPassword }}"
+        ssh_password           = "{{ .Values.rocky9tmpSSHPassword }}"
         ssh_timeout            = "40m"
-        ssh_username           = "{{ .Values.tmpSSHUser }}"
+        ssh_username           = "{{ .Values.rocky9tmpSSHUser }}"
         storage {
           disk_size             = 15360
           disk_thin_provisioned = true
