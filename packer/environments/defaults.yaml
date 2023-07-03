@@ -10,7 +10,8 @@ ip_wait_timeout: 40m
 
 rocky9IsoUrl: https://download.rockylinux.org/pub/rocky/9/isos/x86_64/Rocky-9.2-x86_64-boot.iso
 rocky9IsoChecksum: sha256:11e42da96a7b336de04e60d05e54a22999c4d7f3e92c19ebf31f9c71298f5b42
-
+ubuntu23IsoUrl: https://releases.ubuntu.com/lunar/ubuntu-23.04-live-server-amd64.iso
+ubuntu23IsoChecksum: sha256:c7cda48494a6d7d9665964388a3fc9c824b3bef0c9ea3818a1be982bc80d346b
 
 # ANSIBLE
 ansibleUser: sthings

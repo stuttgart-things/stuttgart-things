@@ -8,6 +8,12 @@ rocky9PackerVMwarePluginMinVersion: 1.0.7
 tmpSSHUser: root
 tmpSSHPassword: ch0coLate
 
+## UBUNTU23
+ubuntu23PackerMinVersion: 1.8.6
+ubuntu23PackerVMwarePluginMinVersion: 1.0.7
+tmpSSHUser: ubuntu
+tmpSSHPassword: ubuntu
+
 # CLOUD
 cloud: vsphere
 cloudUsername: ref+vault://cloud/vsphere/username
