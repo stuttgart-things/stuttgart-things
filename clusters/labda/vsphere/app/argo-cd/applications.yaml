@@ -21,13 +21,13 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: yacht-application-server
+  name: sweat-shop-creator
   namespace: argocd
 spec:
   project: app
   source:
     path: argocd
-    repoURL: 'https://github.com/stuttgart-things/yacht-application-server'
+    repoURL: 'https://github.com/stuttgart-things/sweatShop-creator.git'
   destination:
     name: app
     namespace: argocd
