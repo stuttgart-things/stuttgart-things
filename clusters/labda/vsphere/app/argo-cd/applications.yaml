@@ -39,13 +39,13 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: yacht-dispatcher
+  name: sweat-shop-informer
   namespace: argocd
 spec:
   project: app
   source:
     path: argocd
-    repoURL: 'https://github.com/stuttgart-things/yacht-dispatcher'
+    repoURL: 'https://github.com/stuttgart-things/sweatShop-informer.git'
   destination:
     name: app
     namespace: argocd
