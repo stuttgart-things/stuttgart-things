@@ -16,7 +16,7 @@ export VAULT_TOKEN=<VAULT_TOKEN>
 ## APPLY
 ```
 # export KUBECONFIG=~/.kube/dev11
-helmfile apply --environment labul-vsphere
+helmfile sync --environment labul-vsphere # labda-vsphere
 ```
 
 ## TEMPLATE

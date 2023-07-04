@@ -18,7 +18,7 @@ releases:
 
   - name: package-publish-helmchart
     installed: true
-    namespace: tekton-helm
+    namespace: machine-shop 
     chart: stuttgart-things/yacht-tekton-resources
     version: v0.47.10
     values:

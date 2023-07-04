@@ -15,7 +15,7 @@ helmfile template --environment labda-vsphere | grep kind: -A 2 -B 2 # check for
 
 ## APPLY
 ```
-helmfile apply --environment labda-vsphere
+helmfile sync --environment labda-vsphere
 ```
 
 Author Information

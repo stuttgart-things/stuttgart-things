@@ -10,7 +10,7 @@ jobs:
     volumes:
       ansible:
         volumeKind: configMap
-      packer:
+      {{ .Values.osVersion }}:
         volumeKind: configMap
     containers:
       manager:
@@ -37,7 +37,7 @@ jobs:
         volumeMounts:
           ansible:
             mountPath: {{ .Values.ansiblePlayMountPath }}
-          packer:
+          {{ .Values.osVersion }}:
             mountPath: {{ .Values.packerConfigMountPath }}
         secretsEnvFrom:
           - name: cloud

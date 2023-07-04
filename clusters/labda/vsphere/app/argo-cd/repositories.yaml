@@ -32,3 +32,37 @@ data:
   username: ""
 kind: Secret
 type: Opaque
+---
+apiVersion: v1
+metadata:
+  name: sweatshop-informer
+  namespace: argocd
+  annotations:
+    managed-by: argocd.argoproj.io
+  labels:
+    argocd.argoproj.io/secret-type: repository
+data:
+  password: ""
+  project: ""
+  type: Z2l0
+  url: aHR0cHM6Ly9naXRodWIuY29tL3N0dXR0Z2FydC10aGluZ3Mvc3dlYXRTaG9wLWluZm9ybWVyLmdpdA==
+  username: ""
+kind: Secret
+type: Opaque
+---
+apiVersion: v1
+metadata:
+  name: sweatshop-creator
+  namespace: argocd
+  annotations:
+    managed-by: argocd.argoproj.io
+  labels:
+    argocd.argoproj.io/secret-type: repository
+data:
+  password: ""
+  project: ""
+  type: Z2l0
+  url: aHR0cHM6Ly9naXRodWIuY29tL3N0dXR0Z2FydC10aGluZ3Mvc3dlYXRTaG9wLWNyZWF0b3IuZ2l0
+  username: ""
+kind: Secret
+type: Opaque
