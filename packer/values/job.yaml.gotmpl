@@ -6,6 +6,7 @@ jobs:
     labels:
       app: machine-shop-operator
       machine-shop-operator: packer
+    backoffLimit: 0
     restartPolicy: Never
     volumes:
       ansible:

@@ -6,7 +6,7 @@ ARG TAG=3.17.3-python
 FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 
-ARG ANSIBLE_VERSION=8.0.0
+ARG ANSIBLE_VERSION=8.1.0
 ENV USER_ID=65532
 ENV GROUP_ID=65532
 

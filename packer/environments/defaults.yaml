@@ -1,7 +1,7 @@
 ---
 # PACKER JOB SETTINGS
 packerImage: eu.gcr.io/stuttgart-things/sthings-packer
-packerImageTag: 1.9.1
+packerImageTag: 1.9.1-8.1.0
 
 cpu: 8
 ram: 8192
@@ -17,6 +17,7 @@ ubuntu23IsoChecksum: sha256:c7cda48494a6d7d9665964388a3fc9c824b3bef0c9ea3818a1be
 ansibleUser: sthings
 ansiblePlayMountPath: /home/nonroot/ansible
 packerConfigMountPath: /home/nonroot/packer
+rkeTemplateSetup: true
 
 osPrerequisites:
   - python3-pip

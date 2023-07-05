@@ -11,6 +11,7 @@ configmaps:
           update_packages: true
           install_requirements: true
           install_motd: false
+          configure_rke_node: {{ .Values.rkeTemplateSetup }}
           username: {{ .Values.ansibleUser }}
           send_to_msteams: {{ .Values.sendToMSteams }}
           cloud_init_config_dir: /etc/cloud/cloud.cfg.d
@@ -18,6 +19,11 @@ configmaps:
             {{- range .Values.osPrerequisites }}
             - {{ . }}
             {{- end }}
+
+          # RKE SETUP
+          cloudinit: false
+          update_os: true
+          template_creation_setup: true
 
           netconfig: |
             # This is the network config written by 'subiquity'
@@ -58,6 +64,9 @@ configmaps:
 
           - role: install-requirements
             when: install_requirements|bool
+
+          - role: configure-rke-node
+            when: configure_rke_node|bool
 
         tasks:
           - name: Install vault ca certificate to local system from multiple instances

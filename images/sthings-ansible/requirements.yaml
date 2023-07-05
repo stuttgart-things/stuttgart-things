@@ -3,7 +3,7 @@ collections:
   - name: community.crypto
     version: 2.14.0
   - name: community.general
-    version: 7.0.1
+    version: 7.1.0
   - name: ansible.posix
     version: 1.5.2
   - name: kubernetes.core
@@ -13,8 +13,6 @@ roles:
 # LEGACY
   - src: https://artifacts.tiab.labda.sva.de/roles/install-upgrade-rke.tar.gz
     name: install-upgrade-rke
-  - src: https://artifacts.tiab.labda.sva.de/roles/prepare-rancher-node.tar.gz
-    name: prepare-rancher-node
   - src: https://artifacts.tiab.labda.sva.de/roles/download-install-binary.tar.gz
     name: download-install-binary
   - src: https://artifacts.tiab.labda.sva.de/roles/install-configure-vault.tar.gz
@@ -36,4 +34,6 @@ roles:
   - src: https://github.com/stuttgart-things/create-send-webhook.git
     scm: git
   - src: https://github.com/stuttgart-things/install-configure-nfs.git
+    scm: git
+  - src: https://github.com/stuttgart-things/install-configure-docker.git
     scm: git
