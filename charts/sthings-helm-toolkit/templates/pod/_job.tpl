@@ -25,6 +25,10 @@ metadata:
   labels:
     {{- toYaml $job.labels | nindent 4  }}{{- end }}
 spec:
+  backoffLimit: {{ $job.backoffLimit | default 5 }}
+  completionMode: {{ $job.completionMode | default "NonIndexed" }}
+  completions: {{ $job.completions | default 1 }}
+  parallelism: {{ $job.parallelism | default 1 }}
   template:
     metadata:
       name: {{ $job.name }}
@@ -125,7 +129,7 @@ spec:
               {{- end }}
           {{- end }}{{- end }}
       {{- end }}
-      restartPolicy: {{ $job.restartPolicy }}
+      restartPolicy: {{ $job.restartPolicy | default "restartPolicy" }}
       {{- if $job.volumes }}
       volumes:
       {{- range $k, $v := $job.volumes }}

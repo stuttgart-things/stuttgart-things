@@ -3,7 +3,7 @@ releases:
   - name: rocky9
     namespace: machine-shop-packer
     chart: stuttgart-things/sthings-cluster
-    version: 0.3.7
+    version: 0.3.9
     installed: true
     values:
       - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
@@ -11,7 +11,7 @@ releases:
   - name: ubuntu23
     namespace: machine-shop-packer
     chart: stuttgart-things/sthings-cluster
-    version: 0.3.7
+    version: 0.3.9
     installed: false
     values:
       - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
@@ -19,7 +19,7 @@ releases:
   - name: ansible
     namespace: machine-shop-packer
     chart: stuttgart-things/sthings-cluster
-    version: 0.3.7
+    version: 0.3.9
     installed: true
     values:
       - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
@@ -28,7 +28,7 @@ releases:
     namespace: machine-shop-packer
     chart: stuttgart-things/sthings-cluster
     force: true
-    version: 0.3.7
+    version: 0.3.9
     installed: true
     values:
       - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
@@ -36,7 +36,7 @@ releases:
   - name: job
     namespace: machine-shop-packer
     chart: stuttgart-things/sthings-cluster
-    version: 0.3.7
+    version: 0.3.9
     installed: true
     values:
       - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"

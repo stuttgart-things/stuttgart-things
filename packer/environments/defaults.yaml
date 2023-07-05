@@ -2,11 +2,14 @@
 # PACKER JOB SETTINGS
 packerImage: eu.gcr.io/stuttgart-things/sthings-packer
 packerImageTag: 1.9.1-8.1.0
-
+templateCreator: Patrick Hermann (patrick.hermann@sva.de)\n/Christian Mueller (christian.mueller@sva.de)\n
 cpu: 8
 ram: 8192
 
-ip_wait_timeout: 40m
+ipWaitTimeout: 40m
+sshTimeout: 40m
+sshHandshakeAttempts: 900
+bootWait: 5s
 
 rocky9IsoUrl: https://download.rockylinux.org/pub/rocky/9/isos/x86_64/Rocky-9.2-x86_64-boot.iso
 rocky9IsoChecksum: sha256:11e42da96a7b336de04e60d05e54a22999c4d7f3e92c19ebf31f9c71298f5b42
@@ -17,7 +20,7 @@ ubuntu23IsoChecksum: sha256:c7cda48494a6d7d9665964388a3fc9c824b3bef0c9ea3818a1be
 ansibleUser: sthings
 ansiblePlayMountPath: /home/nonroot/ansible
 packerConfigMountPath: /home/nonroot/packer
-rkeTemplateSetup: true
+rkeTemplateSetup: false
 
 osPrerequisites:
   - python3-pip

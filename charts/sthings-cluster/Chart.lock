@@ -1,6 +1,6 @@
 dependencies:
 - name: sthings-helm-toolkit
   repository: oci://eu.gcr.io/stuttgart-things
-  version: 2.4.47
-digest: sha256:173ad2dc273a65629423cbe45585dc0bce8989fc64fa075fefd8c27a70c1fa75
-generated: "2023-06-16T07:15:08.060766069Z"
+  version: 2.4.48
+digest: sha256:66357dfb2be1c67b26c73a8c405f3bf9125f125ed75c7bd6f725aacefdb6da0d
+generated: "2023-07-05T09:58:52.577338243Z"
