@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: tekton-data-explorer
+  namespace: {{ .Release.Namespace }}
+spec:
+  volumes:
+    - name: tekton-data-explorer
+      persistentVolumeClaim:
+        claimName: {{ .Values.testWorkspaceName }}
+  containers:
+    - name: tekton-data-explorer
+      image: {{ .Values.testWorkspaceImage }}
+      volumeMounts:
+        - mountPath: /workspace
+          name: tekton-data-explorer

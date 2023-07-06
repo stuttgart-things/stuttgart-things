@@ -18,7 +18,7 @@ releases:
 
   - name: package-publish-helmchart
     installed: true
-    namespace: machine-shop 
+    namespace: machine-shop
     chart: stuttgart-things/yacht-tekton-resources
     version: v0.47.10
     values:
@@ -40,6 +40,7 @@ repositories:
 environments:
   labda-vsphere:
     values:
+      - environments/defaults.yaml
       - environments/{{ .Environment.Name }}.yaml
 
 helmDefaults:

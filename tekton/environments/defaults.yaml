@@ -1,0 +1,3 @@
+---
+testWorkspaceName: kaniko-tekton-workspace
+testWorkspaceImage: nginx
