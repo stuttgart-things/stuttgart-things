@@ -22,6 +22,13 @@ spec:
       source:
         repoURL: '{{ repoURL }}'
         path: '{{ path }}'
+        helm:
+          values: |
+            tektonResources:
+              enabled: true
+          parameters:
+            - name: yacht-tekton-resources.runs.buildHelmChart.name
+              value: $ARGOCD_APP_REVISION
       destination:
         name: '{{ destination }}'
         namespace: '{{ namespace }}'
