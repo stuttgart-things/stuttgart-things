@@ -46,14 +46,15 @@ metadata:
   namespace: argocd
 spec:
   generators:
-  - list:
-      elements:
-        - app: machine-shop-operator
-          kind: repository
-          destination: app
-          namespace: argocd
-          repoURL: https://github.com/stuttgart-things/machine-shop-operator.git
-          targetRevision: ANSIBLE-CR
+    - list:
+        elements:
+          - app: machine-shop-operator
+            kind: repository
+            destination: app
+            path: argocd
+            namespace: argocd
+            repoURL: https://github.com/stuttgart-things/machine-shop-operator.git
+            targetRevision: ANSIBLE-CR
   template:
     metadata:
       name: '{{ app }}-{{ kind }}-{{ destination }}'
