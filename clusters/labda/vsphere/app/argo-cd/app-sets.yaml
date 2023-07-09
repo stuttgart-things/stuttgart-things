@@ -5,9 +5,10 @@ metadata:
   name: tekton-builds
   namespace: argocd
 spec:
+  generators:
   - list:
       elements:
-      - app: sweatShop-creator
+      - app: sweatshop-creator
         destination: dev11
         kind: tekton
         namespace: tekton-cd
@@ -20,12 +21,12 @@ spec:
     spec:
       project: app
       source:
-        repoURL: {{ repoURL }}
+        repoURL: '{{ repoURL }}'
         targetRevision: HEAD
         path: '{{ path }}'
       destination:
-        name: {{ destination }}
-        namespace: {{ namespace }}
+        name: '{{ destination }}'
+        namespace: '{{ namespace }}'
       syncPolicy:
         syncOptions:
         - CreateNamespace=true
