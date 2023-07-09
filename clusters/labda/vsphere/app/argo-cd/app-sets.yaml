@@ -38,3 +38,35 @@ spec:
         automated:
           prune: true
           selfHeal: false
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: microservice-repositories
+  namespace: argocd
+spec:
+  generators:
+  - list:
+      elements:
+        - app: machine-shop-operator
+          kind: repository
+          destination: app
+          namespace: argocd
+          repoURL: https://github.com/stuttgart-things/machine-shop-operator.git
+          targetRevision: ANSIBLE-CR
+  template:
+    metadata:
+      name: '{{ app }}-{{ kind }}-{{ destination }}'
+    spec:
+      project: app
+      source:
+        repoURL: '{{ repoURL }}'
+        path: '{{ path }}'
+        targetRevision: '{{ targetRevision }}'
+      destination:
+        name: '{{ destination }}'
+        namespace: '{{ namespace }}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: false
