@@ -70,7 +70,6 @@ spec:
   dependsOn:
     - name: ingress-nginx
     - name: cert-manager
-    - name: longhorn
     - name: trident
   interval: 1h
   retryInterval: 1m

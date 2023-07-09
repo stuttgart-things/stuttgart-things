@@ -1,32 +1,32 @@
 ---
-apiVersion: argoproj.io/v1alpha1
-kind: ApplicationSet
-metadata:
-  name: tekton-builds
-  namespace: argocd
-spec:
-  generators:
-  - list:
-      elements:
-      - app: sweatshop-creator
-        destination: dev11
-        kind: tekton
-        namespace: tekton-cd
-        revision: main
-        path: tkn
-        repoURL: https://github.com/stuttgart-things/sweatShop-creator.git
-  template:
-    metadata:
-      name: '{{ app }}-{{ kind }}-{{ destination }}'
-    spec:
-      project: app
-      source:
-        repoURL: '{{ repoURL }}'
-        targetRevision: HEAD
-        path: '{{ path }}'
-      destination:
-        name: '{{ destination }}'
-        namespace: '{{ namespace }}'
-      syncPolicy:
-        syncOptions:
-        - CreateNamespace=true
+# apiVersion: argoproj.io/v1alpha1
+# kind: ApplicationSet
+# metadata:
+#   name: tekton-builds
+#   namespace: argocd
+# spec:
+#   generators:
+#   - list:
+#       elements:
+#       - app: sweatshop-creator
+#         destination: dev11
+#         kind: tekton
+#         namespace: tekton-cd
+#         revision: main
+#         path: tkn
+#         repoURL: https://github.com/stuttgart-things/sweatShop-creator.git
+#   template:
+#     metadata:
+#       name: '{{ app }}-{{ kind }}-{{ destination }}'
+#     spec:
+#       project: app
+#       source:
+#         repoURL: '{{ repoURL }}'
+#         targetRevision: HEAD
+#         path: '{{ path }}'
+#       destination:
+#         name: '{{ destination }}'
+#         namespace: '{{ namespace }}'
+#       syncPolicy:
+#         syncOptions:
+#         - CreateNamespace=true
