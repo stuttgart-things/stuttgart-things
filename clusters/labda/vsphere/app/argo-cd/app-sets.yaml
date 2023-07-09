@@ -29,7 +29,7 @@ spec:
           parameters:
             - name: yacht-tekton-resources.runs.buildHelmChart.name
               value: sws-creator-helm-${ARGOCD_APP_REVISION}
-            - name: yacht-tekton-resources.runs.buildHelmChart.params."helm-chart-tag"
+            - name: 'yacht-tekton-resources.runs.buildHelmChart.params."helm-chart-tag"'
               value: ${ARGOCD_APP_SOURCE_TARGET_REVISION}
       destination:
         name: '{{ destination }}'
