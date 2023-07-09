@@ -26,14 +26,10 @@ spec:
           values: |
             tektonResources:
               enabled: true
-            yacht-tekton-resources:
-              runs:
-                buildHelmChart:
-                  params:
-                    helm-chart-tag: ${ARGOCD_APP_SOURCE_TARGET_REVISION}
           parameters:
             - name: yacht-tekton-resources.runs.buildHelmChart.name
-              value: sws-creator-helm-${ARGOCD_APP_REVISION}
+              value: sws-creator-helm-${ARGOCD_APP_SOURCE_TARGET_REVISION}
+              # ${ARGOCD_APP_REVISION}
       destination:
         name: '{{ destination }}'
         namespace: '{{ namespace }}'
