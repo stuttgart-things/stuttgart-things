@@ -30,3 +30,43 @@ spec:
       syncPolicy:
         syncOptions:
         - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: pet2cattle-versions
+  namespace: argocd
+spec:
+  generators:
+  - list:
+      elements:
+      - target: 1.0.0
+        instance: v1
+      - target: 2.0.0
+        instance: v2
+  template:
+    metadata:
+      name: pet2cattle-{{ instance }}
+    spec:
+      project: default
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+      source:
+        repoURL: ssh://git@github.com:jordiprats/helm-pet2cattle.git
+        path: .
+        targetRevision: "{{ target }}"
+        helm:
+          values: |
+            ingress:
+              hosts:
+                - "{{ instance }}.pet2cattle.com
+          parameters:
+          - name: image.tag
+            value: $ARGOCD_APP_REVISION
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: pet2cattle
