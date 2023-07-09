@@ -1,26 +1,29 @@
+---
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: cluster-addons
+  name: tekton-builds
   namespace: argocd
 spec:
-  generators:
-  - git:
-      repoURL: https://github.com/argoproj/argo-cd.git
-      revision: HEAD
-      directories:
-      - path: applicationset/examples/git-generator-directory/cluster-addons/*
+  - list:
+      elements:
+      - app: sweatShop-creator
+        destination: dev11
+        kind: tekton
+        revision: main
+        path: tkn
+        repoURL: https://github.com/stuttgart-things/sweatShop-creator.git
   template:
     metadata:
-      name: '{{path.basename}}'
+      name: '{{ app }}-{{ kind }}-{{ destination }}'
     spec:
       project: app
       source:
-        repoURL: https://github.com/argoproj/argo-cd.git
+        repoURL: {{ repoURL }}
         targetRevision: HEAD
-        path: '{{path}}'
+        path: '{{ path }}'
       destination:
-        name: dev11
+        name: {{ destination }}
         namespace: '{{path.basename}}'
       syncPolicy:
         syncOptions:
