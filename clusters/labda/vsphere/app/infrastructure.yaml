@@ -47,7 +47,7 @@ spec:
   timeout: 5m
   sourceRef:
     kind: GitRepository
-    name: infra-june-2023
+    name: flux-system
   path: ./infra/longhorn
   prune: true
   wait: true
