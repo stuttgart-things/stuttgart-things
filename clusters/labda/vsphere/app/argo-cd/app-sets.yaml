@@ -10,6 +10,7 @@ spec:
       - app: sweatShop-creator
         destination: dev11
         kind: tekton
+        namespace: tekton-cd
         revision: main
         path: tkn
         repoURL: https://github.com/stuttgart-things/sweatShop-creator.git
@@ -24,7 +25,7 @@ spec:
         path: '{{ path }}'
       destination:
         name: {{ destination }}
-        namespace: '{{path.basename}}'
+        namespace: {{ namespace }}
       syncPolicy:
         syncOptions:
         - CreateNamespace=true
