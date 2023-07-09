@@ -34,19 +34,18 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: pet2cattle-versions
+  name: sweatshop-creator-tkn-test
   namespace: argocd
 spec:
   generators:
   - list:
       elements:
-      - target: 1.0.0
-        instance: v1
-      - target: 2.0.0
-        instance: v2
+      - name: helm
+        destination: dev11
+        namespace: tekton-cd
   template:
     metadata:
-      name: pet2cattle-{{ instance }}
+      name: sweatshop-creator-tkn-{{ name }}
     spec:
       project: default
       syncPolicy:
@@ -56,17 +55,13 @@ spec:
         syncOptions:
           - CreateNamespace=true
       source:
-        repoURL: ssh://git@github.com:jordiprats/helm-pet2cattle.git
-        path: .
-        targetRevision: "{{ target }}"
+        repoURL: https://github.com/stuttgart-things/sweatShop-creator.git
+        path: helm/sweatshop-creator
         helm:
-          values: |
-            ingress:
-              hosts:
-                - "{{ instance }}.pet2cattle.com
+          # values: |
           parameters:
           - name: image.tag
             value: $ARGOCD_APP_REVISION
       destination:
-        server: https://kubernetes.default.svc
-        namespace: pet2cattle
+        name: '{{ destination }}'
+        namespace: '{{ namespace }}'
