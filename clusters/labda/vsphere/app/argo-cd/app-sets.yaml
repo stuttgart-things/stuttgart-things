@@ -54,14 +54,37 @@ spec:
   generators:
   - list:
       elements:
+        - app: sweatshop-redis
+          destination: dev11
+          kind: deployment
+          namespace: sweatshop-redis
+          repoURL: https://charts.bitnami.com/bitnami
+          chart: redis
+          path: 17.11.6
+          appValues: |
+            sentinel:
+              enabled: true
+            master:
+              service:
+                type: ClusterIP
+              persistence:
+                enabled: false
+                medium: ""
+            replica:
+              replicaCount: 1
+              persistence:
+                enabled: false
+                medium: ""
+            auth:
+              password: <path:apps/data/sweatshop#redisPassword>
         - app: sweatshop-creator
           destination: dev11
           kind: deployment
-          namespace: tekton-cd
+          namespace: sweatshop
           path: helm/sweatshop-creator
           repoURL: https://github.com/stuttgart-things/sweatShop-creator.git
           appValues: |
-            namespace: sweatshop
+            namespace: {{ namespace }}
             redis:
               enabled: false
             configmaps:
@@ -75,11 +98,11 @@ spec:
             clusterRoleBindings:
               sweatshop-creator:
                 subjects[0]:
-                  namespace: sweatshop
+                  namespace: {{ namespace }}
             roleBindings:
               sweatshop-creator:
                 subjects[0]:
-                  namespace: sweatshop
+                  namespace: {{ namespace }}
   template:
     metadata:
       name: '{{ app }}-{{ kind }}-{{ destination }}'
