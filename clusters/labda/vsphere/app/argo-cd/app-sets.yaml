@@ -48,7 +48,62 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: microservice-repositories
+  name: sweatshop-dev-deployments
+  namespace: argocd
+spec:
+  generators:
+  - list:
+      elements:
+        - app: sweatshop-creator
+          destination: dev11
+          kind: deployment
+          namespace: tekton-cd
+          path: helm/sweatshop-creator
+          repoURL: https://github.com/stuttgart-things/sweatShop-creator.git
+          values: |
+            namespace: sweatshop-dev
+            redis:
+              enabled: false
+            configmaps:
+              creator:
+                TEMPLATE_PATH: /templates
+                TEMPLATE_NAME: ansible-job.yaml.gotmpl
+                REDIS_STREAM: sweatshop:manifests
+                REDIS_SERVER: redis-sweatshop-deployment-headless.sweatshop-redis.svc.cluster.local
+                REDIS_PORT: "6379"
+                REDIS_PASSWORD: <path:apps/data/sweatshop#redisPassword>
+            clusterRoleBindings:
+              sweatshop-creator:
+                subjects[0]:
+                  namespace: sweatshop-dev
+            roleBindings:
+              sweatshop-creator:
+                subjects[0]:
+                  namespace: sweatshop-dev
+  template:
+    metadata:
+      name: '{{ app }}-{{ kind }}-{{ destination }}'
+    spec:
+      project: app
+      source:
+        repoURL: '{{ repoURL }}'
+        path: '{{ path }}'
+        helm:
+          values: '{{ values }}'
+      destination:
+        name: '{{ destination }}'
+        namespace: '{{ namespace }}'
+      syncPolicy:
+        syncOptions:
+        - CreateNamespace=true
+        automated:
+          prune: true
+          selfHeal: false
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: dev-deployments
   namespace: argocd
 spec:
   generators:
