@@ -48,6 +48,63 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
+  name: sweatshop-dev-requirements
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - app: sweatshop-redis
+            destination: dev11
+            kind: deployment
+            namespace: sweatshop-redis
+            repoURL: https://charts.bitnami.com/bitnami
+            chart: redis
+            version: 17.11.6
+            appValues: |
+              sentinel:
+                enabled: true
+              master:
+                service:
+                  type: ClusterIP
+                persistence:
+                  enabled: false
+                  medium: ""
+              replica:
+                replicaCount: 1
+                persistence:
+                  enabled: false
+                  medium: ""
+              auth:
+                password: <path:apps/data/sweatshop#redisPassword>
+  template:
+    metadata:
+      name: '{{ app }}-{{ kind }}-{{ destination }}'
+    spec:
+      project: app
+      source:
+        repoURL: '{{ repoURL }}'
+        version: '{{ version }}'
+        plugin:
+          name: argocd-vault-plugin-helm
+          env:
+            - name: HELM_VALUES
+              value: |
+                {{ appValues }}
+      destination:
+        name: '{{ destination }}'
+        namespace: '{{ namespace }}'
+      syncPolicy:
+        syncOptions:
+        - CreateNamespace=true
+        automated:
+          prune: true
+          selfHeal: false
+---
+
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
   name: sweatshop-dev-deployments
   namespace: argocd
 spec:
