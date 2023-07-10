@@ -69,5 +69,5 @@ spec:
         namespace: '{{ namespace }}'
       syncPolicy:
         automated:
-          prune: true
+          prune: false
           selfHeal: false
