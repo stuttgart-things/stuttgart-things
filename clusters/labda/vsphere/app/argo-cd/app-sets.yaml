@@ -14,6 +14,12 @@ spec:
           namespace: tekton-cd
           path: helm/sweatshop-creator
           repoURL: https://github.com/stuttgart-things/sweatShop-creator.git
+        - app: sweatshop-informer
+          destination: dev11
+          kind: tekton
+          namespace: tekton-cd
+          path: helm/sweatshop-informer
+          repoURL: https://github.com/stuttgart-things/sweatShop-informer.git
   template:
     metadata:
       name: '{{ app }}-{{ kind }}-{{ destination }}'
@@ -27,8 +33,8 @@ spec:
             tektonResources:
               enabled: true
           parameters:
-            - name: yacht-tekton-resources.runs.buildHelmChart.name
-              value: sws-creator-helm-${ARGOCD_APP_REVISION}
+            - name: tekton-resources.runs.buildHelmChart.name
+              value: ${ARGOCD_APP_NAME}-helm-${ARGOCD_APP_REVISION}
       destination:
         name: '{{ destination }}'
         namespace: '{{ namespace }}'
