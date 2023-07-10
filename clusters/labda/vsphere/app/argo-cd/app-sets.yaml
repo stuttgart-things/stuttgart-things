@@ -89,7 +89,8 @@ spec:
         repoURL: '{{ repoURL }}'
         path: '{{ path }}'
         helm:
-          values: '{{ values }}'
+          values: |
+            {{ values }}
       destination:
         name: '{{ destination }}'
         namespace: '{{ namespace }}'
