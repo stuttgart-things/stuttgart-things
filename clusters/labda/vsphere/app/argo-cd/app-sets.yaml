@@ -98,7 +98,7 @@ spec:
         syncOptions:
         - CreateNamespace=true
         automated:
-          prune: true
+          prune: false
           selfHeal: false
 ---
 apiVersion: argoproj.io/v1alpha1
