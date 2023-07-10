@@ -34,7 +34,7 @@ spec:
               enabled: true
           parameters:
             - name: tekton-resources.runs.buildHelmChart.name
-              value: ${ARGOCD_APP_NAME}-helm-${ARGOCD_APP_REVISION}
+              value: '{{ app }}-${ARGOCD_APP_REVISION}'
       destination:
         name: '{{ destination }}'
         namespace: '{{ namespace }}'
