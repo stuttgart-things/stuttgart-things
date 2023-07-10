@@ -60,7 +60,7 @@ spec:
           namespace: sweatshop-redis
           repoURL: https://charts.bitnami.com/bitnami
           chart: redis
-          path: 17.11.6
+          version: 17.11.6
           appValues: |
             sentinel:
               enabled: true
@@ -110,7 +110,11 @@ spec:
       project: app
       source:
         repoURL: '{{ repoURL }}'
+        {{- if version }}
+        version: '{{ version }}'
+        {{- else }}
         path: '{{ path }}'
+        {{- end }}
         plugin:
           name: argocd-vault-plugin-helm
           env:
