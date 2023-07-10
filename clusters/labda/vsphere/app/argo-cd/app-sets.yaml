@@ -8,12 +8,12 @@ spec:
   generators:
   - list:
       elements:
-      - app: sweatshop-creator
-        destination: dev11
-        kind: tekton
-        namespace: tekton-cd
-        path: helm/sweatshop-creator
-        repoURL: https://github.com/stuttgart-things/sweatShop-creator.git
+        - app: sweatshop-creator
+          destination: dev11
+          kind: tekton
+          namespace: tekton-cd
+          path: helm/sweatshop-creator
+          repoURL: https://github.com/stuttgart-things/sweatShop-creator.git
   template:
     metadata:
       name: '{{ app }}-{{ kind }}-{{ destination }}'
@@ -55,6 +55,13 @@ spec:
             namespace: argocd
             repoURL: https://github.com/stuttgart-things/machine-shop-operator.git
             targetRevision: ANSIBLE-CR
+          - app: sweatshop-creator
+            kind: repository
+            destination: app
+            path: argocd
+            namespace: argocd
+            repoURL: https://github.com/stuttgart-things/sweatshop-creator.git
+            targetRevision: main
   template:
     metadata:
       name: '{{ app }}-{{ kind }}-{{ destination }}'
