@@ -62,6 +62,13 @@ spec:
             namespace: argocd
             repoURL: https://github.com/stuttgart-things/sweatshop-creator.git
             targetRevision: main
+          - app: sweatshop-informer
+            kind: repository
+            destination: app
+            path: argocd
+            namespace: argocd
+            repoURL: https://github.com/stuttgart-things/sweatshop-informer.git
+            targetRevision: main
   template:
     metadata:
       name: '{{ app }}-{{ kind }}-{{ destination }}'
