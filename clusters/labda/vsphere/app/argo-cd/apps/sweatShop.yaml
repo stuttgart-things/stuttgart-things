@@ -27,7 +27,7 @@ spec:
         - app: machineshop-operator
           repoURL: https://github.com/stuttgart-things/machine-shop-operator.git
           targetRevision: ANSIBLE-CR
-          appShort: ms-o
+          appShort: mso
           destination: dev11
           kind: tekton
           namespace: tekton-cd
