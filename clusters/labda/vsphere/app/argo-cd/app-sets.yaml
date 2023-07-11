@@ -84,6 +84,7 @@ spec:
       project: app
       source:
         repoURL: '{{ repoURL }}'
+        chart: '{{ chart }}'
         targetRevision: '{{ version }}'
         plugin:
           name: argocd-vault-plugin-helm
