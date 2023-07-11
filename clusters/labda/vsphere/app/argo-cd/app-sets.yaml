@@ -137,6 +137,31 @@ spec:
               sweatshop-creator:
                 subjects[0]:
                   namespace: sweatshop
+        - app: sweatshop-informer
+          destination: dev11
+          kind: deployment
+          namespace: sweatshop
+          path: helm/sweatshop-informer
+          repoURL: https://github.com/stuttgart-things/sweatShop-informer.git
+          appValues: |
+            namespace: sweatshop
+            redis:
+              enabled: false
+            configmaps:
+              informer:
+                INFORMING_NAMESPACE: machine-shop-packer
+                INFORMING_KINDS: jobs
+                REDIS_SERVER: redis-sweatshop-deployment-headless.sweatshop-redis.svc.cluster.local
+                REDIS_PORT: "6379"
+                REDIS_PASSWORD: <path:apps/data/sweatshop#redisPassword>
+            clusterRoleBindings:
+              sweatshop-informer:
+                subjects[0]:
+                  namespace: sweatshop
+            roleBindings:
+              sweatshop-informer:
+                subjects[0]:
+                  namespace: sweatshop
   template:
     metadata:
       name: '{{ app }}-{{ kind }}-{{ destination }}'
