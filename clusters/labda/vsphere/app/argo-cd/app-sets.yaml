@@ -60,7 +60,7 @@ spec:
             namespace: sweatshop-redis
             repoURL: https://charts.bitnami.com/bitnami
             chart: redis
-            version: 17.11.6
+            targetRevision: 17.11.6
             appValues: |
               sentinel:
                 enabled: true
@@ -85,7 +85,7 @@ spec:
       source:
         repoURL: '{{ repoURL }}'
         chart: '{{ chart }}'
-        targetRevision: '{{ version }}'
+        targetRevision: '{{ targetRevision }}'
         plugin:
           name: argocd-vault-plugin-helm
           env:
@@ -117,6 +117,7 @@ spec:
           namespace: sweatshop
           path: helm/sweatshop-creator
           repoURL: https://github.com/stuttgart-things/sweatShop-creator.git
+          targetRevision: main
           appValues: |
             namespace: sweatshop
             redis:
@@ -143,6 +144,7 @@ spec:
           namespace: sweatshop
           path: helm/sweatshop-informer
           repoURL: https://github.com/stuttgart-things/sweatShop-informer.git
+          targetRevision: main
           appValues: |
             namespace: sweatshop
             redis:
@@ -170,6 +172,7 @@ spec:
       source:
         repoURL: '{{ repoURL }}'
         path: '{{ path }}'
+        targetRevision: '{{ targetRevision }}'
         plugin:
           name: argocd-vault-plugin-helm
           env:
@@ -200,6 +203,7 @@ spec:
           kind: deployment
           namespace: machine-shop-operator-system
           path: helm/machine-shop-operator
+          targetRevision: ANSIBLE-CR
           repoURL: https://github.com/stuttgart-things/machine-shop-operator.git
           appValues: |
             secrets:
@@ -231,6 +235,7 @@ spec:
       source:
         repoURL: '{{ repoURL }}'
         path: '{{ path }}'
+        targetRevision: '{{ targetRevision }}'
         plugin:
           name: argocd-vault-plugin-helm
           env:
