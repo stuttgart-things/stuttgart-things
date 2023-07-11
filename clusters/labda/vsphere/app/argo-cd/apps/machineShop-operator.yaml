@@ -71,7 +71,7 @@ spec:
   generators:
   - list:
       elements:
-      - app: sweatshop-creator
+      - app: machineshop-operator
         destination: dev11
         kind: crs
         namespace: machine-shop-operator-system
