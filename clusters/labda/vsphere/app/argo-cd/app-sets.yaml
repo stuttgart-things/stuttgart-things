@@ -118,7 +118,7 @@ spec:
           path: helm/sweatshop-creator
           repoURL: https://github.com/stuttgart-things/sweatShop-creator.git
           appValues: |
-            namespace: {{ namespace }}
+            namespace: sweatshop
             redis:
               enabled: false
             configmaps:
@@ -132,11 +132,11 @@ spec:
             clusterRoleBindings:
               sweatshop-creator:
                 subjects[0]:
-                  namespace: {{ namespace }}
+                  namespace: sweatshop
             roleBindings:
               sweatshop-creator:
                 subjects[0]:
-                  namespace: {{ namespace }}
+                  namespace: sweatshop
   template:
     metadata:
       name: '{{ app }}-{{ kind }}-{{ destination }}'
