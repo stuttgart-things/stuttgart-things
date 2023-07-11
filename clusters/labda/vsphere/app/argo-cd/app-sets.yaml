@@ -186,6 +186,67 @@ spec:
           prune: true
           selfHeal: false
 ---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: machineshop-operator-dev-deployments
+  namespace: argocd
+spec:
+  generators:
+  - list:
+      elements:
+        - app: machineshop-operator
+          destination: dev11
+          kind: deployment
+          namespace: machine-shop-operator-system
+          path: helm/machine-shop-operator
+          repoURL: https://github.com/stuttgart-things/machine-shop-operator.git
+          appValues: |
+            secrets:
+              redis:
+                name: redis
+                namespace: machine-shop-operator-system
+                secretKVs:
+                  REDIS_PASSWORD: <path:apps/data/sweatshop#redisPassword>
+              vault:
+                name: vault
+                namespace: machine-shop-operator-system
+                secretKVs:
+                  VAULT_ADDR: <path:apps/data/vault#addr>
+                  VAULT_ROLE_ID: <path:apps/data/vault#roleID>
+                  VAULT_SECRET_ID: <path:apps/data/vault#secretID>
+                  VAULT_NAMESPACE: <path:apps/data/vault#namespace>
+            configmaps:
+              redis-connection:
+                REDIS_SERVER: redis-sweatshop-deployment-headless.sweatshop-redis.svc.cluster.local
+                REDIS_PORT: "6379"
+              environment:
+                ENABLE_WEBHOOK: "yes"
+                WEBHOOK_URL: "https://365sva.webhook.office.com/webhookb2/2f14a9f8-4736-46dd-9c8c-31547ec37180@0a65cb1e-37d5-41ff-980a-647d9d0e4f0b/IncomingWebhook/a993544595464ce6af4f2f0461d55a17/dc3a27ed-396c-40b7-a9b2-f1a2b6b44efe"
+  template:
+    metadata:
+      name: '{{ app }}-{{ kind }}-{{ destination }}'
+    spec:
+      project: app
+      source:
+        repoURL: '{{ repoURL }}'
+        path: '{{ path }}'
+        plugin:
+          name: argocd-vault-plugin-helm
+          env:
+            - name: HELM_VALUES
+              value: |
+                {{ appValues }}
+      destination:
+        name: '{{ destination }}'
+        namespace: '{{ namespace }}'
+      syncPolicy:
+        syncOptions:
+        - CreateNamespace=true
+        automated:
+          prune: true
+          selfHeal: false
+---
 # apiVersion: argoproj.io/v1alpha1
 # kind: ApplicationSet
 # metadata:
