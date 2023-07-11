@@ -24,6 +24,14 @@ spec:
           kind: tekton
           namespace: tekton-cd
           path: helm/sweatshop-informer
+        - app: machineshop-operator
+          repoURL: https://github.com/stuttgart-things/machine-shop-operator.git
+          targetRevision: ANSIBLE-CR
+          appShort: ms-o
+          destination: dev11
+          kind: tekton
+          namespace: tekton-cd
+          path: helm/machine-shop-operator
   template:
     metadata:
       name: '{{ app }}-{{ kind }}-{{ destination }}'
