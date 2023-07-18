@@ -31,6 +31,12 @@ pipelines:
         description: path to context
       dockerfile:
         description: path to dockerfile
+      buildahImage:
+        description: buildah image
+        default: "quay.io/buildah/stable:v1.23.3"
+      tlsVerify:
+        description: buildah image
+        default: "true"
     tasks:
       fetch-repository:
         task: git-clone
@@ -66,13 +72,17 @@ pipelines:
             value: $(params.context)
           DOCKERFILE:
             value: $(params.dockerfile)
+          BUILDER_IMAGE:
+            value: $(params.buildahImage)
+          TLSVERIFY:
+            value: $(params.tlsVerify)
       send-msteams-notification:
         task: send-msteams-notification
         runAfter:
           - buildah
         params:
           message:
-            value: "image $(params.image):$(params.tag) build & pushed successfully w/ buildah ($(tasks.buildah.results.IMAGE_DIGEST))"
+            value: "image $(params.image) build & pushed successfully w/ buildah ($(tasks.buildah.results.IMAGE_DIGEST))"
           webhook-url-secret:
             value: msteams
           webhook-url-secret-key:
@@ -82,7 +92,7 @@ pipelines:
         task: send-msteams-notification
         params:
           message:
-            value: "buildah image build for $(params.image):$(params.tag) failed!!"
+            value: "buildah image build for $(params.image) failed!!"
           webhook-url-secret:
             value: msteams
           webhook-url-secret-key:

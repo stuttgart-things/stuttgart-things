@@ -14,3 +14,8 @@ kanikoWorkspaceName: kaniko-workspace
 kanikoWorkspaceStorage: 10Gi
 kanikoWorkspaceAccessMode: ReadWriteOnce
 kanikoTestRunImage: sthings-ansible
+
+buildahWorkspaceName: kaniko-workspace
+buildahWorkspaceStorage: 10Gi
+buildahWorkspaceAccessMode: ReadWriteOnce
+buildahTestRunImage: sthings-ansible
