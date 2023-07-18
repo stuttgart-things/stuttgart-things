@@ -1,0 +1,79 @@
+tasks:
+  buildah:
+    namespace: {{ .Release.Namespace }}
+    labels:
+      app.kubernetes.io/version: "0.5"
+    annotations:
+      tekton.dev/categories: Image Build
+      tekton.dev/pipelines.minVersion: "0.17.0"
+      tekton.dev/tags: image-build
+      tekton.dev/platforms: "linux/amd64,linux/s390x,linux/ppc64le,linux/arm64"
+    description: buildah task builds source into a container image and then pushes it to a container registry
+    workspaces:
+      source:
+        description: holds the context and Dockerfile
+        optional: false
+      sslcertdir:
+        description: CA certificates have their own directory
+        optional: true
+      dockerconfig:
+        description: includes a docker `config.json`
+        optional: true
+        mountPath: /kaniko/.docker
+    results:
+      IMAGE_DIGEST:
+        description: digest of the image just built
+      IMAGE_URL:
+        description: url of the image just built.
+    params:
+      IMAGE:
+        description: name (reference) of the image to build
+      BUILDER_IMAGE:
+        description: the image on which builds will run (default is v1.5.1)
+        default: quay.io/buildah/stable:v1.23.3
+      STORAGE_DRIVER:
+        description: buildah storage driver
+        default: overlay
+      DOCKERFILE:
+        description: Path to the Dockerfile to build
+        default: ./Dockerfile
+      CONTEXT:
+        description: the build context used by Kaniko
+        default: ./
+      TLSVERIFY:
+        description: verify the TLS on the registry endpoint (for push/pull to a non-TLS registry)
+        default: "true"
+      FORMAT:
+        description: format of the built container, oci or docker
+        default: "oci"
+      BUILD_EXTRA_ARGS:
+        description: format of the built container, oci or docker
+        default: "oci"
+      PUSH_EXTRA_ARGS:
+        description: extra parameters passed for the push command when pushing images.
+        default: ""
+      SKIP_PUSH:
+        description: skip pushing the built image
+        default: "false"
+      SUBDIRECTORY:
+        description: subdirectory of workspace
+        default: ""
+    steps:
+      build:
+        workingDir: $(workspaces.source.path)/$(params.SUBDIRECTORY)
+        image: $(params.BUILDER_IMAGE)
+        script: |
+          set -e
+          [[ "$(workspaces.sslcertdir.bound)" == "true" ]] && CERT_DIR_FLAG="--cert-dir $(workspaces.sslcertdir.path)"
+          [[ "$(workspaces.dockerconfig.bound)" == "true" ]] && export DOCKER_CONFIG="$(workspaces.dockerconfig.path)"
+          buildah ${CERT_DIR_FLAG} --storage-driver=$(params.STORAGE_DRIVER) bud \
+            $(params.BUILD_EXTRA_ARGS) --format=$(params.FORMAT) \
+            --tls-verify=$(params.TLSVERIFY) --no-cache \
+            -f $(params.DOCKERFILE) -t $(params.IMAGE) $(params.CONTEXT)
+          [[ "$(params.SKIP_PUSH)" == "true" ]] && echo "Push skipped" && exit 0
+          buildah ${CERT_DIR_FLAG} --storage-driver=$(params.STORAGE_DRIVER) push \
+            $(params.PUSH_EXTRA_ARGS) --tls-verify=$(params.TLSVERIFY) \
+            --digestfile /tmp/image-digest $(params.IMAGE) \
+            docker://$(params.IMAGE)
+          cat /tmp/image-digest | tee $(results.IMAGE_DIGEST.path)
+          echo -n "$(params.IMAGE)" | tee $(results.IMAGE_URL.path)

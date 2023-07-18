@@ -1,0 +1,93 @@
+---
+enableWorkspaces: true
+enableGitSecretsSSH: true
+enableSecrets: true
+enableRegistryCredentials: true
+enablePipelines: true
+enableTasks: true
+enableRuns: true
+
+pipelines:
+  build-buildah-image:
+    namespace: {{ .Release.Namespace }}
+    workspaces:
+      - shared-workspace
+      - ssh-credentials
+      - dockerconfig
+    params:
+      image:
+        description: reference of the image to build
+      registry:
+        description: registry FROM (base image)
+      gitRepoUrl:
+        description: source git repo
+      gitWorkspaceSubdirectory:
+        description: subdirectory on workspace
+        default: ""
+      git-revision:
+        description: revision of source git repo
+        default: "main"
+      context:
+        description: path to context
+      dockerfile:
+        description: path to dockerfile
+    tasks:
+      fetch-repository:
+        task: git-clone
+        workspaces:
+          output:
+            workspace: shared-workspace
+          ssh-directory:
+            workspace: ssh-credentials
+        params:
+          url:
+            value: $(params.gitRepoUrl)
+          subdirectory:
+            value: $(params.gitWorkspaceSubdirectory)
+          deleteExisting:
+            value: "'true'"
+          revision:
+            value: $(params.git-revision)
+      buildah:
+        task: buildah
+        runAfter:
+          - fetch-repository
+        workspaces:
+          source:
+            workspace: shared-workspace
+          dockerconfig:
+            workspace: dockerconfig
+        params:
+          SUBDIRECTORY:
+            value: $(params.gitWorkspaceSubdirectory)
+          IMAGE:
+            value: $(params.image)
+          CONTEXT:
+            value: $(params.context)
+          DOCKERFILE:
+            value: $(params.dockerfile)
+      send-msteams-notification:
+        task: send-msteams-notification
+        runAfter:
+          - buildah
+        params:
+          message:
+            value: "image $(params.image):$(params.tag) build & pushed successfully w/ buildah ($(tasks.buildah.results.IMAGE_DIGEST))"
+          webhook-url-secret:
+            value: msteams
+          webhook-url-secret-key:
+            value: url
+    finally:
+      notify-any-failure:
+        task: send-msteams-notification
+        params:
+          message:
+            value: "buildah image build for $(params.image):$(params.tag) failed!!"
+          webhook-url-secret:
+            value: msteams
+          webhook-url-secret-key:
+            value: url
+        when:
+          $(tasks.status):
+            operator: in
+            values: Failed

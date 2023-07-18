@@ -1,7 +1,7 @@
 ---
 releases:
   - name: build-kaniko-image
-    installed: true
+    installed: false
     namespace: tekton-kaniko
     chart: stuttgart-things/yacht-tekton-resources
     version: v0.47.10
@@ -27,10 +27,26 @@ releases:
       - "secrets/git-ssh-credentials.yaml.gotmpl"
       - "secrets/msteams-notification.yaml.gotmpl"
       - "tasks/git-clone.yaml.gotmpl"
-      - "tasks/create-publish-helm-chart.yaml.gotmpl"
+      - "tasks/helm.yaml.gotmpl"
       - "tasks/send-msteams-notification.yaml.gotmpl"
       - "pipelines/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
       - "test-runs/run-{{`{{ .Release.Name }}`}}.yaml.gotmpl"
+
+  - name: build-buildah-image
+    installed: true
+    namespace: machine-shop
+    chart: stuttgart-things/yacht-tekton-resources
+    version: v0.47.10
+    values:
+      - "workspaces/tekton-kaniko.yaml.gotmpl"
+      # - "secrets/scr-registry-credentials.yaml.gotmpl"
+      # - "secrets/git-ssh-credentials.yaml.gotmpl"
+      # - "secrets/msteams-notification.yaml.gotmpl"
+      - "tasks/git-clone.yaml.gotmpl"
+      - "tasks/buildah.yaml.gotmpl"
+      # - "tasks/send-msteams-notification.yaml.gotmpl"
+      - "pipelines/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
+      # - "test-runs/run-{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 
 repositories:
   - name: stuttgart-things
