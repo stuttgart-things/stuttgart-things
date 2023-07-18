@@ -106,7 +106,7 @@ spec:
             configmaps:
               informer:
                 INFORMING_NAMESPACE: machine-shop-packer
-                INFORMING_KINDS: jobs
+                INFORMING_KINDS: jobs;configmaps
                 REDIS_SERVER: redis-sweatshop-deployment-headless.sweatshop-redis.svc.cluster.local
                 REDIS_PORT: "6379"
                 REDIS_PASSWORD: <path:apps/data/sweatshop#redisPassword>
