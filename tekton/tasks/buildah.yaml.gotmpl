@@ -62,6 +62,9 @@ tasks:
       build:
         workingDir: $(workspaces.source.path)/$(params.SUBDIRECTORY)
         image: $(params.BUILDER_IMAGE)
+        env:
+          CERT_DIR_FLAG:
+            value: $(workspaces.sslcertdir.path)
         script: |
           #!/usr/bin/env sh
           set -eu

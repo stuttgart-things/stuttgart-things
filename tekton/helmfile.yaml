@@ -2,7 +2,7 @@
 releases:
   - name: build-kaniko-image
     installed: false
-    namespace: tekton-kaniko
+    namespace: tekton-cd
     chart: stuttgart-things/yacht-tekton-resources
     version: v0.47.10
     values:
@@ -47,6 +47,14 @@ releases:
       # - "tasks/send-msteams-notification.yaml.gotmpl"
       - "pipelines/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
       - "test-runs/run-{{`{{ .Release.Name }}`}}.yaml.gotmpl"
+
+  - name: test-workspace-mount
+    installed: false
+    namespace: tekton-cd
+    chart: stuttgart-things/yacht-tekton-resources
+    version: v0.47.10
+    values:
+      - "test-runs/pod-workspace-mount.yaml.gotmpl"
 
 repositories:
   - name: stuttgart-things

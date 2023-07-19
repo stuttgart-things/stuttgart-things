@@ -38,7 +38,7 @@ runs:
       image: {{ .Values.registry }}/sthings-alpine/sthings-alpine
       tag: 230305-0403
       registry: {{ .Values.registry }}
-      dockerfile: build/images/sthings-alpine/Dockerfile
+      dockerfile: images/sthings-alpine/Dockerfile
     workspaces:
       ssh-credentials:
         workspaceKind: secret
