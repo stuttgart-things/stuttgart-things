@@ -9,6 +9,9 @@ tasks:
       tekton.dev/tags: image-build
       tekton.dev/platforms: "linux/amd64,linux/s390x,linux/ppc64le,linux/arm64"
     description: buildah task builds source into a container image and then pushes it to a container registry
+    volumes:
+      varlibcontainers:
+        volumeKind: emptyDir
     workspaces:
       source:
         description: holds the context and Dockerfile
@@ -19,7 +22,7 @@ tasks:
       dockerconfig:
         description: includes a docker `config.json`
         optional: true
-        mountPath: /kaniko/.docker
+        mountPath: /root/.docker
     results:
       IMAGE_DIGEST:
         description: digest of the image just built
@@ -52,16 +55,17 @@ tasks:
       PUSH_EXTRA_ARGS:
         description: extra parameters passed for the push command when pushing images.
         default: ""
-      SKIP_PUSH:
-        description: skip pushing the built image
-        default: "false"
       SUBDIRECTORY:
         description: subdirectory of workspace
         default: ""
     steps:
       build:
+        volumeMounts:
+          varlibcontainers:
+            mountPath: /var/lib/containers
         workingDir: $(workspaces.source.path)/$(params.SUBDIRECTORY)
         image: $(params.BUILDER_IMAGE)
+        privileged: true
         env:
           CERT_DIR_FLAG:
             value: $(workspaces.sslcertdir.path)
@@ -71,14 +75,13 @@ tasks:
 
           [[ "$(workspaces.sslcertdir.bound)" == "true" ]] && CERT_DIR_FLAG="--cert-dir $(workspaces.sslcertdir.path)"
           [[ "$(workspaces.dockerconfig.bound)" == "true" ]] && export DOCKER_CONFIG="$(workspaces.dockerconfig.path)"
+
+          cat $(params.DOCKERFILE)
+
           buildah ${CERT_DIR_FLAG} --storage-driver=$(params.STORAGE_DRIVER) bud \
-            $(params.BUILD_EXTRA_ARGS) --format=$(params.FORMAT) \
-            --tls-verify=$(params.TLSVERIFY) --no-cache \
-            -f $(params.DOCKERFILE) -t $(params.IMAGE) $(params.CONTEXT)
-          [[ "$(params.SKIP_PUSH)" == "true" ]] && echo "Push skipped" && exit 0
-          buildah ${CERT_DIR_FLAG} --storage-driver=$(params.STORAGE_DRIVER) push \
-            $(params.PUSH_EXTRA_ARGS) --tls-verify=$(params.TLSVERIFY) \
-            --digestfile /tmp/image-digest $(params.IMAGE) \
-            docker://$(params.IMAGE)
+          --format=$(params.FORMAT) --tls-verify=$(params.TLSVERIFY) --no-cache \
+          -f $(params.DOCKERFILE) \
+          -t $(params.IMAGE)
+
           cat /tmp/image-digest | tee $(results.IMAGE_DIGEST.path)
           echo -n "$(params.IMAGE)" | tee $(results.IMAGE_URL.path)

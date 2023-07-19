@@ -37,6 +37,9 @@ pipelines:
       tlsVerify:
         description: buildah image
         default: "true"
+      storagDriver:
+        description: buildah storage driver
+        default: vfs
     tasks:
       fetch-repository:
         task: git-clone
@@ -76,6 +79,8 @@ pipelines:
             value: $(params.buildahImage)
           TLSVERIFY:
             value: $(params.tlsVerify)
+          STORAGE_DRIVER:
+            value: $(params.storagDriver)
       send-msteams-notification:
         task: send-msteams-notification
         runAfter:

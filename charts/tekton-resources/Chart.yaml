@@ -2,11 +2,11 @@ apiVersion: v2
 name: tekton-resources
 description: tekton resources definitions
 type: application
-version: "v0.47.11"
-appVersion: v0.47.11
+version: "v0.47.15"
+appVersion: v0.47.15
 dependencies:
   - name: sthings-helm-toolkit
-    version: 2.4.44
+    version: 2.4.52
     repository: oci://eu.gcr.io/stuttgart-things
     alias: toolkit-resources
 maintainers:

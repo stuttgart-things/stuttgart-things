@@ -1,6 +1,6 @@
 runs:
-  buildbuildahImageGithub:
-    name: {{ .Release.Name }}-testrun-github-{{ randAlphaNum 5 | lower }}
+  buildbuildahImage:
+    name: {{ .Release.Name }}-testrun-{{ randAlphaNum 4 | lower }}
     addRandomDateToRunName: false
     namespace: {{ .Release.Namespace }}
     kind: Pipeline
@@ -8,39 +8,16 @@ runs:
     params:
       gitRepoUrl: git@github.com:stuttgart-things/stuttgart-things.git
       git-revision: main
-      context: /buildah/{{ .Values.buildahTestRunImage }}-github/images/{{ .Values.buildahTestRunImage }}
-      gitWorkspaceSubdirectory: /buildah/{{ .Values.buildahTestRunImage }}-github
-      image: {{ .Values.registry }}/{{ .Values.buildahTestRunImage }}/ansible
+      context: /buildah/{{ .Values.buildahTestRunImage }}/images/{{ .Values.buildahTestRunImage }}
+      gitWorkspaceSubdirectory: /buildah/{{ .Values.buildahTestRunImage }}
+      image: {{ .Values.registry }}/{{ .Values.buildahTestRunImage }}:{{ randAlphaNum 5 | lower }}
       dockerfile: images/{{ .Values.buildahTestRunImage }}/Dockerfile
+      tlsVerify: false
+      storagDriver: overlay
     workspaces:
       ssh-credentials:
         workspaceKind: secret
         workspaceRef: github-ssh
-      shared-workspace:
-        workspaceKind: persistentVolumeClaim
-        workspaceRef: {{ .Values.buildahWorkspaceName }}
-      dockerconfig:
-        workspaceKind: secret
-        workspaceRef: scr-{{ .Environment.Name }}
-  buildbuildahImageCodehub:
-    name: {{ .Release.Name }}-testrun-codehub-{{ randAlphaNum 5 | lower }}
-    addRandomDateToRunName: false
-    namespace: {{ .Release.Namespace }}
-    kind: Pipeline
-    ref: build-buildah-image
-    params:
-      gitRepoUrl: git@codehub.sva.de:Lab/stuttgart-things/stuttgart-things.git
-      git-revision: master
-      context: /buildah/sthings-alpine
-      gitWorkspaceSubdirectory: /buildah/sthings-alpine-codehub
-      image: {{ .Values.registry }}/sthings-alpine/sthings-alpine
-      tag: 230305-0403
-      registry: {{ .Values.registry }}
-      dockerfile: images/sthings-alpine/Dockerfile
-    workspaces:
-      ssh-credentials:
-        workspaceKind: secret
-        workspaceRef: codehub-ssh
       shared-workspace:
         workspaceKind: persistentVolumeClaim
         workspaceRef: {{ .Values.buildahWorkspaceName }}

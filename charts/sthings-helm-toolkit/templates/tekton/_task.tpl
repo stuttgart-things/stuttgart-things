@@ -11,7 +11,7 @@
 {{- $taskName := index . 1 -}}
 {{- $task := index . 2 -}}
 ---
-apiVersion: tekton.dev/{{ $task.apiVersion | default "v1" }} 
+apiVersion: tekton.dev/{{ $task.apiVersion | default "v1" }}
 kind: Task
 metadata:
   name: {{ $taskName }}
@@ -78,8 +78,18 @@ spec:
           valueFrom:{{ $ve.valueFrom | toYaml | nindent 12 }}{{- end }}
         {{- end }}
       {{- end }}
-      {{- if $v.securityContext }}
+      {{- if $v.volumeMounts }}
+      volumeMounts:
+      {{- range $key, $volume := $v.volumeMounts }}
+        - name: {{ $key }}
+          mountPath: {{ $volume.mountPath }}
+          {{- if $volume.subPath }}
+          subPath: {{ $volume.subPath }}
+          {{- end }}
+      {{- end }}{{- end }}
       securityContext:
+        privileged: {{ $v.privileged | default "false" }}
+      {{- if $v.securityContext }}
         runAsNonRoot: {{ $v.securityContext.runAsNonRoot }}
         runAsUser: {{ $v.securityContext.runAsUser }}
       {{- end }}
@@ -87,7 +97,17 @@ spec:
       script: {{- $v.script | toYaml | indent 6 | replace "     |" "|" }}
       {{- end }}
   {{- end }}
-{{- end }}
+  {{- if $task.volumes }}
+  volumes:
+  {{- range $key, $volume := $task.volumes }}
+    - name: {{ $key }}
+    {{- if eq $volume.volumeKind "emptyDir" }}
+      emptyDir: {}{{- else if eq $volume.volumeKind "configMap" }}
+      configMap:
+        name: {{ $key }}{{ else }}
+      {{ $volume.volumeKind }}:
+        {{ $volume.volumeKind }}Name: {{ $volume.volumeRef }}{{ end }}{{ end }}{{ end }}
+  {{- end }}
 
 {{/*
 # exampleValues:
