@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: machine-shop-operator
-      version: v0.1.53
+      version: v0.1.94
       sourceRef:
         kind: HelmRepository
         name: stuttgart-things
