@@ -31,7 +31,7 @@
 | helmfile.yaml                              | secrets; ansible & job releases must be enabled |
 | environments/vm.yaml                       | set createInventory: true; copyInventory: false |
 | environments/{{ .Environment.Name }}.yaml  | set/change ansibleTargets; ansiblePlaybook: baseos-setup #or configure-rke-node |
-|
+
 
 </details>
 
