@@ -24,23 +24,23 @@
 
 </details>
 
-<details><summary>NO VM CREATION + BASEOS (ON EXISTING VM)</summary>
+<details><summary>NO VM CREATION + BASEOS/CONFIGURE-RKE-NODE (ON EXISTING VM)</summary>
 
 | FILE                                       | NEEDED/OPTIONAL CHANGES                                     |
 |--------------------------------------------|-------------------------------------------------------------|
 | helmfile.yaml                              | secrets; ansible & job releases must be enabled |
 | environments/vm.yaml                       | set createInventory: true; copyInventory: false |
-| environments/{{ .Environment.Name }}.yaml  | set/change ansibleTargets; ansiblePlaybook: baseos-setup |
+| environments/{{ .Environment.Name }}.yaml  | set/change ansibleTargets; ansiblePlaybook: baseos-setup #or configure-rke-node |
 |
 
 </details>
 
-<details><summary>NO VM CREATION + CONFIGURE-RKE-NODE (ON EXISTING VM)</summary>
+<details><summary>NO VM CREATION + DEPLOY-UPGRADE-RKE</summary>
 
 | FILE                                       | NEEDED/OPTIONAL CHANGES                                     |
 |--------------------------------------------|-------------------------------------------------------------|
 | helmfile.yaml                              | secrets; ansible & job releases must be enabled |
-| environments/vm.yaml                       | set createInventory: true; copyInventory: false; ansiblePlaybook: configure-rke-node |
+| environments/vm.yaml                       | set inventory; createInventory: false; copyInventory: true; ansiblePlaybook: deploy-upgrade-rke |
 | environments/{{ .Environment.Name }}.yaml  | set/change ansibleTargets |
 |
 

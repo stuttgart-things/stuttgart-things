@@ -15,9 +15,10 @@ inventory:
   groups:
     - initial_master_node:
         - test-rt-mso.labul.sva.de
-        - test-rt-mso-3.labul.sva.de
     - additional_master_nodes:
+        - test-rt-mso-2.labul.sva.de
         - test-rt-mso-3.labul.sva.de
   vars:
     - all:vars:
       - ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+      - ansible_user=sthings

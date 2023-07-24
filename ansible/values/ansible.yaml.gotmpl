@@ -69,7 +69,7 @@ configmaps:
             when: create_inventory|bool
 
           - name: Copy inventory
-            ansible.builtin.blockinfile:
+            ansible.builtin.copy:
               src: inventory.yaml
               dest: {{`{{printf "%q" "{{ inv_path }}" }}`}}
             when: copy_inventory|bool
