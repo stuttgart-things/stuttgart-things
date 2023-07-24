@@ -1,5 +1,4 @@
 ---
-vmName: mso-vm2
 ansibleTargets: mso-vm2.labul.sva.de
 vmFolderPath: phermann/testing
 

@@ -1,12 +1,23 @@
 # stuttgart-things/ansible
 
 ## OPERATIONS
-| USECASE          | INSTALLED (helmfile.yaml)                        | CHANGES                      | NEEDED VARIABLE CHANGES                    |
-|------------------|--------------------------------------------------|------------------------------|--------------------------------------------|
-| ONLY VM CREATION | terraform=true                                   | {{ .Environment.Name }}.yaml | * vmName: * ansibleTargets * vmFolderPath: |
-| VM + BASEOS      | terraform=true secret=true ansible=true job=true |                              |                                            |                                                                  |
 
+### ONLY VM CREATION
 
+* ./helmfile.yaml: (only) release terraform must be enabled (set to installed)
+* ./environments/vm.yaml: set/change vmCount; vmName; vmNumCPUs; vmMemory; vmDiskSize
+* ./environments/{{ .Environment.Name }}.yaml: set/change vmFolderPath; datastore; network
+
+### VM CREATION + BASEOS
+
+* ./helmfile.yaml: all releases must be enabled (set to installed)
+* ./environments/vm.yaml: set/change vmCount; vmName; vmNumCPUs; vmMemory; vmDiskSize
+* ./environments/{{ .Environment.Name }}.yaml: set/change vmFolderPath; datastore; network; ansibleTargets; createInventory: true; copyInventory: false
+
+### NO VM CREATION + BASEOS
+
+* ./helmfile.yaml: secrets; ansible & job releases must be enabled
+* ./environments/{{ .Environment.Name }}.yaml: set/change ansibleTargets; createInventory: true; copyInventory: false
 
 ## SET VAULT ENV VARS
 ```

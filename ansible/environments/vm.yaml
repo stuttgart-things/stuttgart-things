@@ -4,6 +4,7 @@ ansiblePlaybook: baseos-setup #configure-rke-node #install-configure-nfs #power-
 
 # TARGETS/INVENTORY + PLAYBOOK
 vmCount: 1
+vmName: mso-vm2
 vmNumCPUs: 8
 vmMemory: 8192
 vmDiskSize: 96
