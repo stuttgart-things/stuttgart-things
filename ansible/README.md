@@ -41,7 +41,7 @@
 |--------------------------------------------|-------------------------------------------------------------|
 | helmfile.yaml                              | secrets; ansible & job releases must be enabled |
 | environments/vm.yaml                       | set inventory; createInventory: false; copyInventory: true; ansiblePlaybook: deploy-upgrade-rke |
-| environments/{{ .Environment.Name }}.yaml  | set/change ansibleTargets |
+| defaults.yaml  | set/change rkeVersion; k8sVersion; rke2ReleaseKind; enableIngressController; clusterSetup   |
 |
 
 </details>
