@@ -4,7 +4,7 @@ releases:
     namespace: machine-shop
     chart: stuttgart-things/sthings-cluster
     version: 0.3.7
-    installed: false
+    installed: true
     values:
       - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 
@@ -12,7 +12,7 @@ releases:
     namespace: machine-shop
     chart: stuttgart-things/sthings-cluster
     version: 0.3.7
-    installed: true
+    installed: false
     values:
       - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 
@@ -20,7 +20,7 @@ releases:
     namespace: machine-shop
     chart: stuttgart-things/sthings-cluster
     version: 0.3.7
-    installed: true
+    installed: false
     values:
       - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 
@@ -28,7 +28,7 @@ releases:
     namespace: machine-shop
     chart: stuttgart-things/sthings-cluster
     version: 0.3.7
-    installed: true
+    installed: false
     values:
       - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
     needs:
@@ -50,4 +50,11 @@ helmDefaults:
 environments:
   labda-vsphere:
     values:
+      - environments/vm.yaml
+      - environments/defaults.yaml
+      - environments/{{ .Environment.Name }}.yaml
+  labul-vsphere:
+    values:
+      - environments/vm.yaml
+      - environments/defaults.yaml
       - environments/{{ .Environment.Name }}.yaml

@@ -3,8 +3,14 @@
 ## SET VAULT ENV VARS
 ```
 export VAULT_NAMESPACE=root
-export VAULT_TOKEN=<VAULT_TOKEN>
+
+# LABDA
 export VAULT_ADDR=https://vault-vsphere.tiab.labda.sva.de:8200
+export VAULT_TOKEN=<VAULT_TOKEN>
+
+# LABUL
+export VAULT_ADDR=https://vault-vsphere.labul.sva.de:8200/
+export VAULT_TOKEN=<VAULT_TOKEN>
 ```
 
 ## TEMPLATE

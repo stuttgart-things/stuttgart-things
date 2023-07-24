@@ -1,4 +1,8 @@
 ---
+vmName: mso-vm2
+ansibleTargets: mso-vm2.labul.sva.de
+vmFolderPath: phermann/testing
+
 # MS-TEAMS
 sendToMSteams: true
 msTeamsWebhookUrl: https://365sva.webhook.office.com/webhookb2/2f14a9f8-4736-46dd-9c8c-31547ec37180@0a65cb1e-37d5-41ff-980a-647d9d0e4f0b/IncomingWebhook/a23d672b86dc42f7a58c9de10632339e/dc3a27ed-396c-40b7-a9b2-f1a2b6b44efe
@@ -20,4 +24,4 @@ datacenter: LabUL
 network: LAB-10.31.103
 templatePath: phermann/vm-templates/ubuntu23
 datastore: UL-ESX-SAS-01
-resourcePool: Resources
+resourcePool: /LabUL/host/Cluster01/Resources
