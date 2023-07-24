@@ -22,7 +22,7 @@ customresources:
         - vsphere_vm_template="/{{ .Values.datacenter }}/vm/{{ .Values.templatePath }}"
         - vsphere_vm_folder_path="{{ .Values.vmFolderPath }}"
         - vsphere_network="/{{ .Values.datacenter }}/network/{{ .Values.network }}"
-        - vsphere_datastore="/{{ .Values.datacenter }}/datastore/DatastoreCluster/{{ .Values.datastore }}"
+        - vsphere_datastore="/{{ .Values.datastore }}"
         - vsphere_resource_pool="{{ .Values.resourcePool }}"
         - vsphere_datacenter="/{{ .Values.datacenter }}"
       module:

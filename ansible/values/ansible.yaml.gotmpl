@@ -33,7 +33,6 @@ configmaps:
 
       - name: Execute {{`{{printf "%q" "{{ target_play }}.yaml" }}`}}
         ansible.builtin.import_playbook: {{`{{printf "%q" "{{ target_play }}.yaml" }}`}}
-        when: target_play is defined
 
     prepare-env.yaml: |
       ---

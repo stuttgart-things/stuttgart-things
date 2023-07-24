@@ -1,6 +1,6 @@
 ---
 createInventory: true
-ansiblePlaybook: configure-rke-node #install-configure-nfs|power-dns
+ansiblePlaybook: baseos-setup #configure-rke-node #install-configure-nfs #power-dns
 
 # TARGETS/INVENTORY + PLAYBOOK
 vmCount: 1

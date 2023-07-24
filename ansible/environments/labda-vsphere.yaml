@@ -23,5 +23,5 @@ pdnsUrl: https://pdns-vsphere.tiab.labda.sva.de:8443
 datacenter: NetApp-HCI-Datacenter
 network: tiab-prod
 templatePath: stuttgart-things/vm-templates/ubuntu23
-datastore: NetApp-HCI-Datastore-04
+datastore: /NetApp-HCI-Datacenter/datastore/DatastoreCluster/NetApp-HCI-Datastore-04
 resourcePool: Resources

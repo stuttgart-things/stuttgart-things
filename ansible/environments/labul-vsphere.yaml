@@ -23,5 +23,5 @@ pdnsUrl: pdns-vsphere.labul.sva.de
 datacenter: LabUL
 network: LAB-10.31.103
 templatePath: phermann/vm-templates/ubuntu23
-datastore: UL-ESX-SAS-01
+datastore: /LabUL/datastore/UL-ESX-SAS-01
 resourcePool: /LabUL/host/Cluster01/Resources
