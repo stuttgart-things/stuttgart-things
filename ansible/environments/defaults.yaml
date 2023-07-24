@@ -3,7 +3,7 @@
 ansibleImage: eu.gcr.io/stuttgart-things/sthings-ansible
 ansibleImageTag: 8.0.0-4
 
-# BASEOS-SETUP PARAMETER
+# BASEOS-SETUP
 prepareEnv: true
 executeBaseos: true
 manageFilesystem: true
@@ -20,6 +20,13 @@ installCAs:
   - https://vault-vsphere.labul.sva.de:8200
   - https://vault-pve.labul.sva.de:8200
   - https://vault-vsphere.tiab.labda.sva.de:8200
+
+# DEPLOY-UPGRADE-RKE
+rkeVersion: 2
+k8sVersion: 1.26.5
+rke2ReleaseKind: rke2r1 # rke2r2
+enableIngressController: false
+clusterSetup: multinode
 
 ## TF
 tfVersion: 1.5.3
