@@ -2,24 +2,33 @@
 
 ## OPERATIONS
 
-### ONLY VM CREATION
+<details><summary>ONLY VM CREATION</summary>
 
 * ./helmfile.yaml: (only) release terraform must be enabled (set to installed)
 * ./environments/vm.yaml: set/change vmCount; vmName; vmNumCPUs; vmMemory; vmDiskSize
 * ./environments/{{ .Environment.Name }}.yaml: set/change vmFolderPath; datastore; network
 
-### VM CREATION + BASEOS
+</details>
+
+<details><summary>VM CREATION + BASEOS</summary>
 
 * ./helmfile.yaml: all releases must be enabled (set to installed)
 * ./environments/vm.yaml: set/change vmCount; vmName; vmNumCPUs; vmMemory; vmDiskSize
 * ./environments/{{ .Environment.Name }}.yaml: set/change vmFolderPath; datastore; network; ansibleTargets; createInventory: true; copyInventory: false
 
-### NO VM CREATION + BASEOS
+</details>
+
+<details><summary>NO VM CREATION + BASEOS (ON EXISTING VM)</summary>
 
 * ./helmfile.yaml: secrets; ansible & job releases must be enabled
 * ./environments/{{ .Environment.Name }}.yaml: set/change ansibleTargets; createInventory: true; copyInventory: false
 
-## SET VAULT ENV VARS
+</details>
+
+## EXECUTION
+
+<details><summary>VAULT</summary>
+
 ```
 export VAULT_NAMESPACE=root
 
@@ -32,17 +41,25 @@ export VAULT_ADDR=https://vault-vsphere.labul.sva.de:8200
 export VAULT_TOKEN=<VAULT_TOKEN> #...rTI1E
 ```
 
-## TEMPLATE / TEST
+</details>
+
+<details><summary>TEMPLATE/TEST</summary>
+
 ```
 helmfile template --environment labda-vsphere
 helmfile template --environment labda-vsphere | grep kind: -A 2 -B 2 # check for rendered kinds
 ```
 
-## APPLY
+</details>
+
+<details><summary>SYNC/CREATE</summary>
+
 ```
 export KUBECONFIG=~/.kube/...
 helmfile sync --environment labda-vsphere
 ```
+
+</details>
 
 Author Information
 ------------------
