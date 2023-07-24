@@ -1,5 +1,5 @@
 ---
-ansibleTargets: mso-vm2.labul.sva.de
+ansibleTargets: test-rt-mso.labul.sva.de;test-rt-mso-2.labul.sva.de;test-rt-mso-3.labul.sva.de
 vmFolderPath: phermann/testing
 
 # MS-TEAMS

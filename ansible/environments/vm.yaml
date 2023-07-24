@@ -1,6 +1,6 @@
 ---
-createInventory: true
-ansiblePlaybook: baseos-setup #configure-rke-node #install-configure-nfs #power-dns
+createInventory: false
+ansiblePlaybook: deploy-upgrade-rke #baseos-setup #configure-rke-node #install-configure-nfs #power-dns
 
 # TARGETS/INVENTORY + PLAYBOOK
 vmCount: 1
@@ -10,14 +10,14 @@ vmMemory: 8192
 vmDiskSize: 96
 
 # CUSTOM INVENTORY
-copyInventory: false
+copyInventory: true
 inventory:
   groups:
     - initial_master_node:
-        - 10.1.2.5
-        - 10.1.2.6
+        - test-rt-mso.labul.sva.de
+        - test-rt-mso-3.labul.sva.de
     - additional_master_nodes:
-        - 192.1.2.6
+        - test-rt-mso-3.labul.sva.de
   vars:
     - all:vars:
       - ansible_ssh_common_args='-o StrictHostKeyChecking=no'

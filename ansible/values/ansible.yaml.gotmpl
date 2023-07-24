@@ -155,6 +155,31 @@ configmaps:
             ignore_errors: true
             when: send_to_msteams|bool
 
+    configure-rke-node.yaml: |
+      ---
+      - hosts: all
+        become: true
+        gather_facts: true
+        vars:
+          install_docker: false
+        roles:
+          - configure-rke-node
+
+    deploy-upgrade-rke.yaml: |
+      ---
+      - hosts: all
+        become: true
+
+        vars:
+          rke_version: {{ .Values.rkeVersion }}
+          rke2_k8s_version: {{ .Values.k8sVersion }}
+          rke2_release_kind: {{ .Values.rke2ReleaseKind }}
+          enable_ingress_controller: {{ .Values.enableIngressController }}
+          cluster_setup: {{ .Values.clusterSetup }}
+
+        roles:
+          - role: deploy-configure-rke
+
     power-dns.yaml: |
       ---
       - hosts: localhost
@@ -180,18 +205,6 @@ configmaps:
 
         roles:
           - install-configure-powerdns
-
-    configure-rke-node.yaml: |
-      ---
-      - hosts: all
-        become: true
-        gather_facts: true
-
-        vars:
-          install_docker: false
-
-        roles:
-          - configure-rke-node
 
     install-configure-nfs.yaml: |
       ---
