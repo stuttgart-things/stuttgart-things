@@ -18,7 +18,7 @@
 | FILE                                       | NEEDED/OPTIONAL CHANGES                                     |
 |--------------------------------------------|-------------------------------------------------------------|
 | helmfile.yaml                              | all releases must be enabled (set to installed) |
-| environments/vm.yaml                       | set/change vmCount; vmName; vmNumCPUs; vmMemory; vmDiskSize; set createInventory: true; copyInventory: false |
+| environments/vm.yaml                       | set/change vmCount; vmName; vmNumCPUs; vmMemory; vmDiskSize; set createInventory: true; copyInventory: false; ansiblePlaybook: baseos-setup |
 | environments/{{ .Environment.Name }}.yaml  | set/change vmFolderPath; datastore; network; ansibleTargets;                 |
 |
 
@@ -29,8 +29,8 @@
 | FILE                                       | NEEDED/OPTIONAL CHANGES                                     |
 |--------------------------------------------|-------------------------------------------------------------|
 | helmfile.yaml                              | secrets; ansible & job releases must be enabled |
-| environments/vm.yaml                       | set createInventory: true; copyInventory: false |
-| environments/{{ .Environment.Name }}.yaml  | set/change ansibleTargets; ansiblePlaybook: baseos-setup #or configure-rke-node |
+| environments/vm.yaml                       | set createInventory: true; copyInventory: false; ansiblePlaybook: baseos-setup #or configure-rke-node |
+| environments/{{ .Environment.Name }}.yaml  | set/change ansibleTargets |
 
 
 </details>

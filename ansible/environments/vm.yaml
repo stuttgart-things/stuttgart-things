@@ -1,16 +1,16 @@
 ---
-createInventory: false
+createInventory: true
 ansiblePlaybook: deploy-upgrade-rke #baseos-setup #configure-rke-node #install-configure-nfs #power-dns
 
 # TARGETS/INVENTORY + PLAYBOOK
-vmCount: 1
-vmName: mso-vm2
-vmNumCPUs: 8
-vmMemory: 8192
+vmCount: 2
+vmName: mso-gude
+vmNumCPUs: 4
+vmMemory: 4096
 vmDiskSize: 96
 
 # CUSTOM INVENTORY
-copyInventory: true
+copyInventory: false
 inventory:
   groups:
     - initial_master_node:
