@@ -1,51 +1,4 @@
 ---
-# TARGETS/INVENTORY + PLAYBOOK
-vmName: mso-vm2
-vmCount: 1
-vmNumCPUs: 8
-vmMemory: 8192
-vmDiskSize: 96
-vmFolderPath: stuttgart-things/testing
-
-ansibleTargets: mso-vm2.tiab.labda.sva.de
-createInventory: true
-ansiblePlaybook: configure-rke-node #install-configure-nfs|power-dns
-
-# ANSIBLE JOB SETTINGS
-ansibleImage: eu.gcr.io/stuttgart-things/sthings-ansible
-ansibleImageTag: 8.0.0-4
-
-# CUSTOM INVENTORY
-copyInventory: false
-inventory:
-  groups:
-    - initial_master_node:
-        - 10.1.2.5
-        - 10.1.2.6
-    - additional_master_nodes:
-        - 192.1.2.6
-  vars:
-    - all:vars:
-      - ansible_ssh_common_args='-o StrictHostKeyChecking=no'
-
-# BASEOS-SETUP PARAMETER
-prepareEnv: true
-executeBaseos: true
-manageFilesystem: true
-installRequirements: true
-updatePackages: true
-installMotd:  true
-ansibleUser: sthings
-lvmHomeSizing: 15%
-lvmRootSizing: 35%
-lvmVarSizing: 50%
-installCAs:
-  - https://vault.tiab.labda.sva.de:8200
-  - https://vault.labul.sva.de:8200
-  - https://vault-vsphere.labul.sva.de:8200
-  - https://vault-pve.labul.sva.de:8200
-  - https://vault-vsphere.tiab.labda.sva.de:8200
-
 # MS-TEAMS
 sendToMSteams: true
 msTeamsWebhookUrl: https://365sva.webhook.office.com/webhookb2/2f14a9f8-4736-46dd-9c8c-31547ec37180@0a65cb1e-37d5-41ff-980a-647d9d0e4f0b/IncomingWebhook/37a805a0a2624dc2ac1aedd7dec6ad49/dc3a27ed-396c-40b7-a9b2-f1a2b6b44efe
@@ -68,13 +21,6 @@ network: tiab-prod
 templatePath: stuttgart-things/vm-templates/ubuntu23
 datastore: NetApp-HCI-Datastore-04
 resourcePool: Resources
-
-## TF
-tfVersion: 1.4.6
-tfProviderName: vsphere
-tfProviderSource: hashicorp/vsphere
-tfProviderVersion: 2.4.0
-tfTemplate: vsphere-vm
 
 ## STATE
 s3Endpoint: https://artifacts.app.4sthings.tiab.ssc.sva.de

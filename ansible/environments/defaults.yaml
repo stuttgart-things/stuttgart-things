@@ -1,0 +1,35 @@
+---
+# ANSIBLE JOB SETTINGS
+ansibleImage: eu.gcr.io/stuttgart-things/sthings-ansible
+ansibleImageTag: 8.0.0-4
+
+# BASEOS-SETUP PARAMETER
+prepareEnv: true
+executeBaseos: true
+manageFilesystem: true
+installRequirements: true
+updatePackages: true
+installMotd:  true
+ansibleUser: sthings
+lvmHomeSizing: 15%
+lvmRootSizing: 35%
+lvmVarSizing: 50%
+installCAs:
+  - https://vault.tiab.labda.sva.de:8200
+  - https://vault.labul.sva.de:8200
+  - https://vault-vsphere.labul.sva.de:8200
+  - https://vault-pve.labul.sva.de:8200
+  - https://vault-vsphere.tiab.labda.sva.de:8200
+
+## TF
+tfVersion: 1.5.3
+tfProviderName: vsphere
+tfProviderSource: hashicorp/vsphere
+tfProviderVersion: 2.4.1
+tfTemplate: vsphere-vm
+
+## STATE
+s3Endpoint: https://artifacts.app.4sthings.tiab.ssc.sva.de
+s3Region: main
+s3ModulePath: modules/vsphere-vm.zip
+s3BackendBucket: vsphere-vm

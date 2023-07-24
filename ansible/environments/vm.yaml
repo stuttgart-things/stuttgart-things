@@ -1,0 +1,25 @@
+---
+ansibleTargets: mso-vm2.tiab.labda.sva.de
+createInventory: true
+ansiblePlaybook: configure-rke-node #install-configure-nfs|power-dns
+
+# CUSTOM INVENTORY
+copyInventory: false
+inventory:
+  groups:
+    - initial_master_node:
+        - 10.1.2.5
+        - 10.1.2.6
+    - additional_master_nodes:
+        - 192.1.2.6
+  vars:
+    - all:vars:
+      - ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+
+# TARGETS/INVENTORY + PLAYBOOK
+vmName: mso-vm2
+vmCount: 1
+vmNumCPUs: 8
+vmMemory: 8192
+vmDiskSize: 96
+vmFolderPath: stuttgart-things/testing
