@@ -1,0 +1,25 @@
+# FLUX/INFRA
+
+<details><summary>METALLB</summary>
+
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: metallb
+  namespace: flux-system
+spec:
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infra/metallb
+  prune: true
+  wait: true
+  postBuild:
+    substitute:
+      IP_RANGE: 10.31.103.11-10.31.103.12
+
+</details>
