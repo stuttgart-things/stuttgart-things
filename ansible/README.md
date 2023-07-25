@@ -102,7 +102,14 @@ helmfile sync --environment labda-vsphere
 kubectl get terraform -A
 kubectl get pods -n machine-shop
 kubectl logs -f <container> -n machine-shop
+
+# CHECK OPERATOR (TERRAFORM)
 kubectl -n machine-shop-operator-system logs -f $(kubectl -n machine-shop-operator-system get po | grep operator | awk '{ print $1}') -c manager
+
+# CHECK CREATED POD/JOB (ANSIBLE)
+
+kubectl -n machine-shop get job
+kubectl -n machine-shop logs -f $(kubectl describe job $() -n machine-shop -n machine-shop | grep 'Created pod:' | awk '{ print $7}')
 ```
 
 </details>
