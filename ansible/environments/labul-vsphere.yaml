@@ -1,6 +1,14 @@
 ---
 ansibleTargets: mso-gude.labul.sva.de;mso-gude-2.labul.sva.de
+
+## LAB
+datacenter: LabUL
+network: LAB-10.31.103
+vmTemplatePath: phermann/vm-templates
+osTemplate: ubuntu23
 vmFolderPath: phermann/testing
+datastore: /LabUL/datastore/UL-ESX-SAS-01
+resourcePool: /LabUL/host/Cluster01/Resources
 
 # MS-TEAMS
 sendToMSteams: true
@@ -17,10 +25,3 @@ ipAddress: # CLUSTER RELATED
 hostname: # CLUSTER RELATED
 entryZone: sthings-vsphere.labul.sva.de.
 pdnsUrl: pdns-vsphere.labul.sva.de
-
-## LAB
-datacenter: LabUL
-network: LAB-10.31.103
-templatePath: phermann/vm-templates/ubuntu23
-datastore: /LabUL/datastore/UL-ESX-SAS-01
-resourcePool: /LabUL/host/Cluster01/Resources

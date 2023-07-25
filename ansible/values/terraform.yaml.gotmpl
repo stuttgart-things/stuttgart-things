@@ -19,7 +19,7 @@ customresources:
         - vm_num_cpus={{ .Values.vmNumCPUs }}
         - vm_memory={{ .Values.vmMemory }}
         - vm_disk_size={{ .Values.vmDiskSize }}
-        - vsphere_vm_template="/{{ .Values.datacenter }}/vm/{{ .Values.templatePath }}"
+        - vsphere_vm_template="/{{ .Values.datacenter }}/vm/{{ .Values.vmTemplatePath }}/{{ .Values.osTemplate }}"
         - vsphere_vm_folder_path="{{ .Values.vmFolderPath }}"
         - vsphere_network="/{{ .Values.datacenter }}/network/{{ .Values.network }}"
         - vsphere_datastore="/{{ .Values.datastore }}"

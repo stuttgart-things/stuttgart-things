@@ -4,12 +4,13 @@ ansibleImage: eu.gcr.io/stuttgart-things/sthings-ansible
 ansibleImageTag: 8.0.0-4
 
 # BASEOS-SETUP
+rebootAll: true
 prepareEnv: true
 executeBaseos: true
 manageFilesystem: true
 installRequirements: true
 updatePackages: true
-installMotd:  true
+installMotd: true
 ansibleUser: sthings
 lvmHomeSizing: 15%
 lvmRootSizing: 35%
@@ -25,6 +26,7 @@ installCAs:
 rkeVersion: 2
 k8sVersion: 1.26.5
 rke2ReleaseKind: rke2r1 # rke2r2
+rke2FetchedKubeconfigPath: /home/nonroot/kubeconfig
 enableIngressController: false
 clusterSetup: multinode
 

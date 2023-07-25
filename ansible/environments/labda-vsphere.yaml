@@ -1,6 +1,14 @@
 ---
 ansibleTargets: mso-vm2.tiab.labda.sva.de
+
+## LAB
+datacenter: NetApp-HCI-Datacenter
+network: tiab-prod
+vmTemplatePath: stuttgart-things/vm-templates
+osTemplate: ubuntu23
 vmFolderPath: stuttgart-things/testing
+datastore: /NetApp-HCI-Datacenter/datastore/DatastoreCluster/NetApp-HCI-Datastore-04
+resourcePool: Resources
 
 # MS-TEAMS
 sendToMSteams: true
@@ -17,10 +25,3 @@ ipAddress: 10.100.136.226 # CLUSTER RELATED
 hostname: dev8 # CLUSTER RELATED
 entryZone: 4sthings.tiab.ssc.sva.de.
 pdnsUrl: https://pdns-vsphere.tiab.labda.sva.de:8443
-
-## LAB
-datacenter: NetApp-HCI-Datacenter
-network: tiab-prod
-templatePath: stuttgart-things/vm-templates/ubuntu23
-datastore: /NetApp-HCI-Datacenter/datastore/DatastoreCluster/NetApp-HCI-Datastore-04
-resourcePool: Resources

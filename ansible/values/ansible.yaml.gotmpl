@@ -1,7 +1,7 @@
 ---
 configmaps:
   ansible:
-    {{- if .Values.copyInventory }}
+    {{- if not .Values.createInventory }}
     inventory.yaml: |
       {{- range $_, $item := .Values.inventory.groups }}
       {{- range $k, $v := . }}
@@ -49,7 +49,6 @@ configmaps:
           vault_url: {{`{{printf "%q" "{{ lookup('env', 'VAULT_ADDR') }}" }}`}}
           ssh_key: {{`{{printf "%q" "{{ lookup('community.hashi_vault.hashi_vault', 'secret=ssh/data/sthings:privateKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}" }}`}}
           create_inventory: {{ .Values.createInventory }}
-          copy_inventory: {{ .Values.copyInventory }}
 
         tasks:
           - name: Create hosts
@@ -72,7 +71,7 @@ configmaps:
             ansible.builtin.copy:
               src: inventory.yaml
               dest: {{`{{printf "%q" "{{ inv_path }}" }}`}}
-            when: copy_inventory|bool
+            when: not create_inventory
 
           - name: Creating ssh directory
             ansible.builtin.file:
@@ -113,6 +112,7 @@ configmaps:
           lvm_var_sizing: "{{ .Values.lvmVarSizing }}"
           send_to_msteams: {{ .Values.sendToMSteams }}
           msteams_webhook_url: "{{ .Values.msTeamsWebhookUrl }}"
+          reboot_all: {{ .Values.rebootAll }}
 
           vault_instances:
             {{- range .Values.installCAs }}
@@ -125,6 +125,10 @@ configmaps:
 
           - role: install-requirements
             when: install_requirements|bool
+
+        pre_tasks:
+          - ansible.builtin.reboot:
+            when: reboot_all|bool
 
         tasks:
           - name: Install vault ca certificate to local system from multiple instances
@@ -176,6 +180,7 @@ configmaps:
           rke2_release_kind: {{ .Values.rke2ReleaseKind }}
           enable_ingress_controller: {{ .Values.enableIngressController }}
           cluster_setup: {{ .Values.clusterSetup }}
+          rke2_fetched_kubeconfig_path: {{ .Values.rke2FetchedKubeconfigPath }}
 
         roles:
           - role: deploy-configure-rke

@@ -1,23 +1,22 @@
 ---
-createInventory: true
+createInventory: false
 ansiblePlaybook: deploy-upgrade-rke #baseos-setup #configure-rke-node #install-configure-nfs #power-dns
 
 # TARGETS/INVENTORY + PLAYBOOK
-vmCount: 2
-vmName: mso-gude
-vmNumCPUs: 4
-vmMemory: 4096
+vmCount: 3
+vmName: rt-1265-mso
+vmNumCPUs: 6
+vmMemory: 8192
 vmDiskSize: 96
 
 # CUSTOM INVENTORY
-copyInventory: false
 inventory:
   groups:
     - initial_master_node:
-        - test-rt-mso.labul.sva.de
+        - rt-1265-mso.labul.sva.de
     - additional_master_nodes:
-        - test-rt-mso-2.labul.sva.de
-        - test-rt-mso-3.labul.sva.de
+        - rt-1265-mso-2.labul.sva.de
+        - rt-1265-mso-3.labul.sva.de
   vars:
     - all:vars:
       - ansible_ssh_common_args='-o StrictHostKeyChecking=no'
