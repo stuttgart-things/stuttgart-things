@@ -2,6 +2,7 @@
 
 <details><summary>METALLB</summary>
 
+```
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -21,11 +22,13 @@ spec:
   postBuild:
     substitute:
       IP_RANGE: 10.31.103.11-10.31.103.12
+```
 
 </details>
 
 <details><summary>INGRESS-NGINX</summary>
 
+```
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -44,5 +47,6 @@ spec:
     - name: metallb
   prune: true
   wait: true
+```
 
 </details>
