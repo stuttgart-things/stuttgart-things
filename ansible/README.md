@@ -1,5 +1,12 @@
 # stuttgart-things/ansible
 
+## TBD
+
+* FlUX BOOTSTRAP
+* FLUX SECRETS
+* POWERDNS
+* NFS-SERVER
+
 ## OPERATIONS
 
 <details><summary>ONLY VM CREATION</summary>
@@ -107,7 +114,7 @@ kubectl logs -f <container> -n machine-shop
 kubectl -n machine-shop-operator-system logs -f $(kubectl -n machine-shop-operator-system get po | grep operator | awk '{ print $1}') -c manager
 
 # CHECK CREATED POD/JOB (ANSIBLE)
-kubectl -n machine-shop logs -f $(kubectl get po -n machine-shop | grep 'Running' | awk '{ print $1}')
+sleep 3 && kubectl -n machine-shop logs -f $(kubectl get po -n machine-shop | grep 'Running' | awk '{ print $1}') # sleep for inital start
 kubectl -n machine-shop get job --sort-by=.metadata.creationTimestamp
 ```
 
