@@ -107,9 +107,8 @@ kubectl logs -f <container> -n machine-shop
 kubectl -n machine-shop-operator-system logs -f $(kubectl -n machine-shop-operator-system get po | grep operator | awk '{ print $1}') -c manager
 
 # CHECK CREATED POD/JOB (ANSIBLE)
-
-kubectl -n machine-shop get job
-kubectl -n machine-shop logs -f $(kubectl describe job $() -n machine-shop -n machine-shop | grep 'Created pod:' | awk '{ print $7}')
+kubectl -n machine-shop logs -f $(kubectl get po -n machine-shop | grep 'Running' | awk '{ print $1}')
+kubectl -n machine-shop get job --sort-by=.metadata.creationTimestamp
 ```
 
 </details>
