@@ -29,6 +29,7 @@ rke2ReleaseKind: rke2r1 # rke2r2
 rke2FetchedKubeconfigPath: /home/nonroot/kubeconfig
 enableIngressController: false
 clusterSetup: multinode
+secretPathKubeconfig: kubeconfigs/data/dev8
 
 ## TF
 tfVersion: 1.5.3
