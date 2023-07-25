@@ -181,14 +181,20 @@ configmaps:
           enable_ingress_controller: {{ .Values.enableIngressController }}
           cluster_setup: {{ .Values.clusterSetup }}
           rke2_fetched_kubeconfig_path: {{ .Values.rke2FetchedKubeconfigPath }}
+
+        roles:
+          - role: deploy-configure-rke
+      ---
+      - hosts: localhost
+        become: false
+        vars:
           vault_approle_id: {{`{{printf "%q" "{{ lookup('env', 'VAULT_ROLE_ID') }}" }}`}}
           vault_approle_secret: {{`{{printf "%q" "{{ lookup('env', 'VAULT_SECRET_ID') }}" }}`}}
           vault_url: {{`{{printf "%q" "{{ lookup('env', 'VAULT_ADDR') }}" }}`}}
           upload_kubeconfig_vault: {{ .Values.uploadKubeconfigVault }}
-        roles:
-          - role: deploy-configure-rke
+          rke2_fetched_kubeconfig_path: {{ .Values.rke2FetchedKubeconfigPath }}
 
-        post_tasks:
+        tasks:
           - name: Write secret to vault using key value V2 engine
             community.hashi_vault.vault_write:
               auth_method: approle
@@ -200,7 +206,6 @@ configmaps:
               data:
                 data:
                   kubeconfig: {{`{{printf "%q" "{{ lookup('ansible.builtin.file', rke2_fetched_kubeconfig_path) | b64encode }}" }}`}}
-            delegate_to: 127.0.0.1
             when: upload_kubeconfig_vault|bool
 
     power-dns.yaml: |
