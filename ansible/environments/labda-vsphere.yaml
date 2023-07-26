@@ -21,6 +21,9 @@ vaultNamespace: root
 vaultAddr: https://vault-vsphere.tiab.labda.sva.de:8200
 vaultRoleID: ref+vault://apps/vault/roleID
 vaultSecretID: ref+vault://apps/vault/secretID
+vaultCABundle: ref+vault://apps/vault/vaultCA
+vaultPkiPath: 4sthings.tiab.ssc.sva.de
+vaultToken: ref+vault://apps/vault/token
 
 ## PDNS
 ipAddress: 10.100.136.226 # CLUSTER RELATED

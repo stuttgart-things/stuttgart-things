@@ -33,6 +33,7 @@ clusterSetup: multinode
 uploadKubeconfigVault: true
 secretPathKubeconfig: kubeconfigs/data/dev8
 installFlux: true
+fluxNamespace: flux-system
 
 ## TF
 tfVersion: 1.5.3
