@@ -32,6 +32,8 @@ clusterName: rt-1265
 clusterSetup: multinode
 uploadKubeconfigVault: true
 secretPathKubeconfig: kubeconfigs/data/dev8
+installFlux: true
+
 ## TF
 tfVersion: 1.5.3
 tfProviderName: vsphere
