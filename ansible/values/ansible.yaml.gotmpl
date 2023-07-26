@@ -208,6 +208,30 @@ configmaps:
                   kubeconfig: {{`{{printf "%q" "{{ lookup('ansible.builtin.file', rke2_fetched_kubeconfig_path) | b64encode }}" }}`}}
             when: upload_kubeconfig_vault|bool
 
+      - hosts: localhost
+        become: false
+        vars:
+          vault_approle_id: {{`{{printf "%q" "{{ lookup('env', 'VAULT_ROLE_ID') }}" }}`}}
+          vault_approle_secret: {{`{{printf "%q" "{{ lookup('env', 'VAULT_SECRET_ID') }}" }}`}}
+          vault_url: {{`{{printf "%q" "{{ lookup('env', 'VAULT_ADDR') }}" }}`}}
+          github_token: {{`{{printf "%q" "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps/data/github:token validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}" }}`}}
+          kubeconfig: {{`{{printf "%q" "{{ lookup('community.hashi_vault.hashi_vault', 'secret=kubeconfigs/data/dev8:kubeconfig validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}" }}`}}
+          kubeconfig_path: /tmp/kubeconfig
+
+        tasks:
+          - name: Copy kubeconfig using inline content
+            ansible.builtin.copy:
+              content: {{`{{printf "%q" "{{ kubeconfig|b64decode }}" }}`}}
+              dest: {{`{{printf "%q" "{{ kubeconfig_path }}" }}`}}
+              remote_src: yes
+
+          - name: Flux bootstrap
+            ansible.builtin.shell: |
+              flux bootstrap github --owner=stuttgart-things --repository=stuttgart-things --path=clusters/{{ .Values.lab }}/{{ .Values.cloud }}/{{ .Values.clusterName }}
+            environment:
+              KUBECONFIG: {{`{{printf "%q" "{{ kubeconfig_path }}" }}`}}
+              GITHUB_TOKEN: {{`{{printf "%q" "{{ github_token }}" }}`}}
+
     power-dns.yaml: |
       ---
       - hosts: localhost

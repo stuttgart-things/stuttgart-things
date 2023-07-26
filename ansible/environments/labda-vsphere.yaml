@@ -2,6 +2,8 @@
 ansibleTargets: mso-vm2.tiab.labda.sva.de
 
 ## LAB
+cloud: vsphere
+lab: labda
 datacenter: NetApp-HCI-Datacenter
 network: tiab-prod
 vmTemplatePath: stuttgart-things/vm-templates
