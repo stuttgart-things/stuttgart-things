@@ -50,3 +50,54 @@ spec:
 ```
 
 </details>
+
+<details><summary>LONGHORN</summary>
+
+```
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: longhorn
+  namespace: flux-system
+spec:
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infra/longhorn
+  prune: true
+  wait: true
+```
+
+</details>
+
+<details><summary>CERT-MANAGER</summary>
+
+```
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: cert-manager
+  namespace: flux-system
+spec:
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infra/cert-manager
+  prune: true
+  wait: true
+  postBuild:
+    substituteFrom:
+      - kind: Secret
+        name: vault-flux-secrets
+```
+
+</details>
+
