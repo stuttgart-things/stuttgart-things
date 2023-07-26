@@ -1,7 +1,7 @@
 ---
 # ANSIBLE JOB SETTINGS
 ansibleImage: eu.gcr.io/stuttgart-things/sthings-ansible
-ansibleImageTag: 8.2.0-1
+ansibleImageTag: 8.2.0-2
 
 # BASEOS-SETUP
 rebootAll: true
