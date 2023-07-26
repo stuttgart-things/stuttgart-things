@@ -1,31 +1,26 @@
 ---
 collections:
   - name: community.crypto
-    version: 2.14.0
+    version: 2.14.1
   - name: community.general
-    version: 7.1.0
+    version: 7.2.0
   - name: ansible.posix
     version: 1.5.2
   - name: kubernetes.core
     version: 2.4.0
 
 roles:
-# LEGACY
-  - src: https://artifacts.tiab.labda.sva.de/roles/install-upgrade-rke.tar.gz
-    name: install-upgrade-rke
-  - src: https://artifacts.tiab.labda.sva.de/roles/download-install-binary.tar.gz
-    name: download-install-binary
-  - src: https://artifacts.tiab.labda.sva.de/roles/install-configure-vault.tar.gz
-    name: install-configure-vault
 # GITHUB
   - src: https://github.com/stuttgart-things/deploy-configure-rke.git
     scm: git
     version: rke2r2-1.26.0
   - src: https://artifacts.tiab.labda.sva.de/roles/manage-filesystem.tar.gz
     name: manage-filesystem
-  - src: https://github.com/stuttgart-things/install-configure-powerdns.git
+  - src: https://github.com/stuttgart-things/install-configure-vault.git
     scm: git
-  - src: https://github.com/stuttgart-things/install-requirements.git
+  - src: https://github.com/stuttgart-things/download-install-binary.git
+    scm: git
+  - src: https://github.com/stuttgart-things/install-configure-powerdns.git
     scm: git
   - src: https://github.com/stuttgart-things/install-requirements.git
     scm: git

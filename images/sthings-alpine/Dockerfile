@@ -1,6 +1,7 @@
-ARG FROM_TAG=3-alpine3.17
+ARG FROM_TAG=3.11.4-alpine3.18
 FROM python:${FROM_TAG}
 
+LABEL version=3.11.4-alpine3.18
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 
 RUN apk update && apk add ca-certificates && rm -rf /var/cache/apk/* \
