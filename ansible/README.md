@@ -25,8 +25,8 @@
 | FILE                                       | NEEDED/OPTIONAL CHANGES                                     |
 |--------------------------------------------|-------------------------------------------------------------|
 | helmfile.yaml                              | all releases must be enabled (set to installed) |
-| environments/vm.yaml                       | set/change vmCount; vmName; vmNumCPUs; vmMemory; vmDiskSize; set createInventory: true; ansiblePlaybook: baseos-setup; prepareEnv: true; executeBaseos: true |
-| environments/{{ .Environment.Name }}.yaml  | set/change vmFolderPath; datastore; network; ansibleTargets;                 |
+| environments/vm.yaml                       | set/change vmCount; vmName; vmNumCPUs; vmMemory; vmDiskSize; ansibleTargets; set createInventory: true; ansiblePlaybook: baseos-setup; prepareEnv: true; executeBaseos: true |
+| environments/{{ .Environment.Name }}.yaml  | set/change vmFolderPath; datastore; network; |
 |
 
 </details>
@@ -36,7 +36,7 @@
 | FILE                                       | NEEDED/OPTIONAL CHANGES                                     |
 |--------------------------------------------|-------------------------------------------------------------|
 | helmfile.yaml                              | all releases must be enabled (set to installed) |
-| environments/vm.yaml                       | set/change vmCount; vmName; vmNumCPUs; vmMemory; vmDiskSize; createInventory: true; ansiblePlaybook: install-configure-nfs; prepareEnv: true; executeBaseos: true |
+| environments/vm.yaml                       | set/change vmCount; vmName; vmNumCPUs; vmMemory; vmDiskSize; ansibleTargets; createInventory: true; ansiblePlaybook: install-configure-nfs; prepareEnv: true; executeBaseos: true |
 | environments/{{ .Environment.Name }}.yaml | set/change vmFolderPath; datastore; network; osTemplate; |
 | defaults.yaml | set/change kind; permanent; nfsManageFirewall; nfsExportPaths |
 
@@ -60,9 +60,7 @@
 | FILE                                       | NEEDED/OPTIONAL CHANGES                                     |
 |--------------------------------------------|-------------------------------------------------------------|
 | helmfile.yaml                              | secrets; ansible & job releases must be enabled |
-| environments/vm.yaml                       | set createInventory: true; ansiblePlaybook: configure-rke-node; prepareEnv: true; executeBaseos: true |
-| environments/{{ .Environment.Name }}.yaml  | set/change ansibleTargets |
-
+| environments/vm.yaml                       | set createInventory: true; ansiblePlaybook: configure-rke-node; prepareEnv: true; ansibleTargets;  executeBaseos: true |
 
 </details>
 
