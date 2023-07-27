@@ -129,3 +129,39 @@ spec:
 ```
 
 </details>
+
+
+<details><summary>FLUX-SYSTEM</summary>
+
+```
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: flux-monitoring
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: cert-manager
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infra/flux-monitoring
+  prune: true
+  wait: true
+  postBuild:
+    substitute:
+      INGRESS_HOSTNAME: grafana
+      INGRESS_DOMAIN: app.4sthings.tiab.ssc.sva.de
+      CLUSTER_NAME: app
+      CLUSTER_DESCRIPTION: app-labda-vsphere
+    substituteFrom:
+      - kind: Secret
+        name: github-flux-secrets
+```
+
+</details>
+

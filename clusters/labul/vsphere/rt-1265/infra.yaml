@@ -91,3 +91,30 @@ spec:
     substitute:
       NFS_SERVER_FQDN: rt-nfs1.labul.sva.de
       NFS_SHARE_PATH: /var/nfs/k8s
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: flux-monitoring
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: cert-manager
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infra/flux-monitoring
+  prune: true
+  wait: true
+  postBuild:
+    substitute:
+      INGRESS_HOSTNAME: grafana
+      INGRESS_DOMAIN: rt-1265-mso.sthings-vsphere.labul.sva.de
+      CLUSTER_NAME: rt-1265
+      CLUSTER_DESCRIPTION: test-labul-vsphere
+    substituteFrom:
+      - kind: Secret
+        name: github-flux-secrets
