@@ -26,3 +26,9 @@ vaultToken: ref+vault://apps/vault/token
 ## PDNS
 entryZone: 4sthings.tiab.ssc.sva.de.
 pdnsUrl: https://pdns-vsphere.tiab.labda.sva.de:8443
+
+## FLUX
+githubRepoUrl: ref+vault://apps/github/repoURL
+msTeamsUrl: ref+vault://apps/github/msTeamsURL
+privateKey: ref+vault://apps/github/privateKey
+githubToken: ref+vault://apps/github/token
