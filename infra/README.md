@@ -102,3 +102,30 @@ spec:
 ```
 
 </details>
+
+<details><summary>NFS-CSI</summary>
+
+```
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: nfs-csi
+  namespace: flux-system
+spec:
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infra/nfs-csi
+  prune: true
+  wait: true
+  postBuild:
+    substitute:
+      NFS_SERVER_FQDN: srvfiles-test.tiab.labda.sva.de
+      NFS_SHARE_PATH: /var/nfs/k8s
+```
+
+</details>
