@@ -32,3 +32,7 @@ githubRepoUrl: ref+vault://apps/github/repoURL
 msTeamsUrl: ref+vault://apps/github/msTeamsURL
 privateKey: ref+vault://apps/github/privateKey
 githubToken: ref+vault://apps/github/token
+
+## MINIO
+minioAdminUser: ref+vault://apps/artifacts/accessKey
+minioAdminPassword: ref+vault://apps/artifacts/secretKey
