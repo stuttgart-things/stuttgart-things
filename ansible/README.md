@@ -25,18 +25,30 @@
 | FILE                                       | NEEDED/OPTIONAL CHANGES                                     |
 |--------------------------------------------|-------------------------------------------------------------|
 | helmfile.yaml                              | all releases must be enabled (set to installed) |
-| environments/vm.yaml                       | set/change vmCount; vmName; vmNumCPUs; vmMemory; vmDiskSize; set createInventory: true; ansiblePlaybook: baseos-setup |
+| environments/vm.yaml                       | set/change vmCount; vmName; vmNumCPUs; vmMemory; vmDiskSize; set createInventory: true; ansiblePlaybook: baseos-setup; prepareEnv: true; executeBaseos: true |
 | environments/{{ .Environment.Name }}.yaml  | set/change vmFolderPath; datastore; network; ansibleTargets;                 |
 |
 
 </details>
 
-<details><summary>VM CREATION + BASEOS + DEPLOY-UPGRADE-RKE</summary>
+<details><summary>VM CREATION + (BASEOS) + NFS SERVER</summary>
 
 | FILE                                       | NEEDED/OPTIONAL CHANGES                                     |
 |--------------------------------------------|-------------------------------------------------------------|
 | helmfile.yaml                              | all releases must be enabled (set to installed) |
-| environments/vm.yaml                       | set/change vmCount; vmName; vmNumCPUs; vmMemory; vmDiskSize; set inventory; createInventory: false; ansiblePlaybook: deploy-upgrade-rke |
+| environments/vm.yaml                       | set/change vmCount; vmName; vmNumCPUs; vmMemory; vmDiskSize; createInventory: true; ansiblePlaybook: install-configure-nfs; prepareEnv: true; executeBaseos: true |
+| environments/{{ .Environment.Name }}.yaml | set/change vmFolderPath; datastore; network; osTemplate; |
+| defaults.yaml | set/change kind; permanent; nfsManageFirewall; nfsExportPaths |
+
+</details>
+
+
+<details><summary>VM CREATION + (BASEOS) + DEPLOY-UPGRADE-RKE</summary>
+
+| FILE                                       | NEEDED/OPTIONAL CHANGES                                     |
+|--------------------------------------------|-------------------------------------------------------------|
+| helmfile.yaml                              | all releases must be enabled (set to installed) |
+| environments/vm.yaml                       | set/change vmCount; vmName; vmNumCPUs; vmMemory; vmDiskSize; set inventory; createInventory: false; ansiblePlaybook: deploy-upgrade-rke; prepareEnv: true; executeBaseos: true |
 | environments/{{ .Environment.Name }}.yaml  | set/change vmFolderPath; datastore; network; templatePath;                 |
 | defaults.yaml  | set/change rkeVersion; k8sVersion; rke2ReleaseKind; enableIngressController; clusterSetup   |
 |
@@ -48,7 +60,7 @@
 | FILE                                       | NEEDED/OPTIONAL CHANGES                                     |
 |--------------------------------------------|-------------------------------------------------------------|
 | helmfile.yaml                              | secrets; ansible & job releases must be enabled |
-| environments/vm.yaml                       | set createInventory: true; ansiblePlaybook: baseos-setup #or configure-rke-node |
+| environments/vm.yaml                       | set createInventory: true; ansiblePlaybook: configure-rke-node; prepareEnv: true; executeBaseos: true |
 | environments/{{ .Environment.Name }}.yaml  | set/change ansibleTargets |
 
 
@@ -60,7 +72,7 @@
 |--------------------------------------------|-------------------------------------------------------------|
 | helmfile.yaml                              | secrets; ansible & job releases must be enabled |
 | environments/vm.yaml                       | set inventory; createInventory: false; ansiblePlaybook: deploy-upgrade-rke |
-| defaults.yaml  | set/change rkeVersion; k8sVersion; rke2ReleaseKind; enableIngressController; clusterSetup   |
+| defaults.yaml  | set/change rkeVersion; k8sVersion; rke2ReleaseKind; enableIngressController; clusterSetup; prepareEnv: true; executeBaseos: true |
 |
 
 </details>

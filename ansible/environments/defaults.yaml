@@ -37,6 +37,13 @@ fluxNamespace: flux-system
 ipAddress: 10.31.103.11 # CLUSTER RELATED
 hostname: rt-1265-mso # CLUSTER RELATED
 
+# NFS
+kind: server
+permanent: true
+nfsManageFirewall: true
+nfsExportPaths:
+  - /var/nfs/k8s
+
 ## TF
 tfVersion: 1.5.3
 tfProviderName: vsphere

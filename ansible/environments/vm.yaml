@@ -1,15 +1,18 @@
 ---
 createInventory: true
-ansiblePlaybook: add-ingress-pdns #deploy-upgrade-rke #baseos-setup #configure-rke-node #install-configure-nfs
-prepareEnv: false
-executeBaseos: false
+ansiblePlaybook: install-configure-nfs #add-ingress-pdns #deploy-upgrade-rke #baseos-setup #configure-rke-node
+prepareEnv: true
+executeBaseos: true
 
 # TARGETS/INVENTORY + PLAYBOOK
-vmCount: 3
-vmName: rt-1265-mso
+vmCount: 1
+vmName: rt-nfs1
 vmNumCPUs: 6
-vmMemory: 8192
+vmMemory: 4096
 vmDiskSize: 96
+
+ansibleTargets: rt-nfs1.labul.sva.de
+# labul.sva.de; tiab.labda.sva.de
 
 # CUSTOM INVENTORY
 inventory:

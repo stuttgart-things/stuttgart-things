@@ -1,15 +1,13 @@
 ---
-ansibleTargets: mso-gude.labul.sva.de;mso-gude-2.labul.sva.de
-
 ## LAB
+vmFolderPath: phermann/testing
+network: LAB-10.31.103
+datastore: /LabUL/datastore/UL-ESX-SAS-01
 cloud: vsphere
 lab: labul
 datacenter: LabUL
-network: LAB-10.31.103
-vmTemplatePath: phermann/vm-templates
 osTemplate: ubuntu23
-vmFolderPath: phermann/testing
-datastore: /LabUL/datastore/UL-ESX-SAS-01
+vmTemplatePath: phermann/vm-templates
 resourcePool: /LabUL/host/Cluster01/Resources
 
 # MS-TEAMS

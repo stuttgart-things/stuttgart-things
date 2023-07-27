@@ -1,6 +1,4 @@
 ---
-ansibleTargets: mso-vm2.tiab.labda.sva.de
-
 ## LAB
 cloud: vsphere
 lab: labda

@@ -276,11 +276,13 @@ configmaps:
         gather_facts: true
         become: true
         vars:
-          kind: server
-          permanent: true
-          nfs_manage_firewall: true
+          kind: {{ .Values.kind }}
+          permanent: {{ .Values.permanent }}
+          nfs_manage_firewall: {{ .Values.nfsManageFirewall }}
           nfs_export_path:
-            - /var/nfs/k8s
+            {{- range .Values.nfsExportPaths }}
+            - {{ . }}
+            {{- end }}
 
         roles:
           - install-configure-nfs
