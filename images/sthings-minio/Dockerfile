@@ -1,7 +1,7 @@
-FROM docker.io/bitnami/minio:2023.5.4-debian-11-r1
+FROM docker.io/bitnami/minio:2023.7.18-debian-11-r0
 
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
-LABEL version=12.6.0
+LABEL version=12.6.11
 
 USER root
 
