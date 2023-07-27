@@ -24,8 +24,7 @@ vaultSecretID: ref+vault://apps/vault/secretID
 vaultCABundle: ref+vault://apps/vault/vaultCA
 vaultPkiPath: sthings-vsphere.labul.sva.de
 vaultToken: ref+vault://apps/vault/token
+
 ## PDNS
-ipAddress: # CLUSTER RELATED
-hostname: # CLUSTER RELATED
 entryZone: sthings-vsphere.labul.sva.de.
-pdnsUrl: pdns-vsphere.labul.sva.de
+pdnsUrl: https://pdns-vsphere.labul.sva.de:8443

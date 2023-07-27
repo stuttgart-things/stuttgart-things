@@ -244,7 +244,7 @@ configmaps:
               GITHUB_TOKEN: {{`{{printf "%q" "{{ github_token }}" }}`}}
             when: install_flux|bool
 
-    power-dns.yaml: |
+    add-ingress-pdns.yaml: |
       ---
       - hosts: localhost
         gather_facts: no

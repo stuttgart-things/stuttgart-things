@@ -1,6 +1,8 @@
 ---
-createInventory: false
-ansiblePlaybook: deploy-upgrade-rke #baseos-setup #configure-rke-node #install-configure-nfs #power-dns
+createInventory: true
+ansiblePlaybook: add-ingress-pdns #deploy-upgrade-rke #baseos-setup #configure-rke-node #install-configure-nfs
+prepareEnv: false
+executeBaseos: false
 
 # TARGETS/INVENTORY + PLAYBOOK
 vmCount: 3

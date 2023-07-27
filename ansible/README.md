@@ -65,7 +65,16 @@
 
 </details>
 
+<details><summary>ADD INGRESS IP TO PNDS</summary>
 
+| FILE                                       | NEEDED/OPTIONAL CHANGES                                     |
+|--------------------------------------------|-------------------------------------------------------------|
+| helmfile.yaml                              | secrets; ansible & job releases must be enabled |
+| environments/vm.yaml                       | set createInventory: true; ansiblePlaybook: add-ingress-pdns.yaml |
+| defaults.yaml  | set/change prepareEnv: false; executeBaseos: false; ipAddress; hostname |
+|
+
+</details>
 
 ## EXECUTION
 

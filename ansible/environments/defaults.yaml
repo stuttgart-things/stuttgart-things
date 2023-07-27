@@ -5,8 +5,6 @@ ansibleImageTag: 8.2.0-2
 
 # BASEOS-SETUP
 rebootAll: true
-prepareEnv: true
-executeBaseos: true
 manageFilesystem: true
 installRequirements: true
 updatePackages: true
@@ -34,6 +32,10 @@ uploadKubeconfigVault: true
 secretPathKubeconfig: kubeconfigs/data/dev8
 installFlux: true
 fluxNamespace: flux-system
+
+# PDNS
+ipAddress: 10.31.103.11 # CLUSTER RELATED
+hostname: rt-1265-mso # CLUSTER RELATED
 
 ## TF
 tfVersion: 1.5.3

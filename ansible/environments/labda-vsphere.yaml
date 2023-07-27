@@ -26,7 +26,5 @@ vaultPkiPath: 4sthings.tiab.ssc.sva.de
 vaultToken: ref+vault://apps/vault/token
 
 ## PDNS
-ipAddress: 10.100.136.226 # CLUSTER RELATED
-hostname: dev8 # CLUSTER RELATED
 entryZone: 4sthings.tiab.ssc.sva.de.
 pdnsUrl: https://pdns-vsphere.tiab.labda.sva.de:8443
