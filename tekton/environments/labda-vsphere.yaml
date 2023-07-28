@@ -21,4 +21,8 @@ buildahWorkspaceStorage: 10Gi
 buildahWorkspaceAccessMode: ReadWriteOnce
 buildahTestRunImage: sthings-minio
 
-buildahRegistryGCR: true
+buildahRegistryGCR: false
+buildahRegistryLogin: true
+
+scrUsername: ref+vault://apps/scr/username
+scrPassword: ref+vault://apps/scr/password

@@ -10,10 +10,14 @@ runs:
       git-revision: main
       context: /buildah/{{ .Values.buildahTestRunImage }}/images/{{ .Values.buildahTestRunImage }}
       gitWorkspaceSubdirectory: /buildah/{{ .Values.buildahTestRunImage }}
-      image: eu.gcr.io/stuttgart-things/{{ .Values.buildahTestRunImage }}:12.6.11
+      image: scr.app.4sthings.tiab.ssc.sva.de/{{ .Values.buildahTestRunImage }}/{{ .Values.buildahTestRunImage }}:12.6.11
       dockerfile: images/{{ .Values.buildahTestRunImage }}/Dockerfile
       tlsVerify: false
       storagDriver: overlay
+      registry: scr.app.4sthings.tiab.ssc.sva.de
+      {{- if .Values.buildahRegistryLogin }}
+      registryInlineSecret: scr-labda-vsphere-inline
+      {{- end }}
     workspaces:
       ssh-credentials:
         workspaceKind: secret

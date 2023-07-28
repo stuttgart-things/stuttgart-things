@@ -61,6 +61,14 @@ tasks:
       SUBDIRECTORY:
         description: subdirectory of workspace
         default: ""
+      REGISTRY:
+        description: registry of to be build image
+        default: ""
+      {{- if .Values.buildahRegistryLogin }}
+      REGISTRY_INLINE_SECRET:
+        description: registry of to be build image
+        default: ""
+      {{- end }}
     steps:
       build:
         volumeMounts:
@@ -72,9 +80,24 @@ tasks:
         env:
           CERT_DIR_FLAG:
             value: $(workspaces.sslcertdir.path)
+        {{- if .Values.buildahRegistryLogin }}
+          REGISTRY_USER:
+            valueFrom:
+              secretKeyRef:
+                name: $(params.REGISTRY_INLINE_SECRET)
+                key: username
+          REGISTRY_PASSWORD:
+            valueFrom:
+              secretKeyRef:
+                name: $(params.REGISTRY_INLINE_SECRET)
+                key: password
+        {{- end }}
         script: |
           #!/usr/bin/env sh
+
           set -eu
+
+          echo $(params.IMAGE) will be pushed to $(params.REGISTRY)
 
           [[ "$(workspaces.sslcertdir.bound)" == "true" ]] && CERT_DIR_FLAG="--cert-dir $(workspaces.sslcertdir.path)"
 
@@ -84,6 +107,10 @@ tasks:
           cp /root/secrets/gcr.json /tmp/gcr.json
 
           cat /tmp/gcr.json | buildah login -u _json_key --password-stdin \eu.gcr.io
+
+          {{- else if .Values.buildahRegistryLogin }}
+
+          buildah login --tls-verify=$(params.TLSVERIFY) -u ${REGISTRY_USER} -p ${REGISTRY_PASSWORD} $(params.REGISTRY)
 
           {{- else }}
 

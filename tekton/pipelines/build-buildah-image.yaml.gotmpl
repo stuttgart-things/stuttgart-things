@@ -40,6 +40,8 @@ pipelines:
       storagDriver:
         description: buildah storage driver
         default: vfs
+      registryInlineSecret:
+        description: registry inline secret
     tasks:
       fetch-repository:
         task: git-clone
@@ -69,6 +71,8 @@ pipelines:
         params:
           SUBDIRECTORY:
             value: $(params.gitWorkspaceSubdirectory)
+          REGISTRY:
+            value: $(params.registry)
           IMAGE:
             value: $(params.image)
           CONTEXT:
@@ -81,6 +85,8 @@ pipelines:
             value: $(params.tlsVerify)
           STORAGE_DRIVER:
             value: $(params.storagDriver)
+          REGISTRY_INLINE_SECRET:
+            value: $(params.registryInlineSecret)
       send-msteams-notification:
         task: send-msteams-notification
         runAfter:

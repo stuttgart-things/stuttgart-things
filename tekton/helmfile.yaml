@@ -38,12 +38,13 @@ releases:
     chart: stuttgart-things/tekton-resources
     version: v0.47.15
     values:
-      # - "workspaces/tekton-kaniko.yaml.gotmpl"
-      # - "secrets/scr-registry-credentials.yaml.gotmpl"
+      - "workspaces/tekton-kaniko.yaml.gotmpl"
+      - "secrets/scr-registry-credentials.yaml.gotmpl"
       - "secrets/gcr-registry-credentials.yaml.gotmpl"
-      # - "secrets/git-ssh-credentials.yaml.gotmpl"
-      # - "secrets/msteams-notification.yaml.gotmpl"
-      # - "tasks/git-clone.yaml.gotmpl"
+      - "secrets/git-ssh-credentials.yaml.gotmpl"
+      - "secrets/msteams-notification.yaml.gotmpl"
+      - "secrets/scr-inline-credentials.yaml.gotmpl"
+      - "tasks/git-clone.yaml.gotmpl"
       - "tasks/buildah.yaml.gotmpl"
       - "tasks/send-msteams-notification.yaml.gotmpl"
       - "pipelines/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
