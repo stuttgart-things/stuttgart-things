@@ -66,3 +66,26 @@ spec:
 ```
 
 </details>
+
+<details><summary>KEDA</summary>
+
+```
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: keda
+  namespace: flux-system
+spec:
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./apps/keda
+  prune: true
+  wait: true
+```
+
+</details>
