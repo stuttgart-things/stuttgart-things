@@ -45,6 +45,8 @@ spec:
           values: |
             tektonResources:
               enabled: true
+            pipelineRuns:
+              enableRuns: true
           parameters:
             - name: pipelineRuns.runs.buildHelmChart.name
               value: '{{ appShort }}-helm-${ARGOCD_APP_REVISION}'
