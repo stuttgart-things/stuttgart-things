@@ -23,6 +23,9 @@ tasks:
         description: includes a docker `config.json`
         optional: true
         mountPath: /root/.docker
+        {{- if .Values.buildahRegistryGCR }}
+        mountPath: /root/secrets
+        {{- end }}
     results:
       IMAGE_DIGEST:
         description: digest of the image just built
@@ -74,14 +77,29 @@ tasks:
           set -eu
 
           [[ "$(workspaces.sslcertdir.bound)" == "true" ]] && CERT_DIR_FLAG="--cert-dir $(workspaces.sslcertdir.path)"
-          [[ "$(workspaces.dockerconfig.bound)" == "true" ]] && export DOCKER_CONFIG="$(workspaces.dockerconfig.path)"
 
           cat $(params.DOCKERFILE)
+
+          {{- if .Values.buildahRegistryGCR }}
+          cp /root/secrets/gcr.json /tmp/gcr.json
+
+          cat /tmp/gcr.json | buildah login -u _json_key --password-stdin \eu.gcr.io
+
+          {{- else }}
+
+          [[ "$(workspaces.dockerconfig.bound)" == "true" ]] && export DOCKER_CONFIG="$(workspaces.dockerconfig.path)"
+
+          {{- end }}
 
           buildah ${CERT_DIR_FLAG} --storage-driver=$(params.STORAGE_DRIVER) bud \
           --format=$(params.FORMAT) --tls-verify=$(params.TLSVERIFY) --no-cache \
           -f $(params.DOCKERFILE) \
           -t $(params.IMAGE)
+
+          buildah ${CERT_DIR_FLAG} --storage-driver=$(params.STORAGE_DRIVER) push \
+          $(params.PUSH_EXTRA_ARGS) --tls-verify=$(params.TLSVERIFY) \
+          --digestfile /tmp/image-digest $(params.IMAGE) \
+          docker://$(params.IMAGE)
 
           cat /tmp/image-digest | tee $(results.IMAGE_DIGEST.path)
           echo -n "$(params.IMAGE)" | tee $(results.IMAGE_URL.path)

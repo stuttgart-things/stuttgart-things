@@ -1,5 +1,6 @@
 ---
 scrDockerConfig: ref+vault://apps/yacht/scr-labda
+gcrDockerJson: ref+vault://apps/gcr/gcrJson
 sshCodehubCredentials: ref+vault://apps/yacht/codehub-ssh
 sshGithubCredentials: ref+vault://apps/yacht/github-ssh
 msTeamsWebhook: ref+vault://apps/yacht/msteams
@@ -18,4 +19,6 @@ kanikoTestRunImage: sthings-ansible
 buildahWorkspaceName: kaniko-workspace
 buildahWorkspaceStorage: 10Gi
 buildahWorkspaceAccessMode: ReadWriteOnce
-buildahTestRunImage: sthings-alpine
+buildahTestRunImage: sthings-minio
+
+buildahRegistryGCR: true

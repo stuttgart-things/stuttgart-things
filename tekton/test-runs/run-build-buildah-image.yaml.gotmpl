@@ -10,7 +10,7 @@ runs:
       git-revision: main
       context: /buildah/{{ .Values.buildahTestRunImage }}/images/{{ .Values.buildahTestRunImage }}
       gitWorkspaceSubdirectory: /buildah/{{ .Values.buildahTestRunImage }}
-      image: {{ .Values.registry }}/{{ .Values.buildahTestRunImage }}:{{ randAlphaNum 5 | lower }}
+      image: eu.gcr.io/stuttgart-things/{{ .Values.buildahTestRunImage }}:12.6.11
       dockerfile: images/{{ .Values.buildahTestRunImage }}/Dockerfile
       tlsVerify: false
       storagDriver: overlay
@@ -23,4 +23,4 @@ runs:
         workspaceRef: {{ .Values.buildahWorkspaceName }}
       dockerconfig:
         workspaceKind: secret
-        workspaceRef: scr-{{ .Environment.Name }}
+        workspaceRef: gcr-{{ .Environment.Name }}
