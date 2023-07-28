@@ -36,3 +36,6 @@ githubToken: ref+vault://apps/github/token
 ## MINIO
 minioAdminUser: ref+vault://apps/artifacts/accessKey
 minioAdminPassword: ref+vault://apps/artifacts/secretKey
+
+## REDIS
+redisPassword: ref+vault://apps/redis/password
