@@ -2,9 +2,10 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: tekton-cd-pipelineRuns
+  name: tekton-cd-pipelineruns
   namespace: argocd
 spec:
+  project: app
   sources:
   - repoURL: eu.gcr.io/stuttgart-things
     chart: tekton-resources
