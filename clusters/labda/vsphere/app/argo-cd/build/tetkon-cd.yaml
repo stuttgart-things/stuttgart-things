@@ -51,6 +51,14 @@ spec:
                   secretKVs:
                     username: <path:apps/data/scr#username>
                     password: <path:apps/data/scr#password>
+                gcr-reg:
+                  name: gcr-reg
+                  labels:
+                    app: tekton
+                    technology: buildah
+                  dataType: data
+                  secretKVs:
+                    gcr.json: <path:apps/data/gcr#gcrJson>
               gitSecretsSSH:
                 github:
                   name: github-ssh
