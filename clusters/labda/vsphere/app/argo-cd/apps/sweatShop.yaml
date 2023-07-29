@@ -83,7 +83,6 @@ spec:
                 REDIS_STREAM: sweatshop:manifests
                 REDIS_SERVER: redis-sweatshop-deployment-headless.sweatshop-redis.svc.cluster.local
                 REDIS_PORT: "6379"
-                REDIS_PASSWORD: <path:apps/data/sweatshop#redisPassword>
             clusterRoleBindings:
               sweatshop-creator:
                 subjects:
