@@ -170,6 +170,107 @@ pipelines:
           webhook-url-secret-key:
             value: url
 
+  build-buildah-image:
+    workspaces:
+      - shared-workspace
+      - ssh-credentials
+    params:
+      image:
+        description: reference of the image to build
+      registry:
+        description: registry FROM (base image)
+      gitRepoUrl:
+        description: source git repo
+      gitWorkspaceSubdirectory:
+        description: subdirectory on workspace
+        default: ""
+      git-revision:
+        description: revision of source git repo
+        default: "main"
+      context:
+        description: path to context
+      dockerfile:
+        description: path to dockerfile
+      buildahImage:
+        description: buildah image
+        default: "quay.io/buildah/stable:v1.23.3"
+      tlsVerify:
+        description: buildah image
+        default: "true"
+      storagDriver:
+        description: buildah storage driver
+        default: vfs
+      registryInlineSecret:
+        description: registry inline secret
+    tasks:
+      fetch-repository:
+        task: git-clone
+        workspaces:
+          output:
+            workspace: shared-workspace
+          ssh-directory:
+            workspace: ssh-credentials
+        params:
+          url:
+            value: $(params.gitRepoUrl)
+          subdirectory:
+            value: $(params.gitWorkspaceSubdirectory)
+          deleteExisting:
+            value: "'true'"
+          revision:
+            value: $(params.git-revision)
+      buildah:
+        task: buildah
+        runAfter:
+          - fetch-repository
+        workspaces:
+          source:
+            workspace: shared-workspace
+        params:
+          SUBDIRECTORY:
+            value: $(params.gitWorkspaceSubdirectory)
+          REGISTRY:
+            value: $(params.registry)
+          IMAGE:
+            value: $(params.image)
+          CONTEXT:
+            value: $(params.context)
+          DOCKERFILE:
+            value: $(params.dockerfile)
+          BUILDER_IMAGE:
+            value: $(params.buildahImage)
+          TLSVERIFY:
+            value: $(params.tlsVerify)
+          STORAGE_DRIVER:
+            value: $(params.storagDriver)
+          REGISTRY_INLINE_SECRET:
+            value: $(params.registryInlineSecret)
+      send-msteams-notification:
+        task: send-msteams-notification
+        runAfter:
+          - buildah
+        params:
+          message:
+            value: "image $(params.image) build & pushed successfully w/ buildah ($(tasks.buildah.results.IMAGE_DIGEST))"
+          webhook-url-secret:
+            value: msteams
+          webhook-url-secret-key:
+            value: url
+    finally:
+      notify-any-failure:
+        task: send-msteams-notification
+        params:
+          message:
+            value: "buildah image build for $(params.image) failed!!"
+          webhook-url-secret:
+            value: msteams
+          webhook-url-secret-key:
+            value: url
+        when:
+          $(tasks.status):
+            operator: in
+            values: Failed
+
   build-kaniko-image:
     workspaces:
       - shared-workspace

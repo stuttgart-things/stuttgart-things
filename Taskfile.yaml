@@ -7,6 +7,8 @@ vars:
   PROJECT:
     sh: echo ${PROJECT}
   CONTAINER_RUNTIME_CMD: sudo nerdctl
+  DATE:
+    sh: date +"%y.%m%d.%H%M"
 
 tasks:
 
@@ -15,6 +17,7 @@ tasks:
     cmds:
       - '{{ .CONTAINER_RUNTIME_CMD }} build -t {{ .REGISTRY }}/{{ .REPOSITORY_NAME }}/{{ .PROJECT }}:{{ .VERSION }} ./images/{{ .PROJECT }}'
       - '{{ .CONTAINER_RUNTIME_CMD }} push {{ .REGISTRY }}/{{ .REPOSITORY_NAME }}/{{ .PROJECT }}:{{ .VERSION }}'
+      - task: git-push
     vars:
       VERSION:
         sh: cat ./images/{{ .PROJECT }}/Dockerfile | grep version | awk -F= '{ print $2 }'
@@ -28,6 +31,7 @@ tasks:
       - helm package ./charts/{{ .PROJECT }}
       - helm push {{ .PACKAGE }} oci://{{ .REGISTRY }}/{{ .REPOSITORY_NAME }}
       - rm -rf {{ .PACKAGE }}
+      - task: git-push
     vars:
       PACKAGE:
         sh: "echo ${PROJECT}-*.tgz"
@@ -37,3 +41,12 @@ tasks:
         sh: "echo $(({{ .CURRENT_VERSION_NUMBER }}+1))"
       VERSION_NUMBER_PREFIX:
         sh: echo $(yq e '.version' ./charts/{{ .PROJECT }}/Chart.yaml | awk -F'[.=]' ' { print $1"."$2"." }')
+
+  git-push:
+    desc: Commit & push the module
+    cmds:
+      - git pull
+      - git config advice.addIgnoredFile false
+      - git add *
+      - git commit -am 'updated {{ .PROJECT }} {{ .DATE }} for tag version {{ .UPDATED_TAG_VERSION }}{{ .BRANCH }}'
+      - git push
