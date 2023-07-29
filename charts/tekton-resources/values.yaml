@@ -1,5 +1,5 @@
 ---
-defaultNamespace: tekton-cd
+defaultNamespace: tektoncd
 
 enableTasks: false
 enableExtraTasks: false
@@ -95,172 +95,172 @@ enableExtraPipelines: false
 #     username: <path:git/data/codehub#git_token_username>
 #     password: <path:git/data/codehub#git_token_password>
 
-# pipelines:
-#   package-publish-helmchart:
-#     workspaces:
-#       - source
-#       - ssh-credentials
-#       - dockerconfig
-#     params:
-#       git-repo-url:
-#         description: source git repo
-#       git-revision:
-#         description: revision of source git repo
-#       gitWorkspaceSubdirectory:
-#         description: subdirectory on workspace
-#         default: ""
-#       helm-chart-path:
-#         description: directory to helm chart in repo, e.g. "helm"
-#       helm-chart-name:
-#         description: name of helm chart, e.g. "sthings-k8s-operator"
-#       helm-chart-tag:
-#         description: tag of helm chart, e.g. "0.1.0"
-#       registry:
-#         description: registry url, e.g. "scr.tiab.labda.sva.de"
-#       working-image:
-#         description: working image
-#     tasks:
-#       fetch-repository:
-#         task: git-clone
-#         workspaces:
-#           output:
-#             workspace: source
-#           ssh-directory:
-#             workspace: ssh-credentials
-#         params:
-#           url:
-#             value: $(params.git-repo-url)
-#           revision:
-#             value: $(params.git-revision)
-#           subdirectory:
-#             value: $(params.gitWorkspaceSubdirectory)
-#           deleteExisting:
-#             value: "'true'"
-#       build-package-helmchart:
-#         task: create-publish-helm-chart
-#         runAfter:
-#           - fetch-repository
-#         workspaces:
-#           source:
-#             workspace: source
-#           dockerconfig:
-#             workspace: dockerconfig
-#         params:
-#           PATH:
-#             value: $(params.helm-chart-path)
-#           CHARTNAME:
-#             value: $(params.helm-chart-name)
-#           CHARTTAG:
-#             value: $(params.helm-chart-tag)
-#           REGISTRY:
-#             value: $(params.registry)
-#           IMAGE:
-#             value: $(params.working-image)
-#           SUBDIRECTORY:
-#             value: $(params.gitWorkspaceSubdirectory)
-#       send-webhook-msteams:
-#         task: send-msteams-webhook
-#         runAfter:
-#           - build-package-helmchart
-#         params:
-#           message:
-#             value: "helm chart $(params.helm-chart-name):$(params.helm-chart-tag) packaged & pushed successfully to oci://$(params.registry)/$(params.helm-chart-name)/"
-#           webhook-url-secret:
-#             value: msteams
-#           webhook-url-secret-key:
-#             value: url
+pipelines:
+  package-publish-helmchart:
+    workspaces:
+      - source
+      - ssh-credentials
+      - dockerconfig
+    params:
+      git-repo-url:
+        description: source git repo
+      git-revision:
+        description: revision of source git repo
+      gitWorkspaceSubdirectory:
+        description: subdirectory on workspace
+        default: ""
+      helm-chart-path:
+        description: directory to helm chart in repo, e.g. "helm"
+      helm-chart-name:
+        description: name of helm chart, e.g. "sthings-k8s-operator"
+      helm-chart-tag:
+        description: tag of helm chart, e.g. "0.1.0"
+      registry:
+        description: registry url, e.g. "scr.tiab.labda.sva.de"
+      working-image:
+        description: working image
+    tasks:
+      fetch-repository:
+        task: git-clone
+        workspaces:
+          output:
+            workspace: source
+          ssh-directory:
+            workspace: ssh-credentials
+        params:
+          url:
+            value: $(params.git-repo-url)
+          revision:
+            value: $(params.git-revision)
+          subdirectory:
+            value: $(params.gitWorkspaceSubdirectory)
+          deleteExisting:
+            value: "'true'"
+      build-package-helmchart:
+        task: create-publish-helm-chart
+        runAfter:
+          - fetch-repository
+        workspaces:
+          source:
+            workspace: source
+          dockerconfig:
+            workspace: dockerconfig
+        params:
+          PATH:
+            value: $(params.helm-chart-path)
+          CHARTNAME:
+            value: $(params.helm-chart-name)
+          CHARTTAG:
+            value: $(params.helm-chart-tag)
+          REGISTRY:
+            value: $(params.registry)
+          IMAGE:
+            value: $(params.working-image)
+          SUBDIRECTORY:
+            value: $(params.gitWorkspaceSubdirectory)
+      send-webhook-msteams:
+        task: send-msteams-webhook
+        runAfter:
+          - build-package-helmchart
+        params:
+          message:
+            value: "helm chart $(params.helm-chart-name):$(params.helm-chart-tag) packaged & pushed successfully to oci://$(params.registry)/$(params.helm-chart-name)/"
+          webhook-url-secret:
+            value: msteams
+          webhook-url-secret-key:
+            value: url
 
-#   build-kaniko-image:
-#     workspaces:
-#       - shared-workspace
-#       - ssh-credentials
-#       - dockerconfig
-#     params:
-#       image:
-#         description: reference of the image to build
-#       tag:
-#         description: reference of the tag of the image to build
-#       registry:
-#         description: registry FROM (base image)
-#       gitRepoUrl:
-#         description: source git repo
-#       gitWorkspaceSubdirectory:
-#         description: subdirectory on workspace
-#         default: ""
-#       git-revision:
-#         description: revision of source git repo
-#         default: "main"
-#       context:
-#         description: path to context
-#       dockerfile:
-#         description: path to dockerfile
-#     tasks:
-#       fetch-repository:
-#         task: git-clone
-#         workspaces:
-#           output:
-#             workspace: shared-workspace
-#           ssh-directory:
-#             workspace: ssh-credentials
-#         params:
-#           url:
-#             value: $(params.gitRepoUrl)
-#           subdirectory:
-#             value: $(params.gitWorkspaceSubdirectory)
-#           deleteExisting:
-#             value: "'true'"
-#           revision:
-#             value: $(params.git-revision)
-#       kaniko:
-#         task: kaniko
-#         runAfter:
-#           - fetch-repository
-#         workspaces:
-#           source:
-#             workspace: shared-workspace
-#           dockerconfig:
-#             workspace: dockerconfig
-#         params:
-#           SUBDIRECTORY:
-#             value: $(params.gitWorkspaceSubdirectory)
-#           IMAGE:
-#             value: $(params.image)
-#           TAG:
-#             value: $(params.tag)
-#           REGISTRY:
-#             value: $(params.registry)
-#           CONTEXT:
-#             value: $(params.context)
-#           DOCKERFILE:
-#             value: $(params.dockerfile)
-#           EXTRA_ARGS:
-#             values:
-#               - --skip-tls-verify
-#       send-webhook-msteams:
-#         task: send-msteams-webhook
-#         runAfter:
-#           - kaniko
-#         params:
-#           message:
-#             value: "image $(params.image):$(params.tag) build & pushed successfully w/ kaniko ($(tasks.kaniko.results.IMAGE_DIGEST))"
-#           webhook-url-secret:
-#             value: msteams
-#           webhook-url-secret-key:
-#             value: url
-#     finally:
-#       notify-any-failure:
-#         task: send-msteams-webhook
-#         params:
-#           message:
-#             value: "kaniko image build for $(params.image):$(params.tag) failed!!"
-#           webhook-url-secret:
-#             value: msteams
-#           webhook-url-secret-key:
-#             value: url
-#         when:
-#           $(tasks.status):
-#             operator: in
-#             values: Failed
+  build-kaniko-image:
+    workspaces:
+      - shared-workspace
+      - ssh-credentials
+      - dockerconfig
+    params:
+      image:
+        description: reference of the image to build
+      tag:
+        description: reference of the tag of the image to build
+      registry:
+        description: registry FROM (base image)
+      gitRepoUrl:
+        description: source git repo
+      gitWorkspaceSubdirectory:
+        description: subdirectory on workspace
+        default: ""
+      git-revision:
+        description: revision of source git repo
+        default: "main"
+      context:
+        description: path to context
+      dockerfile:
+        description: path to dockerfile
+    tasks:
+      fetch-repository:
+        task: git-clone
+        workspaces:
+          output:
+            workspace: shared-workspace
+          ssh-directory:
+            workspace: ssh-credentials
+        params:
+          url:
+            value: $(params.gitRepoUrl)
+          subdirectory:
+            value: $(params.gitWorkspaceSubdirectory)
+          deleteExisting:
+            value: "'true'"
+          revision:
+            value: $(params.git-revision)
+      kaniko:
+        task: kaniko
+        runAfter:
+          - fetch-repository
+        workspaces:
+          source:
+            workspace: shared-workspace
+          dockerconfig:
+            workspace: dockerconfig
+        params:
+          SUBDIRECTORY:
+            value: $(params.gitWorkspaceSubdirectory)
+          IMAGE:
+            value: $(params.image)
+          TAG:
+            value: $(params.tag)
+          REGISTRY:
+            value: $(params.registry)
+          CONTEXT:
+            value: $(params.context)
+          DOCKERFILE:
+            value: $(params.dockerfile)
+          EXTRA_ARGS:
+            values:
+              - --skip-tls-verify
+      send-webhook-msteams:
+        task: send-msteams-webhook
+        runAfter:
+          - kaniko
+        params:
+          message:
+            value: "image $(params.image):$(params.tag) build & pushed successfully w/ kaniko ($(tasks.kaniko.results.IMAGE_DIGEST))"
+          webhook-url-secret:
+            value: msteams
+          webhook-url-secret-key:
+            value: url
+    finally:
+      notify-any-failure:
+        task: send-msteams-webhook
+        params:
+          message:
+            value: "kaniko image build for $(params.image):$(params.tag) failed!!"
+          webhook-url-secret:
+            value: msteams
+          webhook-url-secret-key:
+            value: url
+        when:
+          $(tasks.status):
+            operator: in
+            values: Failed
 
 tasks:
   create-publish-helm-chart:
@@ -623,7 +623,7 @@ tasks:
           printf "%s" "${RESULT_COMMITTER_DATE}" > "$(results.committer-date.path)"
           printf "%s" "${RESULT_SHA}" > "$(results.commit.path)"
           printf "%s" "${PARAM_URL}" > "$(results.url.path)"
-  buildah:
+  buildah-gcr:
     labels:
       app.kubernetes.io/version: "0.5"
     annotations:
