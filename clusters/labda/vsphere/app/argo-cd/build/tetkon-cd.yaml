@@ -41,6 +41,7 @@ spec:
             targetRevision: v0.47.15
             appValues: |
               enableSecrets: true
+              enableGitSecretsSSH: true
               secrets:
                 scr-labda-inline:
                   name: scr-labda-inline
@@ -50,6 +51,15 @@ spec:
                   secretKVs:
                     username: <path:apps/data/scr#username>
                     password: <path:apps/data/scr#password>
+              gitSecretsSSH:
+                github:
+                  name: github-ssh
+                  labels:
+                    app: tekton
+                    technology: git
+                  dataType: data
+                  secretKVs:
+                    id_rsa: <path:apps/data/yacht#github-ssh>
   template:
     metadata:
       name: '{{ app }}-{{ kind }}-{{ destination }}'
