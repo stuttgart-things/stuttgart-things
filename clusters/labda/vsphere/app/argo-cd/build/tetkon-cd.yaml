@@ -40,6 +40,7 @@ spec:
             chart: tekton-resources
             targetRevision: v0.47.15
             appValues: |
+              enableSecrets: true
               secrets:
                 scr-labda-inline:
                   name: scr-labda-inline
