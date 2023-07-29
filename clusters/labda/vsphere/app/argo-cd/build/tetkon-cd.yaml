@@ -14,7 +14,7 @@ spec:
             namespace: tektoncd
             repoURL: eu.gcr.io/stuttgart-things
             chart: tekton-resources
-            targetRevision: v0.47.19
+            targetRevision: v0.47.21
             appValues: |
               enableWorkspaces: true
               workspaces:
@@ -38,7 +38,7 @@ spec:
             namespace: tektoncd
             repoURL: eu.gcr.io/stuttgart-things
             chart: tekton-resources
-            targetRevision: v0.47.19
+            targetRevision: v0.47.21
             appValues: |
               enableSecrets: true
               enableGitSecretsSSH: true
@@ -74,7 +74,7 @@ spec:
             namespace: tektoncd
             repoURL: eu.gcr.io/stuttgart-things
             chart: tekton-resources
-            targetRevision: v0.47.19
+            targetRevision: v0.47.21
             appValues: |
               enableTasks: true
           - app: tekton
@@ -83,7 +83,7 @@ spec:
             namespace: tektoncd
             repoURL: eu.gcr.io/stuttgart-things
             chart: tekton-resources
-            targetRevision: v0.47.19
+            targetRevision: v0.47.21
             appValues: |
               enablePipelines: true
   template:
