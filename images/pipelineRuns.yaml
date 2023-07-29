@@ -2,7 +2,7 @@
 enableRuns: true
 runs:
   buildKanikoImageGithub:
-    name: kaniko-testrun-github-2
+    name: kaniko-testrun-github-3
     addRandomDateToRunName: false
     namespace: tektoncd
     kind: Pipeline
