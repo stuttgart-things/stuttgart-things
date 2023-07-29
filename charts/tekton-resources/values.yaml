@@ -1,5 +1,5 @@
 ---
-defaultNamespace: yacht
+defaultNamespace: tekton-cd
 
 enableTasks: false
 enableExtraTasks: false
@@ -262,365 +262,483 @@ enableExtraPipelines: false
 #             operator: in
 #             values: Failed
 
-# tasks:
-#   create-publish-helm-chart:
-#     labels:
-#       app.kubernetes.io/version: "0.2"
-#     annotations:
-#       tekton.dev/pipelines.minVersion: "0.48.0"
-#       tekton.dev/categories: helm chart Build
-#       tekton.dev/tags: helm-chart-build
-#       tekton.dev/platforms: "linux/amd64"
-#     description: create and publish helm chart to a registry
-#     workspaces:
-#       source:
-#         description: holds helm chart source
-#         optional: false
-#       dockerconfig:
-#         description: includes a docker `config.json`
-#         optional: false
-#         mountPath: /home/nonroot/.config/helm/registry/
-#     params:
-#       PATH:
-#         description: directory to helm chart in repo, e.g. "helm"
-#       CHARTNAME:
-#         description: name of helm chart, e.g. "sthings-k8s-operator"
-#       CHARTTAG:
-#         description: tag of helm chart, e.g. "0.1.0"
-#       REGISTRY:
-#         description: registry url, e.g. "scr.tiab.labda.sva.de"
-#       IMAGE:
-#         description: working image
-#         default: eu.gcr.io/stuttgart-things/sthings-k8s:1.127.2
-#       SUBDIRECTORY:
-#         description: subdirectory of workspace
-#         default: ""
-#     steps:
-#       publish-helm-chart:
-#         workingDir: $(workspaces.source.path)/$(params.SUBDIRECTORY)
-#         image: $(params.IMAGE)
-#         securityContext:
-#           runAsNonRoot: true
-#           runAsUser: 65532
-#         script: |
-#           #!/usr/bin/env sh
-#           helm dependency update $(params.PATH)/$(params.CHARTNAME)
-#           helm package --version $(params.CHARTTAG)-helm $(params.PATH)/$(params.CHARTNAME)
-#           helm push $(params.CHARTNAME)-$(params.CHARTTAG)-helm.tgz oci://$(params.REGISTRY)/$(params.CHARTNAME)/
-#   kaniko:
-#     labels:
-#       app.kubernetes.io/version: "0.6"
-#     annotations:
-#       tekton.dev/pipelines.minVersion: "0.45.0"
-#       tekton.dev/categories: Image Build
-#       tekton.dev/tags: image-build
-#       tekton.dev/displayName: "Build and upload container image using Kaniko"
-#       tekton.dev/platforms: "linux/amd64"
-#     description: build Dockerfile w/ kaniko and push to a registry
-#     workspaces:
-#       source:
-#         description: holds the context and Dockerfile
-#         optional: false
-#       dockerconfig:
-#         description: includes a docker `config.json`
-#         optional: true
-#         mountPath: /kaniko/.docker
-#     results:
-#       IMAGE_DIGEST:
-#         description: digest of the image just built
-#       IMAGE_URL:
-#         description: url of the image just built.
-#     params:
-#       IMAGE:
-#         description: name (reference) of the image to build
-#       TAG:
-#         description: name (reference) of the image to build
-#       REGISTRY:
-#         description: registry FROM (base image)
-#         default: scr.tiab.labda.sva.de
-#       DOCKERFILE:
-#         description: Path to the Dockerfile to build
-#         default: ./Dockerfile
-#       CONTEXT:
-#         description: the build context used by Kaniko
-#         default: ./
-#       SUBDIRECTORY:
-#         description: subdirectory of workspace
-#         default: ""
-#       EXTRA_ARGS:
-#         type: array
-#       BUILDER_IMAGE:
-#         description: the image on which builds will run (default is v1.5.1)
-#         default: gcr.io/kaniko-project/executor:v1.5.1@sha256:c6166717f7fe0b7da44908c986137ecfeab21f31ec3992f6e128fff8a94be8a5
-#     steps:
-#       build-and-push:
-#         workingDir: $(workspaces.source.path)/$(params.SUBDIRECTORY)
-#         image: $(params.BUILDER_IMAGE)
-#         securityContext:
-#           runAsNonRoot: false
-#           runAsUser: 0
-#         args:
-#           - $(params.EXTRA_ARGS)
-#           - --dockerfile=$(params.DOCKERFILE)
-#           - --context=$(workspaces.source.path)/$(params.CONTEXT) # The user does not need to care the workspace and the source.
-#           - --destination=$(params.IMAGE):$(params.TAG)
-#           - --destination=$(params.IMAGE):latest
-#           - --build-arg=REGISTRY=$(params.REGISTRY)
-#           - --digest-file=$(results.IMAGE_DIGEST.path)
-#           - --insecure
-#       write-url:
-#         image: docker.io/library/bash:5.1.4@sha256:b208215a4655538be652b2769d82e576bc4d0a2bb132144c060efc5be8c3f5d6
-#         script: |
-#           set -e
-#           image="$(params.IMAGE)"
-#           echo -n "${image}" | tee "$(results.IMAGE_URL.path)"
+tasks:
+  create-publish-helm-chart:
+    labels:
+      app.kubernetes.io/version: "0.2"
+    annotations:
+      tekton.dev/pipelines.minVersion: "0.48.0"
+      tekton.dev/categories: helm chart Build
+      tekton.dev/tags: helm-chart-build
+      tekton.dev/platforms: "linux/amd64"
+    description: create and publish helm chart to a registry
+    workspaces:
+      source:
+        description: holds helm chart source
+        optional: false
+      dockerconfig:
+        description: includes a docker `config.json`
+        optional: false
+        mountPath: /home/nonroot/.config/helm/registry/
+    params:
+      PATH:
+        description: directory to helm chart in repo, e.g. "helm"
+      CHARTNAME:
+        description: name of helm chart, e.g. "sthings-k8s-operator"
+      CHARTTAG:
+        description: tag of helm chart, e.g. "0.1.0"
+      REGISTRY:
+        description: registry url, e.g. "scr.tiab.labda.sva.de"
+      IMAGE:
+        description: working image
+        default: eu.gcr.io/stuttgart-things/sthings-k8s:1.127.2
+      SUBDIRECTORY:
+        description: subdirectory of workspace
+        default: ""
+    steps:
+      publish-helm-chart:
+        workingDir: $(workspaces.source.path)/$(params.SUBDIRECTORY)
+        image: $(params.IMAGE)
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 65532
+        script: |
+          #!/usr/bin/env sh
+          helm dependency update $(params.PATH)/$(params.CHARTNAME)
+          helm package --version $(params.CHARTTAG)-helm $(params.PATH)/$(params.CHARTNAME)
+          helm push $(params.CHARTNAME)-$(params.CHARTTAG)-helm.tgz oci://$(params.REGISTRY)/$(params.CHARTNAME)/
+  kaniko:
+    labels:
+      app.kubernetes.io/version: "0.6"
+    annotations:
+      tekton.dev/pipelines.minVersion: "0.45.0"
+      tekton.dev/categories: Image Build
+      tekton.dev/tags: image-build
+      tekton.dev/displayName: "Build and upload container image using Kaniko"
+      tekton.dev/platforms: "linux/amd64"
+    description: build Dockerfile w/ kaniko and push to a registry
+    workspaces:
+      source:
+        description: holds the context and Dockerfile
+        optional: false
+      dockerconfig:
+        description: includes a docker `config.json`
+        optional: true
+        mountPath: /kaniko/.docker
+    results:
+      IMAGE_DIGEST:
+        description: digest of the image just built
+      IMAGE_URL:
+        description: url of the image just built.
+    params:
+      IMAGE:
+        description: name (reference) of the image to build
+      TAG:
+        description: name (reference) of the image to build
+      REGISTRY:
+        description: registry FROM (base image)
+        default: scr.tiab.labda.sva.de
+      DOCKERFILE:
+        description: Path to the Dockerfile to build
+        default: ./Dockerfile
+      CONTEXT:
+        description: the build context used by Kaniko
+        default: ./
+      SUBDIRECTORY:
+        description: subdirectory of workspace
+        default: ""
+      EXTRA_ARGS:
+        type: array
+      BUILDER_IMAGE:
+        description: the image on which builds will run (default is v1.5.1)
+        default: gcr.io/kaniko-project/executor:v1.5.1@sha256:c6166717f7fe0b7da44908c986137ecfeab21f31ec3992f6e128fff8a94be8a5
+    steps:
+      build-and-push:
+        workingDir: $(workspaces.source.path)/$(params.SUBDIRECTORY)
+        image: $(params.BUILDER_IMAGE)
+        securityContext:
+          runAsNonRoot: false
+          runAsUser: 0
+        args:
+          - $(params.EXTRA_ARGS)
+          - --dockerfile=$(params.DOCKERFILE)
+          - --context=$(workspaces.source.path)/$(params.CONTEXT) # The user does not need to care the workspace and the source.
+          - --destination=$(params.IMAGE):$(params.TAG)
+          - --destination=$(params.IMAGE):latest
+          - --build-arg=REGISTRY=$(params.REGISTRY)
+          - --digest-file=$(results.IMAGE_DIGEST.path)
+          - --insecure
+      write-url:
+        image: docker.io/library/bash:5.1.4@sha256:b208215a4655538be652b2769d82e576bc4d0a2bb132144c060efc5be8c3f5d6
+        script: |
+          set -e
+          image="$(params.IMAGE)"
+          echo -n "${image}" | tee "$(results.IMAGE_URL.path)"
+  send-msteams-webhook:
+    labels:
+      app.kubernetes.io/version: "0.1"
+    annotations:
+      tekton.dev/pipelines.minVersion: "0.48.0"
+      tekton.dev/categories: Messaging
+      tekton.dev/tags: messaging
+      tekton.dev/displayName: "Send message to Microsoft Teams Channel"
+      tekton.dev/platforms: "linux/amd64,linux/s390x,linux/ppc64le"
+    description: sends simple message to a Microsoft Teams Channel
+    params:
+      webhook-url-secret:
+        type: string
+        description: name of the secret with incoming webhook URL
+      webhook-url-secret-key:
+        type: string
+        description: key in the secret
+      message:
+        type: string
+        description: message to notify about
+    steps:
+      post:
+        image: curlimages/curl:7.84.0
+        env:
+          MESSAGE:
+            value: $(params.message)
+          WEBHOOK_URL:
+            valueFrom:
+              secretKeyRef:
+                name: $(params.webhook-url-secret)
+                key: $(params.webhook-url-secret-key)
+        script: |
+          #!/usr/bin/env sh
+          MESSAGE=$(echo "${MESSAGE}" | sed -e 's/\"/\\\\"/g')
+          JSON="{\"text\": \"${MESSAGE}\" }"
+          curl -X POST -H 'Content-Type: application/json' -d "${JSON}" "${WEBHOOK_URL}"
+  git-clone:
+    labels:
+      app.kubernetes.io/version: "0.9"
+    annotations:
+      "helm.sh/hook": post-install
+      tekton.dev/pipelines.minVersion: "0.48.0"
+      tekton.dev/categories: Git
+      tekton.dev/tags: git
+      tekton.dev/displayName: "git clone"
+      tekton.dev/platforms: "linux/amd64,linux/s390x,linux/ppc64le,linux/arm64"
+    description: clone a git repo from the provided url
+    workspaces:
+      output:
+        description: the git repo will be cloned onto the volume backing this Workspace
+        optional: false
+      ssh-directory:
+        description: .ssh directory with private key, known_hosts, config..
+        optional: true
+      basic-auth:
+        description: workspace containing a .gitconfig and .git-credentials file
+        optional: true
+      ssl-ca-directory:
+        description: workspace containing CA certificates
+        optional: true
+    params:
+      url:
+        description: repository URL to clone from
+        type: string
+      revision:
+        description: Revision to checkout
+        type: string
+      refspec:
+        description: Refspec to fetch before checking out revision
+        type: string
+      submodules:
+        description: Initialize and fetch git submodules
+        type: string
+        default: "true"
+      depth:
+        description: Perform a shallow clone
+        type: string
+        default: "1"
+      sslVerify:
+        description: Set the `http.sslVerify` global git config
+        type: string
+        default: "true"
+      crtFileName:
+        description: file name of mounted crt using ssl-ca-directory workspace
+        type: string
+        default: "ca-bundle.crt"
+      subdirectory:
+        description: subdirectory inside the `output` workspace to clone the repo into
+        type: string
+      sparseCheckoutDirectories:
+        description: define the directory patterns to match or exclude
+        type: string
+      deleteExisting:
+        description: Clean out the contents of the destination directoryå
+        type: string
+        default: "true"
+      httpProxy:
+        description: HTTP proxy server for non-SSL requests
+        type: string
+      httpsProxy:
+        description: HTTPS proxy server for SSL requests
+        type: string
+      noProxy:
+        description: Opt out of proxying HTTP/HTTPS requests
+        type: string
+      verbose:
+        description: Log the commands that are executed during `git-clone`'s operation
+        type: string
+        default: "true"
+      gitInitImage:
+        description: the image providing the git-init binary that this Task runs
+        type: string
+        default: "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init:v0.40.2"
+      userHome:
+        description: absolute path to the user's home directory
+        type: string
+        default: "/home/git"
+    results:
+      commit:
+        description: the precise commit SHA
+      url:
+        description: the precise URL
+      committer-date:
+        description: The epoch timestamp of the commit that was fetched by this Task.
+    steps:
+      clone:
+        image: "$(params.gitInitImage)"
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 65532
+        env:
+          HOME:
+            value: $(params.userHome)
+          PARAM_URL:
+            value: $(params.url)
+          PARAM_REVISION:
+            value: $(params.revision)
+          PARAM_REFSPEC:
+            value: $(params.refspec)
+          PARAM_SUBMODULES:
+            value: $(params.submodules)
+          PARAM_DEPTH:
+            value: $(params.depth)
+          PARAM_SSL_VERIFY:
+            value: $(params.sslVerify)
+          PARAM_CRT_FILENAME:
+            value: $(params.crtFileName)
+          PARAM_SUBDIRECTORY:
+            value: $(params.subdirectory)
+          PARAM_DELETE_EXISTING:
+            value: $(params.deleteExisting)
+          PARAM_HTTP_PROXY:
+            value: $(params.httpProxy)
+          PARAM_HTTPS_PROXY:
+            value: $(params.httpsProxy)
+          PARAM_NO_PROXY:
+            value: $(params.noProxy)
+          PARAM_VERBOSE:
+            value: $(params.verbose)
+          PARAM_SPARSE_CHECKOUT_DIRECTORIES:
+            value: $(params.sparseCheckoutDirectories)
+          PARAM_USER_HOME:
+            value: $(params.userHome)
+          WORKSPACE_OUTPUT_PATH:
+            value: $(workspaces.output.path)
+          WORKSPACE_SSH_DIRECTORY_BOUND:
+            value: $(workspaces.ssh-directory.bound)
+          WORKSPACE_SSH_DIRECTORY_PATH:
+            value: $(workspaces.ssh-directory.path)
+          WORKSPACE_BASIC_AUTH_DIRECTORY_BOUND:
+            value: $(workspaces.basic-auth.bound)
+          WORKSPACE_BASIC_AUTH_DIRECTORY_PATH:
+            value: $(workspaces.basic-auth.path)
+          WORKSPACE_SSL_CA_DIRECTORY_BOUND:
+            value: $(workspaces.ssl-ca-directory.bound)
+          WORKSPACE_SSL_CA_DIRECTORY_PATH:
+            value: $(workspaces.ssl-ca-directory.path)
+        script: |
+          #!/usr/bin/env sh
+          set -eu
 
-#   send-msteams-webhook:
-#     labels:
-#       app.kubernetes.io/version: "0.1"
-#     annotations:
-#       tekton.dev/pipelines.minVersion: "0.48.0"
-#       tekton.dev/categories: Messaging
-#       tekton.dev/tags: messaging
-#       tekton.dev/displayName: "Send message to Microsoft Teams Channel"
-#       tekton.dev/platforms: "linux/amd64,linux/s390x,linux/ppc64le"
-#     description: sends simple message to a Microsoft Teams Channel
-#     params:
-#       webhook-url-secret:
-#         type: string
-#         description: name of the secret with incoming webhook URL
-#       webhook-url-secret-key:
-#         type: string
-#         description: key in the secret
-#       message:
-#         type: string
-#         description: message to notify about
-#     steps:
-#       post:
-#         image: curlimages/curl:7.84.0
-#         env:
-#           MESSAGE:
-#             value: $(params.message)
-#           WEBHOOK_URL:
-#             valueFrom:
-#               secretKeyRef:
-#                 name: $(params.webhook-url-secret)
-#                 key: $(params.webhook-url-secret-key)
-#         script: |
-#           #!/usr/bin/env sh
-#           MESSAGE=$(echo "${MESSAGE}" | sed -e 's/\"/\\\\"/g')
-#           JSON="{\"text\": \"${MESSAGE}\" }"
-#           curl -X POST -H 'Content-Type: application/json' -d "${JSON}" "${WEBHOOK_URL}"
-#   git-clone:
-#     labels:
-#       app.kubernetes.io/version: "0.9"
-#     annotations:
-#       "helm.sh/hook": post-install
-#       tekton.dev/pipelines.minVersion: "0.48.0"
-#       tekton.dev/categories: Git
-#       tekton.dev/tags: git
-#       tekton.dev/displayName: "git clone"
-#       tekton.dev/platforms: "linux/amd64,linux/s390x,linux/ppc64le,linux/arm64"
-#     description: clone a git repo from the provided url
-#     workspaces:
-#       output:
-#         description: the git repo will be cloned onto the volume backing this Workspace
-#         optional: false
-#       ssh-directory:
-#         description: .ssh directory with private key, known_hosts, config..
-#         optional: true
-#       basic-auth:
-#         description: workspace containing a .gitconfig and .git-credentials file
-#         optional: true
-#       ssl-ca-directory:
-#         description: workspace containing CA certificates
-#         optional: true
-#     params:
-#       url:
-#         description: repository URL to clone from
-#         type: string
-#       revision:
-#         description: Revision to checkout
-#         type: string
-#       refspec:
-#         description: Refspec to fetch before checking out revision
-#         type: string
-#       submodules:
-#         description: Initialize and fetch git submodules
-#         type: string
-#         default: "true"
-#       depth:
-#         description: Perform a shallow clone
-#         type: string
-#         default: "1"
-#       sslVerify:
-#         description: Set the `http.sslVerify` global git config
-#         type: string
-#         default: "true"
-#       crtFileName:
-#         description: file name of mounted crt using ssl-ca-directory workspace
-#         type: string
-#         default: "ca-bundle.crt"
-#       subdirectory:
-#         description: subdirectory inside the `output` workspace to clone the repo into
-#         type: string
-#       sparseCheckoutDirectories:
-#         description: define the directory patterns to match or exclude
-#         type: string
-#       deleteExisting:
-#         description: Clean out the contents of the destination directoryå
-#         type: string
-#         default: "true"
-#       httpProxy:
-#         description: HTTP proxy server for non-SSL requests
-#         type: string
-#       httpsProxy:
-#         description: HTTPS proxy server for SSL requests
-#         type: string
-#       noProxy:
-#         description: Opt out of proxying HTTP/HTTPS requests
-#         type: string
-#       verbose:
-#         description: Log the commands that are executed during `git-clone`'s operation
-#         type: string
-#         default: "true"
-#       gitInitImage:
-#         description: the image providing the git-init binary that this Task runs
-#         type: string
-#         default: "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init:v0.40.2"
-#       userHome:
-#         description: absolute path to the user's home directory
-#         type: string
-#         default: "/home/git"
-#     results:
-#       commit:
-#         description: the precise commit SHA
-#       url:
-#         description: the precise URL
-#       committer-date:
-#         description: The epoch timestamp of the commit that was fetched by this Task.
-#     steps:
-#       clone:
-#         image: "$(params.gitInitImage)"
-#         securityContext:
-#           runAsNonRoot: true
-#           runAsUser: 65532
-#         env:
-#           HOME:
-#             value: $(params.userHome)
-#           PARAM_URL:
-#             value: $(params.url)
-#           PARAM_REVISION:
-#             value: $(params.revision)
-#           PARAM_REFSPEC:
-#             value: $(params.refspec)
-#           PARAM_SUBMODULES:
-#             value: $(params.submodules)
-#           PARAM_DEPTH:
-#             value: $(params.depth)
-#           PARAM_SSL_VERIFY:
-#             value: $(params.sslVerify)
-#           PARAM_CRT_FILENAME:
-#             value: $(params.crtFileName)
-#           PARAM_SUBDIRECTORY:
-#             value: $(params.subdirectory)
-#           PARAM_DELETE_EXISTING:
-#             value: $(params.deleteExisting)
-#           PARAM_HTTP_PROXY:
-#             value: $(params.httpProxy)
-#           PARAM_HTTPS_PROXY:
-#             value: $(params.httpsProxy)
-#           PARAM_NO_PROXY:
-#             value: $(params.noProxy)
-#           PARAM_VERBOSE:
-#             value: $(params.verbose)
-#           PARAM_SPARSE_CHECKOUT_DIRECTORIES:
-#             value: $(params.sparseCheckoutDirectories)
-#           PARAM_USER_HOME:
-#             value: $(params.userHome)
-#           WORKSPACE_OUTPUT_PATH:
-#             value: $(workspaces.output.path)
-#           WORKSPACE_SSH_DIRECTORY_BOUND:
-#             value: $(workspaces.ssh-directory.bound)
-#           WORKSPACE_SSH_DIRECTORY_PATH:
-#             value: $(workspaces.ssh-directory.path)
-#           WORKSPACE_BASIC_AUTH_DIRECTORY_BOUND:
-#             value: $(workspaces.basic-auth.bound)
-#           WORKSPACE_BASIC_AUTH_DIRECTORY_PATH:
-#             value: $(workspaces.basic-auth.path)
-#           WORKSPACE_SSL_CA_DIRECTORY_BOUND:
-#             value: $(workspaces.ssl-ca-directory.bound)
-#           WORKSPACE_SSL_CA_DIRECTORY_PATH:
-#             value: $(workspaces.ssl-ca-directory.path)
-#         script: |
-#           #!/usr/bin/env sh
-#           set -eu
+          if [ "${PARAM_VERBOSE}" = "true" ] ; then
+            set -x
+          fi
 
-#           if [ "${PARAM_VERBOSE}" = "true" ] ; then
-#             set -x
-#           fi
+          if [ "${WORKSPACE_BASIC_AUTH_DIRECTORY_BOUND}" = "true" ] ; then
+            cp "${WORKSPACE_BASIC_AUTH_DIRECTORY_PATH}/.git-credentials" "${PARAM_USER_HOME}/.git-credentials"
+            cp "${WORKSPACE_BASIC_AUTH_DIRECTORY_PATH}/.gitconfig" "${PARAM_USER_HOME}/.gitconfig"
+            chmod 400 "${PARAM_USER_HOME}/.git-credentials"
+            chmod 400 "${PARAM_USER_HOME}/.gitconfig"
+          fi
 
-#           if [ "${WORKSPACE_BASIC_AUTH_DIRECTORY_BOUND}" = "true" ] ; then
-#             cp "${WORKSPACE_BASIC_AUTH_DIRECTORY_PATH}/.git-credentials" "${PARAM_USER_HOME}/.git-credentials"
-#             cp "${WORKSPACE_BASIC_AUTH_DIRECTORY_PATH}/.gitconfig" "${PARAM_USER_HOME}/.gitconfig"
-#             chmod 400 "${PARAM_USER_HOME}/.git-credentials"
-#             chmod 400 "${PARAM_USER_HOME}/.gitconfig"
-#           fi
+          if [ "${WORKSPACE_SSH_DIRECTORY_BOUND}" = "true" ] ; then
+            cp -R "${WORKSPACE_SSH_DIRECTORY_PATH}" "${PARAM_USER_HOME}"/.ssh
+            chmod 700 "${PARAM_USER_HOME}"/.ssh
+            chmod -R 400 "${PARAM_USER_HOME}"/.ssh/*
+          fi
 
-#           if [ "${WORKSPACE_SSH_DIRECTORY_BOUND}" = "true" ] ; then
-#             cp -R "${WORKSPACE_SSH_DIRECTORY_PATH}" "${PARAM_USER_HOME}"/.ssh
-#             chmod 700 "${PARAM_USER_HOME}"/.ssh
-#             chmod -R 400 "${PARAM_USER_HOME}"/.ssh/*
-#           fi
+          if [ "${WORKSPACE_SSL_CA_DIRECTORY_BOUND}" = "true" ] ; then
+            export GIT_SSL_CAPATH="${WORKSPACE_SSL_CA_DIRECTORY_PATH}"
+            if [ "${PARAM_CRT_FILENAME}" != "" ] ; then
+                export GIT_SSL_CAINFO="${WORKSPACE_SSL_CA_DIRECTORY_PATH}/${PARAM_CRT_FILENAME}"
+            fi
+          fi
+          CHECKOUT_DIR="${WORKSPACE_OUTPUT_PATH}/${PARAM_SUBDIRECTORY}"
 
-#           if [ "${WORKSPACE_SSL_CA_DIRECTORY_BOUND}" = "true" ] ; then
-#             export GIT_SSL_CAPATH="${WORKSPACE_SSL_CA_DIRECTORY_PATH}"
-#             if [ "${PARAM_CRT_FILENAME}" != "" ] ; then
-#                 export GIT_SSL_CAINFO="${WORKSPACE_SSL_CA_DIRECTORY_PATH}/${PARAM_CRT_FILENAME}"
-#             fi
-#           fi
-#           CHECKOUT_DIR="${WORKSPACE_OUTPUT_PATH}/${PARAM_SUBDIRECTORY}"
+          cleandir() {
+            # Delete any existing contents of the repo directory if it exists.
+            #
+            # We don't just "rm -rf ${CHECKOUT_DIR}" because ${CHECKOUT_DIR} might be "/"
+            # or the root of a mounted volume.
+            if [ -d "${CHECKOUT_DIR}" ] ; then
+              # Delete non-hidden files and directories
+              rm -rf "${CHECKOUT_DIR:?}"/*
+              # Delete files and directories starting with . but excluding ..
+              rm -rf "${CHECKOUT_DIR}"/.[!.]*
+              # Delete files and directories starting with .. plus any other character
+              rm -rf "${CHECKOUT_DIR}"/..?*
+            fi
+          }
 
-#           cleandir() {
-#             # Delete any existing contents of the repo directory if it exists.
-#             #
-#             # We don't just "rm -rf ${CHECKOUT_DIR}" because ${CHECKOUT_DIR} might be "/"
-#             # or the root of a mounted volume.
-#             if [ -d "${CHECKOUT_DIR}" ] ; then
-#               # Delete non-hidden files and directories
-#               rm -rf "${CHECKOUT_DIR:?}"/*
-#               # Delete files and directories starting with . but excluding ..
-#               rm -rf "${CHECKOUT_DIR}"/.[!.]*
-#               # Delete files and directories starting with .. plus any other character
-#               rm -rf "${CHECKOUT_DIR}"/..?*
-#             fi
-#           }
+          if [ "${PARAM_DELETE_EXISTING}" = "true" ] ; then
+            cleandir || true
+          fi
 
-#           if [ "${PARAM_DELETE_EXISTING}" = "true" ] ; then
-#             cleandir || true
-#           fi
+          test -z "${PARAM_HTTP_PROXY}" || export HTTP_PROXY="${PARAM_HTTP_PROXY}"
+          test -z "${PARAM_HTTPS_PROXY}" || export HTTPS_PROXY="${PARAM_HTTPS_PROXY}"
+          test -z "${PARAM_NO_PROXY}" || export NO_PROXY="${PARAM_NO_PROXY}"
 
-#           test -z "${PARAM_HTTP_PROXY}" || export HTTP_PROXY="${PARAM_HTTP_PROXY}"
-#           test -z "${PARAM_HTTPS_PROXY}" || export HTTPS_PROXY="${PARAM_HTTPS_PROXY}"
-#           test -z "${PARAM_NO_PROXY}" || export NO_PROXY="${PARAM_NO_PROXY}"
+          git config --global --add safe.directory "${WORKSPACE_OUTPUT_PATH}"
+          /ko-app/git-init \
+            -url="${PARAM_URL}" \
+            -revision="${PARAM_REVISION}" \
+            -refspec="${PARAM_REFSPEC}" \
+            -path="${CHECKOUT_DIR}" \
+            -sslVerify="${PARAM_SSL_VERIFY}" \
+            -submodules="${PARAM_SUBMODULES}" \
+            -depth="${PARAM_DEPTH}" \
+            -sparseCheckoutDirectories="${PARAM_SPARSE_CHECKOUT_DIRECTORIES}"
+          cd "${CHECKOUT_DIR}"
+          RESULT_SHA="$(git rev-parse HEAD)"
+          EXIT_CODE="$?"
+          if [ "${EXIT_CODE}" != 0 ] ; then
+            exit "${EXIT_CODE}"
+          fi
+          RESULT_COMMITTER_DATE="$(git log -1 --pretty=%ct)"
+          printf "%s" "${RESULT_COMMITTER_DATE}" > "$(results.committer-date.path)"
+          printf "%s" "${RESULT_SHA}" > "$(results.commit.path)"
+          printf "%s" "${PARAM_URL}" > "$(results.url.path)"
+  buildah:
+    labels:
+      app.kubernetes.io/version: "0.5"
+    annotations:
+      tekton.dev/categories: Image Build
+      tekton.dev/pipelines.minVersion: "0.17.0"
+      tekton.dev/tags: image-build
+      tekton.dev/platforms: "linux/amd64,linux/s390x,linux/ppc64le,linux/arm64"
+    description: buildah task builds source into a container image and then pushes it to a container registry
+    volumes:
+      varlibcontainers:
+        volumeKind: emptyDir
+    workspaces:
+      source:
+        description: holds the context and Dockerfile
+        optional: false
+      sslcertdir:
+        description: CA certificates have their own directory
+        optional: true
+      dockerconfig:
+        description: includes a docker `config.json`
+        optional: true
+        mountPath: /root/secrets
+    results:
+      IMAGE_DIGEST:
+        description: digest of the image just built
+      IMAGE_URL:
+        description: url of the image just built.
+    params:
+      IMAGE:
+        description: name (reference) of the image to build
+      BUILDER_IMAGE:
+        description: the image on which builds will run (default is v1.5.1)
+        default: quay.io/buildah/stable:v1.23.3
+      STORAGE_DRIVER:
+        description: buildah storage driver
+        default: overlay
+      DOCKERFILE:
+        description: Path to the Dockerfile to build
+        default: ./Dockerfile
+      CONTEXT:
+        description: the build context used by Kaniko
+        default: ./
+      TLSVERIFY:
+        description: verify the TLS on the registry endpoint (for push/pull to a non-TLS registry)
+        default: "true"
+      FORMAT:
+        description: format of the built container, oci or docker
+        default: "oci"
+      BUILD_EXTRA_ARGS:
+        description: format of the built container, oci or docker
+        default: "oci"
+      PUSH_EXTRA_ARGS:
+        description: extra parameters passed for the push command when pushing images.
+        default: ""
+      SUBDIRECTORY:
+        description: subdirectory of workspace
+        default: ""
+      REGISTRY:
+        description: registry of to be build image
+        default: ""
+      REGISTRY_INLINE_SECRET:
+        description: registry of to be build image
+        default: ""
+    steps:
+      build:
+        volumeMounts:
+          varlibcontainers:
+            mountPath: /var/lib/containers
+        workingDir: $(workspaces.source.path)/$(params.SUBDIRECTORY)
+        image: $(params.BUILDER_IMAGE)
+        privileged: true
+        env:
+          CERT_DIR_FLAG:
+            value: $(workspaces.sslcertdir.path)
+          REGISTRY_USER:
+            valueFrom:
+              secretKeyRef:
+                name: $(params.REGISTRY_INLINE_SECRET)
+                key: username
+          REGISTRY_PASSWORD:
+            valueFrom:
+              secretKeyRef:
+                name: $(params.REGISTRY_INLINE_SECRET)
+                key: password
+        script: |
+          #!/usr/bin/env sh
 
-#           git config --global --add safe.directory "${WORKSPACE_OUTPUT_PATH}"
-#           /ko-app/git-init \
-#             -url="${PARAM_URL}" \
-#             -revision="${PARAM_REVISION}" \
-#             -refspec="${PARAM_REFSPEC}" \
-#             -path="${CHECKOUT_DIR}" \
-#             -sslVerify="${PARAM_SSL_VERIFY}" \
-#             -submodules="${PARAM_SUBMODULES}" \
-#             -depth="${PARAM_DEPTH}" \
-#             -sparseCheckoutDirectories="${PARAM_SPARSE_CHECKOUT_DIRECTORIES}"
-#           cd "${CHECKOUT_DIR}"
-#           RESULT_SHA="$(git rev-parse HEAD)"
-#           EXIT_CODE="$?"
-#           if [ "${EXIT_CODE}" != 0 ] ; then
-#             exit "${EXIT_CODE}"
-#           fi
-#           RESULT_COMMITTER_DATE="$(git log -1 --pretty=%ct)"
-#           printf "%s" "${RESULT_COMMITTER_DATE}" > "$(results.committer-date.path)"
-#           printf "%s" "${RESULT_SHA}" > "$(results.commit.path)"
-#           printf "%s" "${PARAM_URL}" > "$(results.url.path)"
+          set -eu
+
+          echo $(params.IMAGE) WILL BE PUSHED TO: $(params.REGISTRY)
+
+          [[ "$(workspaces.sslcertdir.bound)" == "true" ]] && CERT_DIR_FLAG="--cert-dir $(workspaces.sslcertdir.path)"
+
+          echo DOCKERFILE
+
+          cat $(params.DOCKERFILE)
+
+          echo LOGIN TO GCR
+
+          cp /root/secrets/gcr.json /tmp/gcr.json
+          cat /tmp/gcr.json | buildah login -u _json_key --password-stdin \eu.gcr.io
+
+          [[ "$(workspaces.dockerconfig.bound)" == "true" ]] && export DOCKER_CONFIG="$(workspaces.dockerconfig.path)"
+
+          {{- end }}
+
+          buildah ${CERT_DIR_FLAG} --storage-driver=$(params.STORAGE_DRIVER) bud \
+          --format=$(params.FORMAT) --tls-verify=$(params.TLSVERIFY) --no-cache \
+          -f $(params.DOCKERFILE) \
+          -t $(params.IMAGE)
+
+          buildah ${CERT_DIR_FLAG} --storage-driver=$(params.STORAGE_DRIVER) push \
+          $(params.PUSH_EXTRA_ARGS) --tls-verify=$(params.TLSVERIFY) \
+          --digestfile /tmp/image-digest $(params.IMAGE) \
+          docker://$(params.IMAGE)
+
+          cat /tmp/image-digest | tee $(results.IMAGE_DIGEST.path)
+          echo -n "$(params.IMAGE)" | tee $(results.IMAGE_URL.path)

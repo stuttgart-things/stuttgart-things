@@ -68,6 +68,15 @@ spec:
                   dataType: data
                   secretKVs:
                     id_rsa: <path:apps/data/yacht#github-ssh>
+          - app: tekton
+            destination: dev11
+            kind: tasks
+            namespace: tektoncd
+            repoURL: eu.gcr.io/stuttgart-things
+            chart: tekton-resources
+            targetRevision: v0.47.17
+            appValues: |
+              enableTasks: true
   template:
     metadata:
       name: '{{ app }}-{{ kind }}-{{ destination }}'
