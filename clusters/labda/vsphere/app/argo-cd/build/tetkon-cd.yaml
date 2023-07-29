@@ -16,6 +16,7 @@ spec:
             chart: tekton-resources
             targetRevision: v0.47.15
             appValues: |
+              enableWorkspaces: true
               workspaces:
                 buildah:
                   namespace: tektoncd
