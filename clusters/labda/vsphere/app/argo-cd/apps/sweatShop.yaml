@@ -79,7 +79,6 @@ spec:
             configmaps:
               creator:
                 TEMPLATE_PATH: /templates
-                TEMPLATE_NAME: ansible-job.yaml.gotmpl
                 REDIS_STREAM: sweatshop:manifests
                 REDIS_SERVER: redis-sweatshop-deployment-headless.sweatshop-redis.svc.cluster.local
                 REDIS_PORT: "6379"
