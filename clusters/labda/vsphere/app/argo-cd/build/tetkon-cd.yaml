@@ -1,3 +1,20 @@
+# ---
+# apiVersion: argoproj.io/v1alpha1
+# kind: Application
+# metadata:
+#   name: tekton-pipelineruns
+#   namespace: argocd
+# spec:
+#   sources:
+#   - repoURL: 'https://prometheus-community.github.io/helm-charts'
+#     chart: prometheus
+#     targetRevision: 15.7.1
+#     helm:
+#       valueFiles:
+#       - $values/charts/prometheus/values.yaml
+#   - repoURL: https://github.com/stuttgart-things/stuttgart-things.git
+#     targetRevision: HEAD
+#     ref: values
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
@@ -42,7 +59,14 @@ spec:
             appValues: |
               enableSecrets: true
               enableGitSecretsSSH: true
+              enableRegistryCredentials: true
               secrets:
+                scr-labda:
+                  name: scr-labda
+                  labels:
+                    app: tekton
+                    technology: kaniko
+                  dockerConfigJson: <path:apps/data/yacht#scr-labda>
                 scr-labda-inline:
                   name: scr-labda-inline
                   labels:

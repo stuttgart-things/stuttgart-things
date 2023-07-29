@@ -11,7 +11,7 @@ spec:
     server: 'https://10.100.136.143:6443'
   source:
     path: clusters/labda/vsphere/downstream
-    repoURL: 'https://github.com/stuttgart-things/stuttgart-things.git'
+    repoURL: https://github.com/stuttgart-things/stuttgart-things.git
     targetRevision: HEAD
     directory:
       recurse: true
