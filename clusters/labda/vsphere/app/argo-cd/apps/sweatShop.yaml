@@ -1,4 +1,4 @@
-
+---
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
@@ -86,12 +86,21 @@ spec:
                 REDIS_PASSWORD: <path:apps/data/sweatshop#redisPassword>
             clusterRoleBindings:
               sweatshop-creator:
-                subjects[0]:
-                  namespace: sweatshop
+                subjects:
+                  - kind: ServiceAccount
+                    name: sweatshop-creator
+                    namespace: sweatshop
             roleBindings:
               sweatshop-creator:
-                subjects[0]:
-                  namespace: sweatshop
+                subjects:
+                  - kind: ServiceAccount
+                    name: sweatshop-creator
+                    namespace: sweatshop
+            secrets:
+              redis:
+                name: redis
+                secretKVs:
+                  REDIS_PASSWORD: <path:apps/data/sweatshop#redisPassword>
         - app: sweatshop-informer
           destination: dev11
           kind: deployment
