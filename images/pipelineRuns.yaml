@@ -13,7 +13,7 @@ runs:
       context: /kaniko/sthings-alpine-github/images/sthings-alpine
       gitWorkspaceSubdirectory: /kaniko/sthings-alpine-github
       image: scr.app.4sthings.tiab.ssc.sva.de/sthings-alpine/ansible
-      tag: 8.0.0-5
+      tag: ${ARGOCD_APP_REVISION}
       registry: eu.gcr.io
       dockerfile: images/sthings-alpine/Dockerfile
     workspaces:
