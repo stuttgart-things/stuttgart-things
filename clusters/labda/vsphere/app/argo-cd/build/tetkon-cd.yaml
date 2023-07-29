@@ -1,0 +1,50 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: tekton-cd
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - app: tekton
+            destination: dev11
+            kind: workspaces
+            namespace: tektoncd
+            repoURL: eu.gcr.io/stuttgart-things
+            chart: tekton-resources
+            targetRevision: v0.47.15
+            appValues: |
+              workspaces:
+                buildah:
+                  namespace: tektoncd
+                  volumeMode: Filesystem
+                  storageClassName: nfs4-csi
+                  storage: 10Gi
+                  accessModes:
+                    - ReadWriteOnce
+  template:
+    metadata:
+      name: '{{ app }}-{{ kind }}-{{ destination }}'
+    spec:
+      project: app
+      source:
+        repoURL: '{{ repoURL }}'
+        chart: '{{ chart }}'
+        targetRevision: '{{ targetRevision }}'
+        plugin:
+          name: argocd-vault-plugin-helm
+          env:
+            - name: HELM_VALUES
+              value: |
+                {{ appValues }}
+      destination:
+        name: '{{ destination }}'
+        namespace: '{{ namespace }}'
+      syncPolicy:
+        syncOptions:
+        - CreateNamespace=true
+        automated:
+          prune: true
+          selfHeal: false
