@@ -15,6 +15,15 @@ spec:
   - repoURL: https://github.com/stuttgart-things/stuttgart-things.git
     targetRevision: HEAD
     ref: values
+  destination:
+    name: dev11
+    namespace: tektoncd
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+    automated:
+      prune: true
+      selfHeal: false
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
