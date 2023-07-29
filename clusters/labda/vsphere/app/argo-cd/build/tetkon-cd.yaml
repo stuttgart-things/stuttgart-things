@@ -21,10 +21,34 @@ spec:
                 buildah:
                   namespace: tektoncd
                   volumeMode: Filesystem
-                  storageClassName: nfs4-csi
+                  storageClassName: longhorn
                   storage: 10Gi
                   accessModes:
                     - ReadWriteOnce
+                helm:
+                  namespace: tektoncd
+                  volumeMode: Filesystem
+                  storageClassName: longhorn
+                  storage: 2Gi
+                  accessModes:
+                    - ReadWriteOnce
+          - app: tekton
+            destination: dev11
+            kind: secrets
+            namespace: tektoncd
+            repoURL: eu.gcr.io/stuttgart-things
+            chart: tekton-resources
+            targetRevision: v0.47.15
+            appValues: |
+              secrets:
+                scr-labda-inline:
+                  name: scr-labda-inline
+                  labels:
+                    app: tekton
+                    technology: buildah
+                  secretKVs:
+                    username: <path:apps/data/scr#username>
+                    password: <path:apps/data/scr#password>
   template:
     metadata:
       name: '{{ app }}-{{ kind }}-{{ destination }}'
