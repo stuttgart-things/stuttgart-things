@@ -1,0 +1,28 @@
+---
+enableRuns: true
+runs:
+  buildKanikoImageGithub:
+    name: kaniko-testrun-github-1
+    addRandomDateToRunName: false
+    namespace: tektoncd
+    kind: Pipeline
+    ref: build-kaniko-image
+    params:
+      gitRepoUrl: git@github.com:stuttgart-things/stuttgart-things.git
+      git-revision: main
+      context: /kaniko/sthings-alpine-github/images/sthings-alpine
+      gitWorkspaceSubdirectory: /kaniko/sthings-alpine-github
+      image: scr.app.4sthings.tiab.ssc.sva.de/sthings-alpine/ansible
+      tag: 8.0.0-5
+      registry: eu.gcr.io
+      dockerfile: images/sthings-alpine/Dockerfile
+    workspaces:
+      ssh-credentials:
+        workspaceKind: secret
+        workspaceRef: github-ssh
+      shared-workspace:
+        workspaceKind: persistentVolumeClaim
+        workspaceRef: buildah
+      dockerconfig:
+        workspaceKind: secret
+        workspaceRef: scr-labda-inline
