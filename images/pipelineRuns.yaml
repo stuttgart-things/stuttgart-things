@@ -2,7 +2,7 @@
 enableRuns: true
 runs:
   buildKanikoImageGithub:
-    name: kaniko-testrun-github-4
+    name: kaniko-testrun-github-5
     addRandomDateToRunName: false
     namespace: tektoncd
     kind: Pipeline
@@ -22,7 +22,7 @@ runs:
         workspaceRef: github-ssh
       shared-workspace:
         workspaceKind: persistentVolumeClaim
-        workspaceRef: buildah
+        workspaceRef: buildah-tekton
       dockerconfig:
         workspaceKind: secret
         workspaceRef: scr-labda-inline
