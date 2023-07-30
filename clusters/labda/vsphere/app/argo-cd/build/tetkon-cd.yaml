@@ -76,7 +76,7 @@ spec:
                   labels:
                     app: tekton
                     technology: kaniko
-                  dockerConfigJson: <path:apps/data/yacht#scr-labda>
+                  dockerConfigJson: <path:apps/data/scr#dockerconfig>
                 scr-labda-inline:
                   name: scr-labda-inline
                   labels:
