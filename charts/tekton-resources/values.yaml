@@ -170,7 +170,7 @@ pipelines:
           webhook-url-secret-key:
             value: url
 
-  build-buildah-image:
+  build-buildah-image-inline:
     workspaces:
       - shared-workspace
       - ssh-credentials
@@ -220,7 +220,7 @@ pipelines:
           revision:
             value: $(params.git-revision)
       buildah:
-        task: buildah
+        task: buildah-login-inline
         runAfter:
           - fetch-repository
         workspaces:
@@ -724,7 +724,7 @@ tasks:
           printf "%s" "${RESULT_COMMITTER_DATE}" > "$(results.committer-date.path)"
           printf "%s" "${RESULT_SHA}" > "$(results.commit.path)"
           printf "%s" "${PARAM_URL}" > "$(results.url.path)"
-  buildah-gcr:
+  buildah-login-inline:
     labels:
       app.kubernetes.io/version: "0.5"
     annotations:
