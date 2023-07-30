@@ -1,6 +1,30 @@
 ---
 enableRuns: true
 runs:
+  buildbuildahImage:
+    name: buildah-testrun
+    addRandomDateToRunName: false
+    namespace: tektoncd
+    kind: Pipeline
+    ref: build-buildah-image
+    params:
+      gitRepoUrl: git@github.com:stuttgart-things/stuttgart-things.git
+      git-revision: main
+      context: /buildah/sthings-alpine/images/sthings-alpine
+      gitWorkspaceSubdirectory: /buildah/sthings-alpine
+      image: scr.app.4sthings.tiab.ssc.sva.de/sthings-alpine/sthings-alpine:12.6.11
+      dockerfile: images/sthings-alpine/Dockerfile
+      tlsVerify: false
+      storagDriver: overlay
+      registry: scr.app.4sthings.tiab.ssc.sva.de
+      registryInlineSecret: scr-labda-inline
+    workspaces:
+      ssh-credentials:
+        workspaceKind: secret
+        workspaceRef: github-ssh
+      shared-workspace:
+        workspaceKind: persistentVolumeClaim
+        workspaceRef: buildah-tekton
   buildKanikoImageGithub6:
     name: kaniko-testrun-github-6
     addRandomDateToRunName: false
