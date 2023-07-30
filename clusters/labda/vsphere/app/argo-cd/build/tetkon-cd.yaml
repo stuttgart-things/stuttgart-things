@@ -24,7 +24,7 @@ spec:
     - CreateNamespace=true
     automated:
       prune: true
-      selfHeal: false
+      selfHeal: true
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
@@ -45,17 +45,17 @@ spec:
             appValues: |
               enableWorkspaces: true
               workspaces:
-                buildah:
+                buildah-tekton:
                   namespace: tektoncd
                   volumeMode: Filesystem
-                  storageClassName: longhorn
+                  storageClassName: nfs3-csi2
                   storage: 10Gi
                   accessModes:
                     - ReadWriteOnce
-                helm:
+                helm-tekton:
                   namespace: tektoncd
                   volumeMode: Filesystem
-                  storageClassName: longhorn
+                  storageClassName: nfs3-csi2
                   storage: 2Gi
                   accessModes:
                     - ReadWriteOnce
