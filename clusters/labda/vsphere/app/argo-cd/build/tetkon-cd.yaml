@@ -70,13 +70,13 @@ spec:
               enableSecrets: true
               enableGitSecretsSSH: true
               enableRegistryCredentials: true
-              secrets:
+              registryCredentials:
                 scr-labda:
-                  name: scr-labda
                   labels:
                     app: tekton
                     technology: kaniko
                   dockerConfigJson: <path:apps/data/scr#dockerconfig>
+              secrets:
                 scr-labda-inline:
                   name: scr-labda-inline
                   labels:
