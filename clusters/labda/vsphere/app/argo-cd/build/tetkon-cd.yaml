@@ -9,7 +9,7 @@ spec:
   sources:
   - repoURL: eu.gcr.io/stuttgart-things
     chart: tekton-resources
-    targetRevision: v0.47.21
+    targetRevision: v0.47.22
     helm:
       valueFiles:
       - $values/images/pipelineRuns.yaml
@@ -41,7 +41,7 @@ spec:
             namespace: tektoncd
             repoURL: eu.gcr.io/stuttgart-things
             chart: tekton-resources
-            targetRevision: v0.47.21
+            targetRevision: v0.47.22
             appValues: |
               enableWorkspaces: true
               workspaces:
@@ -65,7 +65,7 @@ spec:
             namespace: tektoncd
             repoURL: eu.gcr.io/stuttgart-things
             chart: tekton-resources
-            targetRevision: v0.47.21
+            targetRevision: v0.47.22
             appValues: |
               enableSecrets: true
               enableGitSecretsSSH: true
@@ -108,7 +108,7 @@ spec:
             namespace: tektoncd
             repoURL: eu.gcr.io/stuttgart-things
             chart: tekton-resources
-            targetRevision: v0.47.21
+            targetRevision: v0.47.22
             appValues: |
               enableTasks: true
           - app: tekton
@@ -117,7 +117,7 @@ spec:
             namespace: tektoncd
             repoURL: eu.gcr.io/stuttgart-things
             chart: tekton-resources
-            targetRevision: v0.47.21
+            targetRevision: v0.47.22
             appValues: |
               enablePipelines: true
   template:
