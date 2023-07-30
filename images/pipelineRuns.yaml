@@ -1,8 +1,8 @@
 ---
 enableRuns: true
 runs:
-  buildKanikoImageGithub5:
-    name: kaniko-testrun-github-5
+  buildKanikoImageGithub6:
+    name: kaniko-testrun-github-6
     addRandomDateToRunName: false
     namespace: tektoncd
     kind: Pipeline
@@ -25,4 +25,4 @@ runs:
         workspaceRef: buildah-tekton
       dockerconfig:
         workspaceKind: secret
-        workspaceRef: scr-labda-inline
+        workspaceRef: scr-labda
