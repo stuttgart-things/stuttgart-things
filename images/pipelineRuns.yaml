@@ -2,7 +2,7 @@
 enableRuns: true
 runs:
   buildKanikoImageGithub:
-    name: kaniko-testrun-github-3
+    name: kaniko-testrun-github-4
     addRandomDateToRunName: false
     namespace: tektoncd
     kind: Pipeline
@@ -13,7 +13,7 @@ runs:
       context: /kaniko/sthings-alpine-github/images/sthings-alpine
       gitWorkspaceSubdirectory: /kaniko/sthings-alpine-github
       image: scr.app.4sthings.tiab.ssc.sva.de/sthings-alpine/ansible
-      tag: ${ARGOCD_APP_REVISION}
+      tag: 123
       registry: eu.gcr.io
       dockerfile: images/sthings-alpine/Dockerfile
     workspaces:
