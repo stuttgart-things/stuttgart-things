@@ -1,0 +1,28 @@
+---
+enableRuns: true
+runs:
+  packageHelmChartGithub:
+    name: package-tekton-resources-1
+    addRandomDateToRunName: false
+    namespace: tektoncd
+    kind: Pipeline
+    ref: package-publish-helmchart
+    params:
+      git-repo-url: git@github.com:stuttgart-things/stuttgart-things.git
+      git-revision: main
+      gitWorkspaceSubdirectory: /helm/tekton-resources
+      helm-chart-path: charts
+      helm-chart-name: tekton-resources
+      helm-chart-tag: v0.47.22
+      registry: scr.app.4sthings.tiab.ssc.sva.de
+      working-image: eu.gcr.io/stuttgart-things/sthings-k8s:1.127.2
+    workspaces:
+      ssh-credentials:
+        workspaceKind: secret
+        workspaceRef: github-ssh
+      source:
+        workspaceKind: persistentVolumeClaim
+        workspaceRef: helm-tekton
+      dockerconfig:
+        workspaceKind: secret
+        workspaceRef: scr-labda

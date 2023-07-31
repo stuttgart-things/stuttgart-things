@@ -13,6 +13,7 @@ spec:
     helm:
       valueFiles:
       - $values/images/pipelineRuns.yaml
+      - $values/charts/pipelineRuns.yaml
   - repoURL: https://github.com/stuttgart-things/stuttgart-things.git
     targetRevision: HEAD
     ref: values

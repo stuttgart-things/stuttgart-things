@@ -2,7 +2,7 @@
 enableRuns: true
 runs:
   buildbuildahImage:
-    name: buildah-testrun
+    name: buildah-testrun-2
     addRandomDateToRunName: false
     namespace: tektoncd
     kind: Pipeline
@@ -26,7 +26,7 @@ runs:
         workspaceKind: persistentVolumeClaim
         workspaceRef: buildah-tekton
   buildKanikoImageGithub6:
-    name: kaniko-testrun-github-6
+    name: kaniko-testrun-github-7
     addRandomDateToRunName: false
     namespace: tektoncd
     kind: Pipeline
