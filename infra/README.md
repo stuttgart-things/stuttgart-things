@@ -236,7 +236,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./apps/rancher
+  path: ./infra/rancher
   prune: true
   wait: true
   postBuild:
@@ -247,6 +247,36 @@ spec:
     substituteFrom:
       - kind: Secret
         name: rancher-flux-secrets
+```
+
+</details>
+
+<details><summary>VAULT</summary>
+
+```
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: vault
+  namespace: flux-system
+spec:
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infra/vault
+  prune: true
+  wait: true
+  postBuild:
+    substitute:
+      VAULT_STORAGE_SIZE: 2Gi
+      VAULT_STORAGE_CLASS: nfs4-csi
+      VAULT_INGRESS_HOSTNAME: vault
+      VAULT_INGRESS_DOMAIN: rt-1265-mso.sthings-vsphere.labul.sva.de
+      CLUSTER_ISSUER: cluster-issuer-approle
 ```
 
 </details>
