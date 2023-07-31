@@ -90,7 +90,7 @@ spec:
   postBuild:
     substitute:
       INGRESS_HOSTNAME: scr
-      INGRESS_DOMAIN: app.sthings-vsphere.labul.sva.de
+      INGRESS_DOMAIN: rt-1265-mso.sthings-vsphere.labul.sva.de
       CLUSTER_ISSUER: cluster-issuer-approle
       STORAGE_CLASS: nfs4-csi
     substituteFrom:
