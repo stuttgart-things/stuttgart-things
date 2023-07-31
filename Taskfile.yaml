@@ -27,6 +27,7 @@ tasks:
       - cd ./charts/{{ .PROJECT }} && helm dep update
       - helm package ./charts/{{ .PROJECT }}
       - helm push {{ .PACKAGE }} oci://{{ .REGISTRY }}/{{ .REPOSITORY_NAME }}
+      - yq e -i '.runs.packageHelmChartSCR.name = "5hello"' /home/sthings/projects/github/stuttgart-things/charts/pipelineRuns.yaml
       - rm -rf {{ .PACKAGE }}
       - task: git-push
     vars:

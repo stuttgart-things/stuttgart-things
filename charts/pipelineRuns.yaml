@@ -1,8 +1,7 @@
----
-enableRuns: true
+enableRuns: "true"
 runs:
-  packageHelmChartGithub:
-    name: package-tekton-resources-3
+  packageHelmChartSCR:
+    name: 4hello
     addRandomDateToRunName: false
     namespace: tektoncd
     kind: Pipeline
@@ -16,6 +15,7 @@ runs:
       helm-chart-tag: v0.47.22
       registry: scr.app.4sthings.tiab.ssc.sva.de
       working-image: eu.gcr.io/stuttgart-things/sthings-k8s:1.127.2
+      name: 2hello
     workspaces:
       ssh-credentials:
         workspaceKind: secret
