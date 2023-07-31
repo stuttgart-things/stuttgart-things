@@ -2,7 +2,7 @@
 enableRuns: true
 runs:
   packageHelmChartGithub:
-    name: package-tekton-resources-2
+    name: package-tekton-resources-3
     addRandomDateToRunName: false
     namespace: tektoncd
     kind: Pipeline
