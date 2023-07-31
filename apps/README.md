@@ -168,3 +168,60 @@ spec:
 ```
 
 </details>
+
+<details><summary>ARGO-CD</summary>
+
+```
+cat <<EOF | kubectl apply -f -
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: scr-flux-secrets
+  namespace: flux-system
+type: Opaque
+stringData:
+  SCR_USERNAME: ""
+  SCR_PASSWORD: ""
+```
+
+```
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: argo-cd
+  namespace: flux-system
+  labels:
+    alerting: flux2
+spec:
+  dependsOn:
+    - name: ingress-nginx
+    - name: cert-manager
+  interval: 10m0s
+  retryInterval: 1m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./apps/argo-cd
+  prune: true
+  wait: true
+  timeout: 5m0s
+  postBuild:
+    substitute:
+      IMAGE_REPOSITORY: eu.gcr.io/stuttgart-things/sthings-argocd
+      IMAGE_TAG: v2.7.9
+      SERVICE_TYPE: ClusterIP
+      INGRESS_HOSTNAME: argo-cd
+      INGRESS_DOMAIN: rt-1265-mso.sthings-vsphere.labul.sva.de
+      INGRESS_SECRET_NAME: argocd-ingress-tls
+      VAULTPLUGIN_GENERATE_CMD: 'helm template "${ARGOCD_APP_NAME}" -f <(echo "${ARGOCD_ENV_HELM_VALUES}") --include-crds . -n ${ARGOCD_APP_NAMESPACE} | argocd-vault-plugin generate -'
+      SCR_HOSTNAME: scr.rt-1265-mso.sthings-vsphere.labul.sva.de
+    substituteFrom:
+      - kind: Secret
+        name: vault-flux-secrets
+      - kind: Secret
+        name: scr-flux-secrets
+```
+
+</details>
