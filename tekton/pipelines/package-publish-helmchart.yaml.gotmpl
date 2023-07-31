@@ -13,25 +13,25 @@ pipelines:
     namespace: {{ .Release.Namespace }}
     workspaces:
       - source
-      - ssh-credentials
+      - sshCredentials
       - dockerconfig
     params:
-      git-repo-url:
+      gitRepoUrl:
         description: source git repo
-      git-revision:
+      gitRevision:
         description: revision of source git repo
       gitWorkspaceSubdirectory:
         description: subdirectory on workspace
         default: ""
-      helm-chart-path:
+      helmChartPath:
         description: directory to helm chart in repo, e.g. "helm"
-      helm-chart-name:
+      helmChartName:
         description: name of helm chart, e.g. "sthings-k8s-operator"
-      helm-chart-tag:
+      helmChartTag:
         description: tag of helm chart, e.g. "0.1.0"
       registry:
         description: registry url, e.g. "scr.tiab.labda.sva.de"
-      working-image:
+      workingImage:
         description: working image
     tasks:
       fetch-repository:
@@ -40,12 +40,12 @@ pipelines:
           output:
             workspace: source
           ssh-directory:
-            workspace: ssh-credentials
+            workspace: sshCredentials
         params:
           url:
-            value: $(params.git-repo-url)
+            value: $(params.gitRepoUrl)
           revision:
-            value: $(params.git-revision)
+            value: $(params.gitRevision)
           subdirectory:
             value: $(params.gitWorkspaceSubdirectory)
           deleteExisting:
@@ -61,15 +61,15 @@ pipelines:
             workspace: dockerconfig
         params:
           PATH:
-            value: $(params.helm-chart-path)
+            value: $(params.helmChartPath)
           CHARTNAME:
-            value: $(params.helm-chart-name)
+            value: $(params.helmChartName)
           CHARTTAG:
-            value: $(params.helm-chart-tag)
+            value: $(params.helmChartTag)
           REGISTRY:
             value: $(params.registry)
           IMAGE:
-            value: $(params.working-image)
+            value: $(params.workingImage)
           SUBDIRECTORY:
             value: $(params.gitWorkspaceSubdirectory)
       send-webhook-msteams:
@@ -78,7 +78,7 @@ pipelines:
           - build-package-helmchart
         params:
           message:
-            value: "helm chart $(params.helm-chart-name):$(params.helm-chart-tag) packaged & pushed successfully to oci://$(params.registry)/$(params.helm-chart-name)/"
+            value: "helm chart $(params.helmChartName):$(params.helmChartTag) packaged & pushed successfully to oci://$(params.registry)/$(params.helmChartName)/"
           webhook-url-secret:
             value: msteams
           webhook-url-secret-key:

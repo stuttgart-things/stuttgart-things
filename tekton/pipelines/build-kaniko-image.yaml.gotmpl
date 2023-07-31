@@ -12,7 +12,7 @@ pipelines:
     namespace: {{ .Release.Namespace }}
     workspaces:
       - shared-workspace
-      - ssh-credentials
+      - sshCredentials
       - dockerconfig
     params:
       image:
@@ -26,7 +26,7 @@ pipelines:
       gitWorkspaceSubdirectory:
         description: subdirectory on workspace
         default: ""
-      git-revision:
+      gitRevision:
         description: revision of source git repo
         default: "main"
       context:
@@ -40,7 +40,7 @@ pipelines:
           output:
             workspace: shared-workspace
           ssh-directory:
-            workspace: ssh-credentials
+            workspace: sshCredentials
         params:
           url:
             value: $(params.gitRepoUrl)
@@ -49,7 +49,7 @@ pipelines:
           deleteExisting:
             value: "'true'"
           revision:
-            value: $(params.git-revision)
+            value: $(params.gitRevision)
       kaniko:
         task: kaniko
         runAfter:

@@ -7,7 +7,7 @@ runs:
     ref: build-kaniko-image
     params:
       gitRepoUrl: git@github.com:stuttgart-things/stuttgart-things.git
-      git-revision: main
+      gitRevision: main
       context: /kaniko/{{ .Values.kanikoTestRunImage }}-github/images/{{ .Values.kanikoTestRunImage }}
       gitWorkspaceSubdirectory: /kaniko/{{ .Values.kanikoTestRunImage }}-github
       image: {{ .Values.registry }}/{{ .Values.kanikoTestRunImage }}/ansible
@@ -15,7 +15,7 @@ runs:
       registry: eu.gcr.io
       dockerfile: images/{{ .Values.kanikoTestRunImage }}/Dockerfile
     workspaces:
-      ssh-credentials:
+      sshCredentials:
         workspaceKind: secret
         workspaceRef: github-ssh
       shared-workspace:
@@ -32,7 +32,7 @@ runs:
     ref: build-kaniko-image
     params:
       gitRepoUrl: git@codehub.sva.de:Lab/stuttgart-things/stuttgart-things.git
-      git-revision: master
+      gitRevision: master
       context: /kaniko/sthings-alpine
       gitWorkspaceSubdirectory: /kaniko/sthings-alpine-codehub
       image: {{ .Values.registry }}/sthings-alpine/sthings-alpine
@@ -40,7 +40,7 @@ runs:
       registry: {{ .Values.registry }}
       dockerfile: images/sthings-alpine/Dockerfile
     workspaces:
-      ssh-credentials:
+      sshCredentials:
         workspaceKind: secret
         workspaceRef: codehub-ssh
       shared-workspace:

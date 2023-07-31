@@ -33,13 +33,13 @@ enableExtraPipelines: false
 #       image: scr.tiab.labda.sva.de/sthings-alpine/sthings-alpine/sthings-alpine/sthings-alpine
 #       tag: 230305-0403
 #       gitWorkspaceSubdirectory: /kaniko/sthings-alpine
-#       git-revision: master
+#       gitRevision: master
 #       registry: scr.tiab.labda.sva.de
 #       gitRepoUrl: git@codehub.sva.de:Lab/stuttgart-things/stuttgart-things.git
 #       dockerfile: build/images/sthings-alpine/Dockerfile
 #       context: /kaniko/sthings-alpine
 #     workspaces:
-#       ssh-credentials:
+#       sshCredentials:
 #         workspaceKind: secret
 #         workspaceRef: codehub-ssh
 #       shared-workspace:
@@ -57,16 +57,16 @@ enableExtraPipelines: false
 #     kind: Pipeline
 #     ref: package-publish-helmchart
 #     params:
-#       git-repo-url: git@github.com:stuttgart-things/stuttgart-things.git
-#       git-revision: main
+#       gitRepoUrl: git@github.com:stuttgart-things/stuttgart-things.git
+#       gitRevision: main
 #       gitWorkspaceSubdirectory: /helm/sthings-cluster
-#       helm-chart-path: charts
-#       helm-chart-name: sthings-cluster
-#       helm-chart-tag: 0.2.1
+#       helmChartPath: charts
+#       helmChartName: sthings-cluster
+#       helmChartTag: 0.2.1
 #       registry: scr.tiab.labda.sva.de
-#       working-image: eu.gcr.io/stuttgart-things/sthings-k8s:1.127.2
+#       workingImage: eu.gcr.io/stuttgart-things/sthings-k8s:1.127.2
 #     workspaces:
-#       ssh-credentials:
+#       sshCredentials:
 #         workspaceKind: secret
 #         workspaceRef: codehub-ssh
 #       source:
@@ -99,25 +99,25 @@ pipelines:
   package-publish-helmchart:
     workspaces:
       - source
-      - ssh-credentials
+      - sshCredentials
       - dockerconfig
     params:
-      git-repo-url:
+      gitRepoUrl:
         description: source git repo
-      git-revision:
+      gitRevision:
         description: revision of source git repo
       gitWorkspaceSubdirectory:
         description: subdirectory on workspace
         default: ""
-      helm-chart-path:
+      helmChartPath:
         description: directory to helm chart in repo, e.g. "helm"
-      helm-chart-name:
+      helmChartName:
         description: name of helm chart, e.g. "sthings-k8s-operator"
-      helm-chart-tag:
+      helmChartTag:
         description: tag of helm chart, e.g. "0.1.0"
       registry:
         description: registry url, e.g. "scr.tiab.labda.sva.de"
-      working-image:
+      workingImage:
         description: working image
     tasks:
       fetch-repository:
@@ -126,12 +126,12 @@ pipelines:
           output:
             workspace: source
           ssh-directory:
-            workspace: ssh-credentials
+            workspace: sshCredentials
         params:
           url:
-            value: $(params.git-repo-url)
+            value: $(params.gitRepoUrl)
           revision:
-            value: $(params.git-revision)
+            value: $(params.gitRevision)
           subdirectory:
             value: $(params.gitWorkspaceSubdirectory)
           deleteExisting:
@@ -147,15 +147,15 @@ pipelines:
             workspace: dockerconfig
         params:
           PATH:
-            value: $(params.helm-chart-path)
+            value: $(params.helmChartPath)
           CHARTNAME:
-            value: $(params.helm-chart-name)
+            value: $(params.helmChartName)
           CHARTTAG:
-            value: $(params.helm-chart-tag)
+            value: $(params.helmChartTag)
           REGISTRY:
             value: $(params.registry)
           IMAGE:
-            value: $(params.working-image)
+            value: $(params.workingImage)
           SUBDIRECTORY:
             value: $(params.gitWorkspaceSubdirectory)
       send-webhook-msteams:
@@ -164,7 +164,7 @@ pipelines:
           - build-package-helmchart
         params:
           message:
-            value: "helm chart $(params.helm-chart-name):$(params.helm-chart-tag) packaged & pushed successfully to oci://$(params.registry)/$(params.helm-chart-name)/"
+            value: "helm chart $(params.helmChartName):$(params.helmChartTag) packaged & pushed successfully to oci://$(params.registry)/$(params.helmChartName)/"
           webhook-url-secret:
             value: msteams
           webhook-url-secret-key:
@@ -173,7 +173,7 @@ pipelines:
   build-buildah-image-inline:
     workspaces:
       - shared-workspace
-      - ssh-credentials
+      - sshCredentials
     params:
       image:
         description: reference of the image to build
@@ -184,7 +184,7 @@ pipelines:
       gitWorkspaceSubdirectory:
         description: subdirectory on workspace
         default: ""
-      git-revision:
+      gitRevision:
         description: revision of source git repo
         default: "main"
       context:
@@ -209,7 +209,7 @@ pipelines:
           output:
             workspace: shared-workspace
           ssh-directory:
-            workspace: ssh-credentials
+            workspace: sshCredentials
         params:
           url:
             value: $(params.gitRepoUrl)
@@ -218,7 +218,7 @@ pipelines:
           deleteExisting:
             value: "'true'"
           revision:
-            value: $(params.git-revision)
+            value: $(params.gitRevision)
       buildah:
         task: buildah-login-inline
         runAfter:
@@ -274,7 +274,7 @@ pipelines:
   build-kaniko-image:
     workspaces:
       - shared-workspace
-      - ssh-credentials
+      - sshCredentials
       - dockerconfig
     params:
       image:
@@ -288,7 +288,7 @@ pipelines:
       gitWorkspaceSubdirectory:
         description: subdirectory on workspace
         default: ""
-      git-revision:
+      gitRevision:
         description: revision of source git repo
         default: "main"
       context:
@@ -302,7 +302,7 @@ pipelines:
           output:
             workspace: shared-workspace
           ssh-directory:
-            workspace: ssh-credentials
+            workspace: sshCredentials
         params:
           url:
             value: $(params.gitRepoUrl)
@@ -311,7 +311,7 @@ pipelines:
           deleteExisting:
             value: "'true'"
           revision:
-            value: $(params.git-revision)
+            value: $(params.gitRevision)
       kaniko:
         task: kaniko
         runAfter:

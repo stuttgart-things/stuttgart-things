@@ -8,7 +8,7 @@ releases:
     values:
       - "workspaces/tekton-kaniko.yaml.gotmpl"
       - "secrets/scr-registry-credentials.yaml.gotmpl"
-      - "secrets/git-ssh-credentials.yaml.gotmpl"
+      - "secrets/git-sshCredentials.yaml.gotmpl"
       - "secrets/msteams-notification.yaml.gotmpl"
       - "tasks/git-clone.yaml.gotmpl"
       - "tasks/kaniko.yaml.gotmpl"
@@ -24,7 +24,7 @@ releases:
     values:
       - "workspaces/tekton-helm.yaml.gotmpl"
       - "secrets/scr-registry-credentials.yaml.gotmpl"
-      - "secrets/git-ssh-credentials.yaml.gotmpl"
+      - "secrets/git-sshCredentials.yaml.gotmpl"
       - "secrets/msteams-notification.yaml.gotmpl"
       - "tasks/git-clone.yaml.gotmpl"
       - "tasks/helm.yaml.gotmpl"
@@ -38,15 +38,15 @@ releases:
     chart: stuttgart-things/tekton-resources
     version: v0.47.15
     values:
-      - "workspaces/tekton-kaniko.yaml.gotmpl"
-      - "secrets/scr-registry-credentials.yaml.gotmpl"
-      - "secrets/gcr-registry-credentials.yaml.gotmpl"
-      - "secrets/git-ssh-credentials.yaml.gotmpl"
-      - "secrets/msteams-notification.yaml.gotmpl"
+      # - "workspaces/tekton-kaniko.yaml.gotmpl"
+      # - "secrets/scr-registry-credentials.yaml.gotmpl"
+      # - "secrets/gcr-registry-credentials.yaml.gotmpl"
+      # - "secrets/git-sshCredentials.yaml.gotmpl"
       - "secrets/scr-inline-credentials.yaml.gotmpl"
+      # - "secrets/msteams-notification.yaml.gotmpl"
       - "tasks/git-clone.yaml.gotmpl"
       - "tasks/buildah.yaml.gotmpl"
-      - "tasks/send-msteams-notification.yaml.gotmpl"
+      # - "tasks/send-msteams-notification.yaml.gotmpl"
       - "pipelines/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
       - "test-runs/run-{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 
