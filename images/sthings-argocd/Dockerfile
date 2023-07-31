@@ -1,4 +1,6 @@
 FROM quay.io/argoproj/argocd:v2.7.4
+
+LABEL version=3.11.4-alpine3.18
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 
 ARG ARGOCD_VAULT_PLUGIN_VERSION=1.14.0

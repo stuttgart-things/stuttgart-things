@@ -9,13 +9,16 @@ vars:
   DATE:
     sh: date +"%y.%m%d.%H%M"
   TKN_CHARTS_PIPELINERUNS: ./charts/pipelineRuns.yaml
+  TKN_IMAGES_PIPELINERUNS: ./images/pipelineRuns.yaml
 
 tasks:
+
   build:
     desc: Build & push image
     cmds:
       - '{{ .CONTAINER_RUNTIME_CMD }} build -t {{ .REGISTRY }}/{{ .REPOSITORY_NAME }}/{{ .PROJECT }}:{{ .VERSION }} ./images/{{ .PROJECT }}'
       - '{{ .CONTAINER_RUNTIME_CMD }} push {{ .REGISTRY }}/{{ .REPOSITORY_NAME }}/{{ .PROJECT }}:{{ .VERSION }}'
+      - task: package-tekton
       - task: git-push
     vars:
       VERSION:
@@ -35,6 +38,23 @@ tasks:
         sh: "echo $(({{ .CURRENT_VERSION_NUMBER }}+1))"
       VERSION_NUMBER_PREFIX:
         sh: echo $(yq e '.version' ./charts/{{ .PROJECT }}/Chart.yaml | awk -F'[.=]' ' { print $1"."$2"." }')
+
+  build-tekton:
+    desc: Update tekton helm pipelineRuns
+    cmds:
+      - echo UPDATING BUILDAH PIPELINERUNS
+      - yq e -i '.runs.buildahImage.name = "builah-{{ .PROJECT }}-{{ .VERSION }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
+      - yq e -i '.runs.buildahImage.params.context = "/buildah/{{ .PROJECT }}/images/{{ .PROJECT }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
+      - yq e -i '.runs.buildahImage.params.tag = "{{ .VERSION }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
+      - yq e -i '.runs.buildahImage.params.gitWorkspaceSubdirectory = "/buildah/{{ .PROJECT }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
+      - echo UPDATING KANIKO PIPELINERUNS
+      - yq e -i '.runs.kanikoImage.name = "kaniko-{{ .PROJECT }}-{{ .VERSION }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
+      - yq e -i '.runs.kanikoImage.params.context = "/kaniko/{{ .PROJECT }}/images/{{ .PROJECT }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
+      - yq e -i '.runs.kanikoImage.params.tag = "{{ .VERSION }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
+      - yq e -i '.runs.kanikoImage.params.gitWorkspaceSubdirectory = "/kaniko/{{ .PROJECT }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
+    vars:
+      VERSION:
+        sh: cat ./images/{{ .PROJECT }}/Dockerfile | grep version | awk -F= '{ print $2 }'
 
   package:
     desc: Package & push chart
@@ -56,6 +76,7 @@ tasks:
         sh: "echo $(({{ .CURRENT_VERSION_NUMBER }}+1))"
       VERSION_NUMBER_PREFIX:
         sh: echo $(yq e '.version' ./charts/{{ .PROJECT }}/Chart.yaml | awk -F'[.=]' ' { print $1"."$2"." }')
+
   git-push:
     desc: Commit & push the module
     cmds:

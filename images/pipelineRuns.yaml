@@ -1,9 +1,7 @@
----
 enableRuns: true
-
 runs:
-  buildbuildahImage:
-    name: buildah-testrun-7
+  buildahImage:
+    name: builah-sthings-alpine-3.11.4-alpine3.18
     addRandomDateToRunName: false
     namespace: tektoncd
     kind: Pipeline
@@ -19,6 +17,7 @@ runs:
       storagDriver: overlay
       registry: scr.app.4sthings.tiab.ssc.sva.de
       registryInlineSecret: scr-labda-inline
+      tag: "3.11.4-alpine3.18"
     workspaces:
       sshCredentials:
         workspaceKind: secret
@@ -26,8 +25,8 @@ runs:
       sharedWorkspace:
         workspaceKind: persistentVolumeClaim
         workspaceRef: buildah-tekton
-  buildKanikoImageGithub6:
-    name: kaniko-testrun-github-11
+  kanikoImage:
+    name: kaniko-sthings-alpine-3.11.4-alpine3.18
     addRandomDateToRunName: false
     namespace: tektoncd
     kind: Pipeline
@@ -35,10 +34,10 @@ runs:
     params:
       gitRepoUrl: git@github.com:stuttgart-things/stuttgart-things.git
       gitRevision: main
-      context: /kaniko/sthings-alpine-github/images/sthings-alpine
-      gitWorkspaceSubdirectory: /kaniko/sthings-alpine-github
+      context: /kaniko/sthings-alpine/images/sthings-alpine
+      gitWorkspaceSubdirectory: /kaniko/sthings-alpine
       image: scr.app.4sthings.tiab.ssc.sva.de/sthings-alpine/ansible
-      tag: 123
+      tag: 3.11.4-alpine3.18
       registry: eu.gcr.io
       dockerfile: images/sthings-alpine/Dockerfile
     workspaces:
