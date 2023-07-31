@@ -33,7 +33,7 @@ spec:
           name: argocd-vault-plugin-credentials
     server:
       image:
-        repository: ${IMAGE_REPOSITORY} # eu.gcr.io/stuttgart-things/sthings-argocd:v2.7.4
+        repository: ${IMAGE_REPOSITORY} # eu.gcr.io/stuttgart-things/sthings-argocd:v2.7.9
         tag: ${IMAGE_TAG}
       service:
         type: ${SERVICE_TYPE}
