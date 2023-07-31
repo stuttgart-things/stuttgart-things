@@ -127,39 +127,3 @@ spec:
 ```
 
 </details>
-
-<details><summary>RANCHER</summary>
-
-```
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: rancher-things
-  namespace: flux-system
-  labels:
-    alerting: flux2
-spec:
-  dependsOn:
-    - name: ingress-nginx
-    - name: cert-manager
-  interval: 1h
-  retryInterval: 1m
-  timeout: 5m
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: ./apps/rancher
-  prune: true
-  wait: true
-  postBuild:
-    substitute:
-      INGRESS_HOSTNAME: rancher-things
-      INGRESS_DOMAIN: app.4sthings.tiab.ssc.sva.de
-      CLUSTER_ISSUER: cluster-issuer-approle
-    substituteFrom:
-      - kind: Secret
-        name: rancher-flux-secrets
-```
-
-</details>
