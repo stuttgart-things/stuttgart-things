@@ -245,8 +245,8 @@ pipelines:
             value: $(params.storagDriver)
           REGISTRY_INLINE_SECRET:
             value: $(params.registryInlineSecret)
-      send-msteams-notification:
-        task: send-msteams-notification
+      send-msteams-webhook:
+        task: send-msteams-webhook
         runAfter:
           - buildah
         params:
@@ -258,7 +258,7 @@ pipelines:
             value: url
     finally:
       notify-any-failure:
-        task: send-msteams-notification
+        task: send-msteams-webhook
         params:
           message:
             value: "buildah image build for $(params.image) failed!!"
