@@ -1,8 +1,9 @@
 ---
 enableRuns: true
+
 runs:
   buildbuildahImage:
-    name: buildah-testrun-6
+    name: buildah-testrun-7
     addRandomDateToRunName: false
     namespace: tektoncd
     kind: Pipeline
@@ -22,11 +23,11 @@ runs:
       sshCredentials:
         workspaceKind: secret
         workspaceRef: github-ssh
-      shared-workspace:
+      sharedWorkspace:
         workspaceKind: persistentVolumeClaim
         workspaceRef: buildah-tekton
   buildKanikoImageGithub6:
-    name: kaniko-testrun-github-10
+    name: kaniko-testrun-github-11
     addRandomDateToRunName: false
     namespace: tektoncd
     kind: Pipeline
@@ -44,7 +45,7 @@ runs:
       sshCredentials:
         workspaceKind: secret
         workspaceRef: github-ssh
-      shared-workspace:
+      sharedWorkspace:
         workspaceKind: persistentVolumeClaim
         workspaceRef: buildah-tekton
       dockerconfig:
