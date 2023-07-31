@@ -20,6 +20,22 @@ tasks:
     vars:
       VERSION:
         sh: cat ./images/{{ .PROJECT }}/Dockerfile | grep version | awk -F= '{ print $2 }'
+
+  package-tekton:
+    desc: Update tekton helm pipelineRuns
+    cmds:
+      - yq e -i '.runs.packageHelmChartSCR.name = "package-{{ .PROJECT }}-{{ .VERSION_NUMBER_PREFIX }}{{ .UPDATED_VERSION_NUMBER }}"' {{ .TKN_CHARTS_PIPELINERUNS }}
+      - yq e -i '.runs.packageHelmChartSCR.params.helmChartTag = "{{ .VERSION_NUMBER_PREFIX }}{{ .UPDATED_VERSION_NUMBER }}"' {{ .TKN_CHARTS_PIPELINERUNS }}
+      - yq e -i '.runs.packageHelmChartSCR.params.helmChartName = "{{ .PROJECT }}"' {{ .TKN_CHARTS_PIPELINERUNS }}
+      - yq e -i '.runs.packageHelmChartSCR.params.gitWorkspaceSubdirectory = "/helm/{{ .PROJECT }}"' {{ .TKN_CHARTS_PIPELINERUNS }}
+    vars:
+      CURRENT_VERSION_NUMBER:
+        sh: "echo $(yq e '.version' ./charts/{{ .PROJECT }}/Chart.yaml | awk -F'[.=]' ' { print $3 }')"
+      UPDATED_VERSION_NUMBER:
+        sh: "echo $(({{ .CURRENT_VERSION_NUMBER }}+1))"
+      VERSION_NUMBER_PREFIX:
+        sh: echo $(yq e '.version' ./charts/{{ .PROJECT }}/Chart.yaml | awk -F'[.=]' ' { print $1"."$2"." }')
+
   package:
     desc: Package & push chart
     cmds:
@@ -28,8 +44,8 @@ tasks:
       - cd ./charts/{{ .PROJECT }} && helm dep update
       - helm package ./charts/{{ .PROJECT }}
       - helm push {{ .PACKAGE }} oci://{{ .REGISTRY }}/{{ .REPOSITORY_NAME }}
-      - yq e -i '.runs.packageHelmChartSCR.name = "package-{{ .PROJECT }}-{{ .VERSION_NUMBER_PREFIX }}{{ .UPDATED_VERSION_NUMBER }}"' {{ .TKN_CHARTS_PIPELINERUNS }}
       - rm -rf {{ .PACKAGE }}
+      - task: package-tekton
       - task: git-push
     vars:
       PACKAGE:
