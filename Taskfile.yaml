@@ -27,7 +27,7 @@ tasks:
   package-tekton:
     desc: Update tekton helm pipelineRuns
     cmds:
-      - yq e -i '.runs.packageHelmChartSCR.name = "package-{{ .PROJECT }}-{{ .VERSION_NUMBER_PREFIX }}{{ .UPDATED_VERSION_NUMBER }}"' {{ .TKN_CHARTS_PIPELINERUNS }}
+      - yq e -i '.runs.packageHelmChartSCR.name = "package-{{ .PROJECT }}-{{ .VERSION_NUMBER_PREFIX }}{{ .UPDATED_VERSION_NUMBER }}-{{ .DATE }}"' {{ .TKN_CHARTS_PIPELINERUNS }}
       - yq e -i '.runs.packageHelmChartSCR.params.helmChartTag = "{{ .VERSION_NUMBER_PREFIX }}{{ .UPDATED_VERSION_NUMBER }}"' {{ .TKN_CHARTS_PIPELINERUNS }}
       - yq e -i '.runs.packageHelmChartSCR.params.helmChartName = "{{ .PROJECT }}"' {{ .TKN_CHARTS_PIPELINERUNS }}
       - yq e -i '.runs.packageHelmChartSCR.params.gitWorkspaceSubdirectory = "/helm/{{ .PROJECT }}"' {{ .TKN_CHARTS_PIPELINERUNS }}
@@ -43,12 +43,12 @@ tasks:
     desc: Update tekton helm pipelineRuns
     cmds:
       - echo UPDATING BUILDAH PIPELINERUNS
-      - yq e -i '.runs.buildahImage.name = "builah-{{ .PROJECT }}-{{ .VERSION }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
+      - yq e -i '.runs.buildahImage.name = "builah-{{ .PROJECT }}-{{ .VERSION }}-{{ .DATE }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
       - yq e -i '.runs.buildahImage.params.context = "/buildah/{{ .PROJECT }}/images/{{ .PROJECT }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
       - yq e -i '.runs.buildahImage.params.image = "scr.app.4sthings.tiab.ssc.sva.de/{{ .PROJECT }}/{{ .PROJECT }}:{{ .VERSION }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
       - yq e -i '.runs.buildahImage.params.gitWorkspaceSubdirectory = "/buildah/{{ .PROJECT }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
       - echo UPDATING KANIKO PIPELINERUNS
-      - yq e -i '.runs.kanikoImage.name = "kaniko-{{ .PROJECT }}-{{ .VERSION }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
+      - yq e -i '.runs.kanikoImage.name = "kaniko-{{ .PROJECT }}-{{ .VERSION }}-{{ .DATE }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
       - yq e -i '.runs.kanikoImage.params.context = "/kaniko/{{ .PROJECT }}/images/{{ .PROJECT }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
       - yq e -i '.runs.buildahImage.params.image = "scr.app.4sthings.tiab.ssc.sva.de/{{ .PROJECT }}/{{ .PROJECT }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
       - yq e -i '.runs.kanikoImage.params.tag = "{{ .VERSION }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
