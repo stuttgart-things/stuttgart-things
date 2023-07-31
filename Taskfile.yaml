@@ -18,7 +18,7 @@ tasks:
     cmds:
       - '{{ .CONTAINER_RUNTIME_CMD }} build -t {{ .REGISTRY }}/{{ .REPOSITORY_NAME }}/{{ .PROJECT }}:{{ .VERSION }} ./images/{{ .PROJECT }}'
       - '{{ .CONTAINER_RUNTIME_CMD }} push {{ .REGISTRY }}/{{ .REPOSITORY_NAME }}/{{ .PROJECT }}:{{ .VERSION }}'
-      - task: package-tekton
+      - task: build-tekton
       - task: git-push
     vars:
       VERSION:
