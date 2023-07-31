@@ -724,6 +724,109 @@ tasks:
           printf "%s" "${RESULT_COMMITTER_DATE}" > "$(results.committer-date.path)"
           printf "%s" "${RESULT_SHA}" > "$(results.commit.path)"
           printf "%s" "${PARAM_URL}" > "$(results.url.path)"
+  buildah-login-gcr:
+    labels:
+      app.kubernetes.io/version: "0.5"
+    annotations:
+      tekton.dev/categories: Image Build
+      tekton.dev/pipelines.minVersion: "0.17.0"
+      tekton.dev/tags: image-build
+      tekton.dev/platforms: "linux/amd64,linux/s390x,linux/ppc64le,linux/arm64"
+    description: buildah task builds source into a container image and then pushes it to a container registry
+    volumes:
+      varlibcontainers:
+        volumeKind: emptyDir
+    workspaces:
+      source:
+        description: holds the context and Dockerfile
+        optional: false
+      sslcertdir:
+        description: CA certificates have their own directory
+        optional: true
+      dockerconfig:
+        description: includes a docker `config.json`
+        optional: true
+        mountPath: /root/secrets
+    results:
+      IMAGE_DIGEST:
+        description: digest of the image just built
+      IMAGE_URL:
+        description: url of the image just built.
+    params:
+      IMAGE:
+        description: name (reference) of the image to build
+      BUILDER_IMAGE:
+        description: the image on which builds will run (default is v1.5.1)
+        default: quay.io/buildah/stable:v1.23.3
+      STORAGE_DRIVER:
+        description: buildah storage driver
+        default: overlay
+      DOCKERFILE:
+        description: Path to the Dockerfile to build
+        default: ./Dockerfile
+      CONTEXT:
+        description: the build context used by Kaniko
+        default: ./
+      TLSVERIFY:
+        description: verify the TLS on the registry endpoint (for push/pull to a non-TLS registry)
+        default: "true"
+      FORMAT:
+        description: format of the built container, oci or docker
+        default: "oci"
+      BUILD_EXTRA_ARGS:
+        description: format of the built container, oci or docker
+        default: "oci"
+      PUSH_EXTRA_ARGS:
+        description: extra parameters passed for the push command when pushing images.
+        default: ""
+      SUBDIRECTORY:
+        description: subdirectory of workspace
+        default: ""
+      REGISTRY:
+        description: registry of to be build image
+        default: ""
+      GCR_SECRET_JSON:
+        description: registry of to be build image
+        default: ""
+    steps:
+      build:
+        volumeMounts:
+          varlibcontainers:
+            mountPath: /var/lib/containers
+        workingDir: $(workspaces.source.path)/$(params.SUBDIRECTORY)
+        image: $(params.BUILDER_IMAGE)
+        privileged: true
+        env:
+          CERT_DIR_FLAG:
+            value: $(workspaces.sslcertdir.path)
+        script: |
+          #!/usr/bin/env sh
+
+          set -eu
+
+          echo $(params.IMAGE) WILL BE PUSHED TO: $(params.REGISTRY)
+
+          [[ "$(workspaces.sslcertdir.bound)" == "true" ]] && CERT_DIR_FLAG="--cert-dir $(workspaces.sslcertdir.path)"
+
+          echo DOCKERFILE
+          cat $(params.DOCKERFILE)
+
+          echo LOGIN TO GCR
+          cp /root/secrets/gcr.json /tmp/gcr.json
+          cat /tmp/gcr.json | buildah login -u _json_key --password-stdin \eu.gcr.io
+
+          buildah ${CERT_DIR_FLAG} --storage-driver=$(params.STORAGE_DRIVER) bud \
+          --format=$(params.FORMAT) --tls-verify=$(params.TLSVERIFY) --no-cache \
+          -f $(params.DOCKERFILE) \
+          -t $(params.IMAGE)
+
+          buildah ${CERT_DIR_FLAG} --storage-driver=$(params.STORAGE_DRIVER) push \
+          $(params.PUSH_EXTRA_ARGS) --tls-verify=$(params.TLSVERIFY) \
+          --digestfile /tmp/image-digest $(params.IMAGE) \
+          docker://$(params.IMAGE)
+
+          cat /tmp/image-digest | tee $(results.IMAGE_DIGEST.path)
+          echo -n "$(params.IMAGE)" | tee $(results.IMAGE_URL.path)
   buildah-login-inline:
     labels:
       app.kubernetes.io/version: "0.5"
@@ -819,17 +922,10 @@ tasks:
           [[ "$(workspaces.sslcertdir.bound)" == "true" ]] && CERT_DIR_FLAG="--cert-dir $(workspaces.sslcertdir.path)"
 
           echo DOCKERFILE
-
           cat $(params.DOCKERFILE)
 
-          echo LOGIN TO GCR
-
-          cp /root/secrets/gcr.json /tmp/gcr.json
-          cat /tmp/gcr.json | buildah login -u _json_key --password-stdin \eu.gcr.io
-
-          [[ "$(workspaces.dockerconfig.bound)" == "true" ]] && export DOCKER_CONFIG="$(workspaces.dockerconfig.path)"
-
-          {{- end }}
+          echo LOGIN TO $(params.REGISTRY)
+          buildah login --tls-verify=$(params.TLSVERIFY) -u ${REGISTRY_USER} -p ${REGISTRY_PASSWORD} $(params.REGISTRY)
 
           buildah ${CERT_DIR_FLAG} --storage-driver=$(params.STORAGE_DRIVER) bud \
           --format=$(params.FORMAT) --tls-verify=$(params.TLSVERIFY) --no-cache \
