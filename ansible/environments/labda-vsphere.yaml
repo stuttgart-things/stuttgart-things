@@ -43,3 +43,6 @@ redisPassword: ref+vault://apps/redis/password
 ## HARBOR
 harborAdminUser: ref+vault://apps/harbor/user
 harborAdminPassword: ref+vault://apps/harbor/password
+
+## RANCHER
+bootstrapPassword: ref+vault://apps/rancher/password
