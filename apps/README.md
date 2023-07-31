@@ -3,6 +3,20 @@
 <details><summary>MINIO</summary>
 
 ```
+cat <<EOF | kubectl apply -f -
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: s3-flux-secrets
+  namespace: flux-system
+type: Opaque
+stringData:
+  MINIO_ADMIN_USER: ""
+  MINIO_ADMIN_PASSWORD: ""
+```
+
+```
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -39,6 +53,19 @@ spec:
 </details>
 
 <details><summary>REDIS</summary>
+
+```
+cat <<EOF | kubectl apply -f -
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: redis-flux-secrets
+  namespace: flux-system
+type: Opaque
+stringData:
+  REDIS_PASSWORD: ""
+```
 
 ```
 ---
@@ -91,6 +118,20 @@ spec:
 </details>
 
 <details><summary>HARBOR</summary>
+
+```
+cat <<EOF | kubectl apply -f -
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: harbor-flux-secrets
+  namespace: flux-system
+type: Opaque
+stringData:
+  HARBOR_ADMIN_USER: ""
+  HARBOR_ADMIN_PASSWORD: ""
+```
 
 ```
 ---

@@ -79,6 +79,26 @@ spec:
 <details><summary>CERT-MANAGER</summary>
 
 ```
+cat <<EOF | kubectl apply -f -
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: vault-flux-secrets
+  namespace: flux-system
+type: Opaque
+stringData:
+  VAULT_ADDR: "" # https://vault...:8200
+  VAULT_ROLE_ID: ""
+  VAULT_SECRET_ID: ""
+  VAULT_NAMESPACE: ""
+  VAULT_PKI_PATH: ""
+  VAULT_CA_BUNDLE: ""
+  VAULT_TOKEN: ""
+EOF
+```
+
+```
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -131,7 +151,23 @@ spec:
 </details>
 
 
-<details><summary>FLUX-SYSTEM</summary>
+<details><summary>FLUX-MONITORING</summary>
+
+```
+cat <<EOF | kubectl apply -f -
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: github-flux-secrets
+  namespace: flux-system
+type: Opaque
+stringData:
+  GIT_REPO_URL: ""
+  MS_TEAMS_URL: ""
+  GITHUB_TOKEN: ""
+  PRIVATE_KEY: ""
+```
 
 ```
 ---
@@ -166,6 +202,20 @@ spec:
 </details>
 
 <details><summary>RANCHER</summary>
+
+```
+cat <<EOF | kubectl apply -f -
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: rancher-flux-secrets
+  namespace: flux-system
+type: Opaque
+stringData:
+  BOOTSTRAP_PASSWORD: ref+vault://apps/rancher/password
+EOF
+```
 
 ```
 ---
