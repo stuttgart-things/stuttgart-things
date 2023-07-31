@@ -2,11 +2,11 @@
 enableRuns: true
 runs:
   buildbuildahImage:
-    name: buildah-testrun-2
+    name: buildah-testrun-3
     addRandomDateToRunName: false
     namespace: tektoncd
     kind: Pipeline
-    ref: build-buildah-image
+    ref: build-buildah-image-inline
     params:
       gitRepoUrl: git@github.com:stuttgart-things/stuttgart-things.git
       git-revision: main
