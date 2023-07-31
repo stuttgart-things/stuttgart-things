@@ -42,7 +42,7 @@ enableExtraPipelines: false
 #       sshCredentials:
 #         workspaceKind: secret
 #         workspaceRef: codehub-ssh
-#       shared-workspace:
+#       sharedWorkspace:
 #         workspaceKind: persistentVolumeClaim
 #         workspaceRef: tekton-kaniko-workspace
 #       dockerconfig:
@@ -172,7 +172,7 @@ pipelines:
 
   build-buildah-image-inline:
     workspaces:
-      - shared-workspace
+      - sharedWorkspace
       - sshCredentials
     params:
       image:
@@ -207,7 +207,7 @@ pipelines:
         task: git-clone
         workspaces:
           output:
-            workspace: shared-workspace
+            workspace: sharedWorkspace
           ssh-directory:
             workspace: sshCredentials
         params:
@@ -225,7 +225,7 @@ pipelines:
           - fetch-repository
         workspaces:
           source:
-            workspace: shared-workspace
+            workspace: sharedWorkspace
         params:
           SUBDIRECTORY:
             value: $(params.gitWorkspaceSubdirectory)
@@ -273,7 +273,7 @@ pipelines:
 
   build-kaniko-image:
     workspaces:
-      - shared-workspace
+      - sharedWorkspace
       - sshCredentials
       - dockerconfig
     params:
@@ -300,7 +300,7 @@ pipelines:
         task: git-clone
         workspaces:
           output:
-            workspace: shared-workspace
+            workspace: sharedWorkspace
           ssh-directory:
             workspace: sshCredentials
         params:
@@ -318,7 +318,7 @@ pipelines:
           - fetch-repository
         workspaces:
           source:
-            workspace: shared-workspace
+            workspace: sharedWorkspace
           dockerconfig:
             workspace: dockerconfig
         params:

@@ -9,7 +9,7 @@ runs:
     ref: build-buildah-image-inline
     params:
       gitRepoUrl: git@github.com:stuttgart-things/stuttgart-things.git
-      git-revision: main
+      gitRevision: main
       context: /buildah/sthings-alpine/images/sthings-alpine
       gitWorkspaceSubdirectory: /buildah/sthings-alpine
       image: scr.app.4sthings.tiab.ssc.sva.de/sthings-alpine/sthings-alpine:12.6.11
@@ -19,7 +19,7 @@ runs:
       registry: scr.app.4sthings.tiab.ssc.sva.de
       registryInlineSecret: scr-labda-inline
     workspaces:
-      ssh-credentials:
+      sshCredentials:
         workspaceKind: secret
         workspaceRef: github-ssh
       shared-workspace:
@@ -33,7 +33,7 @@ runs:
     ref: build-kaniko-image
     params:
       gitRepoUrl: git@github.com:stuttgart-things/stuttgart-things.git
-      git-revision: main
+      gitRevision: main
       context: /kaniko/sthings-alpine-github/images/sthings-alpine
       gitWorkspaceSubdirectory: /kaniko/sthings-alpine-github
       image: scr.app.4sthings.tiab.ssc.sva.de/sthings-alpine/ansible
@@ -41,7 +41,7 @@ runs:
       registry: eu.gcr.io
       dockerfile: images/sthings-alpine/Dockerfile
     workspaces:
-      ssh-credentials:
+      sshCredentials:
         workspaceKind: secret
         workspaceRef: github-ssh
       shared-workspace:
