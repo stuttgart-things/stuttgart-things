@@ -11,13 +11,12 @@ runs:
       gitRevision: main
       context: /buildah/sthings-argocd/images/sthings-argocd
       gitWorkspaceSubdirectory: /buildah/sthings-argocd
-      image: scr.app.4sthings.tiab.ssc.sva.de/sthings-alpine/sthings-alpine:12.6.11
+      image: scr.app.4sthings.tiab.ssc.sva.de/sthings-argocd/sthings-argocd
       dockerfile: images/sthings-alpine/Dockerfile
       tlsVerify: false
       storagDriver: overlay
       registry: scr.app.4sthings.tiab.ssc.sva.de
       registryInlineSecret: scr-labda-inline
-      tag: "v2.7.9"
     workspaces:
       sshCredentials:
         workspaceKind: secret

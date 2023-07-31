@@ -45,11 +45,12 @@ tasks:
       - echo UPDATING BUILDAH PIPELINERUNS
       - yq e -i '.runs.buildahImage.name = "builah-{{ .PROJECT }}-{{ .VERSION }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
       - yq e -i '.runs.buildahImage.params.context = "/buildah/{{ .PROJECT }}/images/{{ .PROJECT }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
-      - yq e -i '.runs.buildahImage.params.tag = "{{ .VERSION }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
+      - yq e -i '.runs.buildahImage.params.image = "scr.app.4sthings.tiab.ssc.sva.de/{{ .PROJECT }}/{{ .PROJECT }}:{{ .VERSION }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
       - yq e -i '.runs.buildahImage.params.gitWorkspaceSubdirectory = "/buildah/{{ .PROJECT }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
       - echo UPDATING KANIKO PIPELINERUNS
       - yq e -i '.runs.kanikoImage.name = "kaniko-{{ .PROJECT }}-{{ .VERSION }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
       - yq e -i '.runs.kanikoImage.params.context = "/kaniko/{{ .PROJECT }}/images/{{ .PROJECT }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
+      - yq e -i '.runs.buildahImage.params.image = "scr.app.4sthings.tiab.ssc.sva.de/{{ .PROJECT }}/{{ .PROJECT }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
       - yq e -i '.runs.kanikoImage.params.tag = "{{ .VERSION }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
       - yq e -i '.runs.kanikoImage.params.gitWorkspaceSubdirectory = "/kaniko/{{ .PROJECT }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
     vars:
