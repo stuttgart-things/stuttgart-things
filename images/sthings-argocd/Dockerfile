@@ -1,9 +1,9 @@
-FROM quay.io/argoproj/argocd:v2.7.4
+FROM quay.io/argoproj/argocd:v2.7.9
 
-LABEL version=3.11.4-alpine3.18
+LABEL version=v2.7.9
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 
-ARG ARGOCD_VAULT_PLUGIN_VERSION=1.14.0
+ARG ARGOCD_VAULT_PLUGIN_VERSION=1.15.0
 
 # Switch to root for the ability to perform install
 USER root
