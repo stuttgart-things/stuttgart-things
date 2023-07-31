@@ -78,6 +78,13 @@ spec:
                     technology: kaniko
                   dockerConfigJson: <path:apps/data/scr#dockerconfig>
               secrets:
+                msteams:
+                  name: msteams
+                  labels:
+                    app: tekton
+                    technology: msteams
+                  secretKVs:
+                    url: <path:apps/data/scr#msteams>
                 scr-labda-inline:
                   name: scr-labda-inline
                   labels:
