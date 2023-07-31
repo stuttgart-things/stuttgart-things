@@ -39,3 +39,7 @@ minioAdminPassword: ref+vault://apps/artifacts/secretKey
 
 ## REDIS
 redisPassword: ref+vault://apps/redis/password
+
+## HARBOR
+harborAdminUser: ref+vault://apps/harbor/user
+harborAdminPassword: ref+vault://apps/harbor/password

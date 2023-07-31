@@ -21,7 +21,7 @@ spec:
   timeout: 5m
   sourceRef:
     kind: GitRepository
-    name: infra-june-2023
+    name: flux-system
   path: ./apps/minio
   prune: true
   wait: true
@@ -86,6 +86,44 @@ spec:
   path: ./apps/keda
   prune: true
   wait: true
+```
+
+</details>
+
+<details><summary>HARBOR</summary>
+
+```
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: harbor
+  namespace: flux-system
+  labels:
+    alerting: flux2
+spec:
+  dependsOn:
+    - name: ingress-nginx
+    - name: cert-manager
+    - name: trident
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./apps/harbor
+  prune: true
+  wait: true
+  postBuild:
+    substitute:
+      INGRESS_HOSTNAME: scr
+      INGRESS_DOMAIN: app.4sthings.tiab.ssc.sva.de
+      CLUSTER_ISSUER: cluster-issuer-approle
+      STORAGE_CLASS: ontap
+    substituteFrom:
+      - kind: Secret
+        name: harbor-flux-secrets
 ```
 
 </details>
