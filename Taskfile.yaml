@@ -10,19 +10,25 @@ vars:
     sh: date +"%y.%m%d.%H%M"
   TKN_CHARTS_PIPELINERUNS: ./charts/pipelineRuns.yaml
   TKN_IMAGES_PIPELINERUNS: ./images/pipelineRuns.yaml
+  VERSION:
+    sh: cat ./images/{{ .PROJECT }}/Dockerfile | grep version | awk -F= '{ print $2 }'
+
 
 tasks:
 
-  build:
-    desc: Build & push image
+  build-local:
+    desc: Build & push image local
     cmds:
       - '{{ .CONTAINER_RUNTIME_CMD }} build -t {{ .REGISTRY }}/{{ .REPOSITORY_NAME }}/{{ .PROJECT }}:{{ .VERSION }} ./images/{{ .PROJECT }}'
       - '{{ .CONTAINER_RUNTIME_CMD }} push {{ .REGISTRY }}/{{ .REPOSITORY_NAME }}/{{ .PROJECT }}:{{ .VERSION }}'
       - task: build-tekton
       - task: git-push
-    vars:
-      VERSION:
-        sh: cat ./images/{{ .PROJECT }}/Dockerfile | grep version | awk -F= '{ print $2 }'
+
+  build-tekton:
+    desc: Build & push image w/ tekton
+    cmds:
+      - task: build-tekton-prs
+      - task: git-push
 
   package-tekton:
     desc: Update tekton helm pipelineRuns
@@ -39,7 +45,7 @@ tasks:
       VERSION_NUMBER_PREFIX:
         sh: echo $(yq e '.version' ./charts/{{ .PROJECT }}/Chart.yaml | awk -F'[.=]' ' { print $1"."$2"." }')
 
-  build-tekton:
+  build-tekton-prs:
     desc: Update tekton helm pipelineRuns
     cmds:
       - echo UPDATING BUILDAH PIPELINERUNS

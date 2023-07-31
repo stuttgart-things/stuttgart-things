@@ -1,7 +1,7 @@
 enableRuns: true
 runs:
   buildahImage:
-    name: builah-sthings-argocd-v2.7.9-23.0731.1322
+    name: builah-sthings-argocd-v2.7.9-23.0731.1343
     addRandomDateToRunName: false
     namespace: tektoncd
     kind: Pipeline
@@ -25,7 +25,7 @@ runs:
         workspaceKind: persistentVolumeClaim
         workspaceRef: buildah-tekton
   kanikoImage:
-    name: kaniko-sthings-argocd-v2.7.9-23.0731.1322
+    name: kaniko-sthings-argocd-v2.7.9-23.0731.1343
     addRandomDateToRunName: false
     namespace: tektoncd
     kind: Pipeline
