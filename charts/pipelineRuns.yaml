@@ -1,7 +1,7 @@
 enableRuns: "true"
 runs:
   packageHelmChartSCR:
-    name: "package-sthings-alpine-1"
+    name: "package-tekton-resources-v0.47.32"
     addRandomDateToRunName: false
     namespace: tektoncd
     kind: Pipeline
@@ -9,10 +9,10 @@ runs:
     params:
       gitRepoUrl: git@github.com:stuttgart-things/stuttgart-things.git
       gitRevision: main
-      gitWorkspaceSubdirectory: /helm/sthings-alpine
+      gitWorkspaceSubdirectory: /helm/tekton-resources
       helmChartPath: charts
-      helmChartName: sthings-alpine
-      helmChartTag: "1"
+      helmChartName: tekton-resources
+      helmChartTag: "v0.47.32"
       registry: scr.app.4sthings.tiab.ssc.sva.de
       workingImage: eu.gcr.io/stuttgart-things/sthings-k8s:1.127.2
     workspaces:
@@ -25,9 +25,3 @@ runs:
       dockerconfig:
         workspaceKind: secret
         workspaceRef: scr-labda
-  buildbuildahImage:
-    name: builah-sthings-argocd-1
-    params:
-      context: /buildah/sthings-argocd/images/sthings-argocd
-      tag: "1"
-      gitWorkspaceSubdirectory: /helm/sthings-argocd
