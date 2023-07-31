@@ -1,7 +1,7 @@
 enableRuns: "true"
 runs:
   packageHelmChartSCR:
-    name: 4hello
+    name: 5hello
     addRandomDateToRunName: false
     namespace: tektoncd
     kind: Pipeline
