@@ -28,7 +28,7 @@ tasks:
       - cd ./charts/{{ .PROJECT }} && helm dep update
       - helm package ./charts/{{ .PROJECT }}
       - helm push {{ .PACKAGE }} oci://{{ .REGISTRY }}/{{ .REPOSITORY_NAME }}
-      - yq e -i '.runs.packageHelmChartSCR.name = "{{ .UPDATED_VERSION_NUMBER }}"' {{ .TKN_CHARTS_PIPELINERUNS }}
+      - yq e -i '.runs.packageHelmChartSCR.name = "package-{{ .PROJECT }}-{{ .VERSION_NUMBER_PREFIX }}{{ .UPDATED_VERSION_NUMBER }}"' {{ .TKN_CHARTS_PIPELINERUNS }}
       - rm -rf {{ .PACKAGE }}
       - task: git-push
     vars:
