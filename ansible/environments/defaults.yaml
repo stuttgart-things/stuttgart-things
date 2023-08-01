@@ -10,9 +10,9 @@ installRequirements: true
 updatePackages: true
 installMotd: true
 ansibleUser: sthings
-lvmHomeSizing: 15%
-lvmRootSizing: 35%
-lvmVarSizing: 50%
+lvmHomeSizing: 5%
+lvmRootSizing: 10%
+lvmVarSizing: 85%
 installCAs:
   - https://vault.tiab.labda.sva.de:8200
   - https://vault.labul.sva.de:8200

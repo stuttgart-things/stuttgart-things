@@ -1,17 +1,17 @@
 ---
-createInventory: false
-ansiblePlaybook: deploy-upgrade-rke #install-configure-nfs #add-ingress-pdns #deploy-upgrade-rke #baseos-setup #configure-rke-node
+createInventory: true
+ansiblePlaybook: install-configure-nfs #install-configure-nfs #add-ingress-pdns #deploy-upgrade-rke #baseos-setup #configure-rke-node
 prepareEnv: true
 executeBaseos: true
 
 # TARGETS/INVENTORY + PLAYBOOK
-vmCount: 3
-vmName: pre-rt2
+vmCount: 1
+vmName: nfs-app
 vmNumCPUs: 6
 vmMemory: 8192
-vmDiskSize: 96
+vmDiskSize: 256
 
-ansibleTargets: rt-nfs1.labul.sva.de
+ansibleTargets: nfs-app.labul.sva.de
 # labul.sva.de; tiab.labda.sva.de
 
 # CUSTOM INVENTORY

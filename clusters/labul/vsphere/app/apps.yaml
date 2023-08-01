@@ -24,7 +24,7 @@ spec:
     substitute:
       INGRESS_HOSTNAME_API: artifacts
       INGRESS_HOSTNAME_CONSOLE: artifacts-console
-      INGRESS_DOMAIN: pre-rt2.sthings-vsphere.labul.sva.de
+      INGRESS_DOMAIN: app.sthings-vsphere.labul.sva.de
       CLUSTER_ISSUER: cluster-issuer-approle
     substituteFrom:
       - kind: Secret
@@ -92,7 +92,7 @@ spec:
   postBuild:
     substitute:
       INGRESS_HOSTNAME: scr
-      INGRESS_DOMAIN: pre-rt2.sthings-vsphere.labul.sva.de
+      INGRESS_DOMAIN: app.sthings-vsphere.labul.sva.de
       CLUSTER_ISSUER: cluster-issuer-approle
       STORAGE_CLASS: nfs4-csi
     substituteFrom:
@@ -125,10 +125,10 @@ spec:
       IMAGE_TAG: v2.7.9
       SERVICE_TYPE: ClusterIP
       INGRESS_HOSTNAME: argo-cd
-      INGRESS_DOMAIN: pre-rt2.sthings-vsphere.labul.sva.de
+      INGRESS_DOMAIN: app.sthings-vsphere.labul.sva.de
       INGRESS_SECRET_NAME: argocd-ingress-tls
       VAULTPLUGIN_GENERATE_CMD: 'helm template "${ARGOCD_APP_NAME}" -f <(echo "${ARGOCD_ENV_HELM_VALUES}") --include-crds . -n ${ARGOCD_APP_NAMESPACE} | argocd-vault-plugin generate -'
-      SCR_HOSTNAME: scr.pre-rt2.sthings-vsphere.labul.sva.de
+      SCR_HOSTNAME: scr.app.sthings-vsphere.labul.sva.de
     substituteFrom:
       - kind: Secret
         name: vault-flux-secrets

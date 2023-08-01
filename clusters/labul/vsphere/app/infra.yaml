@@ -16,7 +16,7 @@ spec:
   wait: true
   postBuild:
     substitute:
-      IP_RANGE: 10.31.103.13-10.31.103.14
+      IP_RANGE: 10.31.103.11-10.31.103.12
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -89,7 +89,7 @@ spec:
   wait: true
   postBuild:
     substitute:
-      NFS_SERVER_FQDN: rt-nfs1.labul.sva.de
+      NFS_SERVER_FQDN: nfs-app.labul.sva.de
       NFS_SHARE_PATH: /var/nfs/k8s
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -113,9 +113,9 @@ spec:
   postBuild:
     substitute:
       INGRESS_HOSTNAME: grafana
-      INGRESS_DOMAIN: pre-rt.sthings-vsphere.labul.sva.de
-      CLUSTER_NAME: pre-rt
-      CLUSTER_DESCRIPTION: pre-rt-labul-vsphere
+      INGRESS_DOMAIN: app.sthings-vsphere.labul.sva.de
+      CLUSTER_NAME: app
+      CLUSTER_DESCRIPTION: app-labul-vsphere
     substituteFrom:
       - kind: Secret
         name: github-flux-secrets
@@ -143,7 +143,7 @@ spec:
   postBuild:
     substitute:
       INGRESS_HOSTNAME: rancher-things
-      INGRESS_DOMAIN: pre-rt.sthings-vsphere.labul.sva.de
+      INGRESS_DOMAIN: app.sthings-vsphere.labul.sva.de
       CLUSTER_ISSUER: cluster-issuer-approle
     substituteFrom:
       - kind: Secret
@@ -172,5 +172,5 @@ spec:
       VAULT_STORAGE_SIZE: 2Gi
       VAULT_STORAGE_CLASS: nfs4-csi
       VAULT_INGRESS_HOSTNAME: vault
-      VAULT_INGRESS_DOMAIN: pre-rt.sthings-vsphere.labul.sva.de
+      VAULT_INGRESS_DOMAIN: app.sthings-vsphere.labul.sva.de
       CLUSTER_ISSUER: cluster-issuer-approle
