@@ -13,9 +13,6 @@
 </details>
 
 
-
-
-
 ## OPERATIONS
 
 <details><summary>ONLY VM CREATION</summary>
