@@ -100,6 +100,7 @@ metadata:
 spec:
   dependsOn:
     - name: cert-manager
+    - name: ingress-nginx
   interval: 1h
   retryInterval: 1m
   timeout: 5m
@@ -112,9 +113,9 @@ spec:
   postBuild:
     substitute:
       INGRESS_HOSTNAME: grafana
-      INGRESS_DOMAIN: rt-1265-mso.sthings-vsphere.labul.sva.de
-      CLUSTER_NAME: rt-1265
-      CLUSTER_DESCRIPTION: test-labul-vsphere
+      INGRESS_DOMAIN: pre-rt2.sthings-vsphere.labul.sva.de
+      CLUSTER_NAME: pre-rt2
+      CLUSTER_DESCRIPTION: pre-rt2-labul-vsphere
     substituteFrom:
       - kind: Secret
         name: github-flux-secrets
@@ -142,7 +143,7 @@ spec:
   postBuild:
     substitute:
       INGRESS_HOSTNAME: rancher-things
-      INGRESS_DOMAIN: rt-1265-mso.sthings-vsphere.labul.sva.de
+      INGRESS_DOMAIN: pre-rt2.sthings-vsphere.labul.sva.de
       CLUSTER_ISSUER: cluster-issuer-approle
     substituteFrom:
       - kind: Secret
@@ -154,6 +155,9 @@ metadata:
   name: vault
   namespace: flux-system
 spec:
+  dependsOn:
+    - name: ingress-nginx
+    - name: cert-manager
   interval: 1h
   retryInterval: 1m
   timeout: 5m
@@ -168,5 +172,5 @@ spec:
       VAULT_STORAGE_SIZE: 2Gi
       VAULT_STORAGE_CLASS: nfs4-csi
       VAULT_INGRESS_HOSTNAME: vault
-      VAULT_INGRESS_DOMAIN: rt-1265-mso.sthings-vsphere.labul.sva.de
+      VAULT_INGRESS_DOMAIN: pre-rt2.sthings-vsphere.labul.sva.de
       CLUSTER_ISSUER: cluster-issuer-approle

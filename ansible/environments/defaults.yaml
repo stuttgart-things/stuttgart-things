@@ -25,7 +25,6 @@ rkeVersion: 2
 k8sVersion: 1.26.5
 rke2ReleaseKind: rke2r1 # rke2r2
 rke2FetchedKubeconfigPath: /home/nonroot/kubeconfig
-enableIngressController: false
 clusterSetup: multinode
 uploadKubeconfigVault: true
 secretPathKubeconfig: kubeconfigs/data

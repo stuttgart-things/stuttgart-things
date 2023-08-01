@@ -6,7 +6,7 @@ executeBaseos: true
 
 # TARGETS/INVENTORY + PLAYBOOK
 vmCount: 3
-vmName: pre-rt
+vmName: pre-rt2
 vmNumCPUs: 6
 vmMemory: 8192
 vmDiskSize: 96
@@ -18,10 +18,10 @@ ansibleTargets: rt-nfs1.labul.sva.de
 inventory:
   groups:
     - initial_master_node:
-        - pre-rt.labul.sva.de
+        - pre-rt2.labul.sva.de
     - additional_master_nodes:
-        - pre-rt-2.labul.sva.de
-        - pre-rt-3.labul.sva.de
+        - pre-rt2-2.labul.sva.de
+        - pre-rt2-3.labul.sva.de
   vars:
     - all:vars:
       - ansible_ssh_common_args='-o StrictHostKeyChecking=no'
