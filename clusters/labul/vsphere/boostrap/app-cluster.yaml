@@ -51,7 +51,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: ansible
-  namespace: 
+  namespace: machine-shop
 data:
   baseos-setup.yaml: |
     - hosts: all
