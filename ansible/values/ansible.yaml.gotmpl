@@ -211,7 +211,7 @@ configmaps:
               role_id: {{`{{printf "%q" "{{ vault_approle_id }}" }}`}}
               secret_id: {{`{{printf "%q" "{{ vault_approle_secret }}" }}`}}
               validate_certs: false
-              path: {{ .Values.secretPathKubeconfig }}
+              path: {{ .Values.secretPathKubeconfig }}/{{ .Values.clusterName }}
               data:
                 data:
                   kubeconfig: {{`{{printf "%q" "{{ lookup('ansible.builtin.file', rke2_fetched_kubeconfig_path) | b64encode }}" }}`}}
@@ -224,7 +224,7 @@ configmaps:
           vault_approle_secret: {{`{{printf "%q" "{{ lookup('env', 'VAULT_SECRET_ID') }}" }}`}}
           vault_url: {{`{{printf "%q" "{{ lookup('env', 'VAULT_ADDR') }}" }}`}}
           github_token: {{`{{printf "%q" "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps/data/github:token validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}" }}`}}
-          kubeconfig: {{`{{printf "%q" "{{ lookup('community.hashi_vault.hashi_vault', 'secret=kubeconfigs/data/dev8:kubeconfig validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}" }}`}}
+          kubeconfig: {{`{{printf "%q" "{{ lookup('community.hashi_vault.hashi_vault', 'secret={{ .Values.secretPathKubeconfig }}/{{ .Values.clusterName }}:kubeconfig validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}" }}`}}
           kubeconfig_path: /home/nonroot/kubeconfig
           install_flux: {{ .Values.installFlux }}
 
