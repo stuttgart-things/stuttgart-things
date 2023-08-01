@@ -3,7 +3,7 @@ collections:
   - name: community.crypto
     version: 2.14.1
   - name: community.general
-    version: 7.2.0
+    version: 7.2.1
   - name: ansible.posix
     version: 1.5.2
   - name: kubernetes.core
@@ -12,7 +12,7 @@ collections:
 roles:
   - src: https://github.com/stuttgart-things/deploy-configure-rke.git
     scm: git
-    version: rke2r2-1.26.0
+    version: rke2.126.5
   - src: https://artifacts.tiab.labda.sva.de/roles/manage-filesystem.tar.gz
     name: manage-filesystem
   - src: https://github.com/stuttgart-things/install-configure-vault.git

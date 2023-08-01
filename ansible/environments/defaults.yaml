@@ -1,7 +1,7 @@
 ---
 # ANSIBLE JOB SETTINGS
 ansibleImage: eu.gcr.io/stuttgart-things/sthings-ansible
-ansibleImageTag: 8.2.0-2
+ansibleImageTag: 8.2.0-3
 
 # BASEOS-SETUP
 rebootAll: true
@@ -29,10 +29,12 @@ enableIngressController: false
 clusterSetup: multinode
 uploadKubeconfigVault: true
 secretPathKubeconfig: kubeconfigs/data
-clusterName: rt-1265
+clusterName: pre-rt
 installFlux: true
 fluxNamespace: flux-system
-
+disable_rke2_components:
+  - rke2-ingress-nginx
+  - rke-snapshot-controller
 # PDNS
 ipAddress: 10.31.103.11 # CLUSTER RELATED
 hostname: rt-1265-mso # CLUSTER RELATED

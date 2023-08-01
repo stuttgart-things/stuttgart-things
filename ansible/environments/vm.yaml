@@ -1,14 +1,14 @@
 ---
-createInventory: true
-ansiblePlaybook: install-configure-nfs #add-ingress-pdns #deploy-upgrade-rke #baseos-setup #configure-rke-node
+createInventory: false
+ansiblePlaybook: deploy-upgrade-rke #install-configure-nfs #add-ingress-pdns #deploy-upgrade-rke #baseos-setup #configure-rke-node
 prepareEnv: true
 executeBaseos: true
 
 # TARGETS/INVENTORY + PLAYBOOK
-vmCount: 1
-vmName: rt-nfs1
+vmCount: 3
+vmName: pre-rt
 vmNumCPUs: 6
-vmMemory: 4096
+vmMemory: 8192
 vmDiskSize: 96
 
 ansibleTargets: rt-nfs1.labul.sva.de
@@ -18,10 +18,10 @@ ansibleTargets: rt-nfs1.labul.sva.de
 inventory:
   groups:
     - initial_master_node:
-        - rt-1265-mso.labul.sva.de
+        - pre-rt.labul.sva.de
     - additional_master_nodes:
-        - rt-1265-mso-2.labul.sva.de
-        - rt-1265-mso-3.labul.sva.de
+        - pre-rt-2.labul.sva.de
+        - pre-rt-3.labul.sva.de
   vars:
     - all:vars:
       - ansible_ssh_common_args='-o StrictHostKeyChecking=no'

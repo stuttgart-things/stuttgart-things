@@ -178,9 +178,12 @@ configmaps:
           rke_version: {{ .Values.rkeVersion }}
           rke2_k8s_version: {{ .Values.k8sVersion }}
           rke2_release_kind: {{ .Values.rke2ReleaseKind }}
-          enable_ingress_controller: {{ .Values.enableIngressController }}
           cluster_setup: {{ .Values.clusterSetup }}
           rke2_fetched_kubeconfig_path: {{ .Values.rke2FetchedKubeconfigPath }}
+          disable_rke2_components:
+            {{- range .Values.disable_rke2_components }}
+            - {{ . }}
+            {{- end }}
 
         roles:
           - role: deploy-configure-rke
