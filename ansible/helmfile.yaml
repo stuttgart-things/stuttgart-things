@@ -4,7 +4,7 @@ releases:
     namespace: machine-shop
     chart: stuttgart-things/sthings-cluster
     version: 0.3.7
-    installed: true
+    installed: false
     values:
       - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 
@@ -20,7 +20,7 @@ releases:
     namespace: machine-shop
     chart: stuttgart-things/sthings-cluster
     version: 0.3.7
-    installed: true
+    installed: false
     values:
       - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 
@@ -28,7 +28,7 @@ releases:
     namespace: machine-shop
     chart: stuttgart-things/sthings-cluster
     version: 0.3.7
-    installed: true
+    installed: false
     values:
       - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
     needs:
@@ -39,7 +39,7 @@ releases:
     namespace: machine-shop
     chart: stuttgart-things/sthings-cluster
     version: 0.3.7
-    installed: false
+    installed: true
     values:
       - "plays/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
       - "secrets/ansible-vault-approle.yaml.gotmpl"

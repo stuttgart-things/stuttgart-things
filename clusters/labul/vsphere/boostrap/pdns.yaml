@@ -1,0 +1,91 @@
+---
+# Source: sthings-cluster/templates/config-map.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: play
+  namespace: machine-shop
+data:
+  play.yaml: |-
+    ---
+    - hosts: localhost
+      gather_facts: no
+  
+      vars:
+        vault_approle_id: "{{ lookup('env', 'VAULT_ROLE_ID') }}"
+        vault_approle_secret: "{{ lookup('env', 'VAULT_SECRET_ID') }}"
+        vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
+  
+        pdns_api_executor: localhost
+        pdns_create_record:
+          - fqdn: "*.app.sthings-vsphere.labul.sva.de."
+            content: "10.31.103.11"
+            record_type: A
+            zone: "sthings-vsphere.labul.sva.de."
+            state: present
+            ttl: 60
+            note: deployed w/ ansible container
+  
+        pdns_url: https://pdns-vsphere.labul.sva.de:8443
+        pdns_token: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps/data/powerdns:token validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+  
+      roles:
+        - install-configure-powerdns
+---
+# Source: sthings-cluster/templates/job.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: 2023-08-01-pdns-ingress-entry-zkvo
+  namespace: machine-shop
+  labels:
+    app: machine-shop-operator
+    machine-shop-operator: ansible
+spec:
+  template:
+    metadata:
+      name: 2023-08-01-pdns-ingress-entry-zkvo
+      labels:
+        app: machine-shop-operator
+        machine-shop-operator: ansible
+    spec:
+      containers:
+        - name: manager
+          image: eu.gcr.io/stuttgart-things/sthings-ansible:8.2.0-3
+          imagePullPolicy: Always
+          securityContext:
+            allowPrivilegeEscalation: true
+            privileged: true
+            runAsNonRoot: true
+            readOnlyRootFilesystem: false
+            runAsUser: 65532
+          env:
+            - name: ANSIBLE_HOST_KEY_CHECKING
+              value: "False"
+          envFrom:
+            - secretRef:
+                name: vault
+            - secretRef:
+                name: vault
+            - configMapRef:
+                name: play
+          resources:
+            requests:
+              cpu: 150m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 768Mi
+          command:
+            - /bin/sh
+            - -ec
+            - ansible-playbook $HOME/ansible/play.yaml -vv
+          volumeMounts:
+            - name: play
+              mountPath: /home/nonroot/ansible
+      restartPolicy: Never
+      volumes:
+        - name: play
+          configMap:
+            name: play
+
