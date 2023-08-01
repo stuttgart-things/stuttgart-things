@@ -1,11 +1,20 @@
 # stuttgart-things/ansible
 
-## TBD
+## RELEASES
 
-* FlUX BOOTSTRAP
-* FLUX SECRETS
-* POWERDNS
-* NFS-SERVER
+<details><summary>pdns-ingress-entry</summary>
+
+| FILE                                       | NEEDED/OPTIONAL CHANGES                                     |
+|--------------------------------------------|-------------------------------------------------------------|
+| helmfile.yaml                              | (only) release pdns-ingress-entry must be enabled (set to installed) |
+| ./variables/pdns.yaml | set/change ipAddress; hostname |
+|                                            |                                                             |
+
+</details>
+
+
+
+
 
 ## OPERATIONS
 

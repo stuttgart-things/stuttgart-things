@@ -68,3 +68,4 @@ environments:
       - environments/vm.yaml
       - environments/defaults.yaml
       - environments/{{ .Environment.Name }}.yaml
+      - variables/pdns.yaml
