@@ -50,7 +50,7 @@
 | helmfile.yaml                              | all releases must be enabled (set to installed) |
 | environments/vm.yaml                       | set/change vmCount; vmName; vmNumCPUs; vmMemory; vmDiskSize; set inventory; createInventory: false; ansiblePlaybook: deploy-upgrade-rke; prepareEnv: true; executeBaseos: true |
 | environments/{{ .Environment.Name }}.yaml  | set/change vmFolderPath; datastore; network; osTemplate; vmTemplatePath;                 |
-| defaults.yaml  | set/change rkeVersion; k8sVersion; rke2ReleaseKind; enableIngressController; clusterSetup   |
+| defaults.yaml  | set/change rkeVersion; k8sVersion; rke2ReleaseKind; enableIngressController; clusterSetup; lvmSizings; installCAs; installFlux |
 |
 
 </details>
@@ -116,6 +116,8 @@ helmfile template --environment labda-vsphere | grep kind: -A 2 -B 2 # check for
 <details><summary>SYNC/CREATE</summary>
 
 ```
+export VAULT_ADDR=https://vault..:8200
+export VAULT_TOKEN=<VAULT_TOKEN>
 export KUBECONFIG=~/.kube/...
 helmfile sync --environment labda-vsphere
 ```

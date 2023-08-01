@@ -4,7 +4,7 @@ releases:
     namespace: machine-shop
     chart: stuttgart-things/sthings-cluster
     version: 0.3.7
-    installed: true
+    installed: false
     values:
       - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 
@@ -12,7 +12,7 @@ releases:
     namespace: machine-shop
     chart: stuttgart-things/sthings-cluster
     version: 0.3.7
-    installed: true
+    installed: false
     values:
       - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 
@@ -20,7 +20,7 @@ releases:
     namespace: machine-shop
     chart: stuttgart-things/sthings-cluster
     version: 0.3.7
-    installed: true
+    installed: false
     values:
       - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 
@@ -28,12 +28,22 @@ releases:
     namespace: machine-shop
     chart: stuttgart-things/sthings-cluster
     version: 0.3.7
-    installed: true
+    installed: false
     values:
       - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
     needs:
       - "{{`{{ .Release.Namespace }}`}}/secrets"
       - "{{`{{ .Release.Namespace }}`}}/ansible"
+
+  - name: pdns-ingress-entry
+    namespace: machine-shop
+    chart: stuttgart-things/sthings-cluster
+    version: 0.3.7
+    installed: true
+    values:
+      - "plays/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
+      - "secrets/ansible-vault-approle.yaml.gotmpl"
+      - "job/localhost.yaml.gotmpl"
 
 repositories:
   - name: stuttgart-things
