@@ -10,9 +10,9 @@ installRequirements: true
 updatePackages: true
 installMotd: true
 ansibleUser: sthings
-lvmHomeSizing: 5%
-lvmRootSizing: 10%
-lvmVarSizing: 85%
+lvmHomeSizing: 15%
+lvmRootSizing: 35%
+lvmVarSizing: 50%
 installCAs:
   - https://vault.tiab.labda.sva.de:8200
   - https://vault.labul.sva.de:8200
@@ -28,7 +28,7 @@ rke2FetchedKubeconfigPath: /home/nonroot/kubeconfig
 clusterSetup: multinode
 uploadKubeconfigVault: true
 secretPathKubeconfig: kubeconfigs/data
-clusterName: pre-rt
+clusterName: app
 installFlux: true
 fluxNamespace: flux-system
 disable_rke2_components:

@@ -1,15 +1,15 @@
 ---
-createInventory: true
-ansiblePlaybook: install-configure-nfs #install-configure-nfs #add-ingress-pdns #deploy-upgrade-rke #baseos-setup #configure-rke-node
+createInventory: false
+ansiblePlaybook: deploy-upgrade-rke #install-configure-nfs #add-ingress-pdns #deploy-upgrade-rke #baseos-setup #configure-rke-node
 prepareEnv: true
 executeBaseos: true
 
 # TARGETS/INVENTORY + PLAYBOOK
-vmCount: 1
-vmName: nfs-app
+vmCount: 5
+vmName: sthings-app
 vmNumCPUs: 6
 vmMemory: 8192
-vmDiskSize: 256
+vmDiskSize: 92
 
 ansibleTargets: nfs-app.labul.sva.de
 # labul.sva.de; tiab.labda.sva.de
@@ -18,10 +18,12 @@ ansibleTargets: nfs-app.labul.sva.de
 inventory:
   groups:
     - initial_master_node:
-        - pre-rt2.labul.sva.de
+        - sthings-app.labul.sva.de
     - additional_master_nodes:
-        - pre-rt2-2.labul.sva.de
-        - pre-rt2-3.labul.sva.de
+        - sthings-app-2.labul.sva.de
+        - sthings-app-3.labul.sva.de
+        - sthings-app-4.labul.sva.de
+        - sthings-app-5.labul.sva.de
   vars:
     - all:vars:
       - ansible_ssh_common_args='-o StrictHostKeyChecking=no'

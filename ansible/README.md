@@ -56,7 +56,7 @@
 | helmfile.yaml                              | terraform,secrets,ansible,job release must be enabled (set to installed) |
 | environments/vm.yaml                       | set/change vmCount; vmName; vmNumCPUs; vmMemory; vmDiskSize; set inventory; createInventory: false; ansiblePlaybook: deploy-upgrade-rke; prepareEnv: true; executeBaseos: true |
 | environments/{{ .Environment.Name }}.yaml  | set/change vmFolderPath; datastore; network; osTemplate; vmTemplatePath;                 |
-| defaults.yaml  | set/change rkeVersion; k8sVersion; rke2ReleaseKind; disable_rke2_components; clusterSetup; lvmSizings; installCAs; installFlux |
+| defaults.yaml  | set/change rkeVersion; k8sVersion; rke2ReleaseKind; disable_rke2_components; clusterSetup; clusterName; lvmSizings; installCAs; installFlux |
 |
 
 </details>
