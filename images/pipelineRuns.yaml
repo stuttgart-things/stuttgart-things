@@ -1,7 +1,7 @@
 enableRuns: true
 runs:
   buildahImage:
-    name: builah-sthings-ansible-8.2.0-3-23.0801.0750
+    name: builah-sthings-ansible-8.2.0-3-23.0801.0800
     addRandomDateToRunName: false
     namespace: tektoncd
     kind: Pipeline
@@ -25,7 +25,7 @@ runs:
         workspaceKind: persistentVolumeClaim
         workspaceRef: buildah-tekton
   kanikoImage:
-    name: kaniko-sthings-ansible-8.2.0-3-23.0801.0750
+    name: kaniko-sthings-ansible-8.2.0-3-23.0801.0800
     addRandomDateToRunName: false
     namespace: tektoncd
     kind: Pipeline
