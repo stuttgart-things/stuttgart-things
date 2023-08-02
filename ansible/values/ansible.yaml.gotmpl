@@ -1,6 +1,6 @@
 ---
 configmaps:
-  {{ randAlphaNum 4 | lower }}-ansible:
+  ansible:
     {{- if not .Values.createInventory }}
     inventory.yaml: |
       {{- range $_, $item := .Values.inventory.groups }}
