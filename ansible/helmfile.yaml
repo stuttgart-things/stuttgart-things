@@ -1,7 +1,7 @@
 ---
 releases:
   - name: terraform
-    namespace: machine-shop
+    namespace: machineshop
     chart: stuttgart-things/sthings-cluster
     version: 0.3.7
     installed: true
@@ -9,15 +9,15 @@ releases:
       - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 
   - name: secrets
-    namespace: machine-shop
+    namespace: machineshop
     chart: stuttgart-things/sthings-cluster
     version: 0.3.7
-    installed: false
+    installed: true
     values:
       - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 
   - name: ansible
-    namespace: machine-shop
+    namespace: machineshop
     chart: stuttgart-things/sthings-cluster
     version: 0.3.7
     installed: true
@@ -25,7 +25,7 @@ releases:
       - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 
   - name: job
-    namespace: machine-shop
+    namespace: machineshop
     chart: stuttgart-things/sthings-cluster
     version: 0.3.7
     installed: true
@@ -36,7 +36,7 @@ releases:
       - "{{`{{ .Release.Namespace }}`}}/ansible"
 
   - name: pdns-ingress-entry
-    namespace: machine-shop
+    namespace: machineshop
     chart: stuttgart-things/sthings-cluster
     version: 0.3.7
     installed: false

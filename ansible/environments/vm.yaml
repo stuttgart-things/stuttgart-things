@@ -1,5 +1,5 @@
 ---
-createInventory: false
+createInventory: true
 ansiblePlaybook: configure-rke-node #install-configure-nfs #add-ingress-pdns #deploy-upgrade-rke #baseos-setup #configure-rke-node
 prepareEnv: true
 executeBaseos: true
