@@ -9,7 +9,7 @@ jobs:
     restartPolicy: Never
     backoffLimit: 2
     volumes:
-      ansible:
+      {{ randAlphaNum 4 | lower }}-ansible:
         volumeKind: configMap
     {{- if .Values.installFlux }}
       flux-secrets:
