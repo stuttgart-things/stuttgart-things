@@ -16,7 +16,7 @@ spec:
   timeout: 5m
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: app-vsphere
   path: ./apps/minio
   prune: true
   wait: true
@@ -43,7 +43,7 @@ spec:
   timeout: 5m
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: app-vsphere
   path: ./apps/redis
   prune: true
   wait: true
@@ -63,7 +63,7 @@ spec:
   timeout: 5m
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: app-vsphere
   path: ./apps/keda
   prune: true
   wait: true
@@ -85,7 +85,7 @@ spec:
   timeout: 5m
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: app-vsphere
   path: ./apps/harbor
   prune: true
   wait: true
@@ -114,7 +114,7 @@ spec:
   retryInterval: 1m
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: app-vsphere
   path: ./apps/argo-cd
   prune: true
   wait: true

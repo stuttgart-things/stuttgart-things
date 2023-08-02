@@ -10,7 +10,7 @@ spec:
   timeout: 5m
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: app-vsphere
   path: ./infra/metallb
   prune: true
   wait: true
@@ -29,7 +29,7 @@ spec:
   timeout: 5m
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: app-vsphere
   path: ./infra/ingress-nginx
   dependsOn:
     - name: metallb
@@ -47,7 +47,7 @@ spec:
   timeout: 5m
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: app-vsphere
   path: ./infra/longhorn
   prune: true
   wait: true
@@ -63,7 +63,7 @@ spec:
   timeout: 5m
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: app-vsphere
   path: ./infra/cert-manager
   prune: true
   wait: true
@@ -83,7 +83,7 @@ spec:
   timeout: 5m
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: app-vsphere
   path: ./infra/nfs-csi
   prune: true
   wait: true
@@ -106,7 +106,7 @@ spec:
   timeout: 5m
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: app-vsphere
   path: ./infra/flux-monitoring
   prune: true
   wait: true
@@ -136,7 +136,7 @@ spec:
   timeout: 5m
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: app-vsphere
   path: ./infra/rancher
   prune: true
   wait: true
@@ -163,7 +163,7 @@ spec:
   timeout: 5m
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: app-vsphere
   path: ./infra/vault
   prune: true
   wait: true
