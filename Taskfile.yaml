@@ -5,6 +5,8 @@ vars:
   REPOSITORY_NAME: stuttgart-things
   PROJECT:
     sh: echo ${PROJECT}
+  TAG:
+    sh: echo ${TAG}
   CONTAINER_RUNTIME_CMD: sudo nerdctl
   DATE:
     sh: date +"%y.%m%d.%H%M"
@@ -15,6 +17,14 @@ vars:
 
 
 tasks:
+  tag:
+    desc: Tag repo
+    cmds:
+      - git pull
+      - git commit -am 'updated for {{ .TAG }} on {{ .DATE }}'
+      - git push
+      - git tag -a {{ .TAG }} -m 'updated for {{ .TAG }} on {{ .DATE }}'
+      - git push origin --tags
 
   build-local:
     desc: Build & push image local
