@@ -10,7 +10,7 @@ spec:
   timeout: 5m
   sourceRef:
     kind: GitRepository
-    name: app-vsphere
+    name: flux-system
   path: ./infra/metallb
   prune: true
   wait: true
@@ -29,7 +29,7 @@ spec:
   timeout: 5m
   sourceRef:
     kind: GitRepository
-    name: app-vsphere
+    name: flux-system
   path: ./infra/ingress-nginx
   dependsOn:
     - name: metallb
