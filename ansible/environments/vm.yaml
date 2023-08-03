@@ -6,12 +6,12 @@ executeBaseos: true
 
 # TARGETS/INVENTORY + PLAYBOOK
 vmCount: 3
-vmName: dev20
+vmName: dev21
 vmNumCPUs: 6
 vmMemory: 8192
 vmDiskSize: 92
 
-ansibleTargets: dev20.labul.sva.de;dev20-2.labul.sva.de;dev20-3.labul.sva.de
+ansibleTargets: dev21.labul.sva.de;dev21-2.labul.sva.de;dev21-3.labul.sva.de
 # labul.sva.de; tiab.labda.sva.de
 
 # CUSTOM INVENTORY
