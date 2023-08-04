@@ -1,0 +1,46 @@
+tasks:
+  create-publish-helm-chart:
+    namespace: {{ .Release.Namespace }}
+    labels:
+      app.kubernetes.io/version: "0.2"
+    annotations:
+      tekton.dev/pipelines.minVersion: "0.48.0"
+      tekton.dev/categories: helm chart Build
+      tekton.dev/tags: helm-chart-build
+      tekton.dev/platforms: "linux/amd64"
+    description: create and publish helm chart to a registry
+    workspaces:
+      source:
+        description: holds helm chart source
+        optional: false
+      dockerconfig:
+        description: includes a docker `config.json`
+        optional: false
+        mountPath: /home/nonroot/.config/helm/registry/
+    params:
+      PATH:
+        description: directory to helm chart in repo, e.g. "helm"
+      CHARTNAME:
+        description: name of helm chart, e.g. "sthings-k8s-operator"
+      CHARTTAG:
+        description: tag of helm chart, e.g. "0.1.0"
+      REGISTRY:
+        description: registry url, e.g. "scr.tiab.labda.sva.de"
+      IMAGE:
+        description: working image
+        default: eu.gcr.io/stuttgart-things/sthings-k8s:1.127.2
+      SUBDIRECTORY:
+        description: subdirectory of workspace
+        default: ""
+    steps:
+      publish-helm-chart:
+        workingDir: $(workspaces.source.path)/$(params.SUBDIRECTORY)
+        image: $(params.IMAGE)
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 65532
+        script: |
+          #!/usr/bin/env sh
+          helm dependency update $(params.PATH)/$(params.CHARTNAME)
+          helm package --version $(params.CHARTTAG)-helm $(params.PATH)/$(params.CHARTNAME)
+          helm push $(params.CHARTNAME)-$(params.CHARTTAG)-helm.tgz oci://$(params.REGISTRY)/$(params.CHARTNAME)/
