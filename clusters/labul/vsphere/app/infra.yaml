@@ -170,7 +170,7 @@ spec:
   postBuild:
     substitute:
       VAULT_STORAGE_SIZE: 2Gi
-      VAULT_STORAGE_CLASS: nfs4-csi
+      VAULT_STORAGE_CLASS: longhorn
       VAULT_INGRESS_HOSTNAME: vault
       VAULT_INGRESS_DOMAIN: app.sthings-vsphere.labul.sva.de
       CLUSTER_ISSUER: cluster-issuer-approle
