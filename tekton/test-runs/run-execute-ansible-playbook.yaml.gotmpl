@@ -11,6 +11,10 @@ runs:
       gitRevision: {{ .Values.testRunGitRepoRevision }}
       gitWorkspaceSubdirectory: /ansible/{{ .Values.ansibleTestPlaybook }}
       ansbileWorkingImage: {{ .Values.ansbileWorkingImage }}
+    listParams:
+      ansbileVarsFile:
+        - hello+-whatever
+        - this+-andthat
     workspaces:
       sshCredentials:
         workspaceKind: secret
