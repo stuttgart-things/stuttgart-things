@@ -1,0 +1,42 @@
+tasks:
+  ansible:
+    namespace: {{ .Release.Namespace }}
+    labels:
+      app.kubernetes.io/version: "0.5"
+    annotations:
+      tekton.dev/categories: configuration-mgmt
+      tekton.dev/pipelines.minVersion: "0.17.0"
+      tekton.dev/tags: image-build
+      tekton.dev/platforms: "linux/amd64,linux/s390x,linux/ppc64le,linux/arm64"
+    description: execute ansible
+    workspaces:
+      source:
+        description: holds the context and Dockerfile
+        optional: false
+    params:
+      SUB_DIRECTORY:
+        description: subdirectory of workspace
+        default: ""
+      WORKING_IMAGE:
+        description: the image on which ansible will run
+        default: eu.gcr.io/stuttgart-things/sthings-ansible:8.2.0-3
+      EXTRA_VARS:
+        description: ansible extra vars
+        type: array
+    steps:
+      create-vars-file:
+        workingDir: $(workspaces.source.path)/$(params.SUB_DIRECTORY)
+        image: $(params.WORKING_IMAGE)
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 65532
+        args: ["$(params.EXTRA_VARS[*])"]
+        script: |
+          #!/usr/bin/env sh
+
+          set -eu
+
+          echo "---" >> /tmp/ansible.yaml
+          for argument in "$@"; do echo $argument | sed -e "s/+-/: /g" >> /tmp/ansible.yaml ; done
+
+          cat /tmp/ansible.yaml

@@ -1,14 +1,27 @@
 ---
 releases:
+  - name: execute-ansible-playbook
+    installed: true
+    namespace: ansible
+    chart: stuttgart-things/tekton-resources
+    version: v0.47.15
+    values:
+      - "workspaces/tekton-ansible.yaml.gotmpl"
+      - "secrets/git-ssh-credentials.yaml.gotmpl"
+      - "tasks/git-clone.yaml.gotmpl"
+      - "tasks/ansible.yaml.gotmpl"
+      - "pipelines/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
+      - "test-runs/run-{{`{{ .Release.Name }}`}}.yaml.gotmpl"
+
   - name: build-kaniko-image
     installed: false
     namespace: kaniko
-    chart: stuttgart-things/yacht-tekton-resources
-    version: v0.47.10
+    chart: stuttgart-things/tekton-resources
+    version: v0.47.15
     values:
       - "workspaces/tekton-kaniko.yaml.gotmpl"
       - "secrets/scr-registry-credentials.yaml.gotmpl"
-      - "secrets/git-sshCredentials.yaml.gotmpl"
+      - "secrets/git-ssh-credentials.yaml.gotmpl"
       - "secrets/msteams-notification.yaml.gotmpl"
       - "tasks/git-clone.yaml.gotmpl"
       - "tasks/kaniko.yaml.gotmpl"
@@ -17,36 +30,36 @@ releases:
       - "test-runs/run-{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 
   - name: package-publish-helmchart
-    installed: true
+    installed: false
     namespace: tekton-cd
-    chart: stuttgart-things/yacht-tekton-resources
-    version: v0.47.10
+    chart: stuttgart-things/tekton-resources
+    version: v0.47.15
     values:
       - "workspaces/tekton-helm.yaml.gotmpl"
-      # - "secrets/scr-registry-credentials.yaml.gotmpl"
-      # - "secrets/git-sshCredentials.yaml.gotmpl"
-      # - "secrets/msteams-notification.yaml.gotmpl"
+      - "secrets/scr-registry-credentials.yaml.gotmpl"
+      - "secrets/git-ssh-credentials.yaml.gotmpl"
+      - "secrets/msteams-notification.yaml.gotmpl"
       - "tasks/git-clone.yaml.gotmpl"
       - "tasks/helm.yaml.gotmpl"
-      # - "tasks/send-msteams-notification.yaml.gotmpl"
+      - "tasks/send-msteams-notification.yaml.gotmpl"
       - "pipelines/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
       - "test-runs/run-{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 
-  - name: build-buildah-image
+  - name: build-buildah-imagexc
     installed: false
     namespace: buildah2
     chart: stuttgart-things/tekton-resources
     version: v0.47.15
     values:
-      # - "workspaces/tekton-kaniko.yaml.gotmpl"
-      # - "secrets/scr-registry-credentials.yaml.gotmpl"
-      # - "secrets/gcr-registry-credentials.yaml.gotmpl"
-      # - "secrets/git-sshCredentials.yaml.gotmpl"
+      - "workspaces/tekton-kaniko.yaml.gotmpl"
+      - "secrets/scr-registry-credentials.yaml.gotmpl"
+      - "secrets/gcr-registry-credentials.yaml.gotmpl"
+      - "secrets/git-ssh-credentials.yaml.gotmpl"
       - "secrets/scr-inline-credentials.yaml.gotmpl"
-      # - "secrets/msteams-notification.yaml.gotmpl"
+      - "secrets/msteams-notification.yaml.gotmpl"
       - "tasks/git-clone.yaml.gotmpl"
       - "tasks/buildah.yaml.gotmpl"
-      # - "tasks/send-msteams-notification.yaml.gotmpl"
+      - "tasks/send-msteams-notification.yaml.gotmpl"
       - "pipelines/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
       - "test-runs/run-{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 

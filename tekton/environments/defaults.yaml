@@ -1,3 +1,12 @@
 ---
 testWorkspaceName: kaniko-tekton-workspace
 testWorkspaceImage: nginx
+
+testRunGitRepoSSHUrl: git@github.com:stuttgart-things/stuttgart-things.git
+testRunGitRepoRevision: main
+
+ansibleTestPlaybook: base-os
+ansbileWorkingImage: eu.gcr.io/stuttgart-things/sthings-ansible:8.2.0-3
+ansibleWorkspaceName: ansible-tekton
+ansibleWorkspaceStorage: 5Gi
+ansibleWorkspaceAccessMode: ReadWriteOnce

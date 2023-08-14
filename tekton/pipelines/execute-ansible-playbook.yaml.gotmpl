@@ -1,0 +1,65 @@
+---
+enableWorkspaces: true
+enableGitSecretsSSH: true
+enableSecrets: true
+enableRegistryCredentials: true
+enablePipelines: true
+enableTasks: true
+enableRuns: true
+
+pipelines:
+  execute-ansible-playbook:
+    namespace: {{ .Release.Namespace }}
+    workspaces:
+      - shared-workspace
+      - sshCredentials
+    params:
+      gitRepoUrl:
+        description: source git repo
+      gitWorkspaceSubdirectory:
+        description: subdirectory on workspace
+        default: ""
+      gitRevision:
+        description: revision of source git repo
+        default: "main"
+      ansbileWorkingImage:
+        description:  the image on which ansible will run
+        default: "eu.gcr.io/stuttgart-things/sthings-ansible:8.2.0-3"
+      ansbileVarsFile:
+        description: values for ansible vars file
+        type: array
+    tasks:
+      fetch-repository:
+        task: git-clone
+        workspaces:
+          output:
+            workspace: shared-workspace
+          ssh-directory:
+            workspace: sshCredentials
+        params:
+          url:
+            value: $(params.gitRepoUrl)
+          subdirectory:
+            value: $(params.gitWorkspaceSubdirectory)
+          deleteExisting:
+            value: "'true'"
+          revision:
+            value: $(params.gitRevision)
+      execute-ansible:
+        task: ansible
+        runAfter:
+          - fetch-repository
+        workspaces:
+          source:
+            workspace: shared-workspace
+        params:
+          SUB_DIRECTORY:
+            value: $(params.gitWorkspaceSubdirectory)
+          WORKING_IMAGE:
+            value: $(params.ansbileWorkingImage)
+          EXTRA_VARS:
+            value: $(params.ansbileVarsFile[*])
+          #EXTRA_VARS:
+            #values:
+             # - hello+-whatever
+              #- this+-andthat

@@ -1,0 +1,9 @@
+---
+workspaces:
+ {{ .Values.ansibleWorkspaceName }}:
+   namespace: {{ .Release.Namespace }}
+   volumeMode: Filesystem
+   storageClassName: {{ .Values.storageClassName }}
+   storage: {{ .Values.ansibleWorkspaceStorage }}
+   accessModes:
+     - {{ .Values.ansibleWorkspaceAccessMode }}

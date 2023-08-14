@@ -1,0 +1,20 @@
+---
+runs:
+  executeAnsible:
+    name: {{ .Release.Name }}-testrun-{{ randAlphaNum 5 | lower }}
+    addRandomDateToRunName: false
+    namespace: {{ .Release.Namespace }}
+    kind: Pipeline
+    ref: execute-ansible-playbook
+    params:
+      gitRepoUrl: {{ .Values.testRunGitRepoSSHUrl }}
+      gitRevision: {{ .Values.testRunGitRepoRevision }}
+      gitWorkspaceSubdirectory: /ansible/{{ .Values.ansibleTestPlaybook }}
+      ansbileWorkingImage: {{ .Values.ansbileWorkingImage }}
+    workspaces:
+      sshCredentials:
+        workspaceKind: secret
+        workspaceRef: github-ssh
+      shared-workspace:
+        workspaceKind: persistentVolumeClaim
+        workspaceRef: {{ .Values.ansibleWorkspaceName }}
