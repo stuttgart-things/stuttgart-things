@@ -29,26 +29,26 @@
           ansible_user=sthings
           host_key_checking=false
 
-#     - name: Creating ssh directory
-#       ansible.builtin.file:
-#         path: "{{ home_dir }}/.ssh/"
-#         state: directory
+    - name: Creating ssh directory
+      ansible.builtin.file:
+        path: "{{ home_dir }}/.ssh/"
+        state: directory
 
-#     - name: Creating ssh private key file
-#       ansible.builtin.copy:
-#         dest: "{{ home_dir }}/.ssh/id_rsa"
-#         content: "{{ ssh_key | b64decode }}"
-#         mode: '0600'
+    - name: Creating ssh private key file
+      ansible.builtin.copy:
+        dest: "{{ home_dir }}/.ssh/id_rsa"
+        content: "{{ ssh_key | b64decode }}"
+        mode: '0600'
 
-#     - name: Refresh inventory
-#       ansible.builtin.meta: refresh_inventory
+    - name: Refresh inventory
+      ansible.builtin.meta: refresh_inventory
 
-#     - name: Wait for SSH
-#       ansible.builtin.wait_for:
-#         host: "{{ item }}"
-#         port: 22
-#         delay: 1
-#         timeout: 1200
-#         sleep: 10
-#       with_items:
-#         - "{{ groups['all'] }}"
+    - name: Wait for SSH
+      ansible.builtin.wait_for:
+        host: "{{ item }}"
+        port: 22
+        delay: 1
+        timeout: 1200
+        sleep: 10
+      with_items:
+        - "{{ groups['all'] }}"
