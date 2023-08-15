@@ -18,24 +18,16 @@
       ansible.builtin.set_fact:
         target_hosts: "{{ targets_list | join('\n') }}"
 
-#     create_inventory: true
+    - name: Write vars on inv file
+      ansible.builtin.blockinfile:
+        path: "{{ inv_path }}"
+        block: |
+          [all]
+          {{ target_hosts }}
 
-#   tasks:
-#     - name: Create hosts
-#       ansible.builtin.set_fact:
-#         target_hosts: "{{ targets_list | join('\n') }}"
-
-#     - name: Write vars on inv file
-#       ansible.builtin.blockinfile:
-#         path: "{{ inv_path }}"
-#         block: |
-#           [all]
-#           {{ target_hosts }}
-
-#           [all:vars]
-#           ansible_user=sthings
-#           host_key_checking=false
-#       when: create_inventory|bool
+          [all:vars]
+          ansible_user=sthings
+          host_key_checking=false
 
 #     - name: Creating ssh directory
 #       ansible.builtin.file:

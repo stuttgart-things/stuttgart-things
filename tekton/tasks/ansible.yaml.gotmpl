@@ -98,7 +98,14 @@ tasks:
           echo "preparing local working environment"
 
           touch inventory
-          ansible-playbook -i inventory -e inv_path=inventory -e path_to_vars_file=vars $(params.PREPARE_PLAYBOOK) -vv
+          ansible-playbook -vv \
+            -i $(workspaces.source.path)/$(params.SUB_DIRECTORY)/inventory \
+            -e inv_path=$(workspaces.source.path)/$(params.SUB_DIRECTORY)/inventory \
+            -e path_to_vars_file=$(workspaces.source.path)/$(params.SUB_DIRECTORY)/vars \
+            $(params.PREPARE_PLAYBOOK)
+
+          cat inventory
+
       install-roles-collections:
         workingDir: $(workspaces.source.path)/$(params.SUB_DIRECTORY)
         image: $(params.WORKING_IMAGE)
