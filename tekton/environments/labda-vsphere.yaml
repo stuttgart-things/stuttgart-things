@@ -26,3 +26,9 @@ buildahRegistryLogin: true
 
 scrUsername: ref+vault://apps/scr/username
 scrPassword: ref+vault://apps/scr/password
+
+# VAULT
+vaultNamespace: root
+vaultAddr: https://vault-vsphere.tiab.labda.sva.de:8200
+vaultRoleID: ref+vault://apps/vault/roleID
+vaultSecretID: ref+vault://apps/vault/secretID

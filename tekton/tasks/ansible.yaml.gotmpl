@@ -26,6 +26,21 @@ tasks:
       USER_HOME:
         description: absolute path to the user's home directory
         default: "/home/nonroot"
+      vault-secret-name:
+        default: "vault"
+        description: name of the secret with incoming webhook URL
+      vault-secret-key-addr:
+        default: "VAULT_ADDR"
+        description: vaul addr key in the secret
+      vault-secret-key-approleId:
+        default: "VAULT_ROLE_ID"
+        description: approle id key in the secret
+      vault-secret-key-approleSecret:
+        default: "VAULT_SECRET_ID"
+        description: approle secret key in the secret
+      vault-secret-key-namespace:
+        default: "VAULT_NAMESPACE"
+        description: namespace key in the secret
       PREPARE_PLAYBOOK:
         description: path to prepare playbook
         default: "ansible/playbooks/prepare-env.yaml"
@@ -53,19 +68,37 @@ tasks:
         securityContext:
           runAsNonRoot: true
           runAsUser: 65532
-      env:
-        HOME:
-          value: $(params.USER_HOME)
+        env:
+          HOME:
+            value: $(params.USER_HOME)
+          VAULT_ADDR:
+            valueFrom:
+              secretKeyRef:
+                name: $(params.vault-secret-name)
+                key: $(params.vault-secret-key-addr)
+          VAULT_ROLE_ID:
+            valueFrom:
+              secretKeyRef:
+                name: $(params.vault-secret-name)
+                key: $(params.vault-secret-key-approleId)
+          VAULT_SECRET_ID:
+            valueFrom:
+              secretKeyRef:
+                name: $(params.vault-secret-name)
+                key: $(params.vault-secret-key-approleSecret)
+          VAULT_NAMESPACE:
+            valueFrom:
+              secretKeyRef:
+                name: $(params.vault-secret-name)
+                key: $(params.vault-secret-key-namespace)
         script: |
           #!/usr/bin/env sh
           set -eu
 
           echo "preparing local working environment"
-          ls -lta
 
           touch inventory
-          ansible-playbook -i inventory -e path_to_vars_file=vars.yaml ${PREPARE_PLAYBOOK} -vv
-
+          ansible-playbook -i inventory -e inv_path=inventory -e path_to_vars_file=vars.yaml $(params.PREPARE_PLAYBOOK) -vv
       install-roles-collections:
         workingDir: $(workspaces.source.path)/$(params.SUB_DIRECTORY)
         image: $(params.WORKING_IMAGE)
