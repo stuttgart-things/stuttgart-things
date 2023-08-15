@@ -44,6 +44,14 @@ tasks:
       PREPARE_PLAYBOOK:
         description: path to prepare playbook
         default: "ansible/playbooks/prepare-env.yaml"
+      INSTALL_ROLES_COLLECTIONS:
+        description: install roles and collections
+        type: string
+        default: "false"
+      PREPARE_LOCAL_ENV:
+        description: preapre inventory and ssh key or not
+        type: string
+        default: "true"
     steps:
       create-vars-file:
         workingDir: $(workspaces.source.path)/$(params.SUB_DIRECTORY)
@@ -95,17 +103,19 @@ tasks:
           #!/usr/bin/env sh
           set -eu
 
-          echo "preparing local working environment"
-
           touch inventory
-          ansible-playbook -vv \
-            -i $(workspaces.source.path)/$(params.SUB_DIRECTORY)/inventory \
-            -e inv_path=$(workspaces.source.path)/$(params.SUB_DIRECTORY)/inventory \
-            -e path_to_vars_file=$(workspaces.source.path)/$(params.SUB_DIRECTORY)/vars \
-            $(params.PREPARE_PLAYBOOK)
+          if [ "$(params.PREPARE_LOCAL_ENV)" = "true" ] ; then
+            echo "preparing local working environment"
+            ansible-playbook -vv \
+              -i $(workspaces.source.path)/$(params.SUB_DIRECTORY)/inventory \
+              -e inv_path=$(workspaces.source.path)/$(params.SUB_DIRECTORY)/inventory \
+              -e path_to_vars_file=$(workspaces.source.path)/$(params.SUB_DIRECTORY)/vars \
+              $(params.PREPARE_PLAYBOOK)
 
-          cat inventory
-
+            cat inventory
+          else
+            echo "skipped preparing local working environment"
+          fi
       install-roles-collections:
         workingDir: $(workspaces.source.path)/$(params.SUB_DIRECTORY)
         image: $(params.WORKING_IMAGE)
@@ -116,7 +126,11 @@ tasks:
           #!/usr/bin/env sh
           set -eu
 
-          echo "you know.. for install"
+          if [ "$(params.INSTALL_ROLES_COLLECTIONS)" = "true" ] ; then
+            echo "you know.. for install"
+          else
+            echo "skipped installing roles & collections "
+          fi
       run-ansible-playbook:
         workingDir: $(workspaces.source.path)/$(params.SUB_DIRECTORY)
         image: $(params.WORKING_IMAGE)
