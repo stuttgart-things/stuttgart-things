@@ -9,16 +9,14 @@
     vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
     ssh_key: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=ssh/data/sthings:privateKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
 
-  vars_files:
-    - "{{ path_to_vars_file }}"
+  pre_tasks:
+    - name: Include vars
+      ansible.builtin.include_vars: "{{ path_to_vars_file }}.yaml"
 
   tasks:
     - name: Create hosts
       ansible.builtin.set_fact:
         target_hosts: "{{ targets_list | join('\n') }}"
-
-
-
 
 #     create_inventory: true
 
