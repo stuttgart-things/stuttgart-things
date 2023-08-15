@@ -13,8 +13,7 @@ runs:
       ansbileWorkingImage: {{ .Values.ansbileWorkingImage }}
     listParams:
       ansbileVarsFile:
-        - hello+-whatever
-        - this+-andthat
+        - targets+-localhost
     workspaces:
       sshCredentials:
         workspaceKind: secret

@@ -23,6 +23,12 @@ tasks:
       EXTRA_VARS:
         description: ansible extra vars
         type: array
+      USER_HOME:
+        description: absolute path to the user's home directory
+        default: "/home/nonroot"
+      PREPARE_PLAYBOOK:
+        description: path to prepare playbook
+        default: "ansible/playbooks/prepare-env.yaml"
     steps:
       create-vars-file:
         workingDir: $(workspaces.source.path)/$(params.SUB_DIRECTORY)
@@ -33,10 +39,52 @@ tasks:
         args: ["$(params.EXTRA_VARS[*])"]
         script: |
           #!/usr/bin/env sh
-
           set -eu
 
-          echo "---" >> /tmp/ansible.yaml
-          for argument in "$@"; do echo $argument | sed -e "s/+-/: /g" >> /tmp/ansible.yaml ; done
+          echo "creating vars file"
+          rm -rf ./vars.yaml
+          echo "---" >> ./vars.yaml
+          for argument in "$@"; do echo $argument | sed -e "s/+-/: /g" >> vars.yaml ; done
 
-          cat /tmp/ansible.yaml
+          cat ./vars.yaml
+      prepare-working-environment:
+        workingDir: $(workspaces.source.path)/$(params.SUB_DIRECTORY)
+        image: $(params.WORKING_IMAGE)
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 65532
+      env:
+        HOME:
+          value: $(params.USER_HOME)
+        script: |
+          #!/usr/bin/env sh
+          set -eu
+
+          echo "preparing local working environment"
+          ls -lta
+
+          touch inventory
+          ansible-playbook -i inventory -e path_to_vars_file=vars.yaml ${PREPARE_PLAYBOOK} -vv
+
+      install-roles-collections:
+        workingDir: $(workspaces.source.path)/$(params.SUB_DIRECTORY)
+        image: $(params.WORKING_IMAGE)
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 65532
+        script: |
+          #!/usr/bin/env sh
+          set -eu
+
+          echo "you know.. for install"
+      run-ansible-playbook:
+        workingDir: $(workspaces.source.path)/$(params.SUB_DIRECTORY)
+        image: $(params.WORKING_IMAGE)
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 65532
+        script: |
+          #!/usr/bin/env sh
+          set -eu
+
+          echo "you know.. for running a playbook or 2"

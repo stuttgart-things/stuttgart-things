@@ -1,0 +1,69 @@
+---
+- hosts: localhost
+  become: false
+  vars:
+    home_dir: "{{ lookup('env','HOME') }}"
+
+  vars_files:
+    - "{{ path_to_vars_file }}"
+
+  tasks:
+    - name: Create hosts
+      ansible.builtin.set_fact:
+        target_hosts: "{{ targets_list | join('\n') }}"
+
+
+# - hosts: localhost
+#   become: false
+
+#   vars:
+#     home_dir: "{{ lookup('env','HOME') }}"
+#     targets: "{{ lookup('env','TARGETS') }}"
+#     targets_list: "{{ targets.split(';') }}"
+#     inv_path: "{{ lookup('env','INV_PATH') }}"
+#     vault_approle_id: "{{ lookup('env', 'VAULT_ROLE_ID') }}"
+#     vault_approle_secret: "{{ lookup('env', 'VAULT_SECRET_ID') }}"
+#     vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
+#     ssh_key: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=ssh/data/sthings:privateKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+#     create_inventory: true
+
+#   tasks:
+#     - name: Create hosts
+#       ansible.builtin.set_fact:
+#         target_hosts: "{{ targets_list | join('\n') }}"
+
+#     - name: Write vars on inv file
+#       ansible.builtin.blockinfile:
+#         path: "{{ inv_path }}"
+#         block: |
+#           [all]
+#           {{ target_hosts }}
+
+#           [all:vars]
+#           ansible_user=sthings
+#           host_key_checking=false
+#       when: create_inventory|bool
+
+#     - name: Creating ssh directory
+#       ansible.builtin.file:
+#         path: "{{ home_dir }}/.ssh/"
+#         state: directory
+
+#     - name: Creating ssh private key file
+#       ansible.builtin.copy:
+#         dest: "{{ home_dir }}/.ssh/id_rsa"
+#         content: "{{ ssh_key | b64decode }}"
+#         mode: '0600'
+
+#     - name: Refresh inventory
+#       ansible.builtin.meta: refresh_inventory
+
+#     - name: Wait for SSH
+#       ansible.builtin.wait_for:
+#         host: "{{ item }}"
+#         port: 22
+#         delay: 1
+#         timeout: 1200
+#         sleep: 10
+#       with_items:
+#         - "{{ groups['all'] }}"

@@ -28,6 +28,9 @@ pipelines:
       ansbileVarsFile:
         description: values for ansible vars file
         type: array
+      userHome:
+        description: absolute path to the user's home directory
+        default: "/home/nonroot"
     tasks:
       fetch-repository:
         task: git-clone
@@ -59,7 +62,5 @@ pipelines:
             value: $(params.ansbileWorkingImage)
           EXTRA_VARS:
             value: $(params.ansbileVarsFile[*])
-          #EXTRA_VARS:
-            #values:
-             # - hello+-whatever
-              #- this+-andthat
+          USER_HOME:
+            value: $(params.userHome)
