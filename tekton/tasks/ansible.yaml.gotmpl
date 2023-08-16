@@ -80,6 +80,8 @@ tasks:
           runAsNonRoot: true
           runAsUser: 65532
         env:
+          ANSIBLE_HOST_KEY_CHECKING:
+            value: '"False"'
           HOME:
             value: $(params.USER_HOME)
           VAULT_ADDR:
@@ -141,17 +143,44 @@ tasks:
           runAsNonRoot: true
           runAsUser: 65532
         args: ["$(params.PLAYBOOKS[*])"]
+        env:
+          ANSIBLE_HOST_KEY_CHECKING:
+            value: '"False"'
+          HOME:
+            value: $(params.USER_HOME)
+          VAULT_ADDR:
+            valueFrom:
+              secretKeyRef:
+                name: $(params.vault-secret-name)
+                key: $(params.vault-secret-key-addr)
+          VAULT_ROLE_ID:
+            valueFrom:
+              secretKeyRef:
+                name: $(params.vault-secret-name)
+                key: $(params.vault-secret-key-approleId)
+          VAULT_SECRET_ID:
+            valueFrom:
+              secretKeyRef:
+                name: $(params.vault-secret-name)
+                key: $(params.vault-secret-key-approleSecret)
+          VAULT_NAMESPACE:
+            valueFrom:
+              secretKeyRef:
+                name: $(params.vault-secret-name)
+                key: $(params.vault-secret-key-namespace)
         script: |
           #!/usr/bin/env sh
           set -eu
 
           echo "you know.. for running a playbook or 2"
 
+          export ANSIBLE_HOST_KEY_CHECKING=False
+
           for playbook in "$@"
           do
-            echo ansible-playbook $playbook -vv \
-            -i $(workspaces.source.path)/$(params.SUB_DIRECTORY)/inventory
+            ansible-playbook -vv \
+            -i $(workspaces.source.path)/$(params.SUB_DIRECTORY)/inventory \
             -e inv_path=$(workspaces.source.path)/$(params.SUB_DIRECTORY)/inventory \
             -e path_to_vars_file=$(workspaces.source.path)/$(params.SUB_DIRECTORY)/vars \
-            $(params.PREPARE_PLAYBOOK)
+            $playbook
           done

@@ -18,8 +18,8 @@ runs:
       ansibleVarsFile:
         - targets+-10.31.103.158;10.31.103.160
       ansiblePlaybooks:
-        - ansible/playbooks/base-os.yaml
         - ansible/playbooks/prepare-env.yaml
+        - ansible/playbooks/base-os.yaml
     workspaces:
       sshCredentials:
         workspaceKind: secret
