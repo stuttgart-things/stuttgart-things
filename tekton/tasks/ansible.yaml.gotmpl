@@ -23,6 +23,9 @@ tasks:
       EXTRA_VARS:
         description: ansible extra vars
         type: array
+      PLAYBOOKS:
+        description: ansible playbooks to execute
+        type: array
       USER_HOME:
         description: absolute path to the user's home directory
         default: "/home/nonroot"
@@ -137,8 +140,18 @@ tasks:
         securityContext:
           runAsNonRoot: true
           runAsUser: 65532
+        args: ["$(params.PLAYBOOKS[*])"]
         script: |
           #!/usr/bin/env sh
           set -eu
 
           echo "you know.. for running a playbook or 2"
+
+          for playbook in "$@"
+          do
+            echo ansible-playbook $playbook -vv \
+            -i $(workspaces.source.path)/$(params.SUB_DIRECTORY)/inventory
+            -e inv_path=$(workspaces.source.path)/$(params.SUB_DIRECTORY)/inventory \
+            -e path_to_vars_file=$(workspaces.source.path)/$(params.SUB_DIRECTORY)/vars \
+            $(params.PREPARE_PLAYBOOK)
+          done

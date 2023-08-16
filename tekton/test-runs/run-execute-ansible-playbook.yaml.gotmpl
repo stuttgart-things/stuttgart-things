@@ -10,13 +10,16 @@ runs:
       gitRepoUrl: {{ .Values.testRunGitRepoSSHUrl }}
       gitRevision: {{ .Values.testRunGitRepoRevision }}
       gitWorkspaceSubdirectory: /ansible/{{ .Values.ansibleTestPlaybook }}
-      ansbileWorkingImage: {{ .Values.ansbileWorkingImage }}
+      ansibleWorkingImage: {{ .Values.ansibleWorkingImage }}
       prepareLocalEnv: "true"
       installRolesCollections: "false"
       preparePlaybook: "ansible/playbooks/prepare-env.yaml"
     listParams:
-      ansbileVarsFile:
+      ansibleVarsFile:
         - targets+-10.31.103.158;10.31.103.160
+      ansiblePlaybooks:
+        - ansible/playbooks/base-os.yaml
+        - ansible/playbooks/prepare-env.yaml
     workspaces:
       sshCredentials:
         workspaceKind: secret
