@@ -44,17 +44,10 @@ tasks:
       vault-secret-key-namespace:
         default: "VAULT_NAMESPACE"
         description: namespace key in the secret
-      PREPARE_PLAYBOOK:
-        description: path to prepare playbook
-        default: "ansible/playbooks/prepare-env.yaml"
       INSTALL_ROLES_COLLECTIONS:
         description: install roles and collections
         type: string
         default: "false"
-      PREPARE_LOCAL_ENV:
-        description: preapre inventory and ssh key or not
-        type: string
-        default: "true"
     steps:
       create-vars-file:
         workingDir: $(workspaces.source.path)/$(params.SUB_DIRECTORY)
@@ -73,54 +66,6 @@ tasks:
           for argument in "$@"; do echo $argument | sed -e "s/+-/: /g" >> vars.yaml ; done
 
           cat ./vars.yaml
-      prepare-working-environment:
-        workingDir: $(workspaces.source.path)/$(params.SUB_DIRECTORY)
-        image: $(params.WORKING_IMAGE)
-        securityContext:
-          runAsNonRoot: true
-          runAsUser: 65532
-        env:
-          ANSIBLE_HOST_KEY_CHECKING:
-            value: '"False"'
-          HOME:
-            value: $(params.USER_HOME)
-          VAULT_ADDR:
-            valueFrom:
-              secretKeyRef:
-                name: $(params.vault-secret-name)
-                key: $(params.vault-secret-key-addr)
-          VAULT_ROLE_ID:
-            valueFrom:
-              secretKeyRef:
-                name: $(params.vault-secret-name)
-                key: $(params.vault-secret-key-approleId)
-          VAULT_SECRET_ID:
-            valueFrom:
-              secretKeyRef:
-                name: $(params.vault-secret-name)
-                key: $(params.vault-secret-key-approleSecret)
-          VAULT_NAMESPACE:
-            valueFrom:
-              secretKeyRef:
-                name: $(params.vault-secret-name)
-                key: $(params.vault-secret-key-namespace)
-        script: |
-          #!/usr/bin/env sh
-          set -eu
-
-          touch inventory
-          if [ "$(params.PREPARE_LOCAL_ENV)" = "true" ] ; then
-            echo "preparing local working environment"
-            ansible-playbook -vv \
-              -i $(workspaces.source.path)/$(params.SUB_DIRECTORY)/inventory \
-              -e inv_path=$(workspaces.source.path)/$(params.SUB_DIRECTORY)/inventory \
-              -e path_to_vars_file=$(workspaces.source.path)/$(params.SUB_DIRECTORY)/vars \
-              $(params.PREPARE_PLAYBOOK)
-
-            cat inventory
-          else
-            echo "skipped preparing local working environment"
-          fi
       install-roles-collections:
         workingDir: $(workspaces.source.path)/$(params.SUB_DIRECTORY)
         image: $(params.WORKING_IMAGE)
@@ -173,6 +118,8 @@ tasks:
           set -eu
 
           echo "you know.. for running a playbook or 2"
+
+          touch inventory
 
           export ANSIBLE_HOST_KEY_CHECKING=False
 
