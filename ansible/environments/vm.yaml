@@ -1,17 +1,17 @@
 ---
 createInventory: true
-ansiblePlaybook: configure-rke-node #install-configure-nfs #add-ingress-pdns #deploy-upgrade-rke #baseos-setup #configure-rke-node
+ansiblePlaybook: baseos-setup #install-configure-nfs #add-ingress-pdns #deploy-upgrade-rke #baseos-setup #configure-rke-node
 prepareEnv: true
 executeBaseos: true
 
 # TARGETS/INVENTORY + PLAYBOOK
-vmCount: 3
-vmName: dev21
-vmNumCPUs: 6
-vmMemory: 8192
+vmCount: 1
+vmName: rke1-smt1
+vmNumCPUs: 8
+vmMemory: 10240
 vmDiskSize: 92
 
-ansibleTargets: dev21.labul.sva.de;dev21-2.labul.sva.de;dev21-3.labul.sva.de
+ansibleTargets: rke1-smt1.labul.sva.de;rke1-smt1-2.labul.sva.de;rke1-smt1-3.labul.sva.de
 # labul.sva.de; tiab.labda.sva.de
 
 # CUSTOM INVENTORY
