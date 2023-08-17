@@ -121,8 +121,6 @@ tasks:
 
           touch inventory
 
-          export ANSIBLE_HOST_KEY_CHECKING=False
-
           for playbook in "$@"
           do
             ansible-playbook -vv \
