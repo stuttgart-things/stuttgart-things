@@ -6,12 +6,12 @@ executeBaseos: true
 
 # TARGETS/INVENTORY + PLAYBOOK
 vmCount: 3
-vmName: rke1-smt2
+vmName: rke1smt
 vmNumCPUs: 8
 vmMemory: 10240
 vmDiskSize: 92
 
-ansibleTargets: rke1-smt2.labul.sva.de;rke1-smt2-2.labul.sva.de;rke1-smt2-3.labul.sva.de
+ansibleTargets: rke1smt.labul.sva.de;rke1smt-2.labul.sva.de;rke1smt-3.labul.sva.de
 # labul.sva.de; tiab.labda.sva.de
 
 # CUSTOM INVENTORY
