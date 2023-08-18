@@ -35,13 +35,6 @@ pipelines:
         description: install roles and collections
         type: string
         default: "false"
-      preparePlaybook:
-        description: path to prepare playbook
-        default: "ansible/playbooks/prepare-env.yaml"
-      prepareLocalEnv:
-        description: preapre inventory and ssh key or not
-        type: string
-        default: "true"
       userHome:
         description: absolute path to the user's home directory
         default: "/home/nonroot"
@@ -82,7 +75,3 @@ pipelines:
             value: $(params.userHome)
           INSTALL_ROLES_COLLECTIONS:
             value: $(params.installRolesCollections)
-          PREPARE_LOCAL_ENV:
-            value: $(params.prepareLocalEnv)
-          PREPARE_PLAYBOOK:
-            value: $(params.preparePlaybook)

@@ -11,15 +11,14 @@ runs:
       gitRevision: {{ .Values.testRunGitRepoRevision }}
       gitWorkspaceSubdirectory: /ansible/{{ .Values.ansibleTestPlaybook }}
       ansibleWorkingImage: {{ .Values.ansibleWorkingImage }}
-      prepareLocalEnv: "true"
-      installRolesCollections: "false"
-      preparePlaybook: "ansible/playbooks/prepare-env.yaml"
+      installRolesCollections: "{{ .Values.ansibleInstallRolesCollections }}"
     listParams:
       ansibleVarsFile:
-        - targets+-10.31.103.158;10.31.103.160
+        {{- range .Values.ansibleVarsFile }}
+        - {{ . }}{{- end }}
       ansiblePlaybooks:
-        - ansible/playbooks/prepare-env.yaml
-        - ansible/playbooks/base-os.yaml
+        {{- range .Values.ansiblePlaybooks }}
+        - {{ . }}{{- end }}
     workspaces:
       sshCredentials:
         workspaceKind: secret

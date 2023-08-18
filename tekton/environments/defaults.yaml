@@ -10,3 +10,12 @@ ansibleWorkingImage: eu.gcr.io/stuttgart-things/sthings-ansible:8.2.0-3
 ansibleWorkspaceName: ansible-tekton
 ansibleWorkspaceStorage: 5Gi
 ansibleWorkspaceAccessMode: ReadWriteOnce
+
+ansibleInstallRolesCollections : false
+
+ansibleVarsFile:
+  - targets+-rke1-smt2.labul.sva.de;rke1-smt2-2.labul.sva.de;rke1-smt2-3.labul.sva.de
+
+ansiblePlaybooks:
+  - ansible/playbooks/prepare-env.yaml
+  - ansible/playbooks/base-os.yaml
