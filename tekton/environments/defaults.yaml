@@ -14,7 +14,17 @@ ansibleWorkspaceAccessMode: ReadWriteOnce
 ansibleInstallRolesCollections : false
 
 ansibleVarsFile:
-  - targets+-rke1-smt2.labul.sva.de;rke1-smt2-2.labul.sva.de;rke1-smt2-3.labul.sva.de
+  - targets+-rke1smt.labul.sva.de;rke1smt-2.labul.sva.de;rke1smt-3.labul.sva.de
+  - manage_filesystem+-true
+  - update_packages+-true
+  - install_requirements+-true
+  - install_motd+-true
+  - username+-sthings
+  - lvm_home_sizing+-'15%'
+  - lvm_root_sizing+-'35%'
+  - lvm_var_sizing+-'50%'
+  - send_to_msteams+-true
+  - reboot_all+-false
 
 ansiblePlaybooks:
   - ansible/playbooks/prepare-env.yaml
