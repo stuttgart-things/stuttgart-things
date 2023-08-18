@@ -12,7 +12,7 @@ releases:
     namespace: machineshop
     chart: stuttgart-things/sthings-cluster
     version: 0.3.7
-    installed: true
+    installed: false
     values:
       - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 
@@ -20,7 +20,7 @@ releases:
     namespace: machineshop
     chart: stuttgart-things/sthings-cluster
     version: 0.3.7
-    installed: true
+    installed: false
     values:
       - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 
@@ -28,7 +28,7 @@ releases:
     namespace: machineshop
     chart: stuttgart-things/sthings-cluster
     version: 0.3.7
-    installed: true
+    installed: false
     values:
       - "values/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
     needs:

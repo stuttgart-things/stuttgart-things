@@ -5,13 +5,13 @@ prepareEnv: true
 executeBaseos: true
 
 # TARGETS/INVENTORY + PLAYBOOK
-vmCount: 1
-vmName: rke1-smt1
+vmCount: 3
+vmName: rke1-smt2
 vmNumCPUs: 8
 vmMemory: 10240
 vmDiskSize: 92
 
-ansibleTargets: rke1-smt1.labul.sva.de
+ansibleTargets: rke1-smt2.labul.sva.de;rke1-smt2-2.labul.sva.de;rke1-smt2-3.labul.sva.de
 # labul.sva.de; tiab.labda.sva.de
 
 # CUSTOM INVENTORY
