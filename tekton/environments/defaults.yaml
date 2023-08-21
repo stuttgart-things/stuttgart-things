@@ -12,7 +12,6 @@ ansibleWorkspaceStorage: 5Gi
 ansibleWorkspaceAccessMode: ReadWriteOnce
 
 ansibleInstallRolesCollections : false
-
 ansibleVarsFile:
   - targets+-rke1smt.labul.sva.de;rke1smt-2.labul.sva.de;rke1smt-3.labul.sva.de
   - manage_filesystem+-true
