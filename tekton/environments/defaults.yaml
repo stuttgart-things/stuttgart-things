@@ -13,7 +13,7 @@ ansibleWorkspaceAccessMode: ReadWriteOnce
 
 ansibleInstallRolesCollections : false
 ansibleVarsFile:
-  - targets+-rke1smt.labul.sva.de;rke1smt-2.labul.sva.de;rke1smt-3.labul.sva.de
+  - targets+-rke1-smt1.labul.sva.de;rke1-smt1-2.labul.sva.de;rke1-smt1-3.labul.sva.de
   - manage_filesystem+-true
   - update_packages+-true
   - install_requirements+-true
