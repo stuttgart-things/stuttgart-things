@@ -105,12 +105,12 @@ spec:
                           port=${!port_var}
                           if [ -z "$port" ]; then
                               case $type in
-                                  "SENTINEL")
-                                      echo 26379
-                                      ;;
-                                  "REDIS")
-                                      echo 6379
-                                      ;;
+                                "SENTINEL")
+                                    echo 26379
+                                    ;;
+                                "REDIS")
+                                    echo 6379
+                                    ;;
                               esac
                           else
                               echo $port
