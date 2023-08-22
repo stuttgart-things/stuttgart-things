@@ -104,14 +104,12 @@ spec:
                           port_var=$(echo "${hostname^^}_SERVICE_PORT_$type" | sed "s/-/_/g")
                           port=${!port_var}
                           if [ -z "$port" ]; then
-                              case $type in
-                                "SENTINEL")
-                                    echo 26379
-                                    ;;
-                                "REDIS")
-                                    echo 6379
-                                    ;;
-                              esac
+                            if [ "$type" = "SENTINEL" ]; then
+                                echo 26379
+                            fi
+                            if [ "$type" = "$REDIS" ]; then
+                                echo 6379
+                            fi
                           else
                               echo $port
                           fi
