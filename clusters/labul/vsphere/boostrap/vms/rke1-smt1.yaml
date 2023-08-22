@@ -1,7 +1,7 @@
 apiVersion: machineshop.sthings.tiab.ssc.sva.de/v1beta1
 kind: Terraform
 metadata:
- name: rke1-smt1
+ name: rke1-smt2
  namespace: machine-shop-operator-system
  labels:
    app.kubernetes.io/created-by: machine-shop-operator
@@ -12,8 +12,8 @@ spec:
  - access_key=apps/data/artifacts:accessKey
  - secret_key=apps/data/artifacts:secretKey
  module:
- - moduleName=rke1-smt1
- - backendKey=rke1-smt1.tfstate
+ - moduleName=rke1-smt2
+ - backendKey=rke1-smt2.tfstate
  - moduleSourceUrl=https://artifacts.tiab.labda.sva.de/modules/vsphere-vm.zip
  - backendEndpoint=https://artifacts.app.4sthings.tiab.ssc.sva.de
  - backendRegion=main
@@ -31,8 +31,8 @@ spec:
  template: vsphere-vm
  terraform-version: 1.5.5
  variables:
- - vsphere_vm_name="rke1-smt1"
- - vm_count=3
+ - vsphere_vm_name="rke1-smt2"
+ - vm_count=4
  - vm_num_cpus=6
  - vm_memory=4096
  - vm_disk_size=96
