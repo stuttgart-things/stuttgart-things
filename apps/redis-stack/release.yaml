@@ -17,44 +17,44 @@ spec:
         namespace: redis
       interval: 12h
   values:
-sentinel:
-  enabled: true
-global:
-  redis:
-    password: "weak"
-image:
-  repository: "redis/redis-stack-server"
-  tag: "6.2.6-v9"
-master:
-  service:
-    type: ClusterIP
-  persistence:
-    enabled: false
-    medium: ""
-  args:
-    - -c
-    - /opt/bitnami/scripts/merged-start-scripts/start-master.sh
-  extraVolumes:
-    - name: merged-start-scripts
-      configMap:
-        name: bitnami-redis-stack-server-merged
-        defaultMode: 0755
-  extraVolumeMounts:
-    - name: merged-start-scripts
-      mountPath: /opt/bitnami/scripts/merged-start-scripts
-replica:
-  replicaCount: 1
-  persistence:
-    enabled: false
-    medium: ""
-  args:
-    - -c
-    - /opt/bitnami/scripts/merged-start-scripts/start-replica.sh
-  extraVolumes:
-    - name: merged-start-scripts
-      configMap:
-        name: bitnami-redis-stack-server-merged
-        defaultMode: 0755
-  extraVolumeMounts:
-    - name: merged-start-scripts
-      mountPath: /opt/bitnami/scripts/merged-start-scripts
+    sentinel:
+      enabled: true
+    global:
+      redis:
+        password: "weak"
+    image:
+      repository: "redis/redis-stack-server"
+      tag: "6.2.6-v9"
+    master:
+      service:
+        type: ClusterIP
+      persistence:
+        enabled: false
+        medium: ""
+      args:
+        - -c
+        - /opt/bitnami/scripts/merged-start-scripts/start-master.sh
+      extraVolumes:
+        - name: merged-start-scripts
+          configMap:
+            name: bitnami-redis-stack-server-merged
+            defaultMode: 0755
+      extraVolumeMounts:
+        - name: merged-start-scripts
+          mountPath: /opt/bitnami/scripts/merged-start-scripts
+    replica:
+      replicaCount: 1
+      persistence:
+        enabled: false
+        medium: ""
+      args:
+        - -c
+        - /opt/bitnami/scripts/merged-start-scripts/start-replica.sh
+      extraVolumes:
+        - name: merged-start-scripts
+          configMap:
+            name: bitnami-redis-stack-server-merged
+            defaultMode: 0755
+      extraVolumeMounts:
+        - name: merged-start-scripts
+          mountPath: /opt/bitnami/scripts/merged-start-scripts
