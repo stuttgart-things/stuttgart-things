@@ -14,7 +14,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: bitnami
-        namespace: redis
+        namespace: redis-stack
       interval: 12h
   values:
     sentinel:
