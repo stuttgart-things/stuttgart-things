@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: execute-ansible-playbook-rke1-smt2
+  name: execute-ansible-playbook-smt-rke1
   namespace: ansible
 spec:
   pipelineRef:
@@ -30,7 +30,7 @@ spec:
         - "ansible/playbooks/base-os.yaml"
     - name: ansibleVarsFile
       value:
-        - "targets+-rke1-smt2.labul.sva.de;rke1-smt2-2.labul.sva.de;rke1-smt2-3.labul.sva.de;rke1-smt2-4.labul.sva.de"
+        - "targets+-smt-rke1.labul.sva.de;smt-rke1-2.labul.sva.de;smt-rke1-3.labul.sva.de"
         - "manage_filesystem+-true"
         - "update_packages+-true"
         - "install_requirements+-true"
