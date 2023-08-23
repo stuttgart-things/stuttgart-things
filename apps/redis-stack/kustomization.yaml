@@ -1,37 +1,7 @@
-# ---
-# apiVersion: kustomize.config.k8s.io/v1beta1
-# kind: Kustomization
-# resources:
-#   - requirements.yaml
-#   - pre-release.yaml
-#   - release.yaml
-- hosts: localhost
-  gather_facts: false
-
-  vars:
-    inventory_groups:
-      host_groups:
-        initial_master_nodes:
-          - rke1-smt2.labul.sva.de
-        additional_master_nodes:
-          - rke1-smt2-2.labul.sva.de
-          - rke1-smt2-3.labul.sva.de
-
-  tasks:
-    - set_fact:
-        inventory_file: |
-          {% for host_groups in inventory_groups.keys() %}
-          {% for group in inventory_groups[host_groups].keys() %}
-          [{{ group }}]
-          {% for host in inventory_groups[host_groups][group] %}
-          {{ host }}
-          {% endfor %}
-          {% endfor %}
-          {% endfor %}
-
-    - debug:
-        var: inventory_file
-
-    - copy:
-        content: "{{ inventory_file }}"
-        dest: inv
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - requirements.yaml
+  - pre-release.yaml
+  # - release.yaml
