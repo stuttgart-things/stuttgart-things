@@ -1,86 +1,100 @@
----
-- hosts: localhost
-  become: false
-  vars:
-    home_dir: "{{ lookup('env','HOME') }}"
-    targets_list: "{{ targets.split(';') }}"
-    vault_approle_id: "{{ lookup('env', 'VAULT_ROLE_ID') }}"
-    vault_approle_secret: "{{ lookup('env', 'VAULT_SECRET_ID') }}"
-    vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
-    ssh_key: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=ssh/data/sthings:privateKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
-
-  pre_tasks:
-    - name: Include vars
-      ansible.builtin.include_vars: "{{ path_to_vars_file }}.yaml"
-
-  tasks:
-    - name: Create hosts
-      ansible.builtin.set_fact:
-        target_hosts: "{{ targets_list | join('\n') }}"
-
-    - name: Write vars on inv file
-      ansible.builtin.blockinfile:
-        path: "{{ inv_path }}"
-        block: |
-          [all]
-          {{ target_hosts }}
-
-          [all:vars]
-          ansible_user=sthings
-          host_key_checking=false
-
-    - name: Creating ssh directory
-      ansible.builtin.file:
-        path: "{{ home_dir }}/.ssh/"
-        state: directory
-
-    - name: Creating ssh private key file
-      ansible.builtin.copy:
-        dest: "{{ home_dir }}/.ssh/id_rsa"
-        content: "{{ ssh_key | b64decode }}"
-        mode: '0600'
-
-    - name: Refresh inventory
-      ansible.builtin.meta: refresh_inventory
-
-    - name: Wait for SSH
-      ansible.builtin.wait_for:
-        host: "{{ item }}"
-        port: 22
-        delay: 1
-        timeout: 1200
-        sleep: 10
-      with_items:
-        - "{{ groups['all'] }}"
-
-
+# ---
 # - hosts: localhost
-#   gather_facts: false
-
+#   become: false
 #   vars:
-#     inventory_groups:
-#       host_groups:
-#         initial_master_nodes:
-#           - rke1-smt2.labul.sva.de
-#         additional_master_nodes:
-#           - rke1-smt2-2.labul.sva.de
-#           - rke1-smt2-3.labul.sva.de
+#     home_dir: "{{ lookup('env','HOME') }}"
+#     targets_list: "{{ targets.split(';') }}"
+#     vault_approle_id: "{{ lookup('env', 'VAULT_ROLE_ID') }}"
+#     vault_approle_secret: "{{ lookup('env', 'VAULT_SECRET_ID') }}"
+#     vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
+#     ssh_key: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=ssh/data/sthings:privateKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+
+#   pre_tasks:
+#     - name: Include vars
+#       ansible.builtin.include_vars: "{{ path_to_vars_file }}.yaml"
 
 #   tasks:
-#     - set_fact:
-#         inventory_file: |
-#           {% for host_groups in inventory_groups.keys() %}
-#           {% for group in inventory_groups[host_groups].keys() %}
-#           [{{ group }}]
-#           {% for host in inventory_groups[host_groups][group] %}
-#           {{ host }}
-#           {% endfor %}
-#           {% endfor %}
-#           {% endfor %}
+#     - name: Create hosts
+#       ansible.builtin.set_fact:
+#         target_hosts: "{{ targets_list | join('\n') }}"
 
-#     - debug:
-#         var: inventory_file
+#     - name: Write vars on inv file
+#       ansible.builtin.blockinfile:
+#         path: "{{ inv_path }}"
+#         block: |
+#           [all]
+#           {{ target_hosts }}
 
-#     - copy:
-#         content: "{{ inventory_file }}"
-#         dest: inv
+#           [all:vars]
+#           ansible_user=sthings
+#           host_key_checking=false
+
+#     - name: Creating ssh directory
+#       ansible.builtin.file:
+#         path: "{{ home_dir }}/.ssh/"
+#         state: directory
+
+#     - name: Creating ssh private key file
+#       ansible.builtin.copy:
+#         dest: "{{ home_dir }}/.ssh/id_rsa"
+#         content: "{{ ssh_key | b64decode }}"
+#         mode: '0600'
+
+#     - name: Refresh inventory
+#       ansible.builtin.meta: refresh_inventory
+
+#     - name: Wait for SSH
+#       ansible.builtin.wait_for:
+#         host: "{{ item }}"
+#         port: 22
+#         delay: 1
+#         timeout: 1200
+#         sleep: 10
+#       with_items:
+#         - "{{ groups['all'] }}"
+
+
+# hosts: "inital_master_nodes:gude1;gude2;gude3;addi"
+
+- hosts: localhost
+  gather_facts: false
+
+  vars:
+    inventory_groups:
+      host_groups:
+        initial_master_nodes:
+          - rke1-smt2.labul.sva.de
+        additional_master_nodes:
+          - rke1-smt2-2.labul.sva.de
+          - rke1-smt2-3.labul.sva.de
+
+    # accountslist:
+    #   - PR_user1: "u]oT,cU{"
+    #   - PR_user2: "b>npKZdi"
+
+  tasks:
+    - set_fact:
+        inventory_file: |
+          {% for host_groups in inventory_groups.keys() %}
+          {% for group in inventory_groups[host_groups].keys() %}
+          [{{ group }}]
+          {% for host in inventory_groups[host_groups][group] %}
+          {{ host }}
+          {% endfor %}
+          {% endfor %}
+          {% endfor %}
+
+    - debug:
+        var: inventory_file
+
+    - copy:
+        content: "{{ inventory_file }}"
+        dest: inv
+
+    # - name: Create Local Dict
+    #   set_fact:
+    #     local_accounts: "{{ local_accounts|default({}) |  combine(item.1) }}"
+    #   with_indexed_items: "{{accountslist}}"
+
+    # - debug:
+    #     var: local_accounts

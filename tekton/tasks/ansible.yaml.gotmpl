@@ -49,6 +49,26 @@ tasks:
         type: string
         default: "false"
     steps:
+      create-inventory-vars:
+        workingDir: $(workspaces.source.path)/$(params.SUB_DIRECTORY)
+        image: $(params.WORKING_IMAGE)
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 65532
+        args: ["$(params.INVENTORY_VARS[*])"]
+        script: |
+          #!/usr/bin/env sh
+          set -eu
+
+          echo "creating vars file"
+          rm -rf ./vars.yaml && echo "---" >> ./vars.yaml
+          echo -e "vars:\n  inventory_groups:\n    host_groups:" >> ./vars.yaml
+          for param in "$@"
+          do
+            yq -i '.vars.inventory_groups.host_groups.'$(echo "$param" | cut -d "+" -f1)' += '$(echo "$param" | cut -d "+" -f2)'' ./vars.yaml
+          done
+
+          cat ./vars.yaml
       create-vars-file:
         workingDir: $(workspaces.source.path)/$(params.SUB_DIRECTORY)
         image: $(params.WORKING_IMAGE)
