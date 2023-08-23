@@ -3,6 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: bitnami-redis-stack-server-merged
+  namespace: redis-stack
 data:
   start-master.sh: |
     #!/usr/bin/dumb-init /bin/bash

@@ -14,4 +14,3 @@ metadata:
 spec:
   interval: 24h
   url: https://charts.bitnami.com/bitnami
----
