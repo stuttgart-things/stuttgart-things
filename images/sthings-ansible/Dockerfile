@@ -6,7 +6,7 @@ ARG TAG=3.11.4-alpine3.18
 FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
 
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
-LABEL version=8.3.0-2
+LABEL version=8.3.0-3
 
 ARG FLUX_VERSION=2.0.1
 ARG YQ_VERSION=4.35.1

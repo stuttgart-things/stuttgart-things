@@ -3,14 +3,13 @@
   become: true
 
   vars:
-    # rke_docker_version: '=5:23.0.6-1~ubuntu.22.04~jammy'
-    # rke_docker_ce_version: '5:23.0.6*'
     rke_version: 1
     rke_installer_version: 1.4.8
     rke_kubernetes_version: v1.26.7-rancher1-1
     project_folder: rancher-things
     rke_create_rke_user: true
     network_plugin: calico
+    rke_docker_package_version: "23.0.6"
 
   roles:
     - role: deploy-configure-rke
