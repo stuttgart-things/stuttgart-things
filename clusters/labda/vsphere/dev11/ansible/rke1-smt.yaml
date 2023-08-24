@@ -31,7 +31,7 @@ spec:
         - "ansible/playbooks/prepare-env.yaml"
         - "ansible/playbooks/base-os.yaml"
         - "ansible/playbooks/deploy-rke1.yaml"
-      - name: ansibleVarsFile
+    - name: ansibleVarsFile
       value:
         - "manage_filesystem+-true"
         - "update_packages+-true"
@@ -43,6 +43,6 @@ spec:
         - "lvm_var_sizing+-'50%'"
         - "send_to_msteams+-true"
         - "reboot_all+-false"
-      - name: ansibleVarsInventory
+    - name: ansibleVarsInventory
       value:
         - "initial_master_node+[\"smt10-rke1.labul.sva.de\"]"
