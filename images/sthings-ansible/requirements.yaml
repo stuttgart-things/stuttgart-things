@@ -20,9 +20,9 @@ roles:
     scm: git
   - src: https://github.com/stuttgart-things/install-configure-powerdns.git
     scm: git
-  - src: https://github.com/stuttgart-things/install-requirements.git
-    scm: git
   - src: https://github.com/stuttgart-things/configure-rke-node.git
+    scm: git
+  - src: https://github.com/stuttgart-things/install-requirements.git
     scm: git
   - src: https://github.com/stuttgart-things/create-send-webhook.git
     scm: git
