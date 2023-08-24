@@ -6,7 +6,7 @@ testRunGitRepoSSHUrl: git@github.com:stuttgart-things/stuttgart-things.git
 testRunGitRepoRevision: main
 
 ansibleTestPlaybook: base-os
-ansibleWorkingImage: eu.gcr.io/stuttgart-things/sthings-ansible:8.3.0-4
+ansibleWorkingImage: eu.gcr.io/stuttgart-things/sthings-ansible:8.3.0-5
 ansibleWorkspaceName: ansible-tekton
 ansibleWorkspaceStorage: 5Gi
 ansibleWorkspaceAccessMode: ReadWriteOnce
