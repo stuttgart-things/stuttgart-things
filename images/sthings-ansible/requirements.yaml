@@ -1,9 +1,9 @@
 ---
 collections:
   - name: community.crypto
-    version: 2.14.1
+    version: 2.15.1
   - name: community.general
-    version: 7.2.1
+    version: 7.3.0
   - name: ansible.posix
     version: 1.5.2
   - name: kubernetes.core
@@ -12,9 +12,8 @@ collections:
 roles:
   - src: https://github.com/stuttgart-things/deploy-configure-rke.git
     scm: git
-    version: rke2.126.5
-  - src: https://artifacts.tiab.labda.sva.de/roles/manage-filesystem.tar.gz
-    name: manage-filesystem
+  - src: https://github.com/stuttgart-things/manage-filesystem
+    scm: git
   - src: https://github.com/stuttgart-things/install-configure-vault.git
     scm: git
   - src: https://github.com/stuttgart-things/download-install-binary.git
@@ -30,4 +29,6 @@ roles:
   - src: https://github.com/stuttgart-things/install-configure-nfs.git
     scm: git
   - src: https://github.com/stuttgart-things/install-configure-docker.git
+    scm: git
+  - src: https://github.com/stuttgart-things/create-os-user.git
     scm: git
