@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: execute-ansible-smt10-rke1-2
+  name: execute-ansible-smt10-rke1-3
   namespace: ansible
 spec:
   pipelineRef:
@@ -45,4 +45,4 @@ spec:
         - "reboot_all+-false"
     - name: ansibleVarsInventory
       value:
-        - "initial_master_node+[\"smt10-rke1.labul.sva.de\"]"
+        - "initial_master_node+[\"smt10-rke1-2.labul.sva.de\"]"
