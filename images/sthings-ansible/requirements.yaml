@@ -28,7 +28,7 @@ roles:
     scm: git
   - src: https://github.com/stuttgart-things/install-configure-nfs.git
     scm: git
-  - src: https://github.com/stuttgart-things/install-configure-docker.git
-    scm: git
   - src: https://github.com/stuttgart-things/create-os-user.git
+    scm: git
+  - src: https://github.com/stuttgart-things/install-configure-docker.git
     scm: git
