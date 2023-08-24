@@ -12,8 +12,6 @@ collections:
 roles:
   - src: https://github.com/stuttgart-things/deploy-configure-rke.git
     scm: git
-  - src: https://github.com/stuttgart-things/install-configure-vault.git
-    scm: git
   - src: https://github.com/stuttgart-things/download-install-binary.git
     scm: git
   - src: https://github.com/stuttgart-things/install-configure-powerdns.git
@@ -25,6 +23,8 @@ roles:
   - src: https://github.com/stuttgart-things/create-send-webhook.git
     scm: git
   - src: https://github.com/stuttgart-things/create-os-user.git
+    scm: git
+  - src: https://github.com/stuttgart-things/install-configure-vault.git
     scm: git
   - src: https://github.com/stuttgart-things/install-configure-nfs.git
     scm: git
