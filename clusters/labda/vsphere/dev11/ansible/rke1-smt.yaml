@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: execute-ansible-smt10-rke1-1
+  name: execute-ansible-smt10-rke1-2
   namespace: ansible
 spec:
   pipelineRef:
@@ -15,7 +15,7 @@ spec:
         secretName: github-ssh
   params:
     - name: ansibleWorkingImage
-      value: "eu.gcr.io/stuttgart-things/sthings-ansible:8.3.0-7"
+      value: "eu.gcr.io/stuttgart-things/sthings-ansible:8.3.0-8"
     - name: createInventory
       value: "true"
     - name: gitRepoUrl
