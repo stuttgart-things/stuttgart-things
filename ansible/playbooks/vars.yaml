@@ -1,0 +1,4 @@
+---
+vars:
+  inventory_groups:
+    host_groups:

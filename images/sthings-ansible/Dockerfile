@@ -6,10 +6,10 @@ ARG TAG=3.11.4-alpine3.18
 FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
 
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
-LABEL version=8.2.0-3
+LABEL version=8.3.0
 
 ARG FLUX_VERSION=2.0.1
-ARG ANSIBLE_VERSION=8.2.0
+ARG ANSIBLE_VERSION=8.3.0
 ENV USER_ID=65532
 ENV GROUP_ID=65532
 

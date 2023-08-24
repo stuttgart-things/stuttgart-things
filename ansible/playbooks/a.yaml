@@ -1,0 +1,30 @@
+vars:
+  inventory_groups:
+    host_groups:
+      additional_master:
+        - rhpam-user1
+        - gude
+      even_more_additional_master:
+        - gude3
+        - gude88
+      blubber:
+        - gude3
+        - gude88
+        - gude3
+        - gude88
+        - gude3
+        - gude88
+        - gude3
+        - gude88
+        - gude3
+        - gude88
+        - gude35853
+        - gude3
+        - gude88
+        - gude35853
+        - gude798
+      master:
+        - gude35853
+        - gude798
+        - gude35853
+        - gude798
