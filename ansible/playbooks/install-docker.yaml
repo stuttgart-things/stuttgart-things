@@ -4,6 +4,6 @@
 
   vars:
     docker_install_compose: true
-
+  
   roles:
     - install-configure-docker
