@@ -12,6 +12,7 @@ runs:
       gitWorkspaceSubdirectory: /ansible/{{ .Values.ansibleTestPlaybook }}
       ansibleWorkingImage: {{ .Values.ansibleWorkingImage }}
       installRolesCollections: "{{ .Values.ansibleInstallRolesCollections }}"
+      createInventory: "{{ .Values.ansibleCreateInventory }}"
     listParams:
       ansibleVarsFile:
         {{- range .Values.ansibleVarsFile }}

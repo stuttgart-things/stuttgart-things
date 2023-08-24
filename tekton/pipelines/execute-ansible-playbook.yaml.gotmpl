@@ -28,6 +28,20 @@ pipelines:
       ansibleVarsFile:
         description: values for ansible vars file
         type: array
+      ansibleVarsInventory:
+        description: values for ansible inventory
+        type: array
+      createInventory:
+        description: create inventory
+        type: string
+        default: "false"
+      installRolesCollections:
+        description: install roles and collections
+        type: string
+        default: "false"
+      ansibleInventoryFile:
+        description: values for ansible inventory file
+        type: array
       ansiblePlaybooks:
         description: playbooks to execute
         type: array
@@ -73,5 +87,9 @@ pipelines:
             value: $(params.ansiblePlaybooks[*])
           USER_HOME:
             value: $(params.userHome)
+          CREATE_INVENTORY:
+            value: $(params.createInventory)
+          INVENTORY_VARS:
+            value: $(params.ansibleVarsInventory[*])
           INSTALL_ROLES_COLLECTIONS:
             value: $(params.installRolesCollections)

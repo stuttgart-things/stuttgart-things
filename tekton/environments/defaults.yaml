@@ -6,12 +6,14 @@ testRunGitRepoSSHUrl: git@github.com:stuttgart-things/stuttgart-things.git
 testRunGitRepoRevision: main
 
 ansibleTestPlaybook: base-os
-ansibleWorkingImage: eu.gcr.io/stuttgart-things/sthings-ansible:8.2.0-3
+ansibleWorkingImage: eu.gcr.io/stuttgart-things/sthings-ansible:8.3.0
 ansibleWorkspaceName: ansible-tekton
 ansibleWorkspaceStorage: 5Gi
 ansibleWorkspaceAccessMode: ReadWriteOnce
 
-ansibleInstallRolesCollections : false
+ansibleInstallRolesCollections: false
+ansibleCreateInventory: false
+
 ansibleVarsFile:
   - targets+-rke1-smt1.labul.sva.de;rke1-smt1-2.labul.sva.de;rke1-smt1-3.labul.sva.de
   - manage_filesystem+-true
