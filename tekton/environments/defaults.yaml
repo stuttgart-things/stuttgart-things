@@ -28,9 +28,10 @@ ansibleVarsFile:
 
 ansibleCreateInventory: true
 ansibleInventoryFile:
-  - master+["smt-rke1.labul.sva.de"]
-  - worker+["smt-rke1-2.labul.sva.de","smt-rke1-3.labul.sva.de"]
+  - initial_master_node+["smt-rke1.labul.sva.de"]
+  - additional_master_nodes+["smt-rke1-2.labul.sva.de","smt-rke1-3.labul.sva.de"]
 
 ansiblePlaybooks:
   - ansible/playbooks/prepare-env.yaml
   - ansible/playbooks/base-os.yaml
+  - ansible/playbooks/deploy-rke1.yaml
