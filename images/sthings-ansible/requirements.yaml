@@ -12,8 +12,6 @@ collections:
 roles:
   - src: https://github.com/stuttgart-things/deploy-configure-rke.git
     scm: git
-  - src: https://github.com/stuttgart-things/manage-filesystem
-    scm: git
   - src: https://github.com/stuttgart-things/install-configure-vault.git
     scm: git
   - src: https://github.com/stuttgart-things/download-install-binary.git
@@ -31,4 +29,6 @@ roles:
   - src: https://github.com/stuttgart-things/install-configure-nfs.git
     scm: git
   - src: https://github.com/stuttgart-things/install-configure-docker.git
+    scm: git
+  - src: https://github.com/stuttgart-things/manage-filesystem.git
     scm: git
