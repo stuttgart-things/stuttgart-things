@@ -23,6 +23,13 @@ tasks:
       EXTRA_VARS:
         description: ansible extra vars
         type: array
+      INVENTORY_VARS:
+        description: ansible inventory vars
+        type: array
+      CREATE_INVENTORY:
+        description: create inventory
+        type: string
+        default: "false"
       PLAYBOOKS:
         description: ansible playbooks to execute
         type: array
@@ -61,12 +68,21 @@ tasks:
           set -eu
 
           echo "creating vars file"
-          rm -rf ./vars.yaml && echo "---" >> ./vars.yaml
+          rm -rf ./vars.yaml
+          echo "---" >> ./vars.yaml
+
+          if [ "$(params.CREATE_INVENTORY)" = "true" ] ; then
+
           echo -e "vars:\n  inventory_groups:\n    host_groups:" >> ./vars.yaml
+
           for param in "$@"
           do
             yq -i '.vars.inventory_groups.host_groups.'$(echo "$param" | cut -d "+" -f1)' += '$(echo "$param" | cut -d "+" -f2)'' ./vars.yaml
           done
+
+          else
+            echo "skipped creating special inventory"
+          fi
 
           cat ./vars.yaml
       create-vars-file:
@@ -80,9 +96,6 @@ tasks:
           #!/usr/bin/env sh
           set -eu
 
-          echo "creating vars file"
-          rm -rf ./vars.yaml
-          echo "---" >> ./vars.yaml
           for argument in "$@"; do echo $argument | sed -e "s/+-/: /g" >> vars.yaml ; done
 
           cat ./vars.yaml

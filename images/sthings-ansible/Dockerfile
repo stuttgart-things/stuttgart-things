@@ -9,6 +9,8 @@ LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 LABEL version=8.3.0
 
 ARG FLUX_VERSION=2.0.1
+ARG YQ_VERSION=4.35.1
+
 ARG ANSIBLE_VERSION=8.3.0
 ENV USER_ID=65532
 ENV GROUP_ID=65532
@@ -21,6 +23,13 @@ RUN wget -q https://github.com/fluxcd/flux2/releases/download/v${FLUX_VERSION}/f
     && tar xvfz flux_${FLUX_VERSION}_linux_amd64.tar.gz -C /usr/bin \
     && chmod +x /usr/bin/flux \
     && rm -rf flux_${FLUX_VERSION}_linux_amd64.tar.gz
+
+# YQ
+RUN wget -q https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_linux_amd64.tar.gz \
+    && tar xvfz yq_linux_amd64.tar.gz -C /usr/bin \
+    && mv /usr/bin/yq_linux_amd64 /usr/bin/yq \
+    && chmod +x /usr/bin/yq \
+    && rm -rf xvfz yq_linux_amd64.tar.gz
 
 RUN /usr/local/bin/python -m pip install --upgrade pip && pip install pip --upgrade
 RUN pip install --no-cache-dir cryptography hvac "hvac[parser]" jmespath openshift kubernetes boto3 passlib kubernetes-validate proxmoxer netaddr setuptools requests pyVim PyVmomi python.dateutil dnspython pycrypto pywinrm pytz ansible==${ANSIBLE_VERSION}
