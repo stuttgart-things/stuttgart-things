@@ -12,10 +12,9 @@ ansibleWorkspaceStorage: 5Gi
 ansibleWorkspaceAccessMode: ReadWriteOnce
 
 ansibleInstallRolesCollections: false
-ansibleCreateInventory: false
 
 ansibleVarsFile:
-  - targets+-rke1-smt1.labul.sva.de;rke1-smt1-2.labul.sva.de;rke1-smt1-3.labul.sva.de
+  - targets+-smt-rke1.labul.sva.de;smt-rke1-2.labul.sva.de;smt-rke1-3.labul.sva.de
   - manage_filesystem+-true
   - update_packages+-true
   - install_requirements+-true
@@ -26,6 +25,11 @@ ansibleVarsFile:
   - lvm_var_sizing+-'50%'
   - send_to_msteams+-true
   - reboot_all+-false
+
+ansibleCreateInventory: true
+ansibleInventoryFile:
+  - master+["smt-rke1.labul.sva.de"]
+  - worker+["smt-rke1-2.labul.sva.de","smt-rke1-3.labul.sva.de"]
 
 ansiblePlaybooks:
   - ansible/playbooks/prepare-env.yaml

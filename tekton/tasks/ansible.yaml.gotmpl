@@ -73,11 +73,11 @@ tasks:
 
           if [ "$(params.CREATE_INVENTORY)" = "true" ] ; then
 
-          echo -e "vars:\n  inventory_groups:\n    host_groups:" >> ./vars.yaml
+          echo -e "inventory_groups:\n  host_groups:" >> ./vars.yaml
 
           for param in "$@"
           do
-            yq -i '.vars.inventory_groups.host_groups.'$(echo "$param" | cut -d "+" -f1)' += '$(echo "$param" | cut -d "+" -f2)'' ./vars.yaml
+            yq -i '.inventory_groups.host_groups.'$(echo "$param" | cut -d "+" -f1)' += '$(echo "$param" | cut -d "+" -f2)'' ./vars.yaml
           done
 
           else

@@ -17,6 +17,11 @@ runs:
       ansibleVarsFile:
         {{- range .Values.ansibleVarsFile }}
         - {{ . }}{{- end }}
+      {{- if .Values.ansibleInventoryFile }}
+      ansibleVarsInventory:
+        {{- range .Values.ansibleInventoryFile }}
+        - {{ . }}{{- end }}
+      {{- end }}
       ansiblePlaybooks:
         {{- range .Values.ansiblePlaybooks }}
         - {{ . }}{{- end }}

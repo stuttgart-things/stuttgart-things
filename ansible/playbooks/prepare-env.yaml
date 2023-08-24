@@ -41,6 +41,9 @@
           {% endfor %}
           {% endfor %}
           {% endfor %}
+          [all:vars]
+          ansible_user=sthings
+          host_key_checking=false
       when: inventory_groups is defined
 
     - ansible.builtin.debug:
