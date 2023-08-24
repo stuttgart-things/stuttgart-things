@@ -6,7 +6,7 @@ testRunGitRepoSSHUrl: git@github.com:stuttgart-things/stuttgart-things.git
 testRunGitRepoRevision: main
 
 ansibleTestPlaybook: base-os
-ansibleWorkingImage: eu.gcr.io/stuttgart-things/sthings-ansible:8.3.0-5
+ansibleWorkingImage: eu.gcr.io/stuttgart-things/sthings-ansible:8.3.0-6
 ansibleWorkspaceName: ansible-tekton
 ansibleWorkspaceStorage: 5Gi
 ansibleWorkspaceAccessMode: ReadWriteOnce
@@ -14,7 +14,7 @@ ansibleWorkspaceAccessMode: ReadWriteOnce
 ansibleInstallRolesCollections: false
 
 ansibleVarsFile:
-  - targets+-smt-rke1.labul.sva.de;smt-rke1-2.labul.sva.de;smt-rke1-3.labul.sva.de
+  # - targets+-smt-rke1.labul.sva.de;smt-rke1-2.labul.sva.de;smt-rke1-3.labul.sva.de
   - manage_filesystem+-true
   - update_packages+-true
   - install_requirements+-true
@@ -28,8 +28,8 @@ ansibleVarsFile:
 
 ansibleCreateInventory: true
 ansibleInventoryFile:
-  - initial_master_node+["smt-rke1.labul.sva.de"]
-  - additional_master_nodes+["smt-rke1-2.labul.sva.de","smt-rke1-3.labul.sva.de"]
+  - initial_master_node+["smt10-rke1.labul.sva.de"]
+  # - additional_master_nodes+["smt-rke1-2.labul.sva.de","smt-rke1-3.labul.sva.de"]
 
 ansiblePlaybooks:
   - ansible/playbooks/prepare-env.yaml

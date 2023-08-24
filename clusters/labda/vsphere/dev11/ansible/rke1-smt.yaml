@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: execute-ansible-playbook-smt-rke1
+  name: execute-ansible-smt10-rke1
   namespace: ansible
 spec:
   pipelineRef:
@@ -15,7 +15,9 @@ spec:
         secretName: github-ssh
   params:
     - name: ansibleWorkingImage
-      value: "eu.gcr.io/stuttgart-things/sthings-ansible:8.2.0-3"
+      value: "eu.gcr.io/stuttgart-things/sthings-ansible:8.3.0-6"
+    - name: createInventory
+      value: "true"
     - name: gitRepoUrl
       value: "git@github.com:stuttgart-things/stuttgart-things.git"
     - name: gitRevision
@@ -28,9 +30,9 @@ spec:
       value:
         - "ansible/playbooks/prepare-env.yaml"
         - "ansible/playbooks/base-os.yaml"
-    - name: ansibleVarsFile
+        - "ansible/playbooks/deploy-rke1.yaml"
+      - name: ansibleVarsFile
       value:
-        - "targets+-smt-rke1.labul.sva.de;smt-rke1-2.labul.sva.de;smt-rke1-3.labul.sva.de"
         - "manage_filesystem+-true"
         - "update_packages+-true"
         - "install_requirements+-true"
@@ -40,4 +42,7 @@ spec:
         - "lvm_root_sizing+-'35%'"
         - "lvm_var_sizing+-'50%'"
         - "send_to_msteams+-true"
-        - "reboot_all+-true"
+        - "reboot_all+-false"
+      - name: ansibleVarsInventory
+      value:
+        - "initial_master_node+[\"smt10-rke1.labul.sva.de\"]"
