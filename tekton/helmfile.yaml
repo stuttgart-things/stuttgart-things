@@ -12,7 +12,7 @@ releases:
       - "tasks/git-clone.yaml.gotmpl"
       - "tasks/ansible.yaml.gotmpl"
       - "pipelines/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
-      - "test-runs/run-{{`{{ .Release.Name }}`}}.yaml.gotmpl"
+      # - "test-runs/run-{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 
   - name: build-kaniko-image
     installed: false

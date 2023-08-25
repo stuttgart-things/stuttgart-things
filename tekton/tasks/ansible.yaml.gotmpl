@@ -117,7 +117,8 @@ tasks:
             echo "you know.. for install"
             for param in "$@"
             do
-              ansible-galaxy install git+${param} -f
+              ansible-galaxy install git+${param} -f --roles-path ./roles
+              ls -lta ./roles
             done
 
           else
@@ -159,10 +160,12 @@ tasks:
           #!/usr/bin/env sh
           set -eu
 
+          echo "list installed roles"
+          if [ -d "roles" ]; then mv roles/* ${HOME}/.ansible/roles/ ; fi
+          ansible-galaxy role list
+
           echo "you know.. for running a playbook or 2"
-
           touch inventory
-
           for playbook in "$@"
           do
             ansible-playbook -vv \
