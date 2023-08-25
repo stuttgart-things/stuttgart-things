@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: execute-ansible-smt10-rke1-7
+  name: execute-ansible-smt10-rke1-8
   namespace: ansible
 spec:
   pipelineRef:

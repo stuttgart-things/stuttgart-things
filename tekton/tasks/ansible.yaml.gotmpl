@@ -161,7 +161,7 @@ tasks:
           set -eu
 
           echo "list installed roles"
-          if [ -d "roles" ]; then mv roles/* ${HOME}/.ansible/roles/ ; fi
+          if [ -d "roles" ]; then cp -R roles/* ${HOME}/.ansible/roles/ ; fi
           ansible-galaxy role list
 
           echo "you know.. for running a playbook or 2"
