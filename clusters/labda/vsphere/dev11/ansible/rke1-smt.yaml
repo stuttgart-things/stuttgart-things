@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: execute-ansible-smt10-rke1-3
+  name: execute-ansible-smt10-rke1-4
   namespace: ansible
 spec:
   pipelineRef:
@@ -25,7 +25,7 @@ spec:
     - name: gitWorkspaceSubdirectory
       value: "/ansible/base-os"
     - name: installRolesCollections
-      value: "false"
+      value: "true"
     - name: ansiblePlaybooks
       value:
         - "ansible/playbooks/prepare-env.yaml"

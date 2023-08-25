@@ -111,6 +111,7 @@ tasks:
 
           if [ "$(params.INSTALL_ROLES_COLLECTIONS)" = "true" ] ; then
             echo "you know.. for install"
+            ansible-galaxy install -r images/sthings-ansible/requirements.yaml -f
           else
             echo "skipped installing roles & collections "
           fi
