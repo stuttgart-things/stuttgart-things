@@ -11,15 +11,20 @@ runs:
       gitRevision: {{ .Values.testRunGitRepoRevision }}
       gitWorkspaceSubdirectory: /ansible/{{ .Values.ansibleTestPlaybook }}
       ansibleWorkingImage: {{ .Values.ansibleWorkingImage }}
-      installRolesCollections: "{{ .Values.ansibleInstallRolesCollections }}"
+      installExtraRoles: "{{ .Values.installExtraRoles }}"
       createInventory: "{{ .Values.ansibleCreateInventory }}"
     listParams:
       ansibleVarsFile:
         {{- range .Values.ansibleVarsFile }}
         - {{ . }}{{- end }}
-      {{- if .Values.ansibleInventoryFile }}
+      {{- if and .Values.ansibleInventoryFile .Values.ansibleCreateInventory }}
       ansibleVarsInventory:
         {{- range .Values.ansibleInventoryFile }}
+        - {{ . }}{{- end }}
+      {{- end }}
+      {{- if and .Values.ansibleExtraRoles .Values.installExtraRoles }}
+      ansibleExtraRoles:
+        {{- range .Values.ansibleExtraRoles }}
         - {{ . }}{{- end }}
       {{- end }}
       ansiblePlaybooks:

@@ -35,7 +35,7 @@ pipelines:
         description: create inventory
         type: string
         default: "false"
-      installRolesCollections:
+      installExtraRoles:
         description: install roles and collections
         type: string
         default: "false"
@@ -45,10 +45,9 @@ pipelines:
       ansiblePlaybooks:
         description: playbooks to execute
         type: array
-      installRolesCollections:
-        description: install roles and collections
-        type: string
-        default: "false"
+      ansibleExtraRoles:
+        description: extra roles to install
+        type: array
       userHome:
         description: absolute path to the user's home directory
         default: "/home/nonroot"
@@ -91,5 +90,7 @@ pipelines:
             value: $(params.createInventory)
           INVENTORY_VARS:
             value: $(params.ansibleVarsInventory[*])
-          INSTALL_ROLES_COLLECTIONS:
-            value: $(params.installRolesCollections)
+          INSTALL_EXTRA_ROLES:
+            value: $(params.installExtraRoles)
+          EXTRA_ROLES:
+            value: $(params.ansibleExtraRoles[*])

@@ -23,6 +23,9 @@ tasks:
       EXTRA_VARS:
         description: ansible extra vars
         type: array
+      EXTRA_ROLES:
+        description: ansible extra roles
+        type: array
       INVENTORY_VARS:
         description: ansible inventory vars
         type: array
@@ -51,7 +54,7 @@ tasks:
       vault-secret-key-namespace:
         default: "VAULT_NAMESPACE"
         description: namespace key in the secret
-      INSTALL_ROLES_COLLECTIONS:
+      INSTALL_EXTRA_ROLES:
         description: install roles and collections
         type: string
         default: "false"
@@ -99,21 +102,26 @@ tasks:
           for argument in "$@"; do echo $argument | sed -e "s/+-/: /g" >> vars.yaml ; done
 
           cat ./vars.yaml
-      install-roles-collections:
+      install-roles:
         workingDir: $(workspaces.source.path)/$(params.SUB_DIRECTORY)
         image: $(params.WORKING_IMAGE)
         securityContext:
           runAsNonRoot: true
           runAsUser: 65532
+        args: ["$(params.EXTRA_ROLES[*])"]
         script: |
           #!/usr/bin/env sh
           set -eu
 
-          if [ "$(params.INSTALL_ROLES_COLLECTIONS)" = "true" ] ; then
+          if [ "$(params.INSTALL_EXTRA_ROLES)" = "true" ] ; then
             echo "you know.. for install"
-            ansible-galaxy install -r images/sthings-ansible/requirements.yaml -f
+            for param in "$@"
+            do
+              ansible-galaxy install git+${param} -f
+            done
+
           else
-            echo "skipped installing roles & collections "
+            echo "skipped installing additional roles"
           fi
       run-ansible-playbook:
         workingDir: $(workspaces.source.path)/$(params.SUB_DIRECTORY)

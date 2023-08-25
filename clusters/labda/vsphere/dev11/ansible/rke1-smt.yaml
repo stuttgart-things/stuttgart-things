@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: execute-ansible-smt10-rke1-4
+  name: execute-ansible-smt10-rke1-5
   namespace: ansible
 spec:
   pipelineRef:
@@ -24,8 +24,6 @@ spec:
       value: "main"
     - name: gitWorkspaceSubdirectory
       value: "/ansible/base-os"
-    - name: installRolesCollections
-      value: "true"
     - name: ansiblePlaybooks
       value:
         - "ansible/playbooks/prepare-env.yaml"
@@ -46,3 +44,9 @@ spec:
     - name: ansibleVarsInventory
       value:
         - "initial_master_node+[\"smt10-rke1-2.labul.sva.de\"]"
+    - name: installExtraRoles
+      value: "true"
+    - name: ansibleExtraRoles
+      value:
+        - "https://github.com/stuttgart-things/deploy-configure-rke.git"
+        - "https://github.com/stuttgart-things/manage-filesystem.git"

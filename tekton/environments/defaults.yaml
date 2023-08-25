@@ -11,8 +11,6 @@ ansibleWorkspaceName: ansible-tekton
 ansibleWorkspaceStorage: 5Gi
 ansibleWorkspaceAccessMode: ReadWriteOnce
 
-ansibleInstallRolesCollections: false
-
 ansibleVarsFile:
   # - targets+-smt-rke1.labul.sva.de;smt-rke1-2.labul.sva.de;smt-rke1-3.labul.sva.de
   - manage_filesystem+-true
@@ -30,6 +28,12 @@ ansibleCreateInventory: true
 ansibleInventoryFile:
   - initial_master_node+["smt10-rke1.labul.sva.de"]
   # - additional_master_nodes+["smt-rke1-2.labul.sva.de","smt-rke1-3.labul.sva.de"]
+
+installExtraRoles: true
+ansibleExtraRoles:
+  #- https://github.com/stuttgart-things/deploy-configure-rke.git,rke2.126.5
+  - https://github.com/stuttgart-things/deploy-configure-rke.git
+  - https://github.com/stuttgart-things/manage-filesystem.git
 
 ansiblePlaybooks:
   - ansible/playbooks/prepare-env.yaml
