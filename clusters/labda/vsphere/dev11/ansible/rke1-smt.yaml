@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: execute-ansible-smt10-rke1-5
+  name: execute-ansible-smt10-rke1-6
   namespace: ansible
 spec:
   pipelineRef:
@@ -48,5 +48,5 @@ spec:
       value: "true"
     - name: ansibleExtraRoles
       value:
+        - "https://github.com/stuttgart-things/configure-rke-node.git"
         - "https://github.com/stuttgart-things/deploy-configure-rke.git"
-        - "https://github.com/stuttgart-things/manage-filesystem.git"
