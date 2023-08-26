@@ -1,0 +1,15 @@
+- hosts: all
+  become: true
+
+  vars:
+    rke_version: 2
+    rke2_k8s_version: 1.27.4
+    rke2_airgapped_installation: true
+    rke2_release_kind: rke2r1 # rke2r2
+    disable_rke2_components:
+      - rke2-ingress-nginx
+      - rke-snapshot-controller
+    cluster_setup: singlenode
+
+  roles:
+    - role: deploy-configure-rke
