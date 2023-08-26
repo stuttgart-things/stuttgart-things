@@ -21,6 +21,7 @@
         ref: bitnami/metallb
         version: 4.7.0
         namespace: metallb-system
+        ignore: true
         values: |
           ---
 
