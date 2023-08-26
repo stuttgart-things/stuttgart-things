@@ -23,5 +23,20 @@
         namespace: metallb-system
         values: |
           ---
+
+    additional_helm_manifests:
+      ip_pool:
+        manifest: |
+          apiVersion: metallb.io/v1beta1
+          kind: IPAddressPool
+          metadata:
+            name: ip-pool
+            namespace: metallb-system
+          spec:
+            addresses:
+              - 10.31.101.20-0.31.101.22
+            autoAssign: true
+            avoidBuggyIPs: false
+
   roles:
     - role: deploy-configure-rke
