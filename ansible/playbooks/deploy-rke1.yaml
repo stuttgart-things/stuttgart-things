@@ -10,16 +10,16 @@
     rke_create_rke_user: true
     network_plugin: calico
     rke_docker_package_version: "23.0.6"
-
+    rke_user_name: maestro
     deploy_helm_charts: true
     helm_repositories:
       bitnami:
         url: https://charts.bitnami.com/bitnami
     helm_releases:
-      nginx:
-        ref: bitnami/nginx
-        version:
-        namespace: internet
+      metallb:
+        ref: bitnami/metallb
+        version: 4.7.0
+        namespace: metallb-system
 
   # pre_tasks:
   #   - name: Install Miniforge3
