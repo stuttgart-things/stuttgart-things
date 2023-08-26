@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: execute-ansible-smt10-rke2
+  name: execute-ansible-smt10-rke2-2
   namespace: ansible
 spec:
   pipelineRef:
@@ -44,6 +44,7 @@ spec:
     - name: ansibleVarsInventory
       value:
         - "initial_master_node+[\"smt10-rke1-2-2.labul.sva.de\"]"
+        - "additional_master_nodes+[\"\"]"
     - name: installExtraRoles
       value: "true"
     - name: ansibleExtraRoles
