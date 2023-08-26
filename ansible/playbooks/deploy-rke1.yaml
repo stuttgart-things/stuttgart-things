@@ -11,7 +11,9 @@
     network_plugin: calico
     rke_docker_package_version: "23.0.6"
     rke_user_name: maestro
+
     deploy_helm_charts: true
+    helm_kubeconfig: "{{ path_to_kubeconfig }}"
     helm_repositories:
       bitnami:
         url: https://charts.bitnami.com/bitnami
@@ -20,7 +22,8 @@
         ref: bitnami/metallb
         version: 4.7.0
         namespace: metallb-system
-
+        values: |
+          ---
   # pre_tasks:
   #   - name: Install Miniforge3
   #     ansible.builtin.shell: |

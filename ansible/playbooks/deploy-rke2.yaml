@@ -11,5 +11,17 @@
       - rke-snapshot-controller
     cluster_setup: singlenode
 
+    deploy_helm_charts: true
+    helm_kubeconfig: "{{ rke2_config_dir }}/{{ rke2_kubeconfig_name }}"
+    helm_repositories:
+      bitnami:
+        url: https://charts.bitnami.com/bitnami
+    helm_releases:
+      metallb:
+        ref: bitnami/metallb
+        version: 4.7.0
+        namespace: metallb-system
+        values: |
+          ---
   roles:
     - role: deploy-configure-rke
