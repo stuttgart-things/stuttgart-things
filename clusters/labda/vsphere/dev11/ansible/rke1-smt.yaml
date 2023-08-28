@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: execute-ansible-smt20-rke2-2
+  name: execute-ansible-smt40-rke2
   namespace: ansible
 spec:
   pipelineRef:
@@ -44,7 +44,7 @@ spec:
         - "reboot_all+-false"
     - name: ansibleVarsInventory
       value:
-        - "initial_master_node+[\"smt20-rke1.labul.sva.de\"]"
+        - "initial_master_node+[\"smt40-rke.labul.sva.de\"]"
         - "additional_master_nodes+[\"\"]"
     - name: installExtraRoles
       value: "true"
@@ -56,7 +56,7 @@ spec:
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: execute-ansible-smt20-rke1-2
+  name: execute-ansible-smt40-rke1
   namespace: ansible
 spec:
   pipelineRef:
@@ -98,7 +98,7 @@ spec:
         - "reboot_all+-false"
     - name: ansibleVarsInventory
       value:
-        - "initial_master_node+[\"smt20-rke1-2.labul.sva.de\"]"
+        - "initial_master_node+[\"smt40-rke-2.labul.sva.de\"]"
         - "additional_master_nodes+[\"\"]"
     - name: installExtraRoles
       value: "true"
