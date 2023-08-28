@@ -45,7 +45,7 @@
             namespace: metallb-system
           spec:
             addresses:
-              - 10.31.101.21-10.31.101.21
+              - 10.31.101.17-10.31.101.17
             autoAssign: true
             avoidBuggyIPs: false
 
