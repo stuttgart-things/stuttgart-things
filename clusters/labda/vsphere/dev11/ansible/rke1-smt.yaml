@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: execute-ansible-smt20-rke1-1
+  name: execute-ansible-smt20-rke2
   namespace: ansible
 spec:
   pipelineRef:
@@ -56,7 +56,7 @@ spec:
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: execute-ansible-smt20-rke1-2
+  name: execute-ansible-smt20-rke1
   namespace: ansible
 spec:
   pipelineRef:
@@ -64,7 +64,7 @@ spec:
   workspaces:
     - name: shared-workspace
       persistentVolumeClaim:
-        claimName: ansible-tekton
+        claimName: ansible-tekton-2
     - name: sshCredentials
       secret:
         secretName: github-ssh
