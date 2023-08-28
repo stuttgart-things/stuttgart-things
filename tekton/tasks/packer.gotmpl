@@ -1,0 +1,32 @@
+tasks:
+  build-packer-template:
+    namespace: {{ .Release.Namespace }}
+    labels:
+      app.kubernetes.io/version: "0.1"
+    annotations:
+      tekton.dev/pipelines.minVersion: "0.48.0"
+      tekton.dev/categories: Messaging
+      tekton.dev/tags: messaging
+      tekton.dev/displayName: "Send message to Microsoft Teams Channel"
+      tekton.dev/platforms: "linux/amd64,linux/s390x,linux/ppc64le"
+    description: sends simple message to a Microsoft Teams Channel
+    params:
+      osVersion:
+        type: string
+        description: name of the secret with incoming webhook URL
+    steps:
+      packer-build:
+        image: $(params.WORKING_IMAGE)
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 65532
+        workingDir: $(workspaces.source.path)/$(params.SUB_DIRECTORY)
+        script: |
+          #!/usr/bin/env sh
+          set -eu
+
+          echo "packer init"
+          packer init {{ .Values.packerConfigMountPath }}/{{ .Values.osVersion }}-{{ .Values.cloud }}.pkr.hcl
+
+          echo "packer build"
+          packer build -force -var "username=${USERNAME}" -var "password=${PASSWORD}" {{ .Values.packerConfigMountPath }}/{{ .Values.osVersion }}-{{ .Values.cloud }}.pkr.hcl
