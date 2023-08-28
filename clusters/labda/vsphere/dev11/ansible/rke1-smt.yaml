@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: execute-ansible-smt40-rke2-4
+  name: execute-ansible-smt40-rke2-5
   namespace: ansible
 spec:
   pipelineRef:
@@ -30,6 +30,7 @@ spec:
         - "ansible/playbooks/prepare-env.yaml"
         - "ansible/playbooks/base-os.yaml"
         - "ansible/playbooks/deploy-rke2.yaml"
+        - "ansible/playbooks/upload-kubeconfig-vault.yaml"
     - name: ansibleVarsFile
       value:
         - "manage_filesystem+-true"
@@ -56,7 +57,7 @@ spec:
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: execute-ansible-smt40-rke1-4
+  name: execute-ansible-smt40-rke1-5
   namespace: ansible
 spec:
   pipelineRef:
