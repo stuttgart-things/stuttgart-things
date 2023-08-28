@@ -28,13 +28,13 @@
         ignore: true
         values: |
           ---
-      metallb:
-        ref: rancher/rancher
-        version: 2.7.5
-        namespace: cattle-system
-        ignore: true
-        values: |
-          ---
+      # rancher:
+      #   ref: rancher/rancher
+      #   version: 2.7.5
+      #   namespace: cattle-system
+      #   ignore: true
+      #   values: |
+      #     ---
 
     additional_helm_manifests:
       ip_pool:
