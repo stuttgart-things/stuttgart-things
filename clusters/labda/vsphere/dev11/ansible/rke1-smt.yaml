@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: execute-ansible-smt10-rke2-12
+  name: execute-ansible-smt10-rke2-13
   namespace: ansible
 spec:
   pipelineRef:
@@ -28,7 +28,7 @@ spec:
       value:
         - "ansible/playbooks/prepare-env.yaml"
         - "ansible/playbooks/base-os.yaml"
-        - "ansible/playbooks/deploy-rke2.yaml"
+        - "ansible/playbooks/deploy-rke1.yaml"
     - name: ansibleVarsFile
       value:
         - "manage_filesystem+-true"
@@ -51,3 +51,4 @@ spec:
       value:
         - "https://github.com/stuttgart-things/configure-rke-node.git"
         - "https://github.com/stuttgart-things/deploy-configure-rke.git"
+---
