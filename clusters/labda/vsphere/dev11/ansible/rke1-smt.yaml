@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: execute-ansible-smt40-rke2-8
+  name: execute-ansible-smt40-rke2-9
   namespace: ansible
 spec:
   pipelineRef:
@@ -28,8 +28,8 @@ spec:
     - name: ansiblePlaybooks
       value:
         - "ansible/playbooks/prepare-env.yaml"
-        - "ansible/playbooks/base-os.yaml"
-        - "ansible/playbooks/deploy-rke2.yaml"
+        # - "ansible/playbooks/base-os.yaml"
+        # - "ansible/playbooks/deploy-rke2.yaml"
         - "ansible/playbooks/upload-kubeconfig-vault.yaml"
     - name: ansibleVarsFile
       value:
