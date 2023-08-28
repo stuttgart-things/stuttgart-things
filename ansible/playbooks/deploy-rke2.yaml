@@ -16,11 +16,21 @@
     helm_repositories:
       bitnami:
         url: https://charts.bitnami.com/bitnami
+      rancher:
+        url: https://releases.rancher.com/server-charts/stable
+
     helm_releases:
       metallb:
         ref: bitnami/metallb
         version: 4.7.0
         namespace: metallb-system
+        ignore: true
+        values: |
+          ---
+      metallb:
+        ref: rancher/rancher
+        version: 2.7.5
+        namespace: cattle-system
         ignore: true
         values: |
           ---
@@ -35,7 +45,7 @@
             namespace: metallb-system
           spec:
             addresses:
-              - 10.31.101.20-0.31.101.22
+              - 10.31.101.20-10.31.101.22
             autoAssign: true
             avoidBuggyIPs: false
 
