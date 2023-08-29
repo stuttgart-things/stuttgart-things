@@ -1,0 +1,46 @@
+---
+- hosts: all
+  become: true
+
+  vars:
+    interface: ens192
+    vip: 10.31.101.16
+
+  tasks:
+    - name: Install keepalived
+      ansible.builtin.package:
+        name:
+          - keepalived
+        state: latest
+
+    - name: Copy keepalived configuration in place
+      ansible.builtin.copy:
+        dest: /etc/keepalived/keepalived.conf
+        content: |
+          vrrp_instance VI_1 {
+            interface {{ interface }}
+            state {{ state }}
+            virtual_router_id 101
+            priority {{ priority }}
+            advert_int 1
+            authentication {
+                auth_type PASS
+                auth_pass pass1234
+            }
+            virtual_ipaddress {
+              {{ vip }} # virtual ip address 
+            }
+          }
+      register: create_config
+
+    - name: restart keepalived
+      service: 
+        name: keepalived
+        state: restarted
+      when: create_config.changed
+
+    - name: Enable keepalived service
+      ansible.builtin.systemd:
+        name: keepalived
+        state: started
+        enabled: yes
