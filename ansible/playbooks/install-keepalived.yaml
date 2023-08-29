@@ -1,3 +1,6 @@
+# dont forget to set state and priority for your server
+# server.labul.sva.de state=MASTER priority=101
+# server2.labul.sva.de state=BACKUP priority=100
 ---
 - hosts: all
   become: true
