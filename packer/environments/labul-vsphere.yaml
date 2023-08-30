@@ -1,6 +1,6 @@
 ---
 osVersion: rocky9
-ansibleOsProvioning: baseos-setup
+ansibleOsProvioning: base-os
 
 ## PACKER JOB SETTINGS
 packerImage: eu.gcr.io/stuttgart-things/sthings-packer

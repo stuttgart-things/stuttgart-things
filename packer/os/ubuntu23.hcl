@@ -60,7 +60,7 @@ configmaps:
         }
         username       = "${ var.username }"
         vcenter_server = "{{ .vcenterServer }}"
-        vm_name        = "ubuntu23-base-os"
+        vm_name        = "ubuntu23-{{ .ansibleOsProvioning }}"
       }
 
       build {
