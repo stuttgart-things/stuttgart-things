@@ -34,6 +34,20 @@ tasks:
           #!/usr/bin/env sh
           set -eu
 
+          echo "create packer workdir"
+          rm -rf ./$(params.OS_VERSION) && mkdir ./$(params.OS_VERSION)
+          
+          echo "render packer config"
+          machineShop render --source local \
+          --template ./packer/os/$(params.OS_VERSION).hcl \
+          --defaults ./packer/environments/labul-vsphere.yaml \
+          --destination ./$(params.OS_VERSION)/$(params.OS_VERSION).pkr.hcl \
+          --output file
+
+          machineShop render --source local \
+          --template ./packer/boot/$(params.OS_VERSION).yaml \
+          --destination ./$(params.OS_VERSION)/user-data \
+          --output file
+
           echo "packer init"
-          ls packer
-          echo $(params.OS_VERSION)
+

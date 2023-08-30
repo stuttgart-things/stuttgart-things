@@ -41,5 +41,5 @@ ansiblePlaybooks:
   - ansible/playbooks/deploy-rke1.yaml
 
 
-packerWorkingImage: eu.gcr.io/stuttgart-things/sthings-packer:1.9.4-8.3.0-1
+packerWorkingImage: eu.gcr.io/stuttgart-things/sthings-packer:1.9.4-8.3.0-3
 packerOsVersion: ubuntu23
