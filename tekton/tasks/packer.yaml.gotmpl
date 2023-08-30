@@ -10,10 +10,19 @@ tasks:
       tekton.dev/displayName: "Send message to Microsoft Teams Channel"
       tekton.dev/platforms: "linux/amd64,linux/s390x,linux/ppc64le"
     description: sends simple message to a Microsoft Teams Channel
+    workspaces:
+      source:
+        description: holds the working data
+        optional: false
     params:
-      osVersion:
+      OS_VERSION:
         type: string
         description: name of the secret with incoming webhook URL
+      WORKING_IMAGE:
+        description: the image on which ansible will run
+        default: "eu.gcr.io/stuttgart-things/sthings-packer:1.9.4-8.3.0-1"
+      SUB_DIRECTORY:
+        description: subdirectory of workspace
     steps:
       packer-build:
         image: $(params.WORKING_IMAGE)
@@ -26,7 +35,5 @@ tasks:
           set -eu
 
           echo "packer init"
-          packer init {{ .Values.packerConfigMountPath }}/{{ .Values.osVersion }}-{{ .Values.cloud }}.pkr.hcl
-
-          echo "packer build"
-          packer build -force -var "username=${USERNAME}" -var "password=${PASSWORD}" {{ .Values.packerConfigMountPath }}/{{ .Values.osVersion }}-{{ .Values.cloud }}.pkr.hcl
+          ls packer
+          echo $(params.OS_VERSION)

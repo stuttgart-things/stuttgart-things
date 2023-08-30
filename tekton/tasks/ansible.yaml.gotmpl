@@ -11,7 +11,7 @@ tasks:
     description: execute ansible
     workspaces:
       source:
-        description: holds the context and Dockerfile
+        description: holds the working data
         optional: false
     params:
       SUB_DIRECTORY:
@@ -19,7 +19,7 @@ tasks:
         default: ""
       WORKING_IMAGE:
         description: the image on which ansible will run
-        default: eu.gcr.io/stuttgart-things/sthings-ansible:8.2.0-3
+        default: "eu.gcr.io/stuttgart-things/sthings-ansible:8.2.0-3"
       EXTRA_VARS:
         description: ansible extra vars
         type: array

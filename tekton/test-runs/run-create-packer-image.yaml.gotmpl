@@ -1,0 +1,21 @@
+---
+runs:
+  createPackerImage:
+    name: {{ .Release.Name }}-testrun-{{ randAlphaNum 5 | lower }}
+    addRandomDateToRunName: false
+    namespace: {{ .Release.Namespace }}
+    kind: Pipeline
+    ref: create-packer-template
+    params:
+      gitRepoUrl: {{ .Values.testRunGitRepoSSHUrl }}
+      gitRevision: {{ .Values.testRunGitRepoRevision }}
+      gitWorkspaceSubdirectory: /packer/{{ .Values.packerOsVersion }}
+      packerWorkingImage: {{ .Values.packerWorkingImage }}
+      osVersion: {{ .Values.packerOsVersion }}
+    workspaces:
+      sshCredentials:
+        workspaceKind: secret
+        workspaceRef: github-ssh
+      shared-workspace:
+        workspaceKind: persistentVolumeClaim
+        workspaceRef: {{ .Values.packerWorkspaceName }}

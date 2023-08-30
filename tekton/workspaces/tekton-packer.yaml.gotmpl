@@ -1,0 +1,9 @@
+---
+workspaces:
+ {{ .Values.packerWorkspaceName }}:
+   namespace: {{ .Release.Namespace }}
+   volumeMode: Filesystem
+   storageClassName: {{ .Values.storageClassName }}
+   storage: {{ .Values.packerWorkspaceStorage }}
+   accessModes:
+     - {{ .Values.packerWorkspaceAccessMode }}

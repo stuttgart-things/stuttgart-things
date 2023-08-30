@@ -21,6 +21,10 @@ buildahWorkspaceStorage: 10Gi
 buildahWorkspaceAccessMode: ReadWriteOnce
 buildahTestRunImage: sthings-minio
 
+packerWorkspaceName: packer-workspace
+packerWorkspaceStorage: 10Gi
+packerWorkspaceAccessMode: ReadWriteOnce
+
 buildahRegistryGCR: false
 buildahRegistryLogin: true
 
