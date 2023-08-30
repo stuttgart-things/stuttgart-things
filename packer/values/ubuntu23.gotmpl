@@ -41,7 +41,7 @@ configmaps:
         guest_os_type        = "ubuntu64Guest"
         host                 = "{{ .host }}"
         insecure_connection  = "true"
-        ip_wait_timeout      = "{{ .ip_wait_timeout }}"
+        ip_wait_timeout      = "{{ .ipWaitTimeout }}"
         iso_checksum         = "{{ .ubuntu23IsoChecksum }}"
         iso_urls             = ["{{ .ubuntu23IsoUrl }}"]
         network_adapters {
