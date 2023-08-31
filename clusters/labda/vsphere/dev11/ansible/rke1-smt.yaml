@@ -45,7 +45,7 @@ spec:
         - "reboot_all+-false"
     - name: ansibleVarsInventory
       value:
-        - "initial_master_node+[\"smt40-rke.labul.sva.de state=MASTER priority=101\"]"
+        - "initial_master_node+[\"smt40-rke.labul.sva.de\"]"
         - "additional_master_nodes+[\"\"]"
     - name: installExtraRoles
       value: "true"

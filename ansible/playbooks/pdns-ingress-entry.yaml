@@ -1,0 +1,24 @@
+---
+- hosts: localhost
+  gather_facts: no
+
+  vars:
+    vault_approle_id: "{{ lookup('env', 'VAULT_ROLE_ID') }}"
+    vault_approle_secret: "{{ lookup('env', 'VAULT_SECRET_ID') }}"
+    vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
+
+    pdns_api_executor: localhost
+    pdns_create_record:
+      - fqdn: "*.{{ .Values.hostname }}.{{ .Values.entryZone }}"
+        content: "{{ .Values.ipAddress }}"
+        record_type: A
+        zone: "{{ .Values.entryZone }}"
+        state: present
+        ttl: 60
+        note: deployed w/ ansible container
+
+    pdns_url: {{ .Values.pdnsUrl }}
+    pdns_token: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps/data/powerdns:token validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+
+  roles:
+    - install-configure-powerdns
