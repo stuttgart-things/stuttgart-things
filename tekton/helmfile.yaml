@@ -20,7 +20,7 @@ releases:
     chart: stuttgart-things/tekton-resources
     version: v0.47.15
     values:
-      - "workspaces/tekton-ansible.yaml.gotmpl"
+      # - "workspaces/tekton-ansible.yaml.gotmpl"
       - "secrets/git-ssh-credentials.yaml.gotmpl"
       - "secrets/vault-approle.yaml.gotmpl"
       - "tasks/git-clone.yaml.gotmpl"
