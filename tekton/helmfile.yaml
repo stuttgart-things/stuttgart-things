@@ -1,7 +1,7 @@
 ---
 releases:
   - name: create-packer-template
-    installed: true
+    installed: false
     namespace: packer
     chart: stuttgart-things/tekton-resources
     version: v0.47.15
@@ -15,7 +15,7 @@ releases:
       - "test-runs/run-create-packer-image.yaml.gotmpl"
 
   - name: execute-ansible-playbook
-    installed: false
+    installed: true
     namespace: ansible
     chart: stuttgart-things/tekton-resources
     version: v0.47.15
