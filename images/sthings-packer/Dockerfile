@@ -5,12 +5,12 @@ ARG TAG=8.3.0-8
 
 FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
-LABEL version=1.9.4-8.3.0-3
+LABEL version=1.9.4-8.3.0-4
 
 USER root
 
 ARG PACKER_VERSION=1.9.4
-ARG MACHINE_SHOP_VERSION=0.1.37
+ARG MACHINE_SHOP_VERSION=0.1.39
 
 RUN apk add --no-cache alpine-sdk build-base apk-tools alpine-conf busybox fakeroot syslinux xorriso squashfs-tools sudo mtools dosfstools grub-efi
 
