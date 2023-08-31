@@ -43,3 +43,6 @@ ansiblePlaybooks:
 
 packerWorkingImage: eu.gcr.io/stuttgart-things/sthings-packer:1.9.4-8.3.0-3
 packerOsVersion: ubuntu23
+packerOsTemplatePath: packer/os/ubuntu23.hcl
+packerDefaultEnvironmentPath: packer/environments/labul-vsphere.yaml
+packerBootConfigPath: packer/boot/ubuntu.yaml

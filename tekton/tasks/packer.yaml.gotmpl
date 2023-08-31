@@ -18,6 +18,15 @@ tasks:
       OS_VERSION:
         type: string
         description: name of the secret with incoming webhook URL
+      OS_TEMPLATE_PATH:
+        type: string
+        description: path to the os template
+      DEFAULT_ENVIRONMENT_PATH:
+        type: string
+        description: path to the default environment
+      BOOT_CONFIG_PATH:
+        type: string
+        description: kickstart config for installation
       WORKING_IMAGE:
         description: the image on which ansible will run
         default: "eu.gcr.io/stuttgart-things/sthings-packer:1.9.4-8.3.0-1"
@@ -39,15 +48,18 @@ tasks:
           
           echo "render packer config"
           machineShop render --source local \
-          --template ./packer/os/$(params.OS_VERSION).hcl \
-          --defaults ./packer/environments/labul-vsphere.yaml \
+          --template ./$(params.OS_TEMPLATE_PATH) \
+          --defaults ./$(params.DEFAULT_ENVIRONMENT_PATH) \
           --destination ./$(params.OS_VERSION)/$(params.OS_VERSION).pkr.hcl \
           --output file
 
+          echo "render kickstart config"
           machineShop render --source local \
-          --template ./packer/boot/$(params.OS_VERSION).yaml \
+          --template ./$(params.BOOT_CONFIG_PATH) \
           --destination ./$(params.OS_VERSION)/user-data \
           --output file
 
           echo "packer init"
+          cd $(params.OS_VERSION)
+          packer init $(params.OS_VERSION).pkr.hcl
 

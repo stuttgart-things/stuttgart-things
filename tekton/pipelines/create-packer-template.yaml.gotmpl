@@ -26,6 +26,12 @@ pipelines:
         default: "eu.gcr.io/stuttgart-things/sthings-packer:1.9.4-8.3.0-1"
       osVersion:
         description: to be build os version
+      osTemplatePath:
+        description: path to os template
+      defaultEnvironmentPath:
+        description: path to default environment
+      bootConfigPath:
+        description: path to kickstart file
     tasks:
       fetch-repository:
         task: git-clone
@@ -57,3 +63,9 @@ pipelines:
             value: $(params.packerWorkingImage)
           OS_VERSION:
             value: $(params.osVersion)
+          OS_TEMPLATE_PATH:
+            value: $(params.osTemplatePath)
+          DEFAULT_ENVIRONMENT_PATH:
+            value: $(params.defaultEnvironmentPath)
+          BOOT_CONFIG_PATH:
+            value: $(params.bootConfigPath)
