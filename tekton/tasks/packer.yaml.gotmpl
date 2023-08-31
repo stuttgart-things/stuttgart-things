@@ -29,9 +29,24 @@ tasks:
         description: kickstart config for installation
       WORKING_IMAGE:
         description: the image on which ansible will run
-        default: "eu.gcr.io/stuttgart-things/sthings-packer:1.9.4-8.3.0-1"
+        default: "eu.gcr.io/stuttgart-things/sthings-packer:1.9.4-8.3.0-4"
       SUB_DIRECTORY:
         description: subdirectory of workspace
+      vault-secret-name:
+        default: "vault"
+        description: name of the secret with incoming webhook URL
+      vault-secret-key-addr:
+        default: "VAULT_ADDR"
+        description: vaul addr key in the secret
+      vault-secret-key-approleId:
+        default: "VAULT_ROLE_ID"
+        description: approle id key in the secret
+      vault-secret-key-approleSecret:
+        default: "VAULT_SECRET_ID"
+        description: approle secret key in the secret
+      vault-secret-key-namespace:
+        default: "VAULT_NAMESPACE"
+        description: namespace key in the secret
     steps:
       packer-build:
         image: $(params.WORKING_IMAGE)
@@ -39,6 +54,29 @@ tasks:
           runAsNonRoot: true
           runAsUser: 65532
         workingDir: $(workspaces.source.path)/$(params.SUB_DIRECTORY)
+        env:
+          ANSIBLE_HOST_KEY_CHECKING:
+            value: '"False"'
+          VAULT_ADDR:
+            valueFrom:
+              secretKeyRef:
+                name: $(params.vault-secret-name)
+                key: $(params.vault-secret-key-addr)
+          VAULT_ROLE_ID:
+            valueFrom:
+              secretKeyRef:
+                name: $(params.vault-secret-name)
+                key: $(params.vault-secret-key-approleId)
+          VAULT_SECRET_ID:
+            valueFrom:
+              secretKeyRef:
+                name: $(params.vault-secret-name)
+                key: $(params.vault-secret-key-approleSecret)
+          VAULT_NAMESPACE:
+            valueFrom:
+              secretKeyRef:
+                name: $(params.vault-secret-name)
+                key: $(params.vault-secret-key-namespace)
         script: |
           #!/usr/bin/env sh
           set -eu
@@ -51,7 +89,14 @@ tasks:
           --template ./$(params.OS_TEMPLATE_PATH) \
           --defaults ./$(params.DEFAULT_ENVIRONMENT_PATH) \
           --destination ./$(params.OS_VERSION)/$(params.OS_VERSION).pkr.hcl \
+          --values "packerConfigMountPath=$(workspaces.source.path)/$(params.SUB_DIRECTORY)/$(params.OS_VERSION), ansiblePlayMountPath=$(workspaces.source.path)/$(params.SUB_DIRECTORY)/$(params.OS_VERSION)" \
           --output file
+
+          touch ./$(params.OS_VERSION)/meta-data
+
+          cat ./$(params.OS_VERSION)/$(params.OS_VERSION).pkr.hcl
+          pwd ./$(params.OS_VERSION)
+          ls -lta ./$(params.OS_VERSION)
 
           echo "render kickstart config"
           machineShop render --source local \
@@ -59,7 +104,21 @@ tasks:
           --destination ./$(params.OS_VERSION)/user-data \
           --output file
 
+          echo "render playbook"
+          machineShop render \
+          --template ./packer/ansible/base-os.yaml \
+          --source local \
+          --defaults ./$(params.DEFAULT_ENVIRONMENT_PATH) \
+          --destination ./$(params.OS_VERSION)/base-os.yaml \
+          --output file
+
           echo "packer init"
           cd $(params.OS_VERSION)
           packer init $(params.OS_VERSION).pkr.hcl
 
+          echo "get vcenter credentials"
+          packer build \
+          -force \
+          -var "username=$(machineShop get --path apps/data/scr:username | tail -n +8)" \
+          -var "password=$(machineShop get --path apps/data/scr:password | tail -n +8)" \
+          $(params.OS_VERSION).pkr.hcl

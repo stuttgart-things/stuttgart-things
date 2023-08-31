@@ -31,6 +31,9 @@ ansibleUser: sthings
 ansiblePlayMountPath: /home/nonroot/ansible
 packerConfigMountPath: /home/nonroot/packer
 rkeTemplateSetup: false
+updatePackages: true
+installRequirements: false
+installMotd: true
 
 osPrerequisites:
   - python3-pip

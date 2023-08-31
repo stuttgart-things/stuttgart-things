@@ -1,0 +1,12 @@
+---
+- name: Provision vm template during packer build w/ ansible
+  hosts: default
+  become: true
+  vars:
+    update_packages: {{ or .updatePackages "true" }}
+    install_requirements: {{ or .installRequirements "true" }}
+    install_motd: {{ or .installMotd "false" }}
+
+  roles:
+    - role: install-requirements
+      when: install_requirements|bool

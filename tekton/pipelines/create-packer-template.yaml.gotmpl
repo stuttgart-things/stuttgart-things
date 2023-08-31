@@ -32,6 +32,8 @@ pipelines:
         description: path to default environment
       bootConfigPath:
         description: path to kickstart file
+      vaultSecretName:
+        description: name of vault secret
     tasks:
       fetch-repository:
         task: git-clone
@@ -69,3 +71,5 @@ pipelines:
             value: $(params.defaultEnvironmentPath)
           BOOT_CONFIG_PATH:
             value: $(params.bootConfigPath)
+          VAULT_SECRET_NAME:
+            value: $(params.vaultSecretName)
