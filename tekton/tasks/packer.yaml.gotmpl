@@ -119,6 +119,6 @@ tasks:
           echo "get vcenter credentials"
           packer build \
           -force \
-          -var "username=$(machineShop get --path apps/data/scr:username | tail -n +8)" \
-          -var "password=$(machineShop get --path apps/data/scr:password | tail -n +8)" \
+          -var "username=$(machineShop get --path cloud/data/vsphere:username | tail -n +8)" \
+          -var "password=$(machineShop get --path cloud/data/vsphere:password | tail -n +8)" \
           $(params.OS_VERSION).pkr.hcl
