@@ -102,7 +102,10 @@ tasks:
           machineShop render --source local \
           --template ./$(params.BOOT_CONFIG_PATH) \
           --destination ./$(params.OS_VERSION)/user-data \
+          --defaults ./$(params.DEFAULT_ENVIRONMENT_PATH) \
           --output file
+
+          cat ./$(params.OS_VERSION)/user-data
 
           echo "render playbook"
           machineShop render \

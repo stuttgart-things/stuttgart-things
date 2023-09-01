@@ -63,10 +63,6 @@ ubuntu23PackerMinVersion: 1.8.6
 ubuntu23PackerVMwarePluginMinVersion: 1.0.7
 ubuntu23tmpSSHUser: ubuntu
 ubuntu23tmpSSHPassword: ubuntu
-add_static_ip: false
-addresses: 10.31.102.221/24
-gateway: 10.31.102.251
-nameserver: 10.31.101.50
 
 # CLOUD
 cloud: vsphere
