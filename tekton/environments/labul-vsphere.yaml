@@ -1,0 +1,38 @@
+---
+scrDockerConfig: ref+vault://apps/yacht/scr-labda
+gcrDockerJson: ref+vault://apps/gcr/gcrJson
+sshCodehubCredentials: ref+vault://apps/yacht/codehub-ssh
+sshGithubCredentials: ref+vault://apps/yacht/github-ssh
+msTeamsWebhook: ref+vault://apps/yacht/msteams
+storageClassName: nfs3-csi2
+
+registry: scr.app.4sthings.tiab.ssc.sva.de
+helmWorkspaceName: helm-workspace
+helmWorkspaceStorage: 5Gi
+helmWorkspaceAccessMode: ReadWriteOnce
+
+kanikoWorkspaceName: kaniko-workspace
+kanikoWorkspaceStorage: 10Gi
+kanikoWorkspaceAccessMode: ReadWriteOnce
+kanikoTestRunImage: sthings-ansible
+
+buildahWorkspaceName: kaniko-workspace
+buildahWorkspaceStorage: 10Gi
+buildahWorkspaceAccessMode: ReadWriteOnce
+buildahTestRunImage: sthings-minio
+
+packerWorkspaceName: packer-workspace
+packerWorkspaceStorage: 10Gi
+packerWorkspaceAccessMode: ReadWriteOnce
+
+buildahRegistryGCR: false
+buildahRegistryLogin: true
+
+scrUsername: ref+vault://apps/scr/username
+scrPassword: ref+vault://apps/scr/password
+
+# VAULT
+vaultNamespace: root
+vaultAddr: https://vault-vsphere.labul.sva.de:8200
+vaultRoleID: ref+vault://apps/vault/roleID
+vaultSecretID: ref+vault://apps/vault/secretID

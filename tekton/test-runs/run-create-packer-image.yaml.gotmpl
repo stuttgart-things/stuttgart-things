@@ -15,6 +15,7 @@ runs:
       osTemplatePath: {{ .Values.packerOsTemplatePath }}
       defaultEnvironmentPath: {{ .Values.packerDefaultEnvironmentPath }}
       bootConfigPath: {{ .Values.packerBootConfigPath }}
+      vaultSecretName: vault-{{ .Environment.Name }}
     workspaces:
       sshCredentials:
         workspaceKind: secret
