@@ -32,7 +32,7 @@ tasks:
         default: "eu.gcr.io/stuttgart-things/sthings-packer:1.9.4-8.3.0-4"
       SUB_DIRECTORY:
         description: subdirectory of workspace
-      vault-secret-name:
+      vaultSecretName:
         default: "vault"
         description: name of the secret with incoming webhook URL
       vault-secret-key-addr:
@@ -60,22 +60,22 @@ tasks:
           VAULT_ADDR:
             valueFrom:
               secretKeyRef:
-                name: $(params.vault-secret-name)
+                name: $(params.vaultSecretName)
                 key: $(params.vault-secret-key-addr)
           VAULT_ROLE_ID:
             valueFrom:
               secretKeyRef:
-                name: $(params.vault-secret-name)
+                name: $(params.vaultSecretName)
                 key: $(params.vault-secret-key-approleId)
           VAULT_SECRET_ID:
             valueFrom:
               secretKeyRef:
-                name: $(params.vault-secret-name)
+                name: $(params.vaultSecretName)
                 key: $(params.vault-secret-key-approleSecret)
           VAULT_NAMESPACE:
             valueFrom:
               secretKeyRef:
-                name: $(params.vault-secret-name)
+                name: $(params.vaultSecretName)
                 key: $(params.vault-secret-key-namespace)
         script: |
           #!/usr/bin/env sh
@@ -83,7 +83,7 @@ tasks:
 
           echo "create packer workdir"
           rm -rf ./$(params.OS_VERSION) && mkdir ./$(params.OS_VERSION)
-          
+
           echo "render packer config"
           machineShop render --source local \
           --template ./$(params.OS_TEMPLATE_PATH) \
