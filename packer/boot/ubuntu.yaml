@@ -152,6 +152,18 @@ autoinstall:
     password: $6$rounds=656000$r6635QXd9WQ08Tgk$wDjmJsQa4GcTsh/XZG47f7mzVUeYOd1QietsPwbDFh9E.8wjogt8c5DIzLU1q6s.htUfmlslKpD9bznyQD0cb1
   ssh:
     install-server: yes
+  {{ if .add_static_ip }}
+    network:
+      network:
+        version: 2
+        ethernets:
+          ens192:
+            dhcp4: no
+            addresses: [{{ .addresses }}]
+            gateway4: {{ .gateway }}
+            nameservers:
+              addresses: [{{ .nameserver }}]
+  {{ end }}
   packages:
     - qemu-guest-agent
     - open-vm-tools
