@@ -81,10 +81,10 @@ tasks:
           #!/usr/bin/env sh
           set -eu
 
-          echo "create packer workdir"
+          echo "CREATE PACKER WORK-DIR"
           rm -rf ./$(params.OS_VERSION) && mkdir ./$(params.OS_VERSION)
 
-          echo "render packer config"
+          echo "RENDER PACKER CONFIG"
           machineShop render --source local \
           --template ./$(params.OS_TEMPLATE_PATH) \
           --defaults ./$(params.DEFAULT_ENVIRONMENT_PATH) \
@@ -92,22 +92,24 @@ tasks:
           --values "packerConfigMountPath=$(workspaces.source.path)/$(params.SUB_DIRECTORY)/$(params.OS_VERSION), ansiblePlayMountPath=$(workspaces.source.path)/$(params.SUB_DIRECTORY)/$(params.OS_VERSION)" \
           --output file
 
-          touch ./$(params.OS_VERSION)/meta-data
-
+          echo "OUTPUT RENDERED OS-CONFIG"
           cat ./$(params.OS_VERSION)/$(params.OS_VERSION).pkr.hcl
-          pwd ./$(params.OS_VERSION)
           ls -lta ./$(params.OS_VERSION)
 
-          echo "render kickstart config"
+          echo "RENDER KICKSTART CONFIG"
           machineShop render --source local \
           --template ./$(params.BOOT_CONFIG_PATH) \
           --destination ./$(params.OS_VERSION)/user-data \
           --defaults ./$(params.DEFAULT_ENVIRONMENT_PATH) \
           --output file
 
+          echo "CREATE (EMPTY) META-DATA FILE"
+          touch ./$(params.OS_VERSION)/meta-data
+
+          echo "OUTPUT KICKSTART CONFIG"
           cat ./$(params.OS_VERSION)/user-data
 
-          echo "render playbook"
+          echo "RENDER PLAYBOOK"
           machineShop render \
           --template ./packer/ansible/base-os.yaml \
           --source local \
@@ -115,13 +117,12 @@ tasks:
           --destination ./$(params.OS_VERSION)/base-os.yaml \
           --output file
 
-          echo "packer init"
+          echo "INIT PACKER"
           cd $(params.OS_VERSION)
           packer init $(params.OS_VERSION).pkr.hcl
 
-          echo "get vcenter credentials"
-          packer build \
-          -force \
+          echo "START PACKER BUILD"
+          packer build -force \
           -var "username=$(machineShop get --path cloud/data/vsphere:username | tail -n +8)" \
           -var "password=$(machineShop get --path cloud/data/vsphere:password | tail -n +8)" \
           $(params.OS_VERSION).pkr.hcl
