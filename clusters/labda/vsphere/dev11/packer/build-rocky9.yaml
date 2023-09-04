@@ -1,0 +1,41 @@
+---
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  labels:
+    tekton.dev/pipeline: create-packer-template
+  name: build-packer-template-rocky9-0904
+  namespace: packer
+spec:
+  params:
+  - name: bootConfigPath
+    value: packer/boot/ks.cfg
+  - name: defaultEnvironmentPath
+    value: packer/environments/labul-vsphere.yaml
+  - name: gitRepoUrl
+    value: git@github.com:stuttgart-things/stuttgart-things.git
+  - name: gitRevision
+    value: main
+  - name: gitWorkspaceSubdirectory
+    value: /packer/rocky9
+  - name: osTemplatePath
+    value: packer/os/rocky9.hcl
+  - name: osVersion
+    value: rocky9
+  - name: packerWorkingImage
+    value: eu.gcr.io/stuttgart-things/sthings-packer:1.9.4-8.3.0-4
+  - name: vaultSecretName
+    value: vault-labul-vsphere
+  pipelineRef:
+    name: create-packer-template
+  taskRunTemplate:
+    serviceAccountName: default
+  timeouts:
+    pipeline: 1h0m0s
+  workspaces:
+  - name: shared-workspace
+    persistentVolumeClaim:
+      claimName: packer-workspace
+  - name: sshCredentials
+    secret:
+      secretName: github-ssh
