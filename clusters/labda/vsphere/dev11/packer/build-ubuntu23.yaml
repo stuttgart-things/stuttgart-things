@@ -4,7 +4,7 @@ kind: PipelineRun
 metadata:
   labels:
     tekton.dev/pipeline: create-packer-template
-  name: build-packer-template-ubuntu23-0904
+  name: build-packer-template-ubuntu23-0904-2
   namespace: packer
 spec:
   params:
