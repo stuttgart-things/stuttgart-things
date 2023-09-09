@@ -1,0 +1,117 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tekton-events-controller
+  namespace: {{ .Values.pipelinesNamespace }}
+  labels:
+    app.kubernetes.io/name: events
+    app.kubernetes.io/component: events
+    app.kubernetes.io/instance: default
+    app.kubernetes.io/version: "v0.50.0"
+    app.kubernetes.io/part-of: tekton-pipelines
+    # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
+    pipeline.tekton.dev/release: "v0.50.0"
+    # labels below are related to istio and should not be used for resource lookup
+    version: "v0.50.0"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: events
+      app.kubernetes.io/component: events
+      app.kubernetes.io/instance: default
+      app.kubernetes.io/part-of: tekton-pipelines
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: events
+        app.kubernetes.io/component: events
+        app.kubernetes.io/instance: default
+        app.kubernetes.io/version: "v0.50.0"
+        app.kubernetes.io/part-of: tekton-pipelines
+        # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
+        pipeline.tekton.dev/release: "v0.50.0"
+        # labels below are related to istio and should not be used for resource lookup
+        app: tekton-events-controller
+        version: "v0.50.0"
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/os
+                    operator: NotIn
+                    values:
+                      - windows
+      serviceAccountName: tekton-events-controller
+      containers:
+        - name: tekton-events-controller
+          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/events:v0.50.0@sha256:9f90f568a7f56c3e418f3d25fb87fb73ad5bd52632a769f4ec8b8ba874495337
+          args: []
+          volumeMounts:
+            - name: config-logging
+              mountPath: /etc/config-logging
+            - name: config-registry-cert
+              mountPath: /etc/config-registry-cert
+          env:
+            - name: SYSTEM_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            # If you are changing these names, you will also need to update
+            # the controller's Role in 200-role.yaml to include the new
+            # values in the "configmaps" "get" rule.
+            - name: CONFIG_DEFAULTS_NAME
+              value: config-defaults
+            - name: CONFIG_LOGGING_NAME
+              value: config-logging
+            - name: CONFIG_OBSERVABILITY_NAME
+              value: config-observability
+            - name: CONFIG_LEADERELECTION_NAME
+              value: config-leader-election
+            - name: SSL_CERT_FILE
+              value: /etc/config-registry-cert/cert
+            - name: SSL_CERT_DIR
+              value: /etc/ssl/certs
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - "ALL"
+            # User 65532 is the nonroot user ID
+            runAsUser: 65532
+            runAsGroup: 65532
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+          ports:
+            - name: metrics
+              containerPort: 9090
+            - name: profiling
+              containerPort: 8008
+            - name: probes
+              containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: probes
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /readiness
+              port: probes
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+      volumes:
+        - name: config-logging
+          configMap:
+            name: config-logging
+        - name: config-registry-cert
+          configMap:
+            name: config-registry-cert

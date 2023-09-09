@@ -1,0 +1,93 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tekton-pipelines-remote-resolvers
+  namespace: {{ .Values.pipelinesNamespace }}-resolvers
+  labels:
+    app.kubernetes.io/name: resolvers
+    app.kubernetes.io/component: resolvers
+    app.kubernetes.io/instance: default
+    app.kubernetes.io/version: "v0.50.0"
+    app.kubernetes.io/part-of: tekton-pipelines
+    # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
+    pipeline.tekton.dev/release: "v0.50.0"
+    # labels below are related to istio and should not be used for resource lookup
+    version: "v0.50.0"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: resolvers
+      app.kubernetes.io/component: resolvers
+      app.kubernetes.io/instance: default
+      app.kubernetes.io/part-of: tekton-pipelines
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: resolvers
+        app.kubernetes.io/component: resolvers
+        app.kubernetes.io/instance: default
+        app.kubernetes.io/version: "v0.50.0"
+        app.kubernetes.io/part-of: tekton-pipelines
+        # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
+        pipeline.tekton.dev/release: "v0.50.0"
+        # labels below are related to istio and should not be used for resource lookup
+        app: tekton-pipelines-resolvers
+        version: "v0.50.0"
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: resolvers
+                    app.kubernetes.io/component: resolvers
+                    app.kubernetes.io/instance: default
+                    app.kubernetes.io/part-of: tekton-pipelines
+                topologyKey: kubernetes.io/hostname
+              weight: 100
+      serviceAccountName: tekton-pipelines-resolvers
+      containers:
+        - name: controller
+          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/resolvers:v0.50.0@sha256:03c3707dd8df1a49ab747a2ec81457830fd94bf117055e685d24eb97c0f6113a
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 1000m
+              memory: 4Gi
+          ports:
+            - name: metrics
+              containerPort: 9090
+          env:
+            - name: SYSTEM_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            # If you are changing these names, you will also need to update
+            # the controller's Role in 200-role.yaml to include the new
+            # values in the "configmaps" "get" rule.
+            - name: CONFIG_LOGGING_NAME
+              value: config-logging
+            - name: CONFIG_OBSERVABILITY_NAME
+              value: config-observability
+            - name: CONFIG_FEATURE_FLAGS_NAME
+              value: feature-flags
+            - name: CONFIG_LEADERELECTION_NAME
+              value: config-leader-election
+            - name: METRICS_DOMAIN
+              value: tekton.dev/resolution
+            # Override this env var to set a private hub api endpoint
+            - name: ARTIFACT_HUB_API
+              value: "https://artifacthub.io/"
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            capabilities:
+              drop:
+                - "ALL"
+            seccompProfile:
+              type: RuntimeDefault

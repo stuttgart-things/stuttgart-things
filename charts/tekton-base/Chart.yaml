@@ -1,0 +1,13 @@
+apiVersion: v2
+name: tekton-base
+description: tekton-base
+type: application
+version: v0.50.2
+appVersion: v0.50.2
+dependencies:
+  - name: sthings-helm-toolkit
+    version: 2.4.40
+    repository: oci://eu.gcr.io/stuttgart-things
+maintainers:
+  - name: Patrick Hermann
+    email: patrick.hermann@sva.de
