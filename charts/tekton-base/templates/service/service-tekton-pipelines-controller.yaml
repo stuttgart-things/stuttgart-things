@@ -13,7 +13,7 @@ metadata:
     app: tekton-pipelines-controller
     version: "v0.50.0"
   name: tekton-pipelines-controller
-   namespace: {{ .Values.pipelinesNamespace }}
+  namespace: {{ .Values.pipelinesNamespace }}
 spec:
   ports:
     - name: http-metrics

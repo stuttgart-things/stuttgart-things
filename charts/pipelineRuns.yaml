@@ -1,7 +1,7 @@
 enableRuns: "true"
 runs:
   packageHelmChartSCR:
-    name: "package-tekton-base-v0.50.2-23.0909.1911"
+    name: "package-tekton-base-v0.50.3-23.0909.1938"
     addRandomDateToRunName: false
     namespace: tektoncd
     kind: Pipeline
@@ -12,7 +12,7 @@ runs:
       gitWorkspaceSubdirectory: /helm/tekton-base
       helmChartPath: charts
       helmChartName: tekton-base
-      helmChartTag: "v0.50.2"
+      helmChartTag: "v0.50.3"
       registry: scr.app.4sthings.tiab.ssc.sva.de
       workingImage: eu.gcr.io/stuttgart-things/sthings-k8s:1.127.2
     workspaces:

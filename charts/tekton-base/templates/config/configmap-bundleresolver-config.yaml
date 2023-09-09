@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: bundleresolver-config
-  namespace: tekton-pipelines-resolvers
+  namespace: {{ .Values.pipelinesNamespace }}-resolvers
   labels:
     app.kubernetes.io/component: resolvers
     app.kubernetes.io/instance: default

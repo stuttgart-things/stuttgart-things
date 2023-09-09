@@ -9,7 +9,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: tekton-pipelines-resolvers
-    namespace: tekton-pipelines-resolvers
+    namespace: {{ .Values.pipelinesNamespace }}-resolvers
 roleRef:
   kind: ClusterRole
   name: tekton-pipelines-resolvers-resolution-request-updates

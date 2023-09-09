@@ -12,7 +12,7 @@ webhooks:
     clientConfig:
       service:
         name: tekton-pipelines-webhook
-         namespace: {{ .Values.pipelinesNamespace }}
+        namespace: {{ .Values.pipelinesNamespace }}
     failurePolicy: Fail
     sideEffects: None
     name: webhook.pipeline.tekton.dev
