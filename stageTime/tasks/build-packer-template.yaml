@@ -1,0 +1,143 @@
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: build-packer-template
+  labels:
+    app.kubernetes.io/version: "0.1"
+  annotations:
+    tekton.dev/categories: "Messaging"
+    tekton.dev/displayName: "Send message to Microsoft Teams Channel"
+    tekton.dev/pipelines.minVersion: "0.48.0"
+    tekton.dev/platforms: "linux/amd64,linux/s390x,linux/ppc64le"
+    tekton.dev/tags: "messaging"
+spec:
+  description: sends simple message to a Microsoft Teams Channel
+  workspaces:
+    - name: source
+      description: holds the working data
+      optional: false
+  params:
+    - name: BOOT_CONFIG_PATH
+      description: kickstart config for installation
+      type: string
+      default: ""
+    - name: DEFAULT_ENVIRONMENT_PATH
+      description: path to the default environment
+      type: string
+      default: ""
+    - name: OS_TEMPLATE_PATH
+      description: path to the os template
+      type: string
+      default: ""
+    - name: OS_VERSION
+      description: name of the secret with incoming webhook URL
+      type: string
+      default: ""
+    - name: SUB_DIRECTORY
+      description: subdirectory of workspace
+      type: string
+      default: ""
+    - name: WORKING_IMAGE
+      description: the image on which ansible will run
+      type: string
+      default: "eu.gcr.io/stuttgart-things/sthings-packer:1.9.4-8.3.0-4"
+    - name: vault-secret-key-addr
+      description: vaul addr key in the secret
+      type: string
+      default: "VAULT_ADDR"
+    - name: vault-secret-key-approleId
+      description: approle id key in the secret
+      type: string
+      default: "VAULT_ROLE_ID"
+    - name: vault-secret-key-approleSecret
+      description: approle secret key in the secret
+      type: string
+      default: "VAULT_SECRET_ID"
+    - name: vault-secret-key-namespace
+      description: namespace key in the secret
+      type: string
+      default: "VAULT_NAMESPACE"
+    - name: vaultSecretName
+      description: name of the secret with incoming webhook URL
+      type: string
+      default: "vault"
+  steps:
+    - name: packer-build
+      workingDir: $(workspaces.source.path)/$(params.SUB_DIRECTORY)
+      image: "$(params.WORKING_IMAGE)"
+      env:
+        - name: ANSIBLE_HOST_KEY_CHECKING
+          value: "False"
+        - name: VAULT_ADDR
+          valueFrom:
+            secretKeyRef:
+              key: $(params.vault-secret-key-addr)
+              name: $(params.vaultSecretName)
+        - name: VAULT_NAMESPACE
+          valueFrom:
+            secretKeyRef:
+              key: $(params.vault-secret-key-namespace)
+              name: $(params.vaultSecretName)
+        - name: VAULT_ROLE_ID
+          valueFrom:
+            secretKeyRef:
+              key: $(params.vault-secret-key-approleId)
+              name: $(params.vaultSecretName)
+        - name: VAULT_SECRET_ID
+          valueFrom:
+            secretKeyRef:
+              key: $(params.vault-secret-key-approleSecret)
+              name: $(params.vaultSecretName)
+      securityContext:
+        privileged: false
+        runAsNonRoot: true
+        runAsUser: 65532
+      script: |-
+        #!/usr/bin/env sh
+        set -eu
+
+        echo "CREATE PACKER WORK-DIR"
+        rm -rf ./$(params.OS_VERSION) && mkdir ./$(params.OS_VERSION)
+
+        echo "RENDER PACKER CONFIG"
+        machineShop render --source local \
+        --template ./$(params.OS_TEMPLATE_PATH) \
+        --defaults ./$(params.DEFAULT_ENVIRONMENT_PATH) \
+        --destination ./$(params.OS_VERSION)/$(params.OS_VERSION).pkr.hcl \
+        --values "packerConfigMountPath=$(workspaces.source.path)/$(params.SUB_DIRECTORY)/$(params.OS_VERSION), ansiblePlayMountPath=$(workspaces.source.path)/$(params.SUB_DIRECTORY)/$(params.OS_VERSION)" \
+        --output file
+
+        echo "OUTPUT RENDERED OS-CONFIG"
+        cat ./$(params.OS_VERSION)/$(params.OS_VERSION).pkr.hcl
+        ls -lta ./$(params.OS_VERSION)
+
+        echo "RENDER KICKSTART CONFIG"
+        machineShop render --source local \
+        --template ./$(params.BOOT_CONFIG_PATH) \
+        --destination ./$(params.OS_VERSION)/user-data \
+        --defaults ./$(params.DEFAULT_ENVIRONMENT_PATH) \
+        --output file
+
+        echo "CREATE (EMPTY) META-DATA FILE"
+        touch ./$(params.OS_VERSION)/meta-data
+
+        echo "OUTPUT KICKSTART CONFIG"
+        cat ./$(params.OS_VERSION)/user-data
+
+        echo "RENDER PLAYBOOK"
+        machineShop render \
+        --template ./packer/ansible/base-os.yaml \
+        --source local \
+        --defaults ./$(params.DEFAULT_ENVIRONMENT_PATH) \
+        --destination ./$(params.OS_VERSION)/base-os.yaml \
+        --output file
+
+        echo "INIT PACKER"
+        cd $(params.OS_VERSION)
+        packer init $(params.OS_VERSION).pkr.hcl
+
+        echo "START PACKER BUILD"
+        packer build -force \
+        -var "username=$(machineShop get --path cloud/data/vsphere:username | tail -n +8)" \
+        -var "password=$(machineShop get --path cloud/data/vsphere:password | tail -n +8)" \
+        $(params.OS_VERSION).pkr.hcl

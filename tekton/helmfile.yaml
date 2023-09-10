@@ -6,13 +6,13 @@ releases:
     chart: stuttgart-things/tekton-resources
     version: v0.47.15
     values:
-      - "workspaces/tekton-packer.yaml.gotmpl"
-      - "secrets/git-ssh-credentials.yaml.gotmpl"
-      - "secrets/vault-approle-lab.yaml.gotmpl"
+      # - "workspaces/tekton-packer.yaml.gotmpl"
+      # - "secrets/git-ssh-credentials.yaml.gotmpl"
+      # - "secrets/vault-approle-lab.yaml.gotmpl"
       - "tasks/git-clone.yaml.gotmpl"
       - "tasks/packer.yaml.gotmpl"
       - "pipelines/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
-      - "test-runs/run-create-packer-image.yaml.gotmpl"
+      # - "test-runs/run-create-packer-image.yaml.gotmpl"
 
   - name: execute-ansible-playbook
     installed: false
