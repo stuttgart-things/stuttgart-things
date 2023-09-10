@@ -81,8 +81,8 @@ tasks:
       - cd ./charts/{{ .PROJECT }} && helm dep update
       - helm package ./charts/{{ .PROJECT }}
       - helm push {{ .PACKAGE }} oci://{{ .REGISTRY }}/{{ .REPOSITORY_NAME }}
-      - gh release delete {{ .PROJECT }}-v{{ .VERSION_NUMBER_PREFIX }}{{ .UPDATED_VERSION_NUMBER }} -y || true
-      - gh release create {{ .PROJECT }}-v{{ .VERSION_NUMBER_PREFIX }}{{ .UPDATED_VERSION_NUMBER }} --notes "released chart artifcact for {{ .PROJECT }}" {{ .PACKAGE }}
+      - gh release delete {{ .PROJECT }}-{{ .VERSION_NUMBER_PREFIX }}{{ .UPDATED_VERSION_NUMBER }} -y || true
+      - gh release create {{ .PROJECT }}-{{ .VERSION_NUMBER_PREFIX }}{{ .UPDATED_VERSION_NUMBER }} --notes "released chart artifcact for {{ .PROJECT }}" {{ .PACKAGE }}
       - rm -rf {{ .PACKAGE }}
       - task: package-tekton
       - task: git-push
