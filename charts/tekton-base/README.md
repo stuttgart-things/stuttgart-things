@@ -13,6 +13,7 @@ https://github.com/stuttgart-things/stuttgart-things/releases/download/tekton-ba
 ## DEV
 
 ```
+helm dep update
 helm template .
 helm upgrade --install tekon-pipelines charts/tekton-base -n tekton-pipelines --create-namespace
 ```
