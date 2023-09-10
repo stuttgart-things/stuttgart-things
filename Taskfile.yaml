@@ -81,12 +81,14 @@ tasks:
       - cd ./charts/{{ .PROJECT }} && helm dep update
       - helm package ./charts/{{ .PROJECT }}
       - helm push {{ .PACKAGE }} oci://{{ .REGISTRY }}/{{ .REPOSITORY_NAME }}
+      - gh release delete {{ .PROJECT }}-v{{ .VERSION_NUMBER_PREFIX }}{{ .UPDATED_VERSION_NUMBER }} -y || true
+      - gh release create {{ .PROJECT }}-v{{ .VERSION_NUMBER_PREFIX }}{{ .UPDATED_VERSION_NUMBER }} --notes "released chart artifcact for {{ .PROJECT }}" {{ .PACKAGE }}
       - rm -rf {{ .PACKAGE }}
       - task: package-tekton
       - task: git-push
     vars:
       PACKAGE:
-        sh: "echo ${PROJECT}-*.tgz"
+        sh: "echo ${PROJECT}-*.tgz | head -n1"
       CURRENT_VERSION_NUMBER:
         sh: "echo $(yq e '.version' ./charts/{{ .PROJECT }}/Chart.yaml | awk -F'[.=]' ' { print $3 }')"
       UPDATED_VERSION_NUMBER:
