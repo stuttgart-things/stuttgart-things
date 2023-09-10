@@ -3,7 +3,6 @@ apiVersion: tekton.dev/v1
 kind: Pipeline
 metadata:
   name: build-packer-template
-  namespace: packer
 spec:
   workspaces:
     - name: shared-workspace

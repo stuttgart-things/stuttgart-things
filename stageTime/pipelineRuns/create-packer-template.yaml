@@ -1,0 +1,40 @@
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  name: create-packer-template-testrun-yoprc1
+  namespace: packer
+spec:
+  pipelineRef:
+    resolver: git
+    params:
+      - name: url
+        value: https://github.com/stuttgart-things/stuttgart-things.git
+      - name: revision
+        value: main
+      - name: pathInRepo
+        value: stageTime/pipelines/build-packer-template.yaml
+  workspaces:
+    - name: shared-workspace
+      emptyDir: {}
+    - name: sshCredentials
+      secret:
+        secretName: github-ssh
+  params:
+    - name: bootConfigPath
+      value: "packer/boot/ubuntu.yaml"
+    - name: defaultEnvironmentPath
+      value: "packer/environments/labul-vsphere.yaml"
+    - name: gitRepoUrl
+      value: "git@github.com:stuttgart-things/stuttgart-things.git"
+    - name: gitRevision
+      value: "main"
+    - name: gitWorkspaceSubdirectory
+      value: "/packer/ubuntu23"
+    - name: osTemplatePath
+      value: "packer/os/ubuntu23.hcl"
+    - name: osVersion
+      value: "ubuntu23"
+    - name: packerWorkingImage
+      value: "eu.gcr.io/stuttgart-things/sthings-packer:1.9.4-8.3.0-4"
+    - name: vaultSecretName
+      value: "vault-labul-vsphere"
