@@ -1,0 +1,199 @@
+---
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: execute-ansible-playbooks
+  labels:
+    app.kubernetes.io/version: "0.5"
+  annotations:
+    tekton.dev/categories: "configuration-mgmt"
+    tekton.dev/pipelines.minVersion: "0.17.0"
+    tekton.dev/platforms: "linux/amd64,linux/s390x,linux/ppc64le,linux/arm64"
+    tekton.dev/tags: "image-build"
+spec:
+  description: execute ansible
+  workspaces:
+    - name: source
+      description: holds the working data
+      optional: false
+  params:
+    - name: CREATE_INVENTORY
+      description: create inventory
+      type: string
+      default: "false"
+    - name: EXTRA_ROLES
+      description: ansible extra roles
+      type: array
+      default: []
+    - name: EXTRA_VARS
+      description: ansible extra vars
+      type: array
+      default: []
+    - name: INSTALL_EXTRA_ROLES
+      description: install roles and collections
+      type: string
+      default: "false"
+    - name: INVENTORY_VARS
+      description: ansible inventory vars
+      type: array
+      default: []
+    - name: PLAYBOOKS
+      description: ansible playbooks to execute
+      type: array
+      default: []
+    - name: SUB_DIRECTORY
+      description: subdirectory of workspace
+      type: string
+      default: ""
+    - name: USER_HOME
+      description: absolute path to the user's home directory
+      type: string
+      default: "/home/nonroot"
+    - name: WORKING_IMAGE
+      description: the image on which ansible will run
+      type: string
+      default: "eu.gcr.io/stuttgart-things/sthings-ansible:8.2.0-3"
+    - name: vault-secret-key-addr
+      description: vaul addr key in the secret
+      type: string
+      default: "VAULT_ADDR"
+    - name: vault-secret-key-approleId
+      description: approle id key in the secret
+      type: string
+      default: "VAULT_ROLE_ID"
+    - name: vault-secret-key-approleSecret
+      description: approle secret key in the secret
+      type: string
+      default: "VAULT_SECRET_ID"
+    - name: vault-secret-key-namespace
+      description: namespace key in the secret
+      type: string
+      default: "VAULT_NAMESPACE"
+    - name: vault-secret-name
+      description: name of the secret with incoming webhook URL
+      type: string
+      default: "vault"
+  steps:
+    - name: create-inventory-vars
+      workingDir: $(workspaces.source.path)/$(params.SUB_DIRECTORY)
+      args:
+        - $(params.INVENTORY_VARS[*])
+      image: "$(params.WORKING_IMAGE)"
+      securityContext:
+        privileged: false
+        runAsNonRoot: true
+        runAsUser: 65532
+      script: |
+        #!/usr/bin/env sh
+        set -eu
+
+        echo "creating vars file"
+        rm -rf ./vars.yaml
+        echo "---" >> ./vars.yaml
+
+        if [ "$(params.CREATE_INVENTORY)" = "true" ] ; then
+
+        echo -e "inventory_groups:\n  host_groups:" >> ./vars.yaml
+
+        for param in "$@"
+        do
+          yq -i '.inventory_groups.host_groups.'$(echo "$param" | cut -d "+" -f1)' += '$(echo "$param" | cut -d "+" -f2)'' ./vars.yaml
+        done
+
+        else
+          echo "skipped creating special inventory"
+        fi
+
+        cat ./vars.yaml
+    - name: create-vars-file
+      workingDir: $(workspaces.source.path)/$(params.SUB_DIRECTORY)
+      args:
+        - $(params.EXTRA_VARS[*])
+      image: "$(params.WORKING_IMAGE)"
+      securityContext:
+        privileged: false
+        runAsNonRoot: true
+        runAsUser: 65532
+      script: |
+        #!/usr/bin/env sh
+        set -eu
+
+        for argument in "$@"; do echo $argument | sed -e "s/+-/: /g" >> vars.yaml ; done
+
+        cat ./vars.yaml
+    - name: install-roles
+      workingDir: $(workspaces.source.path)/$(params.SUB_DIRECTORY)
+      args:
+        - $(params.EXTRA_ROLES[*])
+      image: "$(params.WORKING_IMAGE)"
+      securityContext:
+        privileged: false
+        runAsNonRoot: true
+        runAsUser: 65532
+      script: |
+        #!/usr/bin/env sh
+        set -eu
+
+        if [ "$(params.INSTALL_EXTRA_ROLES)" = "true" ] ; then
+          echo "you know.. for install"
+          for param in "$@"
+          do
+            ansible-galaxy install git+${param} -f --roles-path ./roles
+            ls -lta ./roles
+          done
+
+        else
+          echo "skipped installing additional roles"
+        fi
+    - name: run-ansible-playbook
+      workingDir: $(workspaces.source.path)/$(params.SUB_DIRECTORY)
+      args:
+        - $(params.PLAYBOOKS[*])
+      image: "$(params.WORKING_IMAGE)"
+      env:
+        - name: ANSIBLE_HOST_KEY_CHECKING
+          value: "False"
+        - name: HOME
+          value: $(params.USER_HOME)
+        - name: VAULT_ADDR
+          valueFrom:
+            secretKeyRef:
+              key: $(params.vault-secret-key-addr)
+              name: $(params.vault-secret-name)
+        - name: VAULT_NAMESPACE
+          valueFrom:
+            secretKeyRef:
+              key: $(params.vault-secret-key-namespace)
+              name: $(params.vault-secret-name)
+        - name: VAULT_ROLE_ID
+          valueFrom:
+            secretKeyRef:
+              key: $(params.vault-secret-key-approleId)
+              name: $(params.vault-secret-name)
+        - name: VAULT_SECRET_ID
+          valueFrom:
+            secretKeyRef:
+              key: $(params.vault-secret-key-approleSecret)
+              name: $(params.vault-secret-name)
+      securityContext:
+        privileged: false
+        runAsNonRoot: true
+        runAsUser: 65532
+      script: |-
+        #!/usr/bin/env sh
+        set -eu
+
+        echo "list installed roles"
+        if [ -d "roles" ]; then cp -R roles/* ${HOME}/.ansible/roles/ ; fi
+        ansible-galaxy role list
+
+        echo "you know.. for running a playbook or 2"
+        touch inventory
+        for playbook in "$@"
+        do
+          ansible-playbook -vv \
+          -i $(workspaces.source.path)/$(params.SUB_DIRECTORY)/inventory \
+          -e inv_path=$(workspaces.source.path)/$(params.SUB_DIRECTORY)/inventory \
+          -e path_to_vars_file=$(workspaces.source.path)/$(params.SUB_DIRECTORY)/vars \
+          $playbook
+        done

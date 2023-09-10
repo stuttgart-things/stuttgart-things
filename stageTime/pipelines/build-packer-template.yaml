@@ -56,7 +56,7 @@ spec:
           - name: revision
             value: main
           - name: pathInRepo
-            value: stageTime/tasks/build-packer-template.yaml
+            value: stageTime/tasks/build-packer.yaml
       workspaces:
         - name: source
           workspace: shared-workspace
@@ -84,7 +84,7 @@ spec:
           - name: revision
             value: main
           - name: pathInRepo
-            value: stageTime/tasks/clone-git-repository.yaml
+            value: stageTime/tasks/clone-git.yaml
       workspaces:
         - name: output
           workspace: shared-workspace

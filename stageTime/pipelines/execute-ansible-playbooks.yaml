@@ -1,0 +1,118 @@
+---
+# Source: tekton-resources/templates/pipelines.yaml
+apiVersion: tekton.dev/v1
+kind: Pipeline
+metadata:
+  name: execute-ansible-playbooks
+spec:
+  workspaces:
+    - name: shared-workspace
+    - name: sshCredentials
+  params:
+    - name: ansibleExtraRoles
+      type: array
+      default: []
+      description: extra roles to install
+    - name: ansibleInventoryFile
+      type: array
+      default: []
+      description: values for ansible inventory file
+    - name: ansiblePlaybooks
+      type: array
+      default: []
+      description: playbooks to execute
+    - name: ansibleVarsFile
+      type: array
+      default: []
+      description: values for ansible vars file
+    - name: ansibleVarsInventory
+      type: array
+      default: []
+      description: values for ansible inventory
+    - name: ansibleWorkingImage
+      type: string
+      default: "eu.gcr.io/stuttgart-things/sthings-ansible:8.2.0-3"
+      description: the image on which ansible will run
+    - name: createInventory
+      type: string
+      default: "false"
+      description: create inventory
+    - name: gitRepoUrl
+      type: string
+      default: ""
+      description: source git repo
+    - name: gitRevision
+      type: string
+      default: "main"
+      description: revision of source git repo
+    - name: gitWorkspaceSubdirectory
+      type: string
+      default: ""
+      description: subdirectory on workspace
+    - name: installExtraRoles
+      type: string
+      default: "false"
+      description: install roles and collections
+    - name: userHome
+      type: string
+      default: "/home/nonroot"
+      description: absolute path to the user's home directory
+  tasks:
+    - name: execute-ansible
+      runAfter:
+        - fetch-repository
+      taskRef:
+        resolver: git
+        params:
+          - name: url
+            value: https://github.com/stuttgart-things/stuttgart-things.git
+          - name: revision
+            value: main
+          - name: pathInRepo
+            value: stageTime/tasks/execute-ansible.yaml
+      workspaces:
+        - name: source
+          workspace: shared-workspace
+      params:
+        - name: CREATE_INVENTORY
+          value: $(params.createInventory)
+        - name: EXTRA_ROLES
+          value: $(params.ansibleExtraRoles[*])
+        - name: EXTRA_VARS
+          value: $(params.ansibleVarsFile[*])
+        - name: INSTALL_EXTRA_ROLES
+          value: $(params.installExtraRoles)
+        - name: INVENTORY_VARS
+          value: $(params.ansibleVarsInventory[*])
+        - name: PLAYBOOKS
+          value: $(params.ansiblePlaybooks[*])
+        - name: SUB_DIRECTORY
+          value: $(params.gitWorkspaceSubdirectory)
+        - name: USER_HOME
+          value: $(params.userHome)
+        - name: WORKING_IMAGE
+          value: $(params.ansibleWorkingImage)
+    - name: fetch-repository
+      taskRef:
+        resolver: git
+        params:
+          - name: url
+            value: https://github.com/stuttgart-things/stuttgart-things.git
+          - name: revision
+            value: main
+          - name: pathInRepo
+            value: stageTime/tasks/clone-git.yaml
+      workspaces:
+        - name: output
+          workspace: shared-workspace
+        - name: ssh-directory
+          workspace: sshCredentials
+      params:
+        - name: deleteExisting
+          value: 'true'
+        - name: revision
+          value: $(params.gitRevision)
+        - name: subdirectory
+          value: $(params.gitWorkspaceSubdirectory)
+        - name: url
+          value: $(params.gitRepoUrl)

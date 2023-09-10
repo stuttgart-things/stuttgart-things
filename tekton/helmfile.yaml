@@ -1,32 +1,32 @@
 ---
 releases:
   - name: create-packer-template
-    installed: true
+    installed: false
     namespace: packer
     chart: stuttgart-things/tekton-resources
     version: v0.47.15
     values:
-      #- "workspaces/tekton-packer.yaml.gotmpl"
-      #- "secrets/git-ssh-credentials.yaml.gotmpl"
-      #- "secrets/vault-approle-lab.yaml.gotmpl"
-      # - "tasks/git-clone.yaml.gotmpl"
-      # - "tasks/packer.yaml.gotmpl"
+      - "workspaces/tekton-packer.yaml.gotmpl"
+      - "secrets/git-ssh-credentials.yaml.gotmpl"
+      - "secrets/vault-approle-lab.yaml.gotmpl"
+      - "tasks/git-clone.yaml.gotmpl"
+      - "tasks/packer.yaml.gotmpl"
       - "pipelines/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
       - "test-runs/run-create-packer-image.yaml.gotmpl"
 
   - name: execute-ansible-playbook
-    installed: false
+    installed: true
     namespace: ansible
     chart: stuttgart-things/tekton-resources
     version: v0.47.15
     values:
-      - "workspaces/tekton-ansible.yaml.gotmpl"
-      - "secrets/git-ssh-credentials.yaml.gotmpl"
-      - "secrets/vault-approle.yaml.gotmpl"
-      - "tasks/git-clone.yaml.gotmpl"
+      # - "workspaces/tekton-ansible.yaml.gotmpl"
+      # - "secrets/git-ssh-credentials.yaml.gotmpl"
+      # - "secrets/vault-approle.yaml.gotmpl"
+      # - "tasks/git-clone.yaml.gotmpl"
       - "tasks/ansible.yaml.gotmpl"
       - "pipelines/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
-      - "test-runs/run-{{`{{ .Release.Name }}`}}.yaml.gotmpl"
+      # - "test-runs/run-{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 
   - name: build-kaniko-image
     installed: false
