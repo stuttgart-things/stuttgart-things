@@ -12,9 +12,6 @@ vars:
     sh: date +"%y.%m%d.%H%M"
   TKN_CHARTS_PIPELINERUNS: ./charts/pipelineRuns.yaml
   TKN_IMAGES_PIPELINERUNS: ./images/pipelineRuns.yaml
-  VERSION:
-    sh: cat ./images/{{ .PROJECT }}/Dockerfile | grep version | awk -F= '{ print $2 }'
-
 
 tasks:
   tag:
@@ -32,6 +29,9 @@ tasks:
       - '{{ .CONTAINER_RUNTIME_CMD }} build -t {{ .REGISTRY }}/{{ .REPOSITORY_NAME }}/{{ .PROJECT }}:{{ .VERSION }} ./images/{{ .PROJECT }}'
       - '{{ .CONTAINER_RUNTIME_CMD }} push {{ .REGISTRY }}/{{ .REPOSITORY_NAME }}/{{ .PROJECT }}:{{ .VERSION }}'
       - task: git-push
+    vars:
+      VERSION:
+        sh: cat ./images/{{ .PROJECT }}/Dockerfile | grep version | awk -F= '{ print $2 }'
 
   build-tekton:
     desc: Build & push image w/ tekton
@@ -75,6 +75,7 @@ tasks:
   package:
     desc: Package & push chart
     cmds:
+      - helm template ./charts/{{ .PROJECT }}
       - yq e -i '.version = "{{ .VERSION_NUMBER_PREFIX }}{{ .UPDATED_VERSION_NUMBER }}"' ./charts/{{ .PROJECT }}/Chart.yaml
       - "sed -i 's/appVersion: .*/appVersion: {{ .VERSION_NUMBER_PREFIX }}{{ .UPDATED_VERSION_NUMBER }}/g' ./charts/{{ .PROJECT }}/Chart.yaml"
       - cd ./charts/{{ .PROJECT }} && helm dep update
