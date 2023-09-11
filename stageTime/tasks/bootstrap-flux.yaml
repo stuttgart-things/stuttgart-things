@@ -13,6 +13,10 @@ metadata:
     tekton.dev/tags: "gitops, cli"
 spec:
   description: use flux cli in texton task
+  workspaces:
+    - name: source
+      description: holds the working data
+      optional: false
   params:
     - name: KUBECONFIG
       description: kubeconfig as base64 string
@@ -47,6 +51,10 @@ spec:
   sidecars:
     - image: busybox
       name: hello-sidecar
+      securityContext:
+        privileged: false
+        runAsNonRoot: true
+        runAsUser: 65532
       script: |
         echo 'Hello from sidecar!'
   steps:
