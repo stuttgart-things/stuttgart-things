@@ -12,7 +12,7 @@ spec:
   #     description: path to github token secret in vault
   #     type: string
   tasks:
-    - name: getting-secrets
+    - name: get-secrets
       taskRef:
         resolver: git
         params:
