@@ -4,6 +4,13 @@ kind: Pipeline
 metadata:
   name: bootstrap-flux-cluster
 spec:
+  params:
+    - name: kubeconfigString
+      description: kubeconfig as base64 string
+      type: string
+    - name: githubToken
+      description: github token as base64 string
+      type: string
   tasks:
     - name: getting-secrets
       taskRef:
@@ -15,3 +22,18 @@ spec:
             value: main
           - name: pathInRepo
             value: stageTime/tasks/get-secrets.yaml
+    - name: bootstrap-flux
+      params:
+        - name: KUBECONFIG
+          value: $(params.kubeconfigString)
+        - name: GITHUB_TOKEN
+          value: $(params.githubToken)
+      taskRef:
+        resolver: git
+        params:
+          - name: url
+            value: https://github.com/stuttgart-things/stuttgart-things.git
+          - name: revision
+            value: main
+          - name: pathInRepo
+            value: stageTime/tasks/bootstrap-flux.yaml

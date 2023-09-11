@@ -14,3 +14,8 @@ spec:
         value: main
       - name: pathInRepo
         value: stageTime/pipelines/bootstrap-flux-cluster.yaml
+    params:
+      - name: kubeconfigString
+        value: https://github.com/stuttgart-things/stuttgart-things.git
+      - name: githubToken
+        value: main
