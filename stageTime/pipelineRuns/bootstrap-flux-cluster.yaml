@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: bootstrap-flux-cluster
+  name: bootstrap-flux-cluster-1
   namespace: tekton
 spec:
   pipelineRef:
@@ -14,8 +14,8 @@ spec:
         value: main
       - name: pathInRepo
         value: stageTime/pipelines/bootstrap-flux-cluster.yaml
-    params:
-      - name: kubeconfigString
-        value: https://github.com/stuttgart-things/stuttgart-things.git
-      - name: githubToken
-        value: main
+  params:
+    - name: kubeconfigString
+      value: https://github.com/stuttgart-things/stuttgart-things.git
+    - name: githubToken
+      value: main
