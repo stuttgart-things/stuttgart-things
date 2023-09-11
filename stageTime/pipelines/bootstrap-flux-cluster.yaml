@@ -4,13 +4,13 @@ kind: Pipeline
 metadata:
   name: bootstrap-flux-cluster
 spec:
-  # params:
-    # - name: kubeconfigString
-    #   description: kubeconfig as base64 string
-    #   type: string
-    # - name: githubToken
-    #   description: github token as base64 string
-    #   type: string
+  params:
+    - name: kubeconfigString
+      description: kubeconfig as base64 string
+      type: string
+    - name: githubToken
+      description: github token as base64 string
+      type: string
   tasks:
     - name: getting-secrets
       taskRef:
@@ -25,9 +25,15 @@ spec:
     - name: bootstrap-flux
       params:
         - name: KUBECONFIG
-          value: $(tasks.getting-secrets.results.array-results[0])
+        #   value: $(tasks.getting-secrets.results.array-results[0])
+          value: $(params.kubeconfigString)
         - name: GITHUB_TOKEN
-          value: $(tasks.getting-secrets.results.array-results[1])
+        #   value: $(tasks.getting-secrets.results.array-results[1])
+          value: $(params.githubToken)
+        # - name: KUBECONFIG
+        #   value: $(tasks.getting-secrets.results.array-results[0])
+        # - name: GITHUB_TOKEN
+        #   value: $(tasks.getting-secrets.results.array-results[1])
       taskRef:
         resolver: git
         params:
