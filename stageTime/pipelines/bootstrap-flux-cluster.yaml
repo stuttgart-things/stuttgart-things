@@ -30,9 +30,11 @@ spec:
     - name: bootstrap-flux
       params:
         - name: KUBECONFIG
-          value: $(tasks.get-secrets.results.all-secrets[0])
+          value: test
+          #value: $(tasks.get-secrets.results.all-secrets[0])
         - name: GITHUB_TOKEN
-          value: $(tasks.get-secrets.results.all-secrets[1])
+          value: test
+          # value: $(tasks.get-secrets.results.all-secrets[1])
       taskRef:
         resolver: git
         params:

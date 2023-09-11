@@ -44,6 +44,11 @@ spec:
   #     description: name of the secret with incoming webhook URL
   #     type: string
   #     default: "vault"
+  sidecars:
+    - image: busybox
+      name: hello-sidecar
+      script: |
+        echo 'Hello from sidecar!'
   steps:
     - name: bootstrap-flux
       image: "$(params.WORKING_IMAGE)"
