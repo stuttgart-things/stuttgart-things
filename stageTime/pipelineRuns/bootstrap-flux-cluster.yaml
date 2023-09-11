@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: bootstrap-flux-cluster-37
+  name: bootstrap-flux-cluster-38
   namespace: tekton
 spec:
   pipelineRef:

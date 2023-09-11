@@ -25,9 +25,8 @@ spec:
       params:
         - name: SECRET_PATHS
           value:
-            - "apps/data/scr:password"
-            - "apps/data/scr:password"
-            - "apps/data/scr:password"
+            - "git/data/github:token"
+            - "kubeconfigs/data/dev21:kubeconfig"
     - name: bootstrap-flux
       params:
         - name: KUBECONFIG
