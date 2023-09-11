@@ -24,7 +24,6 @@ spec:
       description: the image on which ansible will run
       type: string
       default: "eu.gcr.io/stuttgart-things/sthings-ansible:8.2.0-3"
-
   #   - name: vault-secret-key-addr
   #     description: vaul addr key in the secret
   #     type: string
@@ -46,7 +45,7 @@ spec:
   #     type: string
   #     default: "vault"
   steps:
-    - name: get-secrets
+    - name: bootstrap-flux
       image: "$(params.WORKING_IMAGE)"
       # env:
       #   - name: ANSIBLE_HOST_KEY_CHECKING
