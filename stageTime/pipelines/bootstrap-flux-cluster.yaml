@@ -37,6 +37,10 @@ spec:
         - name: GITHUB_TOKEN
           value: test
           # value: $(tasks.get-secrets.results.all-secrets[1])
+        - name: SECRET_PATHS
+          value:
+            - "git/data/github:token"
+            - "kubeconfigs/data/dev21:kubeconfig"
       taskRef:
         resolver: git
         params:
@@ -46,11 +50,6 @@ spec:
             value: main
           - name: pathInRepo
             value: stageTime/tasks/bootstrap-flux.yaml
-      params:
-        - name: SECRET_PATHS
-          value:
-            - "git/data/github:token"
-            - "kubeconfigs/data/dev21:kubeconfig"
       workspaces:
         - name: source
           workspace: source
