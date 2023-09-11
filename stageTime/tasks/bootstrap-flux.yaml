@@ -51,15 +51,19 @@ spec:
   sidecars:
     - image: busybox
       name: hello-sidecar
+      workingDir: $(workspaces.source.path)
       securityContext:
         privileged: false
         runAsNonRoot: true
         runAsUser: 65532
       script: |
         echo 'Hello from sidecar!'
+
+        touch sidecar.txt
   steps:
     - name: bootstrap-flux
       image: "$(params.WORKING_IMAGE)"
+      workingDir: $(workspaces.source.path)
       # env:
       #   - name: ANSIBLE_HOST_KEY_CHECKING
       #     value: "False"
@@ -93,3 +97,5 @@ spec:
 
         echo $(params.KUBECONFIG)
         echo $(params.GITHUB_TOKEN)
+
+        ls -lta

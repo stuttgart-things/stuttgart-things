@@ -4,6 +4,8 @@ kind: Pipeline
 metadata:
   name: bootstrap-flux-cluster
 spec:
+  workspaces:
+    - name: source
   # params:
   #   - name: kubeconfigVaultPath
   #     description: path to kubeconfig secret in vault
@@ -44,3 +46,6 @@ spec:
             value: main
           - name: pathInRepo
             value: stageTime/tasks/bootstrap-flux.yaml
+      workspaces:
+        - name: source
+          workspace: source
