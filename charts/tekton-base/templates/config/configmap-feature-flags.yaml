@@ -93,7 +93,7 @@ data:
   # Acceptable values are "termination-message" or "sidecar-logs".
   # "sidecar-logs" is an experimental feature and thus should still be considered
   # an alpha feature.
-  results-from: "termination-message"
+  results-from: "{{ .Values.featureFlags.resultsFrom }}"
   # Setting this flag to "true" will limit privileges for containers injected by Tekton into TaskRuns.
   # This allows TaskRuns to run in namespaces with "restricted" pod security standards.
   # Not all Kubernetes implementations support this option.

@@ -1,7 +1,8 @@
 ---
 # v0.50.0
 pipelinesNamespace: tekton-pipelines
-
+featureFlags:
+  resultsFrom: termination-message
 # WEBHOOK FIX AFTER UPRRADE
 # kubectl delete validatingwebhookconfigurations.admissionregistration.k8s.io config.webhook.pipeline.tekton.dev
 # kubectl delete validatingwebhookconfigurations.admissionregistration.k8s.io validation.webhook.pipeline.tekton.dev
