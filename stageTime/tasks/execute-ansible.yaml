@@ -70,7 +70,7 @@ spec:
       type: string
       default: "VAULT_NAMESPACE"
     - name: vault-secret-name
-      description: name of the secret with incoming webhook URL
+      description: name of the vault secret
       type: string
       default: "vault"
   steps:
