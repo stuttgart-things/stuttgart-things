@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: create-packer-template-testrun-yoprc1
+  name: create-packer-template-testrun-yoprc-2
   namespace: packer
 spec:
   pipelineRef:

@@ -37,6 +37,10 @@ spec:
       type: string
       default: "false"
       description: create inventory
+    - name: vaultSecretName
+      type: string
+      default: vault
+      description: name of the vault secret
     - name: gitRepoUrl
       type: string
       default: ""
@@ -92,6 +96,8 @@ spec:
           value: $(params.userHome)
         - name: WORKING_IMAGE
           value: $(params.ansibleWorkingImage)
+        - name: vault-secret-name
+          value: $(params.vaultSecretName)
     - name: fetch-repository
       taskRef:
         resolver: git

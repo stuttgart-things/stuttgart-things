@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: execute-ansible-playbook-testrun-9bwq7-1
+  name: execute-ansible-playbook-testrun-9bwq7-3
   namespace: ansible
 spec:
   pipelineRef:
@@ -32,6 +32,8 @@ spec:
       value: "main"
     - name: gitWorkspaceSubdirectory
       value: "/ansible/base-os"
+    - name: vaultSecretName
+      value: vault-labul-vsphere
     - name: installExtraRoles
       value: "true"
     - name: ansibleExtraRoles
