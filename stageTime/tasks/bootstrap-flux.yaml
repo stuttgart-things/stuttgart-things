@@ -28,38 +28,72 @@ spec:
       description: the image on which ansible will run
       type: string
       default: "eu.gcr.io/stuttgart-things/sthings-ansible:8.2.0-3"
-  #   - name: vault-secret-key-addr
-  #     description: vaul addr key in the secret
-  #     type: string
-  #     default: "VAULT_ADDR"
-  #   - name: vault-secret-key-approleId
-  #     description: approle id key in the secret
-  #     type: string
-  #     default: "VAULT_ROLE_ID"
-  #   - name: vault-secret-key-approleSecret
-  #     description: approle secret key in the secret
-  #     type: string
-  #     default: "VAULT_SECRET_ID"
-  #   - name: vault-secret-key-namespace
-  #     description: namespace key in the secret
-  #     type: string
-  #     default: "VAULT_NAMESPACE"
-  #   - name: vaultSecretName
-  #     description: name of the secret with incoming webhook URL
-  #     type: string
-  #     default: "vault"
+    - name: SECRET_PATHS
+      description: vault secret paths
+      type: array
+      default: []
+    - name: vault-secret-key-addr
+      description: vaul addr key in the secret
+      type: string
+      default: "VAULT_ADDR"
+    - name: vault-secret-key-approleId
+      description: approle id key in the secret
+      type: string
+      default: "VAULT_ROLE_ID"
+    - name: vault-secret-key-approleSecret
+      description: approle secret key in the secret
+      type: string
+      default: "VAULT_SECRET_ID"
+    - name: vault-secret-key-namespace
+      description: namespace key in the secret
+      type: string
+      default: "VAULT_NAMESPACE"
+    - name: vaultSecretName
+      description: name of the vault secret
+      type: string
+      default: vault-labul-vsphere
   sidecars:
-    - image: busybox
-      name: hello-sidecar
+    - image: eu.gcr.io/stuttgart-things/machineshop:0.1.46-1
+      name: get-secrets-sidecar
       workingDir: $(workspaces.source.path)
+      env:
+        - name: VAULT_ADDR
+          valueFrom:
+            secretKeyRef:
+              key: $(params.vault-secret-key-addr)
+              name: $(params.vaultSecretName)
+        - name: VAULT_NAMESPACE
+          valueFrom:
+            secretKeyRef:
+              key: $(params.vault-secret-key-namespace)
+              name: $(params.vaultSecretName)
+        - name: VAULT_ROLE_ID
+          valueFrom:
+            secretKeyRef:
+              key: $(params.vault-secret-key-approleId)
+              name: $(params.vaultSecretName)
+        - name: VAULT_SECRET_ID
+          valueFrom:
+            secretKeyRef:
+              key: $(params.vault-secret-key-approleSecret)
+              name: $(params.vaultSecretName)
+      args:
+        - $(params.SECRET_PATHS[*])
       securityContext:
         privileged: false
         runAsNonRoot: true
         runAsUser: 65532
       script: |
-        echo 'Hello from sidecar!'
+        #!/usr/bin/env bash
+        set -eu
 
-        touch sidecar.txt
+        ALL_SECRETS=""
+        for SECRET_PATH in "$@"
+        do
+          echo ${SECRET_PATH}
+          SECRET=\"$(machineShop get --path ${SECRET_PATH} | sed '$!d')\"
+          echo ${SECRET} > ${SECRET_PATH}
+        done
   steps:
     - name: bootstrap-flux
       image: "$(params.WORKING_IMAGE)"

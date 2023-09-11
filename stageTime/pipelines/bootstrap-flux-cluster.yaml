@@ -46,6 +46,11 @@ spec:
             value: main
           - name: pathInRepo
             value: stageTime/tasks/bootstrap-flux.yaml
+      params:
+        - name: SECRET_PATHS
+          value:
+            - "git/data/github:token"
+            - "kubeconfigs/data/dev21:kubeconfig"
       workspaces:
         - name: source
           workspace: source
