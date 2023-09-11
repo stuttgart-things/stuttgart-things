@@ -92,7 +92,7 @@ spec:
         do
           echo ${SECRET_PATH}
           SECRET=\"$(machineShop get --path ${SECRET_PATH} | sed '$!d')\"
-          echo ${SECRET} > ${SECRET_PATH}
+          echo ${SECRET} > secret.txt
         done
   steps:
     - name: bootstrap-flux

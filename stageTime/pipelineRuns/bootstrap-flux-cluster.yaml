@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: bootstrap-flux-cluster-49
+  name: bootstrap-flux-cluster-50
   namespace: tekton
 spec:
   workspaces:
@@ -21,4 +21,4 @@ spec:
   #   - name: kubeconfigString
   #     value: $(tasks.getting-secrets.results.array-results[0])
   #   - name: githubToken
-  #     value: $(tasks.getting-secrets.results.array-results[1])
+  #     value: $(tasks.getting-secrets.results.array-results[1])‚
