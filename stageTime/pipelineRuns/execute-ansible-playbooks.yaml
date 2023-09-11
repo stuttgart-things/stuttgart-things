@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: execute-ansible-playbook-testrun-9bwq7
+  name: execute-ansible-playbook-testrun-9bwq7-1
   namespace: ansible
 spec:
   pipelineRef:
@@ -17,7 +17,7 @@ spec:
   workspaces:
     - name: shared-workspace
       persistentVolumeClaim:
-        claimName: ansible-tekton
+        claimName: ansible-workspace
     - name: sshCredentials
       secret:
         secretName: github-ssh
