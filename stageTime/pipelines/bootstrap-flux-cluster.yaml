@@ -25,15 +25,6 @@ spec:
       description: extra roles to install
   tasks:
     - name: bootstrap-flux
-      params:
-        - name: GITHUB_REPOSITORY
-          value: $(params.githubRepository)
-        - name: GITHUB_REPOSITORY_OWNER
-          value: $(params.githubRepositoryOwner)
-        - name: GITHUB_FLUX_BOOTSTRAP_PATH
-          value: $(params.githubFluxBoostrapPath)
-        - name: SECRET_PATHS
-          value: $(params.vaultSecretPaths[*])
       taskRef:
         resolver: git
         params:
@@ -46,3 +37,12 @@ spec:
       workspaces:
         - name: source
           workspace: source
+      params:
+        - name: GITHUB_REPOSITORY
+          value: $(params.githubRepository)
+        - name: GITHUB_REPOSITORY_OWNER
+          value: $(params.githubRepositoryOwner)
+        - name: GITHUB_FLUX_BOOTSTRAP_PATH
+          value: $(params.githubFluxBoostrapPath)
+        - name: SECRET_PATHS
+          value: $(params.vaultSecretPaths[*])
