@@ -124,3 +124,9 @@ spec:
         --owner=$(params.GITHUB_REPOSITORY_OWNER) \
         --repository=$(params.GITHUB_REPOSITORY) \
         --path=$(params.GITHUB_FLUX_BOOTSTRAP_PATH)
+
+        echo RECONCILE FLUX-SYSTEM
+        flux reconcile source git flux-system
+
+        echo FLUX CHECK
+        flux check

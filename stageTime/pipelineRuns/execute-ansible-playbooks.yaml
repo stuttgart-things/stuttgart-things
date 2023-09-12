@@ -2,6 +2,59 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
+  name: create-pdns-entry-dev21
+  namespace: ansible
+spec:
+  pipelineRef:
+    resolver: git
+    params:
+      - name: url
+        value: https://github.com/stuttgart-things/stuttgart-things.git
+      - name: revision
+        value: main
+      - name: pathInRepo
+        value: stageTime/pipelines/execute-ansible-playbooks.yaml
+  workspaces:
+    - name: shared-workspace
+      persistentVolumeClaim:
+        claimName: ansible-workspace
+    - name: sshCredentials
+      secret:
+        secretName: github-ssh
+  params:
+    - name: ansibleWorkingImage
+      value: "eu.gcr.io/stuttgart-things/sthings-ansible:8.3.0-6"
+    - name: createInventory
+      value: "false"
+    - name: gitRepoUrl
+      value: "git@github.com:stuttgart-things/stuttgart-things.git"
+    - name: gitRevision
+      value: "main"
+    - name: gitWorkspaceSubdirectory
+      value: "/ansible/base-os"
+    - name: vaultSecretName
+      value: vault-labul-vsphere
+    - name: installExtraRoles
+      value: "true"
+    - name: ansibleExtraRoles
+      value:
+        - "https://github.com/stuttgart-things/install-configure-powerdns.git"
+    - name: ansiblePlaybooks
+      value:
+        - "ansible/playbooks/pdns-ingress-entry.yaml"
+    - name: ansibleVarsFile
+      value:
+        - "pdns_url+-https://pdns-vsphere.labul.sva.de:8443"
+        - "entry_zone+-sthings-vsphere.labul.sva.de."
+        - "ipAddress+-10.31.103.13"
+        - "hostname+-dev21"
+    - name: ansibleVarsInventory
+      value:
+        - "localhost"
+---
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
   name: execute-ansible-playbook-testrun-9bwq7-4
   namespace: ansible
 spec:
