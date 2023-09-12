@@ -18,12 +18,18 @@ spec:
       description: holds the working data
       optional: false
   params:
-    - name: KUBECONFIG
-      description: kubeconfig as base64 string
-      type: string
-    - name: GITHUB_TOKEN
+    - name: githubRepository
       description: github token as base64 string
       type: string
+      default: ""
+    - name: githubRepositoryOwner
+      description: kubeconfig as base64 string
+      type: string
+      default: ""
+    - name: githubFluxBoostrapPath
+      description: kubeconfig as base64 string
+      type: string
+      default: ""
     - name: WORKING_IMAGE
       description: the image on which ansible will run
       type: string
@@ -115,5 +121,7 @@ spec:
         echo EXPORT GITHUB_TOKEN
         export GITHUB_TOKEN=$(cat GITHUB_TOKEN)
 
-        echo ${GITHUB_TOKEN}
-        echo ${KUBECONFIG}
+f       flux bootstrap github \
+        --owner=$(params.githubRepositoryOwner) \
+        --repository=$(params.githubRepository) \
+        --path=$(params.githubFluxBoostrapPath) \

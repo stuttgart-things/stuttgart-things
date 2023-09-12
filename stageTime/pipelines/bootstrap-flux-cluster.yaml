@@ -6,26 +6,34 @@ metadata:
 spec:
   workspaces:
     - name: source
-  # params:
-  #   - name: kubeconfigVaultPath
-  #     description: path to kubeconfig secret in vault
-  #     type: string
-  #   - name: githubTokenVaultPath
-  #     description: path to github token secret in vault
-  #     type: string
+  params:
+    - name: githubRepository
+      description: github repository name
+      type: string
+      default: ""
+    - name: githubRepositoryOwner
+      description: github repository owner name
+      type: string
+      default: ""
+    - name: githubFluxBoostrapPath
+      description: github repository flux bootstrap path
+      type: string
+      default: ""
+    - name: vaultSecretPaths
+      type: array
+      default: []
+      description: extra roles to install
   tasks:
     - name: bootstrap-flux
       params:
-        - name: KUBECONFIG
-          value: test
-          #value: $(tasks.get-secrets.results.all-secrets[0])
-        - name: GITHUB_TOKEN
-          value: test
-          # value: $(tasks.get-secrets.results.all-secrets[1])
+        - name: GITHUB_REPOSITORY
+          value: $(params.githubRepository)
+        - name: GITHUB_REPOSITORY_OWNER
+          value: $(params.githubRepositoryOwner)
+        - name: GITHUB_FLUX_BOOTSTRAP_PATH
+          value: $(params.githubFluxBoostrapPath)
         - name: SECRET_PATHS
-          value:
-            - "git/data/github:token+-false+-GITHUB_TOKEN"
-            - "kubeconfigs/data/dev21:kubeconfig+-true+-KUBECONFIG"
+          value: $(params.vaultSecretPaths[*])
       taskRef:
         resolver: git
         params:
