@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: create-pdns-entry-dev21
+  name: create-pdns-entry-dev21-2
   namespace: ansible
 spec:
   pipelineRef:
@@ -46,7 +46,7 @@ spec:
       value:
         - "pdns_url+-https://pdns-vsphere.labul.sva.de:8443"
         - "entry_zone+-sthings-vsphere.labul.sva.de."
-        - "ipAddress+-10.31.103.13"
+        - "ip_address+-10.31.103.13"
         - "hostname+-dev21"
     - name: ansibleVarsInventory
       value:
