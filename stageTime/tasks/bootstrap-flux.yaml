@@ -109,11 +109,11 @@ spec:
         #!/usr/bin/env sh
         set -eu
 
-        echo COPY KUBECONFIG
-        mkdir -p ~/.kube/
-        cp -R KUBECONFIG ~/.kube/config
+        echo EXPORT KUBECONFIG
+        export KUBECONFIG=KUBECONFIG
 
-        echo EXPORT GITHUB TOKEN
+        echo EXPORT GITHUB_TOKEN
         export GITHUB_TOKEN=$(cat GITHUB_TOKEN)
 
         echo ${GITHUB_TOKEN}
+        echo ${KUBECONFIG}
