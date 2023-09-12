@@ -27,7 +27,7 @@ spec:
     - name: WORKING_IMAGE
       description: the image on which ansible will run
       type: string
-      default: "eu.gcr.io/stuttgart-things/sthings-ansible:8.2.0-3"
+      default: "fluxcd/flux-cli:v2.1.0"
     - name: SECRET_PATHS
       description: vault secret paths
       type: array
@@ -54,7 +54,7 @@ spec:
       default: vault-labul-vsphere
   sidecars:
     - image: eu.gcr.io/stuttgart-things/machineshop:0.1.48-1
-      name: get-secrets-sidecar
+      name: get-secrets
       workingDir: $(workspaces.source.path)
       env:
         - name: VAULT_ADDR
@@ -109,9 +109,11 @@ spec:
         #!/usr/bin/env bash
         set -eu
 
-        echo $(params.KUBECONFIG)
-        echo $(params.GITHUB_TOKEN)
+        echo COPY KUBECONFIG
+        mkdir -p ~/.kube/
+        cp -R KUBECONFIG ~/.kube/config
 
-        ls -lta
-        cat KUBECONFIG
-        cat GITHUB_TOKEN
+        echo EXPORT GITHUB TOKEN
+        export GITHUB_TOKEN=$(cat GITHUB_TOKEN)
+
+        echo ${GITHUB_TOKEN}
