@@ -13,15 +13,15 @@
 
     pdns_api_executor: localhost
     pdns_create_record:
-      - fqdn: "*.{{ hostname }}.{{ entryZone }}"
-        content: "{{ ipAddress }}"
+      - fqdn: "*.{{ hostname }}.{{ entry_zone }}"
+        content: "{{ ip_address }}"
         record_type: A
-        zone: "{{ entryZone }}"
+        zone: "{{ entry_zone }}"
         state: present
         ttl: 60
-        note: deployed w/ ansible container
+        note: deployed w/ tekton
 
-    pdns_url: "{{ pdnsUrl }}"
+    pdns_url: "{{ pdns_url }}"
     pdns_token: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps/data/powerdns:token validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
 
   roles:
