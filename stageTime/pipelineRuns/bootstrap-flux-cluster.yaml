@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: bootstrap-flux-cluster-dev21-1
+  name: bootstrap-flux-cluster-dev21-2
   namespace: tekton
 spec:
   workspaces:
@@ -28,3 +28,17 @@ spec:
       value:
         - "git/data/github:token+-false+-GITHUB_TOKEN"
         - "kubeconfigs/data/dev21:kubeconfig+-true+-KUBECONFIG"
+
+
+# name:
+# namespace:
+# workspaces:
+#- source
+# pipelineRef:
+# if resolver
+# params-string
+# - githubRepository
+# - githubRepositoryOwner
+# - githubFluxBoostrapPath
+# params-array
+# - vaultSecretPaths (array)
