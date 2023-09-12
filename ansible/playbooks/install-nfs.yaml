@@ -1,0 +1,15 @@
+---
+- hosts: all
+  gather_facts: true
+  become: true
+  vars:
+    kind: {{ .Values.kind }}
+    permanent: {{ .Values.permanent }}
+    nfs_manage_firewall: {{ .Values.nfsManageFirewall }}
+    nfs_export_path:
+      {{- range .Values.nfsExportPaths }}
+      - {{ . }}
+      {{- end }}
+
+  roles:
+    - install-configure-nfs
