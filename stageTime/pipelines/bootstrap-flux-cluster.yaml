@@ -39,8 +39,8 @@ spec:
           # value: $(tasks.get-secrets.results.all-secrets[1])
         - name: SECRET_PATHS
           value:
-            - "git/data/github:token"
-            - "kubeconfigs/data/dev21:kubeconfig"
+            - "git/data/github:token+-false+-GITHUB_TOKEN"
+            - "kubeconfigs/data/dev21:kubeconfig+-true+-KUBECONFIG"
       taskRef:
         resolver: git
         params:

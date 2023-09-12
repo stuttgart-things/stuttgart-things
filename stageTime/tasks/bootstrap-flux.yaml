@@ -53,7 +53,7 @@ spec:
       type: string
       default: vault-labul-vsphere
   sidecars:
-    - image: eu.gcr.io/stuttgart-things/machineshop:0.1.46-1
+    - image: eu.gcr.io/stuttgart-things/machineshop:0.1.48
       name: get-secrets-sidecar
       workingDir: $(workspaces.source.path)
       env:
@@ -88,11 +88,14 @@ spec:
         set -eu
 
         ALL_SECRETS=""
-        for SECRET_PATH in "$@"
+        for SECRET_DEFINITON in "$@"
         do
-          echo ${SECRET_PATH}
-          SECRET=\"$(machineShop get --path ${SECRET_PATH} | sed '$!d')\"
-          echo ${SECRET} > secret.txt
+          echo ${SECRET_DEFINITON}
+          VAULT_PATH=$(awk -F+- '{print $1}' <<< ${SECRET_DEFINITON})
+          B64_DECODE=$(awk -F+- '{print $2}' <<< ${SECRET_DEFINITON})
+          DESTINATION=$(awk -F+- '{print $3}' <<< ${SECRET_DEFINITON})
+
+          machineShop get --path ${VAULT_PATH} --output file --destination ${DESTINATION} --b64 ${B64_DECODE}
         done
   steps:
     - name: bootstrap-flux
