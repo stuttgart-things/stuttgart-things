@@ -26,7 +26,7 @@ RUN rm -rf /usr/local/share/ca-certificates/* \
     && update-ca-certificates
 
 # INSTALL OS PACKAGES
-RUN apk add --no-cache build-base sudo libc6-compat openssl libffi-dev openssl-dev openssh sshpass tar unzip jq curl ca-certificates wget \
+RUN apk add --no-cache build-base sudo gawk libc6-compat openssl libffi-dev openssl-dev openssh sshpass tar unzip jq curl ca-certificates wget \
    && apk add --update bash \
        && rm -rf /var/cache/apk/*
 
