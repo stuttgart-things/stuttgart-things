@@ -18,15 +18,15 @@ spec:
       description: holds the working data
       optional: false
   params:
-    - name: githubRepository
+    - name: GITHUB_REPOSITORY
       description: github token as base64 string
       type: string
       default: ""
-    - name: githubRepositoryOwner
+    - name: GITHUB_REPOSITORY_OWNER
       description: kubeconfig as base64 string
       type: string
       default: ""
-    - name: githubFluxBoostrapPath
+    - name: GITHUB_FLUX_BOOTSTRAP_PATH
       description: kubeconfig as base64 string
       type: string
       default: ""
@@ -115,13 +115,12 @@ spec:
         #!/usr/bin/env sh
         set -eu
 
-        echo EXPORT KUBECONFIG
+        echo EXPORT KUBECONFIG + GITHUB_TOKEN
         export KUBECONFIG=KUBECONFIG
-
-        echo EXPORT GITHUB_TOKEN
         export GITHUB_TOKEN=$(cat GITHUB_TOKEN)
 
-f       flux bootstrap github \
-        --owner=$(params.githubRepositoryOwner) \
-        --repository=$(params.githubRepository) \
-        --path=$(params.githubFluxBoostrapPath) \
+        echo BOOTSTRAP FLUX
+        flux bootstrap github \
+        --owner=$(params.GITHUB_REPOSITORY_OWNER) \
+        --repository=$(params.GITHUB_REPOSITORY) \
+        --path=$(params.GITHUB_FLUX_BOOTSTRAP_PATH)
