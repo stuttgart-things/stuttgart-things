@@ -106,7 +106,7 @@ spec:
         runAsNonRoot: true
         runAsUser: 65532
       script: |-
-        #!/usr/bin/env bash
+        #!/usr/bin/env sh
         set -eu
 
         echo COPY KUBECONFIG
