@@ -87,12 +87,10 @@ spec:
         #!/usr/bin/env bash
         set -eu
 
-        awk --version
-
         ALL_SECRETS=""
         for SECRET_DEFINITON in "$@"
         do
-          echo ${SECRET_DEFINITON}
+          echo 'GETTING VAULT SECRET ${SECRET_DEFINITON} W/ machineShop CLI'
           VAULT_PATH=$(awk -F+- '{print $1}' <<< ${SECRET_DEFINITON})
           B64_DECODE=$(awk -F+- '{print $2}' <<< ${SECRET_DEFINITON})
           DESTINATION=$(awk -F+- '{print $3}' <<< ${SECRET_DEFINITON})
@@ -103,29 +101,6 @@ spec:
     - name: bootstrap-flux
       image: "$(params.WORKING_IMAGE)"
       workingDir: $(workspaces.source.path)
-      # env:
-      #   - name: ANSIBLE_HOST_KEY_CHECKING
-      #     value: "False"
-      #   - name: VAULT_ADDR
-      #     valueFrom:
-      #       secretKeyRef:
-      #         key: $(params.vault-secret-key-addr)
-      #         name: $(params.vaultSecretName)
-      #   - name: VAULT_NAMESPACE
-      #     valueFrom:
-      #       secretKeyRef:
-      #         key: $(params.vault-secret-key-namespace)
-      #         name: $(params.vaultSecretName)
-      #   - name: VAULT_ROLE_ID
-      #     valueFrom:
-      #       secretKeyRef:
-      #         key: $(params.vault-secret-key-approleId)
-      #         name: $(params.vaultSecretName)
-      #   - name: VAULT_SECRET_ID
-      #     valueFrom:
-      #       secretKeyRef:
-      #         key: $(params.vault-secret-key-approleSecret)
-      #         name: $(params.vaultSecretName)
       securityContext:
         privileged: false
         runAsNonRoot: true
@@ -138,3 +113,5 @@ spec:
         echo $(params.GITHUB_TOKEN)
 
         ls -lta
+        cat KUBECONFIG
+        cat GITHUB_TOKEN
