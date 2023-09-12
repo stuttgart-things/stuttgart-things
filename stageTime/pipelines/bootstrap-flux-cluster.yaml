@@ -14,21 +14,6 @@ spec:
   #     description: path to github token secret in vault
   #     type: string
   tasks:
-    - name: get-secrets
-      taskRef:
-        resolver: git
-        params:
-          - name: url
-            value: https://github.com/stuttgart-things/stuttgart-things.git
-          - name: revision
-            value: main
-          - name: pathInRepo
-            value: stageTime/tasks/get-secrets.yaml
-      params:
-        - name: SECRET_PATHS
-          value:
-            - "git/data/github:token"
-            - "kubeconfigs/data/dev21:kubeconfig"
     - name: bootstrap-flux
       params:
         - name: KUBECONFIG
