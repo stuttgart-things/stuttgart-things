@@ -1,0 +1,16 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: awx
+  labels:
+    toolkit.fluxcd.io/tenant: sthings-team
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: awx-operator
+  namespace: awx
+spec:
+  interval: 24h
+  url: https://ansible.github.io/awx-operator
