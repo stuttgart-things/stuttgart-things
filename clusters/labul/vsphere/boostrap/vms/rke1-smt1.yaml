@@ -33,7 +33,7 @@ spec:
  terraform-version: 1.5.5
  variables:
  - vsphere_vm_name="k3s-cluster"
- - vm_count=2
+ - vm_count=4
  - vm_num_cpus=6
  - vm_memory=4096
  - vm_disk_size=96
