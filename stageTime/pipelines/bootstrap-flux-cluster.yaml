@@ -27,6 +27,10 @@ spec:
       description: additional manifest files to apply to cluster
       type: array
       default: []
+    - name: fluxNamespace
+      description: name of the flux namespace
+      type: string
+      default: flux-system
   tasks:
     - name: bootstrap-flux
       taskRef:
@@ -52,3 +56,5 @@ spec:
           value: $(params.additionalManifestFiles[*])
         - name: SECRET_PATHS
           value: $(params.vaultSecretPaths[*])
+        - name: FLUX_NAMESPACE
+          value: $(params.fluxNamespace)

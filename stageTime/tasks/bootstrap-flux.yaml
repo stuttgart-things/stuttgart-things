@@ -62,6 +62,10 @@ spec:
       description: name of the vault secret
       type: string
       default: vault-labul-vsphere
+    - name: FLUX_NAMESPACE
+      description: name of the flux namespace
+      type: string
+      default: flux-system
   sidecars:
     - image: eu.gcr.io/stuttgart-things/machineshop:0.1.48-1
       name: get-secrets
@@ -127,8 +131,8 @@ spec:
         echo TEST CLUSTER CONNECTION
         kubectl get nodes
 
-        echo CREATE FLUX NAMESPACE
-        kubectl create ns flux-system --dry-run=client -o yaml | kubectl apply -f -
+        echo CREATE FLUX NAMESPACE $(params.FLUX_NAMESPACE)
+        kubectl create ns $(params.FLUX_NAMESPACE) --dry-run=client -o yaml | kubectl apply -f -
 
         for MANIFEST_FILE in "$@"
         do
@@ -154,7 +158,8 @@ spec:
         flux bootstrap github \
         --owner=$(params.GITHUB_REPOSITORY_OWNER) \
         --repository=$(params.GITHUB_REPOSITORY) \
-        --path=$(params.GITHUB_FLUX_BOOTSTRAP_PATH)
+        --path=$(params.GITHUB_FLUX_BOOTSTRAP_PATH) \
+        --namespace $(params.FLUX_NAMESPACE)
 
         echo RECONCILE FLUX-SYSTEM
         flux reconcile source git flux-system
