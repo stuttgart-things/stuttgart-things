@@ -61,7 +61,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./infra/awx
+  path: ./apps/awx
   prune: true
   wait: true
   postBuild:
