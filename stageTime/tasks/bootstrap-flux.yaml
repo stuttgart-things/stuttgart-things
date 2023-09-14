@@ -128,7 +128,7 @@ spec:
         kubectl get nodes
 
         echo CREATE FLUX NAMESPACE
-        kubectl create ns flux-secrets || true
+        kubectl create ns flux-system --dry-run=client -o yaml | kubectl apply -f -
 
         for MANIFEST_FILE in "$@"
         do
