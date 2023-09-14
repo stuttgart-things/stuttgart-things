@@ -17,3 +17,8 @@ spec:
       interval: 12h
   values:
     installCRDs: true
+    AWX:
+      enabled: true
+      name: awx
+      spec:
+        admin_user: admin
