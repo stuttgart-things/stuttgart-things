@@ -104,6 +104,22 @@ spec:
           machineShop get --path ${VAULT_PATH} --output file --destination ${DESTINATION} --b64 "${B64_DECODE}"
         done
   steps:
+    - name: apply-manifest
+      image: bitnami/kubectl
+      workingDir: $(workspaces.source.path)
+      securityContext:
+        privileged: false
+        runAsNonRoot: true
+        runAsUser: 65532
+      script: |-
+        #!/usr/bin/env sh
+        set -eu
+
+        echo EXPORT KUBECONFIG
+        export KUBECONFIG=KUBECONFIG
+
+        kubectl get nodes -o wide
+
     - name: bootstrap-flux
       image: "$(params.WORKING_IMAGE)"
       workingDir: $(workspaces.source.path)
