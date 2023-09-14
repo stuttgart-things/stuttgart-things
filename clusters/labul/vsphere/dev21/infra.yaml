@@ -51,6 +51,11 @@ spec:
   path: ./infra/awx
   prune: true
   wait: true
+  postBuild:
+    substitute:
+      INGRESS_HOSTNAME: awx
+      INGRESS_DOMAIN: dev21.sthings-vsphere.labul.sva.de
+      INGRESS_SECRET_NAME: awx-ingress-tls
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
