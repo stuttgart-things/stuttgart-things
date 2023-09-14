@@ -136,7 +136,6 @@ spec:
 
         for MANIFEST_FILE in "$@"
         do
-          cat ${MANIFEST_FILE}
           kubectl apply -f ${MANIFEST_FILE} -n $(params.FLUX_NAMESPACE)
         done
 
