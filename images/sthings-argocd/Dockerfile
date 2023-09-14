@@ -1,9 +1,14 @@
-FROM quay.io/argoproj/argocd:v2.7.9
+ARG REGISTRY=quay.io
+ARG REPOSITORY=argoproj
+ARG IMAGE=argocd
+ARG TAG=v2.8.4
 
-LABEL version=v2.7.9
+FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
+
+LABEL version=v2.8.4
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 
-ARG ARGOCD_VAULT_PLUGIN_VERSION=1.15.0
+ARG ARGOCD_VAULT_PLUGIN_VERSION=1.16.1
 
 # Switch to root for the ability to perform install
 USER root
