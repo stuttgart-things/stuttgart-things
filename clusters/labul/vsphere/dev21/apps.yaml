@@ -66,6 +66,8 @@ spec:
   wait: true
   postBuild:
     substitute:
+      ADMIN_USER: admin
+      INGRESS_CLASS: nginx
       INGRESS_HOSTNAME: awx
       INGRESS_DOMAIN: dev21.sthings-vsphere.labul.sva.de
       INGRESS_SECRET_NAME: awx-ingress-tls
