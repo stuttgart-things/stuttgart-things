@@ -22,3 +22,7 @@ spec:
       name: awx
       spec:
         admin_user: admin
+        ingress_type: ingress
+        ingress_class_name: nginx
+        hostname: awx.dev21.sthings-vsphere.labul.sva.de
+        ingress_tls_secret: awx-ingress-tls
