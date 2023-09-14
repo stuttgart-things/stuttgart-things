@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: bootstrap-flux-cluster-dev21-5
+  name: bootstrap-flux-cluster-dev21-6
   namespace: tekton
 spec:
   workspaces:
@@ -29,7 +29,9 @@ spec:
         - "git/data/github:token+-false+-GITHUB_TOKEN"
         - "kubeconfigs/data/dev21:kubeconfig+-true+-KUBECONFIG"
         - "apps/data/flux:vault-flux-secrets+-true+-flux-secrets.yaml"
-
+    - name: additionalManifestFiles
+      value:
+        - "flux-secrets.yaml"
 
 # name:
 # namespace:
