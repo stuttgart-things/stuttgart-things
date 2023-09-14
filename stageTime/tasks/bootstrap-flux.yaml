@@ -136,7 +136,7 @@ spec:
 
         for MANIFEST_FILE in "$@"
         do
-          kubectl apply -f ${MANIFEST_FILE} -n $(params.FLUX_NAMESPACE)
+          kubectl apply -f ${MANIFEST_FILE} -n $(params.FLUX_NAMESPACE) --validate=false
         done
 
     - name: bootstrap-flux
