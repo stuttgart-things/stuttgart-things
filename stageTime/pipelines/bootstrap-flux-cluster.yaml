@@ -23,6 +23,10 @@ spec:
       type: array
       default: []
       description: extra roles to install
+    - name: additionalManifestFiles
+      description: additional manifest files to apply to cluster
+      type: array
+      default: []
   tasks:
     - name: bootstrap-flux
       taskRef:
@@ -44,5 +48,7 @@ spec:
           value: $(params.githubRepositoryOwner)
         - name: GITHUB_FLUX_BOOTSTRAP_PATH
           value: $(params.githubFluxBoostrapPath)
+        - name: ADDITONAL_MANIFESTS
+          value: $(params.additionalManifestFiles[*])
         - name: SECRET_PATHS
           value: $(params.vaultSecretPaths[*])
