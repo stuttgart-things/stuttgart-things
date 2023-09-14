@@ -109,7 +109,7 @@ spec:
         done
   steps:
     - name: prepare-cluster
-      image: bitnami/kubectl
+      image: bitnami/kubectl:1.26.9
       args:
         - $(params.ADDITONAL_MANIFESTS[*])
       workingDir: $(workspaces.source.path)
