@@ -121,5 +121,7 @@ spec:
           KEY=$(awk -F+- '{print $1}' <<< ${SECRET_KEY_VALUE})
           VALUE_FILE=$(awk -F+- '{print $2}' <<< ${SECRET_KEY_VALUE})
           export $KEY=$(cat ${VALUE_FILE})
-          echo $KEY
         done
+
+        echo $USERNAME
+        echo $PASSWORD
