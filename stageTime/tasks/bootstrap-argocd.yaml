@@ -118,7 +118,7 @@ spec:
       securityContext:
         privileged: false
         runAsNonRoot: true
-        runAsUser: 65532
+        runAsUser: 999
       script: |-
         #!/usr/bin/env bash
         set -eu
