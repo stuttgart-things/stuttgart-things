@@ -103,7 +103,7 @@ spec:
         done
   steps:
     - name: bootstrap-argocd
-      image: "$(params.WORKING_IMAGE)"
+      image: eu.gcr.io/stuttgart-things/machineshop:0.1.48-1
       workingDir: $(workspaces.source.path)
       args:
         - $(params.SECRET_EXPORTS[*])
