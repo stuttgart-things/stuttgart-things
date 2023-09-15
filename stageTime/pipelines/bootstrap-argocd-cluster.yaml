@@ -15,6 +15,12 @@ spec:
       description: vault secret kv paths to export
       type: array
       default: []
+    - name: argocdUrl
+      description: argocd url
+      type: string
+    - name: argocdPort
+      description: argocd port
+      type: string
   tasks:
     - name: bootstrap-argocd
       taskRef:
@@ -34,3 +40,7 @@ spec:
           value: $(params.vaultSecretPaths[*])
         - name: SECRET_EXPORTS
           value: $(params.secretExports[*])
+        - name: ARGOCD_URL
+          value: $(params.argocdUrl)
+        - name: ARGOCD_PORT
+          value: $(params.argocdPort)
