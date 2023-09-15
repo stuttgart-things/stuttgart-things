@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: bootstrap-argocd-cluster-14
+  name: bootstrap-argocd-cluster-15
   namespace: tekton
 spec:
   workspaces:
@@ -22,6 +22,7 @@ spec:
       value:
         - "apps/data/argocd:username+-false+-username.secret"
         - "apps/data/argocd:passwordB64+-true+-password.secret"
+        - "kubeconfigs/data/dev21:kubeconfig+-true+-KUBECONFIG"
     - name: secretExports
       value:
         - "USERNAME+-username.secret"
@@ -30,3 +31,7 @@ spec:
       value: argo-cd.dev21.sthings-vsphere.labul.sva.de
     - name: argocdPort
       value: "443"
+    - name: clusterName
+      value: dev21
+    - name: clusterContext
+      value: default

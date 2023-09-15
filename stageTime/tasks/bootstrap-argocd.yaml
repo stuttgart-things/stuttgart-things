@@ -27,7 +27,14 @@ spec:
     - name: WORKING_IMAGE
       description: the image on which ansible will run
       type: string
-      default: "fluxcd/flux-cli:v2.1.0"
+      default: eu.gcr.io/stuttgart-things/sthings-argocd:v2.8.4-1
+    - name: CLUSTER_NAME
+      description: cluster name to create
+      type: string
+    - name: CLUSTER_CONTEXT
+      description: cluster context name
+      default: default
+      type: string
     - name: ARGOCD_URL
       description: argocd url
       type: string
@@ -110,7 +117,7 @@ spec:
         done
   steps:
     - name: bootstrap-argocd
-      image: eu.gcr.io/stuttgart-things/sthings-argocd:v2.8.4-1
+      image: "$(params.WORKING_IMAGE)"
       workingDir: $(workspaces.source.path)
       args:
         - $(params.SECRET_EXPORTS[*])
@@ -132,3 +139,10 @@ spec:
 
         argocd login $(params.ARGOCD_URL):$(params.ARGOCD_PORT) \
         --insecure --username ${USERNAME} --password ${PASSWORD}
+
+        echo EXPORT KUBECONFIG
+        export KUBECONFIG=KUBECONFIG
+
+        echo ADD CLUSTER $(params.CLUSTER_NAME) TO $(params.ARGOCD_URL)
+        argocd cluster add $(params.CLUSTER_CONTEXT) \
+        --name $(params.CLUSTER_NAME) --grpc-web

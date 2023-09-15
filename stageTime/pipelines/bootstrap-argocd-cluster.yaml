@@ -21,6 +21,13 @@ spec:
     - name: argocdPort
       description: argocd port
       type: string
+    - name: clusterName
+      description: cluster name to create
+      type: string
+    - name: clusterContext
+      description: cluster context name
+      default: default
+      type: string
   tasks:
     - name: bootstrap-argocd
       taskRef:
@@ -44,3 +51,7 @@ spec:
           value: $(params.argocdUrl)
         - name: ARGOCD_PORT
           value: $(params.argocdPort)
+        - name: CLUSTER_NAME
+          value: $(params.clusterName)
+        - name: CLUSTER_CONTEXT
+          value: $(params.clusterContext)

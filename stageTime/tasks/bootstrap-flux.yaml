@@ -33,7 +33,15 @@ spec:
     - name: WORKING_IMAGE
       description: the image on which ansible will run
       type: string
-      default: "fluxcd/flux-cli:v2.1.0"
+      default: fluxcd/flux-cli:v2.1.0
+    - name: KUBECTL_IMAGE
+      description: the image on which kubectl will run
+      type: string
+      default: bitnami/kubectl:1.26.9
+    - name: MACHINESHOP_IMAGE
+      description: the image on which machineShop will run
+      type: string
+      default: eu.gcr.io/stuttgart-things/machineshop:0.1.48-1
     - name: SECRET_PATHS
       description: vault secret paths
       type: array
@@ -67,7 +75,7 @@ spec:
       type: string
       default: flux-system
   sidecars:
-    - image: eu.gcr.io/stuttgart-things/machineshop:0.1.48-1
+      image: "$(params.MACHINESHOP_IMAGE)"
       name: get-secrets
       workingDir: $(workspaces.source.path)
       env:
@@ -113,7 +121,7 @@ spec:
         done
   steps:
     - name: prepare-cluster
-      image: bitnami/kubectl:1.26.9
+      image: "$(params.KUBECTL_IMAGE)"
       args:
         - $(params.ADDITONAL_MANIFESTS[*])
       workingDir: $(workspaces.source.path)
