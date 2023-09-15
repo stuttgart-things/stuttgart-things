@@ -31,7 +31,6 @@ spec:
     - name: ARGOCD_URL
       description: argocd url
       type: string
-      default: argo-cd.dev21.sthings-vsphere.labul.sva.de
     - name: ARGOCD_PORT
       description: argocd port
       type: string
