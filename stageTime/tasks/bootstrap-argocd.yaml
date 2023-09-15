@@ -1,3 +1,9 @@
+        # echo EXPORT KUBECONFIG
+        # export KUBECONFIG=KUBECONFIG
+
+        # argocd login $(params.ARGOCD_SERVER_URL):$(params.ARGOCD_SERVER_PORT) \
+        # --insecure --username ${ARGOCD_USER} \
+        # --password ${ARGOCD_PASSWORD}
 ---
 apiVersion: tekton.dev/v1
 kind: Task
@@ -117,10 +123,3 @@ spec:
           export $KEY=$(cat ${VALUE_FILE})
           echo $KEY
         done
-
-        # echo EXPORT KUBECONFIG
-        # export KUBECONFIG=KUBECONFIG
-
-        # argocd login $(params.ARGOCD_SERVER_URL):$(params.ARGOCD_SERVER_PORT) \
-        # --insecure --username ${ARGOCD_USER} \
-        # --password ${ARGOCD_PASSWORD}
