@@ -131,4 +131,5 @@ spec:
           export $KEY=$(cat ${VALUE_FILE})
         done
 
-        argocd login $(params.ARGOCD_URL):$(params.ARGOCD_PORT) --insecure --username ${echo $USERNAME} --password ${echo $PASSWORD}
+        argocd login $(params.ARGOCD_URL):$(params.ARGOCD_PORT) \
+        --insecure --username ${USERNAME} --password ${PASSWORD}
