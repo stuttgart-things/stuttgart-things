@@ -11,7 +11,7 @@ spec:
       type: array
       default: []
       description: extra roles to install
-    - name: secretKeyValues
+    - name: secretExports
       description: vault secret kv paths to export
       type: array
       default: []
@@ -32,5 +32,5 @@ spec:
       params:
         - name: SECRET_PATHS
           value: $(params.vaultSecretPaths[*])
-        - name: SECRET_KEY_VALUES
-          value: $(params.secretKeyValues[*])
+        - name: SECRET_EXPORTS
+          value: $(params.secretExports[*])

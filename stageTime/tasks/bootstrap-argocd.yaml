@@ -26,7 +26,7 @@ spec:
       description: vault secret paths
       type: array
       default: []
-    - name: SECRET_KEY_VALUES
+    - name: SECRET_EXPORTS
       description: vault secret kv paths to export
       type: array
       default: []
@@ -99,7 +99,7 @@ spec:
       image: "$(params.WORKING_IMAGE)"
       workingDir: $(workspaces.source.path)
       args:
-        - $(params.SECRET_KEY_VALUES[*])
+        - $(params.SECRET_EXPORTS[*])
       securityContext:
         privileged: false
         runAsNonRoot: true
