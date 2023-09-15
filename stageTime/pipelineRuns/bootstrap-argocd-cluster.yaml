@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: bootstrap-argocd-cluster-6
+  name: bootstrap-argocd-cluster-7
   namespace: tekton
 spec:
   workspaces:
@@ -20,8 +20,8 @@ spec:
   params:
     - name: vaultSecretPaths
       value:
-        - "apps/data/username:token+-false+-username.secret"
-        - "apps/data/password:token+-false+-password.secret"
+        - "apps/data/argocd:username+-false+-username.secret"
+        - "apps/data/argocd:password+-false+-password.secret"
     - name: secretExports
       value:
         - "USERNAME+-username.secret"
