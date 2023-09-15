@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: bootstrap-argocd-cluster-7
+  name: bootstrap-argocd-cluster-8
   namespace: tekton
 spec:
   workspaces:

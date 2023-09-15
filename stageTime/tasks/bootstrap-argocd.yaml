@@ -103,7 +103,7 @@ spec:
         done
   steps:
     - name: bootstrap-argocd
-      image: eu.gcr.io/stuttgart-things/machineshop:0.1.48-1
+      image: eu.gcr.io/stuttgart-things/sthings-argocd:v2.8.4
       workingDir: $(workspaces.source.path)
       args:
         - $(params.SECRET_EXPORTS[*])
@@ -123,5 +123,4 @@ spec:
           export $KEY=$(cat ${VALUE_FILE})
         done
 
-        echo $USERNAME
-        echo $PASSWORD
+        argocd login argo-cd.dev21.sthings-vsphere.labul.sva.de:443 --insecure --username ${echo $USERNAME} --password ${echo $PASSWORD}
