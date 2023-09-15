@@ -1,1 +1,36 @@
 ---
+apiVersion: tekton.dev/v1
+kind: Pipeline
+metadata:
+  name: bootstrap-argocd-cluster
+spec:
+  workspaces:
+    - name: source
+  params:
+    - name: vaultSecretPaths
+      type: array
+      default: []
+      description: extra roles to install
+    - name: secretKeyValues
+      description: vault secret kv paths to export
+      type: array
+      default: []
+  tasks:
+    - name: bootstrap-argocd
+      taskRef:
+        resolver: git
+        params:
+          - name: url
+            value: https://github.com/stuttgart-things/stuttgart-things.git
+          - name: revision
+            value: main
+          - name: pathInRepo
+            value: stageTime/tasks/bootstrap-argocd.yaml
+      workspaces:
+        - name: source
+          workspace: source
+      params:
+        - name: SECRET_PATHS
+          value: $(params.vaultSecretPaths[*])
+        - name: SECRET_KEY_VALUES
+          value: $(params.secretKeyValues[*])

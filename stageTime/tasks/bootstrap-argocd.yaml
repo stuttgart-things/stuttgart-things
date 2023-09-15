@@ -1,4 +1,125 @@
 ---
-# add cluster
-# add projects
-# sync applications
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: bootstrap-argocd
+  labels:
+    app.kubernetes.io/version: "0.1"
+  annotations:
+    tekton.dev/categories: "gitOps"
+    tekton.dev/displayName: "bootstrap a cluster w/ flux argocd cli"
+    tekton.dev/pipelines.minVersion: "0.50.0"
+    tekton.dev/platforms: "linux/amd64"
+    tekton.dev/tags: "gitops, cli, argocd"
+spec:
+  description: bootstrap a cluster w/ flux argocd cli
+  workspaces:
+    - name: source
+      description: holds the working data
+      optional: false
+  params:
+    - name: WORKING_IMAGE
+      description: the image on which ansible will run
+      type: string
+      default: "fluxcd/flux-cli:v2.1.0"
+    - name: SECRET_PATHS
+      description: vault secret paths
+      type: array
+      default: []
+    - name: SECRET_KEY_VALUES
+      description: vault secret kv paths to export
+      type: array
+      default: []
+    - name: vault-secret-key-addr
+      description: vaul addr key in the secret
+      type: string
+      default: "VAULT_ADDR"
+    - name: vault-secret-key-approleId
+      description: approle id key in the secret
+      type: string
+      default: "VAULT_ROLE_ID"
+    - name: vault-secret-key-approleSecret
+      description: approle secret key in the secret
+      type: string
+      default: "VAULT_SECRET_ID"
+    - name: vault-secret-key-namespace
+      description: namespace key in the secret
+      type: string
+      default: "VAULT_NAMESPACE"
+    - name: vaultSecretName
+      description: name of the vault secret
+      type: string
+      default: vault-labul-vsphere
+  sidecars:
+    - image: eu.gcr.io/stuttgart-things/machineshop:0.1.48-1
+      name: get-secrets
+      workingDir: $(workspaces.source.path)
+      env:
+        - name: VAULT_ADDR
+          valueFrom:
+            secretKeyRef:
+              key: $(params.vault-secret-key-addr)
+              name: $(params.vaultSecretName)
+        - name: VAULT_NAMESPACE
+          valueFrom:
+            secretKeyRef:
+              key: $(params.vault-secret-key-namespace)
+              name: $(params.vaultSecretName)
+        - name: VAULT_ROLE_ID
+          valueFrom:
+            secretKeyRef:
+              key: $(params.vault-secret-key-approleId)
+              name: $(params.vaultSecretName)
+        - name: VAULT_SECRET_ID
+          valueFrom:
+            secretKeyRef:
+              key: $(params.vault-secret-key-approleSecret)
+              name: $(params.vaultSecretName)
+      args:
+        - $(params.SECRET_PATHS[*])
+      securityContext:
+        privileged: false
+        runAsNonRoot: true
+        runAsUser: 65532
+      script: |
+        #!/usr/bin/env bash
+        set -eu
+
+        ALL_SECRETS=""
+        for SECRET_DEFINITON in "$@"
+        do
+          echo GETTING VAULT SECRET ${SECRET_DEFINITON} W/ machineShop CLI
+          VAULT_PATH=$(awk -F+- '{print $1}' <<< ${SECRET_DEFINITON})
+          B64_DECODE=$(awk -F+- '{print $2}' <<< ${SECRET_DEFINITON})
+          DESTINATION=$(awk -F+- '{print $3}' <<< ${SECRET_DEFINITON})
+
+          machineShop get --path ${VAULT_PATH} --output file --destination ${DESTINATION} --b64 "${B64_DECODE}"
+        done
+    - name: bootstrap-argocd
+      image: "$(params.WORKING_IMAGE)"
+      workingDir: $(workspaces.source.path)
+      args:
+        - $(params.SECRET_KEY_VALUES[*])
+      securityContext:
+        privileged: false
+        runAsNonRoot: true
+        runAsUser: 65532
+      script: |-
+        #!/usr/bin/env sh
+        set -eu
+
+        echo EXPORT SECRETS
+        for SECRET_KEY_VALUE in "$@"
+        do
+          KEY=$(awk -F+- '{print $1}' <<< ${SECRET_KEY_VALUE})
+          VALUE_FILE=$(awk -F+- '{print $2}' <<< ${SECRET_KEY_VALUE})
+          export $KEY=$(cat ${VALUE_FILE})
+          echo $KEY
+        done
+
+        # echo EXPORT KUBECONFIG
+        # export KUBECONFIG=KUBECONFIG
+
+        # argocd login $(params.ARGOCD_SERVER_URL):$(params.ARGOCD_SERVER_PORT) \
+        # --insecure --username ${ARGOCD_USER} \
+        # --password ${ARGOCD_PASSWORD}
