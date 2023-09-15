@@ -1,0 +1,26 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: {{ .projectName }}
+  namespace: {{ .argocdNamepace }}
+spec:
+  clusterResourceBlacklist:
+  - group: ""
+    kind: ""
+  clusterResourceWhitelist:
+  - group: '*'
+    kind: '*'
+  description: {{ .projectName }} project
+  destinations:
+  - name: {{ .projectName }}
+    namespace: '*'
+    server: https://{{ .serverIP }}:6443
+  namespaceResourceBlacklist:
+  - group: ""
+    kind: ""
+  namespaceResourceWhitelist:
+  - group: '*'
+    kind: '*'
+  sourceRepos:
+  - '*'
