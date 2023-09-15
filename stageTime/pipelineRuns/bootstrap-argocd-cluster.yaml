@@ -1,0 +1,28 @@
+---
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  name: bootstrap-argocd-cluster-2
+  namespace: tekton
+spec:
+  workspaces:
+    - name: source
+      emptyDir: {}
+  pipelineRef:
+    resolver: git
+    params:
+      - name: url
+        value: https://github.com/stuttgart-things/stuttgart-things.git
+      - name: revision
+        value: main
+      - name: pathInRepo
+        value: stageTime/pipelines/bootstrap-argocd-cluster.yaml
+  params:
+    - name: vaultSecretPaths
+      value:
+        - "apps/data/username:token+-false+-username.secret"
+        - "apps/data/password:token+-false+-password.secret"
+    - name: secretExports
+      value:
+        - "USERNAME+-username.secret"
+        - "PASSWORD+-password.secret"

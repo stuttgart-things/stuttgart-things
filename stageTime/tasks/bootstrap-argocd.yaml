@@ -95,6 +95,7 @@ spec:
 
           machineShop get --path ${VAULT_PATH} --output file --destination ${DESTINATION} --b64 "${B64_DECODE}"
         done
+  steps:
     - name: bootstrap-argocd
       image: "$(params.WORKING_IMAGE)"
       workingDir: $(workspaces.source.path)
