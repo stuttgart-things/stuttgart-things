@@ -55,7 +55,7 @@ spec:
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: execute-ansible-playbook-testrun-9bwq7-4
+  name: deploy-rke1
   namespace: ansible
 spec:
   pipelineRef:
@@ -113,3 +113,65 @@ spec:
     - name: ansibleVarsInventory
       value:
         - "initial_master_node+[\"smt10-rke1.labul.sva.de\"]"
+---
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  name: execute-baseos-k3scluster-3
+  namespace: ansible
+spec:
+  pipelineRef:
+    resolver: git
+    params:
+      - name: url
+        value: https://github.com/stuttgart-things/stuttgart-things.git
+      - name: revision
+        value: main
+      - name: pathInRepo
+        value: stageTime/pipelines/execute-ansible-playbooks.yaml
+  workspaces:
+    - name: shared-workspace
+      persistentVolumeClaim:
+        claimName: ansible-workspace
+    - name: sshCredentials
+      secret:
+        secretName: github-ssh
+  params:
+    - name: ansibleWorkingImage
+      value: "eu.gcr.io/stuttgart-things/sthings-ansible:8.3.0-6"
+    - name: createInventory
+      value: "true"
+    - name: gitRepoUrl
+      value: "git@github.com:stuttgart-things/stuttgart-things.git"
+    - name: gitRevision
+      value: "main"
+    - name: gitWorkspaceSubdirectory
+      value: "/ansible/base-os"
+    - name: vaultSecretName
+      value: vault-labul-vsphere
+    - name: installExtraRoles
+      value: "true"
+    - name: ansibleExtraRoles
+      value:
+        - "https://github.com/stuttgart-things/install-requirements.git"
+        - "https://github.com/stuttgart-things/manage-filesystem.git"
+        - "https://github.com/stuttgart-things/install-configure-vault.git"
+    - name: ansiblePlaybooks
+      value:
+        - "ansible/playbooks/prepare-env.yaml"
+        - "ansible/playbooks/base-os.yaml"
+    - name: ansibleVarsFile
+      value:
+        - "manage_filesystem+-true"
+        - "update_packages+-true"
+        - "install_requirements+-true"
+        - "install_motd+-true"
+        - "username+-sthings"
+        - "lvm_home_sizing+-'15%'"
+        - "lvm_root_sizing+-'35%'"
+        - "lvm_var_sizing+-'50%'"
+        - "send_to_msteams+-true"
+        - "reboot_all+-false"
+    - name: ansibleVarsInventory
+      value:
+        - "all+[\"k3s-cluster-3.labul.sva.de\",\"k3s-cluster-4.labul.sva.de\"]"

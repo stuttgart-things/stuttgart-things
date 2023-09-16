@@ -1,0 +1,36 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: elasticsearch-cluster-deployment
+  namespace: elastic-system
+spec:
+  interval: 30m
+  dependsOn:
+    - name: eck-operator-deployment
+      namespace: elastic-system
+  chart:
+    spec:
+      chart: sthings-cluster
+      version: 0.2.5
+      sourceRef:
+        kind: HelmRepository
+        name: stuttgart-things
+        namespace: cert-manager
+      interval: 12h
+  values:
+    installCRDs: true
+    customresources:
+      cluster-issuer:
+        apiVersion: elasticsearch.k8s.elastic.co/v1
+        kind: Elasticsearch
+        metadata:
+          name: elasticsearch-cluster
+          namespace: elastic-system
+        spec:
+          version: 8.9.2
+          nodeSets:
+          - name: default
+            count: 1
+            config:
+              node.store.allow_mmap: false

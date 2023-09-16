@@ -27,7 +27,7 @@ ansibleVarsFile:
 ansibleCreateInventory: true
 ansibleInventoryFile:
   - initial_master_node+["smt10-rke1.labul.sva.de"]
-  # - additional_master_nodes+["smt-rke1-2.labul.sva.de","smt-rke1-3.labul.sva.de"]
+  - additional_master_nodes+["smt-rke1-2.labul.sva.de","smt-rke1-3.labul.sva.de"]
 
 installExtraRoles: true
 ansibleExtraRoles:
