@@ -1,0 +1,4 @@
+---
+chartName: hello
+namespace: gude
+randomName: true
