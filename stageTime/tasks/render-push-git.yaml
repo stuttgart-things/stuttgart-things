@@ -1,0 +1,103 @@
+---
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: render-push-git
+  labels:
+    app.kubernetes.io/version: "0.1"
+  annotations:
+    tekton.dev/categories: "gitOps"
+    tekton.dev/displayName: "bootstrap a cluster w/ flux cli"
+    tekton.dev/pipelines.minVersion: "0.50.0"
+    tekton.dev/platforms: "linux/amd64"
+    tekton.dev/tags: "gitops, cli, flux"
+spec:
+  description: bootstrap a cluster w/ flux cli
+  workspaces:
+    - name: source
+      description: holds the working data
+      optional: false
+  params:
+    - name: RENDER_TEMPLATES
+      description: tenplates to render
+      type: array
+      default: []
+    - name: PUSH_FILES
+      description: files to be pushed to git
+      type: array
+      default: []
+    - name: MACHINESHOP_IMAGE
+      description: the image on which machineShop will run
+      type: string
+      default: eu.gcr.io/stuttgart-things/machineshop:0.1.48-1
+    - name: vault-secret-key-addr
+      description: vaul addr key in the secret
+      type: string
+      default: "VAULT_ADDR"
+    - name: vault-secret-key-approleId
+      description: approle id key in the secret
+      type: string
+      default: "VAULT_ROLE_ID"
+    - name: vault-secret-key-approleSecret
+      description: approle secret key in the secret
+      type: string
+      default: "VAULT_SECRET_ID"
+    - name: vault-secret-key-namespace
+      description: namespace key in the secret
+      type: string
+      default: "VAULT_NAMESPACE"
+    - name: vaultSecretName
+      description: name of the vault secret
+      type: string
+      default: vault-labul-vsphere
+  stepTemplate:
+    workingDir: $(workspaces.source.path)
+    image: "$(params.MACHINESHOP_IMAGE)"
+    securityContext:
+      privileged: false
+      runAsNonRoot: true
+      runAsUser: 65532
+    env:
+      - name: VAULT_ADDR
+        valueFrom:
+          secretKeyRef:
+            key: $(params.vault-secret-key-addr)
+            name: $(params.vaultSecretName)
+      - name: VAULT_NAMESPACE
+        valueFrom:
+          secretKeyRef:
+            key: $(params.vault-secret-key-namespace)
+            name: $(params.vaultSecretName)
+      - name: VAULT_ROLE_ID
+        valueFrom:
+          secretKeyRef:
+            key: $(params.vault-secret-key-approleId)
+            name: $(params.vaultSecretName)
+      - name: VAULT_SECRET_ID
+        valueFrom:
+          secretKeyRef:
+            key: $(params.vault-secret-key-approleSecret)
+            name: $(params.vaultSecretName)
+  steps:
+    - name: render-template
+      args:
+        - $(params.RENDER_TEMPLATES[*])
+      script: |-
+        #!/usr/bin/env sh
+        set -eu
+
+        for FILE in "$@"
+        do
+          echo ${FILE}
+        done
+    - name: push-files
+      args:
+        - $(params.PUSH_FILES[*])
+      script: |-
+        #!/usr/bin/env sh
+        set -eu
+
+        for FILE in "$@"
+        do
+          echo ${FILE}
+        done
