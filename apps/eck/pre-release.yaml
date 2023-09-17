@@ -31,3 +31,21 @@ spec:
             name: ${CERT_ISSUER_NAME}
             kind: ${CERT_ISSUER_KIND}
           secretName: ${INGRESS_SECRET_NAME}
+    ingress:
+      kibana-ingress:
+        name: kibana-ingress
+        namespace: elastic-system
+        ingressClassName: nginx
+        annotations:
+          nginx.ingress.kubernetes.io/affinity: cookie
+          nginx.ingress.kubernetes.io/ssl-redirect: "false"
+        service:
+          name: kibana-kb-http
+          port: 5601
+          path: /
+          pathType: Prefix
+        hostname: ${INGRESS_HOSTNAME}
+        domain: ${INGRESS_DOMAIN}
+        tls:
+          host: ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}
+          secretName: ${INGRESS_SECRET_NAME}
