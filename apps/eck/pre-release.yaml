@@ -22,7 +22,7 @@ spec:
         kind: Certificate
         metadata:
           name: kibana-ingress
-          namespace: kibana
+          namespace: elastic-system
         spec:
           commonName: ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}
           dnsNames:
