@@ -29,6 +29,10 @@ spec:
           namespace: elastic-system
         spec:
           version: 8.9.2
+          transport:
+            service:
+              spec:
+                type: ClusterIP
           nodeSets:
           - name: default
             count: 1

@@ -17,20 +17,6 @@ spec:
       interval: 12h
   values:
     customresources:
-      elasticsearch-certificate:
-        apiVersion: cert-manager.io/v1
-        kind: Certificate
-        metadata:
-          name: elasticsearch-ingress
-          namespace: elastic-system
-        spec:
-          commonName: elasticsearch.${INGRESS_DOMAIN}
-          dnsNames:
-          - elasticsearch.${INGRESS_DOMAIN}
-          issuerRef:
-            name: ${CERT_ISSUER_NAME}
-            kind: ${CERT_ISSUER_KIND}
-          secretName: elasticsearch-ingress-tls
       kibana-certificate:
         apiVersion: cert-manager.io/v1
         kind: Certificate
@@ -46,22 +32,6 @@ spec:
             kind: ${CERT_ISSUER_KIND}
           secretName: ${INGRESS_SECRET_NAME}
     ingress:
-      elasticsearch-ingress:
-        name: elasticsearch-ingress
-        namespace: elastic-system
-        ingressClassName: nginx
-        annotations:
-          nginx.ingress.kubernetes.io/backend-protocol: HTTPS
-        service:
-          name: elastic-cluster-es-http
-          port: 9200
-          path: /
-          pathType: Prefix
-        hostname: elasticsearch
-        domain: ${INGRESS_DOMAIN}
-        tls:
-          host: elasticsearch.${INGRESS_DOMAIN}
-          secretName: elasticsearch-ingress-tls
       kibana-ingress:
         name: kibana-ingress
         namespace: elastic-system
