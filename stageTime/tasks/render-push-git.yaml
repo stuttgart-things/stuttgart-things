@@ -18,12 +18,12 @@ spec:
       description: holds the working data
       optional: false
   params:
-    - name: RENDER_TEMPLATES
-      description: tenplates to render
+    - name: RENDER_TEMPLATE
+      description: template to render
       type: array
       default: []
-    - name: PUSH_FILES
-      description: files to be pushed to git
+    - name: PUSH_FILE
+      description: file to be pushed to git
       type: array
       default: []
     - name: MACHINESHOP_IMAGE
@@ -81,7 +81,7 @@ spec:
   steps:
     - name: render-template
       args:
-        - $(params.RENDER_TEMPLATES[*])
+        - $(params.RENDER_TEMPLATE[*])
       script: |-
         #!/usr/bin/env sh
         set -eu
