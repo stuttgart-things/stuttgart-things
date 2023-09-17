@@ -30,7 +30,7 @@ spec:
           issuerRef:
             name: ${CERT_ISSUER_NAME}
             kind: ${CERT_ISSUER_KIND}
-          secretName: ${INGRESS_SECRET_NAME}
+          secretName: elasticsearch-ingress-tls
       kibana-certificate:
         apiVersion: cert-manager.io/v1
         kind: Certificate
@@ -61,7 +61,7 @@ spec:
         domain: ${INGRESS_DOMAIN}
         tls:
           host: elasticsearch.${INGRESS_DOMAIN}
-          secretName: ${INGRESS_SECRET_NAME}
+          secretName: elasticsearch-ingress-tls
       kibana-ingress:
         name: kibana-ingress
         namespace: elastic-system
