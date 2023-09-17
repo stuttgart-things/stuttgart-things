@@ -16,3 +16,6 @@ spec:
         name: elastic
         namespace: elastic-system
       interval: 12h
+  dependsOn:
+    - name: kibana-cert-configuration
+      namespace: elastic-system

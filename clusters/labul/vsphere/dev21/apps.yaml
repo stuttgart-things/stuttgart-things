@@ -14,6 +14,13 @@ spec:
   path: ./apps/eck
   prune: true
   wait: true
+  postBuild:
+    substitute:
+      INGRESS_HOSTNAME: kibana
+      INGRESS_DOMAIN: dev21.sthings-vsphere.labul.sva.de
+      INGRESS_SECRET_NAME: kibana-ingress-tls
+      CERT_ISSUER_NAME: cluster-issuer-approle
+      CERT_ISSUER_KIND: ClusterIssuer
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
