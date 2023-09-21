@@ -5,13 +5,13 @@ metadata:
   labels:
     app.kubernetes.io/version: "0.1"
   annotations:
-    tekton.dev/categories: "Messaging"
-    tekton.dev/displayName: "Send message to Microsoft Teams Channel"
+    tekton.dev/categories: "virtual-machines"
+    tekton.dev/displayName: "Build vm template w/ packer"
     tekton.dev/pipelines.minVersion: "0.48.0"
     tekton.dev/platforms: "linux/amd64,linux/s390x,linux/ppc64le"
-    tekton.dev/tags: "messaging"
+    tekton.dev/tags: "virtual-machines"
 spec:
-  description: sends simple message to a Microsoft Teams Channel
+  description: build packer vm template
   workspaces:
     - name: source
       description: holds the working data

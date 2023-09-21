@@ -117,7 +117,7 @@ spec:
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: execute-baseos-k3scluster-3
+  name: execute-baseos-nashville
   namespace: ansible
 spec:
   pipelineRef:
@@ -174,4 +174,4 @@ spec:
         - "reboot_all+-false"
     - name: ansibleVarsInventory
       value:
-        - "all+[\"k3s-cluster-3.labul.sva.de\",\"k3s-cluster-4.labul.sva.de\"]"
+        - "all+[\"nashville.tiab.labda.sva.de\"]"
