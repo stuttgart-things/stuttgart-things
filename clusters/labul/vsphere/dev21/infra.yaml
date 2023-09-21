@@ -67,7 +67,7 @@ spec:
   timeout: 5m
   sourceRef:
     kind: GitRepository
-    name: app-vsphere
+    name: flux-system
   path: ./infra/nfs-csi
   prune: true
   wait: true
