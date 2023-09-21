@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: create-packer-template-testrun-u23-4
+  name: create-packer-template-testrun-rocky10-4
   namespace: packer
 spec:
   pipelineRef:
@@ -36,11 +36,11 @@ spec:
     - name: gitRevision
       value: "main"
     - name: gitWorkspaceSubdirectory
-      value: "/packer/ubuntu23"
+      value: "/packer/rocky10"
     - name: osTemplatePath
-      value: "packer/os/ubuntu23.hcl"
+      value: "packer/os/rocky10.hcl"
     - name: osVersion
-      value: "ubuntu23"
+      value: "rocky10"
     - name: packerWorkingImage
       value: "eu.gcr.io/stuttgart-things/sthings-packer:1.9.4-8.3.0-4"
     - name: vaultSecretName
