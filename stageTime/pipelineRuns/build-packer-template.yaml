@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: create-packer-template-testrun-yoprc-2
+  name: create-packer-template-testrun-u23-2
   namespace: packer
 spec:
   pipelineRef:
@@ -15,7 +15,14 @@ spec:
         value: stageTime/pipelines/build-packer-template.yaml
   workspaces:
     - name: shared-workspace
-      emptyDir: {}
+      volumeClaimTemplate:
+        spec:
+          storageClassName: longhorn
+          accessModes:
+          - ReadWriteMany
+          resources:
+            requests:
+              storage: 1Gi
     - name: sshCredentials
       secret:
         secretName: github-ssh
