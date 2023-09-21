@@ -42,6 +42,6 @@ spec:
     - name: osVersion
       value: "rocky10"
     - name: packerWorkingImage
-      value: "eu.gcr.io/stuttgart-things/sthings-packer:1.9.4-8.3.0-4"
+      value: "eu.gcr.io/stuttgart-things/sthings-packer:1.9.4-8.4.0"
     - name: vaultSecretName
       value: "vault-labul-vsphere"
