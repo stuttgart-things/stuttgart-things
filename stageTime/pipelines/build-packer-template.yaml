@@ -48,11 +48,12 @@ spec:
     - name: create-vm-folders
       taskSpec:
         steps:
-        - image: vmware/govc:v0.30.7
-          script: |
-            #!/usr/bin/env sh
-            set -eu
-            govc --version
+          - name: create-vm-folders
+            image: vmware/govc:v0.30.7
+            script: |
+              #!/usr/bin/env sh
+              set -eu
+              govc --version
     - name: execute-packer
       runAfter:
         - fetch-repository
