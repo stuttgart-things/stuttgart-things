@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: create-packer-template-testrun-u23-2
+  name: create-packer-template-testrun-u23-4
   namespace: packer
 spec:
   pipelineRef:
@@ -17,7 +17,7 @@ spec:
     - name: shared-workspace
       volumeClaimTemplate:
         spec:
-          storageClassName: longhorn
+          storageClassName: nfs4-csi
           accessModes:
           - ReadWriteMany
           resources:

@@ -45,6 +45,14 @@ spec:
       default: ""
       description: name of vault secret
   tasks:
+    - name: create-vm-folders
+      taskSpec:
+        steps:
+        - image: vmware/govc:v0.30.7
+          script: |
+            #!/usr/bin/env sh
+            set -eu
+            govc --version
     - name: execute-packer
       runAfter:
         - fetch-repository
