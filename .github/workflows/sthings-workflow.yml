@@ -50,7 +50,7 @@ jobs:
     name: Staging
     needs:
       - Init
-    uses: ./.github/workflows/linting.yaml
+    uses: ./.github/workflows/helm.yaml
     with:
       environment-name: dev
       cancel-concurrent: false
@@ -64,7 +64,7 @@ jobs:
     needs:
       - Init
       - Linting-staging
-    uses: ./.github/workflows/linting.yaml
+    uses: ./.github/workflows/helm.yaml
     with:
       environment-name: production
       cancel-concurrent: true
