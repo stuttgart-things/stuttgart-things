@@ -4,14 +4,15 @@ on:
    branches: [ main ]
 
 jobs:
-  init-stage:
-    name: "init"
+  Init:
+    name: Init
     runs-on: ubuntu-latest
     defaults:
       run:
         shell: bash
     steps:
       - name: substitute branch name
+        id: branch_name
         run: |
           # get branch name
           if [ -z "$SOURCE_BRANCH" ]
@@ -24,16 +25,27 @@ jobs:
           export BRANCH_LOWER=${BRANCH_TMP,,}
           echo branch_name=${BRANCH_LOWER} >> $GITHUB_ENV
           echo branch_name_limited=${BRANCH_LOWER:0:30} >> $GITHUB_ENV
-        id: branch_name
         env:
           SOURCE_BRANCH: ${{ github.head_ref }}
 
+  # USE IN MAIN BRANCH ONLY
   linting-staging:
     if: github.event.ref == 'refs/heads/main'
     name: Staging
     needs:
-      - init-stage
+      - Init
     uses: ./.github/workflows/workflow.yml
     with:
       environment-name: dev
+    secrets: inherit
+
+  # PRODUCTION DEPLOYMENT
+  linting-production:
+    name: Production
+    needs:
+      - Init
+      - Staging
+    uses: ./.github/workflows/workflow.yml
+    with:
+      environment-name: production
     secrets: inherit

@@ -30,9 +30,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Check filesystem
+      - name: Deployment Stage output
         id: check
-        run: ls -lta && echo ${ENV_NAME}
+        run: echo running on ${ENV_NAME}
         continue-on-error: true
 
       - name: List Charts
