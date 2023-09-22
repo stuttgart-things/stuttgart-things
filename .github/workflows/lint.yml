@@ -11,8 +11,8 @@ jobs:
    steps:
      - name: Get Charts
        id: fmt
-       run: ls -lta ./charts
-       #continue-on-error: true
+       run: ls -lta charts
+       continue-on-error: true
      - uses: actions/checkout@v3
      - name: Setup helmfile
        uses: mamezou-tech/setup-helmfile@v1.2.0
