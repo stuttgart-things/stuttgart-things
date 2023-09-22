@@ -30,5 +30,6 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Check filesystem
-        id: ls -lta && echo ${ENV_NAME}
+        id: check
+        run: ls -lta && echo ${ENV_NAME}
         continue-on-error: true
