@@ -26,6 +26,7 @@ jobs:
         shell: bash
 
     steps:
+
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -33,3 +34,19 @@ jobs:
         id: check
         run: ls -lta && echo ${ENV_NAME}
         continue-on-error: true
+
+      - uses: actions/checkout@v4
+      - name: List Charts
+        id: fmt
+        run: ls -lta
+        continue-on-error: true
+
+      - name: Setup helmfile
+        uses: mamezou-tech/setup-helmfile@v1.2.0
+
+      - name: Test
+        run: |
+          helmfile --version
+          helm version
+          kubectl version --client
+          helm template charts/tekton-base
