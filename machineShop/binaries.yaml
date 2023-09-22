@@ -1,6 +1,6 @@
 ---
 binary:
-  - argocd:
+  - kubectl:
       url: https://dl.k8s.io/release/v{{ or .kubectlVersion "1.28.2" }}/bin/darwin/amd64/kubectl
       bin: kubectl
   - tkn:
