@@ -16,9 +16,9 @@ permissions:
 jobs:
   lint-helm:
     environment: ${{ inputs.environment-name }}
-    concurrency:
-      group: ${{ inputs.branch-name }}-${{ inputs.environment-name }}
-      cancel-in-progress: ${{ inputs.cancel-concurrent }}
+    # concurrency:
+    #   group: ${{ inputs.branch-name }}-${{ inputs.environment-name }}
+    #   cancel-in-progress: ${{ inputs.cancel-concurrent }}
     runs-on: ubuntu-latest
 
     defaults:
