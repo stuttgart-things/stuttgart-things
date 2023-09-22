@@ -46,6 +46,7 @@ jobs:
     uses: ./.github/workflows/workflow.yml
     with:
       environment-name: dev
+      cancel-concurrent: false
     secrets: inherit
 
   # PRODUCTION DEPLOYMENT
@@ -57,4 +58,5 @@ jobs:
     uses: ./.github/workflows/workflow.yml
     with:
       environment-name: production
+      cancel-concurrent: true
     secrets: inherit
