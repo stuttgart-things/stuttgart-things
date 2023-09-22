@@ -11,7 +11,7 @@ jobs:
    steps:
      - name: Get Charts
        id: fmt
-       run: ls -lta charts
+       run: ls -lta
        continue-on-error: true
      - uses: actions/checkout@v3
      - name: Setup helmfile
