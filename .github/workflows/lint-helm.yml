@@ -1,5 +1,12 @@
 name: Validate helm chart
 on:
+  workflow_dispatch:
+    inputs:
+      dev-cleanup:
+        description: "Dev: Check to enable deletion of the deployment"
+        required: false
+        type: boolean
+        default: false
  push:
    branches: [ main ]
 
