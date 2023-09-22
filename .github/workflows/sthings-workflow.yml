@@ -50,7 +50,7 @@ jobs:
     name: Staging
     needs:
       - Init
-    uses: ./.github/workflows/workflow.yml
+    uses: ./.github/workflows/linting.yaml
     with:
       environment-name: dev
       cancel-concurrent: false
@@ -58,13 +58,13 @@ jobs:
     secrets: inherit
 
   # PRODUCTION DEPLOYMENT
-  # STAGING HAS APPROVAL STEP
+  # STAGING HAS APPROVAL STEP CONFIGURED IN GH
   Linting-production:
     name: Production
     needs:
       - Init
       - Linting-staging
-    uses: ./.github/workflows/workflow.yml
+    uses: ./.github/workflows/linting.yaml
     with:
       environment-name: production
       cancel-concurrent: true
