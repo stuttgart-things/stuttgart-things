@@ -1,18 +1,16 @@
-name: linting
+name: Validation & Build
 on:
-  workflow_call:
-    inputs:
-      config-path:
-        required: true
-        type: string
-    
-  workflow_dispatch:
-jobs:
-  linting:
-    continue-on-error: true
-    runs-on: self-hosted
-    steps:
-      - uses: actions/checkout@v3
+ push:
+   branches: [ main ]
 
-      - name: Ansible Lint
-        uses: ansible/ansible-lint-action@v6.11.0
+jobs:
+ helm-lint:
+   name: Helm lint and release
+   runs-on: ubuntu-latest
+
+   steps:
+     - uses: actions/checkout@v2
+     - name: Helm Lint
+       uses: WyriHaximus/github-action-helm3@v2
+       with:
+         exec: helm lint ./charts/sthings-cluster
