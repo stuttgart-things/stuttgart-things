@@ -9,12 +9,11 @@ jobs:
    runs-on: ubuntu-latest
 
    steps:
-     - uses: actions/checkout@v2
+     - uses: actions/checkout@v4
      - name: Get Charts
        id: fmt
        run: ls -lta
        continue-on-error: true
-     - uses: actions/checkout@v3
      - name: Setup helmfile
        uses: mamezou-tech/setup-helmfile@v1.2.0
      - name: Test
@@ -23,4 +22,3 @@ jobs:
          helm version
          kubectl version --client
          helm template charts/tekton-base
-     
