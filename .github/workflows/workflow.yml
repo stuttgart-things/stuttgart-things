@@ -14,8 +14,7 @@ permissions:
   contents: read
 
 jobs:
-  init:
-    #name: "Terraform Cluster Deployment"
+  lint-helm:
     environment: ${{ inputs.environment-name }}
     concurrency:
       group: ${{ inputs.branch-name }}-${{ inputs.environment-name }}
@@ -33,11 +32,3 @@ jobs:
       - name: Check filesystem
         id: ls -lta && echo ${ENV_NAME}
         continue-on-error: true
-
-  Terraform-Dev:
-    name: Dev
-    needs:
-      - init
-    uses: ./.github/workflows/lint-helm.yml
-    with:
-      environment-name: Dev
