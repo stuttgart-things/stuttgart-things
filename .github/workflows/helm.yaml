@@ -45,12 +45,10 @@ jobs:
       - name: GET KUBECONFIG
         run: |
           mkdir -p ~/.kube
-          echo ${{ secrets.KUBECONFIG_B64 }} | base64 -d > ~/.kube/kubeconfig
+          echo ${{ secrets.KUBECONFIG_B64 }} | base64 -d > ~/.kube/config
 
       - name: SETUP HELMFILE
         uses: mamezou-tech/setup-helmfile@v1.2.0
-
-      - name: VERSION OUTPUT
         run: |
           helmfile --version
           helm version
