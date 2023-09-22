@@ -35,8 +35,8 @@ jobs:
         run: echo running on ${ENV_NAME}
         continue-on-error: true
 
+      - uses: actions/checkout@v4
       - name: List Charts
-        uses: actions/checkout@v4
         id: list
         run: ls -lta
         continue-on-error: true
