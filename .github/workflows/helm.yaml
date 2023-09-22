@@ -1,0 +1,64 @@
+---
+on:
+  workflow_call:
+    inputs:
+      environment-name:
+        required: true
+        type: string
+      cancel-concurrent:
+        required: false
+        type: boolean
+        default: false
+      branch-name:
+        required: true
+        type: string
+
+env:
+  ENV_NAME: ${{ inputs.environment-name }}
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  lint-helm:
+    environment: ${{ inputs.environment-name }}
+    concurrency:
+      group: ${{ inputs.branch-name }}-${{ inputs.environment-name }}
+      cancel-in-progress: ${{ inputs.cancel-concurrent }}
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+
+      - name: CHECKOUT GIT
+        uses: actions/checkout@v4
+
+      - name: DEPLOYMENT STAGE OUTPUT
+        id: check
+        run: echo running on ${ENV_NAME}
+        continue-on-error: true
+
+      - name: GET KUBECONFIG
+        run: |
+          mkdir -p ~/.kube
+          echo ${{ secrets.KUBECONFIG_B64 }} | base64 -d > ~/.kube/kubeconfig
+
+      - name: SETUP HELMFILE
+        uses: mamezou-tech/setup-helmfile@v1.2.0
+
+      - name: VERSION OUTPUT
+        run: |
+          helmfile --version
+          helm version
+          kubectl get nodes
+
+      - name: GET ALL PODS
+        uses: actions-hub/kubectl@master
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBECONFIG_B64 }}
+        with:
+          args: get pods -A
