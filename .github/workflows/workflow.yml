@@ -9,6 +9,9 @@ on:
         required: false
         type: boolean
         default: false
+      branch-name:
+        required: true
+        type: string
 
 env:
   ENV_NAME: ${{ inputs.environment-name }}
@@ -21,7 +24,7 @@ jobs:
   lint-helm:
     environment: ${{ inputs.environment-name }}
     concurrency:
-    #   group: ${{ inputs.branch-name }}-${{ inputs.environment-name }}
+      group: ${{ inputs.branch-name }}-${{ inputs.environment-name }}
       cancel-in-progress: ${{ inputs.cancel-concurrent }}
     runs-on: ubuntu-latest
 

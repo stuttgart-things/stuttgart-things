@@ -20,6 +20,10 @@ jobs:
       run:
         shell: bash
     steps:
+      - name: substitute project name
+        run: echo project_name=${GITHUB_REPOSITORY#*/} >> $GITHUB_ENV
+        id: project_name
+
       - name: substitute branch name
         id: branch_name
         run: |
@@ -36,6 +40,9 @@ jobs:
           echo branch_name_limited=${BRANCH_LOWER:0:30} >> $GITHUB_ENV
         env:
           SOURCE_BRANCH: ${{ github.head_ref }}
+    outputs:
+      project_name: ${{ env.project_name }}
+      branch_name: ${{ env.branch_name }}
 
   # USE IN MAIN BRANCH ONLY
   Linting-staging:
@@ -47,6 +54,7 @@ jobs:
     with:
       environment-name: dev
       cancel-concurrent: false
+      branch-name: ${{ needs.Init.outputs.branch_name }}
     secrets: inherit
 
   # PRODUCTION DEPLOYMENT
@@ -59,4 +67,5 @@ jobs:
     with:
       environment-name: production
       cancel-concurrent: true
+      branch-name: ${{ needs.Init.outputs.branch_name }}
     secrets: inherit
