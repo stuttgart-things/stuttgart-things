@@ -57,8 +57,14 @@ jobs:
           helm version
           kubectl version --client
 
+      - uses: actions-hub/kubectl@master
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBECONFIG_B64 }}
+        with:
+          args: get pods
+
       - name: Test template chart
         run: |
-          echo ${KUBECONFIG_B64} > kubeconfig
+          echo ${{ secrets.KUBECONFIG_B64 }} > kubeconfig
           cat kubeconfig
           helm template charts/tekton-base
