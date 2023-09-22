@@ -1,4 +1,5 @@
 name: Validate helm chart
+
 on:
   workflow_dispatch:
     inputs:
@@ -8,8 +9,8 @@ on:
         type: boolean
         default: false
 
- push:
-   branches: [ main ]
+  push:
+    branches: [ main ]
 
 jobs:
   Init:
