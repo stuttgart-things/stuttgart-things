@@ -4,7 +4,33 @@ on:
    branches: [ main ]
 
 jobs:
- helm-lint:
+  Prepare:
+    name: "Prepare"
+    runs-on: ubuntu-latest
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: substitute branch name
+        run: |
+          # get branch name
+          if [ -z "$SOURCE_BRANCH" ]
+          then
+            export BRANCH_TMP=${GITHUB_REF##*/}
+          else
+            export BRANCH_TMP=${SOURCE_BRANCH##*/}
+          fi
+          # export lowercase
+          export BRANCH_LOWER=${BRANCH_TMP,,}
+          echo branch_name=${BRANCH_LOWER} >> $GITHUB_ENV
+          echo branch_name_limited=${BRANCH_LOWER:0:30} >> $GITHUB_ENV
+        id: branch_name
+        env:
+          SOURCE_BRANCH: ${{ github.head_ref }}
+
+jobs:
+ lint-helm:
    name: Helm lint and release
    runs-on: ubuntu-latest
 

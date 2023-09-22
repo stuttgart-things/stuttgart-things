@@ -1,1 +1,43 @@
 ---
+on:
+  workflow_call:
+    inputs:
+      environment-name:
+        required: true
+        type: string
+
+env:
+  ENV_NAME: ${{ inputs.environment-name }}
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  init:
+    #name: "Terraform Cluster Deployment"
+    environment: ${{ inputs.environment-name }}
+    concurrency:
+      group: ${{ inputs.branch-name }}-${{ inputs.environment-name }}
+      cancel-in-progress: ${{ inputs.cancel-concurrent }}
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check filesystem
+        id: ls -lta && echo ${ENV_NAME}
+        continue-on-error: true
+
+  Terraform-Dev:
+    name: Dev
+    needs:
+      - init
+    uses: ./.github/workflows/lint-helm.yml
+    with:
+      environment-name: Dev

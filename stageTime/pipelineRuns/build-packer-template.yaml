@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: create-packer-template-testrun-rocky10-4
+  name: create-packer-template-testrun-rocky10-5
   namespace: packer
 spec:
   pipelineRef:
