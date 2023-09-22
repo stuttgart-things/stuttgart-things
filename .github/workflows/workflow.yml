@@ -5,6 +5,10 @@ on:
       environment-name:
         required: true
         type: string
+      cancel-concurrent:
+        required: false
+        type: boolean
+        default: false
 
 env:
   ENV_NAME: ${{ inputs.environment-name }}
@@ -16,9 +20,9 @@ permissions:
 jobs:
   lint-helm:
     environment: ${{ inputs.environment-name }}
-    # concurrency:
+    concurrency:
     #   group: ${{ inputs.branch-name }}-${{ inputs.environment-name }}
-    #   cancel-in-progress: ${{ inputs.cancel-concurrent }}
+      cancel-in-progress: ${{ inputs.cancel-concurrent }}
     runs-on: ubuntu-latest
 
     defaults:
