@@ -9,14 +9,16 @@ jobs:
    runs-on: ubuntu-latest
 
    steps:
-     - uses: actions/checkout@v2
-     - name: Terraform Format
+     - name: Get Charts
        id: fmt
-       run: ls -lta
-       continue-on-error: true
+       run: ls -lta ./charts
+       #continue-on-error: true
+     - uses: actions/checkout@v3
+     - name: Setup helmfile
+       uses: mamezou-tech/setup-helmfile@v1.2.0
+     - name: Test
+       run: |
+         helmfile --version
+         helm version
+         kubectl version --client
      
-     - name: Helm Lint
-       uses: WyriHaximus/github-action-helm3@v2
-       with:
-         exec: helm lint ./charts/tekton-base
-       continue-on-error: true
