@@ -10,6 +10,11 @@ jobs:
 
    steps:
      - uses: actions/checkout@v2
+     - name: Terraform Format
+       id: fmt
+       run: la -lta
+       continue-on-error: true
+     
      - name: Helm Lint
        uses: WyriHaximus/github-action-helm3@v2
        with:
