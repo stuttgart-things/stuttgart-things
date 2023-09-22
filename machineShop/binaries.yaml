@@ -7,5 +7,5 @@ binary:
       url: https://github.com/tektoncd/cli/releases/download/v{{ or .tknVersion "0.32.0" }}/tkn_{{ or .tknVersion "0.32.0" }}_Linux_x86_64.tar.gz
       bin: tkn
   - gh:
-      url: https://github.com/cli/cli/releases/download/v{{ or .ghVersion 2.35.0" }}/gh_{{ or .ghVersion 2.35.0" }}_linux_amd64.tar.gz
-      bin: gh_2.35.0_linux_amd64/bin/gh
+      url: https://github.com/cli/cli/releases/download/v{{ or .ghVersion 2.34.0" }}/gh_{{ or .ghVersion 2.34.0" }}_linux_amd64.tar.gz
+      bin: gh_2.34.0_linux_amd64/bin/gh
