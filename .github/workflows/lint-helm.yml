@@ -58,6 +58,7 @@ jobs:
     secrets: inherit
 
   # PRODUCTION DEPLOYMENT
+  # STAGING HAS APPROVAL STEP
   Linting-production:
     name: Production
     needs:
