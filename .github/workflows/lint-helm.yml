@@ -37,10 +37,3 @@ jobs:
     with:
       environment-name: dev
     secrets: inherit
-
-
-  # lint-helm:
-  #   name: Helm lint and release
-  #   runs-on: ubuntu-latest
-
-  #   steps:

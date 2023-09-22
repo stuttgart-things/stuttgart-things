@@ -35,18 +35,21 @@ jobs:
         run: ls -lta && echo ${ENV_NAME}
         continue-on-error: true
 
-      - uses: actions/checkout@v4
       - name: List Charts
-        id: fmt
+        uses: actions/checkout@v4
+        id: list
         run: ls -lta
         continue-on-error: true
 
       - name: Setup helmfile
         uses: mamezou-tech/setup-helmfile@v1.2.0
 
-      - name: Test
+      - name: Version test
         run: |
           helmfile --version
           helm version
           kubectl version --client
+
+      - name: Test template chart
+        run: |
           helm template charts/tekton-base
