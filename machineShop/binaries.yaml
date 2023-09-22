@@ -1,7 +1,7 @@
 ---
 binary:
   - kubectl:
-      url: https://dl.k8s.io/release/v{{ or .kubectlVersion "1.28.2" }}/bin/darwin/amd64/kubectl
+      url: https://dl.k8s.io/release/v{{ or .kubectlVersion "1.28.2" }}/bin/linux/amd64/kubectl
       bin: kubectl
   - tkn:
       url: https://github.com/tektoncd/cli/releases/download/v{{ or .tknVersion "0.32.0" }}/tkn_{{ or .tknVersion "0.32.0" }}_Linux_x86_64.tar.gz
