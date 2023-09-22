@@ -22,5 +22,5 @@ jobs:
          helmfile --version
          helm version
          kubectl version --client
-         ls -lta
+         helm template charts/tekton-base
      
