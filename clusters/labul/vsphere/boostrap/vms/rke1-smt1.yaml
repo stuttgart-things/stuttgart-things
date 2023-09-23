@@ -2,7 +2,7 @@
 apiVersion: machineshop.sthings.tiab.ssc.sva.de/v1beta1
 kind: Terraform
 metadata:
- name: k3s-cluster
+ name: k8s-wks
  namespace: machine-shop-operator-system
  labels:
    app.kubernetes.io/created-by: machine-shop-operator
@@ -13,8 +13,8 @@ spec:
  - access_key=apps/data/artifacts:accessKey
  - secret_key=apps/data/artifacts:secretKey
  module:
- - moduleName=k3s-cluster
- - backendKey=k3s-cluster.tfstate
+ - moduleName=k8s-wks
+ - backendKey=k8s-wks.tfstate
  - moduleSourceUrl=https://artifacts.tiab.labda.sva.de/modules/vsphere-vm.zip
  - backendEndpoint=https://artifacts.app.4sthings.tiab.ssc.sva.de
  - backendRegion=main
@@ -32,8 +32,8 @@ spec:
  template: vsphere-vm
  terraform-version: 1.5.5
  variables:
- - vsphere_vm_name="k3s-cluster"
- - vm_count=4
+ - vsphere_vm_name="k8s-wks"
+ - vm_count=2
  - vm_num_cpus=6
  - vm_memory=4096
  - vm_disk_size=96
