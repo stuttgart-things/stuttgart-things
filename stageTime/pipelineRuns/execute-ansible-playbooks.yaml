@@ -118,7 +118,7 @@ spec:
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: execute-baseos-k8s-wks7
+  name: execute-baseos-docker-k8s-wks7
   namespace: ansible
 spec:
   pipelineRef:
@@ -161,6 +161,7 @@ spec:
       value:
         - "ansible/playbooks/prepare-env.yaml"
         - "ansible/playbooks/base-os.yaml"
+        - "ansible/playbooks/install-docker.yaml"
     - name: ansibleVarsFile
       value:
         - "manage_filesystem+-true"
