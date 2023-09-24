@@ -51,11 +51,74 @@ spec:
     - name: ansibleVarsInventory
       value:
         - "localhost"
+# ---
+# apiVersion: tekton.dev/v1
+# kind: PipelineRun
+# metadata:
+#   name: deploy-rke1
+#   namespace: ansible
+# spec:
+#   pipelineRef:
+#     resolver: git
+#     params:
+#       - name: url
+#         value: https://github.com/stuttgart-things/stuttgart-things.git
+#       - name: revision
+#         value: main
+#       - name: pathInRepo
+#         value: stageTime/pipelines/execute-ansible-playbooks.yaml
+#   workspaces:
+#     - name: shared-workspace
+#       persistentVolumeClaim:
+#         claimName: ansible-workspace
+#     - name: sshCredentials
+#       secret:
+#         secretName: github-ssh
+#   params:
+#     - name: ansibleWorkingImage
+#       value: "eu.gcr.io/stuttgart-things/sthings-ansible:8.3.0-6"
+#     - name: createInventory
+#       value: "true"
+#     - name: gitRepoUrl
+#       value: "git@github.com:stuttgart-things/stuttgart-things.git"
+#     - name: gitRevision
+#       value: "main"
+#     - name: gitWorkspaceSubdirectory
+#       value: "/ansible/base-os"
+#     - name: vaultSecretName
+#       value: vault-labul-vsphere
+#     - name: installExtraRoles
+#       value: "true"
+#     - name: ansibleExtraRoles
+#       value:
+#         - "https://github.com/stuttgart-things/deploy-configure-rke.git"
+#         - "https://github.com/stuttgart-things/manage-filesystem.git"
+#     - name: ansiblePlaybooks
+#       value:
+#         - "ansible/playbooks/prepare-env.yaml"
+#         - "ansible/playbooks/base-os.yaml"
+#         - "ansible/playbooks/deploy-rke1.yaml"
+#     - name: ansibleVarsFile
+#       value:
+#         - "manage_filesystem+-true"
+#         - "update_packages+-true"
+#         - "install_requirements+-true"
+#         - "install_motd+-true"
+#         - "username+-sthings"
+#         - "lvm_home_sizing+-'15%'"
+#         - "lvm_root_sizing+-'35%'"
+#         - "lvm_var_sizing+-'50%'"
+#         - "send_to_msteams+-true"
+#         - "reboot_all+-false"
+#     - name: ansibleVarsInventory
+#       value:
+#         - "initial_master_node+[\"smt10-rke1.labul.sva.de\"]"
+# ---
 ---
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: deploy-rke1
+  name: execute-baseos-k8s-wks4
   namespace: ansible
 spec:
   pipelineRef:
@@ -78,69 +141,7 @@ spec:
     - name: ansibleWorkingImage
       value: "eu.gcr.io/stuttgart-things/sthings-ansible:8.3.0-6"
     - name: createInventory
-      value: "true"
-    - name: gitRepoUrl
-      value: "git@github.com:stuttgart-things/stuttgart-things.git"
-    - name: gitRevision
-      value: "main"
-    - name: gitWorkspaceSubdirectory
-      value: "/ansible/base-os"
-    - name: vaultSecretName
-      value: vault-labul-vsphere
-    - name: installExtraRoles
-      value: "true"
-    - name: ansibleExtraRoles
-      value:
-        - "https://github.com/stuttgart-things/deploy-configure-rke.git"
-        - "https://github.com/stuttgart-things/manage-filesystem.git"
-    - name: ansiblePlaybooks
-      value:
-        - "ansible/playbooks/prepare-env.yaml"
-        - "ansible/playbooks/base-os.yaml"
-        - "ansible/playbooks/deploy-rke1.yaml"
-    - name: ansibleVarsFile
-      value:
-        - "manage_filesystem+-true"
-        - "update_packages+-true"
-        - "install_requirements+-true"
-        - "install_motd+-true"
-        - "username+-sthings"
-        - "lvm_home_sizing+-'15%'"
-        - "lvm_root_sizing+-'35%'"
-        - "lvm_var_sizing+-'50%'"
-        - "send_to_msteams+-true"
-        - "reboot_all+-false"
-    - name: ansibleVarsInventory
-      value:
-        - "initial_master_node+[\"smt10-rke1.labul.sva.de\"]"
----
-apiVersion: tekton.dev/v1
-kind: PipelineRun
-metadata:
-  name: execute-baseos-nashville
-  namespace: ansible
-spec:
-  pipelineRef:
-    resolver: git
-    params:
-      - name: url
-        value: https://github.com/stuttgart-things/stuttgart-things.git
-      - name: revision
-        value: main
-      - name: pathInRepo
-        value: stageTime/pipelines/execute-ansible-playbooks.yaml
-  workspaces:
-    - name: shared-workspace
-      persistentVolumeClaim:
-        claimName: ansible-workspace
-    - name: sshCredentials
-      secret:
-        secretName: github-ssh
-  params:
-    - name: ansibleWorkingImage
-      value: "eu.gcr.io/stuttgart-things/sthings-ansible:8.3.0-6"
-    - name: createInventory
-      value: "true"
+      value: "false"
     - name: gitRepoUrl
       value: "git@github.com:stuttgart-things/stuttgart-things.git"
     - name: gitRevision
@@ -162,6 +163,7 @@ spec:
         - "ansible/playbooks/base-os.yaml"
     - name: ansibleVarsFile
       value:
+        - targets+-k8s-wks.labul.sva.de;k8s-wks2.labul.sva.de
         - "manage_filesystem+-true"
         - "update_packages+-true"
         - "install_requirements+-true"
@@ -172,6 +174,3 @@ spec:
         - "lvm_var_sizing+-'50%'"
         - "send_to_msteams+-true"
         - "reboot_all+-false"
-    - name: ansibleVarsInventory
-      value:
-        - "all+[\"nashville.tiab.labda.sva.de\"]"
