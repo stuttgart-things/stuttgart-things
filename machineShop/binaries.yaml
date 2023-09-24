@@ -15,3 +15,6 @@ binary:
   - helm:
       url: https://get.helm.sh/helm-v{{ or .helmVersion "3.12.3" }}-linux-amd64.tar.gz
       bin: linux-amd64/helm
+  - kompose:
+      url: https://github.com/kubernetes/kompose/releases/download/v{{ or .helmVersion "1.26.0" }}/kompose-linux-amd64
+      bin: kompose-linux-amd64
