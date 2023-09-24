@@ -118,7 +118,7 @@ spec:
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: execute-baseos-k8s-wks5
+  name: execute-baseos-k8s-wks7
   namespace: ansible
 spec:
   pipelineRef:
@@ -141,7 +141,7 @@ spec:
     - name: ansibleWorkingImage
       value: "eu.gcr.io/stuttgart-things/sthings-ansible:8.3.0-6"
     - name: createInventory
-      value: "false"
+      value: "true"
     - name: gitRepoUrl
       value: "git@github.com:stuttgart-things/stuttgart-things.git"
     - name: gitRevision
@@ -163,7 +163,6 @@ spec:
         - "ansible/playbooks/base-os.yaml"
     - name: ansibleVarsFile
       value:
-        - targets+-k8s-wks.labul.sva.de;k8s-wks2.labul.sva.de
         - "manage_filesystem+-true"
         - "update_packages+-true"
         - "install_requirements+-true"
@@ -174,3 +173,6 @@ spec:
         - "lvm_var_sizing+-'50%'"
         - "send_to_msteams+-true"
         - "reboot_all+-false"
+    - name: ansibleVarsInventory
+      value:
+        - "all+[\"k8s-wks.labul.sva.de\"]"
