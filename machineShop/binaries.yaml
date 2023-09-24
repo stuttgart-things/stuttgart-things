@@ -11,4 +11,4 @@ binary:
 #       bin: gh_2.34.0_linux_amd64/bin/gh
   - helm:
       url: https://get.helm.sh/helm-v{{ or .helmVersion "3.12.3" }}-linux-amd64.tar.gz
-      bin: helm
+      bin: linux-amd64/helm
