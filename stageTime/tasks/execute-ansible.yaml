@@ -101,7 +101,7 @@ spec:
         done
 
         else
-          echo "skipped creating special inventory"
+          echo "skipped creating extended inventory"
         fi
 
         cat ./vars.yaml
@@ -186,9 +186,6 @@ spec:
         echo "list installed roles"
         if [ -d "roles" ]; then cp -R roles/* ${HOME}/.ansible/roles/ ; fi
         ansible-galaxy role list
-
-        echo "output inventory file"
-        cat $(workspaces.source.path)/$(params.SUB_DIRECTORY)/inventory
 
         echo "you know.. for running a playbook or 2"
         touch inventory

@@ -66,6 +66,9 @@
         content: "{{ ssh_key | b64decode }}"
         mode: '0600'
 
+    - name: Show inventory
+      ansible.builtin.debug: msg="{{ lookup('file', inv_path) }}"
+
     - name: Refresh inventory
       ansible.builtin.meta: refresh_inventory
 
