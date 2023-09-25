@@ -16,8 +16,8 @@ binary:
       url: https://get.helm.sh/helm-v{{ or .helmVersion "3.12.3" }}-linux-amd64.tar.gz
       bin: linux-amd64/helm
   - kompose:
-      url: https://github.com/kubernetes/kompose/releases/download/v{{ or .helmVersion "1.26.0" }}/kompose-linux-amd64
+      url: https://github.com/kubernetes/kompose/releases/download/v{{ or .komposeVersion "1.26.0" }}/kompose-linux-amd64
       bin: kompose-linux-amd64
   - k9s:
-      url: https://github.com/derailed/k9s/releases/download/v{{ or .helmVersion "0.27.0" }}/k9s_Linux_amd64.tar.gz
+      url: https://github.com/derailed/k9s/releases/download/v{{ or .k9Version "0.27.0" }}/k9s_Linux_amd64.tar.gz
       bin: k9s
