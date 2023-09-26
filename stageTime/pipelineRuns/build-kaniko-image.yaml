@@ -1,0 +1,42 @@
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  name: build-kaniko-image-1
+  namespace: kaniko
+spec:
+  pipelineRef:
+    resolver: git
+    params:
+      - name: url
+        value: https://github.com/stuttgart-things/stuttgart-things.git
+      - name: revision
+        value: main
+      - name: pathInRepo
+        value: stageTime/pipelines/build-kaniko-image.yaml
+  workspaces:
+    - name: dockerconfig
+      secret:
+        secretName: scr-labda-vsphere
+    - name: shared-workspace
+      persistentVolumeClaim:
+        claimName: kaniko-workspace
+    - name: sshCredentials
+      secret:
+        secretName: github-ssh
+  params:
+    - name: context
+      value: "/kaniko/sthings-ansible-github/images/sthings-ansible"
+    - name: dockerfile
+      value: "images/sthings-ansible/Dockerfile"
+    - name: gitRepoUrl
+      value: "git@github.com:stuttgart-things/stuttgart-things.git"
+    - name: gitRevision
+      value: "main"
+    - name: gitWorkspaceSubdirectory
+      value: "/kaniko/sthings-ansible-github"
+    - name: image
+      value: "scr.app.4sthings.tiab.ssc.sva.de/sthings-ansible/ansible"
+    - name: registry
+      value: "eu.gcr.io"
+    - name: tag
+      value: "8.0.0-5"
