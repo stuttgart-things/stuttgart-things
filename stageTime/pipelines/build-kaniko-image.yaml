@@ -1,0 +1,102 @@
+---
+apiVersion: tekton.dev/v1
+kind: Pipeline
+metadata:
+  name: build-kaniko-image
+  namespace: kaniko
+spec:
+  workspaces:
+    - name: shared-workspace
+    - name: sshCredentials
+    - name: dockerconfig
+  params:
+    - name: context
+      type: string
+      default: ""
+      description: path to context
+    - name: dockerfile
+      type: string
+      default: ""
+      description: path to dockerfile
+    - name: gitRepoUrl
+      type: string
+      default: ""
+      description: source git repo
+    - name: gitRevision
+      type: string
+      default: "main"
+      description: revision of source git repo
+    - name: gitWorkspaceSubdirectory
+      type: string
+      default: ""
+      description: subdirectory on workspace
+    - name: image
+      type: string
+      default: ""
+      description: reference of the image to build
+    - name: registry
+      type: string
+      default: ""
+      description: registry FROM (base image)
+    - name: tag
+      type: string
+      default: ""
+      description: reference of the tag of the image to build
+  tasks:
+    - name: fetch-repository
+      taskRef:
+        resolver: git
+        params:
+          - name: url
+            value: https://github.com/stuttgart-things/stuttgart-things.git
+          - name: revision
+            value: main
+          - name: pathInRepo
+            value: stageTime/tasks/clone-git.yaml
+      workspaces:
+        - name: output
+          workspace: shared-workspace
+        - name: ssh-directory
+          workspace: sshCredentials
+      params:
+        - name: deleteExisting
+          value: 'true'
+        - name: revision
+          value: $(params.gitRevision)
+        - name: subdirectory
+          value: $(params.gitWorkspaceSubdirectory)
+        - name: url
+          value: $(params.gitRepoUrl)
+    - name: kaniko
+      runAfter:
+        - fetch-repository
+      taskRef:
+        resolver: git
+        params:
+          - name: url
+            value: https://github.com/stuttgart-things/stuttgart-things.git
+          - name: revision
+            value: main
+          - name: pathInRepo
+            value: stageTime/tasks/kaniko.yaml
+      workspaces:
+        - name: dockerconfig
+          workspace: dockerconfig
+        - name: source
+          workspace: shared-workspace
+      params:
+        - name: CONTEXT
+          value: $(params.context)
+        - name: DOCKERFILE
+          value: $(params.dockerfile)
+        - name: EXTRA_ARGS
+          value:
+            - --skip-tls-verify
+        - name: IMAGE
+          value: $(params.image)
+        - name: REGISTRY
+          value: $(params.registry)
+        - name: SUBDIRECTORY
+          value: $(params.gitWorkspaceSubdirectory)
+        - name: TAG
+          value: $(params.tag)
