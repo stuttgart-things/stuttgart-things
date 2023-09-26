@@ -21,3 +21,6 @@ binary:
   - k9s:
       url: https://github.com/derailed/k9s/releases/download/v{{ or .k9Version "0.27.0" }}/k9s_Linux_amd64.tar.gz
       bin: k9s
+  - kube-linter:
+      url: https://github.com/stackrox/kube-linter/releases/download/v{{ or .k9Version "0.6.4" }}/kube-linter-linux.tar.gz
+      bin: kube-linter
