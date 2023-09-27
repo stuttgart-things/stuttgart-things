@@ -1,5 +1,4 @@
-name: Validate helm chart
-
+name: Run git workflow
 on:
   workflow_dispatch:
     inputs:
