@@ -24,3 +24,6 @@ binary:
   - kube-linter:
       url: https://github.com/stackrox/kube-linter/releases/download/v{{ or .k9Version "0.6.4" }}/kube-linter-linux.tar.gz
       bin: kube-linter
+  - helmfile:
+      url: https://github.com/helmfile/helmfile/releases/download/v{{ or .helmfileVersion "0.157.0" }}/helmfile_{{ or .helmfileVersion "0.157.0" }}_linux_amd64.tar.gz
+      bin: helmfile

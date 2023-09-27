@@ -2,7 +2,6 @@ apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
   name: build-kaniko-image-1
-  namespace: kaniko
 spec:
   pipelineRef:
     resolver: git
@@ -16,10 +15,16 @@ spec:
   workspaces:
     - name: dockerconfig
       secret:
-        secretName: scr-labda-vsphere
+        secretName: aks
     - name: shared-workspace
-      persistentVolumeClaim:
-        claimName: kaniko-workspace
+      volumeClaimTemplate:
+        spec:
+          storageClassName: nfs4-csi
+          accessModes:
+          - ReadWriteMany
+          resources:
+            requests:
+              storage: 2Gi
     - name: sshCredentials
       secret:
         secretName: github-ssh

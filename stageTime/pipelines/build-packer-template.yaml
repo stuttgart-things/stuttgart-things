@@ -71,8 +71,6 @@ spec:
                   secretKeyRef:
                     key: $(params.vault-secret-key-approleSecret)
                     name: $(params.vaultSecretName)
-
-
             script: |
               #!/usr/bin/env sh
               set -eu
