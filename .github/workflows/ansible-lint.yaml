@@ -7,9 +7,10 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-      - name: Ansible Lint
+      - name: Ansible Lint 🔍
         uses: ansible/ansible-lint-action@v6.11.0
 
   if_failure:
