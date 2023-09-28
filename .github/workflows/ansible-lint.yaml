@@ -19,6 +19,7 @@ jobs:
       - name: ECHO
         run: |
           echo ${{ steps.lint.outputs.stdout }}
+        if: always()
 
       - name: Send Microsoft Teams Notification if failed
         uses: skitionek/notify-microsoft-teams@v1.0.8
