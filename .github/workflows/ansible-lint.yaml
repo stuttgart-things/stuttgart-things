@@ -16,6 +16,7 @@ jobs:
   if_failure:
     name: Only if failure
     runs-on: ubuntu-latest
+    environment: dev
     steps:
       - name: Microsoft Teams Notification
         uses: skitionek/notify-microsoft-teams@master
