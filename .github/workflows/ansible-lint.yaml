@@ -6,7 +6,6 @@ jobs:
   linting:
     runs-on: ubuntu-latest
     continue-on-error: true
-    environment: dev
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
