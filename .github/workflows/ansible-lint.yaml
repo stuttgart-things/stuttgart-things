@@ -1,0 +1,28 @@
+---
+on:
+  workflow_call:
+    secrets:
+      MS_TEAMS_URL:
+        required: true
+jobs:
+  linting:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Ansible Lint 🔍
+        uses: ansible/ansible-lint@v6.20.0
+        id: lint
+
+      - name: ECHO
+        run: |
+          echo ${{ steps.lint.outputs.stdout }}
+        if: always()
+
+      - name: Send Microsoft Teams Notification if failed
+        uses: skitionek/notify-microsoft-teams@v1.0.8
+        if: failure()
+        with:
+          webhook_url: ${{ secrets.MS_TEAMS_URL }}
