@@ -21,4 +21,4 @@ jobs:
         uses: skitionek/notify-microsoft-teams@master
         if: failure()
         with:
-          webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
+          webhook_url: ${{ secrets.MS_TEAMS_URL }}
