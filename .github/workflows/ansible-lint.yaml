@@ -1,7 +1,9 @@
 ---
 on:
   workflow_call:
-
+    secrets:
+      MS_TEAMS_URL:
+        required: true
 jobs:
   linting:
     runs-on: ubuntu-latest
