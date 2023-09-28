@@ -10,14 +10,14 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Ansible Lint 🔍
-        uses: ansible/ansible-lint-action@v6.11.0
-
       - name: TEST
         run: |
           ls -lta 
           printenv
           echo ${{ secrets.MS_TEAMS_URL }}
+
+      - name: Ansible Lint 🔍
+        uses: ansible/ansible-lint-action@v6.11.0
 
       - name: Microsoft Teams Notification
         uses: skitionek/notify-microsoft-teams@master
