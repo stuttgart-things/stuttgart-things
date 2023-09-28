@@ -36,13 +36,13 @@ releases:
     values:
       # - "workspaces/tekton-kaniko.yaml.gotmpl"
       # - "secrets/scr-registry-credentials.yaml.gotmpl"
-      # - "secrets/git-ssh-credentials.yaml.gotmpl"
+      - "secrets/git-ssh-credentials.yaml.gotmpl"
       # - "secrets/msteams-notification.yaml.gotmpl"
       # - "tasks/git-clone.yaml.gotmpl"
-      - "tasks/kaniko.yaml.gotmpl"
+      # - "tasks/kaniko.yaml.gotmpl"
       # - "tasks/send-msteams-notification.yaml.gotmpl"
       - "pipelines/{{`{{ .Release.Name }}`}}.yaml.gotmpl"
-      - "test-runs/run-{{`{{ .Release.Name }}`}}.yaml.gotmpl"
+      # - "test-runs/run-{{`{{ .Release.Name }}`}}.yaml.gotmpl"
 
   - name: package-publish-helmchart
     installed: false
