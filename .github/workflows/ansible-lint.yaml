@@ -1,5 +1,9 @@
+on:
+  workflow_call:
+
 jobs:
   linting:
+    runs_on: 
     continue-on-error: true
     steps:
       - uses: actions/checkout@v3
