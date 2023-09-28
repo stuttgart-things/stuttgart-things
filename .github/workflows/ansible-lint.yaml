@@ -12,17 +12,11 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: TEST
-        run: |
-          ls -lta 
-          printenv
-          echo ${{ secrets.MS_TEAMS_URL }}
-
       - name: Ansible Lint 🔍
-        uses: ansible/ansible-lint-action@v6.11.0
+        uses: ansible/ansible/ansible-lint@v6.20.0
 
-      - name: Microsoft Teams Notification
-        uses: skitionek/notify-microsoft-teams@master
+      - name: Send Microsoft Teams Notification if failed
+        uses: skitionek/notify-microsoft-teams@v1.0.8
         if: failure()
         with:
           webhook_url: ${{ secrets.MS_TEAMS_URL }}
