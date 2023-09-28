@@ -11,3 +11,13 @@ jobs:
 
       - name: Ansible Lint
         uses: ansible/ansible-lint-action@v6.11.0
+
+  if_failure:
+    name: Only if failure
+    runs-on: ubuntu-latest
+    steps:
+      - name: Microsoft Teams Notification
+        uses: skitionek/notify-microsoft-teams@master
+        if: failure()
+        with:
+          webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
