@@ -6,6 +6,7 @@ jobs:
   linting:
     runs-on: ubuntu-latest
     continue-on-error: true
+    environment: dev
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -13,11 +14,6 @@ jobs:
       - name: Ansible Lint 🔍
         uses: ansible/ansible-lint-action@v6.11.0
 
-  if_failure:
-    name: Only if failure
-    runs-on: ubuntu-latest
-    environment: dev
-    steps:
       - name: Microsoft Teams Notification
         uses: skitionek/notify-microsoft-teams@master
         if: failure()
