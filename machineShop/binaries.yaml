@@ -13,13 +13,13 @@ binary:
 #       url: https://github.com/cli/cli/releases/download/v{{ or .ghVersion 2.34.0" }}/gh_{{ or .ghVersion 2.34.0" }}_linux_amd64.tar.gz
 #       bin: gh_2.34.0_linux_amd64/bin/gh
   - helm:
-      url: https://get.helm.sh/helm-v{{ or .helmVersion "3.12.3" }}-linux-amd64.tar.gz
+      url: https://get.helm.sh/helm-v{{ or .helmVersion "3.13.0" }}-linux-amd64.tar.gz
       bin: linux-amd64/helm
   - kompose:
       url: https://github.com/kubernetes/kompose/releases/download/v{{ or .komposeVersion "1.26.0" }}/kompose-linux-amd64
       bin: kompose-linux-amd64
   - k9s:
-      url: https://github.com/derailed/k9s/releases/download/v{{ or .k9Version "0.27.0" }}/k9s_Linux_amd64.tar.gz
+      url: https://github.com/derailed/k9s/releases/download/v{{ or .k9Version "0.27.4" }}/k9s_Linux_amd64.tar.gz
       bin: k9s
   - kube-linter:
       url: https://github.com/stackrox/kube-linter/releases/download/v{{ or .k9Version "0.6.4" }}/kube-linter-linux.tar.gz
