@@ -15,17 +15,15 @@ spec:
   description: >-
     This Task is Golang task to validate Go projects.
   params:
-  - name: package
-    description: base package (and its children) under validation
   - name: context
     description: path to the directory to use as context.
     default: "."
   - name: flags
     description: flags to use for the test command
     default: --verbose
-  - name: version
+  - name: golintImage
     description: golangci-lint version to use
-    default: "v1.39"
+    default: "golangci/golangci-lint:v1.54-alpine"
   - name: GOOS
     description: "running operating system target"
     default: linux
@@ -44,14 +42,21 @@ spec:
   - name: GOLANGCI_LINT_CACHE
     description: "golangci-lint cache path"
     default: ""
+  - name: subdirectory
+    description: subdirectory of workspace
+    type: string
+    default: ""
   workspaces:
-  - name: source
-    mountPath: /workspace/src/$(params.package)
+    - name: source
+      description: holds the working data
+      optional: false
   steps:
   - name: lint
-    image: docker.io/golangci/golangci-lint:$(params.version)
-    workingDir: $(workspaces.source.path)/$(params.context)
+    image: (params.golintImage)
+    workingDir: $(workspaces.source.path)/$(params.subdirectory)
     script: |
+      #!/usr/bin/env sh
+      set -eu
       golangci-lint run $(params.flags)
     env:
       - name: GOPATH

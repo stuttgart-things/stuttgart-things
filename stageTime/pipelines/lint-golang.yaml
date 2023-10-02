@@ -6,6 +6,7 @@ metadata:
 spec:
   workspaces:
     - name: source
+    - name: sshCredentials
   params:
     - name: gitWorkspaceSubdirectory
       type: string
@@ -19,8 +20,6 @@ spec:
       type: string
       default: "main"
       description: revision of source git repo
-    - name: golangPackage
-      description: base package (and its children) under validation
     - name: golangContext
       description: path to the directory to use as context.
       default: "."
@@ -36,6 +35,9 @@ spec:
     - name: golangArch
       description: "running architecture target"
       default: amd64
+    - name: golintImage
+      description: golangci-lint version to use
+      default: "golangci/golangci-lint:v1.54-alpine"
   tasks:
     - name: fetch-repository
       taskRef:
@@ -77,8 +79,10 @@ spec:
         - name: source
           workspace: source
       params:
-        - name: package
-          value: $(params.golangPackage)
+        - name: golintImage
+          value: $(params.golintImage)
+        - name: subdirectory
+          value: $(params.gitWorkspaceSubdirectory)
         - name: context
           value: $(params.golangContext)
         - name: flags
