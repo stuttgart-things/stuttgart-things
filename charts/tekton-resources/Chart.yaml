@@ -6,8 +6,9 @@ version: "v0.47.32"
 appVersion: v0.47.32
 dependencies:
   - name: sthings-helm-toolkit
-    version: 2.4.52
+    version: 2.4.53
     repository: oci://eu.gcr.io/stuttgart-things
+    repository: file://../sthings-helm-toolkit
     alias: toolkit-resources
 maintainers:
   - name: Patrick Hermann

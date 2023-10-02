@@ -10,7 +10,7 @@ enableGitSecretsSSH: false
 enableRegistryCredentials: false
 enableWorkspaces: false
 enablePipelines: false
-enableRuns: false
+enableRuns: true
 enableExtraPipelines: false
 #extraPipelines: {}
 
@@ -22,32 +22,57 @@ enableExtraPipelines: false
 #    accessModes:
 #      - ReadWriteOnce
 
-# runs:
-#   buildKanikosthings-alpine-230305-0403:
-#     name: kaniko-sthings-alpine-230305-0403
-#     addRandomDateToRunName: false
-#     namespace: yacht
-#     kind: Pipeline
-#     ref: build-kaniko-image
-#     params:
-#       image: scr.tiab.labda.sva.de/sthings-alpine/sthings-alpine/sthings-alpine/sthings-alpine
-#       tag: 230305-0403
-#       gitWorkspaceSubdirectory: /kaniko/sthings-alpine
-#       gitRevision: master
-#       registry: scr.tiab.labda.sva.de
-#       gitRepoUrl: git@codehub.sva.de:Lab/stuttgart-things/stuttgart-things.git
-#       dockerfile: build/images/sthings-alpine/Dockerfile
-#       context: /kaniko/sthings-alpine
-#     workspaces:
-#       sshCredentials:
-#         workspaceKind: secret
-#         workspaceRef: codehub-ssh
-#       sharedWorkspace:
-#         workspaceKind: persistentVolumeClaim
-#         workspaceRef: tekton-kaniko-workspace
-#       dockerconfig:
-#         workspaceKind: secret
-#         workspaceRef: scr-labda
+runs:
+  lint-golang:
+    name: lint-machineshop-cli-5
+    addRandomDateToRunName: true
+    namespace: packer
+    kind: Pipeline
+    resolver: git
+    resolverParams:
+      url: https://github.com/stuttgart-things/stuttgart-things.git
+      revision: main
+      pathInRepo: stageTime/pipelines/lint-golang.yaml
+    params:
+      gitRepoUrl: git@github.com:stuttgart-things/machineShop.git
+      gitRevision: main
+      gitWorkspaceSubdirectory: ""
+      golintImage: "docker.io/golangci/golangci-lint:v1.54-alpine"
+    workspaces:
+      sshCredentials:
+        workspaceKind: secret
+        workspaceRef: github-ssh
+      source:
+        workspaceKind: volumeClaimTemplate
+        storageClassName: nfs4-csi
+        accessModes: ReadWriteMany
+        storage: 2Gi
+        workspaceRef: tekton-kaniko-workspace
+  # buildKanikosthings-alpine-230305-0403:
+  #   name: kaniko-sthings-alpine-230305-0403
+  #   addRandomDateToRunName: false
+  #   namespace: yacht
+  #   kind: Pipeline
+  #   ref: build-kaniko-image
+  #   params:
+  #     image: scr.tiab.labda.sva.de/sthings-alpine/sthings-alpine/sthings-alpine/sthings-alpine
+  #     tag: 230305-0403
+  #     gitWorkspaceSubdirectory: /kaniko/sthings-alpine
+  #     gitRevision: master
+  #     registry: scr.tiab.labda.sva.de
+  #     gitRepoUrl: git@codehub.sva.de:Lab/stuttgart-things/stuttgart-things.git
+  #     dockerfile: build/images/sthings-alpine/Dockerfile
+  #     context: /kaniko/sthings-alpine
+  #   workspaces:
+  #     sshCredentials:
+  #       workspaceKind: secret
+  #       workspaceRef: codehub-ssh
+  #     sharedWorkspace:
+  #       workspaceKind: persistentVolumeClaim
+  #       workspaceRef: tekton-kaniko-workspace
+  #     dockerconfig:
+  #       workspaceKind: secret
+  #       workspaceRef: scr-labda
 
 # runs:
 #   packagesthings-cluster-0.2.1HelmChart:

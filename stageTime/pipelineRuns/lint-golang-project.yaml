@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: lint-golang-project-5
+  name: lint-machineshop-cli-2
 spec:
   pipelineRef:
     resolver: git
@@ -27,7 +27,7 @@ spec:
         secretName: github-ssh
   params:
     - name: gitRepoUrl
-      value: git@github.com:stuttgart-things/stuttgart-things.git
+      value: git@github.com:stuttgart-things/machineShop.git
     - name: gitRevision
       value: main
     - name: gitWorkspaceSubdirectory

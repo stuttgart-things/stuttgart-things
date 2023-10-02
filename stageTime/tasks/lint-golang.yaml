@@ -57,6 +57,7 @@ spec:
     script: |
       #!/usr/bin/env sh
       set -eu
+      ls -lta
       golangci-lint run $(params.flags)
     env:
       - name: GOPATH

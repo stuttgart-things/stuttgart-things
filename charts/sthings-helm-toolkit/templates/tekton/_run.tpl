@@ -23,14 +23,34 @@ metadata:
 {{- end }}{{- end }}
 spec:
   {{ $run.kind | replace "Run" "" | lower | default "pipeline" }}Ref:
+{{- if $run.ref }}
     name: {{ $run.ref }}
+{{ else }}
+    resolver: {{ $run.resolver }}
+    params:
+    {{- range $k, $v := $run.resolverParams }}
+      - name: {{ $k }}
+        value: {{ $v | quote -}}
+    {{ end }}
+{{ end }}
   workspaces:
   {{- range $k, $v := $run.workspaces }}
     - name: {{ $k }}
+    {{- if eq $v.workspaceKind "volumeClaimTemplate" }}
+      volumeClaimTemplate:
+        spec:
+          storageClassName: {{ $v.storageClassName }}
+          accessModes:
+          - {{ $v.accessModes }}
+          resources:
+            requests:
+              storage: {{ $v.storage }}{{ end }}
+  {{- if ne $v.workspaceKind "volumeClaimTemplate" }}
     {{- if eq $v.workspaceKind "emptyDir" }}
       emptyDir: {}{{ else }}
       {{ $v.workspaceKind }}:
         {{ $v.workspaceKind | replace "persistentVolumeClaim" "claim" }}Name: {{ $v.workspaceRef }}{{ end }}{{ end }}
+  {{ end }}
   params:
   {{- range $k, $v := $run.params }}
     - name: {{ $k }}

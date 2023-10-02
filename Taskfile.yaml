@@ -75,7 +75,7 @@ tasks:
   package:
     desc: Package & push chart
     cmds:
-      - helm template ./charts/{{ .PROJECT }}
+      - helm template ./charts/{{ .PROJECT }} || true
       - yq e -i '.version = "{{ .VERSION_NUMBER_PREFIX }}{{ .UPDATED_VERSION_NUMBER }}"' ./charts/{{ .PROJECT }}/Chart.yaml
       - "sed -i 's/appVersion: .*/appVersion: {{ .VERSION_NUMBER_PREFIX }}{{ .UPDATED_VERSION_NUMBER }}/g' ./charts/{{ .PROJECT }}/Chart.yaml"
       - cd ./charts/{{ .PROJECT }} && helm dep update
