@@ -51,7 +51,7 @@ spec:
             value: stageTime/tasks/clone-git.yaml
       workspaces:
         - name: output
-          workspace: shared-workspace
+          workspace: source
         - name: ssh-directory
           workspace: sshCredentials
       params:
