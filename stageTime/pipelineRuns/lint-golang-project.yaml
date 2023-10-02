@@ -19,10 +19,10 @@ spec:
         spec:
           storageClassName: nfs4-csi
           accessModes:
-          - ReadWriteMany
+            - ReadWriteMany
           resources:
             requests:
-              storage: 2Gi
+              storage: 1Gi
   params:
     - name: gitRepoUrl
       value: https://github.com/stuttgart-things/machineShop.git
