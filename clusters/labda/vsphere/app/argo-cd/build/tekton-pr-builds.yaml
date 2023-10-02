@@ -30,7 +30,7 @@ spec:
         path: charts/tekton-resources
         helm:
           values: |
-            enablePipelines: true
+            enableRuns: true
             runs:
               lint-golang:
                 name: lint-machineshop-cli-{{ number }}
