@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: lint-golang-project
+  name: lint-golang-project-5
 spec:
   pipelineRef:
     resolver: git
@@ -33,4 +33,4 @@ spec:
     - name: gitWorkspaceSubdirectory
       value: ""
     - name: golintImage
-      value: golangci/golangci-lint:v1.54-alpine
+      value: "docker.io/golangci/golangci-lint:v1.54-alpine"

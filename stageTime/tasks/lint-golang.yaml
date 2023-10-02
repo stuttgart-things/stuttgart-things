@@ -52,7 +52,7 @@ spec:
       optional: false
   steps:
   - name: lint
-    image: (params.golintImage)
+    image: $(params.golintImage)
     workingDir: $(workspaces.source.path)/$(params.subdirectory)
     script: |
       #!/usr/bin/env sh
