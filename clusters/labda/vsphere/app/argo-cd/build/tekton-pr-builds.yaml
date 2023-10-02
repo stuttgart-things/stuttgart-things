@@ -1,0 +1,56 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: tetkon-pr-machineshop
+  namespace: argocd
+spec:
+  generators:
+  - pullRequest:
+      github:
+        owner: stuttgart-things
+        repo: machineShop # This is the application source code repo
+        tokenRef:
+          secretName: github
+          key: token
+        # labels:
+        #   - build # label on PR that trigger review app
+      requeueAfterSeconds: 1800
+  template:
+    metadata:
+      name: 'tekton-pr-{{ number }}'
+    spec:
+      project: app
+      destination:
+        name: dev11
+        namespace: tektoncd
+      source:
+        repoURL: https://github.com/stuttgart-things/stuttgart-things.git
+        targetRevision: main
+        path: charts/tekton-resources
+        helm:
+          values: |
+            enablePipelines: true
+            runs:
+              lint-golang:
+                name: lint-machineshop-cli-{{ number }}
+                addRandomDateToRunName: false
+                namespace: packer
+                kind: Pipeline
+                resolver: git
+                resolverParams:
+                  url: https://github.com/stuttgart-things/stuttgart-things.git
+                  revision: main
+                  pathInRepo: stageTime/pipelines/lint-golang.yaml
+                params:
+                  gitRepoUrl: https://github.com/stuttgart-things/machineShop.git
+                  gitRevision: {{ branch }}
+                  gitWorkspaceSubdirectory: ""
+                  golintImage: "docker.io/golangci/golangci-lint:v1.54-alpine"
+                workspaces:
+                  source:
+                    workspaceKind: volumeClaimTemplate
+                    storageClassName: nfs4-csi
+                    accessModes: ReadWriteMany
+                    storage: 1Gi
+                    workspaceRef: tekton-lint-workspace
