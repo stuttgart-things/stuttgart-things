@@ -7,20 +7,21 @@ metadata:
 spec:
   generators:
     - matrix:
-      - pullRequest:
-          github:
-            owner: stuttgart-things
-            repo: machineShop # This is the application source code repo
-            tokenRef:
-              secretName: github
-              key: token
-            # labels:
-            #   - build # label on PR that trigger review app
-          requeueAfterSeconds: 1800
-      - list:
-          elements:
-            - pipelinerun: lint
-            - pipelinerun: docker
+        generators:
+          - pullRequest:
+              github:
+                owner: stuttgart-things
+                repo: machineShop # This is the application source code repo
+                tokenRef:
+                  secretName: github
+                  key: token
+                # labels:
+                #   - build # label on PR that trigger review app
+              requeueAfterSeconds: 1800
+          - list:
+              elements:
+                - pipelinerun: lint
+                - pipelinerun: docker
   template:
     metadata:
       name: 'tekton-pr-{{ number }}-{{ pipelinerun }}'
