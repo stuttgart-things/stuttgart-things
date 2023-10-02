@@ -75,50 +75,50 @@ spec:
       type: string
       default: flux-system
   sidecars:
-      image: "$(params.MACHINESHOP_IMAGE)"
-      name: get-secrets
-      workingDir: $(workspaces.source.path)
-      env:
-        - name: VAULT_ADDR
-          valueFrom:
-            secretKeyRef:
-              key: $(params.vault-secret-key-addr)
-              name: $(params.vaultSecretName)
-        - name: VAULT_NAMESPACE
-          valueFrom:
-            secretKeyRef:
-              key: $(params.vault-secret-key-namespace)
-              name: $(params.vaultSecretName)
-        - name: VAULT_ROLE_ID
-          valueFrom:
-            secretKeyRef:
-              key: $(params.vault-secret-key-approleId)
-              name: $(params.vaultSecretName)
-        - name: VAULT_SECRET_ID
-          valueFrom:
-            secretKeyRef:
-              key: $(params.vault-secret-key-approleSecret)
-              name: $(params.vaultSecretName)
-      args:
-        - $(params.SECRET_PATHS[*])
-      securityContext:
-        privileged: false
-        runAsNonRoot: true
-        runAsUser: 65532
-      script: |
-        #!/usr/bin/env bash
-        set -eu
+    image: "$(params.MACHINESHOP_IMAGE)"
+    name: get-secrets
+    workingDir: $(workspaces.source.path)
+    env:
+      - name: VAULT_ADDR
+        valueFrom:
+          secretKeyRef:
+            key: $(params.vault-secret-key-addr)
+            name: $(params.vaultSecretName)
+      - name: VAULT_NAMESPACE
+        valueFrom:
+          secretKeyRef:
+            key: $(params.vault-secret-key-namespace)
+            name: $(params.vaultSecretName)
+      - name: VAULT_ROLE_ID
+        valueFrom:
+          secretKeyRef:
+            key: $(params.vault-secret-key-approleId)
+            name: $(params.vaultSecretName)
+      - name: VAULT_SECRET_ID
+        valueFrom:
+          secretKeyRef:
+            key: $(params.vault-secret-key-approleSecret)
+            name: $(params.vaultSecretName)
+    args:
+      - $(params.SECRET_PATHS[*])
+    securityContext:
+      privileged: false
+      runAsNonRoot: true
+      runAsUser: 65532
+    script: |
+      #!/usr/bin/env bash
+      set -eu
 
-        ALL_SECRETS=""
-        for SECRET_DEFINITON in "$@"
-        do
-          echo GETTING VAULT SECRET ${SECRET_DEFINITON} W/ machineShop CLI
-          VAULT_PATH=$(awk -F+- '{print $1}' <<< ${SECRET_DEFINITON})
-          B64_DECODE=$(awk -F+- '{print $2}' <<< ${SECRET_DEFINITON})
-          DESTINATION=$(awk -F+- '{print $3}' <<< ${SECRET_DEFINITON})
+      ALL_SECRETS=""
+      for SECRET_DEFINITON in "$@"
+      do
+        echo GETTING VAULT SECRET ${SECRET_DEFINITON} W/ machineShop CLI
+        VAULT_PATH=$(awk -F+- '{print $1}' <<< ${SECRET_DEFINITON})
+        B64_DECODE=$(awk -F+- '{print $2}' <<< ${SECRET_DEFINITON})
+        DESTINATION=$(awk -F+- '{print $3}' <<< ${SECRET_DEFINITON})
 
-          machineShop get --path ${VAULT_PATH} --output file --destination ${DESTINATION} --b64 "${B64_DECODE}"
-        done
+        machineShop get --path ${VAULT_PATH} --output file --destination ${DESTINATION} --b64 "${B64_DECODE}"
+      done
   steps:
     - name: prepare-cluster
       image: "$(params.KUBECTL_IMAGE)"
