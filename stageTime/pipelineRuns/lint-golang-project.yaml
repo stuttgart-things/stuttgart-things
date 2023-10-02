@@ -1,17 +1,18 @@
+---
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: lint-machineshop-cli-6
+  name: lint-machineshop-cli-10
 spec:
   pipelineRef:
     resolver: git
     params:
-      - name: url
-        value: https://github.com/stuttgart-things/stuttgart-things.git
-      - name: revision
-        value: main
       - name: pathInRepo
-        value: stageTime/pipelines/lint-golang.yaml
+        value: "stageTime/pipelines/lint-golang.yaml"
+      - name: revision
+        value: "main"
+      - name: url
+        value: "https://github.com/stuttgart-things/stuttgart-things.git"
   workspaces:
     - name: source
       volumeClaimTemplate:
@@ -22,15 +23,12 @@ spec:
           resources:
             requests:
               storage: 2Gi
-    - name: sshCredentials
-      secret:
-        secretName: github-ssh
   params:
     - name: gitRepoUrl
-      value: git@github.com:stuttgart-things/machineShop.git
+      value: https://github.com/stuttgart-things/machineShop.git
     - name: gitRevision
       value: main
     - name: gitWorkspaceSubdirectory
       value: ""
     - name: golintImage
-      value: "docker.io/golangci/golangci-lint:v1.54-alpine"
+      value: docker.io/golangci/golangci-lint:v1.54-alpine
