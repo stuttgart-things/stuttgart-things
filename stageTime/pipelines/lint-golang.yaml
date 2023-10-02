@@ -50,8 +50,8 @@ spec:
           - name: pathInRepo
             value: stageTime/tasks/clone-git.yaml
       workspaces:
-        - name: output
-          workspace: shared-workspace
+        - name: source
+          workspace: source
         - name: ssh-directory
           workspace: sshCredentials
       params:
