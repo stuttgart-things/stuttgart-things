@@ -1,0 +1,36 @@
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  name: lint-golang-project
+spec:
+  pipelineRef:
+    resolver: git
+    params:
+      - name: url
+        value: https://github.com/stuttgart-things/stuttgart-things.git
+      - name: revision
+        value: main
+      - name: pathInRepo
+        value: stageTime/pipelines/lint-golang.yaml
+  workspaces:
+    - name: source
+      volumeClaimTemplate:
+        spec:
+          storageClassName: nfs4-csi
+          accessModes:
+          - ReadWriteMany
+          resources:
+            requests:
+              storage: 2Gi
+    - name: sshCredentials
+      secret:
+        secretName: github-ssh
+  params:
+    - name: gitRepoUrl
+      value: git@github.com:stuttgart-things/stuttgart-things.git
+    - name: gitRevision
+      value: main
+    - name: gitWorkspaceSubdirectory
+      value: ""
+    - name: golintImage
+      value: golangci/golangci-lint:v1.54-alpine
