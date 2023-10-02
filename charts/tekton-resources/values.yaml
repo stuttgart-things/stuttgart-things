@@ -10,7 +10,7 @@ enableGitSecretsSSH: false
 enableRegistryCredentials: false
 enableWorkspaces: false
 enablePipelines: false
-enableRuns: true
+enableRuns: false
 enableExtraPipelines: false
 #extraPipelines: {}
 
@@ -22,32 +22,32 @@ enableExtraPipelines: false
 #    accessModes:
 #      - ReadWriteOnce
 
-runs:
-  lint-golang:
-    name: lint-machineshop-cli-5
-    addRandomDateToRunName: true
-    namespace: packer
-    kind: Pipeline
-    resolver: git
-    resolverParams:
-      url: https://github.com/stuttgart-things/stuttgart-things.git
-      revision: main
-      pathInRepo: stageTime/pipelines/lint-golang.yaml
-    params:
-      gitRepoUrl: git@github.com:stuttgart-things/machineShop.git
-      gitRevision: main
-      gitWorkspaceSubdirectory: ""
-      golintImage: "docker.io/golangci/golangci-lint:v1.54-alpine"
-    workspaces:
-      sshCredentials:
-        workspaceKind: secret
-        workspaceRef: github-ssh
-      source:
-        workspaceKind: volumeClaimTemplate
-        storageClassName: nfs4-csi
-        accessModes: ReadWriteMany
-        storage: 2Gi
-        workspaceRef: tekton-kaniko-workspace
+# runs:
+#   lint-golang:
+#     name: lint-machineshop-cli-5
+#     addRandomDateToRunName: true
+#     namespace: packer
+#     kind: Pipeline
+#     resolver: git
+#     resolverParams:
+#       url: https://github.com/stuttgart-things/stuttgart-things.git
+#       revision: main
+#       pathInRepo: stageTime/pipelines/lint-golang.yaml
+#     params:
+#       gitRepoUrl: git@github.com:stuttgart-things/machineShop.git
+#       gitRevision: main
+#       gitWorkspaceSubdirectory: ""
+#       golintImage: "docker.io/golangci/golangci-lint:v1.54-alpine"
+#     workspaces:
+#       sshCredentials:
+#         workspaceKind: secret
+#         workspaceRef: github-ssh
+#       source:
+#         workspaceKind: volumeClaimTemplate
+#         storageClassName: nfs4-csi
+#         accessModes: ReadWriteMany
+#         storage: 2Gi
+#         workspaceRef: tekton-kaniko-workspace
   # buildKanikosthings-alpine-230305-0403:
   #   name: kaniko-sthings-alpine-230305-0403
   #   addRandomDateToRunName: false
