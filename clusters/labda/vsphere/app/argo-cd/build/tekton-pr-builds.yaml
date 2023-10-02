@@ -21,6 +21,9 @@ spec:
       name: 'tekton-pr-{{ number }}'
     spec:
       project: app
+      syncPolicy:
+        automated:
+          prune: true
       destination:
         name: dev11
         namespace: tektoncd
@@ -50,7 +53,7 @@ spec:
                 workspaces:
                   source:
                     workspaceKind: volumeClaimTemplate
-                    storageClassName: nfs4-csi
+                    storageClassName: nfs3-csi2
                     accessModes: ReadWriteMany
                     storage: 1Gi
                     workspaceRef: tekton-lint-workspace
