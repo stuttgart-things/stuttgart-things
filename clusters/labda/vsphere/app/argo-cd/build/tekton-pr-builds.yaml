@@ -6,19 +6,24 @@ metadata:
   namespace: argocd
 spec:
   generators:
-  - pullRequest:
-      github:
-        owner: stuttgart-things
-        repo: machineShop # This is the application source code repo
-        tokenRef:
-          secretName: github
-          key: token
-        # labels:
-        #   - build # label on PR that trigger review app
-      requeueAfterSeconds: 1800
+    - matrix:
+      - pullRequest:
+          github:
+            owner: stuttgart-things
+            repo: machineShop # This is the application source code repo
+            tokenRef:
+              secretName: github
+              key: token
+            # labels:
+            #   - build # label on PR that trigger review app
+          requeueAfterSeconds: 1800
+      - list:
+          elements:
+            - pipelinerun: lint
+            - pipelinerun: docker
   template:
     metadata:
-      name: 'tekton-pr-{{ number }}'
+      name: 'tekton-pr-{{ number }}-{{ pipelinerun }}'
     spec:
       project: app
       syncPolicy:
@@ -36,7 +41,7 @@ spec:
             enableRuns: true
             runs:
               lint-golang:
-                name: lint-machineshop-cli-{{ number }}
+                name: {{ pipelinerun }}-machineshop-cli-{{ number }}
                 addRandomDateToRunName: false
                 namespace: packer
                 kind: Pipeline
