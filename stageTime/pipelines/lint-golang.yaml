@@ -59,7 +59,7 @@ spec:
           - name: pathInRepo
             value: stageTime/tasks/use-ghcli.yaml
       workspaces:
-        - name: output
+        - name: source
           workspace: source
         - name: secrets
           workspace: secrets

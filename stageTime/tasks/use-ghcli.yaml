@@ -40,15 +40,14 @@ spec:
     - name: secrets
       description: holds the secrets
       optional: false
-  stepTemplate:
-    securityContext:
-      privileged: false
-      runAsNonRoot: true
-      runAsUser: 65532
   steps:
     - name: clone
       image: $(params.GH_WORKING_IMAGE)
       workingDir: $(workspaces.source.path)/$(params.SUBDIRECTORY)
+      securityContext:
+        privileged: false
+        runAsNonRoot: true
+        runAsUser: 65532
       script: |
         #!/usr/bin/env sh
         set -eu
