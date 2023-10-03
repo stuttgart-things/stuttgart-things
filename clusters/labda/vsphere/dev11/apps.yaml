@@ -69,7 +69,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./apps/vault
+  path: ./infra/vault
   prune: true
   wait: true
   postBuild:
