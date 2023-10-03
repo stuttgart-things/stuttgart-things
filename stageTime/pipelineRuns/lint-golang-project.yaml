@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: lint-machineshop-cli-14
+  name: lint-machineshop-cli-23
 spec:
   pipelineRef:
     resolver: git
@@ -28,7 +28,7 @@ spec:
         driver: 'secrets-store.csi.k8s.io'
         readOnly: true
         volumeAttributes:
-          secretProviderClass: vault-user-creds
+          secretProviderClass: vault-packer-creds
   params:
     - name: gitRepoUrl
       value: https://github.com/stuttgart-things/machineShop.git
@@ -38,3 +38,21 @@ spec:
       value: ""
     - name: golintImage
       value: docker.io/golangci/golangci-lint:v1.54-alpine
+
+# apiVersion: secrets-store.csi.x-k8s.io/v1
+# kind: SecretProviderClass
+# metadata:
+#   name: vault-packer-creds
+#   namespace: packer
+# spec:
+#   provider: vault
+#   parameters:
+#     roleName: csi-kv-packer
+#     vaultAddress: 'http://vault-deployment.vault.svc.cluster.local:8200'
+#     objects: |
+#       - objectName: "user"
+#         secretPath: "kv/app"
+#         secretKey: "user"
+#       - objectName: "password"
+#         secretPath: "kv/db"
+#         secretKey: "password"
