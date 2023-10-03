@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: lint-machineshop-cli-41
+  name: lint-machineshop-cli-42
 spec:
   pipelineRef:
     resolver: git
@@ -56,9 +56,6 @@ spec:
 #       - objectName: "user"
 #         secretPath: "kv/app"
 #         secretKey: "user"
-#       - objectName: "password"
-#         secretPath: "kv/db"
-#         secretKey: "password"
 #       - objectName: "token"
 #         secretPath: "kv/db"
 #         secretKey: "token"
