@@ -17,6 +17,7 @@ spec:
   params:
     - name: REPO_URL
       description: repo url beginning w/ https
+      default: ""
     - name: BRANCH
       description: repo branch
       default: main
@@ -55,10 +56,10 @@ spec:
         #!/usr/bin/env sh
         set -eu
 
-        echo EXPORT GITHUB TOKEN
+        echo EXPORTING GITHUB TOKEN
         export GITHUB_TOKEN=$(cat $(workspaces.secrets.path)/$(params.TOKEN_SECRET_KEY))
 
-        echo CLONE REPOSITORY
+        echo CLONING REPOSITORY $(params.REPO_URL)..
         if [ "${CLONE}" = "true" ] ; then
           gh repo clone $(params.REPO_URL) -- --branch $(params.BRANCH)
         fi

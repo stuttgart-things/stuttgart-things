@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: lint-machineshop-cli-30
+  name: lint-machineshop-cli-32
 spec:
   pipelineRef:
     resolver: git
@@ -30,6 +30,8 @@ spec:
         volumeAttributes:
           secretProviderClass: vault-packer-creds
   params:
+    - name: gitRepoUrl
+      value: https://github.com/stuttgart-things/machineShop.git
     - name: gitRevision
       value: main
     - name: gitWorkspaceSubdirectory
