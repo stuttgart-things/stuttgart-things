@@ -51,7 +51,7 @@ spec:
         runAsUser: 65532
       env:
         - name: CLONE
-          value: ${params.CLONE}
+          value: $(params.CLONE)
       script: |
         #!/usr/bin/env sh
         set -eu
@@ -65,8 +65,10 @@ spec:
 
         echo ${CLONE}
 
-        # if [ "${CLONE}" = "true" ] ; then
+        mkdir 1 && cd 1
+
+        if [ "${CLONE}" = "true" ] ; then
           gh repo clone $(params.REPO_URL) -- --branch $(params.BRANCH)
-        # fi
+        fi
 
         ls -lta
