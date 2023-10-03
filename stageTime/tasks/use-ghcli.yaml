@@ -1,0 +1,62 @@
+---
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: user-ghcli
+  labels:
+    app.kubernetes.io/version: "0.2"
+  annotations:
+    tekton.dev/pipelines.minVersion: "0.12.1"
+    tekton.dev/categories: github
+    tekton.dev/tags: github
+    tekton.dev/displayName: "github cli"
+    tekton.dev/platforms: "linux/amd64"
+spec:
+  description: >-
+    This Task uses github cli (gh) for various commands
+  params:
+    - name: REPO_URL
+      description: repo url beginning w/ https
+    - name: BRANCH
+      description: repo branch
+      default: main
+    - name: CLONE
+      description: clone repository or not
+      default: "true"
+    - name: TOKEN_SECRET_KEY
+      description: key of gitgub token
+      default: token
+    - name: GH_WORKING_IMAGE
+      description: gh image/version to use
+      default: "ghcr.io/supportpal/github-gh-cli:2.35.0"
+    - name: SUBDIRECTORY
+      description: subdirectory of workspace
+      type: string
+      default: ""
+  workspaces:
+    - name: source
+      description: holds the working data
+      optional: false
+    - name: secrets
+      description: holds the secrets
+      optional: false
+  stepTemplate:
+    securityContext:
+      privileged: false
+      runAsNonRoot: true
+      runAsUser: 65532
+  steps:
+    - name: clone
+      image: $(params.GH_WORKING_IMAGE)
+      workingDir: $(workspaces.source.path)/$(params.SUBDIRECTORY)
+      script: |
+        #!/usr/bin/env sh
+        set -eu
+
+        # EXPORT GITHUB TOKEN
+        export GITHUB_TOKEN=$(cat $(workspaces.secrets.path)/$(params.TOKEN_SECRET_KEY))
+
+        # CLONE REPOSITORY
+        if [ "${params.CLONE}" = "true" ] ; then
+          gh repo clone $(params.REPO_URL) -- --branch $(params.BRANCH)
+        fi
