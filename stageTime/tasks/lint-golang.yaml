@@ -54,27 +54,27 @@ spec:
       description: holds the secrets
       optional: true
   steps:
-  - name: lint
-    image: $(params.golintImage)
-    workingDir: $(workspaces.source.path)/$(params.subdirectory)
-    script: |
-      #!/usr/bin/env sh
-      cat $(workspaces.secrets.path)/password
-      set -eu
-      ls -lta
-      golangci-lint run $(params.flags)
-    env:
-      - name: GOPATH
-        value: /workspace
-      - name: GOOS
-        value: "$(params.GOOS)"
-      - name: GOARCH
-        value: "$(params.GOARCH)"
-      - name: GO111MODULE
-        value: "$(params.GO111MODULE)"
-      - name: GOCACHE
-        value: "$(params.GOCACHE)"
-      - name: GOMODCACHE
-        value: "$(params.GOMODCACHE)"
-      - name: GOLANGCI_LINT_CACHE
-        value: "$(params.GOLANGCI_LINT_CACHE)"
+    - name: lint
+      image: $(params.golintImage)
+      workingDir: $(workspaces.source.path)/$(params.subdirectory)
+      script: |
+        #!/usr/bin/env sh
+        cat $(workspaces.secrets.path)/password
+        set -eu
+        ls -lta
+        golangci-lint run $(params.flags)
+      env:
+        - name: GOPATH
+          value: /workspace
+        - name: GOOS
+          value: "$(params.GOOS)"
+        - name: GOARCH
+          value: "$(params.GOARCH)"
+        - name: GO111MODULE
+          value: "$(params.GO111MODULE)"
+        - name: GOCACHE
+          value: "$(params.GOCACHE)"
+        - name: GOMODCACHE
+          value: "$(params.GOMODCACHE)"
+        - name: GOLANGCI_LINT_CACHE
+          value: "$(params.GOLANGCI_LINT_CACHE)"

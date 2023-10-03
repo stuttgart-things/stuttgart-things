@@ -55,6 +55,8 @@ spec:
       workspaces:
         - name: output
           workspace: source
+        - name: secrets
+          workspace: secrets
         - name: ssh-directory
           workspace: sshCredentials
       params:

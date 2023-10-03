@@ -2,8 +2,9 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: lint-machineshop-cli-11
+  name: lint-machineshop-cli-13
 spec:
+  serviceAccountName: csi-sa
   pipelineRef:
     resolver: git
     params:
@@ -17,18 +18,18 @@ spec:
     - name: source
       volumeClaimTemplate:
         spec:
-          storageClassName: nfs4-csi
+          storageClassName: nfs3-csi2
           accessModes:
             - ReadWriteMany
           resources:
             requests:
               storage: 1Gi
-    - name: secret-vault
+    - name: secrets
       csi:
         driver: 'secrets-store.csi.k8s.io'
         readOnly: true
         volumeAttributes:
-          secretProviderClass: 'vault-user-creds'
+          secretProviderClass: vault-user-creds
   params:
     - name: gitRepoUrl
       value: https://github.com/stuttgart-things/machineShop.git
