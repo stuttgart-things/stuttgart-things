@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: lint-machineshop-cli-40
+  name: lint-machineshop-cli-41
 spec:
   pipelineRef:
     resolver: git
