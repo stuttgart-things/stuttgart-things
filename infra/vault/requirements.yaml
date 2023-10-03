@@ -24,3 +24,12 @@ spec:
   type: oci
   interval: 1h
   url: oci://eu.gcr.io/stuttgart-things
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: secrets-store-csi
+  namespace: vault
+spec:
+  interval: 24h
+  url: https://kubernetes-sigs.github.io/secrets-store-csi-driver/charts

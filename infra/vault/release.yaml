@@ -38,3 +38,5 @@ spec:
           - hosts:
             - ${VAULT_INGRESS_HOSTNAME}.${VAULT_INGRESS_DOMAIN}
             secretName: ${VAULT_INGRESS_HOSTNAME}-ingress-tls
+    csi:
+      enabled: true
