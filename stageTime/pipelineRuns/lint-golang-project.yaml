@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: lint-machineshop-cli-23
+  name: lint-machineshop-cli-24
 spec:
   pipelineRef:
     resolver: git
@@ -30,12 +30,12 @@ spec:
         volumeAttributes:
           secretProviderClass: vault-packer-creds
   params:
-    - name: gitRepoUrl
-      value: https://github.com/stuttgart-things/machineShop.git
     - name: gitRevision
       value: main
     - name: gitWorkspaceSubdirectory
       value: ""
+    - name: tokenSecretKey
+      value: token
     - name: golintImage
       value: docker.io/golangci/golangci-lint:v1.54-alpine
 
@@ -56,3 +56,6 @@ spec:
 #       - objectName: "password"
 #         secretPath: "kv/db"
 #         secretKey: "password"
+#       - objectName: "token"
+#         secretPath: "kv/db"
+#         secretKey: "token"

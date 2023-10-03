@@ -11,10 +11,6 @@ spec:
     - name: secrets
       optional: true
   params:
-    - name: gitWorkspaceSubdirectory
-      type: string
-      default: ""
-      description: subdirectory on workspace
     - name: gitRepoUrl
       type: string
       default: ""
@@ -23,6 +19,10 @@ spec:
       type: string
       default: "main"
       description: revision of source git repo
+    - name: gitWorkspaceSubdirectory
+      type: string
+      default: ""
+      description: subdirectory on workspace
     - name: tokenSecretKey
       type: string
       default: token
