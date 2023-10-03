@@ -6,10 +6,9 @@ metadata:
 spec:
   workspaces:
     - name: source
-    - name: sshCredentials
-      optional: true
+      optional: false
     - name: secrets
-      optional: true
+      optional: false
   params:
     - name: gitRepoUrl
       type: string
