@@ -48,6 +48,9 @@ spec:
         privileged: false
         runAsNonRoot: true
         runAsUser: 65532
+      env:
+        - name: CLONE
+          value: ${params.CLONE}
       script: |
         #!/usr/bin/env sh
         set -eu
@@ -56,6 +59,6 @@ spec:
         export GITHUB_TOKEN=$(cat $(workspaces.secrets.path)/$(params.TOKEN_SECRET_KEY))
 
         # CLONE REPOSITORY
-        if [ "${params.CLONE}" = "true" ] ; then
+        if [ "${CLONE}" = "true" ] ; then
           gh repo clone $(params.REPO_URL) -- --branch $(params.BRANCH)
         fi
