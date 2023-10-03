@@ -18,3 +18,5 @@ spec:
         name: secrets-store-csi
         namespace: vault
       interval: 12h
+
+# vault login -address=https://vault.dev11.4sthings.tiab.ssc.sva.de -tls-skip-verify

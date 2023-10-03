@@ -50,12 +50,16 @@ spec:
     - name: source
       description: holds the working data
       optional: false
+    - name: secrets
+      description: holds the secrets
+      optional: true
   steps:
   - name: lint
     image: $(params.golintImage)
     workingDir: $(workspaces.source.path)/$(params.subdirectory)
     script: |
       #!/usr/bin/env sh
+      cat $(workspaces.secrets.path)/password
       set -eu
       ls -lta
       golangci-lint run $(params.flags)

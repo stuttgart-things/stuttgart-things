@@ -8,6 +8,8 @@ spec:
     - name: source
     - name: sshCredentials
       optional: true
+    - name: secrets
+      optional: true
   params:
     - name: gitWorkspaceSubdirectory
       type: string
