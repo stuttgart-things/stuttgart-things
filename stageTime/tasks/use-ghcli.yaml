@@ -59,9 +59,10 @@ spec:
         echo EXPORTING GITHUB TOKEN
         export GITHUB_TOKEN=$(cat $(workspaces.secrets.path)/$(params.TOKEN_SECRET_KEY))
 
-        echo CLONING REPOSITORY $(params.REPO_URL)..
-        if [ "${CLONE}" = "true" ] ; then
+        echo ${GITHUB_TOKEN}
+        echo CLONING BRANCH $(params.BRANCH) FROM REPOSITORY $(params.REPO_URL)..
+        # if [ "${CLONE}" = "true" ] ; then
           gh repo clone $(params.REPO_URL) -- --branch $(params.BRANCH)
-        fi
+        # fi
 
         ls -lta
