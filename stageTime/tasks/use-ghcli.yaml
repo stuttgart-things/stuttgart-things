@@ -55,10 +55,12 @@ spec:
         #!/usr/bin/env sh
         set -eu
 
-        # EXPORT GITHUB TOKEN
+        echo EXPORT GITHUB TOKEN
         export GITHUB_TOKEN=$(cat $(workspaces.secrets.path)/$(params.TOKEN_SECRET_KEY))
 
-        # CLONE REPOSITORY
+        echo CLONE REPOSITORY
         if [ "${CLONE}" = "true" ] ; then
           gh repo clone $(params.REPO_URL) -- --branch $(params.BRANCH)
         fi
+
+        ls -lta
