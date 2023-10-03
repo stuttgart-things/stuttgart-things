@@ -2,9 +2,8 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: lint-machineshop-cli-13
+  name: lint-machineshop-cli-14
 spec:
-  serviceAccountName: csi-sa
   pipelineRef:
     resolver: git
     params:

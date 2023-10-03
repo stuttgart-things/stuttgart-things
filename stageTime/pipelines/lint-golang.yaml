@@ -55,8 +55,6 @@ spec:
       workspaces:
         - name: output
           workspace: source
-        - name: secrets
-          workspace: secrets
         - name: ssh-directory
           workspace: sshCredentials
       params:
@@ -83,6 +81,8 @@ spec:
       workspaces:
         - name: source
           workspace: source
+        - name: secrets
+          workspace: secrets
       params:
         - name: golintImage
           value: $(params.golintImage)
