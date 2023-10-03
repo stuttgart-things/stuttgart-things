@@ -45,10 +45,10 @@ spec:
     - name: clone
       image: $(params.GH_WORKING_IMAGE)
       workingDir: $(workspaces.source.path)/$(params.SUBDIRECTORY)
-      securityContext:
-        privileged: false
-        runAsNonRoot: true
-        runAsUser: 65532
+      # securityContext:
+      #   privileged: false
+      #   runAsNonRoot: true
+      #   runAsUser: 65532
       env:
         - name: CLONE
           value: $(params.CLONE)
