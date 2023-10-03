@@ -56,8 +56,6 @@ spec:
         #!/usr/bin/env sh
         set -eu
 
-        whoami
-        id
         pwd
 
         echo EXPORTING GITHUB TOKEN
