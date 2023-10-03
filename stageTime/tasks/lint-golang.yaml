@@ -57,12 +57,6 @@ spec:
     - name: lint
       image: $(params.golintImage)
       workingDir: $(workspaces.source.path)/$(params.subdirectory)
-      script: |
-        #!/usr/bin/env sh
-        cat $(workspaces.secrets.path)/password
-        set -eu
-        ls -lta
-        golangci-lint run $(params.flags)
       env:
         - name: GOPATH
           value: /workspace
@@ -78,3 +72,9 @@ spec:
           value: "$(params.GOMODCACHE)"
         - name: GOLANGCI_LINT_CACHE
           value: "$(params.GOLANGCI_LINT_CACHE)"
+      script: |
+        #!/usr/bin/env sh
+        set -eu
+
+        ls -lta
+        golangci-lint run $(params.flags)

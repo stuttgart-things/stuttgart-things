@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: lint-machineshop-cli-28
+  name: lint-machineshop-cli-30
 spec:
   pipelineRef:
     resolver: git
@@ -33,7 +33,7 @@ spec:
     - name: gitRevision
       value: main
     - name: gitWorkspaceSubdirectory
-      value: ""
+      value: machineShop
     - name: tokenSecretKey
       value: token
     - name: golintImage
