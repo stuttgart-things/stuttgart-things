@@ -62,7 +62,9 @@ spec:
         if [ "${CLONE}" = "true" ] ; then
           echo CLONING $(params.BRANCH) FROM $(params.REPO_URL)..
           rm -rf *
-          gh repo clone $(params.REPO_URL) -- --branch $(params.BRANCH)
+          gh repo clone $(params.REPO_URL) -- --branch $(params.BRANCH) .
         fi
 
         ls -lta
+
+        chmod -R 777 .
