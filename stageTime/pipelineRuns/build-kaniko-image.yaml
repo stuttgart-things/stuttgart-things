@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: build-kaniko-image-1
+  name: build-kaniko-image-6
 spec:
   pipelineRef:
     resolver: git
@@ -14,20 +14,26 @@ spec:
         value: stageTime/pipelines/build-kaniko-image.yaml
   workspaces:
     - name: dockerconfig
-      secret:
-        secretName: scr-labda-vsphere
+      csi:
+        driver: 'secrets-store.csi.k8s.io'
+        readOnly: true
+        volumeAttributes:
+          secretProviderClass: vault-kaniko-creds
     - name: shared-workspace
       volumeClaimTemplate:
         spec:
-          storageClassName: nfs4-csi
+          storageClassName: nfs3-csi2
           accessModes:
           - ReadWriteMany
           resources:
             requests:
               storage: 2Gi
     - name: sshCredentials
-      secret:
-        secretName: github-ssh
+      csi:
+        driver: 'secrets-store.csi.k8s.io'
+        readOnly: true
+        volumeAttributes:
+          secretProviderClass: vault-ssh-creds
   params:
     - name: context
       value: "/kaniko/sthings-ansible-github/images/sthings-ansible"

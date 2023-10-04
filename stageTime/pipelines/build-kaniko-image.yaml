@@ -8,6 +8,9 @@ spec:
   workspaces:
     - name: shared-workspace
     - name: sshCredentials
+      optional: true
+    - name: basic-auth
+      optional: true
     - name: dockerconfig
   params:
     - name: context
@@ -58,6 +61,8 @@ spec:
           workspace: shared-workspace
         - name: ssh-directory
           workspace: sshCredentials
+        - name: basic-auth
+          workspace: basic-auth
       params:
         - name: deleteExisting
           value: 'true'
