@@ -1,3 +1,4 @@
+---
 apiVersion: tekton.dev/v1
 kind: Task
 metadata:
@@ -7,7 +8,7 @@ metadata:
   annotations:
     tekton.dev/categories: "Image Build"
     tekton.dev/displayName: "Build and upload container image using Kaniko"
-    tekton.dev/pipelines.minVersion: "0.45.0"
+    tekton.dev/pipelines.minVersion: "0.50.0"
     tekton.dev/platforms: "linux/amd64"
     tekton.dev/tags: "image-build"
 spec:
@@ -24,7 +25,7 @@ spec:
     - name: BUILDER_IMAGE
       description: the image on which builds will run (default is v1.5.1)
       type: string
-      default: "gcr.io/kaniko-project/executor:v1.5.1@sha256:c6166717f7fe0b7da44908c986137ecfeab21f31ec3992f6e128fff8a94be8a5"
+      default: "gcr.io/kaniko-project/executor:v1.16.0"
     - name: CONTEXT
       description: the build context used by Kaniko
       type: string

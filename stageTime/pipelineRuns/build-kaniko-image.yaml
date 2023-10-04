@@ -15,7 +15,7 @@ spec:
   workspaces:
     - name: dockerconfig
       secret:
-        secretName: aks
+        secretName: scr-labda-vsphere
     - name: shared-workspace
       volumeClaimTemplate:
         spec:
