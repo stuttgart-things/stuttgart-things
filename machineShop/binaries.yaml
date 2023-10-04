@@ -33,3 +33,8 @@ binary:
   - flux:
       url: https://github.com/fluxcd/flux2/releases/download/v{{ or .fluxVersion "2.1.1" }}/flux_{{ or .fluxVersion "2.1.1" }}_linux_amd64.tar.gz
       bin: flux
+
+script:
+  - azure-cli:
+      script: |
+        curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
