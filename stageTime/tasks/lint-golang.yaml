@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: golangci-lint
+  name: lint-golangci
   labels:
     app.kubernetes.io/version: "0.2"
   annotations:

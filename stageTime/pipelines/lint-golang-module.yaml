@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: Pipeline
 metadata:
-  name: lint-golang
+  name: lint-golang-module
 spec:
   workspaces:
     - name: source

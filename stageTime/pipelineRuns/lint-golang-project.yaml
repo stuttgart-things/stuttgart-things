@@ -8,7 +8,7 @@ spec:
     resolver: git
     params:
       - name: pathInRepo
-        value: "stageTime/pipelines/lint-golang.yaml"
+        value: "stageTime/pipelines/lint-golang-module.yaml"
       - name: revision
         value: "main"
       - name: url
