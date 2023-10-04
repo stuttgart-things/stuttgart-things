@@ -61,8 +61,6 @@ spec:
       workspaces:
         - name: source
           workspace: source
-        - name: secrets
-          workspace: secrets
       params:
         - name: REPO_URL
           value: $(params.gitRepoUrl)
@@ -91,8 +89,6 @@ spec:
       workspaces:
         - name: source
           workspace: source
-        - name: secrets
-          workspace: secrets
       params:
         - name: golintImage
           value: $(params.golintImage)
