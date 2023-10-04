@@ -34,7 +34,7 @@ binary:
       url: https://github.com/fluxcd/flux2/releases/download/v{{ or .fluxVersion "2.1.1" }}/flux_{{ or .fluxVersion "2.1.1" }}_linux_amd64.tar.gz
       bin: flux
   - kubectl-slice:
-      url: https://github.com/patrickdappollonio/kubectl-slice/releases/download/v{{ or .kubectlSliceVersion "2.1.1" }}/kubectl-slice_linux_x86_64.tar.gz
+      url: https://github.com/patrickdappollonio/kubectl-slice/releases/download/v{{ or .kubectlSliceVersion "1.2.7" }}/kubectl-slice_linux_x86_64.tar.gz
       bin: kubectl-slice
 
 script:
