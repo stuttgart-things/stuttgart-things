@@ -35,19 +35,22 @@ spec:
 apiVersion: secrets-store.csi.x-k8s.io/v1
 kind: SecretProviderClass
 metadata:
-  name: vault-ssh-creds
+  name: vault-git-creds
   namespace: buildah2
 spec:
   provider: vault
   parameters:
-    roleName: csi-kv-ssh
+    roleName: csi-kv-git
     vaultAddress: 'http://vault-deployment.vault.svc.cluster.local:8200'
     objects: |
-      - objectName: "id_rsa"
-        secretPath: "kv/ssh"
-        secretKey: "id_rsa"
+      - objectName: ".git-credentials"
+        secretPath: "kv/git"
+        secretKey: ".git-credentials"
+      - objectName: ".gitconfig"
+        secretPath: "kv/git"
+        secretKey: ".gitconfig"
 ---
-# vault write auth/kubernetes/role/csi-kv-ssh \
+# vault write auth/kubernetes/role/csi-kv-git \
 # bound_service_account_names=default \
 # bound_service_account_namespaces=buildah2 \
 # policies=kv_policy \

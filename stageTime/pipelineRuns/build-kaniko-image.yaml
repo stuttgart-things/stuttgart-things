@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: build-kaniko-image-6
+  name: build-kaniko-image-8
 spec:
   pipelineRef:
     resolver: git
@@ -28,19 +28,19 @@ spec:
           resources:
             requests:
               storage: 2Gi
-    - name: sshCredentials
+    - name: basic-auth
       csi:
         driver: 'secrets-store.csi.k8s.io'
         readOnly: true
         volumeAttributes:
-          secretProviderClass: vault-ssh-creds
+          secretProviderClass: vault-git-creds
   params:
     - name: context
       value: "/kaniko/sthings-ansible-github/images/sthings-ansible"
     - name: dockerfile
       value: "images/sthings-ansible/Dockerfile"
     - name: gitRepoUrl
-      value: "git@github.com:stuttgart-things/stuttgart-things.git"
+      value: https://github.boschdevcloud.com/HEP4BUE/tekton.git
     - name: gitRevision
       value: "main"
     - name: gitWorkspaceSubdirectory
