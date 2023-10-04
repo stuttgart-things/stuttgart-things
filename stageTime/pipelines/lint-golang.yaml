@@ -9,6 +9,10 @@ spec:
       optional: false
     - name: secrets
       optional: false
+    - name: basic-auth
+      optional: true
+    - name: sshCredentials
+      optional: true
   params:
     - name: gitRepoUrl
       type: string
@@ -22,13 +26,6 @@ spec:
       type: string
       default: ""
       description: subdirectory on workspace
-    - name: tokenSecretKey
-      type: string
-      default: token
-      description: key of gitgub token in secret objects
-    - name: ghImageURL
-      description: gh image/version to use
-      default: "ghcr.io/supportpal/github-gh-cli:2.35.0"
     - name: golangContext
       description: path to the directory to use as context.
       default: "."
@@ -57,25 +54,23 @@ spec:
           - name: revision
             value: main
           - name: pathInRepo
-            value: stageTime/tasks/use-ghcli.yaml
+            value: stageTime/tasks/clone-git.yaml
       workspaces:
-        - name: source
-          workspace: source
-        - name: secrets
-          workspace: secrets
+        - name: output
+          workspace: shared-workspace
+        - name: ssh-directory
+          workspace: sshCredentials
+        - name: basic-auth
+          workspace: basic-auth
       params:
-        - name: REPO_URL
-          value: $(params.gitRepoUrl)
-        - name: BRANCH
-          value: $(params.gitRevision)
-        - name: TOKEN_SECRET_KEY
-          value: $(params.tokenSecretKey)
-        - name: GH_WORKING_IMAGE
-          value: $(params.ghImageURL)
-        - name: SUBDIRECTORY
-          value: $(params.gitWorkspaceSubdirectory)
-        - name: CLONE
+        - name: deleteExisting
           value: 'true'
+        - name: revision
+          value: $(params.gitRevision)
+        - name: subdirectory
+          value: $(params.gitWorkspaceSubdirectory)
+        - name: url
+          value: $(params.gitRepoUrl)
     - name: golangci-lint
       runAfter:
         - fetch-repository
