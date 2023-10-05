@@ -1,7 +1,8 @@
+---
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: build-kaniko-image-9
+  name: build-kaniko-image-12
 spec:
   pipelineRef:
     resolver: git
@@ -14,11 +15,13 @@ spec:
         value: stageTime/pipelines/build-kaniko-image.yaml
   workspaces:
     - name: dockerconfig
-      csi:
-        driver: 'secrets-store.csi.k8s.io'
-        readOnly: true
-        volumeAttributes:
-          secretProviderClass: vault-kaniko-creds
+      secret:
+        secretName: acr
+      # csi:
+      #   driver: 'secrets-store.csi.k8s.io'
+      #   readOnly: true
+      #   volumeAttributes:
+      #     secretProviderClass: vault-kaniko-creds
     - name: shared-workspace
       volumeClaimTemplate:
         spec:
@@ -36,18 +39,16 @@ spec:
           secretProviderClass: vault-git-creds
   params:
     - name: context
-      value: "/kaniko/sthings-ansible-github/images/sthings-ansible"
+      value: "/kaniko/scaffolder/"
     - name: dockerfile
-      value: "images/sthings-ansible/Dockerfile"
+      value: "Dockerfile"
     - name: gitRepoUrl
-      value: https://github.boschdevcloud.com/HEP4BUE/tekton.git
+      value: https://github.boschdevcloud.com/HEP4BUE/scaffolder.git
     - name: gitRevision
-      value: "main"
+      value: add-tekton-pipelinerun-template
     - name: gitWorkspaceSubdirectory
-      value: "/kaniko/sthings-ansible-github"
+      value: "/kaniko/scaffolder"
     - name: image
-      value: "scr.app.4sthings.tiab.ssc.sva.de/sthings-ansible/ansible"
-    - name: registry
-      value: "eu.gcr.io"
+      value: akswkstekton.azurecr.io/scaffolder
     - name: tag
-      value: "8.0.0-5"
+      value: v1
