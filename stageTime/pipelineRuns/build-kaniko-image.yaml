@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: build-kaniko-image-8
+  name: build-kaniko-image-9
 spec:
   pipelineRef:
     resolver: git
