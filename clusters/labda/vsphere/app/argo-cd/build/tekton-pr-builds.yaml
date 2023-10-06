@@ -17,7 +17,7 @@ spec:
                   key: token
                 # labels:
                 #   - build # label on PR that trigger review app
-              requeueAfterSeconds: 1800
+              requeueAfterSeconds: 300
           - list:
               elements:
                 - pipelinerun: lint
