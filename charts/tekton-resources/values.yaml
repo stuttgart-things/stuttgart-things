@@ -14,6 +14,39 @@ enableRuns: false
 enableExtraPipelines: false
 #extraPipelines: {}
 
+
+enableRuns: true
+
+runs:
+  build-kaniko:
+    name: build-kaniko-image-scaffolder
+    addRandomDateToRunName: true
+    namespace: tektoncd
+    kind: Pipeline
+    ref: build-kaniko-image
+    params:
+      gitRepoUrl: https://github.boschdevcloud.com/HEP4BUE/scaffolder.git
+      gitRevision: add-tekton-pipelinerun-template
+      gitWorkspaceSubdirectory: /kaniko/scaffolder
+      dockerfile: Dockerfile
+      context: /kaniko/scaffolder
+      image: akswkstekton.azurecr.io/scaffolder
+      tag: v4
+    workspaces:
+      shared-workspace:
+        workspaceKind: volumeClaimTemplate
+        storageClassName: longhorn
+        accessModes: ReadWriteMany
+        storage: 2Gi
+      dockerconfig:
+        workspaceKind: csi
+        secretProviderDriver: secrets-store.csi.k8s.io
+        secretProviderClass: vault-kaniko-creds
+      basic-auth:
+        workspaceKind: csi
+        secretProviderDriver: secrets-store.csi.k8s.io
+        secretProviderClass: vault-git-creds
+
 # workspaces:
 #  tekton-kaniko-workspace:
 #    volumeMode: Filesystem
