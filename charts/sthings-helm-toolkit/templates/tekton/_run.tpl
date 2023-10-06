@@ -36,6 +36,12 @@ spec:
   workspaces:
   {{- range $k, $v := $run.workspaces }}
     - name: {{ $k }}
+    {{- if eq $v.workspaceKind "csi" }}
+      csi:
+        driver: {{ $v.secretProviderDriver }}
+        readOnly: true
+        volumeAttributes:
+          secretProviderClass: {{ $v.secretProviderClass }}{{ end }}
     {{- if eq $v.workspaceKind "volumeClaimTemplate" }}
       volumeClaimTemplate:
         spec:
@@ -45,12 +51,12 @@ spec:
           resources:
             requests:
               storage: {{ $v.storage }}{{ end }}
-  {{- if ne $v.workspaceKind "volumeClaimTemplate" }}
+  {{- if or (ne $v.workspaceKind "volumeClaimTemplate") }}{{- if or (ne $v.workspaceKind "csi") }}
     {{- if eq $v.workspaceKind "emptyDir" }}
       emptyDir: {}{{ else }}
       {{ $v.workspaceKind }}:
         {{ $v.workspaceKind | replace "persistentVolumeClaim" "claim" }}Name: {{ $v.workspaceRef }}{{ end }}{{ end }}
-  {{ end }}
+  {{ end }}{{ end }}
   params:
   {{- range $k, $v := $run.params }}
     - name: {{ $k }}
