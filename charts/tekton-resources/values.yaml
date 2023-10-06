@@ -16,36 +16,39 @@ enableExtraPipelines: false
 
 
 enableRuns: true
-
 runs:
   build-kaniko:
-    name: build-kaniko-image-scaffolder
+    name: build-sthings-alpine
     addRandomDateToRunName: true
     namespace: tektoncd
     kind: Pipeline
-    ref: build-kaniko-image
+    resolver: git
+    resolverParams:
+      url: https://github.com/stuttgart-things/stuttgart-things.git
+      revision: main
+      pathInRepo: stageTime/pipelines/build-kaniko-image.yaml
     params:
-      gitRepoUrl: https://github.boschdevcloud.com/HEP4BUE/scaffolder.git
-      gitRevision: add-tekton-pipelinerun-template
-      gitWorkspaceSubdirectory: /kaniko/scaffolder
-      dockerfile: Dockerfile
-      context: /kaniko/scaffolder
-      image: akswkstekton.azurecr.io/scaffolder
+      gitRepoUrl: https://github.com/stuttgart-things/stuttgart-things.git
+      gitRevision: main
+      gitWorkspaceSubdirectory: /kaniko/sthings-alpine
+      dockerfile: images/sthings-alpine/Dockerfile
+      context: /kaniko/sthings-alpine
+      image: /sthings-alpine/sthings-alpine
       tag: v4
     workspaces:
-      shared-workspace:
+      sharedWorkspace:
         workspaceKind: volumeClaimTemplate
         storageClassName: longhorn
         accessModes: ReadWriteMany
-        storage: 2Gi
+        storage: 1Gi
       dockerconfig:
         workspaceKind: csi
         secretProviderDriver: secrets-store.csi.k8s.io
-        secretProviderClass: vault-kaniko-creds
+        secretProviderClass: vault-scrlabda-creds
       basic-auth:
         workspaceKind: csi
         secretProviderDriver: secrets-store.csi.k8s.io
-        secretProviderClass: vault-git-creds
+        secretProviderClass: vault-github-creds
 
 # workspaces:
 #  tekton-kaniko-workspace:
