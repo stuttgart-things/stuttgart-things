@@ -36,6 +36,19 @@ spec:
       privileged: false
       runAsNonRoot: true
       runAsUser: 65532
+  sidecars:
+    image: quay.io/skopeo/stable:v1.13.3
+    name: condition
+    workingDir: $(workspaces.source.path)
+    script: |
+      #!/usr/bin/env bash
+      set -eu
+
+      until skopeo inspect docker://registry.fedoraproject.org/fedora:latest
+      do
+        echo checking..
+        sleep 10
+      done
   steps:
     - name: scan
       image: $(params.trivyImage)
