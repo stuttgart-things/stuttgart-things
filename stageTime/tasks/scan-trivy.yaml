@@ -42,7 +42,7 @@ spec:
       script: |
         #!/usr/bin/env bash
         set -eu
-        until skopeo inspect docker://$(params.scanObject); do echo checking.. sleep 10; done
+        until skopeo inspect docker://$(params.scanObject); do echo checking.. && sleep 30; done
     - name: scan
       image: $(params.trivyImage)
       args:
