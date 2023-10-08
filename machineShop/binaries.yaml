@@ -42,6 +42,9 @@ binary:
   - skopeo:
       url: https://github.com/lework/skopeo-binary/releases/download/v{{ or .skopeoVersion "1.13.3" }}/skopeo-linux-amd64
       bin: skopeo
+  - trivy:
+      url: https://github.com/aquasecurity/trivy/releases/download/v{{ or .trivyVersion "0.45.1" }}/trivy_{{ or .trivyVersion "0.45.1" }}_Linux-64bit.tar.gz
+      bin: trivy
 
 script:
   - azure-cli:

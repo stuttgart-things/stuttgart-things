@@ -28,15 +28,15 @@ runs:
       revision: main
       pathInRepo: stageTime/pipelines/build-kaniko-image.yaml
     params:
-      gitRepoUrl: https://github.com/stuttgart-things/stuttgart-things.git
+      gitRepoUrl: https://github.com/stuttgart-things/machineShop.git
       gitRevision: main
-      gitWorkspaceSubdirectory: /kaniko/sthings-alpine
-      dockerfile: images/sthings-alpine/Dockerfile
-      context: /kaniko/sthings-alpine
-      image: /sthings-alpine/sthings-alpine
-      tag: v4
+      gitWorkspaceSubdirectory: /kaniko/machineShop
+      dockerfile: Dockerfile
+      context: /kaniko/machineShop
+      image: scr.app.4sthings.tiab.ssc.sva.de/machineshop/machineshop
+      tag: v1
     workspaces:
-      sharedWorkspace:
+      shared-workspace:
         workspaceKind: volumeClaimTemplate
         storageClassName: longhorn
         accessModes: ReadWriteMany
