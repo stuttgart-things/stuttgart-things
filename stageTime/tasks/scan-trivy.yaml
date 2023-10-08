@@ -1,0 +1,53 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: scan-trivy
+  labels:
+    app.kubernetes.io/version: "0.2"
+  annotations:
+    tekton.dev/pipelines.minVersion: "0.50.0"
+    tekton.dev/categories: Code Quality
+    tekton.dev/tags: security
+    tekton.dev/displayName: "scan trivy"
+    tekton.dev/platforms: "linux/amd64"
+spec:
+  description: >-
+    scanner for vulnerabilities in container images, file systems, and Git repositories, as well as for configuration issues and hard-coded secrets
+  params:
+    - name: scanCommand
+      description: scanning command e.g. image
+      default: image
+    - name: scanObject
+      description: object to scan
+      default: "."
+    - name: scanFlags
+      description: flags for scanning
+      type: array
+    - name: trivyImage
+      description: trivy image
+      default: aquasec/trivy:0.45.1
+  workspaces:
+    - name: secrets
+      description: holds the secrets
+      optional: true
+  stepTemplate:
+    securityContext:
+      privileged: false
+      runAsNonRoot: true
+      runAsUser: 65532
+  steps:
+    - name: scan
+      image: $(params.trivyImage)
+      workingDir: $(workspaces.source.path)/$(params.subdirectory)
+      args:
+        - $(params.scanFlags[*])
+      script: |
+        #!/usr/bin/env sh
+        set -eu
+
+        # SET FLAGS
+        flags=" "; for argument in "$@"; do flags=${flags}'--'$argument' '; done
+
+        echo TRIVY SCAN
+        trivy $(params.scanCommand) $(params.scanObject) ${flags}
