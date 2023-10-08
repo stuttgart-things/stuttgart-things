@@ -48,5 +48,5 @@ spec:
         # SET FLAGS
         flags=" "; for argument in "$@"; do flags=${flags}'--'$argument' '; done
 
-        echo TRIVY SCAN
-        trivy $(params.scanCommand) $(params.scanObject) ${flags}
+        echo START SCAN OF $(params.scanCommand) $(params.scanObject)
+        trivy $(params.scanCommand) $(params.scanObject) ${flags} --cache-dir /tmp/.cache
