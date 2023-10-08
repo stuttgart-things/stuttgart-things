@@ -39,7 +39,6 @@ spec:
   sidecars:
     image: quay.io/skopeo/stable:v1.13.3
     name: condition
-    workingDir: $(workspaces.source.path)
     script: |
       #!/usr/bin/env bash
       set -eu
