@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: TaskRun
 metadata:
-  name: scan-trivy-python-7
+  name: scan-trivy-python-8
 spec:
   taskRef:
     resolver: git
@@ -17,7 +17,7 @@ spec:
     - name: scanCommand
       value: image
     - name: scanObject
-      value: python:3.4-alpine
+      value: python:3.4-alpine123
     - name: scanFlags
       value:
         - 'scanners vuln'
