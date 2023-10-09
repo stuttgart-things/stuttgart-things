@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: TaskRun
 metadata:
-  name: scan-trivy-python-25
+  name: scan-trivy-python-27
 spec:
   taskRef:
     resolver: git
@@ -28,7 +28,7 @@ spec:
     - name: outputFormat
       value: json
     - name: outputFile
-      value: eport.txt
+      value: /tmp/report.txt
     - name: scanSeverity
       value: MEDIUM,HIGH,CRITICAL
     - name: scanFlags
