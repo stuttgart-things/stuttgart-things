@@ -83,7 +83,7 @@ spec:
         trivy $(params.scanCommand) $(params.scanObject) -f table --severity $(params.scanSeverity) ${flags} --exit-code 0 --cache-dir /tmp/.cache --timeout $(params.scanTimeout) --insecure
 
         echo trivy scan $(params.scanCommand) $(params.scanObject) for report
-        trivy $(params.scanCommand) $(params.scanObject) -f  $(params.outputFormat) --severity $(params.scanSeverity) ${flags} --exit-code 0 --cache-dir /tmp/.cache --timeout $(params.scanTimeout) --output $(params.outputFile) --insecure
+        trivy $(params.scanCommand) $(params.scanObject) -f $(params.outputFormat) --severity $(params.scanSeverity) ${flags} --exit-code 0 --cache-dir /tmp/.cache --timeout $(params.scanTimeout) --output $(params.outputFile) --insecure
 
         echo trivy scan $(params.scanCommand) $(params.scanObject) for CI status
-        trivy $(params.scanCommand) $(params.scanObject) -f  $(params.outputFormat) --severity $(params.scanSeverity) ${flags} --exit-code 1 --cache-dir /tmp/.cache --timeout $(params.scanTimeout) --insecure
+        trivy $(params.scanCommand) $(params.scanObject) -f $(params.outputFormat) --severity $(params.scanSeverity) ${flags} --exit-code 1 --cache-dir /tmp/.cache --timeout $(params.scanTimeout) --insecure
