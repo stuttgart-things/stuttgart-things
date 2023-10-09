@@ -37,17 +37,21 @@ spec:
       description: trivy image
       default: aquasec/trivy:0.45.1
   workspaces:
-    - name: secrets
-      description: holds the secrets
+    - name: dockerconfig
+      description: includes a docker `config.json`
       optional: true
+      mountPath: //tekton/home/.docker
   stepTemplate:
     securityContext:
       privileged: false
       runAsNonRoot: true
       runAsUser: 65532
   steps:
-    - name: condition
+    - name: image-available-check
       image: $(params.skopeoImage)
+      env:
+        - name: HOME
+          value: /tekton/home
       script: |
         #!/usr/bin/env bash
         set -eu
