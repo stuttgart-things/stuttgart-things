@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: TaskRun
 metadata:
-  name: scan-trivy-python-16
+  name: scan-trivy-python-18
 spec:
   taskRef:
     resolver: git
@@ -13,6 +13,13 @@ spec:
         value: main
       - name: url
         value: https://github.com/stuttgart-things/stuttgart-things.git
+  workspaces:
+    - name: dockerconfig
+      csi:
+        driver: 'secrets-store.csi.k8s.io'
+        readOnly: true
+        volumeAttributes:
+          secretProviderClass: vault-scrlabda-creds
   params:
     - name: scanCommand
       value: image
