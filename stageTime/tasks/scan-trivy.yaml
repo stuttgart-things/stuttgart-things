@@ -24,6 +24,12 @@ spec:
     - name: outputFormat
       description: trivy output format
       default: table
+    - name: scanSeverity
+      description: severity level
+      default: MEDIUM,HIGH,CRITICAL
+    - name: scanTimeout
+      description: timout of scan
+      default: 30m
     - name: outputFile
       description: trivy report destination
       default: report.txt
@@ -55,6 +61,8 @@ spec:
       script: |
         #!/usr/bin/env bash
         set -eu
+
+        # CHECK IF IMAGE IS (YES) AVAILABLE
         until skopeo inspect docker://$(params.scanObject) --tls-verify=false; do echo checking.. && sleep 30; done
     - name: scan
       image: $(params.trivyImage)
@@ -64,8 +72,12 @@ spec:
         #!/usr/bin/env sh
         set -eu
 
-        # SET FLAGS
+        # SET FLAGS FROM ARGS
         flags=" "; for argument in "$@"; do flags=${flags}'--'$argument' '; done
 
-        echo scan $(params.scanCommand) $(params.scanObject)
-        trivy $(params.scanCommand) $(params.scanObject) -f $(params.outputFormat) ${flags} --output $(params.outputFile) --cache-dir /tmp/.cache
+        # SCAN W/ TRIVY
+        echo scan $(params.scanCommand) $(params.scanObject) for CI output
+        trivy $(params.scanCommand) $(params.scanObject) -f table --severity $(params.scanSeverity) ${flags} --exit-code 0 --cache-dir /tmp/.cache --timeout $(params.scanTimeout) --insecure
+
+        echo scan $(params.scanCommand) $(params.scanObject) for report
+        trivy $(params.scanCommand) $(params.scanObject) -f  $(params.outputFormat) --severity $(params.scanSeverity) ${flags} --exit-code 1 --cache-dir /tmp/.cache --timeout $(params.scanTimeout) --output $(params.outputFile) --insecure

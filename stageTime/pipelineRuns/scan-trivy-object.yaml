@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: TaskRun
 metadata:
-  name: scan-trivy-python-22
+  name: scan-trivy-python-25
 spec:
   taskRef:
     resolver: git
@@ -28,12 +28,11 @@ spec:
     - name: outputFormat
       value: json
     - name: outputFile
-      value: /tmp/report.txt
+      value: eport.txt
+    - name: scanSeverity
+      value: MEDIUM,HIGH,CRITICAL
     - name: scanFlags
       value:
         - 'scanners vuln'
-        - 'timeout 30m'
-        - 'exit-code 1'
-        - 'severity MEDIUM,HIGH,CRITICAL'
     - name: trivyImage
       value: aquasec/trivy:0.45.1
