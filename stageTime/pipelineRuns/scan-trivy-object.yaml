@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: TaskRun
 metadata:
-  name: scan-trivy-python-10
+  name: scan-trivy-python-11
 spec:
   taskRef:
     resolver: git
@@ -17,10 +17,14 @@ spec:
     - name: scanCommand
       value: image
     - name: scanObject
-      value: python:3.4-alpine123
+      value: python:3.4-alpine
+    - name: outputFormat
+      value: table
     - name: scanFlags
       value:
         - 'scanners vuln'
         - 'timeout 30m'
+        - 'exit-code 1'
+        - 'severity MEDIUM,HIGH,CRITICAL'
     - name: trivyImage
       value: aquasec/trivy:0.45.1
