@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: TaskRun
 metadata:
-  name: scan-trivy-python-18
+  name: scan-trivy-python-20
 spec:
   taskRef:
     resolver: git
@@ -24,7 +24,7 @@ spec:
     - name: scanCommand
       value: image
     - name: scanObject
-      value: python:3.4-alpine
+      value: scr.app.4sthings.tiab.ssc.sva.de/machineshop/machineshop@sha256:df27e7dcea24ec265f522d872adfb9780cf50e0e52dcd3d833e6be87728fbdd0
     - name: outputFormat
       value: json
     - name: outputFile
