@@ -24,6 +24,9 @@ spec:
     - name: outputFormat
       description: trivy output format
       default: table
+    - name: outputFile
+      description: trivy report destination
+      default: report.txt
     - name: scanFlags
       description: flags for scanning
       type: array
@@ -58,4 +61,4 @@ spec:
         flags=" "; for argument in "$@"; do flags=${flags}'--'$argument' '; done
 
         echo scan $(params.scanCommand) $(params.scanObject)
-        trivy $(params.scanCommand) $(params.scanObject) -f $(params.outputFormat) ${flags} --cache-dir /tmp/.cache
+        trivy $(params.scanCommand) $(params.scanObject) -f $(params.outputFormat) ${flags} --output $(params.outputFile) --cache-dir /tmp/.cache
