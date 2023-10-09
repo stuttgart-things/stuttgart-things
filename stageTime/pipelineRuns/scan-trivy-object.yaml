@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: TaskRun
 metadata:
-  name: scan-trivy-python-11
+  name: scan-trivy-python-27
 spec:
   taskRef:
     resolver: git
@@ -13,18 +13,26 @@ spec:
         value: main
       - name: url
         value: https://github.com/stuttgart-things/stuttgart-things.git
+  workspaces:
+    - name: dockerconfig
+      csi:
+        driver: 'secrets-store.csi.k8s.io'
+        readOnly: true
+        volumeAttributes:
+          secretProviderClass: vault-scrlabda-creds
   params:
     - name: scanCommand
       value: image
     - name: scanObject
-      value: python:3.4-alpine
+      value: scr.app.4sthings.tiab.ssc.sva.de/machineshop/machineshop@sha256:df27e7dcea24ec265f522d872adfb9780cf50e0e52dcd3d833e6be87728fbdd0
     - name: outputFormat
-      value: table
+      value: json
+    - name: outputFile
+      value: /tmp/report.txt
+    - name: scanSeverity
+      value: MEDIUM,HIGH,CRITICAL
     - name: scanFlags
       value:
         - 'scanners vuln'
-        - 'timeout 30m'
-        - 'exit-code 1'
-        - 'severity MEDIUM,HIGH,CRITICAL'
     - name: trivyImage
       value: aquasec/trivy:0.45.1

@@ -24,6 +24,12 @@ spec:
     - name: outputFormat
       description: trivy output format
       default: table
+    - name: scanSeverity
+      description: severity level
+      default: MEDIUM,HIGH,CRITICAL
+    - name: scanTimeout
+      description: timout of scan
+      default: 30m
     - name: outputFile
       description: trivy report destination
       default: report.txt
@@ -32,20 +38,23 @@ spec:
       type: array
     - name: trivyImage
       description: trivy image
-      default: quay.io/skopeo/stable:v1.13.3
+      default: aquasec/trivy:0.45.1
     - name: skopeoImage
       description: trivy image
-      default: aquasec/trivy:0.45.1
+      default: quay.io/skopeo/stable:v1.13.3
   workspaces:
     - name: dockerconfig
       description: includes a docker `config.json`
       optional: true
-      mountPath: //tekton/home/.docker
+      mountPath: /tekton/home/.docker
   stepTemplate:
     securityContext:
       privileged: false
       runAsNonRoot: true
       runAsUser: 65532
+    env:
+      - name: HOME
+        value: /tekton/home
   steps:
     - name: image-available-check
       image: $(params.skopeoImage)
@@ -55,7 +64,9 @@ spec:
       script: |
         #!/usr/bin/env bash
         set -eu
-        until skopeo inspect docker://$(params.scanObject); do echo checking.. && sleep 30; done
+
+        # CHECK IF IMAGE IS (YES) AVAILABLE
+        until skopeo inspect docker://$(params.scanObject) --tls-verify=false; do echo checking.. && sleep 30; done
     - name: scan
       image: $(params.trivyImage)
       args:
@@ -64,8 +75,15 @@ spec:
         #!/usr/bin/env sh
         set -eu
 
-        # SET FLAGS
+        # SET FLAGS FROM ARGS
         flags=" "; for argument in "$@"; do flags=${flags}'--'$argument' '; done
 
-        echo scan $(params.scanCommand) $(params.scanObject)
-        trivy $(params.scanCommand) $(params.scanObject) -f $(params.outputFormat) ${flags} --output $(params.outputFile) --cache-dir /tmp/.cache
+        # SCAN W/ TRIVY
+        echo trivy scan $(params.scanCommand) $(params.scanObject) for CI output
+        trivy $(params.scanCommand) $(params.scanObject) -f table --severity $(params.scanSeverity) ${flags} --exit-code 0 --cache-dir /tmp/.cache --timeout $(params.scanTimeout) --insecure
+
+        echo trivy scan $(params.scanCommand) $(params.scanObject) for report
+        trivy $(params.scanCommand) $(params.scanObject) -f  $(params.outputFormat) --severity $(params.scanSeverity) ${flags} --exit-code 0 --cache-dir /tmp/.cache --timeout $(params.scanTimeout) --output $(params.outputFile) --insecure
+
+        echo trivy scan $(params.scanCommand) $(params.scanObject) for CI status
+        trivy $(params.scanCommand) $(params.scanObject) -f  $(params.outputFormat) --severity $(params.scanSeverity) ${flags} --exit-code 1 --cache-dir /tmp/.cache --timeout $(params.scanTimeout) --insecure
