@@ -21,6 +21,9 @@ spec:
     - name: scanObject
       description: object to scan
       default: "."
+    - name: outputFormat
+      description: trivy output format
+      default: table
     - name: scanFlags
       description: flags for scanning
       type: array
@@ -48,5 +51,5 @@ spec:
         # SET FLAGS
         flags=" "; for argument in "$@"; do flags=${flags}'--'$argument' '; done
 
-        echo START SCAN OF $(params.scanCommand) $(params.scanObject)
-        trivy $(params.scanCommand) $(params.scanObject) ${flags} --cache-dir /tmp/.cache
+        echo scan $(params.scanCommand) $(params.scanObject)
+        trivy $(params.scanCommand) $(params.scanObject) -f $(params.outputFormat) ${flags} --cache-dir /tmp/.cache
