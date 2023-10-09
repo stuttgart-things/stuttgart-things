@@ -55,7 +55,7 @@ spec:
       script: |
         #!/usr/bin/env bash
         set -eu
-        until skopeo inspect docker://$(params.scanObject) --tls-verify false; do echo checking.. && sleep 30; done
+        until skopeo inspect docker://$(params.scanObject) --tls-verify=false; do echo checking.. && sleep 30; done
     - name: scan
       image: $(params.trivyImage)
       args:
