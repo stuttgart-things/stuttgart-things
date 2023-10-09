@@ -32,10 +32,10 @@ spec:
       type: array
     - name: trivyImage
       description: trivy image
-      default: quay.io/skopeo/stable:v1.13.3
+      default: aquasec/trivy:0.45.1
     - name: skopeoImage
       description: trivy image
-      default: aquasec/trivy:0.45.1
+      default: quay.io/skopeo/stable:v1.13.3
   workspaces:
     - name: secrets
       description: holds the secrets

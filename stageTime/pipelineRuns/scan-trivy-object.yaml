@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: TaskRun
 metadata:
-  name: scan-trivy-python-11
+  name: scan-trivy-python-13
 spec:
   taskRef:
     resolver: git
