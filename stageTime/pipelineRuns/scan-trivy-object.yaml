@@ -2,22 +2,22 @@
 apiVersion: tekton.dev/v1
 kind: TaskRun
 metadata:
-  name: scan-trivy-python-1
+  name: scan-trivy-python-10
 spec:
   taskRef:
     resolver: git
     params:
       - name: pathInRepo
-        value: "stageTime/tasks/scan-trivy.yaml"
+        value: stageTime/tasks/scan-trivy.yaml
       - name: revision
-        value: "main"
+        value: main
       - name: url
-        value: "https://github.com/stuttgart-things/stuttgart-things.git"
+        value: https://github.com/stuttgart-things/stuttgart-things.git
   params:
     - name: scanCommand
       value: image
     - name: scanObject
-      value: python:3.4-alpine
+      value: python:3.4-alpine123
     - name: scanFlags
       value:
         - 'scanners vuln'
