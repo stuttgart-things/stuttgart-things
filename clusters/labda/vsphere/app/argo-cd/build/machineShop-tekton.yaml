@@ -79,12 +79,12 @@ spec:
                 name: {{ project }}-trivy-{{ branch_slug }}-{{ number }}
                 addRandomDateToRunName: true
                 namespace: {{ buildNamespace }}
-                kind: Pipeline
+                kind: Task
                 resolver: git
                 resolverParams:
                   url: https://github.com/stuttgart-things/stuttgart-things.git
                   revision: main
-                  pathInRepo: stageTime/pipelines/scan-trivy.yaml
+                  pathInRepo: stageTime/tasks/scan-trivy.yaml
                 params:
                   scanCommand: image
                   scanObject: {{ image }}:{{ head_sha }}
