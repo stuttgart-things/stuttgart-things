@@ -26,7 +26,7 @@ spec:
                   image: scr.app.4sthings.tiab.ssc.sva.de/machineshop/machineshop
   template:
     metadata:
-      name: 'machineshop-tekton-{{ number }}-{{ pipelinerun }}'
+      name: '{{ project }}-tekton-{{ branch_slug }}-{{ number }}'
     spec:
       project: app
       syncPolicy:
