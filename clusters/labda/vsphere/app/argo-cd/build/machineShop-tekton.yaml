@@ -1,0 +1,102 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: machineshop-tekton-builds
+  namespace: argocd
+spec:
+  generators:
+    - matrix:
+        generators:
+          - pullRequest:
+              github:
+                owner: stuttgart-things
+                repo: machineShop # This is the application source code repo
+                tokenRef:
+                  secretName: github
+                  key: token
+                # labels:
+                #   - build # label on PR that trigger review app
+              requeueAfterSeconds: 300
+          - list:
+              elements:
+                - project: machineshop
+                  buildNamespace: tektoncd
+                  gitRepoUrl: https://github.com/stuttgart-things/machineShop.git
+                  image: scr.app.4sthings.tiab.ssc.sva.de/machineshop/machineshop
+  template:
+    metadata:
+      name: 'machineshop-tekton-{{ number }}-{{ pipelinerun }}'
+    spec:
+      project: app
+      syncPolicy:
+        automated:
+          prune: true
+      destination:
+        name: dev11
+        namespace: tektoncd
+      source:
+        repoURL: https://github.com/stuttgart-things/stuttgart-things.git
+        targetRevision: main
+        path: charts/tekton-resources
+        helm:
+          values: |
+            enableRuns: true
+            runs:
+              build-kaniko:
+                name: {{ project }}-kaniko-{{ branch_slug }}-{{ number }}
+                addRandomDateToRunName: true
+                namespace: {{ buildNamespace }}
+                kind: Pipeline
+                resolver: git
+                resolverParams:
+                  url: https://github.com/stuttgart-things/stuttgart-things.git
+                  revision: main
+                  pathInRepo: stageTime/pipelines/build-kaniko-image.yaml
+                params:
+                  gitRepoUrl: {{ gitRepoUrl }}
+                  gitRevision: {{ branch }}
+                  gitWorkspaceSubdirectory: /kaniko/machineShop
+                  dockerfile: Dockerfile
+                  context: /kaniko/machineShop
+                  image: {{ image }}
+                  tag: {{ head_sha }}
+                workspaces:
+                  shared-workspace:
+                    workspaceKind: volumeClaimTemplate
+                    storageClassName: longhorn
+                    accessModes: ReadWriteMany
+                    storage: 1Gi
+                  dockerconfig:
+                    workspaceKind: csi
+                    secretProviderDriver: secrets-store.csi.k8s.io
+                    secretProviderClass: vault-scrlabda-creds
+                  basic-auth:
+                    workspaceKind: csi
+                    secretProviderDriver: secrets-store.csi.k8s.io
+                    secretProviderClass: vault-github-creds
+              scan-trivy:
+                name: {{ project }}-trivy-{{ branch_slug }}-{{ number }}
+                addRandomDateToRunName: true
+                namespace: {{ buildNamespace }}
+                kind: Pipeline
+                resolver: git
+                resolverParams:
+                  url: https://github.com/stuttgart-things/stuttgart-things.git
+                  revision: main
+                  pathInRepo: stageTime/pipelines/scan-trivy.yaml
+                params:
+                  scanCommand: image
+                  scanObject: {{ image }}:{{ head_sha }}
+                  outputFormat: json
+                  outputFile: /tmp/report.txt
+                  scanSeverity: MEDIUM,HIGH,CRITICAL
+                  trivyImage: aquasec/trivy:0.45.1
+                listParams:
+                  scanFlags:
+                    - 'scanners vuln'
+                workspaces:
+                  dockerconfig:
+                    workspaceKind: csi
+                    secretProviderDriver: secrets-store.csi.k8s.io
+                    secretProviderClass: vault-scrlabda-creds
