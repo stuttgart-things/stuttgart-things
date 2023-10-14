@@ -4,6 +4,11 @@ kind: Pipeline
 metadata:
   name: watch-tekton-pipelines
 spec:
+  workspaces:
+    - name: shared-workspace
+      optional: false
+    - name: git-secrets
+      optional: false
   params:
     - name: checkInterval
       description: sleep inbetween status checks
@@ -18,6 +23,15 @@ spec:
     - name: tknWorkingImage
       description: image/version to use
       default: "eu.gcr.io/stuttgart-things/sthings-k8s:1.28.2"
+    - name: gitRepoUrl
+      type: string
+      description: source git repo
+    - name: gitRevision
+      type: string
+      description: revision of source git repo
+    - name: tokenSecretKey
+      type: string
+      description: name of the secret key for gh token
   tasks:
     - name: watch-tekton
       taskRef:
@@ -40,3 +54,27 @@ spec:
           value: $(params.pipelineRunNamespace)
         - name: TKN_WORKING_IMAGE
           value: $(params.tknWorkingImage)
+    - name: merge-pullrequest
+      runAfter:
+        - watch-tekton
+      taskRef:
+        resolver: git
+        params:
+          - name: url
+            value: https://github.com/stuttgart-things/stuttgart-things.git
+          - name: revision
+            value: main
+          - name: pathInRepo
+            value: stageTime/tasks/use-ghcli.yaml
+      params:
+        - name: REPO_URL
+          value: $(params.gitRepoUrl)
+        - name: BRANCH
+          value: $(params.gitRevision)
+        - name: TOKEN_SECRET_KEY
+          value: $(params.tokenSecretKey)
+      workspaces:
+        - name: source
+          workspace: shared-workspace
+        - name: secrets
+          workspace: git-secrets
