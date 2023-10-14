@@ -31,7 +31,7 @@ spec:
       runAsNonRoot: true
       runAsUser: 65532
   steps:
-    - name: clone
+    - name: watch
       image: $(params.TKN_WORKING_IMAGE)
       script: |
         #!/usr/bin/env sh
