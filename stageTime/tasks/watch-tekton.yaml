@@ -62,7 +62,8 @@ spec:
           echo sleeping for ${sleep} seconds..
           sleep ${sleep}
           retries=`expr $retries + 1`
-          echo ${retries} retries left
+          retries_left=`expr $max_retries - 1`
+          echo ${retries_left} retries left
         done
 
         echo "Done watching pipelineRuns!"
