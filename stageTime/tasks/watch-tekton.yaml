@@ -44,6 +44,7 @@ spec:
         failed_prs=0
         succeeded_prs=0
         retries=0
+        retries_left=$(params.RETRIES)
         max_retries=$(params.RETRIES)
 
         all_prs=$(tkn pr list -n $(params.PR_NAMESPACE) | grep -c $(params.PR_FILTER))
@@ -51,7 +52,6 @@ spec:
 
         while [[ ${failed_prs} -le 0  ]] || [[ ${succeeded_prs} -eq ${all_prs} ]] || [[ ${retries} -eq ${max_retries} ]]
         do
-
           echo ${retries_left} retries left
           echo check/retry in ${sleep} seconds..
           sleep ${sleep}
