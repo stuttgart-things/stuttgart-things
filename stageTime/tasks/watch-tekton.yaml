@@ -49,8 +49,13 @@ spec:
         all_prs=$(tkn pr list -n $(params.PR_NAMESPACE) | grep -c $(params.PR_FILTER))
         echo all pipelineRuns: ${all_prs}
 
-        while [[ ${failed_prs} -ge 0  ]] || [[ ${succeeded_prs} -eq ${all_prs} || [[ ${retries} -eq ${max_retries} ]]
+        while [[ ${failed_prs} -le 0  ]] || [[ ${succeeded_prs} -eq ${all_prs} ]] || [[ ${retries} -eq ${max_retries} ]]
         do
+
+          echo ${retries_left} retries left
+          echo check/retry in ${sleep} seconds..
+          sleep ${sleep}
+
           failed_prs=$(tkn pr list -n $(params.PR_NAMESPACE) | grep $(params.PR_FILTER) | grep -c Failed)
           echo Failed pipelineRuns: ${failed_prs}
           tkn pr list -n $(params.PR_NAMESPACE) | grep $(params.PR_FILTER) | grep Failed
@@ -61,9 +66,6 @@ spec:
 
           retries=`expr ${retries} + 1`
           retries_left=`expr ${max_retries} - ${retries}`
-          echo ${retries_left} retries left
-          echo sleeping for ${sleep} seconds..
-          sleep ${sleep}
         done
 
         echo "Done watching pipelineRuns!"
