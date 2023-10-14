@@ -16,7 +16,7 @@ spec:
     Use tkn for watching pipelineRuns
   params:
     - name: SLEEP
-      description: sleep inbetween runs
+      description: sleep inbetween status checks
       default: "5"
     - name: RETRIES
       description: total retrys

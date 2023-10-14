@@ -83,7 +83,7 @@ spec:
           - name: revision
             value: main
           - name: pathInRepo
-            value: stageTime/tasks/kaniko.yaml
+            value: stageTime/tasks/build-kaniko.yaml
       workspaces:
         - name: dockerconfig
           workspace: dockerconfig
@@ -105,3 +105,31 @@ spec:
           value: $(params.gitWorkspaceSubdirectory)
         - name: TAG
           value: $(params.tag)
+    # - name: pr-status
+    #   runAfter:
+    #     - kaniko
+    #   taskRef:
+    #     resolver: git
+    #     params:
+    #       - name: url
+    #         value: https://github.com/stuttgart-things/stuttgart-things.git
+    #       - name: revision
+    #         value: main
+    #       - name: pathInRepo
+    #         value: stageTime/tasks/use-ghcli.yaml
+    #   workspaces:
+    #     - name: source
+    #       workspace: shared-workspace
+    #     - name: secrets
+    #       workspace: dockerconfig
+    #   params:
+    #     - name: REPO_URL
+    #       value: $(params.gitRepoUrl)
+    #     - name: BRANCH
+    #       value: $(params.gitRevision)
+    #     - name: TOKEN_SECRET_KEY
+    #       value: token
+    #     - name: GH_WORKING_IMAGE
+    #       value: "ghcr.io/supportpal/github-gh-cli:2.35.0"
+    #     - name: SUBDIRECTORY
+    #       value: $(params.gitWorkspaceSubdirectory)

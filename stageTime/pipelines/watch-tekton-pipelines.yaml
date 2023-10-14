@@ -1,0 +1,47 @@
+---
+apiVersion: tekton.dev/v1
+kind: Pipeline
+metadata:
+  name: watch-tekton-pipelines
+spec:
+  workspaces:
+    - name: source
+  params:
+    - name: checkInterval
+      description: sleep inbetween status checks
+      default: "5"
+    - name: checkRetries
+      description: total retrys
+      default: "250"
+    - name: pipelineRunFilter
+      description: filter term for pipelineRuns
+    - name: pipelineRunNamespace
+      description: pipelineRun namespace
+    - name: tknWorkingImage
+      description: image/version to use
+      default: "eu.gcr.io/stuttgart-things/sthings-k8s:1.28.2"
+  tasks:
+    - name: bootstrap-flux
+      taskRef:
+        resolver: git
+        params:
+          - name: url
+            value: https://github.com/stuttgart-things/stuttgart-things.git
+          - name: revision
+            value: main
+          - name: pathInRepo
+            value: stageTime/tasks/watch-tekton.yaml
+      workspaces:
+        - name: source
+          workspace: source
+      params:
+        - name: SLEEP
+          value: $(params.checkInterval)
+        - name: RETRIES
+          value: $(params.checkRetries)
+        - name: PR_FILTER
+          value: $(params.pipelineRunFilter)
+        - name: PR_NAMESPACE
+          value: $(params.pipelineRunNamespace)
+        - name: TKN_WORKING_IMAGE
+          value: $(params.tknWorkingImage)

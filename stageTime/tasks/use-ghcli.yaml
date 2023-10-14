@@ -41,14 +41,20 @@ spec:
     - name: secrets
       description: holds the secrets
       optional: false
+  stepTemplate:
+    image: $(params.GH_WORKING_IMAGE)
+    workingDir: $(workspaces.source.path)/$(params.SUBDIRECTORY)
+    # securityContext:
+    #   privileged: false
+    #   runAsNonRoot: true
+    #   runAsUser: 65532
+    env:
+      - name: HOME
+        value: /tekton/home
+      - name: GITHUB_TOKEN
+        value: "unset"
   steps:
     - name: clone
-      image: $(params.GH_WORKING_IMAGE)
-      workingDir: $(workspaces.source.path)/$(params.SUBDIRECTORY)
-      # securityContext:
-      #   privileged: false
-      #   runAsNonRoot: true
-      #   runAsUser: 65532
       env:
         - name: CLONE
           value: $(params.CLONE)
@@ -63,8 +69,12 @@ spec:
           echo CLONING $(params.BRANCH) FROM $(params.REPO_URL)..
           rm -rf *
           gh repo clone $(params.REPO_URL) . -- --branch $(params.BRANCH)
+
+          chmod -R 777 $(echo $(params.REPO_URL) | sed 's|.*/||' | sed 's/.git//g')
         fi
+    - name: cli
+      script: |
+        #!/usr/bin/env sh
+        set -eu
 
-        ls -lta
-
-        chmod -R 777 .
+        echo ${GITHUB_TOKEN}
