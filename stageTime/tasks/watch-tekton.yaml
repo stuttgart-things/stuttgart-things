@@ -18,6 +18,9 @@ spec:
     - name: SLEEP
       description: sleep inbetween runs
       default: "5"
+    - name: RETRIES
+      description: total retrys
+      default: "250"
     - name: PR_FILTER
       description: filter term for pipelineRuns
     - name: PR_NAMESPACE
@@ -40,11 +43,13 @@ spec:
         sleep=$(params.SLEEP)
         failed_prs=0
         succeeded_prs=0
+        retries=0
+        max_retries=$(params.RETRIES)
 
         all_prs=$(tkn pr list -n $(params.PR_NAMESPACE) | grep -c $(params.PR_FILTER))
         echo all pipelineRuns: ${all_prs}
 
-        while [[ ${failed_prs} -ge 0  ]] || [[ ${succeeded_prs} -eq ${all_prs} ]]
+        while [[ ${failed_prs} -ge 0  ]] || [[ ${succeeded_prs} -eq ${all_prs} || [[ ${retries} -eq ${max_retries} ]]
         do
           failed_prs=$(tkn pr list -n $(params.PR_NAMESPACE) | grep $(params.PR_FILTER) | grep -c Failed)
           echo Failed pipelineRuns: ${failed_prs}
@@ -55,6 +60,7 @@ spec:
           tkn pr list -n $(params.PR_NAMESPACE) | grep $(params.PR_FILTER) | grep Succeeded
 
           sleep ${sleep}
+          (( retries++ ))
         done
 
         echo "Done watching pipelineRuns!"

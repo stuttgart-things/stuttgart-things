@@ -2,8 +2,10 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: lint-machineshop-cli-43
+  name: lint-machineshop-cli-47
 spec:
+  # taskRunTemplate:
+  #   serviceAccountName: tektoncd
   pipelineRef:
     resolver: git
     params:
