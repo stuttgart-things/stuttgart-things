@@ -34,6 +34,10 @@ spec:
       description: subdirectory of workspace
       type: string
       default: ""
+    - name: ARGS
+      type: array
+      description: gh CLI arguments to run
+      default: ["--help"]
   workspaces:
     - name: source
       description: holds the working data
@@ -72,9 +76,14 @@ spec:
           chmod -R 777 *
         fi
     - name: cli
+      args:
+        - $(params.ARGS[*])
       script: |
         #!/usr/bin/env sh
         set -eu
 
+        echo EXPORTING GITHUB TOKEN
+        export GITHUB_TOKEN=$(cat $(workspaces.secrets.path)/$(params.TOKEN_SECRET_KEY))
         echo ${GITHUB_TOKEN}
-        # cd $(echo $(params.REPO_URL) | sed 's|.*/||' | sed 's/.git//g')
+
+        gh $@

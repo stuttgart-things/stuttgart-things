@@ -32,6 +32,9 @@ spec:
     - name: tokenSecretKey
       type: string
       description: name of the secret key for gh token
+    - name: ghCliArgs
+      type: array
+      description: github cli args
   tasks:
     - name: watch-tekton
       taskRef:
@@ -73,6 +76,8 @@ spec:
           value: $(params.gitRevision)
         - name: TOKEN_SECRET_KEY
           value: $(params.tokenSecretKey)
+        - name: ARGS
+          value: $(params.ghCliArgs)
       workspaces:
         - name: source
           workspace: shared-workspace
