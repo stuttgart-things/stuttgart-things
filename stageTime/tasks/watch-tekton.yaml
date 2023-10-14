@@ -61,7 +61,7 @@ spec:
 
           echo sleep: ${sleep}..
           sleep ${sleep}
-          (( retries++ ))
+          let "retries++"
           echo retries left: ${retries}
         done
 
