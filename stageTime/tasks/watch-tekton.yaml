@@ -13,7 +13,7 @@ metadata:
     tekton.dev/platforms: "linux/amd64"
 spec:
   description: >-
-    This Task uses github cli (gh) for various commands
+    Use tkn for watching pipelineRuns
   params:
     - name: SLEEP
       description: sleep inbetween runs
