@@ -37,7 +37,7 @@ spec:
     - name: watch
       image: $(params.TKN_WORKING_IMAGE)
       script: |
-        #!/usr/bin/env sh
+        #!/usr/bin/env bash
         set -eu
 
         sleep=$(params.SLEEP)
@@ -59,10 +59,10 @@ spec:
           echo Succeeded pipelineRuns: ${succeeded_prs}
           tkn pr list -n $(params.PR_NAMESPACE) | grep $(params.PR_FILTER) | grep Succeeded
 
-          echo sleep: ${sleep}..
+          echo sleeping for ${sleep} seconds..
           sleep ${sleep}
-          let "retries++"
-          echo retries left: ${retries}
+          retries=$((retries++))
+          echo ${retries} retries left
         done
 
         echo "Done watching pipelineRuns!"
