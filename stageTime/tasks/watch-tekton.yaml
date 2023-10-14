@@ -59,8 +59,10 @@ spec:
           echo Succeeded pipelineRuns: ${succeeded_prs}
           tkn pr list -n $(params.PR_NAMESPACE) | grep $(params.PR_FILTER) | grep Succeeded
 
+          echo sleep: ${sleep}..
           sleep ${sleep}
           (( retries++ ))
+          echo retries left: ${retries}
         done
 
         echo "Done watching pipelineRuns!"
