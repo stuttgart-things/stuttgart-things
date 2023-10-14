@@ -37,7 +37,7 @@ spec:
     - name: watch
       image: $(params.TKN_WORKING_IMAGE)
       script: |
-        #!/usr/bin/env bash
+        #!/usr/bin/env sh
         set -eu
 
         sleep=$(params.SLEEP)
@@ -61,7 +61,7 @@ spec:
 
           echo sleeping for ${sleep} seconds..
           sleep ${sleep}
-          retries=$((retries++))
+          retries=`expr $retries + 1`
           echo ${retries} retries left
         done
 
