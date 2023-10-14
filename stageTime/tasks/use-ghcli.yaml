@@ -84,5 +84,6 @@ spec:
 
         echo EXPORTING GITHUB TOKEN
         export GITHUB_TOKEN=$(cat $(workspaces.secrets.path)/$(params.TOKEN_SECRET_KEY))
-
+        ls -lta
+        git config --global --add safe.directory .
         gh $@

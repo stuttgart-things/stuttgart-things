@@ -1,0 +1,64 @@
+---
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  name: watch-tekton-pipelineruns-25
+spec:
+  pipelineRef:
+    resolver: git
+    params:
+      - name: pathInRepo
+        value: stageTime/pipelines/watch-tekton-pipelines.yaml
+      - name: revision
+        value: main
+      - name: url
+        value: https://github.com/stuttgart-things/stuttgart-things.git
+  taskRunSpecs:
+    - pipelineTaskName: watch-tekton
+      serviceAccountName: tektoncd
+      # computeResources:
+      #   requests:
+      #     cpu: 2
+  workspaces:
+    - name: git-secrets
+      csi:
+        driver: 'secrets-store.csi.k8s.io'
+        readOnly: true
+        volumeAttributes:
+          secretProviderClass: vault-github-creds
+    - name: shared-workspace
+      volumeClaimTemplate:
+        spec:
+          storageClassName: nfs3-csi2
+          accessModes:
+          - ReadWriteMany
+          resources:
+            requests:
+              storage: 200M
+  params:
+    - name: checkInterval
+      value: 2
+    - name: checkRetries
+      value: 2
+    - name: pipelineRunFilter
+      value: alpine
+    - name: pipelineRunNamespace
+      value: tektoncd
+    - name: tknWorkingImage
+      value: eu.gcr.io/stuttgart-things/sthings-k8s:1.28.2
+    - name: ghCliArgs
+      value:
+        - pr
+        - create
+        - -t
+        - 'tekton-test1'
+        - -B
+        - GENERATE-HEADER
+        - -b
+        - 'tekton'
+    - name: gitRepoUrl
+      value: https://github.com/stuttgart-things/machineShop.git
+    - name: gitRevision
+      value: GENERATE-HEADER
+    - name: tokenSecretKey
+      value: token
