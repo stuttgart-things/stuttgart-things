@@ -69,8 +69,7 @@ spec:
           echo CLONING $(params.BRANCH) FROM $(params.REPO_URL)..
           rm -rf *
           gh repo clone $(params.REPO_URL) . -- --branch $(params.BRANCH)
-
-          chmod -R 777 $(echo $(params.REPO_URL) | sed 's|.*/||' | sed 's/.git//g')
+          chmod -R 777 *
         fi
     - name: cli
       script: |
@@ -78,3 +77,4 @@ spec:
         set -eu
 
         echo ${GITHUB_TOKEN}
+        # cd $(echo $(params.REPO_URL) | sed 's|.*/||' | sed 's/.git//g')
