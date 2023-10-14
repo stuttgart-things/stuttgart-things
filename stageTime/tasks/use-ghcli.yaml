@@ -84,6 +84,5 @@ spec:
 
         echo EXPORTING GITHUB TOKEN
         export GITHUB_TOKEN=$(cat $(workspaces.secrets.path)/$(params.TOKEN_SECRET_KEY))
-        echo ${GITHUB_TOKEN}
 
         gh $@
