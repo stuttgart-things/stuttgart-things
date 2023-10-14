@@ -23,8 +23,8 @@ spec:
     - name: PR_NAMESPACE
       description: pipelineRun namespace
     - name: TKN_WORKING_IMAGE
-      description: gh image/version to use
-      default: "ghcr.io/supportpal/github-gh-cli:2.35.0"
+      description: image/version to use
+      default: "eu.gcr.io/stuttgart-things/sthings-k8s:1.28.2"
   stepTemplate:
     securityContext:
       privileged: false
