@@ -73,7 +73,6 @@ spec:
           echo CLONING $(params.BRANCH) FROM $(params.REPO_URL)..
           rm -rf *
           gh repo clone $(params.REPO_URL) . -- --branch $(params.BRANCH)
-          chmod -R 777 *
         fi
     - name: cli
       args:
@@ -85,5 +84,5 @@ spec:
         echo EXPORTING GITHUB TOKEN
         export GITHUB_TOKEN=$(cat $(workspaces.secrets.path)/$(params.TOKEN_SECRET_KEY))
         ls -lta
-        git config --global --add safe.directory .
+
         gh $@

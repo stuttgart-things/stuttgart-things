@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: watch-tekton-pipelineruns-25
+  name: watch-tekton-pipelineruns-26
 spec:
   pipelineRef:
     resolver: git
