@@ -1,0 +1,62 @@
+---
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: watch-tekton
+  labels:
+    app.kubernetes.io/version: "0.2"
+  annotations:
+    tekton.dev/pipelines.minVersion: "0.12.1"
+    tekton.dev/categories: github
+    tekton.dev/tags: github
+    tekton.dev/displayName: "github cli"
+    tekton.dev/platforms: "linux/amd64"
+spec:
+  description: >-
+    This Task uses github cli (gh) for various commands
+  params:
+    - name: SLEEP
+      description: sleep inbetween runs
+      default: "5"
+    - name: PR_FILTER
+      description: filter term for pipelineRuns
+    - name: PR_NAMESPACE
+      description: pipelineRun namespace
+    - name: TKN_WORKING_IMAGE
+      description: gh image/version to use
+      default: "ghcr.io/supportpal/github-gh-cli:2.35.0"
+  stepTemplate:
+    securityContext:
+      privileged: false
+      runAsNonRoot: true
+      runAsUser: 65532
+  steps:
+    - name: clone
+      image: $(params.TKN_WORKING_IMAGE)
+      script: |
+        #!/usr/bin/env sh
+        set -eu
+
+        sleep=$(params.SLEEP)
+        failed_prs=0
+        succeeded_prs=0
+
+        all_prs=$(tkn pr list -n $(params.PR_NAMESPACE) | grep -c $(params.PR_FILTER))
+        echo all pipelineRuns: ${all_prs}
+
+        while [[ ${failed_prs} -ge 0  ]] || [[ ${succeeded_prs} -eq ${all_prs} ]]
+        do
+          failed_prs=$(tkn pr list -n $(params.PR_NAMESPACE) | grep $(params.PR_FILTER) | grep -c Failed)
+          echo Failed pipelineRuns: ${failed_prs}
+          tkn pr list -n $(params.PR_NAMESPACE) | grep $(params.PR_FILTER) | grep Failed
+
+          succeeded_prs=$(tkn pr list -n $(params.PR_NAMESPACE) | grep $(params.PR_FILTER) | grep -c Succeeded)
+          echo Succeeded pipelineRuns: ${succeeded_prs}
+          tkn pr list -n $(params.PR_NAMESPACE) | grep $(params.PR_FILTER) | grep Succeeded
+
+          sleep ${sleep}
+        done
+
+        echo "Done watching pipelineRuns!"
+        echo Failed pipelineRuns: ${failed_prs}
+        echo Succeeded pipelineRuns: ${succeeded_prs}

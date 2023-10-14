@@ -6,9 +6,11 @@ ARG TAG=3.17.3-python
 FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
 
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
+LABEL version=1.28.2
 
-ARG KUBECTL_VERSION=1.27.2
-ARG HELM_VERSION=3.12.0
+ARG KUBECTL_VERSION=1.28.2
+ARG HELM_VERSION=3.13.1
+ARG TKN_VERSION=0.32.0
 
 # INSTALL KUBECTL + HELM
 RUN apk add --no-cache ca-certificates bash git openssh curl libc6-compat \
@@ -20,3 +22,8 @@ RUN apk add --no-cache ca-certificates bash git openssh curl libc6-compat \
     && mkdir /config \
     && chmod g+rwx /config \
     && helm repo add "stable" "https://charts.helm.sh/stable" --force-update
+
+# INSTALL TEKTON CLI
+RUN wget -q https://github.com/tektoncd/cli/releases/download/v${TKN_VERSION}/tkn_${TKN_VERSION}_Linux_x86_64.tar.gz \
+    && tar -xvf tkn_${TKN_VERSION}_Linux_x86_64.tar.gz -C /usr/bin/ tkn \
+    && rm -rf tkn_${TKN_VERSION}_Linux_x86_64.tar.gz

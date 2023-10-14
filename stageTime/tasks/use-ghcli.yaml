@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: Task
 metadata:
-  name: user-ghcli
+  name: use-ghcli
   labels:
     app.kubernetes.io/version: "0.2"
   annotations:
