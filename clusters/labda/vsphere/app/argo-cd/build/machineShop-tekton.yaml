@@ -44,7 +44,7 @@ spec:
             enableRuns: true
             runs:
               build-kaniko:
-                name: {{ number }}!{{ project }}-kaniko-{{ branch_slug }}
+                name: {{ project }}-kaniko-{{ branch_slug }}-{{ number }}
                 addRandomDateToRunName: true
                 namespace: {{ buildNamespace }}
                 kind: Pipeline
@@ -76,7 +76,7 @@ spec:
                     secretProviderDriver: secrets-store.csi.k8s.io
                     secretProviderClass: vault-github-creds
               scan-trivy:
-                name: {{ number }}!{{ project }}-trivy-{{ branch_slug }}
+                name: {{ project }}-trivy-{{ branch_slug }}-{{ number }}
                 addRandomDateToRunName: true
                 namespace: {{ buildNamespace }}
                 kind: Pipeline
@@ -115,7 +115,7 @@ spec:
                 params:
                   checkInterval: 10
                   checkRetries: 250
-                  pipelineRunFilter: {{ number }}!{{ project }}
+                  pipelineRunFilter: {{ branch_slug }}-{{ number }}
                   pipelineRunNamespace: tektoncd
                   tknWorkingImage: eu.gcr.io/stuttgart-things/sthings-k8s:1.28.2
                   gitRepoUrl: {{ gitRepoUrl }}
