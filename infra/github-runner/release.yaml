@@ -1,25 +1,17 @@
-# ---
-# apiVersion: helm.toolkit.fluxcd.io/v2beta1
-# kind: HelmRelease
-# metadata:
-#   name: longhorn
-#   namespace: longhorn-system
-# spec:
-#   interval: 20m
-#   chart:
-#     spec:
-#       chart: longhorn
-#       version: 1.5.1
-#       sourceRef:
-#         kind: HelmRepository
-#         name: longhorn
-#         namespace: longhorn-system
-#       interval: 12h
-#   values:
-#     installCRDs: true
-#     persistence:
-#       defaultClass: true
-#       defaultFsType: ext4
-#       defaultMkfsParams: ""
-#       defaultDataLocality: disabled
-#       reclaimPolicy: Delete
+# NAMESPACE="arc-systems"
+# helm upgrade --install arc \
+# --namespace "${NAMESPACE}" \
+# --create-namespace \
+# oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set-controller
+
+
+# INSTALLATION_NAME="docs-runner-set"
+# NAMESPACE="arc-runners"
+# GITHUB_CONFIG_URL="https://github.com/stuttgart-things/docs"
+# GITHUB_PAT=""
+# helm install "${INSTALLATION_NAME}" \
+# --namespace "${NAMESPACE}" \
+# --create-namespace \
+# --set githubConfigUrl="${GITHUB_CONFIG_URL}" \
+# --set githubConfigSecret.github_token="${GITHUB_PAT}" \
+# oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set
