@@ -105,6 +105,8 @@ spec:
                 addRandomDateToRunName: true
                 namespace: {{ buildNamespace }}
                 kind: Pipeline
+                serviceAccounts:
+                  watch-tekton: tektoncd
                 resolver: git
                 resolverParams:
                   url: https://github.com/stuttgart-things/stuttgart-things.git
