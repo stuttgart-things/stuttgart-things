@@ -100,3 +100,37 @@ spec:
                     workspaceKind: csi
                     secretProviderDriver: secrets-store.csi.k8s.io
                     secretProviderClass: vault-scrlabda-creds
+              watch-tekton:
+                name: {{ project }}-watch-{{ number }}
+                addRandomDateToRunName: true
+                namespace: {{ buildNamespace }}
+                kind: Pipeline
+                resolver: git
+                resolverParams:
+                  url: https://github.com/stuttgart-things/stuttgart-things.git
+                  revision: main
+                  pathInRepo: stageTime/tasks/watch-tekton-pipelines.yaml
+                params:
+                  checkInterval: 10
+                  checkRetries: 250
+                  pipelineRunFilter: {{ branch_slug }}-{{ number }}
+                  pipelineRunNamespace: tektoncd
+                  tknWorkingImage: eu.gcr.io/stuttgart-things/sthings-k8s:1.28.2
+                listParams:
+                  ghCliArgs:
+                    - pr
+                    - merge
+                    - -t
+                    - 'tekton-test1'
+                    - -b
+                    - 'tekton'
+                workspaces:
+                  git-secrets:
+                    workspaceKind: csi
+                    secretProviderDriver: secrets-store.csi.k8s.io
+                    secretProviderClass: vault-github-creds
+                  shared-workspace:
+                    workspaceKind: volumeClaimTemplate
+                    storageClassName: longhorn
+                    accessModes: ReadWriteMany
+                    storage: 100M

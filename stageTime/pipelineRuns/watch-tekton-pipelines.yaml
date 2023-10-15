@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: watch-tekton-pipelineruns-27
+  name: watch-tekton-pipelineruns-29
 spec:
   pipelineRef:
     resolver: git
@@ -46,14 +46,20 @@ spec:
       value: tektoncd
     - name: tknWorkingImage
       value: eu.gcr.io/stuttgart-things/sthings-k8s:1.28.2
+    # - name: ghCliArgs
+    #   value:
+    #     - pr
+    #     - create
+    #     - -t
+    #     - 'tekton-test1'
+    #     - -b
+    #     - 'tekton'
     - name: ghCliArgs
-      value:
+      value: # gh pr merge 19 --auto --merge --delete-branch --body "tekton"
         - pr
-        - create
+        - merge
         - -t
         - 'tekton-test1'
-        - -B
-        - GENERATE-HEADER
         - -b
         - 'tekton'
     - name: gitRepoUrl
