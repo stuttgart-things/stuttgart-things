@@ -53,19 +53,19 @@ spec:
         while [[ ${failed_prs} -le 0  ]] || [[ ${succeeded_prs} -eq ${all_prs} ]] || [[ ${retries} -eq ${max_retries} ]]
         do
           echo ${retries_left} retries left
-          echo check/retry in ${sleep} seconds..
-          sleep ${sleep}
 
+          tkn pr list -n $(params.PR_NAMESPACE) | grep '$(params.PR_FILTER)' | grep Failed
           failed_prs=$(tkn pr list -n $(params.PR_NAMESPACE) | grep '$(params.PR_FILTER)' | grep -c Failed)
           echo Failed pipelineRuns: ${failed_prs}
-          tkn pr list -n $(params.PR_NAMESPACE) | grep '$(params.PR_FILTER)' | grep Failed
 
+          tkn pr list -n $(params.PR_NAMESPACE) | grep '$(params.PR_FILTER)' | grep Succeeded
           succeeded_prs=$(tkn pr list -n $(params.PR_NAMESPACE) | grep '$(params.PR_FILTER)' | grep -c Succeeded)
           echo Succeeded pipelineRuns: ${succeeded_prs}
-          tkn pr list -n $(params.PR_NAMESPACE) | grep '$(params.PR_FILTER)' | grep Succeeded
 
           retries=`expr ${retries} + 1`
           retries_left=`expr ${max_retries} - ${retries}`
+          echo check/retry in ${sleep} seconds..
+          sleep ${sleep}
         done
 
         echo "Done watching pipelineRuns!"
