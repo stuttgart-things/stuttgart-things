@@ -1,14 +1,14 @@
 ---
 apiVersion: tekton.dev/v1
-kind: TaskRun
+kind: PipelineRun
 metadata:
-  name: scan-trivy-python-31
+  name: scan-trivy-python-1
 spec:
-  taskRef:
+  pipelineRef:
     resolver: git
     params:
       - name: pathInRepo
-        value: stageTime/tasks/scan-trivy.yaml
+        value: stageTime/pipelines/scan-trivy-object.yaml
       - name: revision
         value: main
       - name: url
