@@ -33,6 +33,14 @@ spec:
         value: {{ $v | quote -}}
     {{ end }}
 {{ end }}
+{{- if $run.taskRunSpecs }}
+  taskRunSpecs:
+  {{- if $run.taskRunSpecs.serviceAccounts }}
+  {{- range $k, $v := $run.taskRunSpecs.serviceAccounts }}
+    - pipelineTaskName: {{ $k }}
+      serviceAccountName: {{ $v | quote -}}{{ end }}
+  {{ end }}
+{{ else }}
   workspaces:
   {{- range $k, $v := $run.workspaces }}
     - name: {{ $k }}
