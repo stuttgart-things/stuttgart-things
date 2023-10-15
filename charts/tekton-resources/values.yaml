@@ -16,39 +16,41 @@ enableExtraPipelines: false
 
 
 enableRuns: true
-runs:
-  build-kaniko:
-    name: build-sthings-alpine
-    addRandomDateToRunName: true
-    namespace: tektoncd
-    kind: Pipeline
-    resolver: git
-    resolverParams:
-      url: https://github.com/stuttgart-things/stuttgart-things.git
-      revision: main
-      pathInRepo: stageTime/pipelines/build-kaniko-image.yaml
-    params:
-      gitRepoUrl: https://github.com/stuttgart-things/machineShop.git
-      gitRevision: main
-      gitWorkspaceSubdirectory: /kaniko/machineShop
-      dockerfile: Dockerfile
-      context: /kaniko/machineShop
-      image: scr.app.4sthings.tiab.ssc.sva.de/machineshop/machineshop
-      tag: v1
-    workspaces:
-      shared-workspace:
-        workspaceKind: volumeClaimTemplate
-        storageClassName: longhorn
-        accessModes: ReadWriteMany
-        storage: 1Gi
-      dockerconfig:
-        workspaceKind: csi
-        secretProviderDriver: secrets-store.csi.k8s.io
-        secretProviderClass: vault-scrlabda-creds
-      basic-auth:
-        workspaceKind: csi
-        secretProviderDriver: secrets-store.csi.k8s.io
-        secretProviderClass: vault-github-creds
+# runs:
+#   build-kaniko:
+#     name: build-sthings-alpine
+#     addRandomDateToRunName: true
+#     namespace: tektoncd
+#     kind: Pipeline
+#     resolver: git
+#     serviceAccounts:
+#       watch-tekton: tektoncd
+#     resolverParams:
+#       url: https://github.com/stuttgart-things/stuttgart-things.git
+#       revision: main
+#       pathInRepo: stageTime/pipelines/build-kaniko-image.yaml
+#     params:
+#       gitRepoUrl: https://github.com/stuttgart-things/machineShop.git
+#       gitRevision: main
+#       gitWorkspaceSubdirectory: /kaniko/machineShop
+#       dockerfile: Dockerfile
+#       context: /kaniko/machineShop
+#       image: scr.app.4sthings.tiab.ssc.sva.de/machineshop/machineshop
+#       tag: v1
+#     workspaces:
+#       shared-workspace:
+#         workspaceKind: volumeClaimTemplate
+#         storageClassName: longhorn
+#         accessModes: ReadWriteMany
+#         storage: 1Gi
+#       dockerconfig:
+#         workspaceKind: csi
+#         secretProviderDriver: secrets-store.csi.k8s.io
+#         secretProviderClass: vault-scrlabda-creds
+#       basic-auth:
+#         workspaceKind: csi
+#         secretProviderDriver: secrets-store.csi.k8s.io
+#         secretProviderClass: vault-github-creds
 
 # workspaces:
 #  tekton-kaniko-workspace:
