@@ -101,7 +101,7 @@ spec:
                     secretProviderDriver: secrets-store.csi.k8s.io
                     secretProviderClass: vault-scrlabda-creds
               watch-tekton:
-                name: {{ project }}-watch-{{ number }}
+                name: {{ project }}-watch-mergepr-{{ number }}
                 addRandomDateToRunName: true
                 namespace: {{ buildNamespace }}
                 kind: Pipeline
@@ -109,11 +109,11 @@ spec:
                 resolverParams:
                   url: https://github.com/stuttgart-things/stuttgart-things.git
                   revision: main
-                  pathInRepo: stageTime/tasks/watch-tekton-pipelines.yaml
+                  pathInRepo: stageTime/pipelines/watch-tekton-pipelines.yaml
                 params:
                   checkInterval: 10
                   checkRetries: 250
-                  pipelineRunFilter: {{ branch_slug }}-{{ number }}
+                  pipelineRunFilter: {{ branch_slug }}
                   pipelineRunNamespace: tektoncd
                   tknWorkingImage: eu.gcr.io/stuttgart-things/sthings-k8s:1.28.2
                 listParams:
