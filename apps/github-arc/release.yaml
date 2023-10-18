@@ -35,7 +35,7 @@ spec:
   values:
     githubConfigUrl: ${GITHUB_URL}
     githubConfigSecret:
-      github_token: ${GITHUB_PAT}
+      github_token: ${GITHUB_TOKEN}
     containerMode:
       type: kubernetes
       kubernetesModeWorkVolumeClaim:
