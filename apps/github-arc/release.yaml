@@ -1,9 +1,20 @@
-# NAMESPACE="arc-systems"
-# helm upgrade --install arc \
-# --namespace "${NAMESPACE}" \
-# --create-namespace \
-# oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set-controller
-
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: actions-runner-controller
+  namespace: arc-systems
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: gha-runner-scale-set-controller
+      version: 0.6.1
+      sourceRef:
+        kind: HelmRepository
+        name: actions-runner-controller-charts
+        namespace: arc-systems
+      interval: 12h
 
 # INSTALLATION_NAME="docs-runner-set"
 # NAMESPACE="arc-runners"

@@ -53,7 +53,6 @@ spec:
         while [[ ${failed_prs} -le 0  ]] || [[ ${succeeded_prs} -eq ${all_prs} ]] || [[ ${retries} -eq ${max_retries} ]]
         do
           echo ${retries_left} retries left
-
           tkn pr list -n $(params.PR_NAMESPACE) | grep '$(params.PR_FILTER)' | grep Failed
           failed_prs=$(tkn pr list -n $(params.PR_NAMESPACE) | grep '$(params.PR_FILTER)' | grep -c Failed)
           echo Failed pipelineRuns: ${failed_prs}
