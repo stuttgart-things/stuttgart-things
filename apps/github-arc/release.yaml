@@ -19,7 +19,7 @@ spec:
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: arc-runner-scale-set
+  name: arc-runner-scale-set-docs
   namespace: arc-runners
 spec:
   interval: 30m

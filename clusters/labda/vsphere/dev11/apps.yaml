@@ -97,7 +97,7 @@ spec:
   wait: true
   postBuild:
     substitute:
-      GITHUB_URL: https://github.com/stuttgart-things
+      GITHUB_URL: https://github.com/stuttgart-things/docs
       STORAGE_CLASS: openebs-hostpath
     substituteFrom:
       - kind: Secret
