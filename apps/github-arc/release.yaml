@@ -15,14 +15,58 @@ spec:
         name: actions-runner-controller-charts
         namespace: arc-systems
       interval: 12h
-
-# INSTALLATION_NAME="docs-runner-set"
-# NAMESPACE="arc-runners"
-# GITHUB_CONFIG_URL="https://github.com/stuttgart-things/docs"
-# GITHUB_PAT=""
-# helm install "${INSTALLATION_NAME}" \
-# --namespace "${NAMESPACE}" \
-# --create-namespace \
-# --set githubConfigUrl="${GITHUB_CONFIG_URL}" \
-# --set githubConfigSecret.github_token="${GITHUB_PAT}" \
-# oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: actions-runner-controller
+  namespace: arc-systems
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: gha-runner-scale-set-controller
+      version: 0.6.1
+      sourceRef:
+        kind: HelmRepository
+        name: actions-runner-controller-charts
+        namespace: arc-systems
+      interval: 12h
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: arc-runner-scale-set
+  namespace: arc-runners
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: gha-runner-scale-set
+      version: 0.6.1
+      sourceRef:
+        kind: HelmRepository
+        name: actions-runner-controller-charts
+        namespace: arc-systems
+      interval: 12h
+  values:
+    githubConfigUrl: ${GITHUB_URL}
+    githubConfigSecret:
+      github_token: ${GITHUB_PAT}
+    containerMode:
+      type: kubernetes
+      kubernetesModeWorkVolumeClaim:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: ${STORAGE_CLASS}
+        resources:
+          requests:
+            storage: 1Gi
+    template:
+      spec:
+        containers:
+        - name: runner
+          image: ghcr.io/actions/actions-runner:latest
+          command: ["/home/runner/run.sh"]
+          env:
+            - name: ACTIONS_RUNNER_REQUIRE_JOB_CONTAINER
+              value: "false"

@@ -95,3 +95,10 @@ spec:
   path: ./apps/github-arc
   prune: true
   wait: true
+  postBuild:
+    substitute:
+      GITHUB_URL: https://github.com/stuttgart-things
+      STORAGE_CLASS: openebs-hostpath
+    substituteFrom:
+      - kind: Secret
+        name: github-flux-secrets

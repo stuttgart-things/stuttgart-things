@@ -132,4 +132,3 @@ spec:
   path: ./infra/openebs
   prune: true
   wait: true
----
