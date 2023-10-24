@@ -8,6 +8,7 @@ spec:
   workspaces:
     - name: shared-workspace
     - name: sshCredentials
+      optional: true
   params:
     - name: ansibleExtraRoles
       type: array
