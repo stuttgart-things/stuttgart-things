@@ -3,58 +3,14 @@
 
   vars:
     rke_version: 2
-    rke2_k8s_version: 1.27.4
+    rke2_k8s_version: 1.28.2
     rke2_airgapped_installation: true
     rke2_release_kind: rke2r1 # rke2r2
     disable_rke2_components:
       - rke2-ingress-nginx
       - rke-snapshot-controller
     cluster_setup: singlenode
-
-    deploy_helm_charts: true
-    helm_kubeconfig: "{{ rke2_config_dir }}/{{ rke2_kubeconfig_name }}"
-    helm_repositories:
-      bitnami:
-        url: https://charts.bitnami.com/bitnami
-      rancher:
-        url: https://releases.rancher.com/server-charts/stable
-      ingress-nginx:
-        url: https://kubernetes.github.io/ingress-nginx
-
-    helm_releases:
-      metallb:
-        ref: bitnami/metallb
-        version: 4.7.0
-        namespace: metallb-system
-        ignore: true
-        wait: true
-        values: |
-          ---
-      ingress-nginx:
-        ref: ingress-nginx/ingress-nginx
-        version: 4.7.1
-        namespace: ingress-nginx
-      # rancher:
-      #   ref: rancher/rancher
-      #   version: 2.7.5
-      #   namespace: cattle-system
-      #   ignore: true
-      #   values: |
-      #     ---
-
-    additional_helm_manifests:
-      ip_pool:
-        manifest: |
-          apiVersion: metallb.io/v1beta1
-          kind: IPAddressPool
-          metadata:
-            name: ip-pool
-            namespace: metallb-system
-          spec:
-            addresses:
-              - 10.31.101.17-10.31.101.17
-            autoAssign: true
-            avoidBuggyIPs: false
+    deploy_helm_charts: false
 
   roles:
     - role: deploy-configure-rke

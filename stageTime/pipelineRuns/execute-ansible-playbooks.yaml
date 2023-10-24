@@ -118,7 +118,7 @@ spec:
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: execute-baseos-boostrap-pve-1
+  name: execute-baseos-boostrap-pve-5
   namespace: ansible
 spec:
   pipelineRef:
@@ -140,22 +140,19 @@ spec:
           resources:
             requests:
               storage: 1Gi
-    - name: sshCredentials
-      secret:
-        secretName: github-ssh
   params:
     - name: ansibleWorkingImage
       value: "eu.gcr.io/stuttgart-things/sthings-ansible:8.3.0-6"
     - name: createInventory
       value: "true"
     - name: gitRepoUrl
-      value: "git@github.com:stuttgart-things/stuttgart-things.git"
+      value: https://github.com/stuttgart-things/stuttgart-things.git
     - name: gitRevision
       value: "main"
     - name: gitWorkspaceSubdirectory
       value: "/ansible/base-os"
     - name: vaultSecretName
-      value: vault-labul-vsphere
+      value: vault
     - name: installExtraRoles
       value: "true"
     - name: ansibleExtraRoles
