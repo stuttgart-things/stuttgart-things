@@ -55,7 +55,7 @@ spec:
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: deploy-rke2-app-pve-4
+  name: deploy-rke2-app-pve-13
   namespace: ansible
 spec:
   pipelineRef:
@@ -100,7 +100,7 @@ spec:
       value:
         - "ansible/playbooks/prepare-env.yaml"
         - "ansible/playbooks/base-os.yaml"
-        #- "ansible/playbooks/deploy-rke2.yaml"
+        - "ansible/playbooks/deploy-rke2.yaml"
     - name: ansibleVarsFile
       value:
         - "manage_filesystem+-true"
@@ -115,8 +115,12 @@ spec:
         - "reboot_all+-false"
     - name: ansibleVarsInventory
       value:
-        - "initial_master_node+[\"pve-app-master.labul.sva.de\", \"pve-app-master-2.labul.sva.de\", \"pve-app-master-3.labul.sva.de\"]"
-        - "additional_master_nodes+[\"pve-app-worker.labul.sva.de\", \"pve-app-worker-2.labul.sva.de\", \"pve-app-worker-3.labul.sva.de\"]"
+        - "initial_master_node+[\"pve-app-master.labul.sva.de\"]"
+        - "additional_master_nodes+[\"pve-app-master-2.labul.sva.de\"]"
+        - "additional_master_nodes+[\"pve-app-master-3.labul.sva.de\"]"
+        - "additional_master_nodes+[\"pve-app-worker.labul.sva.de\"]"
+        - "additional_master_nodes+[\"pve-app-worker-2.labul.sva.de\"]"
+        - "additional_master_nodes+[\"pve-app-worker-3.labul.sva.de\"]"
 ---
 apiVersion: tekton.dev/v1
 kind: PipelineRun
@@ -187,7 +191,7 @@ spec:
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: execute-baseos-boostrap-pve-5
+  name: execute-baseos-pve-eda-server
   namespace: ansible
 spec:
   pipelineRef:
@@ -233,7 +237,7 @@ spec:
       value:
         - "ansible/playbooks/prepare-env.yaml"
         - "ansible/playbooks/base-os.yaml"
-        - "ansible/playbooks/install-docker.yaml"
+        # - "ansible/playbooks/install-docker.yaml"
     - name: ansibleVarsFile
       value:
         - "manage_filesystem+-true"
@@ -248,4 +252,4 @@ spec:
         - "reboot_all+-false"
     - name: ansibleVarsInventory
       value:
-        - "all+[\"bootstrap-pve.labul.sva.de\"]"
+        - "all+[\"pve-eda-server.labul.sva.de\"]"

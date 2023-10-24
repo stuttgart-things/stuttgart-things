@@ -9,7 +9,7 @@
     disable_rke2_components:
       - rke2-ingress-nginx
       - rke-snapshot-controller
-    cluster_setup: singlenode
+    cluster_setup: multinode
     deploy_helm_charts: false
 
   roles:
