@@ -11,7 +11,7 @@ metadata:
 spec:
   variables:
     - vm_name="rke1-mhering"
-    - vm_count=1
+    - vm_count=3
     - vm_num_cpus=8
     - vm_memory=8192
     - vm_template="u22-rke2-upi"
