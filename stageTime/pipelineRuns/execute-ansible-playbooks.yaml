@@ -55,7 +55,7 @@ spec:
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: deploy-rke2-boostrap-pve-3
+  name: deploy-rke2-app-pve
   namespace: ansible
 spec:
   pipelineRef:
@@ -99,7 +99,7 @@ spec:
     - name: ansiblePlaybooks
       value:
         - "ansible/playbooks/prepare-env.yaml"
-        #- "ansible/playbooks/base-os.yaml"
+        - "ansible/playbooks/base-os.yaml"
         - "ansible/playbooks/deploy-rke2.yaml"
     - name: ansibleVarsFile
       value:
