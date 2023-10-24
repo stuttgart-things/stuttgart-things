@@ -4,30 +4,32 @@
 
   vars:
     rke_version: 1
-    rke_installer_version: 1.4.8
-    rke_kubernetes_version: v1.26.7-rancher1-1
+    rke_installer_version: 1.4.10
+    rke_kubernetes_version: v1.26.8-rancher1-1
     project_folder: rancher-things
     rke_create_rke_user: true
     network_plugin: calico
-    rke_docker_package_version: "23.0.6"
-    rke_user_name: maestro
+    rke_user_name: rke
 
-    deploy_helm_charts: true
+    deploy_helm_charts: false
     helm_kubeconfig: "{{ path_to_kubeconfig }}"
-    helm_repositories:
-      bitnami:
-        url: https://charts.bitnami.com/bitnami
-      rancher:
-        url: https://releases.rancher.com/server-charts/stable
 
-    helm_releases:
-      metallb:
-        ref: bitnami/metallb
-        version: 4.7.0
-        namespace: metallb-system
-        ignore: true
-        wait: true
-        values: |
+
+
+    # helm_repositories:
+    #   bitnami:
+    #     url: https://charts.bitnami.com/bitnami
+    #   rancher:
+    #     url: https://releases.rancher.com/server-charts/stable
+
+    # helm_releases:
+    #   metallb:
+    #     ref: bitnami/metallb
+    #     version: 4.7.0
+    #     namespace: metallb-system
+    #     ignore: true
+    #     wait: true
+    #     values: |
           ---
       # rancher:
       #   ref: rancher/rancher
@@ -35,21 +37,21 @@
       #   namespace: cattle-system
       #   ignore: true
       #   values: |
-      #     ---
+    #   #     ---
 
-    additional_helm_manifests:
-      ip_pool:
-        manifest: |
-          apiVersion: metallb.io/v1beta1
-          kind: IPAddressPool
-          metadata:
-            name: ip-pool
-            namespace: metallb-system
-          spec:
-            addresses:
-              - 10.31.101.18-10.31.101.18
-            autoAssign: true
-            avoidBuggyIPs: false
+    # additional_helm_manifests:
+    #   ip_pool:
+    #     manifest: |
+    #       apiVersion: metallb.io/v1beta1
+    #       kind: IPAddressPool
+    #       metadata:
+    #         name: ip-pool
+    #         namespace: metallb-system
+    #       spec:
+    #         addresses:
+    #           - 10.31.101.18-10.31.101.18
+    #         autoAssign: true
+    #         avoidBuggyIPs: false
 
   roles:
     - role: deploy-configure-rke
