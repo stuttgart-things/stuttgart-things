@@ -30,7 +30,6 @@
     #     ignore: true
     #     wait: true
     #     values: |
-          ---
       # rancher:
       #   ref: rancher/rancher
       #   version: 2.7.5
