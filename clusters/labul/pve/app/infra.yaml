@@ -34,3 +34,41 @@ spec:
     substituteFrom:
       - kind: Secret
         name: vault-flux-secrets
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: metallb
+  namespace: flux-system
+spec:
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infra/metallb
+  prune: true
+  wait: true
+  postBuild:
+    substitute:
+      IP_RANGE: 10.31.101.18-10.31.101.19
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: ingress-nginx
+  namespace: flux-system
+spec:
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infra/ingress-nginx
+  dependsOn:
+    - name: metallb
+  prune: true
+  wait: true
+---
