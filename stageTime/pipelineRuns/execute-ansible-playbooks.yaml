@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: create-pdns-entry-dev21-2
+  name: create-pdns-entry-pve-app8-1
   namespace: ansible
 spec:
   pipelineRef:
@@ -16,24 +16,27 @@ spec:
         value: stageTime/pipelines/execute-ansible-playbooks.yaml
   workspaces:
     - name: shared-workspace
-      persistentVolumeClaim:
-        claimName: ansible-workspace
-    - name: sshCredentials
-      secret:
-        secretName: github-ssh
+      volumeClaimTemplate:
+        spec:
+          storageClassName: nfs3-csi2
+          accessModes:
+            - ReadWriteMany
+          resources:
+            requests:
+              storage: 1Gi
   params:
     - name: ansibleWorkingImage
       value: "eu.gcr.io/stuttgart-things/sthings-ansible:8.3.0-6"
     - name: createInventory
       value: "false"
     - name: gitRepoUrl
-      value: "git@github.com:stuttgart-things/stuttgart-things.git"
+      value: "https://github.com/stuttgart-things/stuttgart-things.git"
     - name: gitRevision
       value: "main"
     - name: gitWorkspaceSubdirectory
-      value: "/ansible/base-os"
+      value: "/ansible/pdns"
     - name: vaultSecretName
-      value: vault-labul-vsphere
+      value: vault
     - name: installExtraRoles
       value: "true"
     - name: ansibleExtraRoles
@@ -44,10 +47,10 @@ spec:
         - "ansible/playbooks/pdns-ingress-entry.yaml"
     - name: ansibleVarsFile
       value:
-        - "pdns_url+-https://pdns-vsphere.labul.sva.de:8443"
-        - "entry_zone+-sthings-vsphere.labul.sva.de."
-        - "ip_address+-10.31.103.13"
-        - "hostname+-dev21"
+        - "pdns_url+-https://pdns-pve.labul.sva.de:8443"
+        - "entry_zone+-sthings-pve.labul.sva.de."
+        - "ip_address+-10.31.101.18"
+        - "hostname+-app8"
     - name: ansibleVarsInventory
       value:
         - "localhost"
@@ -55,7 +58,7 @@ spec:
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: deploy-rke2-app-pve-13
+  name: deploy-rke2-app-pve-16
   namespace: ansible
 spec:
   pipelineRef:
@@ -99,7 +102,7 @@ spec:
     - name: ansiblePlaybooks
       value:
         - "ansible/playbooks/prepare-env.yaml"
-        - "ansible/playbooks/base-os.yaml"
+        # - "ansible/playbooks/base-os.yaml"
         - "ansible/playbooks/deploy-rke2.yaml"
     - name: ansibleVarsFile
       value:
