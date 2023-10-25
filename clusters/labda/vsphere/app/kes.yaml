@@ -21,7 +21,8 @@ spec:
         - name: kes
           image: minio/kes:2023-10-24T20-26-51Z
           args:
-          - "--config /mnt/kes-config/config.yaml"
+          - "--config"
+          - "/mnt/kes-config/config.yaml"
           volumeMounts:
             - name: 'kes-config'
               mountPath: '/mnt/kes-config'
