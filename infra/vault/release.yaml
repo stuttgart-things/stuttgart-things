@@ -29,14 +29,12 @@ spec:
         size: ${VAULT_STORAGE_SIZE}
       ingress:
         enabled: true
-        annotations:
-          kubernetes.io/ingress.class: nginx
-          kubernetes.io/tls-acme: "true"
         hosts:
           - host: ${VAULT_INGRESS_HOSTNAME}.${VAULT_INGRESS_DOMAIN}
         tls:
           - hosts:
             - ${VAULT_INGRESS_HOSTNAME}.${VAULT_INGRESS_DOMAIN}
             secretName: ${VAULT_INGRESS_HOSTNAME}-ingress-tls
+        ingressClassName: nginx
     csi:
       enabled: true
