@@ -24,7 +24,7 @@ spec:
     substitute:
       INGRESS_HOSTNAME_API: artifacts
       INGRESS_HOSTNAME_CONSOLE: artifacts-console
-      INGRESS_DOMAIN: app.sthings-pve.labul.sva.de
+      INGRESS_DOMAIN: app8.sthings-pve.labul.sva.de
       CLUSTER_ISSUER: cluster-issuer-approle
     substituteFrom:
       - kind: Secret
