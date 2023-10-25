@@ -92,6 +92,6 @@ spec:
       VAULT_STORAGE_SIZE: 2Gi
       VAULT_STORAGE_CLASS: longhorn
       VAULT_INGRESS_HOSTNAME: vault
-      VAULT_INGRESS_DOMAIN: app.sthings-pve.labul.sva.de
+      VAULT_INGRESS_DOMAIN: app8.sthings-pve.labul.sva.de
       CLUSTER_ISSUER: cluster-issuer-approle
 ---
