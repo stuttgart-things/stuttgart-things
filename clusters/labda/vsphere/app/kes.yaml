@@ -33,14 +33,14 @@ spec:
               readOnly: true
       volumes:
         - name: kes-config
-          valueFrom:
-            secretKeyRef:
-              name: kes-configuration
-              key: config.yaml
+          secret:
+            secretName: kes-configuration
+            items:
+            - key: config.yaml
+              path: config.yaml
         - name: kes-ingress-tls
-          valueFrom:
-            secretRef:
-              name: kes-ingress-tls
+          secret:
+            secretName: kes-ingress-tls
 ---
 apiVersion: v1
 kind: ServiceAccount
