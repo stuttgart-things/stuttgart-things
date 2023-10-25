@@ -1,0 +1,108 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kes
+  namespace: minio
+  labels:
+    app: kes
+spec:
+  selector:
+    matchLabels:
+      app: kes
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: kes
+    spec:
+      serviceAccountName: kes-sa
+      containers:
+        - name: kes
+          image: minio/kes:2023-10-24T20-26-51Z
+          args:
+          - --config /mnt/kes-config/config.yaml
+          volumeMounts:
+            - name: 'kes-config'
+              mountPath: '/mnt/kes-config'
+              readOnly: true
+            - name: 'kes-ingress-tls'
+              mountPath: '/mnt/kes-ingress-tls'
+              readOnly: true
+      volumes:
+        - name: kes-config
+          valueFrom:
+            secretKeyRef:
+              name: kes-configuration
+              key: config.yaml
+        - name: kes-ingress-tls
+          valueFrom:
+            secretRef:
+              name: kes-ingress-tls
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kes-sa
+  namespace: minio
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: kes-configuration
+  namespace: minio
+type: Opaque
+stringData:
+  config.yaml: |-
+    address: 0.0.0.0:7373
+    root: disabled
+    tls:
+      key: /mnt/kes-ingress-tls/tls.key
+      cert: /mnt/kes-ingress-tls/tls.crt
+    policy:
+      default-policy:
+        paths:
+        - /v1/key/create/*   # You can replace these wildcard '*' with a string prefix to restrict key names
+        - /v1/key/generate/* # e.g. '/minio-'
+        - /v1/key/decrypt/*
+        - /v1/key/bulk/decrypt
+        - /v1/key/list/*
+        - /v1/status
+        - /v1/metrics
+        - /v1/log/audit
+        - /v1/log/error
+        identities:
+        - eaf39ab6fd51f4224cfb6a3f4c55ced3292deac281e924ae39b17fcf3a862475
+    cache:
+      expiry:
+        any: 5m0s
+        unused: 20s
+    log:
+      error: "on"
+      audit: "off"
+    keys:
+      vault:
+        endpoint: https://vault.app.4sthings.tiab.ssc.sva.de:8200
+        prefix: my-minio
+        approle:
+          id: 1c1f75ec-6c66-b3e3-c3c1-a093fd7be9bb
+          secret: 0d0af39b-0c24-4942-53d3-84f9d25390de
+          retry: 15s
+        tls:
+          ca: /mnt/kes-ingress-tls/ca.crt
+        status:
+          ping: 10s
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: kes-ingress-tls
+  namespace: minio
+spec:
+  commonName: kes.app.sthings-pve.labul.sva.de
+  dnsNames:
+  - kes.app.sthings-pve.labul.sva.de
+  issuerRef:
+    name: cluster-issuer-approle
+    kind: ClusterIssuer
+  secretName: kes-ingress-tls
