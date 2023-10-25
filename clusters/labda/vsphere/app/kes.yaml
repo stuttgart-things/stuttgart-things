@@ -20,6 +20,8 @@ spec:
       containers:
         - name: kes
           image: minio/kes:2023-10-24T20-26-51Z
+          # command: [ "/bin/bash", "-c", "--" ]
+          # args: [ "while true; do sleep 30; done;" ]
           args:
           - "server"
           - "--config"
@@ -57,13 +59,29 @@ type: Opaque
 stringData:
   config.yaml: |-
     address: 0.0.0.0:7373
-    root: disabled
+
+    # Disable the root administrator identity, as we do not need that level of access for
+    # supporting SSE operations.
+    admin:
+      identity: disabled
+
+    # Specify the TLS keys generated in the previous step here
+    # For production environments, use keys signed by a known and trusted Certificate Authority (CA).
     tls:
-      key: /mnt/kes-ingress-tls/tls.key
+      key:  /mnt/kes-ingress-tls/tls.key
       cert: /mnt/kes-ingress-tls/tls.crt
+
+      # Specify the path to CAs used by KES for validating client certificates
+      # This can alternatively be a single CA
+      # KES uses these CAs in addition to the system trust store for validating client certificates.
+
+      ca: /mnt/kes-ingress-tls/ca.crt
+
+    # Sets access policies for KES
+    # The `minio` policy grants access to the listed APIs.
     policy:
-      default-policy:
-        paths:
+      minio:
+        allow:
         - /v1/key/create/*   # You can replace these wildcard '*' with a string prefix to restrict key names
         - /v1/key/generate/* # e.g. '/minio-'
         - /v1/key/decrypt/*
@@ -74,26 +92,28 @@ stringData:
         - /v1/log/audit
         - /v1/log/error
         identities:
-        - eaf39ab6fd51f4224cfb6a3f4c55ced3292deac281e924ae39b17fcf3a862475
-    cache:
-      expiry:
-        any: 5m0s
-        unused: 20s
-    log:
-      error: "on"
-      audit: "off"
-    keys:
+        - eaf39ab6fd51f4224cfb6a3f4c55ced3292deac281e924ae39b17fcf3a862475 # Replace with the hash output returned from kes identity new
+
+    # Specify the connection information for the Vault server.
+    # The endpoint should be resolvable from the host.
+    # This example assumes that Vault is configured with an AppRole ID and
+    # Secret for use with KES.
+    keystore:
       vault:
-        endpoint: https://vault.app.4sthings.tiab.ssc.sva.de:8200
-        prefix: my-minio
+        endpoint: https://vault.app.4sthings.tiab.ssc.sva.de
+        engine: "kvv2" # Replace with the path to the K/V Engine
+        version: "v2" # Specify v1 or v2 depending on the version of the K/V Engine
         approle:
-          id: 1c1f75ec-6c66-b3e3-c3c1-a093fd7be9bb
-          secret: 0d0af39b-0c24-4942-53d3-84f9d25390de
+          id: "1c1f75ec-6c66-b3e3-c3c1-a093fd7be9bb"     # Hashicorp Vault AppRole ID
+          secret: "0d0af39b-0c24-4942-53d3-84f9d25390de" # Hashicorp Vault AppRole Secret ID
           retry: 15s
-        tls:
-          ca: /mnt/kes-ingress-tls/ca.crt
         status:
           ping: 10s
+        # Required if Vault uses certificates signed by an unknown CA,
+        # e.g. self-signed or internal (non-globally trusted).
+        # Replace this value with the full path to the Vault CA certificate.
+        tls:
+          ca: /mnt/kes-ingress-tls/ca.crt
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
