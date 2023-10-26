@@ -9,13 +9,6 @@ metadata:
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: tekton-pipelines-resolvers
-  labels:
-    toolkit.fluxcd.io/tenant: sthings-team
----
-apiVersion: v1
-kind: Namespace
-metadata:
   name: tektoncd
   labels:
     toolkit.fluxcd.io/tenant: sthings-team
