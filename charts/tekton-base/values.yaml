@@ -7,12 +7,3 @@ featureFlags:
 # kubectl delete validatingwebhookconfigurations.admissionregistration.k8s.io config.webhook.pipeline.tekton.dev
 # kubectl delete validatingwebhookconfigurations.admissionregistration.k8s.io validation.webhook.pipeline.tekton.dev
 # kubectl delete mutatingwebhookconfigurations.admissionregistration.k8s.io webhook.pipeline.tekton.dev
-
-# apiVersion: v1
-# kind: Namespace
-# metadata:
-#   name: tekton-pipelines
-#   labels:
-#     app.kubernetes.io/instance: default
-#     app.kubernetes.io/part-of: tekton-pipelines
-#     pod-security.kubernetes.io/enforce: restricted
