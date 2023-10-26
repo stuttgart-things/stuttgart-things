@@ -20,3 +20,19 @@ spec:
     substituteFrom:
       - kind: Secret
         name: vault-flux-secrets
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: tekton-pipelines
+  namespace: flux-system
+spec:
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./apps/tekton
+  prune: true
+  wait: true
