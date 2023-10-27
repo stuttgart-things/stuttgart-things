@@ -14,6 +14,7 @@ spec:
     create: true
     name: vault
 ---
+apiVersion: secrets.hashicorp.com/v1beta1
 kind: VaultAuth
 metadata:
   name: vault-auth-1
