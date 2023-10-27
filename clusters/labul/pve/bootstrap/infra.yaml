@@ -41,8 +41,8 @@ spec:
         namespace: vault
     - patch: |-
         - op: replace
-          path: /spec/values/injector/enabled
-          value: true
+          path: /spec/values/ingress/enabled
+          value: false
       target:
         kind: HelmRelease
         name: vault-deployment
