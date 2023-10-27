@@ -83,3 +83,4 @@ spec:
     substitute:
       VAULT_URL: "http://vault-deployment.vault.svc.cluster.local:8200"
       VSO_AUTH_ROLE: vso-role
+      MOUNT: vso
