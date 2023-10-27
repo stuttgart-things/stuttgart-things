@@ -65,7 +65,7 @@ spec:
         #!/usr/bin/env bash
         set -eu
 
-        # CHECK IF IMAGE IS (YES) AVAILABLE
+        # CHECK IF IMAGE IS (YET) AVAILABLE
         until skopeo inspect docker://$(params.scanObject) --tls-verify=false; do echo checking.. && sleep 30; done
     - name: scan
       image: $(params.trivyImage)
