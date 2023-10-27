@@ -15,13 +15,3 @@ spec:
         name: hashicorp
         namespace: vault
       interval: 12h
-  values:
-    defaultVaultConnection:
-      enabled: true
-      address: ${VAULT_URL}
-    defaultAuthMethod:
-      enabled: true
-      mount: ${MOUNT:=kubernetes}
-      kubernetes:
-        role: ${VSO_AUTH_ROLE}
-        serviceAccount: ${SERVICE_ACCOUNT:=default}
