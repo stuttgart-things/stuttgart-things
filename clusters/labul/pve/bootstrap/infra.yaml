@@ -42,7 +42,7 @@ spec:
     - patch: |-
         - op: replace
           path: /spec/values/ingress/enabled
-          value: "false"
+          value: false
       target:
         kind: HelmRelease
         name: vault-deployment
