@@ -118,7 +118,7 @@ spec:
     - tfProviderName=proxmox
     - tfProviderSource=Telmate/proxmox
     - tfProviderVersion=2.9.14
-    - tfVersion=1.6.2
+    - tfVersion=1.5.7
   backend:
     - access_key=apps/data/artifacts:accessKey
     - secret_key=apps/data/artifacts:secretKey
@@ -128,5 +128,5 @@ spec:
     - pve_api_password=cloud/data/pve:api_password
     - vm_ssh_user=cloud/data/pve:ssh_user
     - vm_ssh_password=cloud/data/pve:ssh_password
-  terraform-version: 1.6.2
+  terraform-version: 1.5.7
   template: pve-vm
