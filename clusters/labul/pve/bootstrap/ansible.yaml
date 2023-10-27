@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: execute-baseos-pve-eda-server
+  name: execute-baseos-pve-nfs-tekton
   namespace: tektoncd
 spec:
   pipelineRef:
@@ -18,7 +18,7 @@ spec:
     - name: shared-workspace
       volumeClaimTemplate:
         spec:
-          storageClassName: longhorn
+          storageClassName: openebs-hostpath
           accessModes:
             - ReadWriteMany
           resources:
@@ -62,4 +62,4 @@ spec:
         - "reboot_all+-false"
     - name: ansibleVarsInventory
       value:
-        - "all+[\"pve-eda-server.labul.sva.de\"]"
+        - "all+[\"pve-nfs-tekton.labul.sva.de\"]"
