@@ -23,6 +23,6 @@ spec:
       enabled: true
       kubernetes:
         role: ${VSO_AUTH_ROLE}
-        serviceAccount: default
+        serviceAccount: ${SERVICE_ACCOUNT:=default}
         tokenAudiences:
           - vault
