@@ -25,5 +25,3 @@ spec:
       kubernetes:
         role: ${VSO_AUTH_ROLE}
         serviceAccount: ${SERVICE_ACCOUNT:=default}
-        tokenAudiences:
-          - vault
