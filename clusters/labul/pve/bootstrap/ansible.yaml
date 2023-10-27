@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: execute-baseos-pve-nfs-tekton
+  name: execute-baseos-pve-nfs-tekton-1
   namespace: tektoncd
 spec:
   pipelineRef:
@@ -20,7 +20,7 @@ spec:
         spec:
           storageClassName: openebs-hostpath
           accessModes:
-            - ReadWriteMany
+            - ReadWriteOnce
           resources:
             requests:
               storage: 1Gi
