@@ -45,6 +45,9 @@ binary:
   - trivy:
       url: https://github.com/aquasecurity/trivy/releases/download/v{{ or .trivyVersion "0.45.1" }}/trivy_{{ or .trivyVersion "0.45.1" }}_Linux-64bit.tar.gz
       bin: trivy
+  - packer:
+      url: https://releases.hashicorp.com/packer/{{ or .packerVersion "1.9.4" }}/packer_{{ or .packerVersion "1.9.4" }}_linux_amd64.zip
+      bin: packer
 
 script:
   - azure-cli:
