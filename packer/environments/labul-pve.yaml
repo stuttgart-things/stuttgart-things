@@ -1,1 +1,8 @@
 ---
+ubuntu23PackerMinVersion: 1.9.4
+pveProvider: github.com/hashicorp/proxmox
+pveProviderVersion: ">= 1.1.5"
+
+cpu: 8
+ram: 8192
+diskSize: 15360

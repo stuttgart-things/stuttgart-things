@@ -67,7 +67,7 @@ spec:
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: execute-baseos-pve-dev43
+  name: execute-rke2-pve-dev43
   namespace: tektoncd
 spec:
   pipelineRef:
@@ -113,6 +113,7 @@ spec:
       value:
         - "ansible/playbooks/prepare-env.yaml"
         - "ansible/playbooks/base-os.yaml"
+        - "ansible/playbooks/deploy-rke2.yaml"
     - name: ansibleVarsFile
       value:
         - "manage_filesystem+-true"
@@ -127,6 +128,6 @@ spec:
         - "reboot_all+-false"
     - name: ansibleVarsInventory
       value:
-        - "all+[\"pve-dev43.labul.sva.de\"]"
-        - "all+[\"pve-dev43-2.labul.sva.de\"]"
-        - "all+[\"pve-dev43-3.labul.sva.de\"]"
+        - "initial_master_node+[\"pve-dev43.labul.sva.de\"]"
+        - "additional_master_nodes+[\"pve-dev43-2.labul.sva.de\"]"
+        - "additional_master_nodes+[\"pve-dev43-3.labul.sva.de\"]"
