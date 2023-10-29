@@ -19,6 +19,10 @@ spec:
       description: github repository flux bootstrap path
       type: string
       default: ""
+    - name: vaultSecretName
+      description: name of the vault secret
+      type: string
+      default: vault
     - name: vaultSecretPaths
       type: array
       default: []
@@ -58,3 +62,5 @@ spec:
           value: $(params.vaultSecretPaths[*])
         - name: FLUX_NAMESPACE
           value: $(params.fluxNamespace)
+        - name: vaultSecretName
+          value: $(params.vaultSecretName)
