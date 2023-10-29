@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: bootstrap-flux-cluster-dev43-5
+  name: bootstrap-flux-cluster-dev43-6
   namespace: tektoncd
 spec:
   workspaces:
@@ -36,4 +36,4 @@ spec:
     - name: vaultSecretPaths
       value:
         - "git/data/github:token+-false+-GITHUB_TOKEN"
-        - "kubeconfigs/data/dev43:kubeconfig+-true+-KUBECONFIG"
+        - "kubeconfigs/data/pve-dev43:kubeconfig+-true+-KUBECONFIG"
