@@ -83,6 +83,7 @@ spec:
   sidecars:
     - name: get-secrets
       image: "$(params.MACHINESHOP_IMAGE)"
+      workingDir: $(workspaces.source.path)
       env:
         - name: VAULT_ADDR
           valueFrom:
@@ -121,6 +122,9 @@ spec:
           machineShop get --path ${VAULT_PATH} --output file --destination ${DESTINATION} --b64 "${B64_DECODE}"
           cat ${DESTINATION}
         done
+
+        pwd
+        ls -lta
   steps:
     - name: prepare-cluster
       image: "$(params.KUBECTL_IMAGE)"
