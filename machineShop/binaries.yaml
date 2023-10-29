@@ -48,6 +48,9 @@ binary:
   - packer:
       url: https://releases.hashicorp.com/packer/{{ or .packerVersion "1.9.4" }}/packer_{{ or .packerVersion "1.9.4" }}_linux_amd64.zip
       bin: packer
+  - yq:
+      url: https://github.com/mikefarah/yq/releases/download/v{{ or .yqVersion "4.35.2" }}/yq_linux_amd64.tar.gz
+      bin: yq
 
 script:
   - azure-cli:
