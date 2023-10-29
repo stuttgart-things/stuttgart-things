@@ -67,7 +67,7 @@ spec:
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: execute-rke2-pve-dev43-850
+  name: execute-rke2-pve-dev43-850-1
   namespace: tektoncd
 spec:
   pipelineRef:
@@ -99,9 +99,9 @@ spec:
     - name: gitRevision
       value: "main"
     - name: gitWorkspaceSubdirectory
-      value: "/ansible/base-os"
+      value: "/ansible/rke2"
     - name: vaultSecretName
-      value: vault
+      value: vault-in-cluster
     - name: installExtraRoles
       value: "true"
     - name: ansibleExtraRoles
@@ -113,7 +113,8 @@ spec:
       value:
         - "ansible/playbooks/prepare-env.yaml"
         - "ansible/playbooks/base-os.yaml"
-        - "ansible/playbooks/deploy-rke2.yaml"
+        # - "ansible/playbooks/deploy-rke2.yaml"
+        # - "ansible/playbooks/upload-kubeconfig-vault.yaml"
     - name: ansibleVarsFile
       value:
         - "manage_filesystem+-true"
