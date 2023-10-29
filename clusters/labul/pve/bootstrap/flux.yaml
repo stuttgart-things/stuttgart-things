@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: bootstrap-flux-cluster-dev21-15
+  name: bootstrap-flux-cluster-dev43
   namespace: tekton
 spec:
   workspaces:
@@ -23,16 +23,8 @@ spec:
     - name: githubRepositoryOwner
       value: stuttgart-things
     - name: githubFluxBoostrapPath
-      value: clusters/labul/vsphere/dev21
+      value: clusters/labul/pve/dev43
     - name: vaultSecretPaths
       value:
         - "git/data/github:token+-false+-GITHUB_TOKEN"
-        - "kubeconfigs/data/dev21:kubeconfig+-true+-KUBECONFIG"
-        - "apps/data/flux:vault-flux-secrets+-true+-vault-flux-secrets.yaml"
-        - "apps/data/flux:scr-flux-secrets+-true+-scr-flux-secrets.yaml"
-        - "apps/data/flux:github-flux-secrets+-true+-github-flux-secrets.yaml"
-    - name: additionalManifestFiles
-      value:
-        - "vault-flux-secrets.yaml"
-        - "scr-flux-secrets.yaml"
-        - "github-flux-secrets.yaml"
+        - "kubeconfigs/data/dev43:kubeconfig+-true+-KUBECONFIG"

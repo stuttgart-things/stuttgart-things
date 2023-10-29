@@ -113,7 +113,7 @@ spec:
       value:
         - "ansible/playbooks/prepare-env.yaml"
         - "ansible/playbooks/base-os.yaml"
-        # - "ansible/playbooks/deploy-rke2.yaml"
+        - "ansible/playbooks/deploy-rke2.yaml"
         - "ansible/playbooks/upload-kubeconfig-vault.yaml"
     - name: ansibleVarsFile
       value:

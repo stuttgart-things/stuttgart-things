@@ -22,7 +22,7 @@ spec:
     - name: vaultSecretPaths
       type: array
       default: []
-      description: extra roles to install
+      description: extra secrets coming from vault to apply
     - name: additionalManifestFiles
       description: additional manifest files to apply to cluster
       type: array

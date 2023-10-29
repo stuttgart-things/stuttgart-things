@@ -33,7 +33,7 @@ spec:
     - name: WORKING_IMAGE
       description: the image on which ansible will run
       type: string
-      default: fluxcd/flux-cli:v2.1.0
+      default: fluxcd/flux-cli:v2.1.2
     - name: KUBECTL_IMAGE
       description: the image on which kubectl will run
       type: string
