@@ -1,11 +1,11 @@
 ARG REGISTRY=eu.gcr.io
 ARG REPOSITORY=stuttgart-things
 ARG IMAGE=sthings-ansible
-ARG TAG=8.4.0
+ARG TAG=8.5.0
 
 FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
-LABEL version=1.9.4-8.4.0
+LABEL version=1.9.4-8.5.0
 
 USER root
 

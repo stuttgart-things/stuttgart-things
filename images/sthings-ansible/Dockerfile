@@ -1,7 +1,7 @@
 ARG REGISTRY=eu.gcr.io
 ARG REPOSITORY=stuttgart-things
 ARG IMAGE=sthings-alpine
-ARG TAG=3.13.0a1-alpine3.18
+ARG TAG=3.12.0-alpine3.18
 
 FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
 
