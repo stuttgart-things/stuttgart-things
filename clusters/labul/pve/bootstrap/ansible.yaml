@@ -26,7 +26,7 @@ spec:
               storage: 1Gi
   params:
     - name: ansibleWorkingImage
-      value: "eu.gcr.io/stuttgart-things/sthings-ansible:8.3.0-6"
+      value: "eu.gcr.io/stuttgart-things/sthings-ansible:8.5.0"
     - name: createInventory
       value: "true"
     - name: gitRepoUrl
@@ -67,7 +67,7 @@ spec:
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: execute-rke2-pve-dev43-1
+  name: execute-rke2-pve-dev43-850
   namespace: tektoncd
 spec:
   pipelineRef:
@@ -91,7 +91,7 @@ spec:
               storage: 250Mi
   params:
     - name: ansibleWorkingImage
-      value: "eu.gcr.io/stuttgart-things/sthings-ansible:8.3.0-6"
+      value: "eu.gcr.io/stuttgart-things/sthings-ansible:8.5.0"
     - name: createInventory
       value: "true"
     - name: gitRepoUrl
