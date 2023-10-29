@@ -130,6 +130,9 @@ spec:
         #!/usr/bin/env sh
         set -eu
 
+        pwd
+        ls -lta
+
         echo EXPORT KUBECONFIG
         export KUBECONFIG=KUBECONFIG
 
