@@ -1,6 +1,11 @@
 - hosts: all
   become: true
 
+  pre_tasks:
+    - name: Include vars
+      ansible.builtin.include_vars: "{{ path_to_vars_file }}.yaml"
+      when: path_to_vars_file is defined
+
   vars:
     rke_version: 2
     rke2_k8s_version: 1.28.2
