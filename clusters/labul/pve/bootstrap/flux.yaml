@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: bootstrap-flux-cluster-dev43
+  name: bootstrap-flux-cluster-dev43-1
   namespace: tektoncd
 spec:
   workspaces:
@@ -13,6 +13,8 @@ spec:
     params:
       - name: url
         value: https://github.com/stuttgart-things/stuttgart-things.git
+      - name: vaultSecretName
+        value: vault-in-cluster
       - name: revision
         value: main
       - name: pathInRepo

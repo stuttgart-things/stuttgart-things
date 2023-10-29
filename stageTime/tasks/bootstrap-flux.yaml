@@ -75,8 +75,8 @@ spec:
       type: string
       default: flux-system
   sidecars:
-    image: "$(params.MACHINESHOP_IMAGE)"
     name: get-secrets
+    image: "$(params.MACHINESHOP_IMAGE)"
     workingDir: $(workspaces.source.path)
     env:
       - name: VAULT_ADDR
