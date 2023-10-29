@@ -74,10 +74,15 @@ spec:
       description: name of the flux namespace
       type: string
       default: flux-system
+  stepTemplate:
+    workingDir: $(workspaces.source.path)
+    securityContext:
+      privileged: false
+      runAsNonRoot: true
+      runAsUser: 65532
   sidecars:
     name: get-secrets
     image: "$(params.MACHINESHOP_IMAGE)"
-    workingDir: $(workspaces.source.path)
     env:
       - name: VAULT_ADDR
         valueFrom:
@@ -101,10 +106,6 @@ spec:
             name: $(params.vaultSecretName)
     args:
       - $(params.SECRET_PATHS[*])
-    securityContext:
-      privileged: false
-      runAsNonRoot: true
-      runAsUser: 65532
     script: |
       #!/usr/bin/env bash
       set -eu
@@ -124,11 +125,6 @@ spec:
       image: "$(params.KUBECTL_IMAGE)"
       args:
         - $(params.ADDITONAL_MANIFESTS[*])
-      workingDir: $(workspaces.source.path)
-      securityContext:
-        privileged: false
-        runAsNonRoot: true
-        runAsUser: 65532
       script: |-
         #!/usr/bin/env sh
         set -eu
@@ -149,11 +145,6 @@ spec:
 
     - name: bootstrap-flux
       image: "$(params.WORKING_IMAGE)"
-      workingDir: $(workspaces.source.path)
-      securityContext:
-        privileged: false
-        runAsNonRoot: true
-        runAsUser: 65532
       script: |-
         #!/usr/bin/env sh
         set -eu

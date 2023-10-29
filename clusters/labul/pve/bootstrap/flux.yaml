@@ -2,12 +2,19 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: bootstrap-flux-cluster-dev43-1
+  name: bootstrap-flux-cluster-dev43-2
   namespace: tektoncd
 spec:
   workspaces:
-    - name: source
-      emptyDir: {}
+    - name: shared-workspace
+      volumeClaimTemplate:
+        spec:
+          storageClassName: openebs-hostpath
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 1Gi
   pipelineRef:
     resolver: git
     params:
