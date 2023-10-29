@@ -67,7 +67,7 @@ spec:
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: execute-rke2-pve-dev43-850-1
+  name: execute-rke2-pve-dev43-850-2
   namespace: tektoncd
 spec:
   pipelineRef:
@@ -114,7 +114,7 @@ spec:
         - "ansible/playbooks/prepare-env.yaml"
         - "ansible/playbooks/base-os.yaml"
         # - "ansible/playbooks/deploy-rke2.yaml"
-        # - "ansible/playbooks/upload-kubeconfig-vault.yaml"
+        - "ansible/playbooks/upload-kubeconfig-vault.yaml"
     - name: ansibleVarsFile
       value:
         - "manage_filesystem+-true"
@@ -127,6 +127,9 @@ spec:
         - "lvm_var_sizing+-'50%'"
         - "send_to_msteams+-true"
         - "reboot_all+-false"
+        - "cluster_name+-pve-dev43"
+        - "kubeconfig_path+-/etc/rancher/rke2/rke2.yaml"
+        - "secret_path_kubeconfig+-kubeconfigs"
     - name: ansibleVarsInventory
       value:
         - "initial_master_node+[\"pve-dev43.labul.sva.de\"]"
