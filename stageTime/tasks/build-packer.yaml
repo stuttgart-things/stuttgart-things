@@ -151,22 +151,15 @@ spec:
         # --destination ./$(params.OS_VERSION)/base-os.yaml \
         # --output file
 
-    - name: init-packer-config
+    - name: init-build-packer
       script: |-
         #!/usr/bin/env sh
         set -eu
 
         echo "INIT PACKER CONFIG"
-        cd $(params.OS_VERSION)
-        packer init $(params.OS_VERSION).pkr.hcl
-
-    - name: build-packer-vmtemplate
-      script: |-
-        #!/usr/bin/env sh
-        set -eu
+        packer init ./$(params.OS_VERSION)/$(params.OS_VERSION).pkr.hcl
 
         echo "BUILD VMTEMPLATE w/ PACKER"
-        cd $(params.OS_VERSION)
         packer build -force \
         -var "username=$(machineShop get --path $(params.vaultPathCloudUser) | tail -n +8)" \
         -var "password=$(machineShop get --path $(params.vaultPathCloudPassword) | tail -n +8)" \
