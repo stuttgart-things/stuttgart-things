@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: create-packer-template-ubuntu23-16
+  name: create-packer-template-ubuntu23-17
   namespace: tektoncd
 spec:
   params:
