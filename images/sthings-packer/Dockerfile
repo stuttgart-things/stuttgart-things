@@ -10,8 +10,8 @@ LABEL version=1.9.4-8.5.0
 USER root
 
 ARG PACKER_VERSION=1.9.4
-ARG MACHINE_SHOP_VERSION=0.1.48
-ARG GOVC_VERSION=0.30.7
+ARG MACHINE_SHOP_VERSION=0.1.52
+ARG GOVC_VERSION=0.33.0
 
 RUN apk add --no-cache alpine-sdk build-base apk-tools alpine-conf busybox fakeroot syslinux xorriso squashfs-tools sudo mtools dosfstools grub-efi
 
@@ -27,7 +27,7 @@ RUN wget -q https://github.com/vmware/govmomi/releases/download/v${GOVC_VERSION}
     && rm -rf govc_Linux_x86_64.tar.gz
 
 # MACHINE-SHOP
-RUN wget -q https://github.com/stuttgart-things/machineShop/releases/download/${MACHINE_SHOP_VERSION}/machineShop_Linux_x86_64.tar.gz \
+RUN wget -q https://github.com/stuttgart-things/machineShop/releases/download/v${MACHINE_SHOP_VERSION}/machineShop_Linux_x86_64.tar.gz \
     && tar -xvf machineShop_Linux_x86_64.tar.gz -C /usr/bin/ machineShop \
     && rm -rf machineShop_Linux_x86_64.tar.gz
 
