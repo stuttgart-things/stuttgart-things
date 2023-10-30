@@ -37,10 +37,6 @@ spec:
       type: string
       default: ""
       description: to be build os version
-    - name: cloud
-      type: string
-      default: vsphere
-      description: name of cloud provider
     - name: packerWorkingImage
       type: string
       default: "eu.gcr.io/stuttgart-things/sthings-packer:1.9.4-8.4.0"
@@ -94,16 +90,12 @@ spec:
                   secretKeyRef:
                     key: $(params.vault-secret-key-approleSecret)
                     name: $(params.vaultSecretName)
-              - name: CLOUD
-                value: $(params.cloud)
             script: |
               #!/usr/bin/env sh
               set -eu
 
-              if [ "$(CLOUD)" = "vsphere" ] ; then
-                machineShop get --path cloud/data/vsphere:username | tail -n +8
-                govc version
-              fi
+              #machineShop get --path cloud/data/vsphere:username | tail -n +8
+              govc version
     - name: execute-packer
       runAfter:
         - create-vm-folders
