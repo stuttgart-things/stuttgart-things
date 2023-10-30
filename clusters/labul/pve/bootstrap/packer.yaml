@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: create-packer-template-ubuntu23
+  name: create-packer-template-ubuntu23-1
   namespace: tektoncd
 spec:
   pipelineRef:
@@ -25,20 +25,20 @@ spec:
               storage: 1Gi
   params:
     - name: bootConfigPath
-      value: "packer/boot/ubuntu.yaml"
+      value: packer/boot/ubuntu.yaml
     - name: defaultEnvironmentPath
-      value: "packer/environments/labul-pve.yaml"
+      value: packer/environments/labul-pve.yaml
     - name: gitRepoUrl
-      value: "git@github.com:stuttgart-things/stuttgart-things.git"
+      value: https://github.com/stuttgart-things/stuttgart-things.git
     - name: gitRevision
-      value: "main"
+      value: main
     - name: gitWorkspaceSubdirectory
-      value: "/packer/ubuntu23"
+      value: /packer/ubuntu23
     - name: osTemplatePath
-      value: "packer/os/ubuntu23-pve.pkr.tpl.hcl"
+      value: packer/os/ubuntu23-pve.pkr.tpl.hcl
     - name: osVersion
-      value: "ubuntu23"
+      value: ubuntu23
     - name: packerWorkingImage
-      value: "eu.gcr.io/stuttgart-things/sthings-packer:1.9.4-8.5.0"
+      value: eu.gcr.io/stuttgart-things/sthings-packer:1.9.4-8.5.0
     - name: vaultSecretName
       value: vault-in-cluster
