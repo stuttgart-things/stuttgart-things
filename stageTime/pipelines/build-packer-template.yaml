@@ -37,6 +37,10 @@ spec:
       type: string
       default: ""
       description: to be build os version
+    - name: cloud
+      type: string
+      default: vsphere
+      description: name of cloud provider
     - name: packerWorkingImage
       type: string
       default: "eu.gcr.io/stuttgart-things/sthings-packer:1.9.4-8.4.0"
@@ -63,6 +67,8 @@ spec:
       default: "VAULT_NAMESPACE"
   tasks:
     - name: create-vm-folders
+      runAfter:
+        - fetch-repository
       taskSpec:
         steps:
           - name: create-vm-folders
@@ -91,11 +97,14 @@ spec:
             script: |
               #!/usr/bin/env sh
               set -eu
-              machineShop get --path cloud/data/vsphere:username | tail -n +8
-              govc --version
+
+              if [ "$(params.cloud)" = "vsphere" ] ; then
+                machineShop get --path cloud/data/vsphere:username | tail -n +8
+                govc version
+              fi
     - name: execute-packer
       runAfter:
-        - fetch-repository
+        - create-vm-folders
       taskRef:
         resolver: git
         params:
