@@ -61,8 +61,12 @@ spec:
       description: name of the secret with incoming webhook URL
       type: string
       default: "vault"
-  steps:
-    - name: packer-build
+  stepTemplate:
+    workingDir: $(workspaces.source.path)
+    securityContext:
+      privileged: false
+      runAsNonRoot: true
+      runAsUser: 65532
       workingDir: $(workspaces.source.path)/$(params.SUB_DIRECTORY)
       image: "$(params.WORKING_IMAGE)"
       env:
@@ -88,10 +92,8 @@ spec:
             secretKeyRef:
               key: $(params.vault-secret-key-approleSecret)
               name: $(params.vaultSecretName)
-      securityContext:
-        privileged: false
-        runAsNonRoot: true
-        runAsUser: 65532
+  steps:
+    - name: create-vmtemplate-config
       script: |-
         #!/usr/bin/env sh
         set -eu
@@ -112,6 +114,11 @@ spec:
         cat ./$(params.OS_VERSION)/$(params.OS_VERSION).pkr.hcl
         ls -lta ./$(params.OS_VERSION)
 
+    - name: create-kickstart-config
+      script: |-
+        #!/usr/bin/env sh
+        set -eu
+
         echo "RENDER KICKSTART CONFIG"
         machineShop render --source local \
         --output file \
@@ -125,6 +132,11 @@ spec:
         echo "OUTPUT KICKSTART CONFIG"
         cat ./$(params.OS_VERSION)/user-data
 
+    - name: render-ansible-playbook
+      script: |-
+        #!/usr/bin/env sh
+        set -eu
+
         # echo "RENDER PLAYBOOK"
         # machineShop render \
         # --template ./packer/ansible/base-os.yaml \
@@ -133,9 +145,19 @@ spec:
         # --destination ./$(params.OS_VERSION)/base-os.yaml \
         # --output file
 
+    - name: init-packer-config
+      script: |-
+        #!/usr/bin/env sh
+        set -eu
+
         # echo "INIT PACKER"
         # cd $(params.OS_VERSION)
         # packer init $(params.OS_VERSION).pkr.hcl
+
+    - name: build-packer-vmtemplate
+      script: |-
+        #!/usr/bin/env sh
+        set -eu
 
         # echo "START PACKER BUILD"
         # packer build -force \
