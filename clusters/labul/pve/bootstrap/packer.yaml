@@ -2,28 +2,9 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: create-packer-template-ubuntu23-6
+  name: create-packer-template-ubuntu23-7
   namespace: tektoncd
 spec:
-  pipelineRef:
-    resolver: git
-    params:
-      - name: url
-        value: https://github.com/stuttgart-things/stuttgart-things.git
-      - name: revision
-        value: main
-      - name: pathInRepo
-        value: stageTime/pipelines/build-packer-template.yaml
-  workspaces:
-    - name: shared-workspace
-      volumeClaimTemplate:
-        spec:
-          storageClassName: openebs-hostpath
-          accessModes:
-            - ReadWriteOnce
-          resources:
-            requests:
-              storage: 1Gi
   params:
     - name: bootConfigPath
       value: packer/boot/ubuntu.yaml
@@ -45,3 +26,22 @@ spec:
       value: vault-in-cluster
     - name: cloud
       value: pve
+  pipelineRef:
+    resolver: git
+    params:
+      - name: url
+        value: https://github.com/stuttgart-things/stuttgart-things.git
+      - name: revision
+        value: main
+      - name: pathInRepo
+        value: stageTime/pipelines/build-packer-template.yaml
+  workspaces:
+    - name: shared-workspace
+      volumeClaimTemplate:
+        spec:
+          storageClassName: openebs-hostpath
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 1Gi
