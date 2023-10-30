@@ -61,6 +61,12 @@ spec:
       description: name of the secret with incoming webhook URL
       type: string
       default: "vault"
+    - name: vaultPathCloudUser
+      description: secret path cloud user (vault)
+      type: string
+    - name: vaultPathCloudPassword
+      description: secret path cloud password (vault)
+      type: string
   stepTemplate:
     workingDir: $(workspaces.source.path)/$(params.SUB_DIRECTORY)
     image: "$(params.WORKING_IMAGE)"
@@ -160,7 +166,7 @@ spec:
         set -eu
 
         echo "BUILD VMTEMPLATE w/ PACKER"
-        # packer build -force \
-        # -var "username=$(machineShop get --path cloud/data/vsphere:username | tail -n +8)" \
-        # -var "password=$(machineShop get --path cloud/data/vsphere:password | tail -n +8)" \
-        # $(params.OS_VERSION).pkr.hcl
+        packer build -force \
+        -var "username=$(machineShop get --path $(params.vaultPathCloudUser)| tail -n +8)" \
+        -var "password=$(machineShop get --path $(params.vaultPathCloudPasssword) | tail -n +8)" \
+        $(params.OS_VERSION).pkr.hcl

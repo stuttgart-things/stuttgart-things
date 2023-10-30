@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: create-packer-template-ubuntu23-15
+  name: create-packer-template-ubuntu23-16
   namespace: tektoncd
 spec:
   params:
@@ -17,7 +17,7 @@ spec:
     - name: gitWorkspaceSubdirectory
       value: /packer/ubuntu23
     - name: osTemplatePath
-      value: packer/os/ubuntu23-pve.pkr.tpl.hcl
+      value: packer/template/ubuntu23-pve.pkr.tpl.hcl
     - name: osVersion
       value: ubuntu23
     - name: packerWorkingImage
@@ -26,6 +26,10 @@ spec:
       value: vault-in-cluster
     - name: cloud
       value: pve
+    - name: secretPathUser
+      value: cloud/data/pve:username
+    - name: secretPathPassword
+      value: cloud/data/pve:password
   pipelineRef:
     resolver: git
     params:

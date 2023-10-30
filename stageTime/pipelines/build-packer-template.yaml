@@ -61,6 +61,12 @@ spec:
       description: namespace key in the secret
       type: string
       default: "VAULT_NAMESPACE"
+    - name: secretPathUser
+      description: secret path cloud user (vault)
+      type: string
+    - name: secretPathPassword
+      description: secret path cloud password (vault)
+      type: string
   tasks:
     - name: create-vm-folders
       runAfter:
@@ -126,6 +132,10 @@ spec:
           value: $(params.packerWorkingImage)
         - name: vaultSecretName
           value: $(params.vaultSecretName)
+        - name: vaultPathCloudUser
+          value: $(params.secretPathUser)
+        - name: vaultPathCloudPassword
+          value: $(params.secretPathPassword)
     - name: fetch-repository
       taskRef:
         resolver: git

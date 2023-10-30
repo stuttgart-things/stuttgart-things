@@ -1,4 +1,3 @@
----
 packer {
   required_version = ">= [[ .ubuntu23PackerMinVersion ]]"
   required_plugins {
