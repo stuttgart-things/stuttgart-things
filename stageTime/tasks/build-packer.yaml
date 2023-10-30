@@ -107,7 +107,7 @@ spec:
         --brackets square \
         --defaults ./$(params.DEFAULT_ENVIRONMENT_PATH) \
         --destination ./$(params.OS_VERSION)/$(params.OS_VERSION).pkr.hcl \
-        --values "packerConfigMountPath=$(workspaces.source.path)/$(params.SUB_DIRECTORY)/$(params.OS_VERSION), ansiblePlayMountPath=$(workspaces.source.path)/$(params.SUB_DIRECTORY)/$(params.OS_VERSION), vmTemplateName="ubuntu23"
+        --values "packerConfigMountPath=$(workspaces.source.path)/$(params.SUB_DIRECTORY)/$(params.OS_VERSION), ansiblePlayMountPath=$(workspaces.source.path)/$(params.SUB_DIRECTORY)/$(params.OS_VERSION), vmTemplateName=ubuntu23"
 
         echo "OUTPUT RENDERED OS-CONFIG"
         cat ./$(params.OS_VERSION)/$(params.OS_VERSION).pkr.hcl
