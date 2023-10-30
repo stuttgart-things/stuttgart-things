@@ -62,13 +62,12 @@ spec:
       type: string
       default: "vault"
   stepTemplate:
-    workingDir: $(workspaces.source.path)
+    workingDir: $(workspaces.source.path)/$(params.SUB_DIRECTORY)
+    image: "$(params.WORKING_IMAGE)"
     securityContext:
       privileged: false
       runAsNonRoot: true
       runAsUser: 65532
-      workingDir: $(workspaces.source.path)/$(params.SUB_DIRECTORY)
-      image: "$(params.WORKING_IMAGE)"
       env:
         - name: ANSIBLE_HOST_KEY_CHECKING
           value: "False"
