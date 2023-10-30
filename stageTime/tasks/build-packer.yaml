@@ -92,15 +92,15 @@ spec:
               key: $(params.vault-secret-key-approleSecret)
               name: $(params.vaultSecretName)
   steps:
-    - name: create-vmtemplate-config
+    - name: render-vmtemplate-config
       script: |-
         #!/usr/bin/env sh
         set -eu
 
-        echo "CREATE PACKER WORK-DIR"
+        echo "CREATE WORKINGDIR"
         rm -rf ./$(params.OS_VERSION) && mkdir ./$(params.OS_VERSION)
 
-        echo "RENDER PACKER CONFIG"
+        echo "RENDER VMTEMPLATE"
         machineShop render --source local \
         --template ./$(params.OS_TEMPLATE_PATH) \
         --output file \
@@ -109,17 +109,18 @@ spec:
         --destination ./$(params.OS_VERSION)/$(params.OS_VERSION).pkr.hcl \
         --values "packerConfigMountPath=$(workspaces.source.path)/$(params.SUB_DIRECTORY)/$(params.OS_VERSION), ansiblePlayMountPath=$(workspaces.source.path)/$(params.SUB_DIRECTORY)/$(params.OS_VERSION), vmTemplateName=ubuntu23"
 
-        echo "OUTPUT RENDERED OS-CONFIG"
+        echo "OUTPUT RENDERED VMTEMPLATE"
         cat ./$(params.OS_VERSION)/$(params.OS_VERSION).pkr.hcl
         ls -lta ./$(params.OS_VERSION)
 
-    - name: create-kickstart-config
+    - name: render-kickstart-config
       script: |-
         #!/usr/bin/env sh
         set -eu
 
         echo "RENDER KICKSTART CONFIG"
-        machineShop render --source local \
+        machineShop render \
+        --source local \
         --output file \
         --template ./$(params.BOOT_CONFIG_PATH) \
         --destination ./$(params.OS_VERSION)/user-data \
@@ -149,16 +150,16 @@ spec:
         #!/usr/bin/env sh
         set -eu
 
-        # echo "INIT PACKER"
-        # cd $(params.OS_VERSION)
-        # packer init $(params.OS_VERSION).pkr.hcl
+        echo "INIT PACKER CONFIG"
+        cd $(params.OS_VERSION)
+        packer init $(params.OS_VERSION).pkr.hcl
 
     - name: build-packer-vmtemplate
       script: |-
         #!/usr/bin/env sh
         set -eu
 
-        # echo "START PACKER BUILD"
+        echo "BUILD VMTEMPLATE w/ PACKER"
         # packer build -force \
         # -var "username=$(machineShop get --path cloud/data/vsphere:username | tail -n +8)" \
         # -var "password=$(machineShop get --path cloud/data/vsphere:password | tail -n +8)" \
