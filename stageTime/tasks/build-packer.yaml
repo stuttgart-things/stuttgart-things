@@ -102,10 +102,11 @@ spec:
         echo "RENDER PACKER CONFIG"
         machineShop render --source local \
         --template ./$(params.OS_TEMPLATE_PATH) \
+        --output file \
+        --brackets square \
         --defaults ./$(params.DEFAULT_ENVIRONMENT_PATH) \
         --destination ./$(params.OS_VERSION)/$(params.OS_VERSION).pkr.hcl \
-        --values "packerConfigMountPath=$(workspaces.source.path)/$(params.SUB_DIRECTORY)/$(params.OS_VERSION), ansiblePlayMountPath=$(workspaces.source.path)/$(params.SUB_DIRECTORY)/$(params.OS_VERSION)" \
-        --output file
+        --values "packerConfigMountPath=$(workspaces.source.path)/$(params.SUB_DIRECTORY)/$(params.OS_VERSION), ansiblePlayMountPath=$(workspaces.source.path)/$(params.SUB_DIRECTORY)/$(params.OS_VERSION), vmTemplateName="ubuntu23"
 
         echo "OUTPUT RENDERED OS-CONFIG"
         cat ./$(params.OS_VERSION)/$(params.OS_VERSION).pkr.hcl
@@ -113,10 +114,10 @@ spec:
 
         echo "RENDER KICKSTART CONFIG"
         machineShop render --source local \
+        --output file
         --template ./$(params.BOOT_CONFIG_PATH) \
         --destination ./$(params.OS_VERSION)/user-data \
-        --defaults ./$(params.DEFAULT_ENVIRONMENT_PATH) \
-        --output file
+        --defaults ./$(params.DEFAULT_ENVIRONMENT_PATH)
 
         echo "CREATE (EMPTY) META-DATA FILE"
         touch ./$(params.OS_VERSION)/meta-data
