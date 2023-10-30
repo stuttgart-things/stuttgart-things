@@ -94,11 +94,13 @@ spec:
                   secretKeyRef:
                     key: $(params.vault-secret-key-approleSecret)
                     name: $(params.vaultSecretName)
+              - name: CLOUD
+                value: $(params.cloud)
             script: |
               #!/usr/bin/env sh
               set -eu
 
-              if [ "$(params.cloud)" = "vsphere" ] ; then
+              if [ "$(CLOUD)" = "vsphere" ] ; then
                 machineShop get --path cloud/data/vsphere:username | tail -n +8
                 govc version
               fi
