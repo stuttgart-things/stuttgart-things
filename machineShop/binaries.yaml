@@ -51,6 +51,9 @@ binary:
   - yq:
       url: https://github.com/mikefarah/yq/releases/download/v{{ or .yqVersion "4.35.2" }}/yq_linux_amd64.tar.gz
       bin: yq
+  - machineShop:
+      url: https://github.com/stuttgart-things/machineShop/releases/download/v{{ or .machineShop "0.1.52" }}/machineShop_Linux_x86_64.tar.gz
+      bin: machineShop
 
 script:
   - azure-cli:
