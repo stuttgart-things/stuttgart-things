@@ -70,6 +70,9 @@ spec:
       runAfter:
         - fetch-repository
       taskSpec:
+        params:
+          - name: cloud
+            value: $(params.cloud)
         steps:
           - name: create-vm-folders
             image: eu.gcr.io/stuttgart-things/sthings-packer:1.9.4-8.4.0
