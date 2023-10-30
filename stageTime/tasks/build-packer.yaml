@@ -169,4 +169,4 @@ spec:
         packer build -force \
         -var "username=$(machineShop get --path $(params.vaultPathCloudUser) | tail -n +8)" \
         -var "password=$(machineShop get --path $(params.vaultPathCloudPassword) | tail -n +8)" \
-        $(params.OS_VERSION).pkr.hcl
+        ./$(params.OS_VERSION)/$(params.OS_VERSION).pkr.hcl
