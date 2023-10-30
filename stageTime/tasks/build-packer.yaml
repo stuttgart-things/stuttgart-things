@@ -114,7 +114,7 @@ spec:
 
         echo "RENDER KICKSTART CONFIG"
         machineShop render --source local \
-        --output file
+        --output file \
         --template ./$(params.BOOT_CONFIG_PATH) \
         --destination ./$(params.OS_VERSION)/user-data \
         --defaults ./$(params.DEFAULT_ENVIRONMENT_PATH)
