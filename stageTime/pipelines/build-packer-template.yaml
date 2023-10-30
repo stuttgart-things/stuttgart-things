@@ -45,6 +45,22 @@ spec:
       type: string
       default: ""
       description: name of vault secret
+    - name: vault-secret-key-addr
+      description: vaul addr key in the secret
+      type: string
+      default: "VAULT_ADDR"
+    - name: vault-secret-key-approleId
+      description: approle id key in the secret
+      type: string
+      default: "VAULT_ROLE_ID"
+    - name: vault-secret-key-approleSecret
+      description: approle secret key in the secret
+      type: string
+      default: "VAULT_SECRET_ID"
+    - name: vault-secret-key-namespace
+      description: namespace key in the secret
+      type: string
+      default: "VAULT_NAMESPACE"
   tasks:
     - name: create-vm-folders
       taskSpec:
