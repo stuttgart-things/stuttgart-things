@@ -1,8 +1,8 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: create-packer-template-testrun-rocky10-5
-  namespace: packer
+  name: create-packer-template-ubuntu23
+  namespace: tektoncd
 spec:
   pipelineRef:
     resolver: git
@@ -17,31 +17,28 @@ spec:
     - name: shared-workspace
       volumeClaimTemplate:
         spec:
-          storageClassName: nfs4-csi
+          storageClassName: openebs-hostpath
           accessModes:
-          - ReadWriteMany
+            - ReadWriteOnce
           resources:
             requests:
               storage: 1Gi
-    - name: sshCredentials
-      secret:
-        secretName: github-ssh
   params:
     - name: bootConfigPath
       value: "packer/boot/ubuntu.yaml"
     - name: defaultEnvironmentPath
-      value: "packer/environments/labul-vsphere.yaml"
+      value: "packer/environments/labul-pve.yaml"
     - name: gitRepoUrl
       value: "git@github.com:stuttgart-things/stuttgart-things.git"
     - name: gitRevision
       value: "main"
     - name: gitWorkspaceSubdirectory
-      value: "/packer/rocky10"
+      value: "/packer/ubuntu23"
     - name: osTemplatePath
-      value: "packer/os/rocky10.hcl"
+      value: "packer/os/ubuntu23-pve.pkr.tpl.hcl"
     - name: osVersion
-      value: "rocky10"
+      value: "ubuntu23"
     - name: packerWorkingImage
       value: "eu.gcr.io/stuttgart-things/sthings-packer:1.9.4-8.5.0"
     - name: vaultSecretName
-      value: "vault-labul-vsphere"
+      value: vault-in-cluster

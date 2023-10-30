@@ -24,6 +24,8 @@ spec:
       value: stuttgart-things
     - name: githubFluxBoostrapPath
       value: clusters/labul/vsphere/dev21
+    - name: vaultSecretName
+      value: vault-in-cluster
     - name: vaultSecretPaths
       value:
         - "git/data/github:token+-false+-GITHUB_TOKEN"
