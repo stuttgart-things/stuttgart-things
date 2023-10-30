@@ -111,18 +111,18 @@ spec:
         cat ./$(params.OS_VERSION)/$(params.OS_VERSION).pkr.hcl
         ls -lta ./$(params.OS_VERSION)
 
-        # echo "RENDER KICKSTART CONFIG"
-        # machineShop render --source local \
-        # --template ./$(params.BOOT_CONFIG_PATH) \
-        # --destination ./$(params.OS_VERSION)/user-data \
-        # --defaults ./$(params.DEFAULT_ENVIRONMENT_PATH) \
-        # --output file
+        echo "RENDER KICKSTART CONFIG"
+        machineShop render --source local \
+        --template ./$(params.BOOT_CONFIG_PATH) \
+        --destination ./$(params.OS_VERSION)/user-data \
+        --defaults ./$(params.DEFAULT_ENVIRONMENT_PATH) \
+        --output file
 
-        # echo "CREATE (EMPTY) META-DATA FILE"
-        # touch ./$(params.OS_VERSION)/meta-data
+        echo "CREATE (EMPTY) META-DATA FILE"
+        touch ./$(params.OS_VERSION)/meta-data
 
-        # echo "OUTPUT KICKSTART CONFIG"
-        # cat ./$(params.OS_VERSION)/user-data
+        echo "OUTPUT KICKSTART CONFIG"
+        cat ./$(params.OS_VERSION)/user-data
 
         # echo "RENDER PLAYBOOK"
         # machineShop render \
