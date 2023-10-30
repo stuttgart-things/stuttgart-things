@@ -158,7 +158,7 @@ spec:
 
         echo "INIT PACKER CONFIG"
         cd $(params.OS_VERSION)
-        packer init $(params.OS_VERSION).pkr.hcl
+        packer init ./$(params.OS_VERSION)/$(params.OS_VERSION).pkr.hcl
 
     - name: build-packer-vmtemplate
       script: |-
