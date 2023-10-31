@@ -5,6 +5,10 @@ packer {
       source  = "[[ .pveProvider ]]"
       version = ">= [[ .pveProviderVersion ]]"
     }
+    ansible = {
+      source  = "github.com/hashicorp/ansible"
+      version = "~> 1"
+    }
   }
 }
 
