@@ -134,9 +134,9 @@ spec:
           value: $(params.osTemplatePath)
         - name: OS_VERSION
           value: $(params.osVersion)
-        - value: VM_TEMPLATE_NAME
+        - name: VM_TEMPLATE_NAME
           value: $(params.vmTemplateName)
-        - value: ANSIBLE_PROVISIONING
+        - name: ANSIBLE_PROVISIONING
           value: $(params.ansibleProvisioning)
         - name: SUB_DIRECTORY
           value: $(params.gitWorkspaceSubdirectory)
