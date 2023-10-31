@@ -49,7 +49,7 @@ spec:
     - name: WORKING_IMAGE
       description: the image on which ansible will run
       type: string
-      default: "eu.gcr.io/stuttgart-things/sthings-packer:1.9.4-8.5.0"
+      default: eu.gcr.io/stuttgart-things/sthings-packer:1.9.4-8.5.0
     - name: vault-secret-key-addr
       description: vaul addr key in the secret
       type: string
