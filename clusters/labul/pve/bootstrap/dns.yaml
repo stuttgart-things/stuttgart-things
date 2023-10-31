@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: create-pdns-entry-pve-dev43
+  name: create-pdns-entry-pve-dev43-1
   namespace: tektoncd
 spec:
   pipelineRef:
@@ -20,10 +20,10 @@ spec:
         spec:
           storageClassName: openebs
           accessModes:
-            - ReadWriteMany
+            - ReadWriteOnce
           resources:
             requests:
-              storage: 1Gi
+              storage: 100Mi
   params:
     - name: ansibleWorkingImage
       value: "eu.gcr.io/stuttgart-things/sthings-ansible:8.3.0-6"

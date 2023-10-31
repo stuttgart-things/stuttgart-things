@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: create-packer-template-ubuntu23-27
+  name: create-packer-template-ubuntu23-28
   namespace: tektoncd
 spec:
   params:
@@ -27,9 +27,9 @@ spec:
     - name: cloud
       value: pve
     - name: secretPathUser
-      value: cloud/data/pve:username
+      value: cloud/data/pve:apiUser
     - name: secretPathPassword
-      value: cloud/data/pve:password
+      value: cloud/data/pve:apiPassword
   pipelineRef:
     resolver: git
     params:
