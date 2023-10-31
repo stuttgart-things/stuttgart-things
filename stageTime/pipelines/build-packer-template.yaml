@@ -82,7 +82,7 @@ spec:
       taskSpec:
         steps:
           - name: create-vm-folders
-            image: eu.gcr.io/stuttgart-things/sthings-packer:1.9.4-8.4.0
+            image: $(params.packerWorkingImage)
             env:
               - name: VAULT_ADDR
                 valueFrom:
