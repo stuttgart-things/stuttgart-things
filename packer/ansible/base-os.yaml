@@ -12,15 +12,18 @@
     - name: Remove maybe existing apt lock
       block:
 
-      - name: Remove maybe existing lock
-        ansible.builtin.shell: |
-          sudo rm -rf /var/lib/apt/lists/*
-          sudo apt-get clean
-          sudo apt-get update
+        - name: Remove maybe existing lock
+          ansible.builtin.shell: |
+            sudo rm -rf /var/lib/apt/lists/*
+            sudo apt-get clean
+            sudo apt-get update
 
-      - name: Update apt list
-        ansible.builtin.apt:
-          update_cache: yes
+        - name: Update apt list
+          ansible.builtin.apt:
+            update_cache: yes
+
+        - name: Unconditionally reboot the machine with all defaults
+          ansible.builtin.reboot:
 
       when: ansible_distribution == 'Ubuntu'
 
