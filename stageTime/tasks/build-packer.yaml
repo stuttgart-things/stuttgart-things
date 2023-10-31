@@ -154,11 +154,11 @@ spec:
 
         echo "RENDER PLAYBOOK"
         machineShop render \
-        --template ./packer/ansible/$(params.ANSIBLE_PROVISIONING).yaml \
         --source local \
+        --output file \
+        --template ./packer/ansible/$(params.ANSIBLE_PROVISIONING).yaml \
         --defaults ./$(params.DEFAULT_ENVIRONMENT_PATH) \
-        --destination ./$(params.OS_VERSION)/$(params.ANSIBLE_PROVISIONING).yaml \
-        --output file
+        --destination ./$(params.OS_VERSION)/$(params.ANSIBLE_PROVISIONING).yaml
 
         cat ./$(params.OS_VERSION)/$(params.ANSIBLE_PROVISIONING).yaml
 
