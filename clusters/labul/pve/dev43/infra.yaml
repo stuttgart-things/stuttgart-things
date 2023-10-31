@@ -49,15 +49,15 @@ spec:
   postBuild:
     substitute:
       IP_RANGE: 10.31.101.16-10.31.101.17
-  patches:
-    - patch: |-
-        - op: replace
-          path: /spec/chart/spec/version
-          value: 4.7.11
-      target:
-        kind: HelmRelease
-        name: metallb
-        namespace: metallb-system
+  # patches:
+  #   - patch: |-
+  #       - op: replace
+  #         path: /spec/chart/spec/version
+  #         value: 4.7.11
+  #     target:
+  #       kind: HelmRelease
+  #       name: metallb
+  #       namespace: metallb-system
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
