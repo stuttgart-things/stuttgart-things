@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: create-packer-template-ubuntu23-32
+  name: create-packer-template-ubuntu23-33
   namespace: tektoncd
 spec:
   params:
@@ -30,6 +30,10 @@ spec:
       value: cloud/data/pve:apiUser
     - name: secretPathPassword
       value: cloud/data/pve:apiPassword
+    - name: ansibleProvisioning
+      value: base-os
+    - name: vmTemplateName
+      value: ubuntu23
   pipelineRef:
     resolver: git
     params:

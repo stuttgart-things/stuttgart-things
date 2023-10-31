@@ -139,7 +139,7 @@ spec:
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: install-pve-nfs-tekton-server-1
+  name: install-pve-nfs-tekton-server-2
   namespace: tektoncd
 spec:
   pipelineRef:
@@ -185,6 +185,7 @@ spec:
       value:
         - "ansible/playbooks/prepare-env.yaml"
         - "ansible/playbooks/base-os.yaml"
+        - "ansible/playbooks/install-nfs.yaml"
     - name: ansibleVarsFile
       value:
         - "manage_filesystem+-true"
@@ -197,6 +198,9 @@ spec:
         - "lvm_var_sizing+-'50%'"
         - "send_to_msteams+-true"
         - "reboot_all+-false"
+        - "kind+-server"
+        - "permanent+-true"
+        - "nfsManageFirewall+-true"
     - name: ansibleVarsInventory
       value:
         - "all+[\"pve-nfs-tekton.labul.sva.de\"]"

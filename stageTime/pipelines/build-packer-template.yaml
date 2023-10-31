@@ -33,6 +33,14 @@ spec:
       type: string
       default: ""
       description: path to os template
+    - name: vmTemplateName
+      type: string
+      default: ""
+      description: name of the to be build vm template
+    - name: ansibleProvisioning
+      type: string
+      default: base-os
+      description: ansible provisioning / playbook name
     - name: osVersion
       type: string
       default: ""
@@ -126,6 +134,10 @@ spec:
           value: $(params.osTemplatePath)
         - name: OS_VERSION
           value: $(params.osVersion)
+        - value: VM_TEMPLATE_NAME
+          value: $(params.vmTemplateName)
+        - value: ANSIBLE_PROVISIONING
+          value: $(params.ansibleProvisioning)
         - name: SUB_DIRECTORY
           value: $(params.gitWorkspaceSubdirectory)
         - name: WORKING_IMAGE

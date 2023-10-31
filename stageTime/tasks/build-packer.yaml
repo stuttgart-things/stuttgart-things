@@ -1,3 +1,4 @@
+---
 apiVersion: tekton.dev/v1
 kind: Task
 metadata:
@@ -33,6 +34,14 @@ spec:
       description: name of the secret with incoming webhook URL
       type: string
       default: ""
+    - name: VM_TEMPLATE_NAME
+      description: name of the to be build vm template
+      type: string
+      default: ""
+    - name: ANSIBLE_PROVISIONING
+      description: ansible provisioning / playbook name
+      type: string
+      default: base-os
     - name: SUB_DIRECTORY
       description: subdirectory of workspace
       type: string
@@ -113,7 +122,7 @@ spec:
         --brackets square \
         --defaults ./$(params.DEFAULT_ENVIRONMENT_PATH) \
         --destination ./$(params.OS_VERSION)/$(params.OS_VERSION).pkr.hcl \
-        --values "packerConfigMountPath=$(workspaces.source.path)/$(params.SUB_DIRECTORY)/$(params.OS_VERSION), ansiblePlayMountPath=$(workspaces.source.path)/$(params.SUB_DIRECTORY)/$(params.OS_VERSION), vmTemplateName=ubuntu23"
+        --values "packerConfigMountPath=$(workspaces.source.path)/$(params.SUB_DIRECTORY)/$(params.OS_VERSION), ansiblePlayMountPath=$(workspaces.source.path)/$(params.SUB_DIRECTORY)/$(params.OS_VERSION), ansibleOsProvioning=${params.ANSIBLE_PROVISIONING}, vmTemplateName=$(params.VM_TEMPLATE_NAME}"
 
         echo "OUTPUT RENDERED VMTEMPLATE"
         cat ./$(params.OS_VERSION)/$(params.OS_VERSION).pkr.hcl
@@ -143,13 +152,15 @@ spec:
         #!/usr/bin/env sh
         set -eu
 
-        # echo "RENDER PLAYBOOK"
-        # machineShop render \
-        # --template ./packer/ansible/base-os.yaml \
-        # --source local \
-        # --defaults ./$(params.DEFAULT_ENVIRONMENT_PATH) \
-        # --destination ./$(params.OS_VERSION)/base-os.yaml \
-        # --output file
+        echo "RENDER PLAYBOOK"
+        machineShop render \
+        --template ./packer/ansible/${params.ANSIBLE_PROVISIONING}.yaml \
+        --source local \
+        --defaults ./$(params.DEFAULT_ENVIRONMENT_PATH) \
+        --destination ./$(params.OS_VERSION)/${params.ANSIBLE_PROVISIONING}.yaml \
+        --output file
+
+        cat ./$(params.OS_VERSION)/${params.ANSIBLE_PROVISIONING}.yaml
 
     - name: init-build-packer
       script: |-
@@ -158,9 +169,6 @@ spec:
 
         echo "INIT PACKER CONFIG"
         packer init ./$(params.OS_VERSION)/$(params.OS_VERSION).pkr.hcl
-
-        echo ${VAULT_ADDR}
-        echo $(machineShop get --path $(params.vaultPathCloudPassword) | tail -n +8)
 
         echo "BUILD VMTEMPLATE w/ PACKER"
         packer build -force \
