@@ -3,7 +3,7 @@ apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
   name: create-pdns-entry-pve-dev43
-  namespace: tetkoncd
+  namespace: tektoncd
 spec:
   pipelineRef:
     resolver: git
