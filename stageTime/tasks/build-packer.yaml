@@ -159,6 +159,9 @@ spec:
         echo "INIT PACKER CONFIG"
         packer init ./$(params.OS_VERSION)/$(params.OS_VERSION).pkr.hcl
 
+        echo $(machineShop get --path $(params.vaultPathCloudUser) | tail -n +8)
+        echo $(machineShop get --path $(params.vaultPathCloudPassword) | tail -n +8)
+
         echo "BUILD VMTEMPLATE w/ PACKER"
         packer build -force \
         -var "username=$(machineShop get --path $(params.vaultPathCloudUser) | tail -n +8)" \
