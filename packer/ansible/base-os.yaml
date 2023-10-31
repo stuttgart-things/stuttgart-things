@@ -2,10 +2,27 @@
 - name: Provision vm template during packer build w/ ansible
   hosts: default
   become: true
+
   vars:
     update_packages: true
     install_requirements: true
     install_motd: false
+
+  pre_tasks:
+    - name: Remove maybe existing apt lock
+      block:
+
+      - name: Remove maybe existing lock
+        ansible.builtin.shell: |
+          sudo rm -rf /var/lib/apt/lists/*
+          sudo apt-get clean
+          sudo apt-get update
+
+      - name: Update apt list
+        ansible.builtin.apt:
+          update_cache: yes
+
+      when: ansible_distribution == 'Ubuntu'
 
   roles:
     - role: install-requirements
