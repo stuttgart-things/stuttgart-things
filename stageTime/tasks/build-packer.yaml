@@ -74,29 +74,29 @@ spec:
       privileged: false
       runAsNonRoot: true
       runAsUser: 65532
-      env:
-        - name: ANSIBLE_HOST_KEY_CHECKING
-          value: "False"
-        - name: VAULT_ADDR
-          valueFrom:
-            secretKeyRef:
-              key: $(params.vault-secret-key-addr)
-              name: $(params.vaultSecretName)
-        - name: VAULT_NAMESPACE
-          valueFrom:
-            secretKeyRef:
-              key: $(params.vault-secret-key-namespace)
-              name: $(params.vaultSecretName)
-        - name: VAULT_ROLE_ID
-          valueFrom:
-            secretKeyRef:
-              key: $(params.vault-secret-key-approleId)
-              name: $(params.vaultSecretName)
-        - name: VAULT_SECRET_ID
-          valueFrom:
-            secretKeyRef:
-              key: $(params.vault-secret-key-approleSecret)
-              name: $(params.vaultSecretName)
+    env:
+      - name: ANSIBLE_HOST_KEY_CHECKING
+        value: "False"
+      - name: VAULT_ADDR
+        valueFrom:
+          secretKeyRef:
+            key: $(params.vault-secret-key-addr)
+            name: $(params.vaultSecretName)
+      - name: VAULT_NAMESPACE
+        valueFrom:
+          secretKeyRef:
+            key: $(params.vault-secret-key-namespace)
+            name: $(params.vaultSecretName)
+      - name: VAULT_ROLE_ID
+        valueFrom:
+          secretKeyRef:
+            key: $(params.vault-secret-key-approleId)
+            name: $(params.vaultSecretName)
+      - name: VAULT_SECRET_ID
+        valueFrom:
+          secretKeyRef:
+            key: $(params.vault-secret-key-approleSecret)
+            name: $(params.vaultSecretName)
   steps:
     - name: render-vmtemplate-config
       script: |-
