@@ -57,12 +57,12 @@ spec:
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: create-packer-template-rocky9
+  name: create-packer-template-rocky9-1
   namespace: tektoncd
 spec:
   params:
     - name: bootConfigPath
-      value: packer/boot/rocky.yaml
+      value: packer/boot/rocky.cfg
     - name: defaultEnvironmentPath
       value: packer/environments/labul-pve.yaml
     - name: gitRepoUrl
