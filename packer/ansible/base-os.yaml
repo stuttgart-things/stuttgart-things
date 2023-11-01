@@ -12,6 +12,9 @@
     - name: Remove maybe existing apt lock
       block:
 
+        - name: Unconditionally reboot the machine with all defaults
+          ansible.builtin.reboot:
+
         - name: Remove maybe existing lock
           ansible.builtin.shell: |
             sudo rm -rf /var/lib/apt/lists/*
@@ -21,9 +24,6 @@
         - name: Update apt list
           ansible.builtin.apt:
             update_cache: yes
-
-        - name: Unconditionally reboot the machine with all defaults
-          ansible.builtin.reboot:
 
       when: ansible_distribution == 'Ubuntu'
 
