@@ -101,7 +101,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./apps/rancher
+  path: ./infra/rancher
   prune: true
   wait: true
   postBuild:
