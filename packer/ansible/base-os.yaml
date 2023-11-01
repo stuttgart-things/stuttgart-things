@@ -53,8 +53,8 @@
 
     - name: Upgrade pip
       ansible.builtin.shell: |
-        pip install --upgrade pip
-        pip install kubernetes
+        /usr/local/bin/pip install --upgrade pip
+        /usr/local/bin/pip install kubernetes
 
     - name: Remove maybe existing apt lock
       block:

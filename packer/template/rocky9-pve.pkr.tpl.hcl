@@ -68,8 +68,9 @@ build {
   }
 
   provisioner "ansible" {
-    ansible_ssh_extra_args = ["-oHostKeyAlgorithms=+ssh-rsa -oPubkeyAcceptedKeyTypes=+ssh-rsa"]
-    extra_arguments        = ["-e ansible_ssh_pass=[[ .rocky9Password ]]"]
+    ansible_env_vars       = ["ANSIBLE_REMOTE_TEMP=/tmp", "ANSIBLE_HOST_KEY_CHECKING=False", "ANSIBLE_SSH_ARGS=-oForwardAgent=yes -oControlMaster=auto -oControlPersist=60s -oHostKeyAlgorithms=+ssh-rsa   -oPubkeyAcceptedKeyTypes=+ssh-rsa", "ANSIBLE_NOCOLOR=True"]
+    extra_arguments        = ["--scp-extra-args", "'-O'", "-e ansible_ssh_pass=[[ .rocky9Password ]]"]
+    keep_inventory_file    = "true"
     playbook_file          = "[[ .ansiblePlayMountPath ]]/[[ .ansibleOsProvioning ]].yaml"
     user                   = "[[ .rocky9User ]]"
   }
