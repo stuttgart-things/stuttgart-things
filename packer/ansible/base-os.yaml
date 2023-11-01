@@ -7,6 +7,7 @@
     update_packages: true
     install_requirements: true
     install_motd: false
+    create_user: [[ .createUser ]]
     admin_group: "{{ 'wheel' if ansible_os_family == 'RedHat' else 'sudo' }}"
     reboot_prio_provisioning: [[ .rebootBeforeAnsible ]]
     vault_instances:
@@ -58,6 +59,9 @@
   roles:
     - role: install-requirements
       when: install_requirements|bool
+
+    - role: create-os-user
+      when: create_user|bool
 
   post_tasks:
     - name: Install vault ca certificate to local system from multiple instances
