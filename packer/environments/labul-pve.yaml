@@ -18,6 +18,8 @@ rocky9IsoUrl: https://download.rockylinux.org/pub/rocky/9/isos/x86_64/Rocky-9.2-
 rocky9IsoChecksum: 06505828e8d5d052b477af5ce62e50b938021f5c28142a327d4d5c075f0670dc
 rocky9User: root
 rocky9Password: ch0coLate
+rocky9NetworkInstall: https://download.rockylinux.org/pub/rocky/9/BaseOS/x86_64/os/
+rocky9appStreamRepoUrl: https://download.rockylinux.org/pub/rocky/9/AppStream/x86_64/os/
 
 ubuntu23User: ubuntu
 ubuntu23Password: ubuntu
