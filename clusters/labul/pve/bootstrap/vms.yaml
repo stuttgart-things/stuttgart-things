@@ -143,7 +143,7 @@ metadata:
 spec:
   variables:
     - vm_name="pve-cd43"
-    - vm_count=1
+    - vm_count=4
     - vm_num_cpus=8
     - vm_memory=8192
     - vm_template="ubuntu23"
