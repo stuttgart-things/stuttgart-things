@@ -7,6 +7,7 @@
     update_packages: true
     install_requirements: true
     install_motd: false
+    configure_rke_node: false
     create_user: [[ .createUser ]]
     admin_group: "{{ 'wheel' if ansible_os_family == 'RedHat' else 'sudo' }}"
     reboot_prio_provisioning: [[ .rebootBeforeAnsible ]]
@@ -37,6 +38,24 @@
           - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCv17/cfbIKB8JBeDY/SoWz55tYu7e64BarYpj3UeYrbG/UjbyWh3EnsLyG9cL/Sg4C9by2rsyW2ppJSDCO7R3u+b46RufDVebznHqq1KV1vLwR+eEDANCDnkZswFNG1CZd9VU0zwLuEw8e/gy//qDO2DU4pALe/4BtnHkrNodY+Y6szMP4zkouag+myK4Hzn/vz+95sZ0w+/WUc726uiak8CI1IEBofTnFZCSSKYLRxY779D1+j+rOqE6IW4IOwojGBj0c6UDRQVAhSreLiOvVltyAASZWUGJjoa8zzeC4wH4mtOR/86mHI/zaovHuA6hzoBfP/gYWw74TO+WXQwqMBPvW1n8l3WIthvny2y53OTmdGG4GGI0UcLxehsxRp/ZiAlrwSGA9R735Qnq/IH6jt5NQ/qIxs5S+Ww5oQq90J/5MGAqSv8od1fNqTDRoNDvQRo/wSH0Dt11GNCqk4weqFBpij3h3oykhsRXniuYbsM2n/RRmJ4Q9dL2xdYKfBA0= acalva@TPACALVA-1"
 
   pre_tasks:
+
+    - name: Create pip config dir
+      ansible.builtin.file:
+        path: /root/.config/pip/
+        state: directory
+
+    - name: Create pip config
+      ansible.builtin.copy:
+        dest: /root/.config/pip/pip.conf
+        content: |
+          [global]
+          break-system-packages = true
+
+    - name: Upgrade pip
+      ansible.builtin.shell: |
+        pip install --upgrade pip
+        pip install kubernetes
+
     - name: Remove maybe existing apt lock
       block:
 
@@ -62,6 +81,9 @@
 
     - role: create-os-user
       when: create_user|bool
+
+    - role: configure-rke-node
+      when: configure_rke_node|bool
 
   post_tasks:
     - name: Install vault ca certificate to local system from multiple instances

@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: deploy-rke2-cd-cluster
+  name: deploy-rke2-cd-cluster-1
   namespace: tektoncd
 spec:
   pipelineRef:
