@@ -77,7 +77,7 @@ build {
 }
 
 locals {
-  packerstarttime = formatdate("YYYYMMDD", timestamp())
+  packerstarttime = formatdate("YYYY-MM-DD", timestamp())
   vmdate = formatdate("YYMM", timestamp())
 }
 
