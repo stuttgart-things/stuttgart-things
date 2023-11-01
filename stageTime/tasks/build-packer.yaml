@@ -156,6 +156,7 @@ spec:
         machineShop render \
         --source local \
         --output file \
+        --brackets square \
         --template ./packer/ansible/$(params.ANSIBLE_PROVISIONING).yaml \
         --defaults ./$(params.DEFAULT_ENVIRONMENT_PATH) \
         --destination ./$(params.OS_VERSION)/$(params.ANSIBLE_PROVISIONING).yaml
