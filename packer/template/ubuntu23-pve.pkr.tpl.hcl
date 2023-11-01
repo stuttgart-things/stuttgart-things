@@ -71,7 +71,7 @@ build {
     extra_arguments        = ["--scp-extra-args", "'-O'"]
     keep_inventory_file    = "true"
     playbook_file          = "[[ .ansiblePlayMountPath ]]/[[ .ansibleOsProvioning ]].yaml"
-    user                   = "root"
+    user                   = "[[ .ubuntu23User ]]"
   }
 
 }
