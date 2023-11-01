@@ -12,7 +12,7 @@ node: sthings-pve1
 pool: packer
 sshTimeout: 20m
 proxmoxUrl: https://sthings-pve1.labul.sva.de:8006/api2/json
-iso: datastore
+isoStoragePool: datastore
 
 rocky9IsoUrl: https://download.rockylinux.org/pub/rocky/9/isos/x86_64/Rocky-9.2-x86_64-minimal.iso
 rocky9IsoChecksum: 06505828e8d5d052b477af5ce62e50b938021f5c28142a327d4d5c075f0670dc
