@@ -58,7 +58,7 @@ spec:
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: create-pdns-entry-pve-cd43
+  name: create-pdns-entry-pve-cd43-1
   namespace: tektoncd
 spec:
   pipelineRef:
