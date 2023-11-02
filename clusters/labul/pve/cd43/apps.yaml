@@ -1,0 +1,36 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: rancher-things
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: ingress-nginx
+    - name: cert-manager
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infra/rancher
+  prune: true
+  wait: true
+  postBuild:
+    substitute:
+      INGRESS_HOSTNAME: rancher-things
+      INGRESS_DOMAIN: cd43.sthings-pve.labul.sva.de
+      CLUSTER_ISSUER: cluster-issuer-approle
+    substituteFrom:
+      - kind: Secret
+        name: rancher-flux-secrets
+  patches:
+    - patch: |-
+        - op: replace
+          path: /spec/chart/spec/version
+          value: 2.7.9
+      target:
+        kind: HelmRelease
+        name: rancher-deployment
+        namespace: cattle-system
