@@ -51,11 +51,6 @@
           [global]
           break-system-packages = true
 
-    - name: Upgrade pip
-      ansible.builtin.shell: |
-        /usr/local/bin/pip install --upgrade pip
-        /usr/local/bin/pip install kubernetes
-
     - name: Remove maybe existing apt lock
       block:
 
