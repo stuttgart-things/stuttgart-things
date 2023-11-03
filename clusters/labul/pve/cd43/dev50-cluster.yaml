@@ -2,6 +2,8 @@
 apiVersion: provisioning.cattle.io/v1
 kind: Cluster
 metadata:
+  annotations:
+    field.cattle.io/creatorId: user-8xrm9
   finalizers:
     - wrangler.cattle.io/cloud-config-secret-remover
     - wrangler.cattle.io/provisioning-cluster-remove
