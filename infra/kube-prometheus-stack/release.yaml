@@ -8,7 +8,7 @@ spec:
   interval: 1h
   chart:
     spec:
-      version: "48.x"
+      version: 48.6.0
       chart: kube-prometheus-stack
       sourceRef:
         kind: HelmRepository
@@ -27,6 +27,8 @@ spec:
       enabled: false
     prometheus:
       prometheusSpec:
+        scrapeInterval: 30s
+        evaluationInterval: 30s
         retention: 24h
         resources:
           requests:
@@ -37,7 +39,7 @@ spec:
           matchLabels:
             app.kubernetes.io/component: monitoring
     grafana:
-      defaultDashboardsEnabled: false
+      defaultDashboardsEnabled: true
       adminPassword: flux
   postRenderers:
     - kustomize:
@@ -58,4 +60,4 @@ spec:
                 path: /metadata/annotations/helm.toolkit.fluxcd.io~1driftDetection
                 value: disabled
 
-  # https://github.com/prometheus-community/helm-charts/blob/main/charts/kube-prometheus-stack/values.yaml
+# https://github.com/prometheus-community/helm-charts/blob/main/charts/kube-prometheus-stack/values.yaml
