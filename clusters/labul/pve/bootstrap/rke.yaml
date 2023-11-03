@@ -78,7 +78,7 @@ spec:
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: deploy-rke2-downstream-dev45-3
+  name: deploy-rke2-downstream-pve-dev51
   namespace: tektoncd
 spec:
   pipelineRef:
@@ -145,6 +145,6 @@ spec:
         - "scp_if_ssh+-true"
     - name: ansibleVarsInventory
       value:
-        - "initial_master_node+[\"pve-dev50.labul.sva.de\"]"
-        - "additional_master_nodes+[\"pve-dev50-2.labul.sva.de\"]"
-        - "additional_master_nodes+[\"pve-dev50-3.labul.sva.de\"]"
+        - "initial_master_node+[\"pve-dev51.labul.sva.de\"]"
+        - "additional_master_nodes+[\"pve-dev51-2.labul.sva.de\"]"
+        - "additional_master_nodes+[\"pve-dev51-3.labul.sva.de\"]"
