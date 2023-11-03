@@ -51,7 +51,6 @@ spec:
           - secretName: ${INGRESS_SECRETNAME}
             hosts:
               - ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}
-
   postRenderers:
     - kustomize:
         patches:
