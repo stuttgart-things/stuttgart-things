@@ -78,7 +78,7 @@ spec:
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: deploy-rke2-downstream-pve-dev51-1
+  name: deploy-rke2-downstream-pve-dev51-2
   namespace: tektoncd
 spec:
   pipelineRef:
@@ -125,6 +125,7 @@ spec:
         - "ansible/playbooks/prepare-env.yaml"
         - "ansible/playbooks/base-os.yaml"
         - "ansible/playbooks/configure-rke-node.yaml"
+        - "ansible/playbooks/upload-kubeconfig-vault.yaml"
     - name: ansibleVarsFile
       value:
         - "manage_filesystem+-true"
@@ -143,6 +144,9 @@ spec:
         - "set_docker_proxy+-false"
         - "template_creation_setup+-false"
         - "scp_if_ssh+-true"
+        - "cluster_name+-pve-dev51"
+        - "kubeconfig_path+-/etc/rancher/rke2/rke2.yaml"
+        - "secret_path_kubeconfig+-kubeconfigs"
     - name: ansibleVarsInventory
       value:
         - "initial_master_node+[\"pve-dev51.labul.sva.de\"]"
