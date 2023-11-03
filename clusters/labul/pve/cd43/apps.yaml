@@ -25,6 +25,8 @@ spec:
     substituteFrom:
       - kind: Secret
         name: rancher-flux-secrets
+      - kind: Secret
+        name: vault-flux-secrets
   patches:
     - patch: |-
         - op: replace
