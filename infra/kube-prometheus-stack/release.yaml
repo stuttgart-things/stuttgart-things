@@ -8,7 +8,7 @@ spec:
   interval: 1h
   chart:
     spec:
-      version: 48.6.0
+      version: 52.1.0
       chart: kube-prometheus-stack
       sourceRef:
         kind: HelmRepository
@@ -40,7 +40,18 @@ spec:
             app.kubernetes.io/component: monitoring
     grafana:
       defaultDashboardsEnabled: true
-      adminPassword: flux
+      adminPassword: ${GRAFANA_PASSWORD}
+      ingress:
+        enabled: true
+        ingressClassName: ${INGRESS_CLASS:nginx}
+        hosts:
+          - ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}
+        path: /
+        tls:
+          - secretName: ${INGRESS_HOSTNAME}-tls
+            hosts:
+              - ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}
+
   postRenderers:
     - kustomize:
         patches:
