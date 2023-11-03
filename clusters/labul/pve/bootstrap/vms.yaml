@@ -178,7 +178,7 @@ spec:
 apiVersion: machineshop.sthings.tiab.ssc.sva.de/v1beta1
 kind: Terraform
 metadata:
-  name: pve-dev44
+  name: pve-dev45
   namespace: machine-shop-operator-system
   labels:
     app.kubernetes.io/name: terraform
@@ -186,10 +186,10 @@ metadata:
     app.kubernetes.io/created-by: machine-shop-operator
 spec:
   variables:
-    - vm_name="pve-dev44"
+    - vm_name="pve-dev45"
     - vm_count=3
     - vm_num_cpus=8
-    - vm_memory=8192
+    - vm_memory=12288
     - vm_template="rocky9"
     - pve_network="vmbr101"
     - pve_datastore="v3700"
@@ -197,8 +197,8 @@ spec:
     - pve_folder_path="stuttgart-things"
     - pve_cluster_node="sthings-pve1"
   module:
-    - moduleName=pve-dev44
-    - backendKey=pve-dev44.tfstate
+    - moduleName=pve-dev45
+    - backendKey=pve-dev45.tfstate
     - moduleSourceUrl=https://artifacts.tiab.labda.sva.de/modules/proxmox-vm.zip
     - backendEndpoint=https://artifacts.tiab.labda.sva.de
     - backendRegion=main
