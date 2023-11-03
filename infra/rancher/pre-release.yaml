@@ -34,5 +34,6 @@ spec:
     secrets:
       rancher-cacerts:
         name: tls-ca
+        dataType: data
         secretKVs:
           cacerts.pem: ${VAULT_CA_BUNDLE}
