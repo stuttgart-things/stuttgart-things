@@ -145,6 +145,6 @@ spec:
         - "scp_if_ssh+-true"
     - name: ansibleVarsInventory
       value:
-        - "initial_master_node+[\"pve-dev50.labul.sva.de scp_if_ssh=true\"]"
-        - "additional_master_nodes+[\"pve-dev50-2.labul.sva.de scp_if_ssh=true\"]"
-        - "additional_master_nodes+[\"pve-dev50-3.labul.sva.de scp_if_ssh=true\"]"
+        - "initial_master_node+[\"pve-dev50.labul.sva.de\"]"
+        - "additional_master_nodes+[\"pve-dev50-2.labul.sva.de\"]"
+        - "additional_master_nodes+[\"pve-dev50-3.labul.sva.de\"]"
