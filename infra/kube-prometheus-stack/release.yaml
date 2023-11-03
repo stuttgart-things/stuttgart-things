@@ -43,12 +43,12 @@ spec:
       adminPassword: ${GRAFANA_PASSWORD}
       ingress:
         enabled: true
-        ingressClassName: ${INGRESS_CLASS:nginx}
+        ingressClassName: ${INGRESS_CLASS}
         hosts:
           - ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}
         path: /
         tls:
-          - secretName: ${INGRESS_HOSTNAME}-tls
+          - secretName: ${INGRESS_SECRETNAME}
             hosts:
               - ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}
 
