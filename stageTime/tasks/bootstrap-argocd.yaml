@@ -72,7 +72,7 @@ spec:
       default: vault-labul-vsphere
   sidecars:
     - name: get-secrets
-      image: eu.gcr.io/stuttgart-things/machineshop:0.1.48-1
+      image: eu.gcr.io/stuttgart-things/machineshop:v0.1.53
       workingDir: $(workspaces.source.path)
       env:
         - name: VAULT_ADDR
