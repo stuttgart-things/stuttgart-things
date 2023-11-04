@@ -28,6 +28,18 @@ spec:
       description: cluster context name
       default: default
       type: string
+    - name: vaultSecretName
+      description: name of the vault secret
+      type: string
+      default: vault
+    - name: workingImage
+      description: argocd cli image
+      type: string
+      default: eu.gcr.io/stuttgart-things/sthings-argocd:v2.8.6
+    - name: workingImageMachineShop
+      description: the image on which machineShop will run on
+      type: string
+      default: eu.gcr.io/stuttgart-things/machineshop:v0.1.53
   tasks:
     - name: bootstrap-argocd
       taskRef:
@@ -55,3 +67,9 @@ spec:
           value: $(params.clusterName)
         - name: CLUSTER_CONTEXT
           value: $(params.clusterContext)
+        - name: vaultSecretName
+          value: $(params.vaultSecretName)
+        - name: WORKING_IMAGE
+          value: $(params.workingImage)
+        - name: WORKING_IMAGE_MACHINESHOP
+          value: $(params.workingImageMachineShop)

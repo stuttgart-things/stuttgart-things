@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: bootstrap-argocd-cluster-dev51-1
+  name: bootstrap-argocd-cluster-dev51-4
   namespace: tektoncd
 spec:
   workspaces:
@@ -42,3 +42,9 @@ spec:
       value: pve-dev51
     - name: clusterContext
       value: default
+    - name: vaultSecretName
+      value: vault-in-cluster
+    - name: workingImage
+      value: eu.gcr.io/stuttgart-things/sthings-argocd:v2.8.6
+    - name: workingImageMachineShop
+      value: eu.gcr.io/stuttgart-things/machineshop:v0.1.53

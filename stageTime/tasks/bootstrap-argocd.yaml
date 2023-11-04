@@ -69,10 +69,14 @@ spec:
     - name: vaultSecretName
       description: name of the vault secret
       type: string
-      default: vault-labul-vsphere
+      default: vault
+    - name: WORKING_IMAGE_MACHINESHOP
+      description: the image on which ansible will run
+      type: string
+      default: eu.gcr.io/stuttgart-things/machineshop:v0.1.53
   sidecars:
     - name: get-secrets
-      image: eu.gcr.io/stuttgart-things/machineshop:v0.1.53
+      image: "$(params.WORKING_IMAGE_MACHINESHOP)"
       workingDir: $(workspaces.source.path)
       env:
         - name: VAULT_ADDR
