@@ -1,0 +1,78 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: downstream-clusters
+  namespace: argocd
+spec:
+  clusterResourceBlacklist:
+  - group: ""
+    kind: ""
+  clusterResourceWhitelist:
+  - group: '*'
+    kind: '*'
+  description: app
+  destinations:
+    - name: pve-dev51
+      namespace: '*'
+      server: https://10.31.103.122:6443
+  namespaceResourceBlacklist:
+  - group: ""
+    kind: ""
+  namespaceResourceWhitelist:
+  - group: '*'
+    kind: '*'
+  sourceRepos:
+  - '*'
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: pve-dev51
+  namespace: argocd
+spec:
+  clusterResourceBlacklist:
+    - group: ""
+      kind: ""
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  description: pve-dev51
+  destinations:
+    - name: pve-dev51
+      namespace: '*'
+      server: https://10.31.103.122:6443
+  namespaceResourceBlacklist:
+    - group: ""
+      kind: ""
+  namespaceResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  sourceRepos:
+    - '*'
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: in-cluster
+  namespace: argocd
+spec:
+  clusterResourceBlacklist:
+    - group: ""
+      kind: ""
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  description: in-cluster
+  destinations:
+    - name: in-cluster
+      namespace: '*'
+      server: https://kubernetes.default.svc
+  namespaceResourceBlacklist:
+    - group: ""
+      kind: ""
+  namespaceResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  sourceRepos:
+    - '*'
