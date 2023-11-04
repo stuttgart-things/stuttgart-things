@@ -1,37 +1,75 @@
 ---
 apiVersion: tekton.dev/v1
-kind: PipelineRun
+kind: Pipeline
 metadata:
-  name: bootstrap-argocd-cluster-16
-  namespace: tekton
+  name: bootstrap-argocd-cluster
 spec:
   workspaces:
     - name: source
-      emptyDir: {}
-  pipelineRef:
-    resolver: git
-    params:
-      - name: url
-        value: https://github.com/stuttgart-things/stuttgart-things.git
-      - name: revision
-        value: main
-      - name: pathInRepo
-        value: stageTime/pipelines/bootstrap-argocd-cluster.yaml
   params:
     - name: vaultSecretPaths
-      value:
-        - "apps/data/argocd:username+-false+-username.secret"
-        - "apps/data/argocd:passwordB64+-true+-password.secret"
-        - "kubeconfigs/data/dev21:kubeconfig+-true+-KUBECONFIG"
+      type: array
+      default: []
+      description: extra roles to install
     - name: secretExports
-      value:
-        - "USERNAME+-username.secret"
-        - "PASSWORD+-password.secret"
+      description: vault secret kv paths to export
+      type: array
+      default: []
     - name: argocdUrl
-      value: argo-cd.dev21.sthings-vsphere.labul.sva.de
+      description: argocd url
+      type: string
     - name: argocdPort
-      value: "443"
+      description: argocd port
+      type: string
     - name: clusterName
-      value: dev21
+      description: cluster name to create
+      type: string
     - name: clusterContext
-      value: default
+      description: cluster context name
+      default: default
+      type: string
+    - name: vaultSecretName
+      description: name of the vault secret
+      type: string
+      default: vault
+    - name: workingImage
+      description: argocd cli image
+      type: string
+      default: eu.gcr.io/stuttgart-things/sthings-argocd:v2.8.6
+    - name: workingImageMachineShop
+      description: the image on which machineShop will run on
+      type: string
+      default: eu.gcr.io/stuttgart-things/machineshop:v0.1.53
+  tasks:
+    - name: bootstrap-argocd
+      taskRef:
+        resolver: git
+        params:
+          - name: url
+            value: https://github.com/stuttgart-things/stuttgart-things.git
+          - name: revision
+            value: main
+          - name: pathInRepo
+            value: stageTime/tasks/bootstrap-argocd.yaml
+      workspaces:
+        - name: source
+          workspace: source
+      params:
+        - name: SECRET_PATHS
+          value: $(params.vaultSecretPaths[*])
+        - name: SECRET_EXPORTS
+          value: $(params.secretExports[*])
+        - name: ARGOCD_URL
+          value: $(params.argocdUrl)
+        - name: ARGOCD_PORT
+          value: $(params.argocdPort)
+        - name: CLUSTER_NAME
+          value: $(params.clusterName)
+        - name: CLUSTER_CONTEXT
+          value: $(params.clusterContext)
+        - name: vaultSecretName
+          value: $(params.vaultSecretName)
+        - name: WORKING_IMAGE
+          value: $(params.workingImage)
+        - name: WORKING_IMAGE_MACHINESHOP
+          value: $(params.workingImageMachineShop)
