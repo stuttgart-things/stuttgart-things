@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: bootstrap-argocd-cluster-dev51-5
+  name: bootstrap-argocd-cluster-dev51-6
   namespace: tektoncd
 spec:
   workspaces:
@@ -28,7 +28,7 @@ spec:
     - name: vaultSecretPaths
       value:
         - "apps/data/argocd:username+-false+-username.secret"
-        - "apps/data/argocd:password+-false+-password.secret"
+        - "apps/data/argocd:password+-true+-password.secret"
         - "kubeconfigs/data/pve-dev51:kubeconfig+-true+-KUBECONFIG"
     - name: secretExports
       value:
