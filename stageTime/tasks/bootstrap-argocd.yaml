@@ -141,8 +141,11 @@ spec:
           export $KEY=$(cat ${VALUE_FILE})
         done
 
+        echo ${USERNAME}
+        echo ${PASSWORD}
+
         argocd login $(params.ARGOCD_URL):$(params.ARGOCD_PORT) \
-        --insecure --username ${USERNAME} --password ${PASSWORD}
+        --insecure --grpc-web --username ${USERNAME} --password ${PASSWORD}
 
         echo EXPORT KUBECONFIG
         export KUBECONFIG=KUBECONFIG
