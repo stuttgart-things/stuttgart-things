@@ -1,0 +1,44 @@
+---
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  name: bootstrap-argocd-cluster-dev51
+  namespace: tektoncd
+spec:
+  workspaces:
+    - name: source
+      volumeClaimTemplate:
+        spec:
+          storageClassName: openebs-hostpath
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 100Mi
+  pipelineRef:
+    resolver: git
+    params:
+      - name: url
+        value: https://github.com/stuttgart-things/stuttgart-things.git
+      - name: revision
+        value: main
+      - name: pathInRepo
+        value: stageTime/pipelines/bootstrap-argocd-cluster.yaml
+  params:
+    - name: vaultSecretPaths
+      value:
+        - "apps/data/argocd:username+-false+-username.secret"
+        - "apps/data/argocd:password+-false+-password.secret"
+        - "kubeconfigs/data/pve-dev51:kubeconfig+-true+-KUBECONFIG"
+    - name: secretExports
+      value:
+        - "USERNAME+-username.secret"
+        - "PASSWORD+-password.secret"
+    - name: argocdUrl
+      value: argo-cd.dev43.sthings-pve.labul.sva.de
+    - name: argocdPort
+      value: "443"
+    - name: clusterName
+      value: pve-dev51
+    - name: clusterContext
+      value: default
