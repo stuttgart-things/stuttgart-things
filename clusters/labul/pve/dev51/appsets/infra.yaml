@@ -87,6 +87,17 @@ spec:
             appValues: |
               helmPreUpgradeCheckerJob:
                 enabled: false
+          - app: cert-manager
+            chart: cert-manager
+            project: pve-dev51
+            namespace: cert-manager
+            targetRevision: 1.13.2
+            repoURL: https://charts.jetstack.io
+            destination: pve-dev51
+            syncWave: "-7"
+            appValues: |
+              installCRDs: true
+
   template:
     metadata:
       name: '{{ app }}-{{ destination }}'
