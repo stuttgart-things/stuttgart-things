@@ -9,6 +9,7 @@ spec:
     - list:
         elements:
           - app: secrets-store-csi-driver
+            chart: secrets-store-csi-driver
             project: pve-dev51
             namespace: secrets-store-csi
             targetRevision: 1.3.4
@@ -18,6 +19,7 @@ spec:
             appValues: |
               ---
           - app: metallb
+            chart: metallb
             project: pve-dev51
             namespace: metallb-system
             targetRevision: 4.7.11
@@ -26,6 +28,34 @@ spec:
             syncWave: "-7"
             appValues: |
               ---
+          - app: metallb-configuration
+            chart: sthings-cluster
+            project: pve-dev51
+            namespace: metallb-system
+            targetRevision: 0.3.10
+            repoURL: oci://eu.gcr.io/stuttgart-things
+            destination: pve-dev51
+            syncWave: "-7"
+            appValues: |
+              customresources:
+                addressPool:
+                  apiVersion: metallb.io/v1beta1
+                  kind: IPAddressPool
+                  metadata:
+                    name: ip-pool
+                    namespace: metallb-system
+                  spec:
+                    addresses:
+                      - 10.31.103.9-10.31.103.10
+                poolAdvertisement:
+                  apiVersion: metallb.io/v1beta1
+                  kind: L2Advertisement
+                  metadata:
+                    name: pool-advertisement
+                    namespace: metallb-system
+                  spec:
+                    ipAddressPools:
+                    - ip-pool
   template:
     metadata:
       name: '{{ app }}-{{ destination }}'
@@ -35,7 +65,7 @@ spec:
       project: '{{ project }}'
       source:
         repoURL: '{{ repoURL }}'
-        chart: '{{ app }}'
+        chart: '{{ chart }}'
         targetRevision: '{{ targetRevision }}'
         helm:
           releaseName: '{{ app }}-{{ project }}'
