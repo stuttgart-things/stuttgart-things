@@ -30,7 +30,7 @@ spec:
     name: pve-dev51
     namespace: default
   source:
-    path: clusters/labul/pve/dev51/
+    path: clusters/labul/pve/dev51/manifests
     repoURL: https://github.com/stuttgart-things/stuttgart-things.git
     targetRevision: HEAD
     directory:
