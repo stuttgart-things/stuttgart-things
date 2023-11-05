@@ -6,16 +6,24 @@ metadata:
   namespace: argocd
 spec:
   generators:
-  - list:
-      elements:
-        - app: secrets-store-csi-driver
-          project: pve-dev51
-          namespace: secrets-store-csi
-          targetRevision: 1.3.4
-          repoURL: https://kubernetes-sigs.github.io/secrets-store-csi-driver/charts
-          destination: pve-dev51
-          appValues: |
-            ---
+    - list:
+        elements:
+          - app: secrets-store-csi-driver
+            project: pve-dev51
+            namespace: secrets-store-csi
+            targetRevision: 1.3.4
+            repoURL: https://kubernetes-sigs.github.io/secrets-store-csi-driver/charts
+            destination: pve-dev51
+            appValues: |
+              ---
+          - app: metallb
+            project: pve-dev51
+            namespace: metallb-system
+            targetRevision: 4.7.11
+            repoURL: https://charts.bitnami.com/bitnami
+            destination: pve-dev51
+            appValues: |
+              ---
   template:
     metadata:
       name: '{{ app }}-{{ destination }}'
