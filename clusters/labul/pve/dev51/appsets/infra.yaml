@@ -80,7 +80,7 @@ spec:
             chart: longhorn
             project: pve-dev51
             namespace: longhorn-system
-            targetRevision: 1.5.1
+            targetRevision: 1.5.2
             repoURL: https://charts.longhorn.io
             destination: pve-dev51
             syncWave: "-7"
