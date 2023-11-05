@@ -85,7 +85,8 @@ spec:
             destination: pve-dev51
             syncWave: "-7"
             appValues: |
-              ---
+              helmPreUpgradeCheckerJob:
+                enabled: false
   template:
     metadata:
       name: '{{ app }}-{{ destination }}'
