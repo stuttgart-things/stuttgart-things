@@ -28,7 +28,7 @@ metadata:
 spec:
   destination:
     name: in-cluster
-    namespace: argocd
+    namespace: default
   source:
     path: clusters/labul/pve/dev51/
     repoURL: 'https://github.com/stuttgart-things/stuttgart-things.git'
