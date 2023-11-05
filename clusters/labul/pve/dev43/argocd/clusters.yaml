@@ -2,6 +2,27 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
+  name: cluster-appsets-dev51
+  namespace: argocd
+spec:
+  destination:
+    name: in-cluster
+    namespace: argocd
+  source:
+    path: clusters/labul/pve/dev51/appsets/
+    repoURL: 'https://github.com/stuttgart-things/stuttgart-things.git'
+    targetRevision: HEAD
+    directory:
+      recurse: true
+  project: in-cluster
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: false
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
   name: cluster-folder-dev51
   namespace: argocd
 spec:
@@ -9,12 +30,12 @@ spec:
     name: in-cluster
     namespace: argocd
   source:
-    path: clusters/labul/pve/dev51
+    path: clusters/labul/pve/dev51/
     repoURL: 'https://github.com/stuttgart-things/stuttgart-things.git'
     targetRevision: HEAD
     directory:
       recurse: true
-  project: in-cluster
+  project: pve-dev51
   syncPolicy:
     automated:
       prune: true
