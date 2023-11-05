@@ -97,7 +97,6 @@ spec:
             syncWave: "-7"
             appValues: |
               installCRDs: true
-
   template:
     metadata:
       name: '{{ app }}-{{ destination }}'

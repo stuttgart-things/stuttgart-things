@@ -23,7 +23,7 @@ metadata:
     argocd.argoproj.io/secret-type: repository
 stringData:
   enableOCI: "true"
-  name: gcr
+  name: scr
   type: helm
   url: eu.gcr.io/stuttgart-things
 ---

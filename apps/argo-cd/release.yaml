@@ -22,7 +22,44 @@ spec:
   values:
     configs:
       cm:
-        create: false
+        create: true
+        admin.enabled: "true"
+        application.instanceLabelKey: argocd.argoproj.io/instance
+        exec.enabled: "false"
+        server.rbac.log.enforce.enable: "false"
+        timeout.hard.reconciliation: 0s
+        timeout.reconciliation: 180s
+        resource.customizations.health.argoproj.io_Application: |
+              hs = {}
+              hs.status = "Progressing"
+              hs.message = ""
+              if obj.status ~= nil then
+                if obj.status.health ~= nil then
+                  hs.status = obj.status.health.status
+                  if obj.status.health.message ~= nil then
+                    hs.message = obj.status.health.message
+                  end
+                end
+              end
+              return hs
+      cmp:
+        create: true
+        plugins:
+          argocd-vault-plugin:
+            generate:
+              command: ["argocd-vault-plugin"]
+              args: ["generate", "./"]
+          argocd-vault-plugin-helm:
+            init:
+              command: ["bash", "-c"]
+              args: ['helm dependency update']
+            generate:
+              command: ["bash", "-c"]
+              args: ['${VAULTPLUGIN_GENERATE_CMD}']
+          argocd-vault-plugin-kustomize:
+              generate:
+                command: ["sh", "-c"]
+                args: ["kustomize build . > all.yaml && argocd-vault-plugin generate all.yaml"]
     nameOverride: ""
     repoServer:
       image:
