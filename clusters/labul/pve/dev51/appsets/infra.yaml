@@ -27,7 +27,7 @@ spec:
             destination: pve-dev51
             syncWave: "-7"
             appValues: |
-              ---
+              installCRDs: true
           - app: metallb-configuration
             chart: stuttgart-things/sthings-cluster
             project: pve-dev51
@@ -35,7 +35,7 @@ spec:
             targetRevision: 0.3.10
             repoURL: eu.gcr.io
             destination: pve-dev51
-            syncWave: "-7"
+            syncWave: "-6"
             appValues: |
               customresources:
                 addressPool:
@@ -56,6 +56,16 @@ spec:
                   spec:
                     ipAddressPools:
                     - ip-pool
+          - app: ingress-nginx
+            chart: ingress-nginx
+            project: pve-dev51
+            namespace: ingress-nginx
+            targetRevision: 4.8.3
+            repoURL: https://kubernetes.github.io/ingress-nginx
+            destination: pve-dev51
+            syncWave: "-5"
+            appValues: |
+              installCRDs: true
   template:
     metadata:
       name: '{{ app }}-{{ destination }}'
