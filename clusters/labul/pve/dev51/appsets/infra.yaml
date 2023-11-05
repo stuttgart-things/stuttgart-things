@@ -66,6 +66,26 @@ spec:
             syncWave: "-5"
             appValues: |
               installCRDs: true
+          - app: openebs
+            chart: openebs
+            project: pve-dev51
+            namespace: kube-system
+            targetRevision: 3.9.0
+            repoURL: https://openebs.github.io/charts
+            destination: pve-dev51
+            syncWave: "-7"
+            appValues: |
+              ---
+          - app: longhorn
+            chart: longhorn
+            project: pve-dev51
+            namespace: longhorn-system
+            targetRevision: 1.5.1
+            repoURL: https://charts.longhorn.io
+            destination: pve-dev51
+            syncWave: "-7"
+            appValues: |
+              ---
   template:
     metadata:
       name: '{{ app }}-{{ destination }}'
