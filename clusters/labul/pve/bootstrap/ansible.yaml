@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: execute-baseos-pve-dev61-reconf-2
+  name: execute-baseos-pve-dev61-reconf-3
   namespace: tektoncd
 spec:
   pipelineRef:
@@ -62,7 +62,7 @@ spec:
         - "reboot_all+-false"
     - name: ansibleVarsInventory
       value:
-        - "all+[\"pve-dev61.labul.sva.de role=master\"]"
+        - "all+[\"pve-dev61.labul.sva.de\"]'role=master'"
 ---
 apiVersion: tekton.dev/v1
 kind: PipelineRun
