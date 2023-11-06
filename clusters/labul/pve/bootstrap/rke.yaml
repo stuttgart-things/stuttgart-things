@@ -1,154 +1,154 @@
----
-apiVersion: tekton.dev/v1
-kind: PipelineRun
-metadata:
-  name: deploy-rke2-cd-cluster-1
-  namespace: tektoncd
-spec:
-  pipelineRef:
-    resolver: git
-    params:
-      - name: url
-        value: https://github.com/stuttgart-things/stuttgart-things.git
-      - name: revision
-        value: main
-      - name: pathInRepo
-        value: stageTime/pipelines/execute-ansible-playbooks.yaml
-  workspaces:
-    - name: shared-workspace
-      volumeClaimTemplate:
-        spec:
-          storageClassName: openebs-hostpath
-          accessModes:
-            - ReadWriteOnce
-          resources:
-            requests:
-              storage: 250Mi
-  params:
-    - name: ansibleWorkingImage
-      value: "eu.gcr.io/stuttgart-things/sthings-ansible:8.5.0"
-    - name: createInventory
-      value: "true"
-    - name: gitRepoUrl
-      value: https://github.com/stuttgart-things/stuttgart-things.git
-    - name: gitRevision
-      value: "main"
-    - name: gitWorkspaceSubdirectory
-      value: "/ansible/rke2"
-    - name: vaultSecretName
-      value: vault-in-cluster
-    - name: installExtraRoles
-      value: "true"
-    - name: ansibleExtraRoles
-      value:
-        - "https://github.com/stuttgart-things/install-requirements.git"
-        - "https://github.com/stuttgart-things/manage-filesystem.git"
-        - "https://github.com/stuttgart-things/install-configure-vault.git"
-    - name: ansiblePlaybooks
-      value:
-        - "ansible/playbooks/prepare-env.yaml"
-        - "ansible/playbooks/base-os.yaml"
-        - "ansible/playbooks/deploy-rke2.yaml"
-        - "ansible/playbooks/upload-kubeconfig-vault.yaml"
-    - name: ansibleVarsFile
-      value:
-        - "manage_filesystem+-true"
-        - "update_packages+-true"
-        - "install_requirements+-true"
-        - "install_motd+-true"
-        - "username+-sthings"
-        - "lvm_home_sizing+-'15%'"
-        - "lvm_root_sizing+-'35%'"
-        - "lvm_var_sizing+-'50%'"
-        - "send_to_msteams+-true"
-        - "reboot_all+-false"
-        - "cluster_name+-pve-cd43"
-        - "rke2_k8s_version+-1.26.9"
-        - "rke2_release_kind+-rke2r1"
-        - "cluster_setup+-multinode"
-        - "kubeconfig_path+-/etc/rancher/rke2/rke2.yaml"
-        - "secret_path_kubeconfig+-kubeconfigs"
-    - name: ansibleVarsInventory
-      value:
-        - "initial_master_node+[\"pve-cd43.labul.sva.de\"]"
-        - "additional_master_nodes+[\"pve-cd43-2.labul.sva.de\"]"
-        - "additional_master_nodes+[\"pve-cd43-3.labul.sva.de\"]"
-        - "additional_master_nodes+[\"pve-cd43-4.labul.sva.de\"]"
----
-apiVersion: tekton.dev/v1
-kind: PipelineRun
-metadata:
-  name: deploy-rke2-downstream-pve-dev51-2
-  namespace: tektoncd
-spec:
-  pipelineRef:
-    resolver: git
-    params:
-      - name: url
-        value: https://github.com/stuttgart-things/stuttgart-things.git
-      - name: revision
-        value: main
-      - name: pathInRepo
-        value: stageTime/pipelines/execute-ansible-playbooks.yaml
-  workspaces:
-    - name: shared-workspace
-      volumeClaimTemplate:
-        spec:
-          storageClassName: openebs-hostpath
-          accessModes:
-            - ReadWriteOnce
-          resources:
-            requests:
-              storage: 250Mi
-  params:
-    - name: ansibleWorkingImage
-      value: "eu.gcr.io/stuttgart-things/sthings-ansible:8.5.0"
-    - name: createInventory
-      value: "true"
-    - name: gitRepoUrl
-      value: https://github.com/stuttgart-things/stuttgart-things.git
-    - name: gitRevision
-      value: "main"
-    - name: gitWorkspaceSubdirectory
-      value: "/ansible/rke2"
-    - name: vaultSecretName
-      value: vault-in-cluster
-    - name: installExtraRoles
-      value: "true"
-    - name: ansibleExtraRoles
-      value:
-        - "https://github.com/stuttgart-things/install-requirements.git"
-        - "https://github.com/stuttgart-things/manage-filesystem.git"
-        - "https://github.com/stuttgart-things/install-configure-vault.git"
-    - name: ansiblePlaybooks
-      value:
-        - "ansible/playbooks/prepare-env.yaml"
-        - "ansible/playbooks/base-os.yaml"
-        - "ansible/playbooks/configure-rke-node.yaml"
-        - "ansible/playbooks/upload-kubeconfig-vault.yaml"
-    - name: ansibleVarsFile
-      value:
-        - "manage_filesystem+-true"
-        - "update_packages+-true"
-        - "install_requirements+-true"
-        - "install_motd+-true"
-        - "username+-sthings"
-        - "lvm_home_sizing+-'15%'"
-        - "lvm_root_sizing+-'35%'"
-        - "lvm_var_sizing+-'50%'"
-        - "send_to_msteams+-true"
-        - "reboot_all+-false"
-        - "cloudinit+-false"
-        - "create_rke_user+-false"
-        - "update_os+-true"
-        - "set_docker_proxy+-false"
-        - "template_creation_setup+-false"
-        - "scp_if_ssh+-true"
-        - "cluster_name+-pve-dev51"
-        - "kubeconfig_path+-/etc/rancher/rke2/rke2.yaml"
-        - "secret_path_kubeconfig+-kubeconfigs"
-    - name: ansibleVarsInventory
-      value:
-        - "initial_master_node+[\"pve-dev51.labul.sva.de\"]"
-        - "additional_master_nodes+[\"pve-dev51-2.labul.sva.de\"]"
-        - "additional_master_nodes+[\"pve-dev51-3.labul.sva.de\"]"
+# ---
+# apiVersion: tekton.dev/v1
+# kind: PipelineRun
+# metadata:
+#   name: deploy-rke2-cd-cluster-1
+#   namespace: tektoncd
+# spec:
+#   pipelineRef:
+#     resolver: git
+#     params:
+#       - name: url
+#         value: https://github.com/stuttgart-things/stuttgart-things.git
+#       - name: revision
+#         value: main
+#       - name: pathInRepo
+#         value: stageTime/pipelines/execute-ansible-playbooks.yaml
+#   workspaces:
+#     - name: shared-workspace
+#       volumeClaimTemplate:
+#         spec:
+#           storageClassName: openebs-hostpath
+#           accessModes:
+#             - ReadWriteOnce
+#           resources:
+#             requests:
+#               storage: 250Mi
+#   params:
+#     - name: ansibleWorkingImage
+#       value: "eu.gcr.io/stuttgart-things/sthings-ansible:8.5.0"
+#     - name: createInventory
+#       value: "true"
+#     - name: gitRepoUrl
+#       value: https://github.com/stuttgart-things/stuttgart-things.git
+#     - name: gitRevision
+#       value: "main"
+#     - name: gitWorkspaceSubdirectory
+#       value: "/ansible/rke2"
+#     - name: vaultSecretName
+#       value: vault-in-cluster
+#     - name: installExtraRoles
+#       value: "true"
+#     - name: ansibleExtraRoles
+#       value:
+#         - "https://github.com/stuttgart-things/install-requirements.git"
+#         - "https://github.com/stuttgart-things/manage-filesystem.git"
+#         - "https://github.com/stuttgart-things/install-configure-vault.git"
+#     - name: ansiblePlaybooks
+#       value:
+#         - "ansible/playbooks/prepare-env.yaml"
+#         - "ansible/playbooks/base-os.yaml"
+#         - "ansible/playbooks/deploy-rke2.yaml"
+#         - "ansible/playbooks/upload-kubeconfig-vault.yaml"
+#     - name: ansibleVarsFile
+#       value:
+#         - "manage_filesystem+-true"
+#         - "update_packages+-true"
+#         - "install_requirements+-true"
+#         - "install_motd+-true"
+#         - "username+-sthings"
+#         - "lvm_home_sizing+-'15%'"
+#         - "lvm_root_sizing+-'35%'"
+#         - "lvm_var_sizing+-'50%'"
+#         - "send_to_msteams+-true"
+#         - "reboot_all+-false"
+#         - "cluster_name+-pve-cd43"
+#         - "rke2_k8s_version+-1.26.9"
+#         - "rke2_release_kind+-rke2r1"
+#         - "cluster_setup+-multinode"
+#         - "kubeconfig_path+-/etc/rancher/rke2/rke2.yaml"
+#         - "secret_path_kubeconfig+-kubeconfigs"
+#     - name: ansibleVarsInventory
+#       value:
+#         - "initial_master_node+[\"pve-cd43.labul.sva.de\"]"
+#         - "additional_master_nodes+[\"pve-cd43-2.labul.sva.de\"]"
+#         - "additional_master_nodes+[\"pve-cd43-3.labul.sva.de\"]"
+#         - "additional_master_nodes+[\"pve-cd43-4.labul.sva.de\"]"
+# ---
+# apiVersion: tekton.dev/v1
+# kind: PipelineRun
+# metadata:
+#   name: deploy-rke2-downstream-pve-dev51-2
+#   namespace: tektoncd
+# spec:
+#   pipelineRef:
+#     resolver: git
+#     params:
+#       - name: url
+#         value: https://github.com/stuttgart-things/stuttgart-things.git
+#       - name: revision
+#         value: main
+#       - name: pathInRepo
+#         value: stageTime/pipelines/execute-ansible-playbooks.yaml
+#   workspaces:
+#     - name: shared-workspace
+#       volumeClaimTemplate:
+#         spec:
+#           storageClassName: openebs-hostpath
+#           accessModes:
+#             - ReadWriteOnce
+#           resources:
+#             requests:
+#               storage: 250Mi
+#   params:
+#     - name: ansibleWorkingImage
+#       value: "eu.gcr.io/stuttgart-things/sthings-ansible:8.5.0"
+#     - name: createInventory
+#       value: "true"
+#     - name: gitRepoUrl
+#       value: https://github.com/stuttgart-things/stuttgart-things.git
+#     - name: gitRevision
+#       value: "main"
+#     - name: gitWorkspaceSubdirectory
+#       value: "/ansible/rke2"
+#     - name: vaultSecretName
+#       value: vault-in-cluster
+#     - name: installExtraRoles
+#       value: "true"
+#     - name: ansibleExtraRoles
+#       value:
+#         - "https://github.com/stuttgart-things/install-requirements.git"
+#         - "https://github.com/stuttgart-things/manage-filesystem.git"
+#         - "https://github.com/stuttgart-things/install-configure-vault.git"
+#     - name: ansiblePlaybooks
+#       value:
+#         - "ansible/playbooks/prepare-env.yaml"
+#         - "ansible/playbooks/base-os.yaml"
+#         - "ansible/playbooks/configure-rke-node.yaml"
+#         - "ansible/playbooks/upload-kubeconfig-vault.yaml"
+#     - name: ansibleVarsFile
+#       value:
+#         - "manage_filesystem+-true"
+#         - "update_packages+-true"
+#         - "install_requirements+-true"
+#         - "install_motd+-true"
+#         - "username+-sthings"
+#         - "lvm_home_sizing+-'15%'"
+#         - "lvm_root_sizing+-'35%'"
+#         - "lvm_var_sizing+-'50%'"
+#         - "send_to_msteams+-true"
+#         - "reboot_all+-false"
+#         - "cloudinit+-false"
+#         - "create_rke_user+-false"
+#         - "update_os+-true"
+#         - "set_docker_proxy+-false"
+#         - "template_creation_setup+-false"
+#         - "scp_if_ssh+-true"
+#         - "cluster_name+-pve-dev51"
+#         - "kubeconfig_path+-/etc/rancher/rke2/rke2.yaml"
+#         - "secret_path_kubeconfig+-kubeconfigs"
+#     - name: ansibleVarsInventory
+#       value:
+#         - "initial_master_node+[\"pve-dev51.labul.sva.de\"]"
+#         - "additional_master_nodes+[\"pve-dev51-2.labul.sva.de\"]"
+#         - "additional_master_nodes+[\"pve-dev51-3.labul.sva.de\"]"
