@@ -26,11 +26,6 @@ kube-state-metrics:
           - imagepolicies
           - imageupdateautomations
         verbs: [ "list", "watch" ]
-      - apiGroups:
-          - autoscaling.k8s.io
-        resources:
-          - verticalpodautoscalers
-        verbs: [ "list", "watch" ]
   customResourceState:
     enabled: true
     config:
@@ -288,6 +283,7 @@ kube-state-metrics:
               target_api_version: [apiVersion]
               target_kind: [spec, targetRef, kind]
               target_name: [spec, targetRef, name]
+            metricNamePrefix: vpa
             metrics:
               - name: "vpa_containerrecommendations_target"
                 help: "VPA container recommendations for memory."
