@@ -2,7 +2,8 @@
 kube-state-metrics:
   collectors: [ ]
   extraArgs:
-    - --custom-resource-state-only=true
+    - --custom-resource-state-only=false
+    - --resources=certificatesigningrequests,configmaps,cronjobs,daemonsets,deployments,endpoints,horizontalpodautoscalers,ingresses,jobs,leases,limitranges,mutatingwebhookconfigurations,namespaces,networkpolicies,nodes,persistentvolumeclaims,persistentvolumes,poddisruptionbudgets,pods,replicasets,replicationcontrollers,resourcequotas,secrets,services,statefulsets,storageclasses,validatingwebhookconfigurations,volumeattachments
   rbac:
     extraRules:
       - apiGroups:
