@@ -3,62 +3,77 @@
   become: true
   vars:
     rancher_api_url: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps/data/rancher:apiUrl validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
-    cluster_name: dev61
+    #cluster_name: dev61
     rancher_access_key: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps/data/rancher:apiAccessKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
     rancher_secret_key: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps/data/rancher:apiSecretKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
     vault_approle_id: "{{ lookup('env', 'VAULT_ROLE_ID') }}"
     vault_approle_secret: "{{ lookup('env', 'VAULT_SECRET_ID') }}"
     vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
+    role_cmd:
+      worker: "--worker"
+      master: "--etcd --controlplane"
+
+  pre_tasks:
+    - name: Include vars
+      ansible.builtin.include_vars: "{{ path_to_vars_file }}.yaml"
+      when: path_to_vars_file is defined
 
   tasks:
+    - name: Set node role command
+      set_fact:
+        node_role: '{{ item.split(":")[1] }}'
+      with_items:
+        - "{{ roles.split(';') }}"
+      when: inventory_hostname_short == item.split(":")[0]
 
-    - name: Output cluster role from inventory
-      shell: |
-        echo {{ cluster_role }}
-
-    - name: Get cluster information
-      ansible.builtin.uri:
-        validate_certs: false
-        url: "{{ rancher_api_url }}/clusters?name={{ cluster_name }}"
-        user: "{{ rancher_access_key }}"
-        password: "{{ rancher_secret_key }}"
-        body_format: json
-        method: GET
-        force_basic_auth: yes
-        headers:
-          Content-Type: "application/json"
-      register: cluster_info
-
-    - name: Show clusterid
+    - name: Show node role
       ansible.builtin.debug:
-        var:
-          cluster_info.json.data[0].id
+        var: role_cmd[node_role]
 
-    - name: Set clusterid
-      ansible.builtin.set_fact:
-        cluster_id: "{{ cluster_info.json.data[0].id }}"
 
-    - name: Get cluster registration tokens
-      ansible.builtin.uri:
-        validate_certs: false
-        url: "{{ rancher_api_url }}/clusters/{{ cluster_id }}/clusterregistrationtokens?sort=insecureCommand"
-        user: "{{ rancher_access_key }}"
-        password: "{{ rancher_secret_key }}"
-        body_format: json
-        method: GET
-        force_basic_auth: yes
-        headers:
-            Content-Type: "application/json"
-      register: cluster_registration_tokens
+    # - name: Get cluster information
+    #   ansible.builtin.uri:
+    #     validate_certs: false
+    #     url: "{{ rancher_api_url }}/clusters?name={{ cluster_name }}"
+    #     user: "{{ rancher_access_key }}"
+    #     password: "{{ rancher_secret_key }}"
+    #     body_format: json
+    #     method: GET
+    #     force_basic_auth: yes
+    #     headers:
+    #       Content-Type: "application/json"
+    #   register: cluster_info
 
-    - name: Get node Command
-      ansible.builtin.debug:
-        var: cluster_registration_tokens.json.data[0].nodeCommand
+    # - name: Show clusterid
+    #   ansible.builtin.debug:
+    #     var:
+    #       cluster_info.json.data[0].id
 
-    - name: Set node Command
-      ansible.builtin.set_fact:
-        node_command: "{{ cluster_registration_tokens.json.data[0].nodeCommand }}"
+    # - name: Set clusterid
+    #   ansible.builtin.set_fact:
+    #     cluster_id: "{{ cluster_info.json.data[0].id }}"
 
-    - name: Create Cluster node
-      ansible.builtin.shell: |
-        {{ node_command }} {{ cluster_role }}
+    # - name: Get cluster registration tokens
+    #   ansible.builtin.uri:
+    #     validate_certs: false
+    #     url: "{{ rancher_api_url }}/clusters/{{ cluster_id }}/clusterregistrationtokens?sort=insecureCommand"
+    #     user: "{{ rancher_access_key }}"
+    #     password: "{{ rancher_secret_key }}"
+    #     body_format: json
+    #     method: GET
+    #     force_basic_auth: yes
+    #     headers:
+    #         Content-Type: "application/json"
+    #   register: cluster_registration_tokens
+
+    # - name: Get node Command
+    #   ansible.builtin.debug:
+    #     var: cluster_registration_tokens.json.data[0].nodeCommand
+
+    # - name: Set node Command
+    #   ansible.builtin.set_fact:
+    #     node_command: "{{ cluster_registration_tokens.json.data[0].nodeCommand }}"
+
+    # - name: Create Cluster node
+    #   ansible.builtin.shell: |
+    #     {{ node_command }} {{ cluster_role }}

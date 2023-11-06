@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: execute-baseos-pve-dev61-reconf-5
+  name: execute-baseos-pve-dev61-reconf-6
   namespace: tektoncd
 spec:
   pipelineRef:
@@ -60,7 +60,8 @@ spec:
         - "lvm_var_sizing+-'50%'"
         - "send_to_msteams+-true"
         - "reboot_all+-false"
-        - "pve-dev61.labul.sva.de:master"
+        - "roles+-pve-dev61:worker;pve-dev61:master"
+        - "cluster_name+-dev61"
     - name: ansibleVarsInventory
       value:
         - "all+[\"pve-dev61.labul.sva.de\"]"
