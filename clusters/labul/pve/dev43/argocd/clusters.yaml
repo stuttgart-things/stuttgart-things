@@ -57,7 +57,7 @@ spec:
     directory:
       recurse: true
   sources: []
-  project: pve-dev51
+  project: pve-cd43
   syncPolicy:
     automated:
       prune: false

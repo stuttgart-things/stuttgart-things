@@ -54,6 +54,32 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
+  name: pve-cd43
+  namespace: argocd
+spec:
+  clusterResourceBlacklist:
+    - group: ""
+      kind: ""
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  description: pve-cd43
+  destinations:
+    - name: pve-cd43
+      namespace: '*'
+      server: https://10.31.101.176:6443
+  namespaceResourceBlacklist:
+    - group: ""
+      kind: ""
+  namespaceResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  sourceRepos:
+    - '*'
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
   name: in-cluster
   namespace: argocd
 spec:
