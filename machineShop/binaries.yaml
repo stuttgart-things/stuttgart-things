@@ -57,6 +57,9 @@ binary:
   - vcluster:
       url: https://github.com/loft-sh/vcluster/releases/download/v{{ or .vClusterVersion "0.16.4" }}/vcluster-linux-amd64
       bin: vcluster-linux-amd64
+  - clusterctl:
+      url: https://github.com/kubernetes-sigs/cluster-api/releases/download/v{{ or .clusterctlVersion "1.5.3" }}/clusterctl-linux-amd64
+      bin: clusterctl-linux-amd64
 
 script:
   - azure-cli:
