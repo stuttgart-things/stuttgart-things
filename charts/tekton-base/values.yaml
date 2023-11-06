@@ -7,3 +7,48 @@ featureFlags:
 # kubectl delete validatingwebhookconfigurations.admissionregistration.k8s.io config.webhook.pipeline.tekton.dev
 # kubectl delete validatingwebhookconfigurations.admissionregistration.k8s.io validation.webhook.pipeline.tekton.dev
 # kubectl delete mutatingwebhookconfigurations.admissionregistration.k8s.io webhook.pipeline.tekton.dev
+
+cronJobs:
+  pipeline-run-cleaner:
+    schedule: "*/15 * * * *"
+    concurrencyPolicy: Forbid
+    restartPolicy: OnFailure
+    namespace: tektoncd
+    serviceAccount: pipeline-run-cleaner
+    container:
+      name: kubectl
+      image: ghcr.io/ctron/kubectl:latest
+      command:
+        - /bin/bash
+        - -c
+        - PRS="$(kubectl get pipelinerun -o jsonpath='{range .items[?(@.status.completionTime)]}{.status.completionTime}{" "}{.metadata.name}{"\n"}{end}' | sort | head -n -${NUM_TO_KEEP} | awk '{ print $2}')" && kubectl delete pipelinerun ${PRS} || true
+      env:
+        num2Keep:
+          name: NUM_TO_KEEP
+          value: "3"
+
+serviceAccounts:
+  pipeline-run-cleaner:
+    namespace: tektoncd
+    labels:
+      app: sthings-tekton
+
+clusterRoles:
+  pipeline-run-cleaner:
+    labels:
+      app: sthings-tekton
+    rules:
+      - apiGroups: ["tekton.dev"]
+        resources: ["pipelineruns"]
+        verbs: ["delete", "get", "watch", "list"]
+
+clusterRoleBindings:
+  pipeline-run-cleaner:
+    roleRef:
+      kind: ClusterRole
+      name: pipeline-run-cleaner
+      apiGroup: rbac.authorization.k8s.io
+    subjects:
+      - kind: ServiceAccount
+        name: pipeline-run-cleaner
+        namespace: tektoncd
