@@ -48,8 +48,8 @@ metadata:
   namespace: argocd
 spec:
   destination:
-    name: in-cluster
-    namespace: default
+    name: pve-cd43
+    namespace: fleet-default
   source:
     path: clusters/labul/pve/downstream
     repoURL: https://github.com/stuttgart-things/stuttgart-things.git

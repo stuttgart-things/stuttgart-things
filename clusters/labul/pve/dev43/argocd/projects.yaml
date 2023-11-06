@@ -11,9 +11,12 @@ spec:
   clusterResourceWhitelist:
   - group: '*'
     kind: '*'
-  description: app
+  description: downstream-clusters
   destinations:
     - name: pve-dev51
+      namespace: '*'
+      server: https://10.31.103.122:6443
+    - name: pve-cd43
       namespace: '*'
       server: https://10.31.103.122:6443
   namespaceResourceBlacklist:
