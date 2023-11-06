@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: execute-baseos-pve-dev61-reconf-8
+  name: execute-baseos-pve-dev61-reconf-9
   namespace: tektoncd
 spec:
   pipelineRef:
@@ -48,7 +48,7 @@ spec:
         - "ansible/playbooks/prepare-env.yaml"
         #- "ansible/playbooks/base-os.yaml"
         #- "ansible/playbooks/configure-rke-node"
-        - "ansible/create-downstream-cluster.yaml"
+        - "ansible/playbooks/create-downstream-cluster.yaml"
     - name: ansibleVarsFile
       value:
         - "manage_filesystem+-true"
