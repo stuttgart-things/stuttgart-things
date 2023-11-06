@@ -294,46 +294,9 @@ kube-state-metrics:
                 each:
                   type: Gauge
                   gauge:
-                    path: [status, recommendation, containerRecommendations]
-                    valueFrom: [target, memory]
-                    labelsFromPath:
-                      container: [containerName]
-                commonLabels:
-                  resource: "memory"
-                  unit: "byte"
-              - name: "vpa_containerrecommendations_lowerbound"
-                help: "VPA container recommendations for memory."
-                each:
-                  type: Gauge
-                  gauge:
-                    path: [status, recommendation, containerRecommendations]
-                    valueFrom: [lowerBound, memory]
-                    labelsFromPath:
-                      container: [containerName]
-                commonLabels:
-                  resource: "memory"
-                  unit: "byte"
-              - name: "vpa_containerrecommendations_uncappedtarget"
-                help: "VPA container recommendations for memory."
-                each:
-                  type: Gauge
-                  gauge:
-                    path: [status, recommendation, containerRecommendations]
-                    valueFrom: [uncappedTarget, memory]
-                    labelsFromPath:
-                      container: [containerName]
-                commonLabels:
-                  resource: "memory"
-                  unit: "byte"
-              - name: "vpa_containerrecommendations_upperbound"
-                help: "VPA container recommendations for memory."
-                each:
-                  type: Gauge
-                  gauge:
-                    path: [status, recommendation, containerRecommendations]
-                    valueFrom: [upperBound, memory]
-                    labelsFromPath:
-                      container: [containerName]
+                    path: [status, recommendation, containerRecommendations, "0", target, memory]
+                labelsFromPath:
+                  container: [status, recommendation, containerRecommendations, "0", containerName]
                 commonLabels:
                   resource: "memory"
                   unit: "byte"
@@ -342,46 +305,9 @@ kube-state-metrics:
                 each:
                   type: Gauge
                   gauge:
-                    path: [status, recommendation, containerRecommendations]
-                    valueFrom: [target, cpu]
-                    labelsFromPath:
-                      container: [containerName]
-                commonLabels:
-                  resource: "cpu"
-                  unit: "core"
-              - name: "vpa_containerrecommendations_lowerbound"
-                help: "VPA container recommendations for cpu."
-                each:
-                  type: Gauge
-                  gauge:
-                    path: [status, recommendation, containerRecommendations]
-                    valueFrom: [lowerBound, cpu]
-                    labelsFromPath:
-                      container: [containerName]
-                commonLabels:
-                  resource: "cpu"
-                  unit: "core"
-              - name: "vpa_containerrecommendations_uncappedtarget"
-                help: "VPA container recommendations for cpu."
-                each:
-                  type: Gauge
-                  gauge:
-                    path: [status, recommendation, containerRecommendations]
-                    valueFrom: [uncappedTarget, cpu]
-                    labelsFromPath:
-                      container: [containerName]
-                commonLabels:
-                  resource: "cpu"
-                  unit: "core"
-              - name: "vpa_containerrecommendations_upperbound"
-                help: "VPA container recommendations for cpu."
-                each:
-                  type: Gauge
-                  gauge:
-                    path: [status, recommendation, containerRecommendations]
-                    valueFrom: [upperBound, cpu]
-                    labelsFromPath:
-                      container: [containerName]
+                    path: [status, recommendation, containerRecommendations, "0", target, cpu]
+                labelsFromPath:
+                  container: [status, recommendation, containerRecommendations, "0", containerName]
                 commonLabels:
                   resource: "cpu"
                   unit: "core"
