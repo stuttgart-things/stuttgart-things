@@ -49,7 +49,7 @@ metadata:
 spec:
   destination:
     name: in-cluster
-    namespace: fleet-default
+    namespace: default
   source:
     path: clusters/labul/pve/downstream
     repoURL: https://github.com/stuttgart-things/stuttgart-things.git
@@ -57,7 +57,7 @@ spec:
     directory:
       recurse: true
   sources: []
-  project: in-cluster
+  project: pve-dev51
   syncPolicy:
     automated:
       prune: false
