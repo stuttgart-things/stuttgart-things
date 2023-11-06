@@ -56,7 +56,7 @@ binary:
       bin: machineShop
   - vcluster:
       url: https://github.com/loft-sh/vcluster/releases/download/v{{ or .vClusterVersion "0.16.4" }}/vcluster-linux-amd64
-      bin: vcluster
+      bin: vcluster-linux-amd64
 
 script:
   - azure-cli:

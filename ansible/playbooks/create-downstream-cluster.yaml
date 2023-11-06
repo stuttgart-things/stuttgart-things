@@ -76,4 +76,4 @@
 
     - name: Create Cluster w/ node command
       ansible.builtin.shell: |
-        {{ cluster_registration_tokens.json.data[0].nodeCommand }} role_cmd[node_role]
+        {{ cluster_registration_tokens.json.data[0].nodeCommand }} {{ role_cmd[node_role] }}
