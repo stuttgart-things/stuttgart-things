@@ -40,3 +40,25 @@ spec:
     automated:
       prune: true
       selfHeal: false
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: downstream-cluster-configuration
+  namespace: argocd
+spec:
+  destination:
+    name: in-cluster
+    namespace: fleet-default
+  source:
+    path: clusters/labul/pve/downstream
+    repoURL: https://github.com/stuttgart-things/stuttgart-things.git
+    targetRevision: HEAD
+    directory:
+      recurse: true
+  sources: []
+  project: in-cluster
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: false
