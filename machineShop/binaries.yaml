@@ -52,8 +52,11 @@ binary:
       url: https://github.com/mikefarah/yq/releases/download/v{{ or .yqVersion "4.35.2" }}/yq_linux_amd64.tar.gz
       bin: yq
   - machineShop:
-      url: https://github.com/stuttgart-things/machineShop/releases/download/v{{ or .machineShop "0.1.52" }}/machineShop_Linux_x86_64.tar.gz
+      url: https://github.com/stuttgart-things/machineShop/releases/download/v{{ or .machineShopVersion "0.1.52" }}/machineShop_Linux_x86_64.tar.gz
       bin: machineShop
+  - vcluster:
+      url: https://github.com/loft-sh/vcluster/releases/download/v{{ or .vClusterVersion "0.16.4" }}/vcluster-linux-amd64
+      bin: vcluster
 
 script:
   - azure-cli:

@@ -12,6 +12,7 @@
     role_cmd:
       worker: "--worker"
       master: "--etcd --controlplane"
+      all: "--etcd --controlplane --worker"
 
   pre_tasks:
     - name: Include vars
@@ -65,14 +66,14 @@
             Content-Type: "application/json"
       register: cluster_registration_tokens
 
-    - name: Get node Command
-      ansible.builtin.debug:
-        var: cluster_registration_tokens.json.data[0].nodeCommand
+    # - name: Get node Command
+    #   ansible.builtin.debug:
+    #     var: cluster_registration_tokens.json.data[0].nodeCommand
 
-    - name: Set node Command
-      ansible.builtin.set_fact:
-        node_command: "{{ cluster_registration_tokens.json.data[0].nodeCommand }}"
+    # - name: Set node Command
+    #   ansible.builtin.set_fact:
+    #     node_command: "{{ cluster_registration_tokens.json.data[0].nodeCommand }}"
 
-    # - name: Create Cluster node
-    #   ansible.builtin.shell: |
-    #     {{ node_command }} {{ cluster_role }}
+    - name: Create Cluster w/ node command
+      ansible.builtin.shell: |
+        {{ cluster_registration_tokens.json.data[0].nodeCommand }} role_cmd[node_role]
