@@ -1,7 +1,8 @@
+---
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: execute-baseos-pve-dev61-reconf-10
+  name: execute-baseos-pve-dev61-reconf-11
   namespace: tektoncd
 spec:
   pipelineRef:
@@ -35,7 +36,7 @@ spec:
     - name: gitWorkspaceSubdirectory
       value: "/ansible/base-os"
     - name: vaultSecretName
-      value: vault
+      value: vault-in-cluster
     - name: installExtraRoles
       value: "true"
     - name: ansibleExtraRoles

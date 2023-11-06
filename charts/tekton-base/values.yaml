@@ -27,6 +27,9 @@ cronJobs:
           name: NUM_TO_KEEP
           value: "3"
 
+#PRS=$(kubectl get po -n tektoncd | grep Completed | awk '{ print $1}')
+#kubectl delete po $PRS -n tektoncd
+
 serviceAccounts:
   pipeline-run-cleaner:
     namespace: tektoncd
