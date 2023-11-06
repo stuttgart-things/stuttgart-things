@@ -288,7 +288,6 @@ kube-state-metrics:
               target_api_version: [apiVersion]
               target_kind: [spec, targetRef, kind]
               target_name: [spec, targetRef, name]
-            metricNamePrefix: vpa
             metrics:
               - name: "vpa_containerrecommendations_target"
                 help: "VPA container recommendations for memory."
@@ -302,6 +301,42 @@ kube-state-metrics:
                 commonLabels:
                   resource: "memory"
                   unit: "byte"
+              - name: "vpa_containerrecommendations_lowerbound"
+                help: "VPA container recommendations for memory."
+                each:
+                  type: Gauge
+                  gauge:
+                    path: [status, recommendation, containerRecommendations]
+                    valueFrom: [lowerBound, memory]
+                    labelsFromPath:
+                      container: [containerName]
+                commonLabels:
+                  resource: "memory"
+                  unit: "byte"
+              - name: "vpa_containerrecommendations_uncappedtarget"
+                help: "VPA container recommendations for memory."
+                each:
+                  type: Gauge
+                  gauge:
+                    path: [status, recommendation, containerRecommendations]
+                    valueFrom: [uncappedTarget, memory]
+                    labelsFromPath:
+                      container: [containerName]
+                commonLabels:
+                  resource: "memory"
+                  unit: "byte"
+              - name: "vpa_containerrecommendations_upperbound"
+                help: "VPA container recommendations for memory."
+                each:
+                  type: Gauge
+                  gauge:
+                    path: [status, recommendation, containerRecommendations]
+                    valueFrom: [upperBound, memory]
+                    labelsFromPath:
+                      container: [containerName]
+                commonLabels:
+                  resource: "memory"
+                  unit: "byte"
               - name: "vpa_containerrecommendations_target"
                 help: "VPA container recommendations for cpu."
                 each:
@@ -309,6 +344,42 @@ kube-state-metrics:
                   gauge:
                     path: [status, recommendation, containerRecommendations]
                     valueFrom: [target, cpu]
+                    labelsFromPath:
+                      container: [containerName]
+                commonLabels:
+                  resource: "cpu"
+                  unit: "core"
+              - name: "vpa_containerrecommendations_lowerbound"
+                help: "VPA container recommendations for cpu."
+                each:
+                  type: Gauge
+                  gauge:
+                    path: [status, recommendation, containerRecommendations]
+                    valueFrom: [lowerBound, cpu]
+                    labelsFromPath:
+                      container: [containerName]
+                commonLabels:
+                  resource: "cpu"
+                  unit: "core"
+              - name: "vpa_containerrecommendations_uncappedtarget"
+                help: "VPA container recommendations for cpu."
+                each:
+                  type: Gauge
+                  gauge:
+                    path: [status, recommendation, containerRecommendations]
+                    valueFrom: [uncappedTarget, cpu]
+                    labelsFromPath:
+                      container: [containerName]
+                commonLabels:
+                  resource: "cpu"
+                  unit: "core"
+              - name: "vpa_containerrecommendations_upperbound"
+                help: "VPA container recommendations for cpu."
+                each:
+                  type: Gauge
+                  gauge:
+                    path: [status, recommendation, containerRecommendations]
+                    valueFrom: [upperBound, cpu]
                     labelsFromPath:
                       container: [containerName]
                 commonLabels:
