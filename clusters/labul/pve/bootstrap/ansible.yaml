@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: execute-baseos-pve-dev61-reconf-1
+  name: execute-baseos-pve-dev61-reconf-2
   namespace: tektoncd
 spec:
   pipelineRef:
@@ -47,7 +47,7 @@ spec:
       value:
         - "ansible/playbooks/prepare-env.yaml"
         # - "ansible/playbooks/base-os.yaml"
-        - "ansible/playbooks/configure-rke-node"
+        #- "ansible/playbooks/configure-rke-node"
     - name: ansibleVarsFile
       value:
         - "manage_filesystem+-true"
@@ -62,7 +62,7 @@ spec:
         - "reboot_all+-false"
     - name: ansibleVarsInventory
       value:
-        - "all+[\"pve-dev61.labul.sva.de\"]"
+        - "all+[\"pve-dev61.labul.sva.de role=master\"]"
 ---
 apiVersion: tekton.dev/v1
 kind: PipelineRun
