@@ -26,6 +26,11 @@ kube-state-metrics:
           - imagepolicies
           - imageupdateautomations
         verbs: [ "list", "watch" ]
+      - apiGroups:
+          - autoscaling.k8s.io
+        resources:
+          - verticalpodautoscalers
+        verbs: [ "list", "watch" ]
   customResourceState:
     enabled: true
     config:
