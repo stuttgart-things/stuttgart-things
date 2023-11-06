@@ -26,6 +26,11 @@ kube-state-metrics:
           - imagepolicies
           - imageupdateautomations
         verbs: [ "list", "watch" ]
+      - apiGroups:
+          - autoscaling.k8s.io
+        resources:
+          - verticalpodautoscalers
+        verbs: [ "list", "watch" ]
   customResourceState:
     enabled: true
     config:
@@ -273,3 +278,38 @@ kube-state-metrics:
                   ready: [ status, conditions, "[type=Ready]", status ]
                   suspended: [ spec, suspend ]
                   source_name: [ spec, sourceRef, name ]
+          - groupVersionKind:
+              group: autoscaling.k8s.io
+              kind: "VerticalPodAutoscaler"
+              version: "v1"
+            labelsFromPath:
+              verticalpodautoscaler: [metadata, name]
+              namespace: [metadata, namespace]
+              target_api_version: [apiVersion]
+              target_kind: [spec, targetRef, kind]
+              target_name: [spec, targetRef, name]
+            metrics:
+              - name: "vpa_containerrecommendations_target"
+                help: "VPA container recommendations for memory."
+                each:
+                  type: Gauge
+                  gauge:
+                    path: [status, recommendation, containerRecommendations]
+                    valueFrom: [target, memory]
+                    labelsFromPath:
+                      container: [containerName]
+                commonLabels:
+                  resource: "memory"
+                  unit: "byte"
+              - name: "vpa_containerrecommendations_target"
+                help: "VPA container recommendations for cpu."
+                each:
+                  type: Gauge
+                  gauge:
+                    path: [status, recommendation, containerRecommendations]
+                    valueFrom: [target, cpu]
+                    labelsFromPath:
+                      container: [containerName]
+                commonLabels:
+                  resource: "cpu"
+                  unit: "core"
