@@ -30,49 +30,48 @@
       ansible.builtin.debug:
         var: role_cmd[node_role]
 
+    - name: Get cluster information
+      ansible.builtin.uri:
+        validate_certs: false
+        url: "{{ rancher_api_url }}/clusters?name={{ cluster_name }}"
+        user: "{{ rancher_access_key }}"
+        password: "{{ rancher_secret_key }}"
+        body_format: json
+        method: GET
+        force_basic_auth: yes
+        headers:
+          Content-Type: "application/json"
+      register: cluster_info
 
-    # - name: Get cluster information
-    #   ansible.builtin.uri:
-    #     validate_certs: false
-    #     url: "{{ rancher_api_url }}/clusters?name={{ cluster_name }}"
-    #     user: "{{ rancher_access_key }}"
-    #     password: "{{ rancher_secret_key }}"
-    #     body_format: json
-    #     method: GET
-    #     force_basic_auth: yes
-    #     headers:
-    #       Content-Type: "application/json"
-    #   register: cluster_info
+    - name: Show clusterid
+      ansible.builtin.debug:
+        var:
+          cluster_info.json.data[0].id
 
-    # - name: Show clusterid
-    #   ansible.builtin.debug:
-    #     var:
-    #       cluster_info.json.data[0].id
+    - name: Set clusterid
+      ansible.builtin.set_fact:
+        cluster_id: "{{ cluster_info.json.data[0].id }}"
 
-    # - name: Set clusterid
-    #   ansible.builtin.set_fact:
-    #     cluster_id: "{{ cluster_info.json.data[0].id }}"
+    - name: Get cluster registration tokens
+      ansible.builtin.uri:
+        validate_certs: false
+        url: "{{ rancher_api_url }}/clusters/{{ cluster_id }}/clusterregistrationtokens?sort=insecureCommand"
+        user: "{{ rancher_access_key }}"
+        password: "{{ rancher_secret_key }}"
+        body_format: json
+        method: GET
+        force_basic_auth: yes
+        headers:
+            Content-Type: "application/json"
+      register: cluster_registration_tokens
 
-    # - name: Get cluster registration tokens
-    #   ansible.builtin.uri:
-    #     validate_certs: false
-    #     url: "{{ rancher_api_url }}/clusters/{{ cluster_id }}/clusterregistrationtokens?sort=insecureCommand"
-    #     user: "{{ rancher_access_key }}"
-    #     password: "{{ rancher_secret_key }}"
-    #     body_format: json
-    #     method: GET
-    #     force_basic_auth: yes
-    #     headers:
-    #         Content-Type: "application/json"
-    #   register: cluster_registration_tokens
+    - name: Get node Command
+      ansible.builtin.debug:
+        var: cluster_registration_tokens.json.data[0].nodeCommand
 
-    # - name: Get node Command
-    #   ansible.builtin.debug:
-    #     var: cluster_registration_tokens.json.data[0].nodeCommand
-
-    # - name: Set node Command
-    #   ansible.builtin.set_fact:
-    #     node_command: "{{ cluster_registration_tokens.json.data[0].nodeCommand }}"
+    - name: Set node Command
+      ansible.builtin.set_fact:
+        node_command: "{{ cluster_registration_tokens.json.data[0].nodeCommand }}"
 
     # - name: Create Cluster node
     #   ansible.builtin.shell: |
