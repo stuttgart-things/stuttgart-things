@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: execute-baseos-pve-dev61-reconf-14
+  name: deploy-downstreamcluster-tekton-dev
   namespace: tektoncd
 spec:
   pipelineRef:
@@ -47,8 +47,8 @@ spec:
     - name: ansiblePlaybooks
       value:
         - "ansible/playbooks/prepare-env.yaml"
-        #- "ansible/playbooks/base-os.yaml"
-        #- "ansible/playbooks/configure-rke-node"
+        - "ansible/playbooks/base-os.yaml"
+        - "ansible/playbooks/configure-rke-node"
         - "ansible/playbooks/create-downstream-cluster.yaml"
     - name: ansibleVarsFile
       value:
@@ -62,12 +62,15 @@ spec:
         - "lvm_var_sizing+-'50%'"
         - "send_to_msteams+-true"
         - "reboot_all+-false"
-        - "roles+-pve-dev61:all"
-        - "cluster_name+-dev61"
+        - "roles+-pve-tekton-dev:all"
+        - "roles+-pve-tekton-dev-2:all"
+        - "roles+-pve-tekton-dev-3:all"
+        - "cluster_name+-tekton-dev"
     - name: ansibleVarsInventory
       value:
-        - "all+[\"pve-dev61.labul.sva.de\"]"
-
+        - "all+[\"pve-tekton-dev.labul.sva.de\"]"
+        - "all+[\"pve-tekton-dev-2.labul.sva.de\"]"
+        - "all+[\"pve-tekton-dev-3.labul.sva.de\"]"
 # ---
 # apiVersion: tekton.dev/v1
 # kind: PipelineRun
