@@ -68,3 +68,35 @@ spec:
         kind: HelmRelease
         name: vault-deployment
         namespace: vault
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: vault-secret-operator
+  namespace: flux-system
+spec:
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infra/vault-secret-operator
+  prune: true
+  wait: true
+  postBuild:
+    substitute:
+      VAULT_URL: "http://vault-deployment.vault.svc.cluster.local:8200"
+      VAULT_AUTH_NAME: vault-auth
+      VSO_AUTH_ROLE: vso-role
+      MOUNT: vso
+      SECRET_NAMESPACE: tektoncd
+  patches:
+    - patch: |-
+        - op: replace
+          path: /spec/chart/spec/version
+          value: 0.3.4
+      target:
+        kind: HelmRelease
+        name: vault-secrets-operator
+        namespace: vault
