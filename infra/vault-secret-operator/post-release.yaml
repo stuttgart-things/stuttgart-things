@@ -32,24 +32,24 @@ subjects:
     name: ${VAULT_AUTH_NAME:=vault-auth}
     namespace: ${SECRET_NAMESPACE:=default}
 ---
-apiVersion: secrets.hashicorp.com/v1beta1
-kind: VaultConnection
-metadata:
-  name: vault-connection
-  namespace: ${SECRET_NAMESPACE:=default}
-spec:
-  address: ${VAULT_URL}
-  skipTLSVerify: true
----
-apiVersion: secrets.hashicorp.com/v1beta1
-kind: VaultAuth
-metadata:
-  name: ${VAULT_AUTH_NAME:=vault-auth}
-  namespace: ${SECRET_NAMESPACE:=default}
-spec:
-  vaultConnectionRef: vault-connection
-  method: kubernetes
-  mount: ${MOUNT:=kubernetes}
-  kubernetes:
-    role: ${VSO_AUTH_ROLE}
-    serviceAccount: ${SERVICE_ACCOUNT:=default}
+# apiVersion: secrets.hashicorp.com/v1beta1
+# kind: VaultConnection
+# metadata:
+#   name: vault-connection
+#   namespace: ${SECRET_NAMESPACE:=default}
+# spec:
+#   address: ${VAULT_URL}
+#   skipTLSVerify: true
+# ---
+# apiVersion: secrets.hashicorp.com/v1beta1
+# kind: VaultAuth
+# metadata:
+#   name: ${VAULT_AUTH_NAME:=vault-auth}
+#   namespace: ${SECRET_NAMESPACE:=default}
+# spec:
+#   vaultConnectionRef: vault-connection
+#   method: kubernetes
+#   mount: ${MOUNT:=kubernetes}
+#   kubernetes:
+#     role: ${VSO_AUTH_ROLE}
+#     serviceAccount: ${SERVICE_ACCOUNT:=default}
