@@ -26,7 +26,7 @@ spec:
     - moduleSourceUrl=https://artifacts.tiab.labda.sva.de/modules/proxmox-vm.zip
     - backendEndpoint=https://artifacts.tiab.labda.sva.de
     - backendRegion=main
-    - backendBucket=PVE-VM
+    - backendBucket=pve-vm
     - tfProviderName=proxmox
     - tfProviderSource=Telmate/proxmox
     - tfProviderVersion=2.9.14
