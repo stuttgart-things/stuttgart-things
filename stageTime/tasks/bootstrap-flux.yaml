@@ -155,8 +155,6 @@ spec:
         export KUBECONFIG=KUBECONFIG
         export GITHUB_TOKEN=$(cat GITHUB_TOKEN)
 
-        echo ${GITHUB_TOKEN}
-
         echo BOOTSTRAP FLUX
         flux bootstrap github \
         --owner=$(params.GITHUB_REPOSITORY_OWNER) \
