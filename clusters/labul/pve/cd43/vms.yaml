@@ -10,7 +10,7 @@ metadata:
     app.kubernetes.io/created-by: machine-shop-operator
 spec:
   variables:
-    - vm_name="pve-bootstrap-2"
+    - vm_name="pve-bootstrap-3"
     - vm_count=1
     - vm_num_cpus=10
     - vm_memory=14336
@@ -21,8 +21,8 @@ spec:
     - pve_folder_path="stuttgart-things"
     - pve_cluster_node="sthings-pve1"
   module:
-    - moduleName=pve-bootstrap-2
-    - backendKey=pve-bootstrap-2.tfstate
+    - moduleName=pve-bootstrap-3
+    - backendKey=pve-bootstrap-3.tfstate
     - moduleSourceUrl=https://artifacts.tiab.labda.sva.de/modules/proxmox-vm.zip
     - backendEndpoint=https://artifacts.tiab.labda.sva.de
     - backendRegion=main
