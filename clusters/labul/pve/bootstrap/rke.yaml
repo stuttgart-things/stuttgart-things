@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: deploy-boostrap-rke2-4
+  name: deploy-boostrap-rke2-5
   namespace: tektoncd
 spec:
   pipelineRef:
@@ -36,7 +36,7 @@ spec:
     - name: gitWorkspaceSubdirectory
       value: "/ansible/rke2"
     - name: vaultSecretName
-      value: vault-in-cluster
+      value: vault
     - name: installExtraRoles
       value: "true"
     - name: ansibleExtraRoles
