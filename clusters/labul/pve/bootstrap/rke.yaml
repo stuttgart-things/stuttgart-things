@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: deploy-boostrap-rke2-5
+  name: deploy-boostrap-rke2-6
   namespace: tektoncd
 spec:
   pipelineRef:
