@@ -12,10 +12,10 @@ spec:
   variables:
     - vm_name="pve-bootstrap-2"
     - vm_count=1
-    - vm_num_cpus=12
-    - vm_memory=16384
+    - vm_num_cpus=10
+    - vm_memory=14336
     - vm_template="ubuntu23"
-    - pve_network="vmbr103"
+    - pve_network="vmbr101"
     - pve_datastore="v3700"
     - vm_disk_size="128G"
     - pve_folder_path="stuttgart-things"
