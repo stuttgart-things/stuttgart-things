@@ -36,7 +36,7 @@ spec:
     - name: gitWorkspaceSubdirectory
       value: "/ansible/rke2"
     - name: vaultSecretName
-      value: vault-in-cluster
+      value: vault
     - name: installExtraRoles
       value: "true"
     - name: ansibleExtraRoles
@@ -70,7 +70,7 @@ spec:
         - "secret_path_kubeconfig+-kubeconfigs"
     - name: ansibleVarsInventory
       value:
-        - "initial_master_node+[\"pve-cd43.labul.sva.de\"]"
+        - "initial_master_node+[\"pve-bootstrap-2.labul.sva.de\"]"
         - "additional_master_nodes+[\"\"]"
 # ---
 # apiVersion: tekton.dev/v1
