@@ -11,7 +11,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./apps/machine-shop-operator/flux
+  path: ./apps/machine-shop-operator
   prune: true
   wait: true
   postBuild:
