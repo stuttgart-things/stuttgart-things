@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: deploy-boostrap-rke2-3
+  name: deploy-boostrap-rke2-4
   namespace: tektoncd
 spec:
   pipelineRef:
@@ -36,7 +36,7 @@ spec:
     - name: gitWorkspaceSubdirectory
       value: "/ansible/rke2"
     - name: vaultSecretName
-      value: vault
+      value: vault-in-cluster
     - name: installExtraRoles
       value: "true"
     - name: ansibleExtraRoles
@@ -48,8 +48,8 @@ spec:
       value:
         - "ansible/playbooks/prepare-env.yaml"
         - "ansible/playbooks/base-os.yaml"
-        # - "ansible/playbooks/deploy-rke2.yaml"
-        # - "ansible/playbooks/upload-kubeconfig-vault.yaml"
+        - "ansible/playbooks/deploy-rke2.yaml"
+        - "ansible/playbooks/upload-kubeconfig-vault.yaml"
     - name: ansibleVarsFile
       value:
         - "manage_filesystem+-true"
@@ -62,10 +62,10 @@ spec:
         - "lvm_var_sizing+-'50%'"
         - "send_to_msteams+-true"
         - "reboot_all+-false"
-        - "cluster_name+-pve-cd43"
-        - "rke2_k8s_version+-1.26.9"
+        - "cluster_name+-pve-boostrap2"
+        - "rke2_k8s_version+-1.28.3"
         - "rke2_release_kind+-rke2r1"
-        - "cluster_setup+-multinode"
+        - "cluster_setup+-singlenode"
         - "kubeconfig_path+-/etc/rancher/rke2/rke2.yaml"
         - "secret_path_kubeconfig+-kubeconfigs"
     - name: ansibleVarsInventory
