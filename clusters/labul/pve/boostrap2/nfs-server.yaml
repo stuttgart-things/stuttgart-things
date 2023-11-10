@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: install-pve-nfs-server-2
+  name: install-pve-nfs-server-3
   namespace: tektoncd
 spec:
   pipelineRef:
@@ -34,9 +34,9 @@ spec:
     - name: gitRevision
       value: "main"
     - name: gitWorkspaceSubdirectory
-      value: "/ansible/rke2"
+      value: "/ansible/nfs"
     - name: vaultSecretName
-      value: vault-in-cluster
+      value: vault
     - name: installExtraRoles
       value: "true"
     - name: ansibleExtraRoles
