@@ -14,6 +14,10 @@ spec:
   path: ./apps/tekton
   prune: true
   wait: true
+  postBuild:
+    substituteFrom:
+      - kind: Secret
+        name: vault-flux-secrets
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
