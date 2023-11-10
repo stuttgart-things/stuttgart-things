@@ -25,3 +25,43 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ca-pemstore
+  namespace: flux-system
+data:
+  labul-pve.crt: |-
+    -----BEGIN CERTIFICATE-----
+    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
+    DGmlCM/e6VsZGsLz
+    -----END CERTIFICATE-----
