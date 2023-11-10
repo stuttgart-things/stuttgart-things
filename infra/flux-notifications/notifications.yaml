@@ -21,8 +21,6 @@ spec:
     name: msteams
   eventSeverity: info
   eventSources:
-    # - kind: GitRepository
-    #   name: '*'
     - kind: Kustomization
       name: '*'
     - kind: HelmRelease
