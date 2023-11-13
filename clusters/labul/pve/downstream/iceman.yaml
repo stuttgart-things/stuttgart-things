@@ -1,0 +1,65 @@
+---
+apiVersion: provisioning.cattle.io/v1
+kind: Cluster
+metadata:
+  name: iceman
+  namespace: fleet-default
+  annotations:
+    field.cattle.io/creatorId: user-8xrm9
+  finalizers:
+    - wrangler.cattle.io/cloud-config-secret-remover
+    - wrangler.cattle.io/provisioning-cluster-remove
+    - wrangler.cattle.io/rke-cluster-remove
+  labels:
+    stage: dev
+    team: sthings
+spec:
+  kubernetesVersion: v1.26.8+rke2r1
+  localClusterAuthEndpoint: {}
+  rkeConfig:
+    chartValues:
+      rke2-calico: {}
+    etcd:
+      disableSnapshots: true
+      s3: {}
+      snapshotRetention: 5
+      snapshotScheduleCron: 0 */5 * * *
+    machineGlobalConfig:
+      cni: calico
+      disable:
+        - rke2-ingress-nginx
+        - rke2-metrics-server
+      disable-kube-proxy: false
+      etcd-expose-metrics: false
+      profile: null
+    machineSelectorConfig:
+      - config:
+          protect-kernel-defaults: false
+    registries: {}
+    upgradeStrategy:
+      controlPlaneConcurrency: '1'
+      controlPlaneDrainOptions:
+        deleteEmptyDirData: true
+        disableEviction: false
+        enabled: false
+        force: false
+        gracePeriod: -1
+        ignoreDaemonSets: true
+        ignoreErrors: false
+        postDrainHooks: null
+        preDrainHooks: null
+        skipWaitForDeleteTimeoutSeconds: 0
+        timeout: 120
+      workerConcurrency: '1'
+      workerDrainOptions:
+        deleteEmptyDirData: true
+        disableEviction: false
+        enabled: false
+        force: false
+        gracePeriod: -1
+        ignoreDaemonSets: true
+        ignoreErrors: false
+        postDrainHooks: null
+        preDrainHooks: null
+        skipWaitForDeleteTimeoutSeconds: 0
+        timeout: 120

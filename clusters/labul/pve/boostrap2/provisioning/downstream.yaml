@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: deploy-downstream-hannes-6
+  name: deploy-downstream-iceman-1
   namespace: tektoncd
 spec:
   pipelineRef:
@@ -47,8 +47,8 @@ spec:
     - name: ansiblePlaybooks
       value:
         - "ansible/playbooks/prepare-env.yaml"
-        # - "ansible/playbooks/base-os.yaml"
-        # - "ansible/playbooks/configure-rke-node.yaml"
+        - "ansible/playbooks/base-os.yaml"
+        - "ansible/playbooks/configure-rke-node.yaml"
         - "ansible/playbooks/create-downstream-cluster.yaml"
     - name: ansibleVarsFile
       value:
@@ -62,11 +62,11 @@ spec:
         - "lvm_var_sizing+-'50%'"
         - "send_to_msteams+-true"
         - "reboot_all+-false"
-        - "roles+-pve-hannes:all;pve-hannes-2:all"
-        # - "pve-hannes+-all"
-        # - "pve-hannes-2+-all"
-        - "cluster_name+-tekton-dev"
+        - "roles+-pve-iceman:all;pve-iceman-2:all;pve-iceman-3:all"
+        - "cluster_name+-iceman"
+        - "pause_time+-20"
     - name: ansibleVarsInventory
       value:
-        - "all+[\"pve-hannes.labul.sva.de\"]"
-        - "all+[\"pve-hannes-2.labul.sva.de\"]"
+        - "all+[\"pve-iceman.labul.sva.de\"]"
+        - "all+[\"pve-iceman-2.labul.sva.de\"]"
+        - "all+[\"pve-iceman-3.labul.sva.de\"]"
