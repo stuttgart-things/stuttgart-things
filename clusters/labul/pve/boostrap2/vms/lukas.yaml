@@ -1,0 +1,43 @@
+apiVersion: machineshop.sthings.tiab.ssc.sva.de/v1beta1
+kind: Terraform
+metadata:
+  name: pve-lukas
+  namespace: machine-shop-operator-system
+  labels:
+    app.kubernetes.io/name: terraform
+    app.kubernetes.io/part-of: machine-shop-operator
+    app.kubernetes.io/created-by: machine-shop-operator
+spec:
+  variables:
+    - vm_name="pve-lukas"
+    - vm_count=2
+    - vm_num_cpus=4
+    - vm_memory=8192
+    - vm_template="ubuntu23"
+    - pve_network="vmbr103"
+    - pve_datastore="v3700"
+    - vm_disk_size="128G"
+    - pve_folder_path="stuttgart-things"
+    - pve_cluster_node="sthings-pve1"
+  module:
+    - moduleName=pve-lukas
+    - backendKey=pve-lukas.tfstate
+    - moduleSourceUrl=https://artifacts.tiab.labda.sva.de/modules/proxmox-vm.zip
+    - backendEndpoint=https://artifacts.tiab.labda.sva.de
+    - backendRegion=main
+    - backendBucket=pve-vm
+    - tfProviderName=proxmox
+    - tfProviderSource=Telmate/proxmox
+    - tfProviderVersion=2.9.14
+    - tfVersion=1.5.7
+  backend:
+    - access_key=apps/data/artifacts:accessKey
+    - secret_key=apps/data/artifacts:secretKey
+  secrets:
+    - pve_api_url=cloud/data/pve:api_url
+    - pve_api_user=cloud/data/pve:api_user
+    - pve_api_password=cloud/data/pve:api_password
+    - vm_ssh_user=cloud/data/pve:ssh_user
+    - vm_ssh_password=cloud/data/pve:ssh_password
+  terraform-version: 1.5.7
+  template: pve-vm
