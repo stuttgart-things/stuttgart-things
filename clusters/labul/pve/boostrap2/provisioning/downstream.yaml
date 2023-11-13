@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: deploy-downstream-hannes-4
+  name: deploy-downstream-hannes-5
   namespace: tektoncd
 spec:
   pipelineRef:
@@ -47,8 +47,8 @@ spec:
     - name: ansiblePlaybooks
       value:
         - "ansible/playbooks/prepare-env.yaml"
-        - "ansible/playbooks/base-os.yaml"
-        - "ansible/playbooks/configure-rke-node.yaml"
+        # - "ansible/playbooks/base-os.yaml"
+        # - "ansible/playbooks/configure-rke-node.yaml"
         - "ansible/playbooks/create-downstream-cluster.yaml"
     - name: ansibleVarsFile
       value:
@@ -62,8 +62,8 @@ spec:
         - "lvm_var_sizing+-'50%'"
         - "send_to_msteams+-true"
         - "reboot_all+-false"
-        - "roles+-pve-hannes:all"
-        - "roles+-pve-hannes-2:all"
+        - "pve-hannes+-all"
+        - "pve-hannes-2+-all"
         - "cluster_name+-tekton-dev"
     - name: ansibleVarsInventory
       value:
