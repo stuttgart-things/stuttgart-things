@@ -1,7 +1,7 @@
 apiVersion: machineshop.sthings.tiab.ssc.sva.de/v1beta1
 kind: Terraform
 metadata:
-  name: pve-lukas
+  name: pve-francis
   namespace: machine-shop-operator-system
   labels:
     app.kubernetes.io/name: terraform
@@ -9,7 +9,7 @@ metadata:
     app.kubernetes.io/created-by: machine-shop-operator
 spec:
   variables:
-    - vm_name="pve-lukas"
+    - vm_name="pve-francis"
     - vm_count=2
     - vm_num_cpus=4
     - vm_memory=8192
@@ -20,8 +20,8 @@ spec:
     - pve_folder_path="stuttgart-things"
     - pve_cluster_node="sthings-pve1"
   module:
-    - moduleName=pve-lukas
-    - backendKey=pve-lukas.tfstate
+    - moduleName=pve-francis
+    - backendKey=pve-francis.tfstate
     - moduleSourceUrl=https://artifacts.tiab.labda.sva.de/modules/proxmox-vm.zip
     - backendEndpoint=https://artifacts.tiab.labda.sva.de
     - backendRegion=main

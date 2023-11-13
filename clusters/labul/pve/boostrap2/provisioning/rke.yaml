@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: deploy-pve-lukas-rke2-3
+  name: deploy-pve-francis-rke2-1
   namespace: tektoncd
 spec:
   pipelineRef:
@@ -62,15 +62,14 @@ spec:
         - "lvm_var_sizing+-'50%'"
         - "send_to_msteams+-true"
         - "reboot_all+-false"
-        - "cluster_name+-pve-lukas"
+        - "cluster_name+-pve-francis"
         - "rke2_k8s_version+-1.28.3"
         - "rke2_release_kind+-rke2r1"
-        - "cluster_setup+-singlenode"
+        - "cluster_setup+-multinode"
         - "kubeconfig_path+-/etc/rancher/rke2/rke2.yaml"
         - "secret_path_kubeconfig+-kubeconfigs"
-        - "pause_time+-3"
-        - "delay_time+-100"
+        - "pause_time+-15"
     - name: ansibleVarsInventory
       value:
-        - "initial_master_node+[\"pve-lukas.labul.sva.de\"]"
-        - "additional_master_nodes+[\"pve-lukas-2.labul.sva.de\"]"
+        - "initial_master_node+[\"pve-francis.labul.sva.de\"]"
+        - "additional_master_nodes+[\"pve-francis-2.labul.sva.de\"]"
