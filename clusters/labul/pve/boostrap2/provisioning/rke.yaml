@@ -68,7 +68,7 @@ spec:
         - "cluster_setup+-singlenode"
         - "kubeconfig_path+-/etc/rancher/rke2/rke2.yaml"
         - "secret_path_kubeconfig+-kubeconfigs"
-        - "pause_time+-100"
+        - "pause_time+-3"
         - "delay_time+-100"
     - name: ansibleVarsInventory
       value:
