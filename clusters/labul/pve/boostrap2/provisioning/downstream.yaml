@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: deploy-downstream-hannes-2
+  name: deploy-downstream-hannes-3
   namespace: tektoncd
 spec:
   pipelineRef:
