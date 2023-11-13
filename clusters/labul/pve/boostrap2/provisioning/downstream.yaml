@@ -65,7 +65,6 @@ spec:
         - "roles+-pve-hannes:all"
         - "roles+-pve-hannes-2:all"
         - "cluster_name+-tekton-dev"
-        - "pause_time+-15"
     - name: ansibleVarsInventory
       value:
         - "all+[\"pve-hannes.labul.sva.de\"]"
