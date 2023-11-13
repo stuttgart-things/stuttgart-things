@@ -72,6 +72,11 @@
     - name: Refresh inventory
       ansible.builtin.meta: refresh_inventory
 
+    - name: "Pause for {{ pause_time | default(1) }} minutes to build app cache"
+      ansible.builtin.pause:
+        minutes: "{{ pause_time | default(1) }}"
+      when: pause_time is defined
+
     - name: "Wait for SSH (delay: {{ delay_time | default(1) }})"
       ansible.builtin.wait_for:
         host: "{{ item }}"
