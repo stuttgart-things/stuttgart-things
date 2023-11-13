@@ -2,7 +2,7 @@
 apiVersion: provisioning.cattle.io/v1
 kind: Cluster
 metadata:
-  name: dev60
+  name: hannes
   namespace: fleet-default
   annotations:
     field.cattle.io/creatorId: user-8xrm9
