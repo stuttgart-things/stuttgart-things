@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: deploy-pve-percy-rke2-1
+  name: deploy-pve-percy-rke2-2
   namespace: tektoncd
 spec:
   pipelineRef:
