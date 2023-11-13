@@ -62,8 +62,9 @@ spec:
         - "lvm_var_sizing+-'50%'"
         - "send_to_msteams+-true"
         - "reboot_all+-false"
-        - "pve-hannes+-all"
-        - "pve-hannes-2+-all"
+        - "roles+-pve-hannes:all;pve-hannes-2:all"
+        # - "pve-hannes+-all"
+        # - "pve-hannes-2+-all"
         - "cluster_name+-tekton-dev"
     - name: ansibleVarsInventory
       value:
