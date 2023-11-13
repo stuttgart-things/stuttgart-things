@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: deploy-pve-lukas-rke2-1
+  name: deploy-pve-lukas-rke2-2
   namespace: tektoncd
 spec:
   pipelineRef:
@@ -68,7 +68,7 @@ spec:
         - "cluster_setup+-singlenode"
         - "kubeconfig_path+-/etc/rancher/rke2/rke2.yaml"
         - "secret_path_kubeconfig+-kubeconfigs"
-        - "delay_time+-900"
+        - "delay_time+-100"
     - name: ansibleVarsInventory
       value:
         - "initial_master_node+[\"pve-lukas.labul.sva.de\"]"
