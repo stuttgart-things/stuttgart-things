@@ -1,0 +1,55 @@
+---
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  name: create-packer-template-rocky9-1
+  namespace: tektoncd
+spec:
+  params:
+    - name: bootConfigPath
+      value: packer/kickstart/rocky.cfg
+    - name: defaultEnvironmentPath
+      value: packer/environments/labul-pve.yaml
+    - name: gitRepoUrl
+      value: https://github.com/stuttgart-things/stuttgart-things.git
+    - name: gitRevision
+      value: main
+    - name: gitWorkspaceSubdirectory
+      value: /packer/rocky9
+    - name: osTemplatePath
+      value: packer/template/rocky9-pve.pkr.tpl.hcl
+    - name: osVersion
+      value: rocky9
+    - name: packerWorkingImage
+      value: eu.gcr.io/stuttgart-things/sthings-packer:1.9.4-8.5.0
+    - name: vaultSecretName
+      value: vault-in-cluster
+    - name: cloud
+      value: pve
+    - name: secretPathUser
+      value: cloud/data/pve:apiUser
+    - name: secretPathPassword
+      value: cloud/data/pve:apiPassword
+    - name: ansibleProvisioning
+      value: base-os
+    - name: vmTemplateName
+      value: rocky9
+  pipelineRef:
+    resolver: git
+    params:
+      - name: url
+        value: https://github.com/stuttgart-things/stuttgart-things.git
+      - name: revision
+        value: main
+      - name: pathInRepo
+        value: stageTime/pipelines/build-packer-template.yaml
+  workspaces:
+    - name: shared-workspace
+      volumeClaimTemplate:
+        spec:
+          storageClassName: openebs-hostpath
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 1Gi
