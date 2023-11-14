@@ -41,3 +41,26 @@ spec:
         name: argocd-deployment
         namespace: argocd
 ---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: eck
+  namespace: flux-system
+spec:
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./apps/eck
+  prune: true
+  wait: true
+  postBuild:
+    substitute:
+      INGRESS_HOSTNAME: kibana
+      INGRESS_DOMAIN: maverick.sthings-pve.labul.sva.de
+      INGRESS_SECRET_NAME: kibana-ingress-tls
+      CERT_ISSUER_NAME: cluster-issuer-approle
+      CERT_ISSUER_KIND: ClusterIssuer
+---
