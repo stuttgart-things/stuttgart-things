@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: create-packer-template-rocky9-1
+  name: create-packer-template-rocky9-2
   namespace: tektoncd
 spec:
   params:
@@ -23,7 +23,7 @@ spec:
     - name: packerWorkingImage
       value: eu.gcr.io/stuttgart-things/sthings-packer:1.9.4-8.5.0
     - name: vaultSecretName
-      value: vault-in-cluster
+      value: vault
     - name: cloud
       value: pve
     - name: secretPathUser
