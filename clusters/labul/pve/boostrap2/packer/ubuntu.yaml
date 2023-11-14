@@ -23,13 +23,13 @@
 #     - name: packerWorkingImage
 #       value: eu.gcr.io/stuttgart-things/sthings-packer:1.9.4-8.5.0
 #     - name: vaultSecretName
-#       value: vault-in-cluster
+#       value: vault
 #     - name: cloud
 #       value: pve
 #     - name: secretPathUser
-#       value: cloud/data/pve:apiUser
+#       value: cloud/data/pve:api_user
 #     - name: secretPathPassword
-#       value: cloud/data/pve:apiPassword
+#       value: cloud/data/pve:api_password
 #     - name: ansibleProvisioning
 #       value: base-os
 #     - name: vmTemplateName
