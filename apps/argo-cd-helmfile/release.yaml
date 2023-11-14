@@ -68,6 +68,22 @@ spec:
               name: argocd-cmp-cm
             - mountPath: /tmp
               name: cmp-tmp
+        - name: avp
+          command: [/var/run/argocd/argocd-cmp-server]
+          image: eu.gcr.io/stuttgart-things/sthings-avp:1.17.0
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 999
+          volumeMounts:
+            - mountPath: /var/run/argocd
+              name: var-files
+            - mountPath: /home/argocd/cmp-server/plugins
+              name: plugins
+            - mountPath: /tmp
+              name: tmp
+            - mountPath: /home/argocd/cmp-server/config/plugin.yaml
+              subPath: avp.yaml
+              name: cmp-plugin
       volumes:
         - name: argocd-cmp-cm
           configMap:
