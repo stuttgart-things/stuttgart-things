@@ -27,9 +27,9 @@ spec:
     - name: cloud
       value: pve
     - name: secretPathUser
-      value: cloud/data/pve:apiUser
+      value: cloud/data/pve:api_user
     - name: secretPathPassword
-      value: cloud/data/pve:apiPassword
+      value: cloud/data/pve:api_password
     - name: ansibleProvisioning
       value: base-os
     - name: vmTemplateName
