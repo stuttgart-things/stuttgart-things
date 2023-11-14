@@ -65,6 +65,7 @@ spec:
         - "reboot_all+-false"
         - "roles+-pve-maverick:all"
         - "cluster_name+-maverick"
+        - "target_host+-pve-maverick.labul.sva.de"
         - "kubeconfig_path+-/etc/rancher/rke2/rke2.yaml"
         - "secret_path_kubeconfig+-kubeconfigs"
         # - "pause_time+-20"
