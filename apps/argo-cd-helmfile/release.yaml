@@ -77,15 +77,16 @@ spec:
           emptyDir: {}
         - emptyDir: {}
           name: cmp-tmp
-    ingress:
-      enabled: true
-      annotations:
-        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-        nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-      ingressClassName: nginx
-      hosts:
-        - ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}
-      tls:
-        - secretName: ${INGRESS_SECRET_NAME}
-          hosts:
-            - ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}
+    server:
+      ingress:
+        enabled: true
+        annotations:
+          nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+          nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+        ingressClassName: nginx
+        hosts:
+          - ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}
+        tls:
+          - secretName: ${INGRESS_SECRET_NAME}
+            hosts:
+              - ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}
