@@ -64,7 +64,7 @@ spec:
         - "reboot_all+-false"
         - "roles+-pve-iceman:all;pve-iceman-2:all;pve-iceman-3:all;pve-iceman-4:worker"
         - "cluster_name+-iceman"
-        - "pause_time+-20"
+        #- "pause_time+-20"
     - name: ansibleVarsInventory
       value:
         - "all+[\"pve-iceman.labul.sva.de\"]"
