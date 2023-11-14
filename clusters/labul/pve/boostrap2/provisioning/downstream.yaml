@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: deploy-downstream-iceman-3
+  name: deploy-downstream-iceman-4
   namespace: tektoncd
 spec:
   pipelineRef:
