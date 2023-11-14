@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: deploy-downstream-maverick-4
+  name: deploy-downstream-maverick-5
   namespace: tektoncd
 spec:
   pipelineRef:
