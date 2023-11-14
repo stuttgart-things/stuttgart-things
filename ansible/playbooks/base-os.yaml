@@ -35,7 +35,7 @@
       when: path_to_vars_file is defined
 
     - ansible.builtin.reboot:
-      when: reboot_all(false)|bool
+      when: reboot_all|bool
 
   tasks:
     - name: Install vault ca certificate to local system from multiple instances
