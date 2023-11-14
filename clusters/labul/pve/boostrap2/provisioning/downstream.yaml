@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: deploy-downstream-iceman-4
+  name: deploy-downstream-maverick-1
   namespace: tektoncd
 spec:
   pipelineRef:
@@ -62,12 +62,10 @@ spec:
         - "lvm_var_sizing+-'50%'"
         - "send_to_msteams+-true"
         - "reboot_all+-false"
-        - "roles+-pve-iceman:all;pve-iceman-2:all;pve-iceman-3:all;pve-iceman-4:worker"
-        - "cluster_name+-iceman"
-        #- "pause_time+-20"
+        - "roles+-pve-maverick:all"
+        - "cluster_name+-maverick"
+        - "pause_time+-20"
     - name: ansibleVarsInventory
       value:
-        - "all+[\"pve-iceman.labul.sva.de\"]"
-        - "all+[\"pve-iceman-2.labul.sva.de\"]"
-        - "all+[\"pve-iceman-3.labul.sva.de\"]"
-        - "all+[\"pve-iceman-4.labul.sva.de\"]"
+        - "all+[\"pve-maverick.labul.sva.de\"]"
+        
