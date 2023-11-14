@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: deploy-downstream-maverick-2
+  name: deploy-downstream-maverick-3
   namespace: tektoncd
 spec:
   pipelineRef:
@@ -67,7 +67,7 @@ spec:
         - "cluster_name+-maverick"
         - "kubeconfig_path+-/etc/rancher/rke2/rke2.yaml"
         - "secret_path_kubeconfig+-kubeconfigs"
-        - "pause_time+-20"
+        # - "pause_time+-20"
     - name: ansibleVarsInventory
       value:
         - "all+[\"pve-maverick.labul.sva.de\"]"
