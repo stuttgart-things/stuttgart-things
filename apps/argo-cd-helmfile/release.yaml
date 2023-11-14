@@ -1,0 +1,91 @@
+
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: argocd-deployment
+  namespace: argocd
+spec:
+  dependsOn:
+    - name: argocd-configuration
+      namespace: argocd
+  interval: 30m
+  chart:
+    spec:
+      chart: argo-cd
+      version: 5.51.1
+      sourceRef:
+        kind: HelmRepository
+        name: argocd
+        namespace: argocd
+      interval: 12h
+  values:
+    configs:
+      cmp:
+        create: true
+        plugins:
+          helmfile:
+            allowConcurrency: true
+            discover:
+              fileName: helmfile.yaml
+            generate:
+              command:
+                - bash
+                - "-c"
+                - |
+                  if [[ -v ENV_NAME ]]; then
+                    helmfile -n "$ARGOCD_APP_NAMESPACE" -e $ENV_NAME template --include-crds -q
+                  elif [[ -v ARGOCD_ENV_ENV_NAME ]]; then
+                    helmfile -n "$ARGOCD_APP_NAMESPACE" -e "$ARGOCD_ENV_ENV_NAME" template --include-crds -q
+                  else
+                    helmfile -n "$ARGOCD_APP_NAMESPACE" template --include-crds -q
+                  fi
+            lockRepo: false
+    repoServer:
+      extraContainers:
+        - name: helmfile
+          image: ghcr.io/helmfile/helmfile:v0.157.0
+          # Entrypoint should be Argo CD lightweight CMP server i.e. argocd-cmp-server
+          command: ["/var/run/argocd/argocd-cmp-server"]
+          env:
+            - name: HELM_CACHE_HOME
+              value: /tmp/helm/cache
+            - name: HELM_CONFIG_HOME
+              value: /tmp/helm/config
+            - name: HELMFILE_CACHE_HOME
+              value: /tmp/helmfile/cache
+            - name: HELMFILE_TEMPDIR
+              value: /tmp/helmfile/tmp
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 999
+          volumeMounts:
+            - mountPath: /var/run/argocd
+              name: var-files
+            - mountPath: /home/argocd/cmp-server/plugins
+              name: plugins
+            - mountPath: /home/argocd/cmp-server/config/plugin.yaml
+              subPath: helmfile.yaml
+              name: argocd-cmp-cm
+            - mountPath: /tmp
+              name: cmp-tmp
+      volumes:
+        - name: argocd-cmp-cm
+          configMap:
+            name: argocd-cmp-cm
+        - name: helmfile-tmp
+          emptyDir: {}
+        - emptyDir: {}
+          name: cmp-tmp
+      ingress:
+        enabled: true
+        annotations:
+          nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+          nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+        ingressClassName: nginx
+        hosts:
+          - ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}
+        tls:
+          - secretName: ${INGRESS_SECRET_NAME}
+            hosts:
+              - ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}
