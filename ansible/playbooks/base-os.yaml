@@ -31,7 +31,7 @@
 
   pre_tasks:
     - ansible.builtin.reboot:
-      when: reboot_all(false)|bool and reboot_all is defined
+      when: reboot_all(false)|bool
 
   tasks:
     - name: Install vault ca certificate to local system from multiple instances
