@@ -24,7 +24,7 @@ spec:
       cmp:
         create: true
         plugins:
-          avp:
+          argocd-vault-plugin:
             allowConcurrency: true
             discover:
               find:
@@ -113,7 +113,7 @@ spec:
               name: argocd-cmp-cm
             - mountPath: /tmp
               name: cmp-tmp
-        - name: avp
+        - name: argocd-vault-plugin
           command: [/var/run/argocd/argocd-cmp-server]
           image: eu.gcr.io/stuttgart-things/sthings-avp:1.17.0
           securityContext:
@@ -127,7 +127,7 @@ spec:
             - mountPath: /tmp
               name: tmp
             - mountPath: /home/argocd/cmp-server/config/plugin.yaml
-              subPath: avp.yaml
+              subPath: argocd-vault-plugin.yaml
               name: argocd-cmp-cm
         - name: argocd-vault-plugin-helm
           command: [/var/run/argocd/argocd-cmp-server]
