@@ -53,6 +53,22 @@ spec:
                 - "-c"
                 - "kustomize build . | argocd-vault-plugin generate -"
             lockRepo: false
+          argocd-vault-plugin-helm:
+            allowConcurrency: true
+            discover:
+              find:
+                command:
+                  - sh
+                  - "-c"
+                  - "find . -name 'Chart.yaml' && find . -name 'values.yaml'"
+            generate:
+              command:
+                - sh
+                - "-c"
+                - |
+                  helm template $ARGOCD_APP_NAME -n $ARGOCD_APP_NAMESPACE ${ARGOCD_ENV_HELM_ARGS} . |
+                  argocd-vault-plugin generate -
+            lockRepo: false
           helmfile:
             allowConcurrency: true
             discover:
