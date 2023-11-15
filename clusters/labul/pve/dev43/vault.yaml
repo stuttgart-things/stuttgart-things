@@ -53,6 +53,7 @@ spec:
         - op: add
           path: /spec/values/standalone
           value:
+            enabled: true
             config: |
               ui = true
 
