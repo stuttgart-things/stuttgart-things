@@ -97,7 +97,7 @@ spec:
               name: tmp
             - mountPath: /home/argocd/cmp-server/config/plugin.yaml
               subPath: avp.yaml
-              name: cmp-plugin
+              name: argocd-cmp-cm
       volumes:
         - name: argocd-cmp-cm
           configMap:
