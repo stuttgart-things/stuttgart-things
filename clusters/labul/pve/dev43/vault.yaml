@@ -51,7 +51,7 @@ spec:
     # configure auto unseal: add seal stanza and mount vault ingress tls secret
     - patch: |-
         - op: add
-          path: /spec/values/standalone
+          path: /spec/values/server/standalone
           value:
             enabled: true
             config: |
