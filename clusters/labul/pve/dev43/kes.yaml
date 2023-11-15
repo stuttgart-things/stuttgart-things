@@ -22,6 +22,7 @@ spec:
       KES_INGRESS_DOMAIN: dev43.sthings-pve.labul.sva.de
       CLUSTER_ISSUER: cluster-issuer-approle
       # workaround for nested substitution
+      # values come from secret kes-creds
       MINIO_IDENTITY: '"${MINIO_IDENTITY}"'
       KES_APPROLE_ID: '"${KES_APPROLE_ID}"'
       KES_APPROLE_SECRET: '"${KES_APPROLE_SECRET}"'
