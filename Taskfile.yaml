@@ -33,11 +33,11 @@ tasks:
       VERSION:
         sh: cat ./images/{{ .PROJECT }}/Dockerfile | grep version | awk -F= '{ print $2 }'
 
-  build-tekton:
-    desc: Build & push image w/ tekton
-    cmds:
-      - task: build-tekton-prs
-      - task: git-push
+  # build-tekton:
+  #   desc: Build & push image w/ tekton
+  #   cmds:
+  #     - task: build-tekton-prs
+  #     - task: git-push
 
   package-tekton:
     desc: Update tekton helm pipelineRuns
