@@ -25,6 +25,7 @@ spec:
       VAULT_INGRESS_DOMAIN: dev43.sthings-pve.labul.sva.de
       CLUSTER_ISSUER: cluster-issuer-approle
   patches:
+    # mount vault ingress tls secret into csi provider for communication with vault
     - patch: |-
         - op: add
           path: /spec/values/csi/volumes
@@ -47,16 +48,30 @@ spec:
         kind: HelmRelease
         name: vault-deployment
         namespace: vault
+    # configure auto unseal: add seal stanza and mount vault ingress tls secret
     - patch: |-
         - op: add
-          path: /spec/values/server/extraEnvironmentVars
+          path: /spec/values/standalone
           value:
-            VAULT_ADDR: https://vault-pve.labul.sva.de:8200
-            VAULT_NAMESPACE: root
-            VAULT_SEAL_TYPE: transit
-            VAULT_TRANSIT_SEAL_KEY_NAME: pve_dev43
-            VAULT_TRANSIT_SEAL_MOUNT_PATH: autounseal
-            VAULT_CACERT: /mnt/vault-ingress-tls/ca.crt
+            config: |
+              ui = true
+
+              listener "tcp" {
+                tls_disable = 1
+                address = "[::]:8200"
+                cluster_address = "[::]:8201"
+              }
+              storage "file" {
+                path = "/vault/data"
+              }
+
+              seal "transit" {
+                address     = "https://vault-pve.labul.sva.de:8200"
+                namespace   = "root"
+                key_name    = "pve_dev43"
+                mount_path  = "autounseal"
+                tls_ca_cert = "/mnt/vault-ingress-tls/ca.crt"
+              }
       target:
         kind: HelmRelease
         name: vault-deployment
