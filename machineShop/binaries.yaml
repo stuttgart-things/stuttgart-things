@@ -63,6 +63,9 @@ binary:
   - kube-capacity:
       url: https://github.com/robscott/kube-capacity/releases/download/v{{ or .kubeCapacityVersion "0.7.4" }}/kube-capacity_v{{ or .kubeCapacityVersion "0.7.4" }}_linux_x86_64.tar.gz
       bin: kube-capacity
+  - oras:
+      url: https://github.com/oras-project/oras/releases/download/v{{ or .orasVersion "1.1.0" }}/oras_{{ or .orasVersion "1.1.0" }}_linux_amd64.tar.gz
+      bin: oras
 
 script:
   - azure-cli:
