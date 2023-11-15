@@ -129,6 +129,38 @@ spec:
             - mountPath: /home/argocd/cmp-server/config/plugin.yaml
               subPath: avp.yaml
               name: argocd-cmp-cm
+        - name: argocd-vault-plugin-helm
+          command: [/var/run/argocd/argocd-cmp-server]
+          image: eu.gcr.io/stuttgart-things/sthings-avp:1.17.0
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 65532
+          volumeMounts:
+            - mountPath: /var/run/argocd
+              name: var-files
+            - mountPath: /home/argocd/cmp-server/plugins
+              name: plugins
+            - mountPath: /tmp
+              name: tmp
+            - mountPath: /home/argocd/cmp-server/config/plugin.yaml
+              subPath: argocd-vault-plugin-helm.yaml
+              name: argocd-cmp-cm
+        - name: argocd-vault-plugin-kustomize
+          command: [/var/run/argocd/argocd-cmp-server]
+          image: eu.gcr.io/stuttgart-things/sthings-avp:1.17.0
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 65532
+          volumeMounts:
+            - mountPath: /var/run/argocd
+              name: var-files
+            - mountPath: /home/argocd/cmp-server/plugins
+              name: plugins
+            - mountPath: /tmp
+              name: tmp
+            - mountPath: /home/argocd/cmp-server/config/plugin.yaml
+              subPath: argocd-vault-plugin-kustomize.yaml
+              name: argocd-cmp-cm
       volumes:
         - name: argocd-cmp-cm
           configMap:
