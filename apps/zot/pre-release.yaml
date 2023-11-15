@@ -30,4 +30,4 @@ spec:
           issuerRef:
             name: ${CLUSTER_ISSUER}
             kind: ClusterIssuer
-          secretName: ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}-tls
+          secretName: ${INGRESS_SECRET_NAME}

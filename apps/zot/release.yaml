@@ -23,10 +23,10 @@ spec:
       enabled: true
       className: nginx
       hosts:
-        - host: ${INGRESS_HOSTNAME_CONSOLE}.${INGRESS_DOMAIN}
+        - host: ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}
           paths:
             - path: /
       tls:
-       - secretName: ${INGRESS_HOSTNAME_API}-tls
+       - secretName: ${INGRESS_SECRET_NAME}
          hosts:
-           - ${INGRESS_HOSTNAME_CONSOLE}.${INGRESS_DOMAIN}
+           - ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}
