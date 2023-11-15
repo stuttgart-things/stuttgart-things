@@ -24,6 +24,20 @@ spec:
       cmp:
         create: true
         plugins:
+          avp:
+            allowConcurrency: true
+            discover:
+              find:
+                command:
+                  - sh
+                  - "-c"
+                  - "find . -name '*.yaml' | xargs -I {} grep \"<path\\|avp\\.kubernetes\\.io\" {} | grep ."
+            generate:
+              command:
+                - argocd-vault-plugin
+                - generate
+                - "."
+            lockRepo: false
           helmfile:
             allowConcurrency: true
             discover:
@@ -73,7 +87,7 @@ spec:
           image: eu.gcr.io/stuttgart-things/sthings-avp:1.17.0
           securityContext:
             runAsNonRoot: true
-            runAsUser: 999
+            runAsUser: 65532
           volumeMounts:
             - mountPath: /var/run/argocd
               name: var-files
@@ -90,8 +104,8 @@ spec:
             name: argocd-cmp-cm
         - name: helmfile-tmp
           emptyDir: {}
-        - emptyDir: {}
-          name: cmp-tmp
+        - name: cmp-tmp
+          emptyDir: {}
     server:
       ingress:
         enabled: true
