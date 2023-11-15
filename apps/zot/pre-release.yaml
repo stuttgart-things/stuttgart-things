@@ -28,6 +28,6 @@ spec:
           dnsNames:
             - ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}
           issuerRef:
-            name: ${CLUSTER_ISSUER}
+            name: ${ISSUER_NAME}
             kind: ${ISSUER_KIND}
           secretName: ${INGRESS_SECRET_NAME}
