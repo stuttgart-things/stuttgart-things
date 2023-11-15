@@ -29,5 +29,5 @@ spec:
             - ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}
           issuerRef:
             name: ${CLUSTER_ISSUER}
-            kind: ClusterIssuer
+            kind: ${ISSUER_KIND}
           secretName: ${INGRESS_SECRET_NAME}
