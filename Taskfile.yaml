@@ -10,8 +10,8 @@ vars:
   CONTAINER_RUNTIME_CMD: sudo nerdctl
   DATE:
     sh: date +"%y.%m%d.%H%M"
-  TKN_CHARTS_PIPELINERUNS: ./charts/pipelineRuns.yaml
-  TKN_IMAGES_PIPELINERUNS: ./images/pipelineRuns.yaml
+  # TKN_CHARTS_PIPELINERUNS: ./charts/pipelineRuns.yaml
+  # TKN_IMAGES_PIPELINERUNS: ./images/pipelineRuns.yaml
 
 tasks:
   tag:
@@ -54,23 +54,23 @@ tasks:
       VERSION_NUMBER_PREFIX:
         sh: echo $(yq e '.version' ./charts/{{ .PROJECT }}/Chart.yaml | awk -F'[.=]' ' { print $1"."$2"." }')
 
-  build-tekton-prs:
-    desc: Update tekton helm pipelineRuns
-    cmds:
-      - echo UPDATING BUILDAH PIPELINERUNS
-      - yq e -i '.runs.buildahImage.name = "builah-{{ .PROJECT }}-{{ .VERSION }}-{{ .DATE }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
-      - yq e -i '.runs.buildahImage.params.context = "/buildah/{{ .PROJECT }}/images/{{ .PROJECT }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
-      - yq e -i '.runs.buildahImage.params.image = "scr.app.4sthings.tiab.ssc.sva.de/{{ .PROJECT }}/{{ .PROJECT }}:{{ .VERSION }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
-      - yq e -i '.runs.buildahImage.params.gitWorkspaceSubdirectory = "/buildah/{{ .PROJECT }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
-      - echo UPDATING KANIKO PIPELINERUNS
-      - yq e -i '.runs.kanikoImage.name = "kaniko-{{ .PROJECT }}-{{ .VERSION }}-{{ .DATE }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
-      - yq e -i '.runs.kanikoImage.params.context = "/kaniko/{{ .PROJECT }}/images/{{ .PROJECT }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
-      - yq e -i '.runs.buildahImage.params.image = "scr.app.4sthings.tiab.ssc.sva.de/{{ .PROJECT }}/{{ .PROJECT }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
-      - yq e -i '.runs.kanikoImage.params.tag = "{{ .VERSION }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
-      - yq e -i '.runs.kanikoImage.params.gitWorkspaceSubdirectory = "/kaniko/{{ .PROJECT }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
-    vars:
-      VERSION:
-        sh: cat ./images/{{ .PROJECT }}/Dockerfile | grep version | awk -F= '{ print $2 }'
+  # build-tekton-prs:
+  #   desc: Update tekton helm pipelineRuns
+  #   cmds:
+  #     - echo UPDATING BUILDAH PIPELINERUNS
+  #     - yq e -i '.runs.buildahImage.name = "builah-{{ .PROJECT }}-{{ .VERSION }}-{{ .DATE }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
+  #     - yq e -i '.runs.buildahImage.params.context = "/buildah/{{ .PROJECT }}/images/{{ .PROJECT }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
+  #     - yq e -i '.runs.buildahImage.params.image = "scr.app.4sthings.tiab.ssc.sva.de/{{ .PROJECT }}/{{ .PROJECT }}:{{ .VERSION }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
+  #     - yq e -i '.runs.buildahImage.params.gitWorkspaceSubdirectory = "/buildah/{{ .PROJECT }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
+  #     - echo UPDATING KANIKO PIPELINERUNS
+  #     - yq e -i '.runs.kanikoImage.name = "kaniko-{{ .PROJECT }}-{{ .VERSION }}-{{ .DATE }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
+  #     - yq e -i '.runs.kanikoImage.params.context = "/kaniko/{{ .PROJECT }}/images/{{ .PROJECT }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
+  #     - yq e -i '.runs.buildahImage.params.image = "scr.app.4sthings.tiab.ssc.sva.de/{{ .PROJECT }}/{{ .PROJECT }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
+  #     - yq e -i '.runs.kanikoImage.params.tag = "{{ .VERSION }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
+  #     - yq e -i '.runs.kanikoImage.params.gitWorkspaceSubdirectory = "/kaniko/{{ .PROJECT }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
+  #   vars:
+  #     VERSION:
+  #       sh: cat ./images/{{ .PROJECT }}/Dockerfile | grep version | awk -F= '{ print $2 }'
 
   package:
     desc: Package & push chart
