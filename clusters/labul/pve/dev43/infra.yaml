@@ -83,8 +83,8 @@ spec:
           value: 4.8.3
       target:
         kind: HelmRelease
-        name: metallb
-        namespace: metallb-system
+        name: ingress-nginx
+        namespace: flux-system
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization

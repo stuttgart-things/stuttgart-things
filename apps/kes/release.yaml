@@ -23,11 +23,11 @@ spec:
           #   - "identity"
           #   - "of"
           #   - "/mnt/artifacts-ingress-tls/tls.crt"
-          #   - ">/mnt/minio-identity"
+          #   - ">/mnt/minio-identity/minio-identity"
           command: ["/bin/bash", "-c", "--"]
           args:
             [
-              "/kes identity of /mnt/artifacts-ingress-tls/tls.crt | tee /mnt/minio-identity",
+              "/kes identity of /mnt/artifacts-ingress-tls/tls.crt | tee /mnt/minio-identity/minio-identity",
             ]
           volumeMounts:
             - name: minio-identity
@@ -46,7 +46,7 @@ spec:
           command: ["/bin/bash", "-c", "--"]
           args:
             [
-              "MINIO_IDENTITY=$(cat /mnt/minio-identity) /kes server --config /mnt/kes-config/config.yaml",
+              "MINIO_IDENTITY=$(cat /mnt/minio-identity/minio-identity) /kes server --config /mnt/kes-config/config.yaml",
             ]
           ports:
             - containerPort: 7373
