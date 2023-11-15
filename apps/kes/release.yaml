@@ -16,7 +16,6 @@ spec:
       labels:
         app: kes
     spec:
-      serviceAccountName: kes-sa
       initContainers:
         - name: kes-init
           image: quay.io/minio/kes:2023-10-03T00-48-37Z-amd64
@@ -27,8 +26,12 @@ spec:
           #   - ">/mnt/minio-identity"
           command: ["/bin/bash", "-c", "--"]
           args:
-            ["/kes identity of /mnt/minio-identity | tee /mnt/minio-identity"]
+            [
+              "/kes identity of /mnt/artifacts-ingress-tls/tls.crt | tee /mnt/minio-identity",
+            ]
           volumeMounts:
+            - name: minio-identity
+              mountPath: "/mnt/minio-identity"
             - name: "artifacts-ingress-tls"
               mountPath: "/mnt/artifacts-ingress-tls"
               readOnly: true
@@ -50,11 +53,6 @@ spec:
               name: kes
               protocol: TCP
           env:
-            - name: MINIO_IDENTITY
-              valueFrom:
-                secretKeyRef:
-                  name: kes-creds
-                  key: MINIO_IDENTITY
             - name: KES_APPROLE_ID
               valueFrom:
                 secretKeyRef:
@@ -66,6 +64,8 @@ spec:
                   name: kes-creds
                   key: KES_APPROLE_SECRET
           volumeMounts:
+            - name: minio-identity
+              mountPath: "/mnt/minio-identity"
             - name: "kes-config"
               mountPath: "/mnt/kes-config"
               readOnly: true
@@ -76,6 +76,8 @@ spec:
               mountPath: "/mnt/kes-creds"
               readOnly: true
       volumes:
+        - name: minio-identity
+          emptyDir: {}
         - name: kes-config
           configMap:
             name: kes-configuration
@@ -137,59 +139,6 @@ spec:
     - hosts:
         - kes.dev43.sthings-pve.labul.sva.de
       secretName: kes-ingress-tls
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: kes-sa
-  namespace: minio
-# ---
-# # create a cluster role binding for the service account for vault auth k8s
-# apiVersion: rbac.authorization.k8s.io/v1
-# kind: ClusterRoleBinding
-# metadata:
-#   name: kes-sa-auth-delegator
-# subjects:
-#   - kind: ServiceAccount
-#     name: kes-sa
-#     namespace: minio
-# roleRef:
-#   kind: ClusterRole
-#   name: system:auth-delegator
-#   apiGroup: rbac.authorization.k8s.io
-# ---
-# apiVersion: secrets-store.csi.x-k8s.io/v1
-# kind: SecretProviderClass
-# metadata:
-#   name: kes-creds
-#   namespace: minio
-# spec:
-#   provider: vault
-#   parameters:
-#     vaultAddress: https://vault.dev43.sthings-pve.labul.sva.de
-#     roleName: "read-global-and-local-kvv2"
-#     vaultKubernetesMountPath: "pve-dev43"
-#     vaultCACertPath: /mnt/vault-ingress-tls/ca.crt
-#     objects: |
-#       - objectName: "MINIO_IDENTITY"
-#         secretPath: "secret/data/pve-dev43-kes"
-#         secretKey: "MINIO_IDENTITY"
-#       - objectName: "KES_APPROLE_ID"
-#         secretPath: "secret/data/pve-dev43-kes"
-#         secretKey: "KES_APPROLE_ID"
-#       - objectName: "KES_APPROLE_SECRET"
-#         secretPath: "secret/data/pve-dev43-kes"
-#         secretKey: "KES_APPROLE_SECRET"
-#   secretObjects:
-#     - secretName: kes-creds
-#       type: Opaque
-#       data:
-#         - objectName: MINIO_IDENTITY # References dbUsername below
-#           key: MINIO_IDENTITY # Key within k8s secret for this value
-#         - objectName: KES_APPROLE_ID
-#           key: KES_APPROLE_ID
-#         - objectName: KES_APPROLE_SECRET
-#           key: KES_APPROLE_SECRET
 ---
 apiVersion: v1
 kind: ConfigMap

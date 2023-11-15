@@ -1,0 +1,30 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: kes
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: vault
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./apps/kes
+  prune: true
+  wait: true
+  postBuild:
+    substitute:
+      KES_STORAGE_SIZE: 2Gi
+      KES_STORAGE_CLASS: longhorn
+      KES_INGRESS_HOSTNAME: kes
+      KES_INGRESS_DOMAIN: dev43.sthings-pve.labul.sva.de
+      CLUSTER_ISSUER: cluster-issuer-approle
+      KES_VAULT_ADDR: https://vault.${KES_INGRESS_DOMAIN}
+      # KES_VAULT_KV_PATH: secret
+      # KES_VAULT_SECRET_PATH: "secret/data/pve-dev43-kes"
+---
+
