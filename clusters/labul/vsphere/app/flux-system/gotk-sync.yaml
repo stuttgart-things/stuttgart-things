@@ -16,6 +16,19 @@ spec:
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: GitRepository
 metadata:
+  name: argocd-refactoring
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  ref:
+    tag: argocd-refactoring
+  secretRef:
+    name: flux-system
+  url: ssh://git@github.com/stuttgart-things/stuttgart-things
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
   name: flux-system
   namespace: flux-system
 spec:

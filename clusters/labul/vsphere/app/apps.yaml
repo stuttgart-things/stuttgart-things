@@ -114,7 +114,7 @@ spec:
   retryInterval: 1m
   sourceRef:
     kind: GitRepository
-    name: app-vsphere
+    name: argocd-refactoring
   path: ./apps/argo-cd
   prune: true
   wait: true
