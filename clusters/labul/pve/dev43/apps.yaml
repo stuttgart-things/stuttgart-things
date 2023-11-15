@@ -105,7 +105,7 @@ spec:
         namespace: minio
     - patch: |-
         - op: add
-          path: /spec/values/provisioning/extraVolumes
+          path: /spec/values/extraVolumes
           value:
             - name: artifacts-ingress-tls
               secret:
@@ -116,7 +116,7 @@ spec:
         namespace: minio
     - patch: |-
         - op: add
-          path: /spec/values/provisioning/extraVolumeMounts
+          path: /spec/values/extraVolumeMounts
           value:
             - name: "artifacts-ingress-tls"
               mountPath: "/mnt/artifacts-ingress-tls"
