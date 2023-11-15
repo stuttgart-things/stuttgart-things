@@ -1,0 +1,26 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: zot
+  labels:
+    toolkit.fluxcd.io/tenant: sthings-team
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: zotregistry
+  namespace: zot
+spec:
+  interval: 24h
+  url: https://zotregistry.io/helm-charts/
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: stuttgart-things
+  namespace: zot
+spec:
+  type: oci
+  interval: 1h
+  url: oci://eu.gcr.io/stuttgart-things

@@ -1,0 +1,32 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: zot-deployment
+  namespace: zot
+spec:
+  dependsOn:
+    - name: zot-certificate-configuration
+      namespace: zot
+  interval: 30m
+  chart:
+    spec:
+      chart: zot
+      version: 0.1.34
+      sourceRef:
+        kind: HelmRepository
+        name: zotregistry
+        namespace: zot
+      interval: 12h
+  values:
+    ingress:
+      enabled: true
+      className: nginx
+      hosts:
+        - host: ${INGRESS_HOSTNAME_CONSOLE}.${INGRESS_DOMAIN}
+          paths:
+            - path: /
+      tls:
+       - secretName: ${INGRESS_HOSTNAME_API}-tls
+         hosts:
+           - ${INGRESS_HOSTNAME_CONSOLE}.${INGRESS_DOMAIN}
