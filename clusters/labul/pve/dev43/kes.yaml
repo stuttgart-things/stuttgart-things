@@ -21,8 +21,10 @@ spec:
       KES_INGRESS_HOSTNAME: kes
       KES_INGRESS_DOMAIN: dev43.sthings-pve.labul.sva.de
       CLUSTER_ISSUER: cluster-issuer-approle
-      KES_VAULT_ADDR: https://vault.${KES_INGRESS_DOMAIN}
-      # KES_VAULT_KV_PATH: secret
-      # KES_VAULT_SECRET_PATH: "secret/data/pve-dev43-kes"
+      MINIO_IDENTITY: "${MINIO_IDENTITY}" # nested substitution
+    substituteFrom:
+      - kind: Secret
+        name: kes-creds
+        optional: false
 ---
 

@@ -192,8 +192,8 @@ data:
     # Secret for use with KES.
     keystore:
       vault:
-        endpoint: https://vault-pve.labul.sva.de:8200
-        engine: "kes" # Replace with the path to the K/V Engine
+        endpoint: "${KES_VAULT_ADDR}"
+        engine: "${KES_VAULT_KV_ENGINE}" # Replace with the path to the K/V Engine
         version: "v2" # Specify v1 or v2 depending on the version of the K/V Engine
         approle:
           id: ${KES_APPROLE_ID}     # Hashicorp Vault AppRole ID
