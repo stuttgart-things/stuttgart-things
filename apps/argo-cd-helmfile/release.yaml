@@ -38,6 +38,21 @@ spec:
                 - generate
                 - "."
             lockRepo: false
+          argocd-vault-plugin-kustomize:
+            allowConcurrency: true
+            discover:
+              find:
+                command:
+                  - find
+                  - "."
+                  - -name
+                  - kustomization.yaml
+            generate:
+              command:
+                - sh
+                - "-c"
+                - "kustomize build . | argocd-vault-plugin generate -"
+            lockRepo: false
           helmfile:
             allowConcurrency: true
             discover:
