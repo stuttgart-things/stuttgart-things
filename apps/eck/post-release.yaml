@@ -16,7 +16,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: stuttgart-things
-        namespace: cert-manager
+        namespace: elastic-system
       interval: 12h
   values:
     installCRDs: true
@@ -34,18 +34,18 @@ spec:
               spec:
                 type: ClusterIP
           nodeSets:
-            - name: default
-              count: 1
-              config:
-                node.store.allow_mmap: false
+          - name: default
+            count: 1
+            config:
+              node.store.allow_mmap: false
             podTemplate:
               spec:
                 initContainers:
-                  - name: sysctl
-                    securityContext:
-                      privileged: true
-                      runAsUser: 0
-                    command: ['sh', '-c', 'sysctl -w vm.max_map_count=262144']
+                - name: sysctl
+                  securityContext:
+                    privileged: true
+                    runAsUser: 0
+                  command: ['sh', '-c', 'sysctl -w vm.max_map_count=262144']
       kibana:
         apiVersion: kibana.k8s.elastic.co/v1
         kind: Kibana
@@ -60,14 +60,14 @@ spec:
           podTemplate:
             spec:
               containers:
-                - name: kibana
-                  resources:
-                    requests:
-                      memory: 512Mi
-                      cpu: 500m
-                    limits:
-                      memory: 2Gi
-                      cpu: 1500m
+              - name: kibana
+                resources:
+                  requests:
+                    memory: 512Mi
+                    cpu: 500m
+                  limits:
+                    memory: 2Gi
+                    cpu: 1500m
           http:
             tls:
               selfSignedCertificate:
@@ -79,3 +79,29 @@ spec:
 
 # user: elastic
 # password: kubectl get secret elasticsearch-cluster-es-elastic-user -n elastic-system -o=jsonpath='{.data.elastic}' | base64 --decode
+
+# https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-beat-configuration-examples.html
+# https://raphaeldelio.medium.com/deploy-logstash-and-filebeat-on-kubernetes-with-eck-ssl-and-filebeat-d9f616737390
+# https://github.com/elastic/helm-charts/issues/779#issuecomment-781431675
+# ...
+# protocol: https
+# ingress:
+#   enabled: true
+#   annotations:
+#     kubernetes.io/ingress.class: nginx
+#     kubernetes.io/tls-acme: "true"
+#     nginx.ingress.kubernetes.io/proxy-ssl-verify: "false"
+#     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+#   hosts:
+#     - elasticsearch.example.com
+# esConfig:
+#   elasticsearch.yml: |
+#     xpack.security.enabled: true
+#     xpack.security.transport.ssl.enabled: true
+#     xpack.security.transport.ssl.verification_mode: certificate
+#     xpack.security.transport.ssl.keystore.path: /usr/share/elasticsearch/config/certs/elastic-certificates.p12
+#     xpack.security.transport.ssl.truststore.path: /usr/share/elasticsearch/config/certs/elastic-certificates.p12
+#     xpack.security.http.ssl.enabled: true
+#     xpack.security.http.ssl.truststore.path: /usr/share/elasticsearch/config/certs/elastic-certificates.p12
+#     xpack.security.http.ssl.keystore.path: /usr/share/elasticsearch/config/certs/elastic-certificates.p12
+# ...
