@@ -63,6 +63,16 @@ spec:
                 secretKeyRef:
                   name: kes-creds
                   key: KES_APPROLE_SECRET
+            - name: KES_VAULT_ADDR
+              valueFrom:
+                secretKeyRef:
+                  name: kes-creds
+                  key: KES_VAULT_ADDR
+            - name: KES_VAULT_KV_ENGINE
+              valueFrom:
+                secretKeyRef:
+                  name: kes-creds
+                  key: KES_VAULT_KV_ENGINE
           volumeMounts:
             - name: minio-identity
               mountPath: "/mnt/minio-identity"
@@ -87,11 +97,6 @@ spec:
         - name: kes-creds
           secret:
             secretName: kes-creds
-          # csi:
-          #   driver: "secrets-store.csi.k8s.io"
-          #   readOnly: true
-          #   volumeAttributes:
-          #     secretProviderClass: "kes-creds"
         - name: artifacts-ingress-tls
           secret:
             secretName: artifacts-ingress-tls
