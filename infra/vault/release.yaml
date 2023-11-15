@@ -33,7 +33,7 @@ spec:
           - host: ${VAULT_INGRESS_HOSTNAME}.${VAULT_INGRESS_DOMAIN}
         tls:
           - hosts:
-            - ${VAULT_INGRESS_HOSTNAME}.${VAULT_INGRESS_DOMAIN}
+              - ${VAULT_INGRESS_HOSTNAME}.${VAULT_INGRESS_DOMAIN}
             secretName: ${VAULT_INGRESS_HOSTNAME}-ingress-tls
         ingressClassName: nginx
     csi:
