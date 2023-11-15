@@ -34,18 +34,18 @@ spec:
               spec:
                 type: ClusterIP
           nodeSets:
-          - name: default
-            count: 1
-            config:
-              node.store.allow_mmap: false
+            - name: default
+              count: 1
+              config:
+                node.store.allow_mmap: false
             podTemplate:
               spec:
                 initContainers:
-                - name: sysctl
-                  securityContext:
-                    privileged: true
-                    runAsUser: 0
-                  command: ['sh', '-c', 'sysctl -w vm.max_map_count=262144']
+                  - name: sysctl
+                    securityContext:
+                      privileged: true
+                      runAsUser: 0
+                    command: ['sh', '-c', 'sysctl -w vm.max_map_count=262144']
       kibana:
         apiVersion: kibana.k8s.elastic.co/v1
         kind: Kibana
@@ -60,14 +60,14 @@ spec:
           podTemplate:
             spec:
               containers:
-              - name: kibana
-                resources:
-                  requests:
-                    memory: 512Mi
-                    cpu: 500m
-                  limits:
-                    memory: 2Gi
-                    cpu: 1500m
+                - name: kibana
+                  resources:
+                    requests:
+                      memory: 512Mi
+                      cpu: 500m
+                    limits:
+                      memory: 2Gi
+                      cpu: 1500m
           http:
             tls:
               selfSignedCertificate:
@@ -76,3 +76,6 @@ spec:
               spec:
                 type: LoadBalancer
 #https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-deploy-elasticsearch.html
+
+# user: elastic
+# password: kubectl get secret elasticsearch-cluster-es-elastic-user -n elastic-system -o=jsonpath='{.data.elastic}' | base64 --decode
