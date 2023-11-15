@@ -5,6 +5,9 @@ metadata:
   name: kes
   namespace: flux-system
 spec:
+  dependsOn:
+    - name: ingress-nginx
+    - name: cert-manager
   interval: 1h
   retryInterval: 1m
   timeout: 5m
