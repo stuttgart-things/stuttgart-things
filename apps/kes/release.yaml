@@ -52,27 +52,6 @@ spec:
             - containerPort: 7373
               name: kes
               protocol: TCP
-          env:
-            - name: KES_APPROLE_ID
-              valueFrom:
-                secretKeyRef:
-                  name: kes-creds
-                  key: KES_APPROLE_ID
-            - name: KES_APPROLE_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: kes-creds
-                  key: KES_APPROLE_SECRET
-            - name: KES_VAULT_ADDR
-              valueFrom:
-                secretKeyRef:
-                  name: kes-creds
-                  key: KES_VAULT_ADDR
-            - name: KES_VAULT_KV_ENGINE
-              valueFrom:
-                secretKeyRef:
-                  name: kes-creds
-                  key: KES_VAULT_KV_ENGINE
           volumeMounts:
             - name: minio-identity
               mountPath: "/mnt/minio-identity"
@@ -81,9 +60,6 @@ spec:
               readOnly: true
             - name: "kes-ingress-tls"
               mountPath: "/mnt/kes-ingress-tls"
-              readOnly: true
-            - name: "kes-creds"
-              mountPath: "/mnt/kes-creds"
               readOnly: true
       volumes:
         - name: minio-identity
@@ -94,9 +70,6 @@ spec:
         - name: kes-ingress-tls
           secret:
             secretName: kes-ingress-tls
-        - name: kes-creds
-          secret:
-            secretName: kes-creds
         - name: artifacts-ingress-tls
           secret:
             secretName: artifacts-ingress-tls

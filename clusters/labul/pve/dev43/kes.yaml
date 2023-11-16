@@ -18,6 +18,9 @@ spec:
   prune: true
   wait: true
   postBuild:
+    substituteFrom:
+      - kind: Secret
+        name: kes-creds
     substitute:
       KES_STORAGE_SIZE: 2Gi
       KES_STORAGE_CLASS: longhorn
@@ -25,11 +28,7 @@ spec:
       KES_INGRESS_DOMAIN: dev43.sthings-pve.labul.sva.de
       CLUSTER_ISSUER: cluster-issuer-approle
       # workaround for nested substitution
-      # values come from secret kes-creds
+      # value will be generated in init container
       MINIO_IDENTITY: '"${MINIO_IDENTITY}"'
-      KES_APPROLE_ID: '"${KES_APPROLE_ID}"'
-      KES_APPROLE_SECRET: '"${KES_APPROLE_SECRET}"'
-      KES_VAULT_ADDR: '"${KES_VAULT_ADDR}"'
-      KES_VAULT_KV_ENGINE: '"${KES_VAULT_KV_ENGINE}"'
 ---
 
