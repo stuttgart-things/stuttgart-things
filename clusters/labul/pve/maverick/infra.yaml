@@ -187,28 +187,28 @@ spec:
         kind: HelmRelease
         name: vault-deployment
         namespace: vault
-    # # mount vault ingress tls secret into csi provider for communication with vault
-    # - patch: |-
-    #     - op: add
-    #       path: /spec/values/csi/volumes
-    #       value:
-    #         - name: vault-ingress-tls
-    #           secret:
-    #             secretName: vault-ingress-tls
-    #   target:
-    #     kind: HelmRelease
-    #     name: vault-deployment
-    #     namespace: vault
-    # - patch: |-
-    #     - op: add
-    #       path: /spec/values/csi/volumeMounts
-    #       value:
-    #         - name: "vault-ingress-tls"
-    #           mountPath: "/mnt/vault-ingress-tls"
-    #           readOnly: true
-    #   target:
-    #     kind: HelmRelease
-    #     name: vault-deployment
-    #     namespace: vault
+    # mount vault ingress tls secret into csi provider for communication with vault
+    - patch: |-
+        - op: add
+          path: /spec/values/csi/volumes
+          value:
+            - name: vault-ingress-tls
+              secret:
+                secretName: vault-ingress-tls
+      target:
+        kind: HelmRelease
+        name: vault-deployment
+        namespace: vault
+    - patch: |-
+        - op: add
+          path: /spec/values/csi/volumeMounts
+          value:
+            - name: "vault-ingress-tls"
+              mountPath: "/mnt/vault-ingress-tls"
+              readOnly: true
+      target:
+        kind: HelmRelease
+        name: vault-deployment
+        namespace: vault
 ---
 
