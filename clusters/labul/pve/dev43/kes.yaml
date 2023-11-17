@@ -1,0 +1,34 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: kes
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: ingress-nginx
+    - name: cert-manager
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./apps/kes
+  prune: true
+  wait: true
+  postBuild:
+    substituteFrom:
+      - kind: Secret
+        name: kes-creds
+    substitute:
+      KES_STORAGE_SIZE: 2Gi
+      KES_STORAGE_CLASS: longhorn
+      KES_INGRESS_HOSTNAME: kes
+      KES_INGRESS_DOMAIN: dev43.sthings-pve.labul.sva.de
+      CLUSTER_ISSUER: cluster-issuer-approle
+      # workaround for nested substitution
+      # value will be generated in init container
+      MINIO_IDENTITY: '"${MINIO_IDENTITY}"'
+---
+

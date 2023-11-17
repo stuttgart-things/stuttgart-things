@@ -85,3 +85,43 @@ spec:
         kind: HelmRelease
         name: minio-deployment
         namespace: minio
+    - patch: |-
+        - op: add
+          path: /spec/values/extraEnvVars
+          value:
+            - name: MINIO_KMS_KES_ENDPOINT
+              value: https://kes.${INGRESS_DOMAIN}
+            - name: MINIO_KMS_KES_CAPATH
+              value: /mnt/artifacts-ingress-tls/ca.crt
+            - name: MINIO_KMS_KES_KEY_FILE
+              value: /mnt/artifacts-ingress-tls/tls.key
+            - name: MINIO_KMS_KES_CERT_FILE
+              value: /mnt/artifacts-ingress-tls/tls.crt
+            - name: MINIO_KMS_KES_KEY_NAME
+              value: minio-kes-vault-default-key
+      target:
+        kind: HelmRelease
+        name: minio-deployment
+        namespace: minio
+    - patch: |-
+        - op: add
+          path: /spec/values/extraVolumes
+          value:
+            - name: artifacts-ingress-tls
+              secret:
+                secretName: artifacts-ingress-tls
+      target:
+        kind: HelmRelease
+        name: minio-deployment
+        namespace: minio
+    - patch: |-
+        - op: add
+          path: /spec/values/extraVolumeMounts
+          value:
+            - name: "artifacts-ingress-tls"
+              mountPath: "/mnt/artifacts-ingress-tls"
+              readOnly: true
+      target:
+        kind: HelmRelease
+        name: minio-deployment
+        namespace: minio

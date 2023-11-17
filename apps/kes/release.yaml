@@ -1,0 +1,200 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kes
+  namespace: minio
+  labels:
+    app: kes
+spec:
+  selector:
+    matchLabels:
+      app: kes
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: kes
+    spec:
+      initContainers:
+        - name: kes-init
+          image: quay.io/minio/kes:2023-10-03T00-48-37Z-amd64
+          # args:
+          #   - "identity"
+          #   - "of"
+          #   - "/mnt/artifacts-ingress-tls/tls.crt"
+          #   - ">/mnt/minio-identity/minio-identity"
+          command: ["/bin/bash", "-c", "--"]
+          args:
+            [
+              "/kes identity of /mnt/artifacts-ingress-tls/tls.crt | tee /mnt/minio-identity/minio-identity",
+            ]
+          volumeMounts:
+            - name: minio-identity
+              mountPath: "/mnt/minio-identity"
+            - name: "artifacts-ingress-tls"
+              mountPath: "/mnt/artifacts-ingress-tls"
+              readOnly: true
+      containers:
+        - name: kes
+          # the kes server could not be started with new versions of the image
+          image: quay.io/minio/kes:2023-10-03T00-48-37Z-amd64
+          # args:
+          #   - "server"
+          #   - "--config"
+          #   - "/mnt/kes-config/config.yaml"
+          command: ["/bin/bash", "-c", "--"]
+          args:
+            [
+              "MINIO_IDENTITY=$(cat /mnt/minio-identity/minio-identity) /kes server --config /mnt/kes-config/config.yaml",
+            ]
+          ports:
+            - containerPort: 7373
+              name: kes
+              protocol: TCP
+          volumeMounts:
+            - name: minio-identity
+              mountPath: "/mnt/minio-identity"
+            - name: "kes-config"
+              mountPath: "/mnt/kes-config"
+              readOnly: true
+            - name: "kes-ingress-tls"
+              mountPath: "/mnt/kes-ingress-tls"
+              readOnly: true
+      volumes:
+        - name: minio-identity
+          emptyDir: {}
+        - name: kes-config
+          configMap:
+            name: kes-configuration
+        - name: kes-ingress-tls
+          secret:
+            secretName: kes-ingress-tls
+        - name: artifacts-ingress-tls
+          secret:
+            secretName: artifacts-ingress-tls
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kes-deployment
+  namespace: minio
+spec:
+  ports:
+    - name: kes
+      port: 7373
+      protocol: TCP
+      targetPort: 7373
+  selector:
+    app: kes
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kes-ingress
+  namespace: minio
+  annotations:
+    # service is only reachable via https
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    # let the backend services decrypt the TLS communication
+    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: kes.dev43.sthings-pve.labul.sva.de
+      http:
+        paths:
+          - backend:
+              service:
+                name: kes-deployment
+                port:
+                  number: 7373
+            path: /
+            pathType: Prefix
+  tls:
+    - hosts:
+        - kes.dev43.sthings-pve.labul.sva.de
+      secretName: kes-ingress-tls
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kes-configuration
+  namespace: minio
+data:
+  config.yaml: |-
+    address: 0.0.0.0:7373
+
+    # Disable the root administrator identity, as we do not need that level of access for
+    # supporting SSE operations.
+    admin:
+      identity: disabled
+
+    # Specify the TLS keys generated in the previous step here
+    # For production environments, use keys signed by a known and trusted Certificate Authority (CA).
+    tls:
+      key:  /mnt/kes-ingress-tls/tls.key
+      cert: /mnt/kes-ingress-tls/tls.crt
+
+      # Specify the path to CAs used by KES for validating client certificates
+      # This can alternatively be a single CA
+      # KES uses these CAs in addition to the system trust store for validating client certificates.
+
+      ca: /mnt/kes-ingress-tls/ca.crt
+
+    # Sets access policies for KES
+    # The `minio` policy grants access to the listed APIs.
+    policy:
+      minio:
+        allow:
+        - /v1/key/create/*   # You can replace these wildcard '*' with a string prefix to restrict key names
+        - /v1/key/generate/* # e.g. '/minio-'
+        - /v1/key/decrypt/*
+        - /v1/key/bulk/decrypt
+        - /v1/key/list/*
+        - /v1/status
+        - /v1/metrics
+        - /v1/log/audit
+        - /v1/log/error
+        identities:
+        - ${MINIO_IDENTITY} # Replace with the hash output returned from kes identity new
+
+    keys:
+      - name: minio-kes-vault-default-key
+
+    # Specify the connection information for the Vault server.
+    # The endpoint should be resolvable from the host.
+    # This example assumes that Vault is configured with an AppRole ID and
+    # Secret for use with KES.
+    keystore:
+      vault:
+        endpoint: ${KES_VAULT_ADDR}
+        engine: ${KES_VAULT_KV_ENGINE} # Replace with the path to the K/V Engine
+        version: "v2" # Specify v1 or v2 depending on the version of the K/V Engine
+        approle:
+          id: ${KES_APPROLE_ID}     # Hashicorp Vault AppRole ID
+          secret: ${KES_APPROLE_SECRET} # Hashicorp Vault AppRole Secret ID
+          retry: 15s
+        status:
+          ping: 10s
+        # Required if Vault uses certificates signed by an unknown CA,
+        # e.g. self-signed or internal (non-globally trusted).
+        # Replace this value with the full path to the Vault CA certificate.
+        tls:
+          ca: /mnt/kes-ingress-tls/ca.crt
+
+    api:
+      /v1/ready:
+        skip_auth: true
+        timeout:   15s
+      /v1/status:
+        skip_auth: false
+        timeout:   15s
+
+    log:
+      error: on
+      audit: on
+---
+

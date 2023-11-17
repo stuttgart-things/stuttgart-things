@@ -83,8 +83,8 @@ spec:
           value: 4.8.3
       target:
         kind: HelmRelease
-        name: metallb
-        namespace: metallb-system
+        name: ingress-nginx
+        namespace: flux-system
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -125,3 +125,29 @@ spec:
     substituteFrom:
       - kind: Secret
         name: vault-flux-secrets
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: kube-prometheus-stack
+  namespace: flux-system
+spec:
+  interval: 1h
+  retryInterval: 2m
+  timeout: 10m
+  prune: true
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infra/kube-prometheus-stack
+  postBuild:
+    substituteFrom:
+      - kind: Secret
+        name: grafana-flux-secrets
+    substitute:
+      INGRESS_HOSTNAME: monitoring
+      INGRESS_CLASS: nginx
+      INGRESS_DOMAIN: dev43.sthings-pve.labul.sva.de
+      CLUSTER_ISSUER: cluster-issuer-approle
+      INGRESS_SECRETNAME: monitoring-tls
