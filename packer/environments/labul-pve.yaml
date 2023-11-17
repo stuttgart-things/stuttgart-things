@@ -8,11 +8,11 @@ pveProviderVersion: 1.1.5
 configureClusterNode: false
 cloudinit: false
 createRkeUser: false
-update_os: true
-install_docker: false
-install_docker_compose: false
-set_docker_proxy: false
-template_creation_setup: false
+updateOs: true
+installDocker: false
+installDockerCompose: false
+setDockerProxy: false
+templateCreationSetup: false
 
 updatePackages: true
 installRequirements: true

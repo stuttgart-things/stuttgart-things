@@ -14,6 +14,12 @@ spec:
         - "installRequirements+true"
         - "configureClusterNode+true"
         - "rebootBeforeAnsible+false"
+        - "createRkeUser+false"
+        - "updateOs+true"
+        - "installDocker+false"
+        - "installDockerCompose+false"
+        - "setDockerProxy+false"
+        - "templateCreationSetup+false"
     - name: gitRevision
       value: main
     - name: bootConfigPath
