@@ -1,0 +1,97 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: minio-kes
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: ingress-nginx
+    - name: cert-manager
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./apps/minio-kes
+  prune: true
+  wait: true
+  postBuild:
+    substitute:
+      INGRESS_HOSTNAME_API: artifacts
+      INGRESS_HOSTNAME_CONSOLE: artifacts-console
+      INGRESS_DOMAIN: maverick.sthings-pve.labul.sva.de
+      CLUSTER_ISSUER: cluster-issuer-approle
+      MINIO_KEY_NAME: test-minio-kes
+      # for kes
+      KES_INGRESS_HOSTNAME: kes
+      KES_INGRESS_DOMAIN: maverick.sthings-pve.labul.sva.de
+      # workaround for nested substitution
+      # value will be generated in init container
+      MINIO_IDENTITY: '"${MINIO_IDENTITY}"'
+    substituteFrom:
+      - kind: Secret
+        name: s3-flux-secrets
+      # prepare a secret with KES_APPROLE_ID, KES_APPROLE_SECRET, KES_VAULT_ADDR and KES_VAULT_KV_ENGINE
+      - kind: Secret
+        name: kes-creds
+  patches:
+    - patch: |-
+        - op: replace
+          path: /spec/chart/spec/version
+          value: 12.8.18
+      target:
+        kind: HelmRelease
+        name: minio-deployment
+        namespace: minio
+    - patch: |-
+        - op: replace
+          path: /spec/values/image/tag
+          value: 12.8.18
+      target:
+        kind: HelmRelease
+        name: minio-deployment
+        namespace: minio
+    - patch: |-
+        - op: add
+          path: /spec/values/extraEnvVars
+          value:
+            - name: MINIO_KMS_KES_ENDPOINT
+              value: https://kes.${INGRESS_DOMAIN}
+            - name: MINIO_KMS_KES_CAPATH
+              value: /mnt/artifacts-ingress-tls/ca.crt
+            - name: MINIO_KMS_KES_KEY_FILE
+              value: /mnt/artifacts-ingress-tls/tls.key
+            - name: MINIO_KMS_KES_CERT_FILE
+              value: /mnt/artifacts-ingress-tls/tls.crt
+            - name: MINIO_KMS_KES_KEY_NAME
+              value: ${MINIO_KEY_NAME}
+      target:
+        kind: HelmRelease
+        name: minio-deployment
+        namespace: minio
+    - patch: |-
+        - op: add
+          path: /spec/values/extraVolumes
+          value:
+            - name: artifacts-ingress-tls
+              secret:
+                secretName: artifacts-ingress-tls
+      target:
+        kind: HelmRelease
+        name: minio-deployment
+        namespace: minio
+    - patch: |-
+        - op: add
+          path: /spec/values/extraVolumeMounts
+          value:
+            - name: "artifacts-ingress-tls"
+              mountPath: "/mnt/artifacts-ingress-tls"
+              readOnly: true
+      target:
+        kind: HelmRelease
+        name: minio-deployment
+        namespace: minio
+---
+
