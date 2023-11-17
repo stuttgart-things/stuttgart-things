@@ -48,6 +48,18 @@ spec:
         kind: HelmRelease
         name: vault-deployment
         namespace: vault
+    - patch: |-
+        - op: add
+          path: /spec/values/csi/extraArgs
+          value:
+            - "-vault-addr=https://vault.dev43.sthings-pve.labul.sva.de"
+            - "-vault-mount=pve-dev43"
+            - "-vault-namespace=root"
+            - "-vault-tls-ca-cert=/mnt/vault-ingress-tls/ca.crt"
+      target:
+        kind: HelmRelease
+        name: vault-deployment
+        namespace: vault
     # configure auto unseal: add seal stanza and mount vault ingress tls secret
     - patch: |-
         - op: add
@@ -106,6 +118,14 @@ spec:
             - name: vault-ingress-tls
               mountPath: /mnt/vault-ingress-tls
               readOnly: true
+      target:
+        kind: HelmRelease
+        name: vault-deployment
+        namespace: vault
+    - patch: |-
+        - op: add
+          path: /spec/values/server/logLevel
+          value: debug
       target:
         kind: HelmRelease
         name: vault-deployment
