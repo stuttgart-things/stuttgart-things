@@ -210,5 +210,17 @@ spec:
         kind: HelmRelease
         name: vault-deployment
         namespace: vault
+    - patch: |-
+        - op: add
+          path: /spec/values/csi/extraArgs
+          value:
+            - "-vault-addr=https://vault.dev43.sthings-pve.labul.sva.de"
+            - "-vault-mount=pve-maverick"
+            - "-vault-namespace=root"
+            - "-vault-tls-ca-cert=/mnt/vault-ingress-tls/ca.crt"
+      target:
+        kind: HelmRelease
+        name: vault-deployment
+        namespace: vault
 ---
 

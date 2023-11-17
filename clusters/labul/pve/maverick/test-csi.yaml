@@ -36,7 +36,11 @@ spec:
   provider: vault
   parameters:
     roleName: "read-global-and-local-kvv2"
-    vaultAddress: https://vault.dev43.sthings-pve.labul.sva.de
+    ## optional, because already set in the helm chart of vault csi provider
+    # vaultAddress: https://vault.dev43.sthings-pve.labul.sva.de
+    # vaultNamespace: root
+    # vaultCACertPath: /mnt/vault-ingress-tls/ca.crt
+    # vaultKubernetesMountPath: pve-maverick
     objects: |
       - objectName: first
         secretPath:  kvv2-pve-maverick/data/test
