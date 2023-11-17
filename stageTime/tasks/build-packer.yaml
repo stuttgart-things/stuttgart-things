@@ -159,7 +159,10 @@ spec:
         #!/usr/bin/env sh
         set -eu
 
-        for argument in "$@"; do echo $argument | sed -e "s/+-/: /g" >> ./$(params.DEFAULT_ENVIRONMENT_PATH) ; done
+        for variable in "$@";
+        do
+          yq e -i '.'$(echo "$variable" | cut -d "+" -f1)' = '$(echo "$variable" | cut -d "+" -f2)'' ./$(params.DEFAULT_ENVIRONMENT_PATH)
+        done
 
         echo "RENDER PLAYBOOK"
         machineShop render \
