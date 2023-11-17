@@ -4,10 +4,10 @@
   become: true
 
   vars:
-    update_packages: true
-    install_requirements: true
+    update_packages: [[ .updatePackages ]]
+    install_requirements: [[ .installRequirements ]]
     install_motd: false
-    configure_rke_node: false
+    configure_rke_node: [[ .configureClusterNode ]]
     create_user: [[ .createUser ]]
     admin_group: "{{ 'wheel' if ansible_os_family == 'RedHat' else 'sudo' }}"
     reboot_prio_provisioning: [[ .rebootBeforeAnsible ]]
