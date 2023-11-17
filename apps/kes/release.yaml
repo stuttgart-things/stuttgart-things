@@ -162,7 +162,7 @@ data:
         - ${MINIO_IDENTITY} # Replace with the hash output returned from kes identity new
 
     keys:
-      - name: minio-kes-vault-default-key
+      - name: ${MINIO_KEY_NAME}
 
     # Specify the connection information for the Vault server.
     # The endpoint should be resolvable from the host.

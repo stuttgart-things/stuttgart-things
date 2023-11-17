@@ -65,6 +65,7 @@ spec:
       INGRESS_HOSTNAME_CONSOLE: artifacts-console
       INGRESS_DOMAIN: dev43.sthings-pve.labul.sva.de
       CLUSTER_ISSUER: cluster-issuer-approle
+      MINIO_KEY_NAME: minio-kes-vault-default-key
     substituteFrom:
       - kind: Secret
         name: s3-flux-secrets
@@ -98,7 +99,7 @@ spec:
             - name: MINIO_KMS_KES_CERT_FILE
               value: /mnt/artifacts-ingress-tls/tls.crt
             - name: MINIO_KMS_KES_KEY_NAME
-              value: minio-kes-vault-default-key
+              value: ${MINIO_KEY_NAME}
       target:
         kind: HelmRelease
         name: minio-deployment
