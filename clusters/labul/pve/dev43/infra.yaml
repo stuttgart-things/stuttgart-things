@@ -85,6 +85,16 @@ spec:
         kind: HelmRelease
         name: ingress-nginx
         namespace: flux-system
+    - patch: |-
+        - op: add
+          path: /spec/values/controller
+          value:
+            extraArgs:
+              enable-ssl-passthrough: ""
+      target:
+        kind: HelmRelease
+        name: ingress-nginx
+        namespace: ingress-nginx
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
