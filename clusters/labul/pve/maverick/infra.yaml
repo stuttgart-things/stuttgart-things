@@ -83,8 +83,18 @@ spec:
           value: 4.8.3
       target:
         kind: HelmRelease
-        name: metallb
-        namespace: metallb-system
+        name: ingress-nginx
+        namespace: ingress-nginx
+    - patch: |-
+        - op: add
+          path: /spec/values/controller
+          value:
+            extraArgs:
+              enable-ssl-passthrough: ""
+      target:
+        kind: HelmRelease
+        name: ingress-nginx
+        namespace: ingress-nginx
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
