@@ -41,6 +41,10 @@ spec:
       type: string
       default: base-os
       description: ansible provisioning / playbook name
+    - name: ansibleExtraVars
+      description: ansible extra vars
+      type: array
+      default: []
     - name: osVersion
       type: string
       default: ""
@@ -136,6 +140,8 @@ spec:
           value: $(params.osVersion)
         - name: VM_TEMPLATE_NAME
           value: $(params.vmTemplateName)
+        - name: ANSIBLE_EXTRA_VARS
+          value: $(params.ansibleExtraVars)
         - name: ANSIBLE_PROVISIONING
           value: $(params.ansibleProvisioning)
         - name: SUB_DIRECTORY

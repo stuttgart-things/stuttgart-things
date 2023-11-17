@@ -42,6 +42,10 @@ spec:
       description: ansible provisioning / playbook name
       type: string
       default: base-os
+    - name: ANSIBLE_EXTRA_VARS
+      description: ansible extra vars
+      type: array
+      default: []
     - name: SUB_DIRECTORY
       description: subdirectory of workspace
       type: string
@@ -149,9 +153,13 @@ spec:
         cat ./$(params.OS_VERSION)/user-data
 
     - name: render-ansible-playbook
+      args:
+        - $(params.ANSIBLE_EXTRA_VARS[*])
       script: |-
         #!/usr/bin/env sh
         set -eu
+
+        for argument in "$@"; do echo $argument | sed -e "s/+-/: /g" >> ./$(params.DEFAULT_ENVIRONMENT_PATH) ; done
 
         echo "RENDER PLAYBOOK"
         machineShop render \
