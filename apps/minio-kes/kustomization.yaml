@@ -4,7 +4,7 @@ kind: Kustomization
 resources:
   - ../minio/requirements.yaml
   - ../minio/pre-release.yaml
-  - ../kes/requirements.yaml
+  # - ../kes/requirements.yaml # skipped because resources are already included in ../minio/requirements.yaml
   - ../kes/pre-release.yaml
   - ../kes/release.yaml
   - ../minio/release.yaml
