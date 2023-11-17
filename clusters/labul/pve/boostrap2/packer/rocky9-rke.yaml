@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: create-packer-template-rocky9-rke2-2
+  name: create-packer-template-rocky9-rke2-3
   namespace: tektoncd
 spec:
   params:
@@ -19,7 +19,7 @@ spec:
         - "installDocker+false"
         - "installDockerCompose+false"
         - "setDockerProxy+false"
-        - "templateCreationSetup+false"
+        - "templateCreationSetup+true"
     - name: bootConfigPath
       value: packer/kickstart/rocky.cfg
     - name: defaultEnvironmentPath
