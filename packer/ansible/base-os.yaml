@@ -7,6 +7,13 @@
     update_packages: [[ .updatePackages ]]
     install_requirements: [[ .installRequirements ]]
     install_motd: false
+    cloudinit: false
+    create_rke_user: [[ .createRkeUser ]]
+    update_os: true
+    install_docker: false
+    install_docker_compose: false
+    set_docker_proxy: false
+    template_creation_setup: false
     configure_rke_node: [[ .configureClusterNode ]]
     create_user: [[ .createUser ]]
     admin_group: "{{ 'wheel' if ansible_os_family == 'RedHat' else 'sudo' }}"

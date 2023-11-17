@@ -3,7 +3,17 @@ ubuntu23PackerMinVersion: 1.9.4
 rocky9PackerMinVersion: 1.9.4
 pveProvider: github.com/hashicorp/proxmox
 pveProviderVersion: 1.1.5
+
+# RKE NODE CONFIG
 configureClusterNode: false
+cloudinit: false
+createRkeUser: false
+update_os: true
+install_docker: false
+install_docker_compose: false
+set_docker_proxy: false
+template_creation_setup: false
+
 updatePackages: true
 installRequirements: true
 cpu: 8
