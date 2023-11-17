@@ -141,7 +141,7 @@ spec:
         - name: VM_TEMPLATE_NAME
           value: $(params.vmTemplateName)
         - name: ANSIBLE_EXTRA_VARS
-          value: $(params.ansibleExtraVars)
+          value: $(params.ansibleExtraVars[*])
         - name: ANSIBLE_PROVISIONING
           value: $(params.ansibleProvisioning)
         - name: SUB_DIRECTORY
