@@ -18,6 +18,10 @@ spec:
   prune: true
   wait: true
   postBuild:
+    substituteFrom:
+      # prepare a secret with VAULT_AUTOUNSEAL_TOKEN
+      - kind: Secret
+        name: autounseal-creds
     substitute:
       VAULT_STORAGE_SIZE: 2Gi
       VAULT_STORAGE_CLASS: longhorn
@@ -59,6 +63,21 @@ spec:
       target:
         kind: HelmRelease
         name: vault-deployment
+        namespace: vault
+    # make sure a secret with autounseal token exists
+    - patch: |-
+        - op: add
+          path: /spec/values/secrets
+          value:
+            autounseal-creds:
+              name: autounseal-creds
+              namespace: vault
+              dataType: stringData
+              secretKVs:
+                VAULT_TOKEN: ${VAULT_AUTOUNSEAL_TOKEN}
+      target:
+        kind: HelmRelease
+        name: vault-certificate-configuration
         namespace: vault
     # configure auto unseal: add seal stanza and mount vault ingress tls secret
     - patch: |-

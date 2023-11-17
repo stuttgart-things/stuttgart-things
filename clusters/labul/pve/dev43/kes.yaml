@@ -19,6 +19,7 @@ spec:
   wait: true
   postBuild:
     substituteFrom:
+      # prepare a secret with KES_APPROLE_ID, KES_APPROLE_SECRET, KES_VAULT_ADDR and KES_VAULT_KV_ENGINE
       - kind: Secret
         name: kes-creds
     substitute:
