@@ -10,10 +10,10 @@ spec:
       value: ubuntu23-rke2
     - name: ansibleExtraVars
       value:
-        - "updatePackages+-true"
-        - "installRequirements+-true"
-        - "configureClusterNode+-true"
-        - "rebootBeforeAnsible+-false"
+        - "updatePackages+true"
+        - "installRequirements+true"
+        - "configureClusterNode+true"
+        - "rebootBeforeAnsible+false"
     - name: gitRevision
       value: main
     - name: bootConfigPath
