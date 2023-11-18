@@ -2,12 +2,12 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: create-packer-template-rocky9-rke2-3
+  name: create-packer-template-rocky9-rke1-2
   namespace: tektoncd
 spec:
   params:
     - name: vmTemplateName
-      value: rocky9-rke2
+      value: rocky9-rke1
     - name: ansibleExtraVars
       value:
         - "updatePackages+true"
@@ -16,8 +16,8 @@ spec:
         - "rebootBeforeAnsible+false"
         - "createRkeUser+false"
         - "updateOs+true"
-        - "installDocker+false"
-        - "installDockerCompose+false"
+        - "installDocker+true"
+        - "installDockerCompose+true"
         - "setDockerProxy+false"
         - "templateCreationSetup+true"
     - name: bootConfigPath

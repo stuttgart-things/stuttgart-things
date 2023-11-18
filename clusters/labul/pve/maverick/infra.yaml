@@ -83,8 +83,18 @@ spec:
           value: 4.8.3
       target:
         kind: HelmRelease
-        name: metallb
-        namespace: metallb-system
+        name: ingress-nginx
+        namespace: ingress-nginx
+    - patch: |-
+        - op: add
+          path: /spec/values/controller
+          value:
+            extraArgs:
+              enable-ssl-passthrough: ""
+      target:
+        kind: HelmRelease
+        name: ingress-nginx
+        namespace: ingress-nginx
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -125,3 +135,102 @@ spec:
     substituteFrom:
       - kind: Secret
         name: vault-flux-secrets
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: secret-store-csi-driver
+  namespace: flux-system
+spec:
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infra/secret-store-csi-driver
+  prune: true
+  wait: true
+  patches:
+    - patch: |-
+        - op: add
+          path: /spec/values
+          value:
+            syncSecret:
+              enabled: true
+            enableSecretRotation: true
+      target:
+        kind: HelmRelease
+        name: secret-store-csi-driver
+        namespace: kube-system
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: vault
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: ingress-nginx
+    - name: cert-manager
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infra/vault
+  prune: true
+  wait: true
+  postBuild:
+    substitute:
+      VAULT_INGRESS_HOSTNAME: vault
+      VAULT_INGRESS_DOMAIN: maverick.sthings-pve.labul.sva.de
+      CLUSTER_ISSUER: cluster-issuer-approle
+  patches:
+    # only deploy vault csi provider
+    - patch: |-
+        - op: replace
+          path: /spec/values/server/enabled
+          value: false
+      target:
+        kind: HelmRelease
+        name: vault-deployment
+        namespace: vault
+    # mount vault ingress tls secret into csi provider for communication with vault
+    - patch: |-
+        - op: add
+          path: /spec/values/csi/volumes
+          value:
+            - name: vault-ingress-tls
+              secret:
+                secretName: vault-ingress-tls
+      target:
+        kind: HelmRelease
+        name: vault-deployment
+        namespace: vault
+    - patch: |-
+        - op: add
+          path: /spec/values/csi/volumeMounts
+          value:
+            - name: "vault-ingress-tls"
+              mountPath: "/mnt/vault-ingress-tls"
+              readOnly: true
+      target:
+        kind: HelmRelease
+        name: vault-deployment
+        namespace: vault
+    - patch: |-
+        - op: add
+          path: /spec/values/csi/extraArgs
+          value:
+            - "-vault-addr=https://vault.dev43.sthings-pve.labul.sva.de"
+            - "-vault-mount=pve-maverick"
+            - "-vault-namespace=root"
+            - "-vault-tls-ca-cert=/mnt/vault-ingress-tls/ca.crt"
+      target:
+        kind: HelmRelease
+        name: vault-deployment
+        namespace: vault
+---
+

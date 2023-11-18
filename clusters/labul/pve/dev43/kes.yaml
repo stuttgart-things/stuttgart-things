@@ -19,11 +19,10 @@ spec:
   wait: true
   postBuild:
     substituteFrom:
+      # prepare a secret with KES_APPROLE_ID, KES_APPROLE_SECRET, KES_VAULT_ADDR and KES_VAULT_KV_ENGINE
       - kind: Secret
         name: kes-creds
     substitute:
-      KES_STORAGE_SIZE: 2Gi
-      KES_STORAGE_CLASS: longhorn
       KES_INGRESS_HOSTNAME: kes
       KES_INGRESS_DOMAIN: dev43.sthings-pve.labul.sva.de
       CLUSTER_ISSUER: cluster-issuer-approle
