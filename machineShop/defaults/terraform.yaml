@@ -1,0 +1,39 @@
+---
+options:
+  - labul-pve
+  - labul-vsphere
+  - labda-vsphere
+
+variables:
+  - general: |
+      - vm_name="pve-maverick"
+      - vm_count={{ call .SingleSelectSurvey }}
+      - vm_num_cpus=12
+      - vm_memory=12288
+      - vm_template="ubuntu23"
+      - vm_disk_size="128G"
+  - labul-pve: |
+      - pve_folder_path="stuttgart-things"
+      - pve_cluster_node="sthings-pve1"
+      - pve_network="vmbr103"
+      - pve_datastore="v3700"
+
+backend:
+  - general: |
+      - access_key=apps/data/artifacts:accessKey
+      - secret_key=apps/data/artifacts:secretKey
+
+secrets:
+  - general: |
+      - vm_ssh_user=cloud/data/pve:ssh_user
+      - vm_ssh_password=cloud/data/pve:ssh_password
+  - labul-pve: |
+      - pve_api_url=cloud/data/pve:api_url
+      - pve_api_user=cloud/data/pve:api_user
+      - pve_api_password=cloud/data/pve:api_password
+
+terraform-version:
+  - general: 1.5.7
+
+template:
+  - labul-pve: pve-vm

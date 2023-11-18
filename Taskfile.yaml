@@ -10,8 +10,8 @@ vars:
   CONTAINER_RUNTIME_CMD: sudo nerdctl
   DATE:
     sh: date +"%y.%m%d.%H%M"
-  # TKN_CHARTS_PIPELINERUNS: ./charts/pipelineRuns.yaml
-  # TKN_IMAGES_PIPELINERUNS: ./images/pipelineRuns.yaml
+  BRANCH:
+    sh: if [ $(git rev-parse --abbrev-ref HEAD) != "main" ]; then echo $(git rev-parse --abbrev-ref HEAD) ; fi
 
 tasks:
   tag:
@@ -33,12 +33,6 @@ tasks:
       VERSION:
         sh: cat ./images/{{ .PROJECT }}/Dockerfile | grep version | awk -F= '{ print $2 }'
 
-  # build-tekton:
-  #   desc: Build & push image w/ tekton
-  #   cmds:
-  #     - task: build-tekton-prs
-  #     - task: git-push
-
   package-tekton:
     desc: Update tekton helm pipelineRuns
     cmds:
@@ -53,24 +47,6 @@ tasks:
         sh: "echo $(({{ .CURRENT_VERSION_NUMBER }}+1))"
       VERSION_NUMBER_PREFIX:
         sh: echo $(yq e '.version' ./charts/{{ .PROJECT }}/Chart.yaml | awk -F'[.=]' ' { print $1"."$2"." }')
-
-  # build-tekton-prs:
-  #   desc: Update tekton helm pipelineRuns
-  #   cmds:
-  #     - echo UPDATING BUILDAH PIPELINERUNS
-  #     - yq e -i '.runs.buildahImage.name = "builah-{{ .PROJECT }}-{{ .VERSION }}-{{ .DATE }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
-  #     - yq e -i '.runs.buildahImage.params.context = "/buildah/{{ .PROJECT }}/images/{{ .PROJECT }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
-  #     - yq e -i '.runs.buildahImage.params.image = "scr.app.4sthings.tiab.ssc.sva.de/{{ .PROJECT }}/{{ .PROJECT }}:{{ .VERSION }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
-  #     - yq e -i '.runs.buildahImage.params.gitWorkspaceSubdirectory = "/buildah/{{ .PROJECT }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
-  #     - echo UPDATING KANIKO PIPELINERUNS
-  #     - yq e -i '.runs.kanikoImage.name = "kaniko-{{ .PROJECT }}-{{ .VERSION }}-{{ .DATE }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
-  #     - yq e -i '.runs.kanikoImage.params.context = "/kaniko/{{ .PROJECT }}/images/{{ .PROJECT }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
-  #     - yq e -i '.runs.buildahImage.params.image = "scr.app.4sthings.tiab.ssc.sva.de/{{ .PROJECT }}/{{ .PROJECT }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
-  #     - yq e -i '.runs.kanikoImage.params.tag = "{{ .VERSION }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
-  #     - yq e -i '.runs.kanikoImage.params.gitWorkspaceSubdirectory = "/kaniko/{{ .PROJECT }}"' {{ .TKN_IMAGES_PIPELINERUNS }}
-  #   vars:
-  #     VERSION:
-  #       sh: cat ./images/{{ .PROJECT }}/Dockerfile | grep version | awk -F= '{ print $2 }'
 
   package:
     desc: Package & push chart
@@ -99,8 +75,30 @@ tasks:
   git-push:
     desc: Commit & push the module
     cmds:
-      - git pull
+      - git pull origin {{ .BRANCH }}
       - git config advice.addIgnoredFile false
       - git add *
-      - git commit -am 'updated {{ .PROJECT }} {{ .DATE }} for tag version {{ .UPDATED_TAG_VERSION }}{{ .BRANCH }}'
-      - git push
+      - |
+        echo "Enter commit message:"
+        read COMMIT_MESSAGE;
+        git commit -am "${COMMIT_MESSAGE}"
+      - git push origin -u {{ .BRANCH }}
+
+  branch:
+    desc: Create branch from main
+    cmds:
+      - git checkout main
+      - git branch
+      - git pull
+      - |
+        echo "Enter to be created (remote) branch:"
+        read BRANCH_NAME;
+        git checkout -b ${BRANCH_NAME}
+        git push origin ${BRANCH_NAME}
+      - git branch
+
+  pull-request:
+    desc: Create pull request into main
+    cmds:
+      - task: git-push
+      - gh pr create -t "pr" -b "created pr for ${BRANCH_NAME} branch into main"
