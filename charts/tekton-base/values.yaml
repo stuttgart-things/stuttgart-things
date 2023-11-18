@@ -1,12 +1,10 @@
 ---
-# v0.50.0
+# v0.53.2
 pipelinesNamespace: tekton-pipelines
 featureFlags:
   resultsFrom: termination-message
-# WEBHOOK FIX AFTER UPRRADE
-# kubectl delete validatingwebhookconfigurations.admissionregistration.k8s.io config.webhook.pipeline.tekton.dev
-# kubectl delete validatingwebhookconfigurations.admissionregistration.k8s.io validation.webhook.pipeline.tekton.dev
-# kubectl delete mutatingwebhookconfigurations.admissionregistration.k8s.io webhook.pipeline.tekton.dev
+
+enableCronJobCleaner: false
 
 cronJobs:
   pipeline-run-cleaner:
@@ -26,9 +24,6 @@ cronJobs:
         num2Keep:
           name: NUM_TO_KEEP
           value: "3"
-
-#PRS=$(kubectl get po -n tektoncd | grep Completed | awk '{ print $1}')
-#kubectl delete po $PRS -n tektoncd
 
 serviceAccounts:
   pipeline-run-cleaner:
