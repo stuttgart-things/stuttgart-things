@@ -126,8 +126,8 @@ spec:
     - patch: |-
         - op: replace
           path: /spec/chart/spec/version
-          value: 0.53.4
+          value: v0.53.4
       target:
         kind: HelmRelease
-        name: argocd-deployment
-        namespace: argocd
+        name: tekton-pipelines
+        namespace: argocdtekton-pipelines

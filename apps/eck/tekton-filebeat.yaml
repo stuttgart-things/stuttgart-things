@@ -16,7 +16,7 @@ spec:
       autodiscover:
         providers:
         - type: kubernetes
-          node: ${NODE_NAME}
+          node: ${HOSTNAME}
           hints:
             enabled: true
             default_config:
@@ -36,6 +36,10 @@ spec:
         hostNetwork: true # Allows to provide richer host metadata
         containers:
         - name: filebeat
+          ports:
+          - containerPort: 5066
+            name: monitoring
+            protocol: TCP
           securityContext:
             runAsUser: 0
             # If using Red Hat OpenShift uncomment this:
