@@ -1,4 +1,6 @@
+{{ if .Values.enableCronJobCleaner }}
 {{- $envVar := . -}}
 {{- range $cronJobName, $cronJob := .Values.cronJobs -}}
 {{ include "sthings-helm-toolkit.cron-job" (list $envVar $cronJobName $cronJob) }}
 {{ end -}}
+{{ end }}

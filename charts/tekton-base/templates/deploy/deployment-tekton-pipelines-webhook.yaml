@@ -1,18 +1,35 @@
+# Copyright 2020 The Tekton Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  # Note: the Deployment name must be the same as the Service name specified in
+  # config/400-webhook-service.yaml. If you change this name, you must also
+  # change the value of WEBHOOK_SERVICE_NAME below.
   name: tekton-pipelines-webhook
   namespace: {{ .Values.pipelinesNamespace }}
   labels:
     app.kubernetes.io/name: webhook
     app.kubernetes.io/component: webhook
     app.kubernetes.io/instance: default
-    app.kubernetes.io/version: "v0.50.0"
+    app.kubernetes.io/version: "v0.53.2"
     app.kubernetes.io/part-of: tekton-pipelines
     # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-    pipeline.tekton.dev/release: "v0.50.0"
+    pipeline.tekton.dev/release: "v0.53.2"
     # labels below are related to istio and should not be used for resource lookup
-    version: "v0.50.0"
+    version: "v0.53.2"
 spec:
   selector:
     matchLabels:
@@ -26,13 +43,13 @@ spec:
         app.kubernetes.io/name: webhook
         app.kubernetes.io/component: webhook
         app.kubernetes.io/instance: default
-        app.kubernetes.io/version: "v0.50.0"
+        app.kubernetes.io/version: "v0.53.2"
         app.kubernetes.io/part-of: tekton-pipelines
         # tekton.dev/release value replaced with inputs.params.versionTag in pipeline/tekton/publish.yaml
-        pipeline.tekton.dev/release: "v0.50.0"
+        pipeline.tekton.dev/release: "v0.53.2"
         # labels below are related to istio and should not be used for resource lookup
         app: tekton-pipelines-webhook
-        version: "v0.50.0"
+        version: "v0.53.2"
     spec:
       affinity:
         nodeAffinity:
@@ -59,7 +76,7 @@ spec:
         - name: webhook
           # This is the Go import path for the binary that is containerized
           # and substituted here.
-          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/webhook:v0.50.0@sha256:8ca5c85f62307fe753624de443deb3a4cc4b8dcc735c3971068820e14030c69c
+          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/webhook:v0.53.2@sha256:1e8f8be3b51be378747b4589dde970582f50e1e69f59527f0a9aa7a75c5833e3
           # Resource request required for autoscaler to take any action for a metric
           resources:
             requests:
@@ -81,7 +98,7 @@ spec:
             - name: CONFIG_OBSERVABILITY_NAME
               value: config-observability
             - name: CONFIG_LEADERELECTION_NAME
-              value: config-leader-election
+              value: config-leader-election-webhook
             - name: CONFIG_FEATURE_FLAGS_NAME
               value: feature-flags
             # If you change PROBES_PORT, you will also need to change the
