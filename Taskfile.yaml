@@ -96,3 +96,9 @@ tasks:
         git checkout -b ${BRANCH_NAME}
         git push origin ${BRANCH_NAME}
       - git branch
+
+  pull-request:
+    desc: Create pull request into main
+    cmds:
+      - task: git-push
+      - gh pr create -t "pr" -b "created pr for ${BRANCH_NAME} branch into main"
