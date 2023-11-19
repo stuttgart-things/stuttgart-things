@@ -68,7 +68,7 @@ binary:
       bin: oras
   - argocd-vault-plugin:
       url: https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/v{{ or .avpVersion "1.17.0" }}/argocd-vault-plugin_{{ or .avpVersion "1.17.0" }}_linux_amd64
-      bin: argocd-vault-plugin
+      bin: argocd-vault-plugin_{{ or .avpVersion "1.17.0" }}_linux_amd64
 
 script:
   - azure-cli:
