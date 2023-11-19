@@ -66,6 +66,9 @@ binary:
   - oras:
       url: https://github.com/oras-project/oras/releases/download/v{{ or .orasVersion "1.1.0" }}/oras_{{ or .orasVersion "1.1.0" }}_linux_amd64.tar.gz
       bin: oras
+  - argocd-vault-plugin:
+      url: https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/v{{ or .avpVersion "1.17.0" }}/argocd-vault-plugin_{{ or .avpVersion "1.17.0" }}_linux_amd64
+      bin: argocd-vault-plugin
 
 script:
   - azure-cli:
