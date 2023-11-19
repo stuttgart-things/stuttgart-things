@@ -130,4 +130,4 @@ spec:
       target:
         kind: HelmRelease
         name: tekton-pipelines
-        namespace: argocdtekton-pipelines
+        namespace: tekton-pipelines
