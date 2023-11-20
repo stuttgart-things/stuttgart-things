@@ -114,7 +114,7 @@ spec:
               name: cmp-tmp
         - name: argocd-vault-plugin
           command: [/var/run/argocd/argocd-cmp-server]
-          image: eu.gcr.io/stuttgart-things/sthings-avp:1.17.0
+          image: ${IMAGE_AVP}
           securityContext:
             runAsNonRoot: true
             runAsUser: 65532
@@ -130,7 +130,7 @@ spec:
               name: argocd-cmp-cm
         - name: argocd-vault-plugin-helm
           command: [/var/run/argocd/argocd-cmp-server]
-          image: eu.gcr.io/stuttgart-things/sthings-avp:1.17.0
+          image: ${IMAGE_AVP}
           securityContext:
             runAsNonRoot: true
             runAsUser: 65532
@@ -146,7 +146,7 @@ spec:
               name: argocd-cmp-cm
         - name: argocd-vault-plugin-kustomize
           command: [/var/run/argocd/argocd-cmp-server]
-          image: eu.gcr.io/stuttgart-things/sthings-avp:1.17.0
+          image: ${IMAGE_AVP}
           securityContext:
             runAsNonRoot: true
             runAsUser: 65532
