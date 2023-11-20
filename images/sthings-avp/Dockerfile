@@ -46,5 +46,20 @@ RUN wget https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/
 RUN chmod +x ${BIN}*
 RUN mv ${BIN}* /usr/local/bin/${BIN}
 
+# CREATE NON ROOT USER
+ENV USER_ID=999
+ENV GROUP_ID=998
+ENV USER_NAME=argocd
+ENV GROUP_NAME=argocd
+ENV USER_HOME=/home/argocd
+
+RUN addgroup -g $GROUP_ID $GROUP_NAME && \
+     adduser --shell /bin/bash --disabled-password -h ${USER_HOME} \
+     --uid $USER_ID --ingroup $GROUP_NAME $USER_NAME
+
+RUN mkdir -p /home/nonroot
+
+RUN chown -R ${USER_ID}:${GROUP_ID} ${USER_HOME}
+
 # Switch back to non-root user
-USER 65532
+USER 999
