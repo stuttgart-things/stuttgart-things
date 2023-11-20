@@ -175,6 +175,15 @@ spec:
 
         cat ./$(params.OS_VERSION)/$(params.ANSIBLE_PROVISIONING).yaml
 
+        echo "RENDER REQUIREMENTS FILE"
+        machineShop render \
+        --source local \
+        --output file \
+        --brackets square \
+        --template ./packer/ansible/requirements.yaml \
+        --defaults ./$(params.DEFAULT_ENVIRONMENT_PATH) \
+        --destination ./$(params.OS_VERSION)/requirements.yaml
+
     - name: init-build-packer
       script: |-
         #!/usr/bin/env sh
