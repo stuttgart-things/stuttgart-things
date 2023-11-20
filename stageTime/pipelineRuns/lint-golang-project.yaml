@@ -1,61 +1,46 @@
+---
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: "stageTime-0-create-pdns-entry-pve-cd43-0"
-  namespace: tektoncd
-  labels:
-    stagetime/commit: "385e2f8-0"
-    stagetime/repo: stuttgart-things
-    stagetime/author: patrick.hermann@sva.de
-    stagetime/stage: "0"
+  name: lint-machineshop-cli-47
 spec:
-  timeout: 1h
+  # taskRunTemplate:
+  #   serviceAccountName: tektoncd
   pipelineRef:
     resolver: git
     params:
       - name: pathInRepo
-        value: stageTime/pipelines/execute-ansible-playbooks.yaml
+        value: "stageTime/pipelines/lint-golang-module.yaml"
       - name: revision
-        value: main
+        value: "main"
       - name: url
-        value: https://github.com/stuttgart-things/stuttgart-things.git
+        value: "https://github.com/stuttgart-things/stuttgart-things.git"
+  workspaces:
+    - name: source
+      volumeClaimTemplate:
+        spec:
+          storageClassName: nfs3-csi2
+          accessModes:
+            - ReadWriteMany
+          resources:
+            requests:
+              storage: 1Gi
+    - name: secrets
+      csi:
+        driver: 'secrets-store.csi.k8s.io'
+        readOnly: true
+        volumeAttributes:
+          secretProviderClass: vault-packer-creds
   params:
-    - name: ansibleWorkingImage
-      value: eu.gcr.io/stuttgart-things/sthings-ansible:8.5.0
-    - name: createInventory
-      value: false
     - name: gitRepoUrl
-      value: https://github.com/stuttgart-things/stuttgart-things.git
+      value: https://github.com/stuttgart-things/machineShop.git
     - name: gitRevision
       value: main
     - name: gitWorkspaceSubdirectory
-      value: /ansible/pdns
-    - name: installExtraRoles
-      value: true
-    - name: vaultSecretName
-      value: vault
-    - name: ansibleExtraRoles
-      value:
-        - https://github.com/stuttgart-things/install-configure-powerdns.git
-    - name: ansiblePlaybooks
-      value:
-        - ansible/playbooks/pdns-ingress-entry.yaml
-    - name: ansibleVarsFile
-      value:
-        - pdns_url+-https://pdns-pve.labul.sva.de:8443
-        - entry_zone+-sthings-pve.labul.sva.de.
-        - ip_address+-10.31.101.10
-        - hostname+-cd43
-    - name: ansibleVarsInventory
-      value:
-        - localhost
-  workspaces:
-    - name: shared-workspace
-      volumeClaimTemplate:
-        spec:
-          storageClassName: openebs-hostpath
-          accessModes:
-            - ReadWriteOnce
-          resources:
-            requests:
-              storage: 250Mi
+      value: machineShop
+    - name: tokenSecretKey
+      value: token
+    - name: golintImage
+      value: docker.io/golangci/golangci-lint:v1.54-alpine
+    - name: ghImageURL
+      value: maniator/gh:v2.35.0
