@@ -86,6 +86,9 @@ spec:
                   fi
             lockRepo: false
     repoServer:
+      envFrom:
+        - secretRef:
+            name: argocd-vault-plugin-credentials
       extraContainers:
         - name: helmfile
           image: ${IMAGE_HELMFILE}
