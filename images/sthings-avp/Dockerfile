@@ -6,7 +6,7 @@ ARG TAG=3.12.0-alpine3.18
 FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
 # Switch to root for the ability to perform install
 
-LABEL version=1.17.0
+LABEL version=1.17.0-1
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 
 ENV AWSCDK_VERSION=2.99.0
