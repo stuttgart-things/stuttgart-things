@@ -2,18 +2,32 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: create-packer-template-ubuntu23-7
+  name: create-packer-template-ubuntu23-rke1-1
   namespace: tektoncd
 spec:
   params:
+    - name: vmTemplateName
+      value: ubuntu23-rke1
+    - name: ansibleExtraVars
+      value:
+        - "updatePackages+true"
+        - "installRequirements+true"
+        - "configureClusterNode+true"
+        - "rebootBeforeAnsible+false"
+        - "createRkeUser+false"
+        - "updateOs+true"
+        - "installDocker+true"
+        - "installDockerCompose+true"
+        - "setDockerProxy+false"
+        - "templateCreationSetup+false"
+    - name: gitRevision
+      value: main
     - name: bootConfigPath
       value: packer/kickstart/ubuntu.yaml
     - name: defaultEnvironmentPath
       value: packer/environments/labul-pve.yaml
     - name: gitRepoUrl
       value: https://github.com/stuttgart-things/stuttgart-things.git
-    - name: gitRevision
-      value: main
     - name: gitWorkspaceSubdirectory
       value: /packer/ubuntu23
     - name: osTemplatePath
@@ -32,12 +46,6 @@ spec:
       value: cloud/data/pve:api_password
     - name: ansibleProvisioning
       value: base-os
-    - name: vmTemplateName
-      value: ubuntu23-packer
-    - name: ansibleExtraVars
-      value:
-        - "updatePackages+true"
-        - "installRequirements+true"
   pipelineRef:
     resolver: git
     params:
