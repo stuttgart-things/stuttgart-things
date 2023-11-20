@@ -60,7 +60,7 @@ spec:
         - name: outputFile
           value: $(params.outputFile)
         - name: scanFlags
-          value: $(params.scanFlags)
+          value: $(params.scanFlags[*])
         - name: trivyImage
           value: $(params.trivyImage)
         - name: skopeoImage
