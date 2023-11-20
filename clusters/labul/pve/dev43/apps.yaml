@@ -25,7 +25,6 @@ spec:
       INGRESS_HOSTNAME: argo-cd
       INGRESS_DOMAIN: dev43.sthings-pve.labul.sva.de
       INGRESS_SECRET_NAME: argocd-ingress-tls
-      VAULTPLUGIN_GENERATE_CMD: 'helm template "${ARGOCD_APP_NAME}" -f <(echo "${ARGOCD_ENV_HELM_VALUES}") --include-crds . -n ${ARGOCD_APP_NAMESPACE} | argocd-vault-plugin generate -'
     substituteFrom:
       - kind: Secret
         name: vault-flux-secrets
@@ -35,7 +34,7 @@ spec:
     - patch: |-
         - op: replace
           path: /spec/chart/spec/version
-          value: 5.50.0
+          value: 5.51.3
       target:
         kind: HelmRelease
         name: argocd-deployment

@@ -13,7 +13,7 @@ spec:
   chart:
     spec:
       chart: argo-cd
-      version: 5.51.1
+      version: 5.51.3
       sourceRef:
         kind: HelmRepository
         name: argocd
@@ -66,8 +66,7 @@ spec:
                 - sh
                 - "-c"
                 - |
-                  helm template $ARGOCD_APP_NAME -n $ARGOCD_APP_NAMESPACE ${ARGOCD_ENV_HELM_ARGS} . |
-                  argocd-vault-plugin generate -
+                  helm template "${ARGOCD_APP_NAME}" -f <(echo "${ARGOCD_ENV_HELM_VALUES}") --include-crds . -n ${ARGOCD_APP_NAMESPACE} | argocd-vault-plugin generate -
             lockRepo: false
           helmfile:
             allowConcurrency: true
