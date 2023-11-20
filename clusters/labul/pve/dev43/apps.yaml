@@ -19,9 +19,9 @@ spec:
   timeout: 5m0s
   postBuild:
     substitute:
-      IMAGE_REPOSITORY: eu.gcr.io/stuttgart-things/sthings-argocd
-      IMAGE_TAG: v2.8.6
       SERVICE_TYPE: ClusterIP
+      IMAGE_AVP: eu.gcr.io/stuttgart-things/sthings-avp:1.17.0
+      IMAGE_HELMFILE: ghcr.io/helmfile/helmfile:v0.157.0
       INGRESS_HOSTNAME: argo-cd
       INGRESS_DOMAIN: dev43.sthings-pve.labul.sva.de
       INGRESS_SECRET_NAME: argocd-ingress-tls
@@ -34,7 +34,7 @@ spec:
     - patch: |-
         - op: replace
           path: /spec/chart/spec/version
-          value: 5.51.3
+          value: 5.51.2
       target:
         kind: HelmRelease
         name: argocd-deployment
