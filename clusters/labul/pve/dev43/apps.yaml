@@ -12,7 +12,7 @@ spec:
   retryInterval: 1m
   sourceRef:
     kind: GitRepository
-    name: argocd-refactoring
+    name: flux-system
   path: ./apps/argo-cd
   prune: true
   wait: true
