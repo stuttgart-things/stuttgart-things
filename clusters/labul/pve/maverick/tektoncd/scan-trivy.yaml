@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: scan-trivy-python-1
+  name: scan-trivy-python-2
   namespace: tektoncd
 spec:
   pipelineRef:
