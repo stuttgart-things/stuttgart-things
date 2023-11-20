@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: create-packer-template-rocky9-rke1-3
+  name: create-packer-template-rocky9-rke1-4
   namespace: tektoncd
 spec:
   params:

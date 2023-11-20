@@ -74,6 +74,7 @@ build {
     playbook_file          = "[[ .ansiblePlayMountPath ]]/[[ .ansibleOsProvioning ]].yaml"
     user                   = "[[ .rocky9User ]]"
     galaxy_file            = "[[ .ansiblePlayMountPath ]]/requirements.yaml"
+    galaxy_force_install   = "true"
   }
 
 }
