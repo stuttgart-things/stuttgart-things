@@ -20,7 +20,7 @@ spec:
   postBuild:
     substitute:
       SERVICE_TYPE: ClusterIP
-      IMAGE_AVP: eu.gcr.io/stuttgart-things/sthings-avp:1.17.0
+      IMAGE_AVP: eu.gcr.io/stuttgart-things/sthings-avp:1.17.0-1
       IMAGE_HELMFILE: ghcr.io/helmfile/helmfile:v0.157.0
       INGRESS_HOSTNAME: argo-cd
       INGRESS_DOMAIN: dev43.sthings-pve.labul.sva.de

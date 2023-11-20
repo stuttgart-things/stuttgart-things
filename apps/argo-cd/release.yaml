@@ -117,7 +117,7 @@ spec:
           image: ${IMAGE_AVP}
           securityContext:
             runAsNonRoot: true
-            runAsUser: 65532
+            runAsUser: 999
           volumeMounts:
             - mountPath: /var/run/argocd
               name: var-files
@@ -133,7 +133,7 @@ spec:
           image: ${IMAGE_AVP}
           securityContext:
             runAsNonRoot: true
-            runAsUser: 65532
+            runAsUser: 999
           volumeMounts:
             - mountPath: /var/run/argocd
               name: var-files
@@ -149,7 +149,7 @@ spec:
           image: ${IMAGE_AVP}
           securityContext:
             runAsNonRoot: true
-            runAsUser: 65532
+            runAsUser: 999
           volumeMounts:
             - mountPath: /var/run/argocd
               name: var-files
