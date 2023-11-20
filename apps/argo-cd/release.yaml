@@ -88,7 +88,7 @@ spec:
     repoServer:
       extraContainers:
         - name: helmfile
-          image: ghcr.io/helmfile/helmfile:v0.157.0
+          image: ${IMAGE_HELMFILE}
           command: ["/var/run/argocd/argocd-cmp-server"]
           env:
             - name: HELM_CACHE_HOME
