@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: create-packer-template-ubuntu23-3
+  name: create-packer-template-ubuntu23-4
   namespace: tektoncd
 spec:
   params:
@@ -33,7 +33,7 @@ spec:
     - name: ansibleProvisioning
       value: base-os
     - name: vmTemplateName
-      value: ubuntu23
+      value: ubuntu23-packer
     - name: ansibleExtraVars
       value:
         - "manage_filesystem+-true"
