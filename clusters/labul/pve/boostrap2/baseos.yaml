@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: baseos-harry
+  name: baseos-mcfly
   namespace: tektoncd
 spec:
   pipelineRef:
@@ -62,4 +62,4 @@ spec:
         - "reboot_all+-false"
     - name: ansibleVarsInventory
       value:
-        - "all+[\"pve-harry.labul.sva.de\"]"
+        - "all+[\"pve-mcfly.labul.sva.de\"]"
