@@ -26,8 +26,8 @@ pool: packer
 sshTimeout: 20m
 proxmoxUrl: https://sthings-pve1.labul.sva.de:8006/api2/json
 isoStoragePool: datastore
-rocky9IsoUrl: https://download.rockylinux.org/pub/rocky/9/isos/x86_64/Rocky-9.2-x86_64-minimal.iso
-rocky9IsoChecksum: 06505828e8d5d052b477af5ce62e50b938021f5c28142a327d4d5c075f0670dc
+rocky9IsoUrl: https://download.rockylinux.org/pub/rocky/9/isos/x86_64/Rocky-9.3-x86_64-minimal.iso
+rocky9IsoChecksum: eb096f0518e310f722d5ebd4c69f0322df4fc152c6189f93c5c797dc25f3d2e1
 rocky9User: root
 rocky9Password: ch0coLate
 rocky9NetworkInstall: https://download.rockylinux.org/pub/rocky/9/BaseOS/x86_64/os/

@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: create-packer-template-rocky9-3
+  name: create-packer-template-rocky9-4
   namespace: tektoncd
 spec:
   params:
@@ -33,7 +33,7 @@ spec:
     - name: ansibleProvisioning
       value: base-os
     - name: vmTemplateName
-      value: rocky9
+      value: rocky9-3
   pipelineRef:
     resolver: git
     params:
