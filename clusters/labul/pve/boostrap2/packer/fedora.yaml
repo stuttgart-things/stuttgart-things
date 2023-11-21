@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: create-packer-template-fedora39-1
+  name: create-packer-template-fedora39-2
   namespace: tektoncd
 spec:
   params:
