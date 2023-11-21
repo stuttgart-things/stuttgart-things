@@ -7,7 +7,7 @@ vmWareProvider: github.com/hashicorp/vmware
 templateCreator: Patrick Hermann (patrick.hermann@sva.de)\n/Christian Mueller (christian.mueller@sva.de)\n
 cpu: 8
 ram: 8192
-diskSize: 15360
+diskSize: 16384
 diskThinProvisioned: true
 
 ipWaitTimeout: 40m
