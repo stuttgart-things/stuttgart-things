@@ -73,6 +73,8 @@
       ansible.builtin.file:
         path: /home/{{ username }}/.kube
         state: directory
+        owner: "{{ username }}"
+        group: "{{ username }}"
 
     - name: Ensure kubectl is sourced from the .bashrc
       ansible.builtin.blockinfile:
@@ -80,7 +82,7 @@
         block: |
           export PATH="/var/lib/rancher/rke2/bin/:$PATH"
           sudo cp {{ kubeconfig_path }} /home/{{ username }}/.kube/config
-          sudo chown sthings.sthings /home/{{ username }}/.kube/config
+          sudo chown sthings:sthings /home/{{ username }}/.kube/config
         marker: '# {mark} ANSIBLE MANAGED BLOCK - kubectl'
         insertbefore: EOF
         create: yes 
