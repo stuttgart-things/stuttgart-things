@@ -69,14 +69,18 @@
       ansible.builtin.shell: |
         {{ cluster_registration_tokens.json.data[0].nodeCommand }} {{ role_cmd[node_role] }}
 
+    - name: Create directory for kubeconfig
+      ansible.builtin.file:
+        path: /home/{{ username }}/.kube
+        state: directory
+
     - name: Ensure kubectl is sourced from the .bashrc
       ansible.builtin.blockinfile:
         dest: "/home/{{ username }}/.bashrc"
         block: |
           export PATH="/var/lib/rancher/rke2/bin/:$PATH"
-          mkdir /home/{{ username }}/.kube
-          sudo cp /etc/rancher/rke2/rke2.yaml /home/{{ username }}/.kube/config
-          chown sthings.sthings /home/{{ username }}/.kube/config
+          sudo cp {{ kubeconfig_path }} /home/{{ username }}/.kube/config
+          sudo chown sthings.sthings /home/{{ username }}/.kube/config
         marker: '# {mark} ANSIBLE MANAGED BLOCK - kubectl'
         insertbefore: EOF
         create: yes 
