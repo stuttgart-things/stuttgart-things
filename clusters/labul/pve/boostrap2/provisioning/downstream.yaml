@@ -148,7 +148,7 @@ spec:
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: deploy-downstream-excalibur-1
+  name: deploy-downstream-excalibur-2
   namespace: tektoncd
 spec:
   pipelineRef:
@@ -193,8 +193,8 @@ spec:
     - name: ansiblePlaybooks
       value:
         - "ansible/playbooks/prepare-env.yaml"
-        - "ansible/playbooks/base-os.yaml"
-        - "ansible/playbooks/configure-rke-node.yaml"
+        # - "ansible/playbooks/base-os.yaml"
+        # - "ansible/playbooks/configure-rke-node.yaml"
         - "ansible/playbooks/create-downstream-cluster.yaml"
         - "ansible/playbooks/upload-kubeconfig-vault.yaml"
     - name: ansibleVarsFile
@@ -214,7 +214,7 @@ spec:
         - "target_host+-pve-excalibur.labul.sva.de"
         - "kubeconfig_path+-/etc/rancher/rke2/rke2.yaml"
         - "secret_path_kubeconfig+-kubeconfigs"
-        - "pause_time+-20"
+        # - "pause_time+-20"
     - name: ansibleVarsInventory
       value:
         - "all+[\"pve-excalibur.labul.sva.de\"]"
