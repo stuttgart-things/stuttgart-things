@@ -82,7 +82,7 @@
         block: |
           export PATH="/var/lib/rancher/rke2/bin/:$PATH"
           sudo cp {{ kubeconfig_path }} /home/{{ username }}/.kube/config
-          sudo chown sthings:sthings /home/{{ username }}/.kube/config
+          sudo chown {{ username }}:{{ username }} /home/{{ username }}/.kube/config
         marker: '# {mark} ANSIBLE MANAGED BLOCK - kubectl'
         insertbefore: EOF
         create: yes 
