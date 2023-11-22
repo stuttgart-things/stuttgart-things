@@ -71,7 +71,7 @@
 
     - name: Ensure kubectl is sourced from the .bashrc
       ansible.builtin.blockinfile:
-        dest: "{{ HOME }}/.bashrc"
+        dest: "/home/{{ username }}/.bashrc"
         block: |
           export PATH="/var/lib/rancher/rke2/bin/:$PATH"
           export KUBECONFIG="/etc/rancher/rke2/rke2.yaml"
