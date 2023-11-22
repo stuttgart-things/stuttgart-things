@@ -66,6 +66,7 @@ spec:
         - "rke2_k8s_version+-1.26.9"
         - "rke2_release_kind+-rke2r1"
         - "cluster_setup+-singlenode"
+        - "target_host+-pve-ohio.labul.sva.de"
         - "kubeconfig_path+-/etc/rancher/rke2/rke2.yaml"
         - "secret_path_kubeconfig+-kubeconfigs"
         # - "pause_time+-20"
