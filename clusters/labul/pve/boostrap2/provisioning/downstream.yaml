@@ -144,3 +144,77 @@ spec:
         - "all+[\"pve-maverick-worker.labul.sva.de\"]"
         - "all+[\"pve-maverick-worker-2.labul.sva.de\"]"
         - "all+[\"pve-maverick-worker-3.labul.sva.de\"]"
+---
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  name: deploy-downstream-excalibur-1
+  namespace: tektoncd
+spec:
+  pipelineRef:
+    resolver: git
+    params:
+      - name: url
+        value: https://github.com/stuttgart-things/stuttgart-things.git
+      - name: revision
+        value: main
+      - name: pathInRepo
+        value: stageTime/pipelines/execute-ansible-playbooks.yaml
+  workspaces:
+    - name: shared-workspace
+      volumeClaimTemplate:
+        spec:
+          storageClassName: openebs-hostpath
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 1Gi
+  params:
+    - name: ansibleWorkingImage
+      value: "eu.gcr.io/stuttgart-things/sthings-ansible:8.5.0"
+    - name: createInventory
+      value: "true"
+    - name: gitRepoUrl
+      value: https://github.com/stuttgart-things/stuttgart-things.git
+    - name: gitRevision
+      value: "main"
+    - name: gitWorkspaceSubdirectory
+      value: "/ansible/base-os"
+    - name: vaultSecretName
+      value: vault
+    - name: installExtraRoles
+      value: "true"
+    - name: ansibleExtraRoles
+      value:
+        - "https://github.com/stuttgart-things/install-requirements.git"
+        - "https://github.com/stuttgart-things/manage-filesystem.git"
+        - "https://github.com/stuttgart-things/install-configure-vault.git"
+    - name: ansiblePlaybooks
+      value:
+        - "ansible/playbooks/prepare-env.yaml"
+        - "ansible/playbooks/base-os.yaml"
+        - "ansible/playbooks/configure-rke-node.yaml"
+        - "ansible/playbooks/create-downstream-cluster.yaml"
+        - "ansible/playbooks/upload-kubeconfig-vault.yaml"
+    - name: ansibleVarsFile
+      value:
+        - "manage_filesystem+-true"
+        - "update_packages+-true"
+        - "install_requirements+-true"
+        - "install_motd+-true"
+        - "username+-sthings"
+        - "lvm_home_sizing+-'15%'"
+        - "lvm_root_sizing+-'35%'"
+        - "lvm_var_sizing+-'50%'"
+        - "send_to_msteams+-true"
+        - "reboot_all+-false"
+        - "roles+-pve-excalibur:all"
+        - "cluster_name+-excalibur"
+        - "target_host+-pve-excalibur.labul.sva.de"
+        - "kubeconfig_path+-/etc/rancher/rke2/rke2.yaml"
+        - "secret_path_kubeconfig+-kubeconfigs"
+        - "pause_time+-20"
+    - name: ansibleVarsInventory
+      value:
+        - "all+[\"pve-excalibur.labul.sva.de\"]"
