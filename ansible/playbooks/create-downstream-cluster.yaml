@@ -74,7 +74,9 @@
         dest: "/home/{{ username }}/.bashrc"
         block: |
           export PATH="/var/lib/rancher/rke2/bin/:$PATH"
-          export KUBECONFIG="/etc/rancher/rke2/rke2.yaml"
+          mkdir /home/{{ username }}/.kube
+          sudo cp /etc/rancher/rke2/rke2.yaml /home/{{ username }}/.kube/config
+          chown sthings.sthings /home/{{ username }}/.kube/config
         marker: '# {mark} ANSIBLE MANAGED BLOCK - kubectl'
         insertbefore: EOF
         create: yes 

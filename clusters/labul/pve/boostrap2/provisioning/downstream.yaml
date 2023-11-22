@@ -148,7 +148,7 @@ spec:
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: deploy-downstream-excalibur-6
+  name: deploy-downstream-excalibur-7
   namespace: tektoncd
 spec:
   pipelineRef:
