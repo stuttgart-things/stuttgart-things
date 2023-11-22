@@ -68,3 +68,13 @@
     - name: Create Cluster w/ node command
       ansible.builtin.shell: |
         {{ cluster_registration_tokens.json.data[0].nodeCommand }} {{ role_cmd[node_role] }}
+
+    - name: Ensure kubectl is sourced from the .bashrc
+      ansible.builtin.blockinfile:
+        dest: "{{ ansible_env.HOME }}/.bashrc"
+        block: |
+          export PATH="/var/lib/rancher/rke2/bin/:$PATH"
+          export KUBECONFIG="/etc/rancher/rke2/rke2.yaml"
+        marker: '# {mark} ANSIBLE MANAGED BLOCK - kubectl'
+        insertbefore: BOF
+        create: yes 
