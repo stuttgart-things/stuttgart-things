@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: deploy-pve-ohio-rke2-3
+  name: deploy-pve-ohio-rke2-4
   namespace: tektoncd
 spec:
   pipelineRef:
@@ -47,8 +47,8 @@ spec:
     - name: ansiblePlaybooks
       value:
         - "ansible/playbooks/prepare-env.yaml"
-        # - "ansible/playbooks/base-os.yaml"
-        # - "ansible/playbooks/deploy-rke2.yaml"
+        - "ansible/playbooks/base-os.yaml"
+        - "ansible/playbooks/deploy-rke2.yaml"
         - "ansible/playbooks/upload-kubeconfig-vault.yaml"
     - name: ansibleVarsFile
       value:
