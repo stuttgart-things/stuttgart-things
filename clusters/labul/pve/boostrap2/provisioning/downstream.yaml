@@ -148,7 +148,7 @@ spec:
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: deploy-downstream-excalibur-10
+  name: prepare-downstream-cluster-minnesota
   namespace: tektoncd
 spec:
   pipelineRef:
@@ -193,10 +193,8 @@ spec:
     - name: ansiblePlaybooks
       value:
         - "ansible/playbooks/prepare-env.yaml"
-        # - "ansible/playbooks/base-os.yaml"
-        # - "ansible/playbooks/configure-rke-node.yaml"
-        - "ansible/playbooks/create-downstream-cluster.yaml"
-        - "ansible/playbooks/upload-kubeconfig-vault.yaml"
+        - "ansible/playbooks/base-os.yaml"
+        - "ansible/playbooks/configure-rke-node.yaml"
     - name: ansibleVarsFile
       value:
         - "manage_filesystem+-true"
@@ -209,12 +207,7 @@ spec:
         - "lvm_var_sizing+-'50%'"
         - "send_to_msteams+-true"
         - "reboot_all+-false"
-        - "roles+-pve-excalibur:all"
-        - "cluster_name+-excalibur"
-        - "target_host+-pve-excalibur.labul.sva.de"
-        - "kubeconfig_path+-/etc/rancher/rke2/rke2.yaml"
-        - "secret_path_kubeconfig+-kubeconfigs"
-        # - "pause_time+-20"
+        - "pause_time+-10"
     - name: ansibleVarsInventory
       value:
-        - "all+[\"pve-excalibur.labul.sva.de\"]"
+        - "all+[\"minnesota.labul.sva.de\"]"
