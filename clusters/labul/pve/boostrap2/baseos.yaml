@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: baseos-tijuana
+  name: baseos-miami
   namespace: tektoncd
 spec:
   pipelineRef:
@@ -62,4 +62,4 @@ spec:
         - "reboot_all+-false"
     - name: ansibleVarsInventory
       value:
-        - "all+[\"tijuana.labul.sva.de\"]"
+        - "all+[\"miami.labul.sva.de\"]"
