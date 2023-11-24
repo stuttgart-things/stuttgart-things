@@ -2,7 +2,7 @@
 apiVersion: machineshop.sthings.tiab.ssc.sva.de/v1beta1
 kind: Terraform
 metadata:
- name: k8s-wks
+ name: aws-test1
  namespace: machine-shop-operator-system
  labels:
    app.kubernetes.io/created-by: machine-shop-operator
@@ -13,8 +13,8 @@ spec:
  - access_key=apps/data/artifacts:accessKey
  - secret_key=apps/data/artifacts:secretKey
  module:
- - moduleName=k8s-wks
- - backendKey=k8s-wks.tfstate
+ - moduleName=aws-test1
+ - backendKey=aws-test1.tfstate
  - moduleSourceUrl=https://artifacts.tiab.labda.sva.de/modules/vsphere-vm.zip
  - backendEndpoint=https://artifacts.app.4sthings.tiab.ssc.sva.de
  - backendRegion=main
@@ -22,7 +22,7 @@ spec:
  - tfProviderName=vsphere
  - tfProviderSource=hashicorp/vsphere
  - tfProviderVersion=2.4.1
- - tfVersion=1.5.5
+ - tfVersion=1.5.7
  secrets:
  - vsphere_user=cloud/data/vsphere:username
  - vsphere_password=cloud/data/vsphere:password
@@ -30,9 +30,9 @@ spec:
  - vm_ssh_user=cloud/data/vsphere:vm_ssh_user
  - vm_ssh_password=cloud/data/vsphere:vm_ssh_password
  template: vsphere-vm
- terraform-version: 1.5.5
+ terraform-version: 1.5.7
  variables:
- - vsphere_vm_name="k8s-wks"
+ - vsphere_vm_name="aws-test1"
  - vm_count=2
  - vm_num_cpus=6
  - vm_memory=4096

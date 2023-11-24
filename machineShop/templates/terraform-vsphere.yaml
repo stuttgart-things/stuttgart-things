@@ -1,0 +1,57 @@
+
+defaults: |
+  countVMs: VM count|1;2;3;4;5
+  numCPUs: CPU count|4;6;8;10;12
+  vmMemory: RAM in MB|4096;8192;12288
+  vmTemplate: name of vm template|ubuntu22;ubuntu23
+  resourceNamespace: machineShop operator namespace|machine-shop-operator-system
+  vmName: name of vm|var+resourceName
+  resourceName: name of custom resource|var+resourceName
+  moduleName: name of module|var+resourceName
+  backendKey: key of s3 backend state|var+resourceName
+
+template: |
+  apiVersion: machineshop.sthings.tiab.ssc.sva.de/v1beta1
+  kind: Terraform
+  metadata:
+    name: {{ call .SingleInputSurvey "resourceName" }}
+    namespace: {{ call .SingleInputSurvey "resourceNamespace" }}
+  labels:
+    app.kubernetes.io/created-by: machine-shop-operator
+    app.kubernetes.io/name: terraform
+    app.kubernetes.io/part-of: machine-shop-operator
+  spec:
+    variables:
+      - vsphere_vm_name="awx-test1"
+      - vm_count=1
+      - vm_num_cpus=6
+      - vm_memory=4096
+      - vm_disk_size=96
+      - vsphere_vm_template="/LabUL/host/Cluster01/10.31.101.40/ubuntu22"
+      - vsphere_vm_folder_path="phermann/testing"
+      - vsphere_network="/LabUL/host/Cluster01/10.31.101.41/MGMT-10.31.101"
+      - vsphere_datastore="/LabUL/host/Cluster01/10.31.101.41/UL-ESX-SAS-01"
+      - vsphere_resource_pool="/LabUL/host/Cluster01/Resources"
+      - vsphere_datacenter="LabUL"
+    backend:
+      - access_key=apps/data/artifacts:accessKey
+      - secret_key=apps/data/artifacts:secretKey
+    module:
+      - moduleName=awx-test1
+      - backendKey=awx-test1.tfstate
+      - moduleSourceUrl=https://artifacts.tiab.labda.sva.de/modules/vsphere-vm.zip
+      - backendEndpoint=https://artifacts.app.4sthings.tiab.ssc.sva.de
+      - backendRegion=main
+      - backendBucket=vsphere-vm
+      - tfProviderName=vsphere
+      - tfProviderSource=hashicorp/vsphere
+      - tfProviderVersion=2.4.1
+      - tfVersion=1.5.7
+    secrets:
+      - vsphere_user=cloud/data/vsphere:username
+      - vsphere_password=cloud/data/vsphere:password
+      - vsphere_server=cloud/data/vsphere:ip
+      - vm_ssh_user=cloud/data/vsphere:vm_ssh_user
+      - vm_ssh_password=cloud/data/vsphere:vm_ssh_password
+    template: vsphere-vm
+    terraform-version: 1.5.7
