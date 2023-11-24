@@ -1,5 +1,14 @@
 ---
-defaults:
-  -
+profile:
+  repository: https://github.com/stuttgart-things/stuttgart-things.git
+  defaults:
+    - tests/default.yaml
+    - tests/labul-pve.yaml
+
 templates:
-  - ../pve-v
+  - build-vm-terraform:
+      template: tests/vm-template.yaml
+      defaultTargetDir: clusters/{{ lab }}/{{ cloud }}
+  - provision-machine-ansible:
+      template: tests/provisoning-template.yaml
+      defaultTargetDir: clusters/{{ lab }}/{{ cloud }}
