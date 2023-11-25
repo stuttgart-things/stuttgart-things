@@ -26,8 +26,19 @@ spec:
         ingress_class_name: ${INGRESS_CLASS}
         hostname: ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}
         ingress_tls_secret: ${INGRESS_SECRET_NAME}
-        projects_persistence: true
-        postgres_storage_class: ${STORAGE_CLASS}
+        projects_persistence: false
+        projects_storage_class: ${STORAGE_CLASS:-longhorn}
+        projects_storage_access_mode: ReadWriteMany
+        postgres_storage_class: ${STORAGE_CLASS:-longhorn}
         postgres_storage_requirements:
           requests:
-            storage: ${STORAGE_SIZE:-8}Gi
+            storage: ${STORAGE_SIZE:-1Gi}
+          limits:
+            storage: ${STORAGE_SIZE:-8Gi}
+        web_extra_volume_mounts: |
+          - name: static-data
+            mountPath: /var/lib/awx/public
+        extra_volumes: |
+          - name: static-data
+            persistentVolumeClaim:
+              claimName: local-storage-pvc
