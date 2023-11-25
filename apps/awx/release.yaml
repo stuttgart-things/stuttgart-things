@@ -26,3 +26,8 @@ spec:
         ingress_class_name: ${INGRESS_CLASS}
         hostname: ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}
         ingress_tls_secret: ${INGRESS_SECRET_NAME}
+        projects_persistence: true
+        postgres_storage_class: ${STORAGE_CLASS}
+        postgres_storage_requirements:
+          requests:
+            storage: ${STORAGE_SIZE}Gi
