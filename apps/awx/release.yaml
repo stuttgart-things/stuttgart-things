@@ -30,4 +30,4 @@ spec:
         postgres_storage_class: ${STORAGE_CLASS}
         postgres_storage_requirements:
           requests:
-            storage: ${STORAGE_SIZE}Gi
+            storage: ${STORAGE_SIZE:-8}Gi
