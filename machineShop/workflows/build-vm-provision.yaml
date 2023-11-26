@@ -7,10 +7,10 @@ profile:
 
 templates:
   - build-vm-terraform:
-      template: templates/terraform-{{ call .SingleSelectSurvey "vmTemplate" }}.yaml
+      template: terraform-{{ call .SingleSelectSurvey "vmTemplate" }}.yaml
       defaultTargetDir: clusters/{{ lab }}/{{ cloud }}
   - provision-machine-ansible:
-      template: templates/provisoning-template.yaml
+      template: provisoning-template.yaml
       defaultTargetDir: clusters/{{ lab }}/{{ cloud }}
 
 defaults: |
