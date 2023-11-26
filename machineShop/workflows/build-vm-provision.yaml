@@ -7,8 +7,8 @@ profile:
 
 templates:
   - build-vm-terraform:
-      template: tests/vm-template.yaml
+      template: templates/vm-{{ cloud }}.yaml
       defaultTargetDir: clusters/{{ lab }}/{{ cloud }}
   - provision-machine-ansible:
-      template: tests/provisoning-template.yaml
+      template: templates/provisoning-template.yaml
       defaultTargetDir: clusters/{{ lab }}/{{ cloud }}
