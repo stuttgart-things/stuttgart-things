@@ -2,12 +2,19 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: bootstrap-flux-cluster-dev21-16
-  namespace: tekton
+  name: bootstrap-flux-cluster-boostrap-5
+  namespace: tektoncd
 spec:
   workspaces:
     - name: source
-      emptyDir: {}
+      volumeClaimTemplate:
+        spec:
+          storageClassName: openebs-hostpath
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 1Gi
   pipelineRef:
     resolver: git
     params:
@@ -22,19 +29,11 @@ spec:
       value: stuttgart-things
     - name: githubRepositoryOwner
       value: stuttgart-things
-    - name: githubFluxBoostrapPath
-      value: clusters/labul/vsphere/dev21
     - name: vaultSecretName
-      value: vault-in-cluster
+      value: vault
+    - name: githubFluxBoostrapPath
+      value: clusters/labul/pve/boostrap2
     - name: vaultSecretPaths
       value:
         - "git/data/github:token+-false+-GITHUB_TOKEN"
-        - "kubeconfigs/data/dev21:kubeconfig+-true+-KUBECONFIG"
-        - "apps/data/flux:vault-flux-secrets+-true+-vault-flux-secrets.yaml"
-        - "apps/data/flux:scr-flux-secrets+-true+-scr-flux-secrets.yaml"
-        - "apps/data/flux:github-flux-secrets+-true+-github-flux-secrets.yaml"
-    - name: additionalManifestFiles
-      value:
-        - "vault-flux-secrets.yaml"
-        - "scr-flux-secrets.yaml"
-        - "github-flux-secrets.yaml"
+        - "kubeconfigs/data/pve-boostrap2:kubeconfig+-true+-KUBECONFIG"

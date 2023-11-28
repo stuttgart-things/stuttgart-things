@@ -52,7 +52,7 @@ spec:
     - patch: |-
         - op: replace
           path: /spec/chart/spec/version
-          value: v0.1.60
+          value: 0.1.14
       target:
         kind: HelmRelease
         name: machine-shop-operator-deployment
