@@ -1,6 +1,6 @@
 ---
 defaults: |
-  countVMs: VM count|1;2;3;4;5
+  resourceName: name of custom resource|var+resourceName
 
 template: |
   apiVersion: tekton.dev/v1
