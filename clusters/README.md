@@ -88,6 +88,18 @@ metadata:
 type: Opaque
 stringData:
   BOOTSTRAP_PASSWORD: <BOOTSTRAP_PASSWORD>
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: vault-mso-secrets
+  namespace: flux-system
+type: Opaque
+stringData:
+  VAULT_ADDR: https://vault.automation.sthings-vsphere.labul.sva.de
+  VAULT_ROLE_ID: ef0222ff-7aa6-9954-32b6-1e6ab9206eae
+  VAULT_SECRET_ID: bc4b844f-98a0-3063-2c6f-c83ce85678cc
+  VAULT_NAMESPACE: root
 ```
 
 </details>

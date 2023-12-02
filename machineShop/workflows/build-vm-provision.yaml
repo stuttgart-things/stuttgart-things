@@ -1,6 +1,6 @@
 ---
 profile:
-  repository: https://github.com/stuttgart-things/stuttgart-things.git
+  name: Create virtal machine
   defaults:
     - default.yaml
     - labul-pve.yaml
