@@ -10,8 +10,9 @@ templates:
       template: terraform-{{ call .SingleSelectSurvey "vmTemplate" }}.yaml
       defaultTargetDir: clusters/{{ lab }}/{{ cloud }}
   - provision-machine-ansible:
-      template: provisoning-template.yaml
+      template: ansible-{{ call .SingleSelectSurvey "ansiblePlabook" }}.yaml
       defaultTargetDir: clusters/{{ lab }}/{{ cloud }}
 
 defaults: |
   vmTemplate: VM template|vsphere;pve
+  ansiblePlabook: Ansible playbook|baseos
