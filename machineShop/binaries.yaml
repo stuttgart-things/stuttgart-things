@@ -9,6 +9,9 @@ binary:
   - sops:
       url: https://github.com/getsops/sops/releases/download/v{{ or .sopsVersion "3.8.1" }}/sops-v{{ or .sopsVersion "3.8.1" }}.linux.amd64
       bin: sops-v3.8.1.linux.amd64
+  - age:
+      url: https://github.com/FiloSottile/age/releases/download/v1.1.1/age-v1.1.1-linux-amd64.tar.gz
+      bin: sops-v3.8.1.linux.amd64
   - tkn:
       url: https://github.com/tektoncd/cli/releases/download/v{{ or .tknVersion "0.32.0" }}/tkn_{{ or .tknVersion "0.32.0" }}_Linux_x86_64.tar.gz
       bin: tkn
@@ -78,6 +81,9 @@ binary:
 
 
 script:
+  - age:
+      script: |
+        go install filippo.io/age/cmd/...@latest
   - azure-cli:
       script: |
         curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
