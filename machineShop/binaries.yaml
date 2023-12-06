@@ -83,7 +83,7 @@ binary:
 script:
   - age:
       script: |
-        go install filippo.io/age/cmd/...@latest
+        go install filippo.io/age/cmd/...@v1.1.1
   - azure-cli:
       script: |
         curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
