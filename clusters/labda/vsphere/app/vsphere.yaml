@@ -35,4 +35,42 @@ cloudinit: |
   runcmd:
     - wget -O /usr/local/share/ca-certificates/labda-vsphere-ca.crt https://vault-vsphere.tiab.labda.sva.de:8200/v1/pki/ca/pem --no-check-certificate
     - update-ca-certificates
+---
+apiVersion: rke-machine-config.cattle.io/v1
+kind: VmwarevsphereConfig
+metadata:
+  name: dev-flux-worker
+  namespace: fleet-default
+common:
+  cloudCredentialSecretName: cattle-global-data:labda-vsphere
+cloneFrom: /NetApp-HCI-Datacenter/vm/stuttgart-things/vm-templates/u22-rke2-ipi
+cfgparam:
+  - disk.enableUUID=TRUE
+datacenter: /NetApp-HCI-Datacenter
+datastoreCluster: /NetApp-HCI-Datacenter/datastore/DatastoreCluster
+hostsystem: null
+folder: /NetApp-HCI-Datacenter/vm/stuttgart-things/rancher-things
+network:
+  - /NetApp-HCI-Datacenter/host/NetApp-HCI-Cluster-01/10.100.135.44/tiab-prod
+cpuCount: "6"
+diskSize: "20480"
+memorySize: "6144"
+creationType: template
+sshPort: "22"
+sshUser: docker
+sshUserGroup: staff
+tag: []
+vappProperty: []
+customAttribute: []
+boot2dockerUrl: ""
+contentLibrary: ""
+vcenter: "10.100.135.50"
+vcenterPort: "443"
+vappTransport: null
+vappIpallocationpolicy: null
+vappIpprotocol: null
+cloudinit: |
+  runcmd:
+    - wget -O /usr/local/share/ca-certificates/labda-vsphere-ca.crt https://vault-vsphere.tiab.labda.sva.de:8200/v1/pki/ca/pem --no-check-certificate
+    - update-ca-certificates
      
