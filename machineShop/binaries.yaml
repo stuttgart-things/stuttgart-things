@@ -78,6 +78,9 @@ binary:
   - mc:
       url: https://dl.min.io/client/mc/release/linux-amd64/mc
       bin: mc
+  - rclone:
+      url: https://github.com/rclone/rclone/releases/download/v{{ or .rcloneVersion "1.6.5" }}/rclone-v{{ or .rcloneVersion "1.6.5" }}-linux-amd64.zip
+      bin: rclone
 
   #- argocd-vault-plugin:
     #  url: https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/v{{ or .avpVersion "1.17.0" }}/argocd-vault-plugin_{{ or .avpVersion "1.17.0" }}_linux_amd64
