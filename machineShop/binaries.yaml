@@ -80,7 +80,7 @@ binary:
       bin: mc
   - rclone:
       url: https://github.com/rclone/rclone/releases/download/v{{ or .rcloneVersion "1.65.0" }}/rclone-v{{ or .rcloneVersion "1.65.0" }}-linux-amd64.zip
-      bin: rclone
+      bin: rclone-v1.65.0-linux-amd64
 
   #- argocd-vault-plugin:
     #  url: https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/v{{ or .avpVersion "1.17.0" }}/argocd-vault-plugin_{{ or .avpVersion "1.17.0" }}_linux_amd64
