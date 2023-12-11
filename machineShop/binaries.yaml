@@ -75,6 +75,10 @@ binary:
   - terraform:
       url: https://releases.hashicorp.com/terraform/{{ or .terraformVersion "1.6.5" }}/terraform_{{ or .terraformVersion "1.6.5" }}_linux_amd64.zip
       bin: terraform
+  - mc:
+      url: https://dl.min.io/client/mc/release/linux-amd64/mc
+      bin: mc
+
   #- argocd-vault-plugin:
     #  url: https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/v{{ or .avpVersion "1.17.0" }}/argocd-vault-plugin_{{ or .avpVersion "1.17.0" }}_linux_amd64
     #  bin: argocd-vault-plugin_{{ or .avpVersion "1.17.0" }}_linux_amd64
@@ -94,3 +98,11 @@ script:
         rm -rf nerdctl-full-{{ or .nerdctlVersion "1.6.0" }}-linux-amd64.tar.gz
         sudo systemctl enable --now containerd
         sudo systemctl enable --now buildkit
+  - age:
+      script: |
+        curl https://dl.min.io/client/mc/release/linux-amd64/mc \
+        --create-dirs \
+        -o $HOME/minio-binaries/mc
+
+        chmod +x $HOME/minio-binaries/mc
+        export PATH=$PATH:$HOME/minio-binaries/
