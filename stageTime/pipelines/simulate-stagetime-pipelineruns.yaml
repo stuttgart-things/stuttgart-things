@@ -1,0 +1,76 @@
+---
+apiVersion: tekton.dev/v1
+kind: Pipeline
+metadata:
+  name: simulate-stagetime-pipelineruns
+spec:
+  params:
+    - name: gitRepoUrl
+      type: string
+      default: ""
+      description: source git repo
+    - name: gitRevision
+      type: string
+      default: "main"
+      description: revision of source git repo
+    - name: gitWorkspaceSubdirectory
+      description: subdirectory of workspace
+      type: string
+    - name: scriptTimeout
+      description: scirpt timeout
+      type: string
+      default: "5s"
+    - name: scriptPath
+      description: the image on which ansible will run
+      type: string
+    - name: workingImage
+      description: the image on which ansible will run
+      type: string
+      default: eu.gcr.io/stuttgart-things/sthings-alpine:3.12.0-alpine3.18
+  tasks:
+    - name: fetch-repository
+      taskRef:
+        resolver: git
+        params:
+          - name: url
+            value: https://github.com/stuttgart-things/stuttgart-things.git
+          - name: revision
+            value: main
+          - name: pathInRepo
+            value: stageTime/tasks/clone-git.yaml
+      params:
+        - name: url
+          value: $(params.gitRepoUrl)
+        - name: revision
+          value: $(params.gitRevision)
+        - name: deleteExisting
+          value: 'true'
+        - name: subdirectory
+          value: $(params.gitWorkspaceSubdirectory)
+      workspaces:
+        - name: output
+          workspace: shared-workspace
+        - name: ssh-directory
+          workspace: sshCredentials
+    - name: stagetime-simulator
+      taskRef:
+        resolver: git
+        params:
+          - name: url
+            value: https://github.com/stuttgart-things/stuttgart-things.git
+          - name: revision
+            value: main
+          - name: pathInRepo
+            value: stageTime/tasks/stagetime-simulator.yaml
+      params:
+        - name: SCRIPT_TIMEOUT
+          value: $(params.scriptTimeout)
+        - name: SUB_DIRECTORY
+          value: $(params.subDirectory)
+        - name: SCRIPT_PATH
+          value: $(params.scriptPath)
+        - name: WORKING_IMAGE
+          value: $(params.workingImage)
+      workspaces:
+        - name: source
+          workspace: shared-workspace
