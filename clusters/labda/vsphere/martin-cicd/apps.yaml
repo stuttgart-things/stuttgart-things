@@ -1,0 +1,52 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: machine-shop-operator
+  namespace: flux-system
+spec:
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./apps/machine-shop-operator
+  prune: true
+  wait: true
+  postBuild:
+    substitute:
+      TKN_TEAMS_URL: https://365sva.webhook.office.com/webhookb2/2f14a9f8-4736-46dd-9c8c-31547ec37180@0a65cb1e-37d5-41ff-980a-647d9d0e4f0b/IncomingWebhook/623bf0daab3d404baea9858fc689cf02/dc3a27ed-396c-40b7-a9b2-f1a2b6b44efe
+    substituteFrom:
+      - kind: Secret
+        name: vault-flux-secrets
+  patches:
+    - patch: |-
+        - op: replace
+          path: /spec/chart/spec/version
+          value: 0.1.48
+      target:
+        kind: HelmRelease
+        name: machine-shop-operator-deployment
+        namespace: machine-shop-operator-system
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: tekton-pipelines
+  namespace: flux-system
+spec:
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./apps/tekton
+  prune: true
+  wait: true
+  postBuild:
+    substituteFrom:
+      - kind: Secret
+        name: vault-flux-secrets
+---
