@@ -15,3 +15,5 @@ spec:
         name: openebs
         namespace: openebs
       interval: 12h
+  values:
+    ---
