@@ -77,4 +77,4 @@ spec:
           value: $(params.workingImage)
       workspaces:
         - name: source
-          workspace: shared-workspace
+          workspace: source
