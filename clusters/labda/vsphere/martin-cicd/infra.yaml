@@ -10,7 +10,7 @@ spec:
   timeout: 5m
   sourceRef:
     kind: GitRepository
-    name: infra-june-2023
+    name: flux-system
   path: ./infra/trident
   prune: true
   wait: true
@@ -20,4 +20,3 @@ spec:
     substituteFrom:
       - kind: Secret
         name: trident-flux-secrets
----
