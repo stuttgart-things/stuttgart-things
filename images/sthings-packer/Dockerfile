@@ -5,11 +5,11 @@ ARG TAG=8.5.0
 
 FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
-LABEL version=1.9.4-8.5.0
+LABEL version=1.10.0-9.1.0
 
 USER root
 
-ARG PACKER_VERSION=1.9.4
+ARG PACKER_VERSION=1.10.0
 ARG MACHINE_SHOP_VERSION=0.1.52
 ARG GOVC_VERSION=0.33.0
 
