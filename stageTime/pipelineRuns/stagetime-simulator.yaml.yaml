@@ -1,0 +1,37 @@
+---
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  name: simulate-stagetime-pipelinerun-1
+  namespace: tektoncd
+spec:
+  workspaces:
+    - name: source
+      volumeClaimTemplate:
+        spec:
+          storageClassName: openebs-hostpath
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 100Mi
+  pipelineRef:
+    resolver: git
+    params:
+      - name: url
+        value: https://github.com/stuttgart-things/stuttgart-things.git
+      - name: revision
+        value: main
+      - name: pathInRepo
+        value: stageTime/pipelines/simulate-stagetime-pipelineruns.yaml
+  params:
+    - name: gitRepoUrl
+      value: https://github.com/stuttgart-things/stageTime-server.git
+    - name: gitRevision
+      value: main
+    - name: gitWorkspaceSubdirectory
+      value: stageTime
+    - name: scriptPath
+      value: tests/prime.sh
+    - name: scriptTimeout
+      value: "100s"
