@@ -2,7 +2,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: openebs
+  name: trident
   namespace: flux-system
 spec:
   interval: 1h
@@ -10,24 +10,14 @@ spec:
   timeout: 5m
   sourceRef:
     kind: GitRepository
-    name: flux-system
-  path: ./infra/openebs
+    name: infra-june-2023
+  path: ./infra/trident
   prune: true
   wait: true
-  patches:
-    - patch: |-
-        - op: replace
-          path: /spec/chart/spec/version
-          value: 3.9.0
-      target:
-        kind: HelmRelease
-        name: openebs
-        namespace: openebs
-    - patch: |-
-        - op: replace
-          path: /spec/values/cstor/enabled
-          value: false
-      target:
-        kind: HelmRelease
-        name: openebs
-        namespace: openebs
+  postBuild:
+    substitute:
+      TRIDENT_LIF: 10.100.112.160
+    substituteFrom:
+      - kind: Secret
+        name: trident-flux-secrets
+---
