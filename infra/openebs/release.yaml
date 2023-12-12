@@ -16,4 +16,5 @@ spec:
         namespace: openebs
       interval: 12h
   values:
-    ---
+    cstor:
+      enabled: false
