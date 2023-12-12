@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: simulate-stagetime-pipelinerun-10
+  name: simulate-stagetime-pipelinerun-12
   namespace: tektoncd
 spec:
   workspaces:
@@ -11,7 +11,7 @@ spec:
         spec:
           storageClassName: longhorn
           accessModes:
-            - ReadWriteOnce
+            - ReadWriteMany
           resources:
             requests:
               storage: 200Mi

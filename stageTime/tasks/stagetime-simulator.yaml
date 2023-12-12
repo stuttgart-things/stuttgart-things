@@ -39,6 +39,7 @@ spec:
       privileged: false
       runAsNonRoot: true
       runAsUser: 65532
+      fsGroup: 65532
     env:
       - name: SCRIPT_TIMEOUT
         value: "$(params.SCRIPT_TIMEOUT)"
