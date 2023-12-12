@@ -53,7 +53,7 @@ spec:
           value: $(params.gitWorkspaceSubdirectory)
       workspaces:
         - name: output
-          workspace: shared-workspace
+          workspace: source
         - name: ssh-directory
           workspace: sshCredentials
     - name: stagetime-simulator
