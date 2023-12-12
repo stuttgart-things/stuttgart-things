@@ -26,7 +26,7 @@ spec:
     - patch: |-
         - op: replace
           path: /spec/values/cstor/enabled
-          value: true
+          value: false
       target:
         kind: HelmRelease
         name: openebs

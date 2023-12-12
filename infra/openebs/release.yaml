@@ -18,3 +18,4 @@ spec:
   values:
     cstor:
       enabled: false
+      #https://openebs.io/docs/user-guides/cstor
