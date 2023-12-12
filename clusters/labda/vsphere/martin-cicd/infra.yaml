@@ -2,7 +2,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: trident
+  name: longhorn
   namespace: flux-system
 spec:
   interval: 1h
@@ -11,21 +11,15 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./infra/trident
+  path: ./infra/longhorn
   prune: true
   wait: true
-  postBuild:
-    substitute:
-      TRIDENT_LIF: 10.100.112.160
-    substituteFrom:
-      - kind: Secret
-        name: trident-flux-secrets
   patches:
     - patch: |-
         - op: replace
           path: /spec/chart/spec/version
-          value: 23.10.0
+          value: 1.5.3
       target:
         kind: HelmRelease
-        name: trident-operator
-        namespace: trident
+        name: longhorn
+        namespace: longhorn-system
