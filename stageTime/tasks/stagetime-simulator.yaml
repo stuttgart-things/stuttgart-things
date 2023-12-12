@@ -49,4 +49,4 @@ spec:
         set -eu
 
         echo "EXECUTING SCRIPT"
-        sh ${SCRIPT_PATH}
+        sh $(params.SCRIPT_PATH)

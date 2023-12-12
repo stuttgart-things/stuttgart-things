@@ -2,14 +2,14 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: simulate-stagetime-pipelinerun-6
+  name: simulate-stagetime-pipelinerun-9
   namespace: tektoncd
 spec:
   workspaces:
     - name: source
       volumeClaimTemplate:
         spec:
-          storageClassName: openebs-hostpath
+          storageClassName: longhorn
           accessModes:
             - ReadWriteOnce
           resources:
