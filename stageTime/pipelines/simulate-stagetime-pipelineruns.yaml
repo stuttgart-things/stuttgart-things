@@ -70,7 +70,7 @@ spec:
         - name: SCRIPT_TIMEOUT
           value: $(params.scriptTimeout)
         - name: SUB_DIRECTORY
-          value: $(params.subDirectory)
+          value: $(params.gitWorkspaceSubdirectory)
         - name: SCRIPT_PATH
           value: $(params.scriptPath)
         - name: WORKING_IMAGE
