@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: simulate-stagetime-pipelinerun-1
+  name: simulate-stagetime-pipelinerun-2
   namespace: tektoncd
 spec:
   workspaces:

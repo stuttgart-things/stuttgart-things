@@ -4,6 +4,10 @@ kind: Pipeline
 metadata:
   name: simulate-stagetime-pipelineruns
 spec:
+  workspaces:
+    - name: source
+    - name: sshCredentials
+      optional: true
   params:
     - name: gitRepoUrl
       type: string
