@@ -48,5 +48,8 @@ spec:
         #!/usr/bin/env sh
         set -eu
 
+        ls -lta
+        echo $(params.SCRIPT_PATH)
+
         echo "EXECUTING SCRIPT"
         sh $(params.SCRIPT_PATH)
