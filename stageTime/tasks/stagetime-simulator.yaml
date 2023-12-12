@@ -1,0 +1,52 @@
+---
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: stagetime-script-simulator
+  labels:
+    app.kubernetes.io/version: "0.1"
+  annotations:
+    tekton.dev/categories: "testing"
+    tekton.dev/displayName: "Build vm template w/ packer"
+    tekton.dev/pipelines.minVersion: "0.48.0"
+    tekton.dev/platforms: "linux/amd64,linux/s390x,linux/ppc64le"
+    tekton.dev/tags: "testing"
+spec:
+  description: build packer vm template
+  workspaces:
+    - name: source
+      description: holds the working data
+      optional: false
+  params:
+    - name: SCRIPT_TIMEOUT
+      description: scirpt timeout
+      type: string
+      default: "5s"
+    - name: SUB_DIRECTORY
+      description: subdirectory of workspace
+      type: string
+    - name: SCRIPT_PATH
+      description: the image on which ansible will run
+      type: string
+    - name: WORKING_IMAGE
+      description: the image on which ansible will run
+      type: string
+      default: eu.gcr.io/stuttgart-things/sthings-alpine:3.12.0-alpine3.18
+  stepTemplate:
+    workingDir: $(workspaces.source.path)/$(params.SUB_DIRECTORY)
+    image: "$(params.WORKING_IMAGE)"
+    securityContext:
+      privileged: false
+      runAsNonRoot: true
+      runAsUser: 65532
+    env:
+      - name: SCRIPT_TIMEOUT
+        value: "$(params.SCRIPT_TIMEOUT)"
+  steps:
+    - name: execute-script
+      script: |-
+        #!/usr/bin/env sh
+        set -eu
+
+        echo "EXECUTING SCRIPT"
+        sh ${SCRIPT_PATH}
