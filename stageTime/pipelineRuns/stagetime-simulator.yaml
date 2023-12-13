@@ -2,16 +2,20 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: simulate-stagetime-pipelinerun-12
+  name: simulate-stagetime-pipelinerun-20
   namespace: tektoncd
 spec:
+  taskRunTemplate:
+    podTemplate:
+      securityContext:
+        fsGroup: 65532
   workspaces:
     - name: source
       volumeClaimTemplate:
         spec:
-          storageClassName: longhorn
+          storageClassName: openebs-hostpath
           accessModes:
-            - ReadWriteMany
+            - ReadWriteOnce
           resources:
             requests:
               storage: 200Mi

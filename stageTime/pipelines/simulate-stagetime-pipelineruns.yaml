@@ -78,3 +78,5 @@ spec:
       workspaces:
         - name: source
           workspace: source
+      runAfter:
+        - fetch-repository
