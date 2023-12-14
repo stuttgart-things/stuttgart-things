@@ -153,15 +153,14 @@ autoinstall:
   ssh:
     install-server: yes
   network:
-    network:
-      version: 2
-      ethernets:
-        ens192:
-          dhcp4: no
-          addresses: [10.100.136.221]
-          gateway4: 10.100.136.254
-          nameservers:
-            addresses: [10.100.101.5]
+    version: 2
+    ethernets:
+      ens192:
+        dhcp4: no
+        addresses: [10.100.136.221]
+        gateway4: 10.100.136.254
+        nameservers:
+          addresses: [10.100.101.5]
   packages:
     - qemu-guest-agent
     - open-vm-tools
