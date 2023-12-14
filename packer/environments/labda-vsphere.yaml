@@ -8,7 +8,7 @@ ipWaitTimeout: 10m
 
 ansibleProvisioner: github.com/hashicorp/ansible
 ansibleProvisionerMinVersion: 1.1.0
-ipSettleTimeout: 10m
+ipSettleTimeout: 55s
 bootWait: 5s
 
 
