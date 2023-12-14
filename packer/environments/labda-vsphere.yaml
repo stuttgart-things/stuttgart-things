@@ -6,6 +6,12 @@ ubuntu23User: ubuntu
 ubuntu23Password: ubuntu
 ipWaitTimeout: 10m
 
+ansibleProvisioner: github.com/hashicorp/ansible
+ansibleProvisionerMinVersion: 1.1.0
+ipSettleTimeout: 10m
+bootWait: 5s
+
+
 ubuntu23IsoUrl: https://releases.ubuntu.com/lunar/ubuntu-23.04-live-server-amd64.iso
 ubuntu23IsoChecksum: c7cda48494a6d7d9665964388a3fc9c824b3bef0c9ea3818a1be982bc80d346b
 cpu: 8
