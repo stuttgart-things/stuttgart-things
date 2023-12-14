@@ -9,12 +9,12 @@ autoinstall:
         dhcp4: false
         dhcp6: false
         addresses:
-          - 10.100.136.210/24
+          - [[ .staticIp ]]
         routes:
           - to: default
-            via: 10.100.136.254
+            via: [[ .gateway ]]
         nameservers:
-          addresses: [10.100.101.5]
+          addresses: [[[ .nameserver ]]]
   locale: en_US.UTF-8
   keyboard:
     layout: de
