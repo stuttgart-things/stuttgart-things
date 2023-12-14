@@ -7,7 +7,7 @@ packer {
     }
     ansible = {
       source  = "[[ .ansibleProvisioner ]]"
-      version = ">= [[ .vmWareProvider ]]"
+      version = ">= [[ .ansibleProvisionerMinVersion ]]"
     }
   }
 }
