@@ -1,4 +1,13 @@
 #cloud-config
+network:
+  version: 2
+  ethernets:
+    ens192:
+      dhcp4: no
+      addresses: [10.100.136.221]
+      gateway4: 10.100.136.254
+      nameservers:
+        addresses: [10.100.101.5]
 autoinstall:
   version: 1
   locale: en_US.UTF-8
@@ -152,15 +161,6 @@ autoinstall:
     password: $6$rounds=656000$r6635QXd9WQ08Tgk$wDjmJsQa4GcTsh/XZG47f7mzVUeYOd1QietsPwbDFh9E.8wjogt8c5DIzLU1q6s.htUfmlslKpD9bznyQD0cb1
   ssh:
     install-server: yes
-  network:
-    version: 2
-    ethernets:
-      ens192:
-        dhcp4: no
-        addresses: [10.100.136.221]
-        gateway4: 10.100.136.254
-        nameservers:
-          addresses: [10.100.101.5]
   packages:
     - qemu-guest-agent
     - open-vm-tools
