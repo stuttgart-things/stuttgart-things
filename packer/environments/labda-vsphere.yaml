@@ -2,17 +2,15 @@
 ubuntu23PackerMinVersion: 1.10.0
 vmWareProvider: github.com/hashicorp/packer-plugin-vmware
 ubuntu23PackerVMwarePluginMinVersion: 1.0.10
-ipWaitTimeout: 10m
-
 ubuntu23User: ubuntu
 ubuntu23Password: ubuntu
+ipWaitTimeout: 10m
 
 ubuntu23IsoUrl: https://releases.ubuntu.com/lunar/ubuntu-23.04-live-server-amd64.iso
 ubuntu23IsoChecksum: c7cda48494a6d7d9665964388a3fc9c824b3bef0c9ea3818a1be982bc80d346b
 cpu: 8
 ram: 8192
 diskSize: 16
-
 osVersion: rocky9
 ansibleOsProvioning: baseos-setup
 
