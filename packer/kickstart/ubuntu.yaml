@@ -3,11 +3,16 @@ autoinstall:
   version: 1
   network:
     version: 2
+    renderer: networkd
     ethernets:
       ens192:
-        dhcp4: no
-        addresses: [10.100.136.221]
-        gateway4: 10.100.136.254
+        dhcp4: false
+        dhcp6: false
+        addresses:
+          - 10.100.136.210/24
+        routes:
+          - to: default
+            via: 10.100.136.254
         nameservers:
           addresses: [10.100.101.5]
   locale: en_US.UTF-8
