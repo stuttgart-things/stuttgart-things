@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: simulate-stagetime-pipelinerun-20
+  name: simulate-stagetime-pipelinerun-24
   namespace: tektoncd
 spec:
   taskRunTemplate:
@@ -18,7 +18,7 @@ spec:
             - ReadWriteOnce
           resources:
             requests:
-              storage: 200Mi
+              storage: 20Mi
   pipelineRef:
     resolver: git
     params:
@@ -38,4 +38,4 @@ spec:
     - name: scriptPath
       value: tests/prime.sh
     - name: scriptTimeout
-      value: "100s"
+      value: "15s"
