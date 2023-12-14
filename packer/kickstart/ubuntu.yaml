@@ -1,15 +1,15 @@
 #cloud-config
-network:
-  version: 2
-  ethernets:
-    ens192:
-      dhcp4: no
-      addresses: [10.100.136.221]
-      gateway4: 10.100.136.254
-      nameservers:
-        addresses: [10.100.101.5]
 autoinstall:
   version: 1
+  network:
+    version: 2
+    ethernets:
+      ens192:
+        dhcp4: no
+        addresses: [10.100.136.221]
+        gateway4: 10.100.136.254
+        nameservers:
+          addresses: [10.100.101.5]
   locale: en_US.UTF-8
   keyboard:
     layout: de
