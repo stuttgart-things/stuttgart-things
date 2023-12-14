@@ -1,6 +1,6 @@
 ---
 ubuntu23PackerMinVersion: 1.10.0
-vmWareProvider: github.com/hashicorp/packer-plugin-vmware
+vmWareProvider: github.com/hashicorp/vmware
 ubuntu23PackerVMwarePluginMinVersion: 1.0.10
 ubuntu23User: ubuntu
 ubuntu23Password: ubuntu
