@@ -1,7 +1,7 @@
 ---
 ubuntu23PackerMinVersion: 1.10.0
-vmWareProvider: github.com/hashicorp/vmware
-ubuntu23PackerVMwarePluginMinVersion: 1.0.10
+vmWareProvider: github.com/hashicorp/vsphere
+ubuntu23PackerVMwarePluginMinVersion: 1.2.3
 ubuntu23User: ubuntu
 ubuntu23Password: ubuntu
 ipWaitTimeout: 10m
