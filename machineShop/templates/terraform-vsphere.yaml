@@ -23,11 +23,11 @@ template: |
   spec:
     variables:
       - vsphere_vm_name="awx-test1"
-      - vm_count=1
+      - vm_count={{ call .SingleSelectSurvey "countVMs" }}
       - vm_num_cpus=6
       - vm_memory=4096
       - vm_disk_size=96
-      - vsphere_vm_template="/LabUL/host/Cluster01/10.31.101.40/ubuntu22"
+      - vsphere_vm_template="/LabUL/host/Cluster01/10.31.101.40/ubuntu23"
       - vsphere_vm_folder_path="phermann/testing"
       - vsphere_network="/LabUL/host/Cluster01/10.31.101.41/MGMT-10.31.101"
       - vsphere_datastore="/LabUL/host/Cluster01/10.31.101.41/UL-ESX-SAS-01"
@@ -46,7 +46,7 @@ template: |
       - tfProviderName=vsphere
       - tfProviderSource=hashicorp/vsphere
       - tfProviderVersion=2.4.1
-      - tfVersion=1.5.7
+      - tfVersion=1.6.6
     secrets:
       - vsphere_user=cloud/data/vsphere:username
       - vsphere_password=cloud/data/vsphere:password
@@ -54,4 +54,4 @@ template: |
       - vm_ssh_user=cloud/data/vsphere:vm_ssh_user
       - vm_ssh_password=cloud/data/vsphere:vm_ssh_password
     template: vsphere-vm
-    terraform-version: 1.5.7
+    terraform-version: 1.6.6
