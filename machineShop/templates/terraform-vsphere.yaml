@@ -13,7 +13,6 @@ defaults: |
   backendKey: key of s3 backend state|var+resourceName
   terraformVersion: Terraform version|1.6.6;1.6.5
   vsphereProviderVersion: Vsphere Provider version|2.6.1;2.4.1
-  backendKey: key of s3 backend state|var+resourceName
 
 template: |
   apiVersion: machineshop.sthings.tiab.ssc.sva.de/v1beta1
