@@ -11,7 +11,6 @@ defaults: |
   vmName: Name of vm|var+resourceName
   resourceName: Name of custom resource|var+resourceName
   moduleName: Name of module|var+resourceName
-  vmName: Name of vm|var+resourceName
   backendKey: Key of s3 backend state|var+resourceName
   vsphereProviderVersion: Vsphere Provider version|2.6.1;2.4.1
 
