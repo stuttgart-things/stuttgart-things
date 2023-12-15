@@ -8,7 +8,7 @@
 
   vars:
     rke_version: 2
-    rke2_k8s_version: 1.28.2
+    rke2_k8s_version: 1.28.4
     rke2_airgapped_installation: true
     rke2_release_kind: rke2r1 # rke2r2
     disable_rke2_components:
