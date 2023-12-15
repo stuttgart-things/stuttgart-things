@@ -58,4 +58,4 @@ template: |
       - vm_ssh_user=cloud/data/vsphere:vm_ssh_user
       - vm_ssh_password=cloud/data/vsphere:vm_ssh_password
     template: vsphere-vm
-    terraform-version: {{ terraformVersion }}
+    terraform-version: {{ call .SingleInputSurvey "terraformVersion" }}
