@@ -20,8 +20,8 @@ kind: Kustomization
 metadata:
   name: argo-cd
   namespace: flux-system
-  labels:
-    alerting: flux2
+  # labels:
+  #   alerting: flux2
 spec:
   dependsOn:
     - name: ingress-nginx
