@@ -7,7 +7,7 @@ defaults: |
   vmTemplate: Name of vm template|ubuntu23;ubuntu22
   vsphereFolder: VM folder|phermann/testing;phermann/infra
   resourceNamespace: Operator namespace|machine-shop-operator-system
-  vsphereVMtemplate: Terraform version|1.6.6;1.6.5
+  terraformVersion: Terraform version|1.6.6;1.6.5
   vmName: Name of vm|var+resourceName
   resourceName: Name of custom resource|var+resourceName
   moduleName: Name of module|var+resourceName
