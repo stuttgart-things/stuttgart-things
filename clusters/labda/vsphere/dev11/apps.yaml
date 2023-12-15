@@ -60,6 +60,38 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: vault
+  namespace: flux-system
+spec:
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infra/vault
+  prune: true
+  wait: true
+  postBuild:
+    substitute:
+      VAULT_STORAGE_SIZE: 2Gi
+      VAULT_STORAGE_CLASS: nfs3-csi2
+      VAULT_INGRESS_HOSTNAME: vault
+      VAULT_INGRESS_DOMAIN: dev11.4sthings.tiab.ssc.sva.de
+      CLUSTER_ISSUER: cluster-issuer-approle
+  patches:
+    - patch: |-
+        - op: replace
+          path: /spec/chart/spec/version
+          value: 0.26.1
+      target:
+        kind: HelmRelease
+        name: vault-deployment
+        namespace: vault
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: github-arc
   namespace: flux-system
 spec:
