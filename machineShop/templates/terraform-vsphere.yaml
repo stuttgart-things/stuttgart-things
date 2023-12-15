@@ -4,16 +4,15 @@ defaults: |
   numCPUs: CPU count|4;6;8;10;12
   vmMemory: RAM in MB|4096;8192;12288
   vmDisk: DiskSize in GB|64;32;96;128;196;256
-  vmTemplate: name of vm template|ubuntu23;ubuntu22
+  vmTemplate: Name of vm template|ubuntu23;ubuntu22
   vsphereFolder: VM folder|phermann/testing;phermann/infra
-  resourceNamespace: machineShop operator namespace|machine-shop-operator-system
+  resourceNamespace: Operator namespace|machine-shop-operator-system
   vsphereVMtemplate: Terraform version|1.6.6;1.6.5
-  vmName: name of vm|var+resourceName
-  resourceName: name of custom resource|var+resourceName
-  moduleName: name of module|var+resourceName
-  backendKey: key of s3 backend state|var+resourceName
-  terraformVersion: Terraform version|1.6.6;1.6.5
-  terraformVersion2: Terraform version|var+terraformVersion
+  vmName: Name of vm|var+resourceName
+  resourceName: Name of custom resource|var+resourceName
+  moduleName: Name of module|var+resourceName
+  vmName: Name of vm|var+resourceName
+  backendKey: Key of s3 backend state|var+resourceName
   vsphereProviderVersion: Vsphere Provider version|2.6.1;2.4.1
 
 template: |
@@ -28,7 +27,7 @@ template: |
     app.kubernetes.io/part-of: machine-shop-operator
   spec:
     variables:
-      - vsphere_vm_name="awx-test1"
+      - vsphere_vm_name="{{ call .SingleInputSurvey "moduleName" }}"
       - vm_count={{ call .SingleSelectSurvey "countVMs" }}
       - vm_num_cpus={{ call .SingleSelectSurvey "numCPUs" }}
       - vm_memory={{ call .SingleSelectSurvey "vmMemory" }}
@@ -60,4 +59,4 @@ template: |
       - vm_ssh_user=cloud/data/vsphere:vm_ssh_user
       - vm_ssh_password=cloud/data/vsphere:vm_ssh_password
     template: vsphere-vm
-    terraform-version: {{ call .SingleInputSurvey "terraformVersion2" }}
+    terraform-version: 1.6.6
