@@ -7,7 +7,7 @@ ubuntu23Password: ubuntu
 ipWaitTimeout: 10m
 
 ansibleProvisioner: github.com/hashicorp/ansible
-ansibleProvisionerMinVersion: 1.1.0
+ansibleProvisionerMinVersion: 1.1.1
 ipSettleTimeout: 20s
 bootWait: 5s
 

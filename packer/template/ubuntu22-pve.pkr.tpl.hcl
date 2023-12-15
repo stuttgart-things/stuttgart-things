@@ -6,8 +6,8 @@ packer {
       version = ">= [[ .pveProviderVersion ]]"
     }
     ansible = {
-      source  = "github.com/hashicorp/ansible"
-      version = "~> 1"
+      source  = "[[ .ansibleProvisioner ]]"
+      version = ">= [[ .ansibleProvisionerMinVersion ]]"
     }
   }
 }

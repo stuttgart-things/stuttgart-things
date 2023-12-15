@@ -1,20 +1,20 @@
 #cloud-config
 autoinstall:
   version: 1
-  network:
-    version: 2
-    renderer: networkd
-    ethernets:
-      ens192:
-        dhcp4: false
-        dhcp6: false
-        addresses:
-          - [[ .staticIp ]]
-        routes:
-          - to: default
-            via: [[ .gateway ]]
-        nameservers:
-          addresses: [[[ .nameserver ]]]
+  # network:
+  #   version: 2
+  #   renderer: networkd
+  #   ethernets:
+  #     ens192:
+  #       dhcp4: false
+  #       dhcp6: false
+  #       addresses:
+  #         - [[ .staticIp ]]
+  #       routes:
+  #         - to: default
+  #           via: [[ .gateway ]]
+  #       nameservers:
+  #         addresses: [[[ .nameserver ]]]
   locale: en_US.UTF-8
   keyboard:
     layout: de

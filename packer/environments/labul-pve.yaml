@@ -2,7 +2,10 @@
 ubuntu23PackerMinVersion: 1.9.4
 rocky9PackerMinVersion: 1.9.4
 pveProvider: github.com/hashicorp/proxmox
-pveProviderVersion: 1.1.5
+pveProviderVersion: 1.1.6
+
+ansibleProvisioner: github.com/hashicorp/ansible
+ansibleProvisionerMinVersion: 1.1.1
 
 # RKE NODE CONFIG
 configureClusterNode: false
