@@ -44,3 +44,79 @@ spec:
   - vm_ssh_password=cloud/data/vsphere:vm_ssh_password
  template: vsphere-vm
  terraform-version: 1.6.6
+---
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  name: deploy-rke2-rancher28-eva
+  namespace: tektoncd
+spec:
+  pipelineRef:
+    resolver: git
+    params:
+      - name: url
+        value: https://github.com/stuttgart-things/stuttgart-things.git
+      - name: revision
+        value: main
+      - name: pathInRepo
+        value: stageTime/pipelines/execute-ansible-playbooks.yaml
+  workspaces:
+    - name: shared-workspace
+      volumeClaimTemplate:
+        spec:
+          storageClassName: openebs-hostpath
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 250Mi
+  params:
+    - name: ansibleWorkingImage
+      value: "eu.gcr.io/stuttgart-things/sthings-ansible:9.1.0"
+    - name: createInventory
+      value: "true"
+    - name: gitRepoUrl
+      value: https://github.com/stuttgart-things/stuttgart-things.git
+    - name: gitRevision
+      value: "main"
+    - name: gitWorkspaceSubdirectory
+      value: "/ansible/rke2"
+    - name: vaultSecretName
+      value: vault
+    - name: installExtraRoles
+      value: "true"
+    - name: ansibleExtraRoles
+      value:
+        - "https://github.com/stuttgart-things/install-requirements.git"
+        - "https://github.com/stuttgart-things/manage-filesystem.git"
+        - "https://github.com/stuttgart-things/install-configure-vault.git"
+    - name: ansiblePlaybooks
+      value:
+        - "ansible/playbooks/prepare-env.yaml"
+        - "ansible/playbooks/base-os.yaml"
+        - "ansible/playbooks/deploy-rke2.yaml"
+        - "ansible/playbooks/upload-kubeconfig-vault.yaml"
+    - name: ansibleVarsFile
+      value:
+        - "manage_filesystem+-true"
+        - "update_packages+-true"
+        - "install_requirements+-true"
+        - "install_motd+-true"
+        - "username+-sthings"
+        - "lvm_home_sizing+-'15%'"
+        - "lvm_root_sizing+-'35%'"
+        - "lvm_var_sizing+-'50%'"
+        - "send_to_msteams+-true"
+        - "reboot_all+-false"
+        - "cluster_name+-ohio"
+        - "rke2_k8s_version+-1.26.9"
+        - "rke2_release_kind+-rke2r1"
+        - "cluster_setup+-singlenode"
+        - "target_host+-pve-ohio.labul.sva.de"
+        - "kubeconfig_path+-/etc/rancher/rke2/rke2.yaml"
+        - "secret_path_kubeconfig+-kubeconfigs"
+        # - "pause_time+-20"
+    - name: ansibleVarsInventory
+      value:
+        - "initial_master_node+[\"pve-ohio.labul.sva.de\"]"
+        - "additional_master_nodes+[\"\"]"
