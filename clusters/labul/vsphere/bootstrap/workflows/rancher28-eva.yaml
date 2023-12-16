@@ -48,7 +48,7 @@ spec:
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: deploy-rke2-rancher28-eva
+  name: deploy-rke2-rancher28-eva-1
   namespace: tektoncd
 spec:
   pipelineRef:
