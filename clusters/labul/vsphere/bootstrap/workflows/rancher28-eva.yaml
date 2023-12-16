@@ -57,7 +57,7 @@ spec:
       - name: url
         value: https://github.com/stuttgart-things/stuttgart-things.git
       - name: revision
-        value: main
+        value: rancher-280
       - name: pathInRepo
         value: stageTime/pipelines/execute-ansible-playbooks.yaml
   workspaces:
@@ -78,7 +78,7 @@ spec:
     - name: gitRepoUrl
       value: https://github.com/stuttgart-things/stuttgart-things.git
     - name: gitRevision
-      value: "main"
+      value: "rancher-280"
     - name: gitWorkspaceSubdirectory
       value: "/ansible/rke2"
     - name: vaultSecretName
@@ -109,14 +109,15 @@ spec:
         - "send_to_msteams+-true"
         - "reboot_all+-false"
         - "cluster_name+-ohio"
-        - "rke2_k8s_version+-1.26.9"
-        - "rke2_release_kind+-rke2r1"
-        - "cluster_setup+-singlenode"
-        - "target_host+-pve-ohio.labul.sva.de"
+        - "rke2_k8s_version+-1.27.7"
+        - "rke2_release_kind+-rke2r2"
+        - "cluster_setup+-multinode"
+        - "target_host+-rancher28-eva.labul.sva.de"
         - "kubeconfig_path+-/etc/rancher/rke2/rke2.yaml"
         - "secret_path_kubeconfig+-kubeconfigs"
-        # - "pause_time+-20"
+        - "pause_time+-10"
     - name: ansibleVarsInventory
       value:
-        - "initial_master_node+[\"pve-ohio.labul.sva.de\"]"
-        - "additional_master_nodes+[\"\"]"
+        - "initial_master_node+[\"rancher28-eva.labul.sva.de\"]"
+        - "additional_master_nodes+[\"rancher28-eva-2.labul.sva.de\"]"
+        - "additional_master_nodes+[\"rancher28-eva-3.labul.sva.de\"]"
