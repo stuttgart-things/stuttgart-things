@@ -155,12 +155,19 @@ spec:
         export KUBECONFIG=KUBECONFIG
         export GITHUB_TOKEN=$(cat GITHUB_TOKEN)
 
-        echo BOOTSTRAP FLUX
+        echo BOOTSTRAP FLUX GITHUB
         flux bootstrap github \
         --owner=$(params.GITHUB_REPOSITORY_OWNER) \
         --repository=$(params.GITHUB_REPOSITORY) \
         --path=$(params.GITHUB_FLUX_BOOTSTRAP_PATH) \
         --namespace $(params.FLUX_NAMESPACE)
+
+        echo BOOTSTRAP FLUX WITHOUT GIT
+
+# flux install \
+# --namespace=flux-system \
+# --network-policy=false \
+# --components=source-controller,helm-controller
 
         echo RECONCILE FLUX-SYSTEM
         flux reconcile source git flux-system

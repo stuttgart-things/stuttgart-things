@@ -1,4 +1,5 @@
 ---
+# STAGE 0 - CREATE VMS
 apiVersion: machineshop.sthings.tiab.ssc.sva.de/v1beta1
 kind: Terraform
 metadata:
@@ -45,6 +46,7 @@ spec:
  template: vsphere-vm
  terraform-version: 1.6.6
 ---
+# STAGE 0 - DEPLOY RKE2
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
@@ -108,7 +110,7 @@ spec:
         - "lvm_var_sizing+-'50%'"
         - "send_to_msteams+-true"
         - "reboot_all+-false"
-        - "cluster_name+-ohio"
+        - "cluster_name+-rancher28-eva"
         - "rke2_k8s_version+-1.27.7"
         - "rke2_release_kind+-rke2r2"
         - "cluster_setup+-multinode"
@@ -121,3 +123,65 @@ spec:
         - "initial_master_node+[\"rancher28-eva.labul.sva.de\"]"
         - "additional_master_nodes+[\"rancher28-eva-2.labul.sva.de\"]"
         - "additional_master_nodes+[\"rancher28-eva-3.labul.sva.de\"]"
+---
+# STAGE 1 - BOOSTRAP FLUX
+
+---
+# STAGE 1 - DNS
+---
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  name: pdns-entry-rke2-rancher28-eva-1
+  namespace: tektoncd
+spec:
+  pipelineRef:
+    resolver: git
+    params:
+      - name: url
+        value: https://github.com/stuttgart-things/stuttgart-things.git
+      - name: revision
+        value: "rancher-280"
+      - name: pathInRepo
+        value: stageTime/pipelines/execute-ansible-playbooks.yaml
+  workspaces:
+    - name: shared-workspace
+      volumeClaimTemplate:
+        spec:
+          storageClassName: openebs-hostpath
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 10Mi
+  params:
+    - name: ansibleWorkingImage
+      value: "eu.gcr.io/stuttgart-things/sthings-ansible:9.1.0"
+    - name: createInventory
+      value: "false"
+    - name: gitRepoUrl
+      value: "https://github.com/stuttgart-things/stuttgart-things.git"
+    - name: gitRevision
+      value: rancher-280
+    - name: gitWorkspaceSubdirectory
+      value: "/ansible/pdns"
+    - name: vaultSecretName
+      value: vault
+    - name: installExtraRoles
+      value: "true"
+    - name: ansibleExtraRoles
+      value:
+        - "https://github.com/stuttgart-things/install-configure-powerdns.git"
+    - name: ansiblePlaybooks
+      value:
+        - "ansible/playbooks/pdns-ingress-entry.yaml"
+    - name: ansibleVarsFile
+      value:
+        - "pdns_url+-https://pdns-vsphere.labul.sva.de:8443"
+        - "entry_zone+-sthings-vsphere.labul.sva.de."
+        - "ip_address+-10.31.103.5"
+        - "hostname+-dev28"
+    - name: ansibleVarsInventory
+      value:
+        - "localhost"
+---
