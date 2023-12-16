@@ -83,3 +83,76 @@ spec:
         kind: HelmRelease
         name: machine-shop-operator-deployment
         namespace: machine-shop-operator-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: pod-list-delete
+  namespace: tektoncd
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: pod-list-delete
+  namespace: tektoncd
+rules:
+- apiGroups: [""]
+  resources: ["pods", "persistentvolumeclaims"]
+  verbs: ["list", "get", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: pod-list-delete
+subjects:
+- kind: ServiceAccount
+  name: pod-list-delete
+  namespace: tektoncd
+roleRef:
+  kind: ClusterRole
+  name: pod-list-delete
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: pod-list-delete
+  namespace: tektoncd
+spec:
+  schedule: "*/15 * * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          serviceAccount: pod-list-delete
+          containers:
+            - name: kubectl
+              image: ghcr.io/ctron/kubectl:latest
+              command:
+                - /bin/bash
+                - -c
+                - PODS="$(kubectl -n tektoncd get pod | awk 'match($5,/[0-9]+d/) {print $1}')" && kubectl -n tektoncd delete pod ${PODS} || true
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: pvc-list-delete
+  namespace: tektoncd
+spec:
+  schedule: "*/15 * * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          serviceAccount: pod-list-delete
+          containers:
+            - name: kubectl
+              image: ghcr.io/ctron/kubectl:latest
+              command:
+                - /bin/bash
+                - -c
+                - PVC="$(kubectl -n tektoncd get pvc | awk 'match($7,/[0-9]+d/) {print $1}')" && kubectl -n tektoncd delete pvc ${PVC} || true
