@@ -53,6 +53,15 @@ spec:
         name: tekton-base
         namespace: tekton-pipelines
 ---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: terraform
+  labels:
+    app.kubernetes.io/instance: machine-shop-operator
+    app.kubernetes.io/part-of: machine-shop-operator
+    app.kubernetes.io/version: 0.1.48
+---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
