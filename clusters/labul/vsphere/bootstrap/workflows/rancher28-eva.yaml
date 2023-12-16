@@ -69,7 +69,7 @@ spec:
             - ReadWriteOnce
           resources:
             requests:
-              storage: 250Mi
+              storage: 20Mi
   params:
     - name: ansibleWorkingImage
       value: "eu.gcr.io/stuttgart-things/sthings-ansible:9.1.0"
