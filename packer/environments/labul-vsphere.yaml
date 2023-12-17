@@ -14,7 +14,6 @@ diskSize: 16
 osVersion: ubuntu23
 sshTimeout: 40m
 sshHandshakeAttempts: 900
-
 # UBUNTU23
 ubuntu23PackerMinVersion: 1.10.0
 ubuntu23PackerVMwarePluginMinVersion: 1.2.3
@@ -23,6 +22,8 @@ ubuntu23Password: ubuntu
 staticIp: 10.31.102.221/24
 gateway: 10.31.102.251
 nameserver: 10.31.101.50
+createUser: true
+rebootBeforeAnsible: false
 
 # ANSIBLE
 ansibleOsProvioning: baseos-setup
@@ -93,4 +94,4 @@ vaultCloudKeyPassword: password
 
 # MS-TEAMS
 sendToMSteams: true
-msTeamsWebhookUrl: https://365sva.webhook.office.com/webhookb2/2f14a9f8-4736-46dd-9c8c-31547ec37180@0a65cb1e-37d5-41ff-980a-647d9d0e4f0b/IncomingWebhook/37a805a0a2624dc2ac1aedd7dec6ad49/dc3a27ed-396c-40b7-a9b2-f1a2b6b44efe
+msTeamsWebHookUrl: https://365sva.webhook.office.com/webhookb2/2f14a9f8-4736-46dd-9c8c-31547ec37180@0a65cb1e-37d5-41ff-980a-647d9d0e4f0b/IncomingWebhook/37a805a0a2624dc2ac1aedd7dec6ad49/dc3a27ed-396c-40b7-a9b2-f1a2b6b44efe

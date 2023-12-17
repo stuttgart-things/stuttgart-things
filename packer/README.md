@@ -1,6 +1,6 @@
 # stuttgart-things/packer
 
-## RENDER TEMPLATE w/ machineShop
+## RENDER OS-TEMPLATE w/ machineShop
 
 ```bash
 machineShop render \
@@ -11,7 +11,16 @@ machineShop render \
 --values "vmTemplateName=u23"
 ```
 
-## RENDER TEMPLATE w/ machineShop
+## RENDER KICKSTART w/ machineShop
+
+```bash
+machineShop render \
+--source local \
+--template kickstart/ubuntu-vsphere.yaml \
+--defaults environments/labul-vsphere.yaml
+```
+
+## RENDER PLAYBOOK w/ machineShop
 
 ```bash
 machineShop render \
