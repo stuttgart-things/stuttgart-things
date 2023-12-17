@@ -20,9 +20,9 @@ ubuntu23PackerMinVersion: 1.10.0
 ubuntu23PackerVMwarePluginMinVersion: 1.2.3
 ubuntu23User: ubuntu
 ubuntu23Password: ubuntu
-staticIp: ""
-gateway: ""
-nameserver: ""
+staticIp: 10.31.102.221/24
+gateway: 10.31.102.251
+nameserver: 10.31.101.50
 
 # ANSIBLE
 ansibleOsProvioning: baseos-setup
