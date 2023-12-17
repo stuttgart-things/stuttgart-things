@@ -9,12 +9,12 @@ autoinstall:
         dhcp4: false
         dhcp6: false
         addresses:
-          - [[ .staticIp ]]
+          - {{ .staticIp }}
         routes:
           - to: default
-            via: [[ .gateway ]]
+            via: {{ .gateway }}
         nameservers:
-          addresses: [[[ .nameserver ]]]
+          addresses: [{{ .nameserver }}]
   locale: en_US.UTF-8
   keyboard:
     layout: de

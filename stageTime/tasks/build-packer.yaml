@@ -141,7 +141,6 @@ spec:
         machineShop render \
         --source local \
         --output file \
-        --brackets square \
         --template ./$(params.BOOT_CONFIG_PATH) \
         --destination ./$(params.OS_VERSION)/user-data \
         --defaults ./$(params.DEFAULT_ENVIRONMENT_PATH)
