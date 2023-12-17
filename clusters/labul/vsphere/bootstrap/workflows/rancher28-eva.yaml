@@ -126,7 +126,6 @@ spec:
 ---
 # STAGE 1 - BOOSTRAP FLUX
 ## TBD
----
 # STAGE 1 - DNS
 ---
 apiVersion: tekton.dev/v1

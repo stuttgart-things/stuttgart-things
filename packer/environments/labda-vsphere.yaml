@@ -1,33 +1,51 @@
 ---
-ubuntu23PackerMinVersion: 1.10.0
-vmWareProvider: github.com/hashicorp/vsphere
-ubuntu23PackerVMwarePluginMinVersion: 1.2.3
-ubuntu23User: ubuntu
-ubuntu23Password: ubuntu
+# GLOBAL
 ipWaitTimeout: 10m
-
+vmWareProvider: github.com/hashicorp/vsphere
 ansibleProvisioner: github.com/hashicorp/ansible
 ansibleProvisionerMinVersion: 1.1.1
 ipSettleTimeout: 20s
 bootWait: 5s
-
-staticIp: 10.100.136.210/24
-gateway: 10.100.136.254
-nameserver: 10.100.101.5
-
 ubuntu23IsoUrl: https://releases.ubuntu.com/lunar/ubuntu-23.04-live-server-amd64.iso
 ubuntu23IsoChecksum: c7cda48494a6d7d9665964388a3fc9c824b3bef0c9ea3818a1be982bc80d346b
 cpu: 8
 ram: 8192
 diskSize: 16
-osVersion: rocky9
+osVersion: ubuntu23
+sshTimeout: 40m
+sshHandshakeAttempts: 900
+
+# UBUNTU23
+ubuntu23PackerMinVersion: 1.10.0
+ubuntu23PackerVMwarePluginMinVersion: 1.2.3
+ubuntu23User: ubuntu
+ubuntu23Password: ubuntu
+staticIp: 10.100.136.210/24
+gateway: 10.100.136.254
+nameserver: 10.100.101.5
+
+# ANSIBLE
 ansibleOsProvioning: baseos-setup
+configureClusterNode: false
+cloudinit: false
+createRkeUser: false
+updateOs: true
+installDocker: false
+installDockerCompose: false
+setDockerProxy: false
+templateCreationSetup: false
+updatePackages: true
+installRequirements: true
 
 # ROCKY9
 rocky9PackerMinVersion: 1.8.6
 rocky9PackerVMwarePluginMinVersion: 1.0.7
 rocky9tmpSSHUser: root
 rocky9tmpSSHPassword: ch0coLate
+rocky9IsoUrl: https://download.rockylinux.org/pub/rocky/9/isos/x86_64/Rocky-9.2-x86_64-boot.iso
+rocky9IsoChecksum: sha256:11e42da96a7b336de04e60d05e54a22999c4d7f3e92c19ebf31f9c71298f5b42
+rocky9ShellCmd: "dnf update -y; dnf install -y python3-dnf cloud-utils-growpart; dnf install -y gdisk python3; shred -u /etc/ssh/*_key /etc/ssh/*_key.pub; rm -f /var/run/utmp; >/var/log/lastlog; >/var/log/wtmp; >/var/log/btmp; rm -rf /tmp/* /var/tmp/*; unset HISTFILE; rm -rf /home/*/.*history /root/.*history; rm -f /root/*ks; passwd -d root; passwd -l root; rm -f /etc/resolv.conf; ln -sf /run/NetworkManager/resolv.conf /etc/resolv.conf; echo manage_PasswordAuthentication ;sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config; sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/g' /etc/ssh/sshd_config"
+rocky9NetworkInstall: https://download.rockylinux.org/pub/rocky/9/BaseOS/x86_64/os/
 
 # CLOUD
 cloud: vsphere
@@ -48,15 +66,3 @@ vaultCloudKeyPassword: password
 # MS-TEAMS
 sendToMSteams: true
 msTeamsWebhookUrl: https://365sva.webhook.office.com/webhookb2/2f14a9f8-4736-46dd-9c8c-31547ec37180@0a65cb1e-37d5-41ff-980a-647d9d0e4f0b/IncomingWebhook/37a805a0a2624dc2ac1aedd7dec6ad49/dc3a27ed-396c-40b7-a9b2-f1a2b6b44efe
-
-# ANSIBLE
-configureClusterNode: false
-cloudinit: false
-createRkeUser: false
-updateOs: true
-installDocker: false
-installDockerCompose: false
-setDockerProxy: false
-templateCreationSetup: false
-updatePackages: true
-installRequirements: true
