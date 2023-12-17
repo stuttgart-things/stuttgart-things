@@ -48,3 +48,4 @@ ubuntu22IsoChecksum: a4acfda10b18da50e2ec50ccaf860d7f20b389df8765611142305c0e911
 createUser: true
 rebootBeforeAnsible: false
 msTeamsWebHookUrl: https://365sva.webhook.office.com/webhookb2/2f14a9f8-4736-46dd-9c8c-31547ec37180@0a65cb1e-37d5-41ff-980a-647d9d0e4f0b/IncomingWebhook/37a805a0a2624dc2ac1aedd7dec6ad49/dc3a27ed-396c-40b7-a9b2-f1a2b6b44efe
+sendToMSteams: true

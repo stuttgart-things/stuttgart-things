@@ -18,6 +18,7 @@
     create_user: [[ .createUser ]]
     admin_group: "{{ 'wheel' if ansible_os_family == 'RedHat' else 'sudo' }}"
     reboot_prio_provisioning: [[ .rebootBeforeAnsible ]]
+    send_to_msteams: [[ .sendToMSteams ]]
     vault_instances:
       - https://vault.tiab.labda.sva.de:8200
       - https://vault.labul.sva.de:8200
