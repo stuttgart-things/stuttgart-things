@@ -125,14 +125,14 @@ spec:
         - "additional_master_nodes+[\"rancher28-eva-3.labul.sva.de\"]"
 ---
 # STAGE 1 - BOOSTRAP FLUX
-
+## TBD
 ---
 # STAGE 1 - DNS
 ---
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: pdns-entry-rke2-rancher28-eva-1
+  name: pdns-entry-rke2-rancher28-eva-2
   namespace: tektoncd
 spec:
   pipelineRef:
@@ -179,7 +179,7 @@ spec:
       value:
         - "pdns_url+-https://pdns-vsphere.labul.sva.de:8443"
         - "entry_zone+-sthings-vsphere.labul.sva.de."
-        - "ip_address+-10.31.103.5"
+        - "ip_address+-10.31.103.11"
         - "hostname+-dev28"
     - name: ansibleVarsInventory
       value:
