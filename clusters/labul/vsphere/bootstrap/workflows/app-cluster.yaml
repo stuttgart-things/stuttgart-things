@@ -125,3 +125,43 @@ spec:
         - "additional_master_nodes+[\"sthings-app1-2.labul.sva.de\"]"
         - "additional_master_nodes+[\"sthings-app1-3.labul.sva.de\"]"
         - "additional_master_nodes+[\"sthings-app1-4.labul.sva.de\"]"
+---
+# STAGE 1 - BOOSTRAP FLUX
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  name: bootstrap-flux-sthings-app1
+  namespace: tektoncd
+spec:
+  workspaces:
+    - name: source
+      volumeClaimTemplate:
+        spec:
+          storageClassName: openebs-hostpath
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 10Mi
+  pipelineRef:
+    resolver: git
+    params:
+      - name: url
+        value: https://github.com/stuttgart-things/stuttgart-things.git
+      - name: revision
+        value: rancher-280
+      - name: pathInRepo
+        value: stageTime/pipelines/bootstrap-flux-cluster.yaml
+  params:
+    - name: githubRepository
+      value: stuttgart-things
+    - name: githubRepositoryOwner
+      value: stuttgart-things
+    - name: vaultSecretName
+      value: vault
+    - name: githubFluxBoostrapPath
+      value: clusters/labul/vsphere/sthings-app1
+    - name: vaultSecretPaths
+      value:
+        - "git/data/github:token+-false+-GITHUB_TOKEN"
+        - "kubeconfigs/data/sthings-app1:kubeconfig+-true+-KUBECONFIG"
