@@ -130,7 +130,7 @@ spec:
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: bootstrap-flux-sthings-app1
+  name: bootstrap-flux-sthings-app1-1
   namespace: tektoncd
 spec:
   workspaces:
@@ -149,7 +149,7 @@ spec:
       - name: url
         value: https://github.com/stuttgart-things/stuttgart-things.git
       - name: revision
-        value: rancher-280
+        value: main
       - name: pathInRepo
         value: stageTime/pipelines/bootstrap-flux-cluster.yaml
   params:
