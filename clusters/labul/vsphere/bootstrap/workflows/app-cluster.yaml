@@ -92,6 +92,7 @@ spec:
         - "https://github.com/stuttgart-things/install-requirements.git"
         - "https://github.com/stuttgart-things/manage-filesystem.git"
         - "https://github.com/stuttgart-things/install-configure-vault.git"
+        - "https://github.com/stuttgart-things/deploy-configure-rke"
     - name: ansiblePlaybooks
       value:
         - "ansible/playbooks/prepare-env.yaml"
