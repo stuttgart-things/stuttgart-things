@@ -2,7 +2,7 @@
 apiVersion: machineshop.sthings.tiab.ssc.sva.de/v1beta1
 kind: Terraform
 metadata:
- name: vsphere-r2805
+ name: vsphere-r2806
  namespace: terraform
  labels:
    app.kubernetes.io/created-by: machine-shop-operator
@@ -11,7 +11,7 @@ metadata:
 spec:
  state: present
  variables:
-  - vsphere_vm_name="vsphere-r2805"
+  - vsphere_vm_name="vsphere-r2806"
   - vm_count=1
   - vm_num_cpus=8
   - vm_memory=8192
@@ -26,8 +26,8 @@ spec:
   - access_key=apps/data/artifacts:accessKey
   - secret_key=apps/data/artifacts:secretKey
  module:
-  - moduleName=vsphere-r2805
-  - backendKey=vsphere-r2805.tfstate
+  - moduleName=vsphere-r2806
+  - backendKey=vsphere-r2806.tfstate
   - moduleSourceUrl=https://artifacts.tiab.labda.sva.de/modules/vsphere-vm.zip
   - backendEndpoint=https://artifacts.app.4sthings.tiab.ssc.sva.de
   - backendRegion=main
