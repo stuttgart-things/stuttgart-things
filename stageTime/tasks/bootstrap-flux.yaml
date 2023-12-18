@@ -162,13 +162,6 @@ spec:
         --path=$(params.GITHUB_FLUX_BOOTSTRAP_PATH) \
         --namespace $(params.FLUX_NAMESPACE)
 
-        echo BOOTSTRAP FLUX WITHOUT GIT
-
-# flux install \
-# --namespace=flux-system \
-# --network-policy=false \
-# --components=source-controller,helm-controller
-
         echo RECONCILE FLUX-SYSTEM
         flux reconcile source git flux-system
 
