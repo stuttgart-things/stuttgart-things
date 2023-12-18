@@ -2,7 +2,7 @@
 apiVersion: machineshop.sthings.tiab.ssc.sva.de/v1beta1
 kind: Terraform
 metadata:
-  name: pve-r2803
+  name: pve-r2804
   namespace: terraform
   labels:
     app.kubernetes.io/name: terraform
@@ -10,7 +10,7 @@ metadata:
     app.kubernetes.io/created-by: machine-shop-operator
 spec:
   variables:
-    - vm_name="pve-r2803"
+    - vm_name="pve-r2804"
     - vm_count=1
     - vm_num_cpus=8
     - vm_memory=8192
@@ -21,8 +21,8 @@ spec:
     - pve_folder_path="stuttgart-things"
     - pve_cluster_node="sthings-pve1"
   module:
-    - moduleName=pve-r2803
-    - backendKey=pve-r2803.tfstate
+    - moduleName=pve-r2804
+    - backendKey=pve-r2804.tfstate
     - moduleSourceUrl=https://artifacts.tiab.labda.sva.de/modules/proxmox-vm.zip
     - backendEndpoint=https://artifacts.app.4sthings.tiab.ssc.sva.de
     - backendRegion=main
@@ -30,7 +30,7 @@ spec:
     - tfProviderName=proxmox
     - tfProviderSource=Telmate/proxmox
     - tfProviderVersion=2.9.14
-    - tfVersion=1.6.6
+    - tfVersion=1.5.7
   backend:
     - access_key=apps/data/artifacts:accessKey
     - secret_key=apps/data/artifacts:secretKey
@@ -40,6 +40,6 @@ spec:
     - pve_api_password=cloud/data/pve:api_password
     - vm_ssh_user=cloud/data/pve:ssh_user
     - vm_ssh_password=cloud/data/pve:ssh_password
-  terraform-version: 1.6.6
+  terraform-version: 1.5.7
   template: pve-vm
   state: present                                                                                                                                    │
