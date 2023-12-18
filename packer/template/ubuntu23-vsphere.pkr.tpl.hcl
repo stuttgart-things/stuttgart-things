@@ -64,6 +64,8 @@ build {
     extra_arguments        = ["-e ansible_ssh_pass=ubuntu -vv"]
     keep_inventory_file    = "true"
     playbook_file          = "[[ .ansiblePlayMountPath ]]/[[ .ansibleOsProvioning ]].yaml"
+    galaxy_file            = "[[ .ansiblePlayMountPath ]]/requirements.yaml"
+    galaxy_force_install   = "true"
     use_proxy              = "false"
     user                   = "ubuntu"
   }
