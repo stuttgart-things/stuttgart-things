@@ -24,7 +24,7 @@ spec:
     - moduleName=pve-r2802
     - backendKey=pve-r2802.tfstate
     - moduleSourceUrl=https://artifacts.tiab.labda.sva.de/modules/proxmox-vm.zip
-    - backendEndpoint=https://artifacts.automation.sthings-vsphere.labul.sva.de
+    - backendEndpoint=https://artifacts.app.4sthings.tiab.ssc.sva.de
     - backendRegion=main
     - backendBucket=terraform
     - tfProviderName=proxmox
