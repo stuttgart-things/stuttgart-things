@@ -38,6 +38,7 @@ setDockerProxy: false
 templateCreationSetup: false
 updatePackages: true
 installRequirements: true
+copyNetworkConfig: true
 
 # ROCKY9
 rocky9PackerMinVersion: 1.8.6

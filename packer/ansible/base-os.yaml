@@ -25,6 +25,17 @@
       - https://vault-vsphere.labul.sva.de:8200
       - https://vault-pve.labul.sva.de:8200
       - https://vault-vsphere.tiab.labda.sva.de:8200
+    ubuntu_network_config: |
+      # This is the network config written by 'subiquity'
+      network:
+        ethernets:
+          ens18:
+            dhcp4: true
+            dhcp-identifier: mac
+        version: 2
+        renderer: NetworkManager
+    path_ubuntu_network_config: /etc/netplan/00-installer-config.yaml
+    copy_network_config: [[ .copyNetworkConfig ]]
 
     msteams_webhook_url: "https://365sva.webhook.office.com/webhookb2/2f14a9f8-4736-46dd-9c8c-31547ec37180@0a65cb1e-37d5-41ff-980a-647d9d0e4f0b/IncomingWebhook/37a805a0a2624dc2ac1aedd7dec6ad49/dc3a27ed-396c-40b7-a9b2-f1a2b6b44efe"
     groups_to_create:
@@ -99,6 +110,12 @@
       loop_control:
         loop_var: vault_instance
       when: vault_instances is defined
+
+    - name: Copy network config for enabling dhcp on ubuntu
+      ansible.builtin.copy:
+        content: "{{ ubuntu_network_config }}"
+        dest: "{{ path_ubuntu_network_config }}"
+      when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' and copy_network_config|bool
 
     - name: Send webhook to msteams
       ansible.builtin.include_role:

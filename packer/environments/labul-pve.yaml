@@ -6,6 +6,7 @@ pveProviderVersion: 1.1.6
 
 ansibleProvisioner: github.com/hashicorp/ansible
 ansibleProvisionerMinVersion: 1.1.1
+copyNetworkConfig: false
 
 # RKE NODE CONFIG
 configureClusterNode: false

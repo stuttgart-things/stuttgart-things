@@ -37,6 +37,7 @@ setDockerProxy: false
 templateCreationSetup: false
 updatePackages: true
 installRequirements: true
+copyNetworkConfig: true
 
 # ROCKY9
 rocky9PackerMinVersion: 1.8.6
@@ -86,7 +87,6 @@ datastore: /LabUL/datastore/UL-V5010-01-LUN3
 folder: /phermann/packer
 host: /LabUL/host/Cluster01/10.31.101.41
 network: /LabUL/network/LAB-10.31.102
-
 # VAULT
 vaultCloudPath: /cloud/data/vsphere
 vaultCloudKeyUsername: username
