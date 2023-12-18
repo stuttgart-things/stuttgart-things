@@ -130,7 +130,7 @@ spec:
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: bootstrap-flux-sthings-app1-1
+  name: bootstrap-flux-sthings-app1-2
   namespace: tektoncd
 spec:
   workspaces:
