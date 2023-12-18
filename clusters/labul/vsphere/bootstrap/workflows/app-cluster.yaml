@@ -165,3 +165,61 @@ spec:
       value:
         - "git/data/github:token+-false+-GITHUB_TOKEN"
         - "kubeconfigs/data/sthings-app1:kubeconfig+-true+-KUBECONFIG"
+---
+# STAGE 2 - PDNS
+---
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  name: pdns-entry-sthings-app1
+  namespace: tektoncd
+spec:
+  pipelineRef:
+    resolver: git
+    params:
+      - name: url
+        value: https://github.com/stuttgart-things/stuttgart-things.git
+      - name: revision
+        value: rancher-280
+      - name: pathInRepo
+        value: stageTime/pipelines/execute-ansible-playbooks.yaml
+  workspaces:
+    - name: shared-workspace
+      volumeClaimTemplate:
+        spec:
+          storageClassName: openebs-hostpath
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 10Mi
+  params:
+    - name: ansibleWorkingImage
+      value: "eu.gcr.io/stuttgart-things/sthings-ansible:9.1.0"
+    - name: createInventory
+      value: "false"
+    - name: gitRepoUrl
+      value: "https://github.com/stuttgart-things/stuttgart-things.git"
+    - name: gitRevision
+      value: rancher-280
+    - name: gitWorkspaceSubdirectory
+      value: "/ansible/pdns"
+    - name: vaultSecretName
+      value: vault
+    - name: installExtraRoles
+      value: "true"
+    - name: ansibleExtraRoles
+      value:
+        - "https://github.com/stuttgart-things/install-configure-powerdns.git"
+    - name: ansiblePlaybooks
+      value:
+        - "ansible/playbooks/pdns-ingress-entry.yaml"
+    - name: ansibleVarsFile
+      value:
+        - "pdns_url+-https://pdns-vsphere.labul.sva.de:8443"
+        - "entry_zone+-sthings-vsphere.labul.sva.de."
+        - "ip_address+-10.31.103.13"
+        - "hostname+-app1"
+    - name: ansibleVarsInventory
+      value:
+        - "localhost"
