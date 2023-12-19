@@ -12,7 +12,7 @@ cpu: 8
 ram: 8192
 diskSize: 16
 osVersion: ubuntu23
-sshTimeout: 40m
+sshTimeout: 30m
 sshHandshakeAttempts: 900
 createUser: true
 rebootBeforeAnsible: false
