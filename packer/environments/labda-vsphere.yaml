@@ -12,7 +12,7 @@ cpu: 8
 ram: 8192
 diskSize: 16
 osVersion: ubuntu23
-sshTimeout: 40m
+sshTimeout: 20m
 sshHandshakeAttempts: 900
 createUser: true
 rebootBeforeAnsible: false
@@ -20,8 +20,11 @@ rebootBeforeAnsible: false
 # UBUNTU23
 ubuntu23PackerMinVersion: 1.10.0
 ubuntu23PackerVMwarePluginMinVersion: 1.2.3
+ubuntu23DiskSize: 15360
+ubuntu23networkCard: vmxnet3
 ubuntu23User: ubuntu
 ubuntu23Password: ubuntu
+ubuntu23ShellProvisioner: "sudo apt-get -y update; sudo apt-get -y upgrade; sudo apt-get -y install python3; sudo apt-get autoremove --purge -y && sudo apt-get autoclean -y && sudo apt-get clean -y; sudo truncate -s 0 /etc/machine-id && echo 'machine-id was reset successfully'; sudo systemctl stop systemd-resolved; sudo sed -i 's/#DNSStubListener=yes/DNSStubListener=no/g' /etc/systemd/resolved.conf; sudo rm /etc/resolv.conf; sudo ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf; sudo systemctl start systemd-resolved"
 staticIp: 10.100.136.210/24
 gateway: 10.100.136.254
 nameserver: 10.100.101.5
