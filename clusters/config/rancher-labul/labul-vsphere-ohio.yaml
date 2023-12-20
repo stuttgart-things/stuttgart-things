@@ -1,13 +1,34 @@
 ---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ohio6
+  namespace: cattle-global-data
+  annotations:
+    field.cattle.io/description: "labul-vsphere"
+    field.cattle.io/name: "labul-vsphere"
+    provisioning.cattle.io/driver: "vmwarevsphere"
+  labels:
+    cattle.io/creator: norman
+type: Opaque
+stringData:
+  vmwarevspherecredentialConfig-password: "<path:cloud/data/vsphere#password>"
+  vmwarevspherecredentialConfig-username: "<path:cloud/data/vsphere#username>"
+  vmwarevspherecredentialConfig-vcenter: "<path:cloud/data/vsphere#ip>"
+  vmwarevspherecredentialConfig-vcenterPort: "443"
+---
 apiVersion: rke-machine-config.cattle.io/v1
 metadata:
-  name: nc-ohio5-aio
+  annotations:
+    field.cattle.io/creatorId: user-rz2tb
+    ownerBindingsCreated: "true"
+  name: nc-ohio6-aio
   namespace: fleet-default
-boot2dockerUrl: null
+boot2dockerUrl: ""
 cfgparam:
   - disk.enableUUID=TRUE
 cloneFrom: /LabUL/vm/phermann/vm-templates/u22-rke2-ipi
-cloudConfig: |+
+cloudConfig: |-
   #cloud-config
   runcmd:
     - wget -O /usr/local/share/ca-certificates/labda-vsphere-ca.crt https://vault-vsphere.tiab.labda.sva.de:8200/v1/pki/ca/pem --no-check-certificate
@@ -20,7 +41,7 @@ common:
   labels: null
   taints: []
 contentLibrary: ""
-cpuCount: "8"
+cpuCount: "6"
 creationType: template
 customAttribute: []
 datacenter: /LabUL
@@ -31,8 +52,9 @@ folder: /LabUL/vm/phermann/testing
 gracefulShutdownTimeout: "0"
 hostsystem: null
 kind: VmwarevsphereConfig
-memorySize: "8192"
-network: []
+memorySize: "4096"
+network:
+  - /LabUL/network/LAB-10.31.103
 os: linux
 password: ""
 pool: /LabUL/host/Cluster01/Resources
@@ -52,16 +74,16 @@ vcenterPort: "443"
 apiVersion: provisioning.cattle.io/v1
 kind: Cluster
 metadata:
-  name: ohio5
+  name: ohio6
   annotations:
-    field.cattle.io/description: ohio5
+    field.cattle.io/description: ohio6
     #  key: string
   labels:
     {}
     #  key: string
   namespace: fleet-default
 spec:
-  cloudCredentialSecretName: cattle-global-data:labul-vsphere-ohio
+  cloudCredentialSecretName: cattle-global-data:ohio6
   clusterAgentDeploymentCustomization:
     appendTolerations:
 #      - effect: string
@@ -327,7 +349,7 @@ spec:
       etcd-expose-metrics: false
       profile: null
     machinePools:
-      - name: ohio5-aio
+      - name: pool1
         etcdRole: true
         controlPlaneRole: true
         workerRole: true
@@ -336,7 +358,7 @@ spec:
         unhealthyNodeTimeout: 0m
         machineConfigRef:
           kind: VmwarevsphereConfig
-          name: nc-ohio5-aio
+          name: nc-ohio6-aio
         drainBeforeDelete: true
         machineOS: linux
         labels: {}
