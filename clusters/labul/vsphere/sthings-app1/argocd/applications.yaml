@@ -12,6 +12,8 @@ spec:
     path: clusters/config/rancher-labul/
     repoURL: https://github.com/stuttgart-things/stuttgart-things.git
     targetRevision: HEAD
+    plugin:
+      name: argocd-vault-plugin
     directory:
       recurse: true
   sources: []
