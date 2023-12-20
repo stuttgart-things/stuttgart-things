@@ -1,0 +1,22 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: downstream-cluster-config
+  namespace: argocd
+spec:
+  destination:
+    name: in-cluster
+    namespace: fleet-default
+  source:
+    path: clusters/config/rancher-labul/
+    repoURL: https://github.com/stuttgart-things/stuttgart-things.git
+    targetRevision: HEAD
+    directory:
+      recurse: true
+  sources: []
+  project: app
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: false

@@ -1,0 +1,19 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: labul-vsphere-ohio
+  namespace: cattle-global-data
+  annotations:
+    field.cattle.io/description: "labul-vsphere"
+    field.cattle.io/name: "labul-vsphere"
+    provisioning.cattle.io/driver: "vmwarevsphere"
+  labels:
+    cattle.io/creator: norman
+type: Opaque
+stringData:
+  vmwarevspherecredentialConfig-password: "<path:cloud/data/vsphere#password>"
+  vmwarevspherecredentialConfig-username: "<path:cloud/data/vsphere#username>"
+  vmwarevspherecredentialConfig-vcenter: "<path:cloud/data/vsphere#ip>"
+  vmwarevspherecredentialConfig-vcenterPort: "443"
+---
