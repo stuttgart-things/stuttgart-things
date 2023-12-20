@@ -21,7 +21,7 @@ apiVersion: rke-machine-config.cattle.io/v1
 boot2dockerUrl: ""
 cfgparam:
 - disk.enableUUID=TRUE
-cloneFrom: /LabUL/vm/phermann/vm-templates/u23-rke2-upi
+cloneFrom: /LabUL/vm/phermann/vm-templates/u22-rke2-ipi
 cloudConfig: |+
   #cloud-config
 
