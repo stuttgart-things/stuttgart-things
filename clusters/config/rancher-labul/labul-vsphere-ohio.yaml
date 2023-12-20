@@ -22,10 +22,12 @@ boot2dockerUrl: ""
 cfgparam:
 - disk.enableUUID=TRUE
 cloneFrom: /LabUL/vm/phermann/vm-templates/u22-rke2-ipi
-cloudConfig: |+
-  #cloud-config
-
-cloudinit: ""
+cloudConfig: ""
+cloudinit: |
+  runcmd:
+    - wget -O /usr/local/share/ca-certificates/labda-vsphere-ca.crt https://vault-vsphere.tiab.labda.sva.de:8200/v1/pki/ca/pem --no-check-certificate
+    - wget -O /usr/local/share/ca-certificates/labul-vsphere-ca.crt https://vault-vsphere.labul.sva.de:8200/v1/pki/ca/pem --no-check-certificate
+    - update-ca-certificates
 common:
   labels: null
   taints: []
