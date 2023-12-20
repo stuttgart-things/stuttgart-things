@@ -54,7 +54,7 @@ kind: Cluster
 metadata:
   name: ohio5
   annotations:
-    field.cattle.io/description: ohio3
+    field.cattle.io/description: ohio5
     #  key: string
   labels:
     {}
@@ -327,7 +327,7 @@ spec:
       etcd-expose-metrics: false
       profile: null
     machinePools:
-      - name: ohio3-aio
+      - name: ohio5-aio
         etcdRole: true
         controlPlaneRole: true
         workerRole: true
