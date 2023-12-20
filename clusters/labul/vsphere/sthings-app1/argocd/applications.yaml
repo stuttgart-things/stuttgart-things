@@ -14,8 +14,6 @@ spec:
     targetRevision: HEAD
     plugin:
       name: argocd-vault-plugin
-    directory:
-      recurse: true
   sources: []
   project: in-cluster
   syncPolicy:
