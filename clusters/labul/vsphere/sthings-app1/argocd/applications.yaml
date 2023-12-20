@@ -15,7 +15,7 @@ spec:
     directory:
       recurse: true
   sources: []
-  project: app
+  project: in-cluster
   syncPolicy:
     automated:
       prune: false
