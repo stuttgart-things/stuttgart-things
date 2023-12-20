@@ -34,7 +34,7 @@ cpuCount: "6"
 creationType: template
 customAttribute: []
 datacenter: /LabUL
-datastore: /LabUL/datastore/ESX01-Local1
+datastore: /LabUL/datastore/ESX01-Local2
 datastoreCluster: ""
 diskSize: "20000"
 folder: /LabUL/vm/phermann/testing
