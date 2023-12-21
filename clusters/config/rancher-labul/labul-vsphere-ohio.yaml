@@ -464,19 +464,19 @@ spec:
         drainBeforeDelete: true
         machineOS: linux
         labels: {}
-      - name: worker
-        etcdRole: false
-        controlPlaneRole: false
-        workerRole: true
-        hostnamePrefix: 'worker'
-        quantity: 2
-        unhealthyNodeTimeout: 0m
-        machineConfigRef:
-          kind: VmwarevsphereConfig
-          name: nc-ohio6-worker
-        drainBeforeDelete: true
-        machineOS: linux
-        labels: {}
+      # - name: worker
+      #   etcdRole: false
+      #   controlPlaneRole: false
+      #   workerRole: true
+      #   hostnamePrefix: 'worker'
+      #   quantity: 2
+      #   unhealthyNodeTimeout: 0m
+      #   machineConfigRef:
+      #     kind: VmwarevsphereConfig
+      #     name: nc-ohio6-worker
+      #   drainBeforeDelete: true
+      #   machineOS: linux
+      #   labels: {}
 #      - cloudCredentialSecretName: string
 #        controlPlaneRole: boolean
 #        displayName: string
