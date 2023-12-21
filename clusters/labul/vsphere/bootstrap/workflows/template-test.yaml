@@ -46,3 +46,69 @@ spec:
  template: vsphere-vm
  terraform-version: 1.6.6
 ---
+# STAGE 0 - BASE-OS
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  name: u23-eva1-baseos
+  namespace: tektoncd
+spec:
+  pipelineRef:
+    resolver: git
+    params:
+      - name: url
+        value: https://github.com/stuttgart-things/stuttgart-things.git
+      - name: revision
+        value: rancher-280
+      - name: pathInRepo
+        value: stageTime/pipelines/execute-ansible-playbooks.yaml
+  workspaces:
+    - name: shared-workspace
+      volumeClaimTemplate:
+        spec:
+          storageClassName: openebs-hostpath
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 20Mi
+  params:
+    - name: ansibleWorkingImage
+      value: "eu.gcr.io/stuttgart-things/sthings-ansible:9.1.0"
+    - name: createInventory
+      value: "true"
+    - name: gitRepoUrl
+      value: https://github.com/stuttgart-things/stuttgart-things.git
+    - name: gitRevision
+      value: "rancher-280"
+    - name: gitWorkspaceSubdirectory
+      value: "/ansible/rke2"
+    - name: vaultSecretName
+      value: vault
+    - name: installExtraRoles
+      value: "true"
+    - name: ansibleExtraRoles
+      value:
+        - "https://github.com/stuttgart-things/install-requirements.git"
+        - "https://github.com/stuttgart-things/manage-filesystem.git"
+        - "https://github.com/stuttgart-things/install-configure-vault.git"
+        - "https://github.com/stuttgart-things/deploy-configure-rke"
+    - name: ansiblePlaybooks
+      value:
+        - "ansible/playbooks/prepare-env.yaml"
+        - "ansible/playbooks/base-os.yaml"
+    - name: ansibleVarsFile
+      value:
+        - "manage_filesystem+-true"
+        - "update_packages+-true"
+        - "install_requirements+-true"
+        - "install_motd+-true"
+        - "username+-sthings"
+        - "lvm_home_sizing+-'15%'"
+        - "lvm_root_sizing+-'35%'"
+        - "lvm_var_sizing+-'50%'"
+        - "send_to_msteams+-true"
+        - "reboot_all+-false"
+    - name: ansibleVarsInventory
+      value:
+        - "all+[\"u23-eva1.labul.sva.de\"]"
