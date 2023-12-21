@@ -73,7 +73,7 @@ metadata:
 spec:
   params:
     - name: vmTemplateName
-      value: ubuntu23-rke2-12-20
+      value: ubuntu23-rke2-12-21
     - name: ansibleExtraVars
       value:
         - "updatePackages+true"
