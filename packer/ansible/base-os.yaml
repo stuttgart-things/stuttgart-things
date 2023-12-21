@@ -7,7 +7,7 @@
     update_packages: [[ .updatePackages ]]
     install_requirements: [[ .installRequirements ]]
     install_motd: false
-    cloudinit: false
+    cloudinit: [[ .installCloudInit ]]
     create_rke_user: [[ .createRkeUser ]]
     update_os: [[ .updateOs ]]
     install_docker: [[ .installDocker ]]
