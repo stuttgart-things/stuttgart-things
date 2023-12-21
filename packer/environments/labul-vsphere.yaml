@@ -32,7 +32,7 @@ nameserver: 10.31.101.50
 # ANSIBLE
 ansibleOsProvioning: baseos-setup
 configureClusterNode: false
-cloudinit: false
+installCloudInit: false
 createRkeUser: false
 updateOs: true
 installDocker: false
