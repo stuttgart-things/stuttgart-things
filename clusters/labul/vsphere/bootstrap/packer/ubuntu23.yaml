@@ -14,7 +14,7 @@ spec:
         - "copyNetworkConfig+true"
         - "installRequirements+true"
         - "configureClusterNode+false"
-        - "cloudinit+false"
+        - "installCloudInit+false"
         - "createRkeUser+false"
         - "installDocker+false"
         - "installDockerCompose+false"
@@ -68,7 +68,7 @@ spec:
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: packer-vsphere-ubuntu23-rke2-12-20
+  name: packer-vsphere-ubuntu23-rke2-12-21
   namespace: tektoncd
 spec:
   params:
@@ -80,7 +80,7 @@ spec:
         - "copyNetworkConfig+true"
         - "installRequirements+true"
         - "configureClusterNode+true"
-        - "cloudinit+true"
+        - "installCloudInit+true"
         - "createRkeUser+false"
         - "installDocker+false"
         - "installDockerCompose+false"
