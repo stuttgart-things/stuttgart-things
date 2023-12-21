@@ -110,9 +110,20 @@ cloudConfig: |-
     - update-ca-certificates
 cloudinit: |
   #cloud-config
+  runcmd:
+    - wget -O /usr/local/share/ca-certificates/labda-vsphere-ca.crt https://vault-vsphere.tiab.labda.sva.de:8200/v1/pki/ca/pem --no-check-certificate
+    - wget -O /usr/local/share/ca-certificates/labul-vsphere-ca.crt https://vault-vsphere.labul.sva.de:8200/v1/pki/ca/pem --no-check-certificate
+    - wget -O /usr/local/share/ca-certificates/labul-ca.crt https://vault.labul.sva.de:8200/v1/pki/ca/pem --no-check-certificate
+    - wget -O /usr/local/share/ca-certificates/labda-ca.crt https://vault.tiab.labda.sva.de:8200/v1/pki/ca/pem --no-check-certificate
+    - update-ca-certificates
+  package_update: true
+  package_upgrade: true
+  packages:
+    - git
+    - curl
+    - wget
   ansible:
-    package_name: ansible-core
-    install_method: distro
+    install_method: pip
     pull:
       url: https://github.com/stuttgart-things/stuttgart-things.git
       playbook_name: ansible/playbooks/base-os.yaml
@@ -458,7 +469,7 @@ spec:
         controlPlaneRole: false
         workerRole: true
         hostnamePrefix: 'worker'
-        quantity: 1
+        quantity: 2
         unhealthyNodeTimeout: 0m
         machineConfigRef:
           kind: VmwarevsphereConfig
