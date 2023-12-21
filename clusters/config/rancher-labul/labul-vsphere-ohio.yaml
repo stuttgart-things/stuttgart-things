@@ -84,6 +84,24 @@ cfgparam:
 cloneFrom: /LabUL/vm/phermann/packer/ubuntu23-rke2-12-20
 cloudConfig: |-
   #cloud-config
+  ansible:
+    package_name: ansible-core
+    install_method: distro
+    pull:
+      url: https://github.com/stuttgart-things/stuttgart-things.git
+      playbook_name: ansible/playbooks/base-os.yaml
+    run_ansible:
+      extra_vars: target_host=localhost
+    galaxy:
+      actions:
+        - ["ansible-galaxy", "collection", "install", "community.crypto "]
+        - ["ansible-galaxy", "collection", "install", "community.general"]
+        - ["ansible-galaxy", "collection", "install", "ansible.posix"]
+        - ["ansible-galaxy", "role", "install", "https://github.com/stuttgart-things/manage-filesystem.git"]
+        - ["ansible-galaxy", "role", "install", "https://github.com/stuttgart-things/install-configure-vault.git"]
+        - ["ansible-galaxy", "role", "install", "https://github.com/stuttgart-things/install-requirements.git"]
+        - ["ansible-galaxy", "role", "install", "https://github.com/stuttgart-things/download-install-binary.git"]
+        - ["ansible-galaxy", "role", "install", " https://github.com/stuttgart-things/create-os-user.git"]
   runcmd:
     - wget -O /usr/local/share/ca-certificates/labda-vsphere-ca.crt https://vault-vsphere.tiab.labda.sva.de:8200/v1/pki/ca/pem --no-check-certificate
     - wget -O /usr/local/share/ca-certificates/labul-vsphere-ca.crt https://vault-vsphere.labul.sva.de:8200/v1/pki/ca/pem --no-check-certificate
@@ -416,19 +434,19 @@ spec:
         drainBeforeDelete: true
         machineOS: linux
         labels: {}
-      # - name: worker
-      #   etcdRole: false
-      #   controlPlaneRole: false
-      #   workerRole: true
-      #   hostnamePrefix: 'worker'
-      #   quantity: 1
-      #   unhealthyNodeTimeout: 0m
-      #   machineConfigRef:
-      #     kind: VmwarevsphereConfig
-      #     name: nc-ohio6-worker
-      #   drainBeforeDelete: true
-      #   machineOS: linux
-      #   labels: {}
+      - name: worker
+        etcdRole: false
+        controlPlaneRole: false
+        workerRole: true
+        hostnamePrefix: 'worker'
+        quantity: 1
+        unhealthyNodeTimeout: 0m
+        machineConfigRef:
+          kind: VmwarevsphereConfig
+          name: nc-ohio6-worker
+        drainBeforeDelete: true
+        machineOS: linux
+        labels: {}
 #      - cloudCredentialSecretName: string
 #        controlPlaneRole: boolean
 #        displayName: string
