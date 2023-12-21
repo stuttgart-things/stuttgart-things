@@ -10,7 +10,7 @@ copyNetworkConfig: false
 
 # RKE NODE CONFIG
 configureClusterNode: false
-cloudinit: false
+installCloudInit: false
 createRkeUser: false
 updateOs: true
 installDocker: false
