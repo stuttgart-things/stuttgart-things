@@ -103,7 +103,7 @@ cloudConfig: |-
       url: https://github.com/stuttgart-things/stuttgart-things.git
       playbook_name: ansible/playbooks/base-os.yaml
     run_ansible:
-      extra_vars: target_host=localhost
+      extra_vars: target_host=localhost reboot_all=false
     galaxy:
       actions:
         - ["ansible-galaxy", "collection", "install", "community.crypto "]
@@ -446,19 +446,19 @@ spec:
         drainBeforeDelete: true
         machineOS: linux
         labels: {}
-      # - name: worker
-      #   etcdRole: false
-      #   controlPlaneRole: false
-      #   workerRole: true
-      #   hostnamePrefix: worker
-      #   quantity: 1
-      #   unhealthyNodeTimeout: 0m
-      #   machineConfigRef:
-      #     kind: VmwarevsphereConfig
-      #     name: nc-ohio6-worker
-      #   drainBeforeDelete: true
-      #   machineOS: linux
-      #   labels: {}
+      - name: worker
+        etcdRole: false
+        controlPlaneRole: false
+        workerRole: true
+        hostnamePrefix: worker
+        quantity: 1
+        unhealthyNodeTimeout: 0m
+        machineConfigRef:
+          kind: VmwarevsphereConfig
+          name: nc-ohio6-worker
+        drainBeforeDelete: true
+        machineOS: linux
+        labels: {}
 #      - cloudCredentialSecretName: string
 #        controlPlaneRole: boolean
 #        displayName: string
