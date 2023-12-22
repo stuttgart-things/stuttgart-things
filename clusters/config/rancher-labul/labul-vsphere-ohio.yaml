@@ -91,6 +91,7 @@ cloudConfig: |-
     - git
     - curl
     - wget
+    - git
   resize_rootfs: true
   growpart:
     mode: auto
@@ -98,12 +99,18 @@ cloudConfig: |-
     ignore_growroot_disabled: false
   ansible:
     package_name: ansible-core
-    install_method: distro
-    pull:
-      url: https://github.com/stuttgart-things/stuttgart-things.git
-      playbook_name: ansible/playbooks/base-os.yaml
+    install_method: pip
+    setup_controller:
+      repositories:
+        - path: /home/sthings/stuttgart-things
+          source: https://github.com/stuttgart-things/stuttgart-things.git
     run_ansible:
-      extra_vars: target_host=localhost reboot_all=false
+      - playbook_dir: /home/sthings/stuttgart-things
+        playbook_name: ansible/playbooks/base-os.yaml
+        timeout: 120
+        forks: 1
+        inventory: new_ansible_hosts
+        extra_vars: target_host=localhost reboot_all=false
     galaxy:
       actions:
         - ["ansible-galaxy", "collection", "install", "community.crypto"]
@@ -437,7 +444,7 @@ spec:
         controlPlaneRole: true
         workerRole: true
         hostnamePrefix: master
-        quantity: 1
+        quantity: 0
         unhealthyNodeTimeout: 0m
         machineConfigRef:
           kind: VmwarevsphereConfig
