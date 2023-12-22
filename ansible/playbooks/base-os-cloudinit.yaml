@@ -1,0 +1,59 @@
+---
+- hosts: localhosts
+  become: true
+  gather_facts: true
+
+  vars:
+    manage_filesystem: true
+    update_packages: true
+    install_requirements: true
+    install_motd: true
+    username: sthings
+    lvm_home_sizing: "15%"
+    lvm_root_sizing: "35%"
+    lvm_var_sizing: "50%"
+    send_to_msteams: true
+    msteams_webhook_url: "https://365sva.webhook.office.com/webhookb2/2f14a9f8-4736-46dd-9c8c-31547ec37180@0a65cb1e-37d5-41ff-980a-647d9d0e4f0b/IncomingWebhook/37a805a0a2624dc2ac1aedd7dec6ad49/dc3a27ed-396c-40b7-a9b2-f1a2b6b44efe"
+
+    vault_instances:
+      - https://vault.tiab.labda.sva.de:8200
+      - https://vault.labul.sva.de:8200
+      - https://vault-vsphere.labul.sva.de:8200
+      - https://vault-pve.labul.sva.de:8200
+      - https://vault-vsphere.tiab.labda.sva.de:8200
+
+  roles:
+    - role: manage-filesystem
+      when: manage_filesystem|bool
+
+    - role: install-requirements
+      when: install_requirements|bool
+
+  tasks:
+    - name: Install vault ca certificate to local system from multiple instances
+      ansible.builtin.include_role:
+        name: install-configure-vault
+        tasks_from: install-ca-auth
+      vars:
+        vault_url: "{{ vault_instance }}"
+      loop: "{{ vault_instances }}"
+      loop_control:
+        loop_var: vault_instance
+      when: vault_instances is defined
+
+    - name: Send webhook to msteams
+      ansible.builtin.include_role:
+        name: create-send-webhook
+      vars:
+        summary_text: base-os-setup was executed
+        msteams_url: "https://365sva.webhook.office.com/webhookb2/2f14a9f8-4736-46dd-9c8c-31547ec37180@0a65cb1e-37d5-41ff-980a-647d9d0e4f0b/IncomingWebhook/37a805a0a2624dc2ac1aedd7dec6ad49/dc3a27ed-396c-40b7-a9b2-f1a2b6b44efe"
+        card_title: base-os-setup was executed
+        act_image: "{{ logo_pic }}"
+        act_title: "{{ quotes | random }}"
+        act_text: "{{ quotes | random }}"
+        os_facts: |
+          base-os-setup was executed on "{{ ansible_fqdn }}"
+        ms_teams_notification_type: "simple"
+      tags: notify
+      ignore_errors: true
+      when: send_to_msteams|bool
