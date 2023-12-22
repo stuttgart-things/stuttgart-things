@@ -77,7 +77,7 @@ metadata:
   annotations:
     field.cattle.io/creatorId: user-rz2tb
     ownerBindingsCreated: "true"
-  name: nc-ohio11-aio
+  name: nc-ohio12-aio
   namespace: fleet-default
 boot2dockerUrl: ""
 cfgparam:
@@ -99,7 +99,7 @@ cloudConfig: |-
     ignore_growroot_disabled: false
   ansible:
     package_name: ansible-core
-    install_method: pip
+    install_method: distro
     setup_controller:
       repositories:
         - path: /home/sthings/stuttgart-things
@@ -439,12 +439,25 @@ spec:
       etcd-expose-metrics: false
       profile: null
     machinePools:
-      - name: aio
+      - name: aio2
         etcdRole: true
         controlPlaneRole: true
         workerRole: true
         hostnamePrefix: master
         quantity: 1
+        unhealthyNodeTimeout: 0m
+        machineConfigRef:
+          kind: VmwarevsphereConfig
+          name: nc-ohio12-aio
+        drainBeforeDelete: true
+        machineOS: linux
+        labels: {}
+      - name: aio
+        etcdRole: true
+        controlPlaneRole: true
+        workerRole: true
+        hostnamePrefix: master
+        quantity: 0
         unhealthyNodeTimeout: 0m
         machineConfigRef:
           kind: VmwarevsphereConfig
