@@ -72,11 +72,12 @@ stringData:
 # vcenterPort: "443"
 ---
 apiVersion: rke-machine-config.cattle.io/v1
+kind: VmwarevsphereConfig
 metadata:
   annotations:
     field.cattle.io/creatorId: user-rz2tb
     ownerBindingsCreated: "true"
-  name: nc-ohio7-aio
+  name: nc-ohio8-aio
   namespace: fleet-default
 boot2dockerUrl: ""
 cfgparam:
@@ -95,7 +96,6 @@ cloudConfig: |-
     mode: auto
     devices: ['/']
     ignore_growroot_disabled: false
-
   ansible:
     package_name: ansible-core
     install_method: distro
@@ -135,7 +135,6 @@ diskSize: "40000"
 folder: /LabUL/vm/phermann/testing
 gracefulShutdownTimeout: "0"
 hostsystem: null
-kind: VmwarevsphereConfig
 memorySize: "8192"
 network:
   - /LabUL/network/LAB-10.31.103
@@ -438,7 +437,7 @@ spec:
         controlPlaneRole: true
         workerRole: true
         hostnamePrefix: master
-        quantity: 1
+        quantity: 0
         unhealthyNodeTimeout: 0m
         machineConfigRef:
           kind: VmwarevsphereConfig
