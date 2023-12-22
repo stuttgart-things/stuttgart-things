@@ -95,7 +95,7 @@ spec:
   wait: true
   postBuild:
     substitute:
-      INGRESS_HOSTNAME: argo-events
+      INGRESS_HOSTNAME: argo-workflows
       INGRESS_DOMAIN: app1.sthings-vsphere.labul.sva.de
       INGRESS_SECRET_NAME: argo-events-ingress-tls
   patches:
