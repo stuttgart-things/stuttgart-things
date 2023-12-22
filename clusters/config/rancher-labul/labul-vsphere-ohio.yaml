@@ -157,7 +157,7 @@ vcenterPort: "443"
 apiVersion: provisioning.cattle.io/v1
 kind: Cluster
 metadata:
-  name: ohio7
+  name: ohio8
   annotations:
     field.cattle.io/description: ohio7
     #  key: string
@@ -437,11 +437,11 @@ spec:
         controlPlaneRole: true
         workerRole: true
         hostnamePrefix: master
-        quantity: 0
+        quantity: 1
         unhealthyNodeTimeout: 0m
         machineConfigRef:
           kind: VmwarevsphereConfig
-          name: nc-ohio7-aio
+          name: nc-ohio8-aio
         drainBeforeDelete: true
         machineOS: linux
         labels: {}
