@@ -109,11 +109,11 @@ cloudConfig: |-
         - ["ansible-galaxy", "collection", "install", "community.crypto"]
         - ["ansible-galaxy", "collection", "install", "community.general"]
         - ["ansible-galaxy", "collection", "install", "ansible.posix"]
-        - ["ansible-galaxy", "role", "install", "https://github.com/stuttgart-things/manage-filesystem.git"]
-        - ["ansible-galaxy", "role", "install", "https://github.com/stuttgart-things/install-configure-vault.git"]
-        - ["ansible-galaxy", "role", "install", "https://github.com/stuttgart-things/install-requirements.git"]
-        - ["ansible-galaxy", "role", "install", "https://github.com/stuttgart-things/download-install-binary.git"]
-        - ["ansible-galaxy", "role", "install", " https://github.com/stuttgart-things/create-os-user.git"]
+        - ["ansible-galaxy", "install", "git+https://github.com/stuttgart-things/manage-filesystem.git"]
+        - ["ansible-galaxy", "install", "git+https://github.com/stuttgart-things/install-configure-vault.git"]
+        - ["ansible-galaxy", "install", "git+https://github.com/stuttgart-things/install-requirements.git"]
+        - ["ansible-galaxy", "install", "git+https://github.com/stuttgart-things/download-install-binary.git"]
+        - ["ansible-galaxy", "install", " git+https://github.com/stuttgart-things/create-os-user.git"]
   runcmd:
     - wget -O /usr/local/share/ca-certificates/labda-vsphere-ca.crt https://vault-vsphere.tiab.labda.sva.de:8200/v1/pki/ca/pem --no-check-certificate
     - wget -O /usr/local/share/ca-certificates/labul-vsphere-ca.crt https://vault-vsphere.labul.sva.de:8200/v1/pki/ca/pem --no-check-certificate
