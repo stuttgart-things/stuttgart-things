@@ -1,5 +1,5 @@
 ---
-- hosts: localhosts
+- hosts: localhost
   become: true
   gather_facts: true
 
