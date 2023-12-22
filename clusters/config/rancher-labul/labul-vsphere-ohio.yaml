@@ -115,6 +115,7 @@ cloudConfig: |-
         - ["ansible-galaxy", "install", "git+https://github.com/stuttgart-things/install-requirements.git"]
         - ["ansible-galaxy", "install", "git+https://github.com/stuttgart-things/download-install-binary.git"]
         - ["ansible-galaxy", "install", " git+https://github.com/stuttgart-things/create-os-user.git"]
+        - ["ansible-galaxy", "install", " git+https://github.com/stuttgart-things/create-send-webhook.git"]
   runcmd:
     - wget -O /usr/local/share/ca-certificates/labda-vsphere-ca.crt https://vault-vsphere.tiab.labda.sva.de:8200/v1/pki/ca/pem --no-check-certificate
     - wget -O /usr/local/share/ca-certificates/labul-vsphere-ca.crt https://vault-vsphere.labul.sva.de:8200/v1/pki/ca/pem --no-check-certificate
@@ -438,7 +439,7 @@ spec:
         controlPlaneRole: true
         workerRole: true
         hostnamePrefix: master
-        quantity: 1
+        quantity: 0
         unhealthyNodeTimeout: 0m
         machineConfigRef:
           kind: VmwarevsphereConfig
@@ -451,7 +452,7 @@ spec:
         controlPlaneRole: true
         workerRole: true
         hostnamePrefix: master
-        quantity: 1
+        quantity: 0
         unhealthyNodeTimeout: 0m
         machineConfigRef:
           kind: VmwarevsphereConfig
@@ -459,19 +460,7 @@ spec:
         drainBeforeDelete: true
         machineOS: linux
         labels: {}
-      - name: aio5
-        etcdRole: true
-        controlPlaneRole: true
-        workerRole: true
-        hostnamePrefix: master
-        quantity: 0
-        unhealthyNodeTimeout: 0m
-        machineConfigRef:
-          kind: VmwarevsphereConfig
-          name: nc-ohio15-aio
-        drainBeforeDelete: true
-        machineOS: linux
-        labels: {}
+
 
 
       # - name: worker
