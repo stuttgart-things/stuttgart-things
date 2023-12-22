@@ -106,7 +106,7 @@ cloudConfig: |-
       extra_vars: target_host=localhost reboot_all=false
     galaxy:
       actions:
-        - ["ansible-galaxy", "collection", "install", "community.crypto "]
+        - ["ansible-galaxy", "collection", "install", "community.cryptosud"]
         - ["ansible-galaxy", "collection", "install", "community.general"]
         - ["ansible-galaxy", "collection", "install", "ansible.posix"]
         - ["ansible-galaxy", "role", "install", "https://github.com/stuttgart-things/manage-filesystem.git"]
@@ -438,7 +438,7 @@ spec:
         controlPlaneRole: true
         workerRole: true
         hostnamePrefix: master
-        quantity: 1
+        quantity: 0
         unhealthyNodeTimeout: 0m
         machineConfigRef:
           kind: VmwarevsphereConfig
