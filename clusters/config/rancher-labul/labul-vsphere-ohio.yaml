@@ -438,7 +438,7 @@ spec:
         controlPlaneRole: true
         workerRole: true
         hostnamePrefix: ''
-        quantity: 1
+        quantity: 0
         unhealthyNodeTimeout: 0m
         machineConfigRef:
           kind: VmwarevsphereConfig
@@ -451,7 +451,7 @@ spec:
         controlPlaneRole: false
         workerRole: true
         hostnamePrefix: worker
-        quantity: 1
+        quantity: 0
         unhealthyNodeTimeout: 0m
         machineConfigRef:
           kind: VmwarevsphereConfig
