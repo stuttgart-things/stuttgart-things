@@ -77,7 +77,7 @@ metadata:
   annotations:
     field.cattle.io/creatorId: user-rz2tb
     ownerBindingsCreated: "true"
-  name: nc-ohio15-aio
+  name: nc-ohio16-aio
   namespace: fleet-default
 boot2dockerUrl: ""
 cfgparam:
@@ -433,6 +433,19 @@ spec:
       etcd-expose-metrics: false
       profile: null
     machinePools:
+      - name: aio6
+        etcdRole: true
+        controlPlaneRole: true
+        workerRole: true
+        hostnamePrefix: master
+        quantity: 1
+        unhealthyNodeTimeout: 0m
+        machineConfigRef:
+          kind: VmwarevsphereConfig
+          name: nc-ohio16-aio
+        drainBeforeDelete: true
+        machineOS: linux
+        labels: {}
       - name: aio5
         etcdRole: true
         controlPlaneRole: true
@@ -446,19 +459,7 @@ spec:
         drainBeforeDelete: true
         machineOS: linux
         labels: {}
-      - name: aio4
-        etcdRole: true
-        controlPlaneRole: true
-        workerRole: true
-        hostnamePrefix: master
-        quantity: 0
-        unhealthyNodeTimeout: 0m
-        machineConfigRef:
-          kind: VmwarevsphereConfig
-          name: nc-ohio14-aio
-        drainBeforeDelete: true
-        machineOS: linux
-        labels: {}
+
 
       # - name: worker
       #   etcdRole: false
