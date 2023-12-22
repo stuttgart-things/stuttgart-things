@@ -77,12 +77,12 @@ metadata:
   annotations:
     field.cattle.io/creatorId: user-rz2tb
     ownerBindingsCreated: "true"
-  name: nc-ohio10-aio
+  name: nc-ohio11-aio
   namespace: fleet-default
 boot2dockerUrl: ""
 cfgparam:
   - disk.enableUUID=TRUE
-cloneFrom: /LabUL/vm/phermann/packer/ubuntu23-rke2-12-20
+cloneFrom: /LabUL/vm/phermann/vm-templates/u23-rke2-ipi
 cloudConfig: |-
   #cloud-config
   package_update: true
@@ -164,7 +164,7 @@ vcenterPort: "443"
 apiVersion: provisioning.cattle.io/v1
 kind: Cluster
 metadata:
-  name: ohio10
+  name: ohio11
   annotations:
     field.cattle.io/description: ohio7
     #  key: string
@@ -448,7 +448,7 @@ spec:
         unhealthyNodeTimeout: 0m
         machineConfigRef:
           kind: VmwarevsphereConfig
-          name: nc-ohio10-aio
+          name: nc-ohio11-aio
         drainBeforeDelete: true
         machineOS: linux
         labels: {}
