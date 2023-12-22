@@ -77,7 +77,7 @@ metadata:
   annotations:
     field.cattle.io/creatorId: user-rz2tb
     ownerBindingsCreated: "true"
-  name: nc-ohio8-aio
+  name: nc-ohio9-aio
   namespace: fleet-default
 boot2dockerUrl: ""
 cfgparam:
@@ -437,7 +437,7 @@ spec:
         controlPlaneRole: true
         workerRole: true
         hostnamePrefix: master
-        quantity: 1
+        quantity: 0
         unhealthyNodeTimeout: 0m
         machineConfigRef:
           kind: VmwarevsphereConfig
