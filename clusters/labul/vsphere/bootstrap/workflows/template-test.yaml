@@ -10,7 +10,7 @@ metadata:
    app.kubernetes.io/name: terraform
    app.kubernetes.io/part-of: machine-shop-operator
 spec:
- state: present
+ state: absent
  variables:
   - vsphere_vm_name="u23-eva1"
   - vm_count=1
