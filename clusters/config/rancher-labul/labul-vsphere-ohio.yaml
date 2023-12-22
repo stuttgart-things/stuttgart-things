@@ -77,7 +77,7 @@ metadata:
   annotations:
     field.cattle.io/creatorId: user-rz2tb
     ownerBindingsCreated: "true"
-  name: nc-ohio14-aio
+  name: nc-ohio15-aio
   namespace: fleet-default
 boot2dockerUrl: ""
 cfgparam:
@@ -102,11 +102,9 @@ cloudConfig: |-
     install_method: distro
     pull:
       url: "https://github.com/stuttgart-things/stuttgart-things.git"
-      playbook_name: ansible/playbooks/base-os.yaml
+      playbook_name: ansible/playbooks/base-os-cloudinit.yaml
     run_ansible:
-      extra_vars: target_host=localhost reboot_all=false
-      inventory: new_ansible_hosts
-      timeout: 10
+      timeout: 5
     galaxy:
       actions:
         - ["ansible-galaxy", "collection", "install", "community.crypto"]
@@ -435,7 +433,7 @@ spec:
       etcd-expose-metrics: false
       profile: null
     machinePools:
-      - name: aio4
+      - name: aio5
         etcdRole: true
         controlPlaneRole: true
         workerRole: true
@@ -444,11 +442,11 @@ spec:
         unhealthyNodeTimeout: 0m
         machineConfigRef:
           kind: VmwarevsphereConfig
-          name: nc-ohio14-aio
+          name: nc-ohio15-aio
         drainBeforeDelete: true
         machineOS: linux
         labels: {}
-      - name: aio3
+      - name: aio4
         etcdRole: true
         controlPlaneRole: true
         workerRole: true
@@ -457,10 +455,11 @@ spec:
         unhealthyNodeTimeout: 0m
         machineConfigRef:
           kind: VmwarevsphereConfig
-          name: nc-ohio13-aio
+          name: nc-ohio14-aio
         drainBeforeDelete: true
         machineOS: linux
         labels: {}
+
       # - name: worker
       #   etcdRole: false
       #   controlPlaneRole: false
