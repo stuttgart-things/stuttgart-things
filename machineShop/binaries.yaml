@@ -116,7 +116,7 @@ script:
   - argo:
       script: |
         curl -sLO https://github.com/argoproj/argo-workflows/releases/download/v{{ or .argocdVersion "3.5.2" }}/argo-linux-amd64.gz
-        gunzip argo-darwin-amd64.gz
+        gunzip argo-linux-amd64.gz
         chmod +x argo-linux-amd64
         mv ./argo-darwin-amd64 /usr/local/bin/argo
         argo version
