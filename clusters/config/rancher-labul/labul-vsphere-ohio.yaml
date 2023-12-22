@@ -437,11 +437,11 @@ spec:
         controlPlaneRole: true
         workerRole: true
         hostnamePrefix: master
-        quantity: 0
+        quantity: 1
         unhealthyNodeTimeout: 0m
         machineConfigRef:
           kind: VmwarevsphereConfig
-          name: nc-ohio8-aio
+          name: nc-ohio9-aio
         drainBeforeDelete: true
         machineOS: linux
         labels: {}
