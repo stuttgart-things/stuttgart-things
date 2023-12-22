@@ -16,3 +16,14 @@ spec:
         name: argo
         namespace: argo-workflows
       interval: 12h
+  values:
+    workflow:
+      serviceAccount:
+        create: true
+    controller:
+      workflowNamespaces:
+        - default
+        - argo-workflows
+      workflowDefaults:
+        spec:
+          serviceAccountName: argo-workflow
