@@ -19,7 +19,7 @@ apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: HelmRepository
 metadata:
   name: stuttgart-things
-  namespace: argocd
+  namespace: argo-workflows
 spec:
   type: oci
   interval: 1h
