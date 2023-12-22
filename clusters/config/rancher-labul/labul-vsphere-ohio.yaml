@@ -444,7 +444,7 @@ spec:
         controlPlaneRole: true
         workerRole: true
         hostnamePrefix: master
-        quantity: 1
+        quantity: 0
         unhealthyNodeTimeout: 0m
         machineConfigRef:
           kind: VmwarevsphereConfig
