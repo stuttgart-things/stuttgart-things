@@ -2,14 +2,13 @@ packer {
   required_version = ">= [[ .rocky9PackerMinVersion ]]"
   required_plugins {
     vmware = {
-    version = ">= [[ .rocky9PackerVMwarePluginMinVersion ]]"
-    source  = "[[ .vmWareProvider ]]"
+      version = ">= [[ .rocky9PackerVMwarePluginMinVersion ]]"
+      source  = "[[ .vmWareProvider ]]"
     }
-  }
-
-  ansible = {
-    source  = "[[ .ansibleProvisioner ]]"
-    version = ">= [[ .ansibleProvisionerMinVersion ]]"
+    ansible = {
+      source  = "[[ .ansibleProvisioner ]]"
+      version = ">= [[ .ansibleProvisionerMinVersion ]]"
+    }
   }
 
 }
