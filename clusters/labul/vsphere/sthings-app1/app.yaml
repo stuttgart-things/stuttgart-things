@@ -30,7 +30,7 @@ spec:
   patches:
     - patch: |-
         - op: replace
-          path: /spec/chart/spec/version
+          path: s
           value: 2.8.0
       target:
         kind: HelmRelease
