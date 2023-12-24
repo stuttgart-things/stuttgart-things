@@ -44,8 +44,8 @@ installRequirements: true
 copyNetworkConfig: true
 
 # ROCKY9
-rocky9PackerMinVersion: 1.8.6
-rocky9PackerVMwarePluginMinVersion: 1.0.7
+rocky9PackerMinVersion: 1.10.0
+rocky9PackerVMwarePluginMinVersion: 1.2.3
 rocky9tmpSSHUser: root
 rocky9tmpSSHPassword: ch0coLate
 rocky9IsoUrl: https://download.rockylinux.org/pub/rocky/9/isos/x86_64/Rocky-9.2-x86_64-boot.iso
