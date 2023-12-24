@@ -357,6 +357,17 @@ spec:
     enabled: false
     fqdn: ''
   rkeConfig:
+    additionalManifest: |-
+      apiVersion: v1
+      kind: Pod
+      metadata:
+        name: nginx
+      spec:
+        containers:
+          - name: nginx
+            image: nginx:1.14.2
+            ports:
+              - containerPort: 80
     chartValues:
       rke2-calico: {}
     etcd:
