@@ -44,7 +44,7 @@ spec:
     - name: secretPathPassword
       value: cloud/data/vsphere:password
     - name: ansibleProvisioning
-      value: base-os
+      value: play
   pipelineRef:
     resolver: git
     params:
@@ -110,7 +110,7 @@ spec:
     - name: secretPathPassword
       value: cloud/data/vsphere:password
     - name: ansibleProvisioning
-      value: base-os
+      value: play
   pipelineRef:
     resolver: git
     params:
