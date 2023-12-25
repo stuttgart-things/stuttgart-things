@@ -2,12 +2,12 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: packer-vsphere-rocky9-baseos-12-24-4
+  name: packer-vsphere-rocky9-baseos-12-25-1
   namespace: tektoncd
 spec:
   params:
     - name: vmTemplateName
-      value: rocky9-12-24
+      value: rocky9-12-25
     - name: ansibleExtraVars
       value:
         - "updatePackages+true"
