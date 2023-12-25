@@ -48,8 +48,8 @@ rocky9PackerMinVersion: 1.10.0
 rocky9PackerVMwarePluginMinVersion: 1.2.3
 rocky9tmpSSHUser: root
 rocky9tmpSSHPassword: ch0coLate
-rocky9IsoUrl: https://download.rockylinux.org/pub/rocky/9/isos/x86_64/Rocky-9.2-x86_64-boot.iso
-rocky9IsoChecksum: sha256:11e42da96a7b336de04e60d05e54a22999c4d7f3e92c19ebf31f9c71298f5b42
+rocky9IsoUrl: https://download.rockylinux.org/pub/rocky/9/isos/x86_64/Rocky-9.3-x86_64-minimal.iso
+rocky9IsoChecksum: eef8d26018f4fcc0dc101c468f65cbf588f2184900c556f243802e9698e56729
 rocky9ShellCmd: "dnf update -y; dnf install -y python3-dnf cloud-utils-growpart; dnf install -y gdisk python3; shred -u /etc/ssh/*_key /etc/ssh/*_key.pub; rm -f /var/run/utmp; >/var/log/lastlog; >/var/log/wtmp; >/var/log/btmp; rm -rf /tmp/* /var/tmp/*; unset HISTFILE; rm -rf /home/*/.*history /root/.*history; rm -f /root/*ks; passwd -d root; passwd -l root; rm -f /etc/resolv.conf; ln -sf /run/NetworkManager/resolv.conf /etc/resolv.conf; echo manage_PasswordAuthentication ;sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config; sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/g' /etc/ssh/sshd_config"
 rocky9NetworkInstall: https://download.rockylinux.org/pub/rocky/9/BaseOS/x86_64/os/
 

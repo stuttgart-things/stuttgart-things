@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: packer-vsphere-rocky9-baseos-12-25-1
+  name: packer-vsphere-rocky9-baseos-12-25-2
   namespace: tektoncd
 spec:
   params:
@@ -20,7 +20,7 @@ spec:
         - "installDockerCompose+false"
         - "templateCreationSetup+false"
     - name: bootConfigPath
-      value: packer/kickstart/ubuntu-vsphere.yaml
+      value: packer/kickstart/rocky.cfg
     - name: defaultEnvironmentPath
       value: packer/environments/labul-vsphere.yaml
     - name: gitRepoUrl
