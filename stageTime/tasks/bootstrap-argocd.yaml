@@ -1,9 +1,3 @@
-        # echo EXPORT KUBECONFIG
-        # export KUBECONFIG=KUBECONFIG
-
-        # argocd login $(params.ARGOCD_SERVER_URL):$(params.ARGOCD_SERVER_PORT) \
-        # --insecure --username ${ARGOCD_USER} \
-        # --password ${ARGOCD_PASSWORD}
 ---
 apiVersion: tekton.dev/v1
 kind: Task
@@ -153,3 +147,10 @@ spec:
         echo ADD CLUSTER $(params.CLUSTER_NAME) TO $(params.ARGOCD_URL)
         argocd cluster add $(params.CLUSTER_CONTEXT) \
         --name $(params.CLUSTER_NAME) --grpc-web
+
+# echo EXPORT KUBECONFIG
+# export KUBECONFIG=KUBECONFIG
+
+# argocd login $(params.ARGOCD_SERVER_URL):$(params.ARGOCD_SERVER_PORT) \
+# --insecure --username ${ARGOCD_USER} \
+# --password ${ARGOCD_PASSWORD}

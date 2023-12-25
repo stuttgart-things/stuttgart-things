@@ -42,8 +42,7 @@ spec:
         accessModes: ["ReadWriteOnce"]
         storageClassName: ${STORAGE_CLASS}
         resources:
-          requests:
-            storage: 1Gi
+          requests:            storage: 1Gi
     template:
       spec:
         containers:

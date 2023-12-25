@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: packer-vsphere-rocky9-baseos-12-25-2
+  name: packer-vsphere-rocky9-baseos-12-25-3
   namespace: tektoncd
 spec:
   params:
