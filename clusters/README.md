@@ -53,6 +53,15 @@ stringData:
 apiVersion: v1
 kind: Secret
 metadata:
+  name: grafana-flux-secrets
+  namespace: flux-system
+type: Opaque
+stringData:
+  GRAFANA_PASSWORD: Atlan7is2024
+---
+apiVersion: v1
+kind: Secret
+metadata:
   name: s3-flux-secrets
   namespace: flux-system
 type: Opaque
