@@ -35,7 +35,7 @@ spec:
                 type: ClusterIP
           nodeSets:
           - name: default
-            count: 1
+            count: ${COUNT_ELASTICSEARCH_NODES:-1}
             config:
               node.store.allow_mmap: false
             podTemplate:
