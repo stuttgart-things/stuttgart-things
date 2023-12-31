@@ -8,6 +8,10 @@ collections:
     version: 1.5.2
   - name: kubernetes.core
     version: 3.0.0
+  - name: community.vmware
+    version: 4.0.1
+  - name: community.hashi_vault
+    version: 6.0.0
 
 roles:
   - src: https://github.com/stuttgart-things/deploy-configure-rke.git
