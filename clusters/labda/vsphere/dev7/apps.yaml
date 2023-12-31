@@ -104,6 +104,7 @@ spec:
       REPOSIORY_NAME: stuttgart-things
       GITHUB_URL: https://github.com/stuttgart-things/stuttgart-things
       STORAGE_CLASS: openebs-hostpath
+      STORAGE_REQUEST: 50Mi
     substituteFrom:
       - kind: Secret
         name: github-flux-secrets

@@ -26,7 +26,7 @@ spec:
         storageClassName: ${STORAGE_CLASS}
         resources:
           requests:
-            storage: 1Gi
+            storage: ${STORAGE_REQUEST:-100Mi}
     template:
       spec:
         containers:
