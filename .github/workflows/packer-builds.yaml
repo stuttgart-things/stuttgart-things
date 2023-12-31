@@ -1,0 +1,21 @@
+---
+name: Build & Create Packer PipelineRun
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  Packer-PipelineRun-Creation:
+    runs-on: arc-runner-scale-set-stuttgart-things
+    container:
+      image: eu.gcr.io/stuttgart-things/machineshop:v0.1.53
+    environment: k8s
+    continue-on-error: false
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.1.1
+      - run: |
+          printenv
+          ls -lta
