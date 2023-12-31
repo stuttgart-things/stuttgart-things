@@ -10,7 +10,6 @@ LABEL version=9.1.0
 
 ARG FLUX_VERSION=2.1.2
 ARG YQ_VERSION=4.40.5
-
 ARG ANSIBLE_VERSION=9.1.0
 ENV USER_ID=65532
 ENV GROUP_ID=65532
@@ -41,6 +40,7 @@ RUN pip install --no-cache-dir cryptography hvac "hvac[parser]" paramiko jmespat
 
 RUN mkdir -p /home/nonroot/.ansible && chown -R ${USER_ID}:${GROUP_ID} /home/nonroot/.ansible
 
+# ANSIBLE REQUIREMENTS
 ADD requirements.yaml /home/nonroot/requirements.yaml
 
 USER 65532
