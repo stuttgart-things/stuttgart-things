@@ -68,7 +68,7 @@ spec:
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: packer-vsphere-ubuntu23-rke2-12-31
+  name: packer-vsphere-ubuntu23-rke2-12-31-1
   namespace: tektoncd
 spec:
   params:
