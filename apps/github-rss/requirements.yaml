@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: arc-runners
+  labels:
+    toolkit.fluxcd.io/tenant: sthings-team
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: actions-runner-controller-charts
+  namespace: arc-systems
+spec:
+  type: oci
+  interval: 5m0s
+  url: oci://ghcr.io/actions/actions-runner-controller-charts

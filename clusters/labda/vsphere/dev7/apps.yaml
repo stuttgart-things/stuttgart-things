@@ -74,12 +74,36 @@ spec:
         kind: HelmRelease
         name: actions-runner-controller
         namespace: arc-systems
-
-
-  # postBuild:
-  #   substitute:
-  #     GITHUB_URL: https://github.com/stuttgart-things/docs
-  #     STORAGE_CLASS: openebs-hostpath
-  #   substituteFrom:
-  #     - kind: Secret
-  #       name: github-flux-secrets
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: github-rss
+  namespace: flux-system
+spec:
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./apps/github-rss
+  prune: true
+  wait: true
+  patches:
+    - patch: |-
+        - op: replace
+          path: /spec/chart/spec/version
+          value: 0.8.1
+      target:
+        kind: HelmRelease
+        name: arc-runner-scale-set-stuttgart-things
+        namespace: arc-runners
+  postBuild:
+    substitute:
+      REPOSIORY_NAME: stuttgart-things
+      GITHUB_URL: https://github.com/stuttgart-things/stuttgart-things
+      STORAGE_CLASS: openebs-hostpath
+    substituteFrom:
+      - kind: Secret
+        name: github-flux-secrets
