@@ -1,7 +1,7 @@
 # stuttgart-things
 [sˈθɪŋz] - using modularity to speed up parallel builds
 
-this repository is used for configuration code like gitops configuration, ansible playbooks, Dockerfiles or helm charts.  
+used for configuration code like gitops configuration, ansible playbooks, Dockerfiles or helm charts.  
 
 ## INFRASTRUCTURE AS CODE
 
