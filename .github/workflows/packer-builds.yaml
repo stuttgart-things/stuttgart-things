@@ -23,6 +23,7 @@ jobs:
           git config --global --add safe.directory '*'
           touch test.txt
           echo 'hello' >> test.txt
+          tr -dc A-Za-z0-9 </dev/urandom | head -c 13; echos
       - name: Commit changes
         uses: EndBug/add-and-commit@v9.1.3
         with:
@@ -30,4 +31,4 @@ jobs:
           author_email: patrick.hermann@sva.de
           message: 'updated vars for LabUL'
           add: '*'
-
+          new_branch: custom-new-branch
