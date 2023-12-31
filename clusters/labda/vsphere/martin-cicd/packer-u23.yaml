@@ -1,0 +1,199 @@
+---
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  name: packer-vsphere-ubuntu23-baseos-12-31-1
+  namespace: tektoncd
+spec:
+  params:
+    - name: vmTemplateName
+      value: ubuntu23-12-31
+    - name: ansibleExtraVars
+      value:
+        - "updatePackages+true"
+        - "copyNetworkConfig+true"
+        - "installRequirements+true"
+        - "configureClusterNode+false"
+        - "installCloudInit+false"
+        - "createRkeUser+false"
+        - "installDocker+false"
+        - "installDockerCompose+false"
+        - "templateCreationSetup+false"
+    - name: bootConfigPath
+      value: packer/kickstart/ubuntu-vsphere.yaml
+    - name: defaultEnvironmentPath
+      value: packer/environments/labda-vsphere.yaml
+    - name: gitRepoUrl
+      value: https://github.com/stuttgart-things/stuttgart-things.git
+    - name: gitRevision
+      value: main
+    - name: gitWorkspaceSubdirectory
+      value: /packer/ubuntu23
+    - name: osTemplatePath
+      value: packer/template/ubuntu23-vsphere.pkr.tpl.hcl
+    - name: osVersion
+      value: ubuntu23
+    - name: packerWorkingImage
+      value: eu.gcr.io/stuttgart-things/sthings-packer:1.10.0-9.1.0
+    - name: vaultSecretName
+      value: vault
+    - name: cloud
+      value: vsphere
+    - name: secretPathUser
+      value: cloud/data/vsphere:username
+    - name: secretPathPassword
+      value: cloud/data/vsphere:password
+    - name: ansibleProvisioning
+      value: play
+  pipelineRef:
+    resolver: git
+    params:
+      - name: url
+        value: https://github.com/stuttgart-things/stuttgart-things.git
+      - name: revision
+        value: main
+      - name: pathInRepo
+        value: stageTime/pipelines/build-packer-template.yaml
+  workspaces:
+    - name: shared-workspace
+      volumeClaimTemplate:
+        spec:
+          storageClassName: openebs-hostpath
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 100Mi
+---
+# ---
+# apiVersion: tekton.dev/v1
+# kind: PipelineRun
+# metadata:
+#   name: packer-vsphere-ubuntu23-baseos-5
+#   namespace: tektoncd
+# spec:
+#   params:
+#     - name: vmTemplateName
+#       value: ubuntu23
+#     - name: ansibleExtraVars
+#       value:
+#         - "updatePackages+true"
+#         - "installRequirements+true"
+#         - "configureClusterNode+false"
+#         - "cloudinit+false"
+#         - "createRkeUser+false"
+#         - "installDocker+false"
+#         - "installDockerCompose+false"
+#         - "templateCreationSetup+false"
+#         - "copyNetworkConfig+true"
+#     - name: bootConfigPath
+#       value: packer/kickstart/ubuntu-vsphere.yaml
+#     - name: defaultEnvironmentPath
+#       value: packer/environments/labda-vsphere.yaml
+#     - name: gitRepoUrl
+#       value: https://github.com/stuttgart-things/stuttgart-things.git
+#     - name: gitRevision
+#       value: main
+#     - name: gitWorkspaceSubdirectory
+#       value: /packer/ubuntu23
+#     - name: osTemplatePath
+#       value: packer/template/ubuntu23-vsphere.pkr.tpl.hcl
+#     - name: osVersion
+#       value: ubuntu23
+#     - name: packerWorkingImage
+#       value: eu.gcr.io/stuttgart-things/sthings-packer:1.10.0-9.1.0
+#     - name: vaultSecretName
+#       value: vault
+#     - name: cloud
+#       value: vsphere
+#     - name: secretPathUser
+#       value: cloud/data/vsphere:username
+#     - name: secretPathPassword
+#       value: cloud/data/vsphere:password
+#     - name: ansibleProvisioning
+#       value: base-os
+#   pipelineRef:
+#     resolver: git
+#     params:
+#       - name: url
+#         value: https://github.com/stuttgart-things/stuttgart-things.git
+#       - name: revision
+#         value: main
+#       - name: pathInRepo
+#         value: stageTime/pipelines/build-packer-template.yaml
+#   workspaces:
+#     - name: shared-workspace
+#       volumeClaimTemplate:
+#         spec:
+#           storageClassName: openebs-hostpath
+#           accessModes:
+#             - ReadWriteOnce
+#           resources:
+#             requests:
+#               storage: 100Mi
+# ---
+# apiVersion: tekton.dev/v1
+# kind: PipelineRun
+# metadata:
+#   name: packer-vsphere-ubuntu23-rke2-3
+#   namespace: tektoncd
+# spec:
+#   params:
+#     - name: vmTemplateName
+#       value: u23-rke2-ipi
+#     - name: bootConfigPath
+#       value: packer/kickstart/ubuntu-vsphere.yaml
+#     - name: defaultEnvironmentPath
+#       value: packer/environments/labda-vsphere.yaml
+#     - name: gitRepoUrl
+#       value: https://github.com/stuttgart-things/stuttgart-things.git
+#     - name: gitRevision
+#       value: main
+#     - name: gitWorkspaceSubdirectory
+#       value: /packer/ubuntu23
+#     - name: osTemplatePath
+#       value: packer/template/ubuntu23-vsphere.pkr.tpl.hcl
+#     - name: osVersion
+#       value: ubuntu23
+#     - name: packerWorkingImage
+#       value: eu.gcr.io/stuttgart-things/sthings-packer:1.10.0-9.1.0
+#     - name: vaultSecretName
+#       value: vault
+#     - name: cloud
+#       value: vsphere
+#     - name: secretPathUser
+#       value: cloud/data/vsphere:username
+#     - name: secretPathPassword
+#       value: cloud/data/vsphere:password
+#     - name: ansibleProvisioning
+#       value: base-os
+#     - name: ansibleExtraVars
+#       value:
+#         - "updatePackages+true"
+#         - "installRequirements+true"
+#         - "configureClusterNode+true"
+#         - "cloudinit+true"
+#         - "createRkeUser+false"
+#         - "installDocker+false"
+#         - "installDockerCompose+false"
+#         - "templateCreationSetup+true"
+#         - "copyNetworkConfig+true"
+#   pipelineRef:
+#     resolver: git
+#     params:
+#       - name: url
+#         value: https://github.com/stuttgart-things/stuttgart-things.git
+#       - name: revision
+#         value: main
+#       - name: pathInRepo
+#         value: stageTime/pipelines/build-packer-template.yaml
+#   workspaces:
+#     - name: shared-workspace
+#       volumeClaimTemplate:
+#         spec:
+#           storageClassName: openebs-hostpath
+#           accessModes:
+#             - ReadWriteOnce
+#           resources:
+#             requests:
+#               storage: 100Mi

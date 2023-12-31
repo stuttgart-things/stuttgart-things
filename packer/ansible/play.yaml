@@ -23,7 +23,7 @@
       - https://vault.tiab.labda.sva.de:8200
       - https://vault.labul.sva.de:8200
       - https://vault-vsphere.labul.sva.de:8200
-      #- https://vault-pve.labul.sva.de:8200
+      - https://vault-vsphere.tiab.labda.sva.de:8200
       - https://vault-vsphere.tiab.labda.sva.de:8200
     ubuntu_network_config: |
       # This is the network config written by 'subiquity'
