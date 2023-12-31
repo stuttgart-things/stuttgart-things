@@ -13,9 +13,14 @@ jobs:
       image: eu.gcr.io/stuttgart-things/machineshop:v0.1.53
     environment: k8s
     continue-on-error: false
+    permissions:
+      contents: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v4.1.1
       - run: |
           printenv
           ls -lta
+          machineShop version
+          touch ./test.txt
+      - uses: stefanzweifel/git-auto-commit-action@v5
