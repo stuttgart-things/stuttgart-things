@@ -91,7 +91,7 @@ metadata:
     #  key: string
   namespace: fleet-default
 spec:
-  cloudCredentialSecretName: cattle-global-data:labul-vsphere
+  cloudCredentialSecretName: cattle-global-data:labda-vsphere
   clusterAgentDeploymentCustomization:
     appendTolerations:
 #      - effect: string
@@ -372,7 +372,7 @@ spec:
         etcdRole: true
         controlPlaneRole: true
         workerRole: true
-        hostnamePrefix: master
+        # hostnamePrefix: master
         quantity: 1
         unhealthyNodeTimeout: 0m
         machineConfigRef:
@@ -417,9 +417,9 @@ spec:
 #        unhealthyNodeTimeout: string
 #        unhealthyRange: string
 #        workerRole: boolean
-    machineSelectorConfig:
-      - config:
-          protect-kernel-defaults: false
+    # machineSelectorConfig:
+    #   - config:
+    #       protect-kernel-defaults: false
 #      - config:
 #
 #        machineLabelSelector:
@@ -525,8 +525,6 @@ spec:
 #        - string
 #    rotateEncryptionKeys:
 #      generation: int
-  machineSelectorConfig:
-    - config: {}
 #  agentEnvVars:
 #    - name: string
 #      value: string
@@ -535,4 +533,3 @@ spec:
 #  defaultClusterRoleForProjectMembers: string
 #  enableNetworkPolicy: boolean
 #  redeploySystemAgentGeneration: int
-__clone: true
