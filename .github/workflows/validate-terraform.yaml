@@ -1,0 +1,51 @@
+---
+name: Build & Verify Terraform Module
+on:
+  workflow_call:
+    inputs:
+      runs-on:
+        required: true
+        type: string
+      terraform-version:
+        default: 1.6
+        required: true
+        type: string
+      tflint-version:
+        default: v0.50.0
+        required: true
+        type: string
+      environment-name:
+        default: k8s
+        required: true
+        type: string
+      continue-error:
+        default: false
+        required: true
+        type: boolean
+
+jobs:
+  Terraform-Validate:
+    runs-on: ${{ inputs.runs-on }}
+    container:
+      image: hashicorp/terraform:${{ inputs.terraform-version }}
+    environment: ${{ inputs.environment-name }}
+    continue-on-error: ${{ inputs.continue-error }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.1.1
+      - run: |
+          terraform init
+          terraform fmt
+          terraform validate
+
+  Terraform-Lint:
+    runs-on: arc-runner-scale-set-vault-base-setup
+    container:
+      image: ghcr.io/terraform-linters/tflint:${{ inputs.tflint-version }}
+    environment: k8s
+    continue-on-error: false
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.1.1
+      - run: |
+          tflint --recursive
