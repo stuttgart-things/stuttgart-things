@@ -16,4 +16,5 @@ spec:
         namespace: influxdb
       interval: 12h
   values:
-    installCRDs: true
+    persistence:
+      enabled: ${ENABLE_PERSISTENCE:-true}
