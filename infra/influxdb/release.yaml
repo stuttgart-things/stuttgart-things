@@ -17,5 +17,3 @@ spec:
       interval: 12h
   values:
     installCRDs: true
-
-helm install my-influxdb influxdata/influxdb --version 4.12.5
