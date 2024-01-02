@@ -39,7 +39,7 @@ jobs:
           terraform validate
 
   Terraform-Lint:
-    runs-on: arc-runner-scale-set-vault-base-setup
+    runs-on: ${{ inputs.runs-on }}
     container:
       image: ghcr.io/terraform-linters/tflint:${{ inputs.tflint-version }}
     environment: k8s
