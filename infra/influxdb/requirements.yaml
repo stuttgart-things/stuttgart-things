@@ -11,3 +11,6 @@ kind: HelmRepository
 metadata:
   name: influxdb
   namespace: influxdb
+spec:
+  interval: 24h
+  url: https://helm.influxdata.com/
