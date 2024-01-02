@@ -1,0 +1,32 @@
+---
+name: Build & Create Packer PipelineRun
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  Packer-PipelineRun-Creation:
+    runs-on: arc-runner-scale-set-stuttgart-things
+    container:
+      image: eu.gcr.io/stuttgart-things/machineshop:v0.1.53-git
+    environment: k8s
+    continue-on-error: false
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.1.1
+      - run: |
+          machineShop version
+          git config --global --add safe.directory '*'
+          echo 'hello' >> test.txt
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v9.1.3
+        with:
+          author_name: Patrick Hermann
+          author_email: patrick.hermann@sva.de
+          message: 'updated vars for LabUL'
+          add: '*'
+          new_branch: custom-new-branch

@@ -29,6 +29,19 @@ spec:
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: GitRepository
 metadata:
+  name: rancher-280
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  ref:
+    tag: rancher-280
+  secretRef:
+    name: flux-system
+  url: ssh://git@github.com/stuttgart-things/stuttgart-things
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
   name: argocd-refactoring
   namespace: flux-system
 spec:
