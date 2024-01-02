@@ -18,3 +18,5 @@ spec:
   values:
     persistence:
       enabled: ${ENABLE_PERSISTENCE:-true}
+      accessMode: ${ACCESS_MODE:-ReadWriteOnce}
+      size: ${INFLUXDB_SIZE:-8Gi}
