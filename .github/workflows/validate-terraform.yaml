@@ -42,8 +42,8 @@ jobs:
     runs-on: ${{ inputs.runs-on }}
     container:
       image: ghcr.io/terraform-linters/tflint:${{ inputs.tflint-version }}
-    environment: k8s
-    continue-on-error: false
+    environment: ${{ inputs.environment-name }}
+    continue-on-error: ${{ inputs.continue-error }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4.1.1
