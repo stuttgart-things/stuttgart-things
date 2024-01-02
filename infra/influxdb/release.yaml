@@ -17,11 +17,11 @@ spec:
       interval: 12h
   values:
     persistence:
-      enabled: ${ENABLE_PERSISTENCE:-"true"}
+      enabled: ${ENABLE_PERSISTENCE:-true}
       accessMode: ${ACCESS_MODE:-ReadWriteOnce}
       size: ${INFLUXDB_SIZE:-8Gi}
-    ingress:
-      enabled: ${ENABLE_INGRESS:-"false"}
-      tls: ${ENABLE_TLS:-"false"}
-      hostname: ${INGRESS_HOSTNAME:-}
-      className: ${CLASSNAME:-nginx}
+    # ingress:
+    #   enabled: ${ENABLE_INGRESS:-false}
+    #   tls: ${ENABLE_TLS:-false}
+    #   hostname: ${INGRESS_HOSTNAME:-}
+    #   className: ${CLASSNAME:-nginx}
