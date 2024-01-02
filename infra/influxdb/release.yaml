@@ -20,3 +20,8 @@ spec:
       enabled: ${ENABLE_PERSISTENCE:-true}
       accessMode: ${ACCESS_MODE:-ReadWriteOnce}
       size: ${INFLUXDB_SIZE:-8Gi}
+    ingress:
+      enabled: ${ENABLE_INGRESS:-false}
+      tls: ${ENABLE_TLS:-false}
+      hostname: ${HOSTNAME:-}
+      className: ${CLASSNAME:-nginx}
