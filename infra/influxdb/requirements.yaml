@@ -14,3 +14,13 @@ metadata:
 spec:
   interval: 24h
   url: https://helm.influxdata.com/
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: stuttgart-things
+  namespace: awx
+spec:
+  type: oci
+  interval: 1h
+  url: oci://eu.gcr.io/stuttgart-things
