@@ -29,3 +29,5 @@ spec:
       hostname: ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}
       className: ${CLASSNAME:-nginx}
       secretName: ${INGRESS_SECRET_NAME}
+      annotations:
+        nginx.ingress.kubernetes.io/rewrite-target: $1
