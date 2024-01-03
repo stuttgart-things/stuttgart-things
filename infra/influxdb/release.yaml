@@ -5,6 +5,9 @@ metadata:
   name: influxdb
   namespace: influxdb
 spec:
+  dependsOn:
+    - name: influxdb-configuration
+      namespace: influxdb
   interval: 30m
   chart:
     spec:
