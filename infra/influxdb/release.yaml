@@ -21,7 +21,7 @@ spec:
       accessMode: ${ACCESS_MODE:-ReadWriteOnce}
       size: ${INFLUXDB_SIZE:-8Gi}
     ingress:
-      enabled: ${ENABLE_INGRESS:-false}
-      tls: ${ENABLE_TLS:-false}
+      enabled: ${ENABLE_INGRESS:-true}
+      tls: ${ENABLE_TLS:-true}
       hostname: ${INGRESS_HOSTNAME}
       className: ${CLASSNAME:-nginx}
