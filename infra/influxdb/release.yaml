@@ -23,5 +23,6 @@ spec:
     ingress:
       enabled: ${ENABLE_INGRESS:-true}
       tls: ${ENABLE_TLS:-true}
-      hostname: ${INGRESS_HOSTNAME}
+      hostname: ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}
       className: ${CLASSNAME:-nginx}
+      secretName: ${INGRESS_SECRET_NAME}
