@@ -73,7 +73,7 @@ binary:
       url: https://github.com/oras-project/oras/releases/download/v{{ or .orasVersion "1.1.0" }}/oras_{{ or .orasVersion "1.1.0" }}_linux_amd64.tar.gz
       bin: oras
   - terraform:
-      url: https://releases.hashicorp.com/terraform/{{ or .terraformVersion "1.6.5" }}/terraform_{{ or .terraformVersion "1.6.5" }}_linux_amd64.zip
+      url: https://releases.hashicorp.com/terraform/{{ or .terraformVersion "1.6.6" }}/terraform_{{ or .terraformVersion "1.6.6" }}_linux_amd64.zip
       bin: terraform
   - mc:
       url: https://dl.min.io/client/mc/release/linux-amd64/mc
