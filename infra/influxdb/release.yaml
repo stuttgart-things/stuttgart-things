@@ -1,0 +1,33 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: influxdb
+  namespace: influxdb
+spec:
+  dependsOn:
+    - name: influxdb-configuration
+      namespace: influxdb
+  interval: 30m
+  chart:
+    spec:
+      chart: influxdb2
+      version: 2.1.2
+      sourceRef:
+        kind: HelmRepository
+        name: influxdb
+        namespace: influxdb
+      interval: 12h
+  values:
+    persistence:
+      enabled: ${ENABLE_PERSISTENCE:-true}
+      accessMode: ${ACCESS_MODE:-ReadWriteOnce}
+      size: ${INFLUXDB_SIZE:-8Gi}
+    ingress:
+      enabled: ${ENABLE_INGRESS:-true}
+      tls: ${ENABLE_TLS:-true}
+      hostname: ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}
+      className: ${CLASSNAME:-nginx}
+      secretName: ${INGRESS_SECRET_NAME}
+    service:
+      type: ${SERVICE_TYPE:-ClusterIP} 
