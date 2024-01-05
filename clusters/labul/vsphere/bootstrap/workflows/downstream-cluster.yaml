@@ -17,7 +17,7 @@ spec:
   - vm_num_cpus=6
   - vm_memory=8192
   - vm_disk_size=96
-  - vsphere_vm_template="/LabUL/host/Cluster01/10.31.101.40/ubuntu23"
+  - vsphere_vm_template="/LabUL/host/Cluster01/10.31.101.41/ubuntu23"
   - vsphere_vm_folder_path="phermann/rancher-things"
   - vsphere_network="/LabUL/host/Cluster01/10.31.101.41/LAB-10.31.103"
   - vsphere_datastore="/LabUL/host/Cluster01/10.31.101.41/UL-ESX-SAS-01"
