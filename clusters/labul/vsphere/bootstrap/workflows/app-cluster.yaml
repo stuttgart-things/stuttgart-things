@@ -29,7 +29,7 @@ spec:
  module:
   - moduleName=sthings-app1
   - backendKey=sthings-app1.tfstate
-  - moduleSourceUrl=https://artifacts.tiab.labda.sva.de/modules/vsphere-vm.zip
+  - moduleSourceUrl=https://github.com/stuttgart-things/vsphere-vm/releases/download/vsphere-vm-2.6.1/vsphere-vm.zip
   - backendEndpoint=https://artifacts.app.4sthings.tiab.ssc.sva.de
   - backendRegion=main
   - backendBucket=vsphere-labul
@@ -199,7 +199,7 @@ spec:
     - name: createInventory
       value: "false"
     - name: gitRepoUrl
-      value: "git::https://github.com/stuttgart-things/stuttgart-things.git"
+      value: "https://github.com/stuttgart-things/stuttgart-things.git"
     - name: gitRevision
       value: rancher-280
     - name: gitWorkspaceSubdirectory
