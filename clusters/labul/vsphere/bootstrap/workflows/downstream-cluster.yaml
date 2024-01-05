@@ -29,7 +29,7 @@ spec:
  module:
   - moduleName=oregon
   - backendKey=oregon.tfstate
-  - moduleSourceUrl=https://github.com/stuttgart-things/vsphere-vm/releases/download/vsphere-vm-2.6.1/vsphere-vm.zip
+  - moduleSourceUrl=https://github.com/stuttgart-things/vsphere-vm.git
   - backendEndpoint=https://artifacts.app.4sthings.tiab.ssc.sva.de
   - backendRegion=main
   - backendBucket=vsphere-labul
