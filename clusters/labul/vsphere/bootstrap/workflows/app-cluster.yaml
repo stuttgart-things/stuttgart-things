@@ -199,7 +199,7 @@ spec:
     - name: createInventory
       value: "false"
     - name: gitRepoUrl
-      value: "https://github.com/stuttgart-things/stuttgart-things.git"
+      value: "git::https://github.com/stuttgart-things/stuttgart-things.git"
     - name: gitRevision
       value: rancher-280
     - name: gitWorkspaceSubdirectory
