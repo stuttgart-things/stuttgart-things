@@ -1,0 +1,116 @@
+---
+# STAGE 0 - CREATE VMS
+apiVersion: machineshop.sthings.tiab.ssc.sva.de/v1beta1
+kind: Terraform
+metadata:
+ name: oregon
+ namespace: terraform
+ labels:
+   app.kubernetes.io/created-by: machine-shop-operator
+   app.kubernetes.io/name: terraform
+   app.kubernetes.io/part-of: machine-shop-operator
+spec:
+ state: present
+ variables:
+  - vsphere_vm_name="oregon"
+  - vm_count=3
+  - vm_num_cpus=6
+  - vm_memory=8192
+  - vm_disk_size=96
+  - vsphere_vm_template="/LabUL/host/Cluster01/10.31.101.40/ubuntu23"
+  - vsphere_vm_folder_path="phermann/rancher-things"
+  - vsphere_network="/LabUL/host/Cluster01/10.31.101.41/LAB-10.31.103"
+  - vsphere_datastore="/LabUL/host/Cluster01/10.31.101.41/UL-ESX-SAS-01"
+  - vsphere_resource_pool="/LabUL/host/Cluster01/Resources"
+  - vsphere_datacenter="LabUL"
+ backend:
+  - access_key=apps/data/artifacts:accessKey
+  - secret_key=apps/data/artifacts:secretKey
+ module:
+  - moduleName=oregon
+  - backendKey=oregon.tfstate
+  - moduleSourceUrl=https://artifacts.tiab.labda.sva.de/modules/vsphere-vm.zip
+  - backendEndpoint=https://artifacts.app.4sthings.tiab.ssc.sva.de
+  - backendRegion=main
+  - backendBucket=vsphere-labul
+  - tfProviderName=vsphere
+  - tfProviderSource=hashicorp/vsphere
+  - tfProviderVersion=2.6.1
+  - tfVersion=1.6.6
+ secrets:
+  - vsphere_user=cloud/data/vsphere:username
+  - vsphere_password=cloud/data/vsphere:password
+  - vsphere_server=cloud/data/vsphere:ip
+  - vm_ssh_user=cloud/data/vsphere:vm_ssh_user
+  - vm_ssh_password=cloud/data/vsphere:vm_ssh_password
+ template: vsphere-vm
+ terraform-version: 1.6.6
+---
+# STAGE 1 - BASE-OS
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  name: baseos-oregon
+  namespace: tektoncd
+spec:
+  pipelineRef:
+    resolver: git
+    params:
+      - name: url
+        value: https://github.com/stuttgart-things/stuttgart-things.git
+      - name: revision
+        value: main
+      - name: pathInRepo
+        value: stageTime/pipelines/execute-ansible-playbooks.yaml
+  workspaces:
+    - name: shared-workspace
+      volumeClaimTemplate:
+        spec:
+          storageClassName: openebs-hostpath
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 250Mi
+  params:
+    - name: ansibleWorkingImage
+      value: "eu.gcr.io/stuttgart-things/sthings-ansible:8.5.0"
+    - name: createInventory
+      value: "true"
+    - name: gitRepoUrl
+      value: https://github.com/stuttgart-things/stuttgart-things.git
+    - name: gitRevision
+      value: "main"
+    - name: gitWorkspaceSubdirectory
+      value: "/ansible/oregon"
+    - name: vaultSecretName
+      value: vault
+    - name: installExtraRoles
+      value: "true"
+    - name: ansibleExtraRoles
+      value:
+        - "https://github.com/stuttgart-things/install-requirements.git"
+        - "https://github.com/stuttgart-things/manage-filesystem.git"
+        - "https://github.com/stuttgart-things/install-configure-vault.git"
+    - name: ansiblePlaybooks
+      value:
+        - "ansible/playbooks/prepare-env.yaml"
+        - "ansible/playbooks/base-os.yaml"
+    - name: ansibleVarsFile
+      value:
+        - "manage_filesystem+-true"
+        - "update_packages+-true"
+        - "install_requirements+-true"
+        - "install_motd+-true"
+        - "username+-sthings"
+        - "lvm_home_sizing+-'15%'"
+        - "lvm_root_sizing+-'35%'"
+        - "lvm_var_sizing+-'50%'"
+        - "send_to_msteams+-true"
+        - "reboot_all+-false"
+        - "pause_time+-20"
+    - name: ansibleVarsInventory
+      value:
+        - "all+[\"oregon.labul.sva.de\"]"
+        - "all+[\"oregon-2.labul.sva.de\"]"
+        - "all+[\"oregon-3.labul.sva.de\"]"
