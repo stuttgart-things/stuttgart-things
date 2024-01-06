@@ -72,7 +72,7 @@ spec:
     - patch: |-
         - op: replace
           path: /spec/chart/spec/version
-          value: 5.51.6
+          value: 5.52.1
       target:
         kind: HelmRelease
         name: argocd-deployment
