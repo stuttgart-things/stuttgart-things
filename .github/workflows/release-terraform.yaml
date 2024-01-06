@@ -41,12 +41,12 @@ jobs:
 
       - name: Package module
         run: |
-          "zip -r ${{ github.event.inputs.module-name }}.zip * -j"
+          "zip -r ${{ inputs.module-name }}.zip * -j"
 
       - name: Release module
         uses: ncipollo/release-action@v1.13.0
         with:
-          name: "${{ github.event.inputs.module-name }}"
-          artifacts: "${{ github.event.inputs.module-name }}.zip"
-          body: "${{ github.event.inputs.release-message }}"
-          tag: "${{ github.event.inputs.tag-name }}"
+          name: "${{ inputs.module-name }}"
+          artifacts: "${{ inputs.module-name }}.zip"
+          body: "${{ inputs.release-message }}"
+          tag: "${{ inputs.tag-name }}"
