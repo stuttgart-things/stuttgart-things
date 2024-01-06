@@ -22,9 +22,9 @@ kind: VmwarevsphereConfig
 metadata:
   name: medium-aio-michigan
   namespace: fleet-default
-  annotations:
-    field.cattle.io/creatorId: user-rz2tb
-    ownerBindingsCreated: "true"
+  # annotations:
+  #   field.cattle.io/creatorId: user-rz2tb
+  #   ownerBindingsCreated: "true"
 boot2dockerUrl: ""
 cfgparam:
   - disk.enableUUID=TRUE
