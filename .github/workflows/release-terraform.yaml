@@ -1,16 +1,52 @@
-#---
-#name: Release
-#on:
-#  push:
-#    tags:
-#      - '*'
+---
+name: Package Terraform Module
+on:
+  workflow_call:
+    inputs:
+      module-name:
+        required: true
+        type: string
+      tag-name:
+        required: true
+        type: string
+      release-message:
+        required: true
+        type: string
+      runs-on:
+        required: true
+        type: string
+      environment-name:
+        default: k8s
+        required: true
+        type: string
+      continue-error:
+        default: false
+        required: true
+        type: boolean
 
-#jobs:
-#  build:
-#    runs-on: ubuntu-latest
-#    steps:
-#    - uses: actions/checkout@v1
-#    - name: Zip Folder
-#      run: zip -r release.zip .
-#    - name: Release to Github
-#      run: echo "Release"
+jobs:
+  Package-Terraform:
+    runs-on: ${{ inputs.runs-on }}
+    container:
+      image: joshkeegan/zip:3.19.0
+    environment: ${{ inputs.environment-name }}
+    permissions:
+      contents: write
+    continue-on-error:  ${{ inputs.continue-error }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.1.1
+        with:
+          fetch-depth: '0'
+
+      - name: Package module
+        run: |
+          zip -r ${{ github.event.inputs.module-name }}.zip * -j
+
+      - name: Release module
+        uses: ncipollo/release-action@v1.13.0
+        with:
+          name: ${{ github.event.inputs.module-name }}
+          artifacts: ${{ github.event.inputs.module-name }}.zip
+          body: ${{ github.event.inputs.release-message }}
+          tag: ${{ github.event.inputs.tag }}
