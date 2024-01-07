@@ -23,6 +23,15 @@ spec:
         kind: HelmRelease
         name: crossplane-deployment
         namespace: crossplane-system
+  healthChecks:
+    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
+      kind: HelmRelease
+      name: crossplane-deployment
+      namespace: crossplane-system
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: crossplane
+      namespace: crossplane-system
 ---
 # ---
 # apiVersion: kustomize.toolkit.fluxcd.io/v1
