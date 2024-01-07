@@ -3,7 +3,7 @@
 apiVersion: machineshop.sthings.tiab.ssc.sva.de/v1beta1
 kind: Terraform
 metadata:
- name: oregon
+ name: staples
  namespace: terraform
  labels:
    app.kubernetes.io/created-by: machine-shop-operator
@@ -12,8 +12,8 @@ metadata:
 spec:
  state: present
  variables:
-  - vsphere_vm_name="oregon"
-  - vm_count=3
+  - vsphere_vm_name="staples"
+  - vm_count=1
   - vm_num_cpus=6
   - vm_memory=8192
   - vm_disk_size=96
@@ -27,9 +27,9 @@ spec:
   - access_key=apps/data/artifacts:accessKey
   - secret_key=apps/data/artifacts:secretKey
  module:
-  - moduleName=oregon
-  - backendKey=oregon.tfstate
-  - moduleSourceUrl=https://github.com/stuttgart-things/vsphere-vm/releases/download/vsphere-vm-2.6.1/vsphere-vm.zip
+  - moduleName=staples
+  - backendKey=staples.tfstate
+  - moduleSourceUrl=https://github.com/stuttgart-things/vsphere-vm/releases/download/1.6.6-2.6.1-1/vsphere-vm.zip
   - backendEndpoint=https://artifacts.app.4sthings.tiab.ssc.sva.de
   - backendRegion=main
   - backendBucket=vsphere-labul
@@ -50,7 +50,7 @@ spec:
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: baseos-oregon-1
+  name: baseos-staples
   namespace: tektoncd
 spec:
   pipelineRef:
@@ -82,7 +82,7 @@ spec:
     - name: gitRevision
       value: "main"
     - name: gitWorkspaceSubdirectory
-      value: "/ansible/oregon"
+      value: "/ansible/staples"
     - name: vaultSecretName
       value: vault
     - name: installExtraRoles
@@ -96,7 +96,6 @@ spec:
       value:
         - "ansible/playbooks/prepare-env.yaml"
         - "ansible/playbooks/base-os.yaml"
-        - "ansible/playbooks/configure-rke-node.yaml"
     - name: ansibleVarsFile
       value:
         - "manage_filesystem+-true"
@@ -109,9 +108,7 @@ spec:
         - "lvm_var_sizing+-'50%'"
         - "send_to_msteams+-true"
         - "reboot_all+-false"
-        # - "pause_time+-"
+        - "pause_time+-20"
     - name: ansibleVarsInventory
       value:
-        - "all+[\"oregon.labul.sva.de\"]"
-        - "all+[\"oregon-2.labul.sva.de\"]"
-        - "all+[\"oregon-3.labul.sva.de\"]"
+        - "all+[\"staples.labul.sva.de\"]"
