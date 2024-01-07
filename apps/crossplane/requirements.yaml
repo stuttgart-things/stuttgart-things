@@ -13,7 +13,7 @@ metadata:
   namespace: crossplane-system
 spec:
   interval: 24h
-  url:  https://charts.crossplane.io/stable
+  url: https://charts.crossplane.io/stable
 ---
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: HelmRepository
