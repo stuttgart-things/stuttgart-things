@@ -46,7 +46,7 @@ jobs:
       - name: Release module
         uses: ncipollo/release-action@v1.13.0
         with:
-          name: ${{ inputs.module-name }}
+          name: ${{ inputs.tag-name }}
           artifacts: ${{ inputs.module-name }}.zip
           body: ${{ inputs.release-message }}
           tag: ${{ inputs.tag-name }}
