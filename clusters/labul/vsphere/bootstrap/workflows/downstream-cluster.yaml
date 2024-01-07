@@ -50,7 +50,7 @@ spec:
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: baseos-oregon-1
+  name: clusternode-oregon-2
   namespace: tektoncd
 spec:
   pipelineRef:

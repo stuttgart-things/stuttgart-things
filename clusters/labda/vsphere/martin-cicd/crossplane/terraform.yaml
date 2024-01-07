@@ -1,9 +1,10 @@
+---
 apiVersion: tf.upbound.io/v1beta1
 kind: Workspace
 metadata:
   name: vsphere-vm-labda-1
   annotations:
-    crossplane.io/external-name: vsphere-vm
+    crossplane.io/external-name: vsphere-vm-labda-1
 spec:
   forProvider:
     source: Inline
@@ -59,16 +60,9 @@ spec:
         default     = "Atlan7is"
         description = "password of ssh user for vm"
       }
-
-
-
-
   writeConnectionSecretToRef:
     namespace: default
-    name: terraform-workspace-example-inline
-
-
-
+    name: terraform-workspace-vsphere-vm-labda-1
 ---
 
 
