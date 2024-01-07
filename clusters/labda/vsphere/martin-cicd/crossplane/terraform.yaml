@@ -19,3 +19,34 @@ spec:
         in_cluster_config = true
       }
     }
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: crossplane:provider:provider-terraform
+rules:
+- apiGroups:
+  - ""
+  - "apps"
+  - "extensions"
+  - "networking.k8s.io"
+  resources:
+  - "namespaces"
+  - "ingresses"
+  - "services"
+  - "deployments"
+  verbs:
+  - "*"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: crossplane:provider:provider-terraform
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: crossplane:provider:provider-terraform
+subjects:
+- kind: ServiceAccount
+  name: provider-terraform-e85717374b82
+  namespace: crossplane-system
