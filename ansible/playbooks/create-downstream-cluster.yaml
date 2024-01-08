@@ -2,9 +2,14 @@
 - hosts: all
   become: true
   vars:
-    rancher_api_url: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps/data/rancher:apiUrl validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
-    rancher_access_key: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps/data/rancher:apiAccessKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
-    rancher_secret_key: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps/data/rancher:apiSecretKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+    rancher_api_secret_path: apps/data/rancher:apiUrl
+    rancher_api_accesskey_path: apps/data/rancher:apiAccessKey
+    rancher_api_secretkey_path: apps/data/rancher:apiSecretKey
+
+    rancher_api_url: "{{ lookup('community.hashi_vault.hashi_vault', 'secret={{ rancher_api_secret_path }} validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+    rancher_access_key: "{{ lookup('community.hashi_vault.hashi_vault', 'secret={{ rancher_api_accesskey_path }} validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+    rancher_secret_key: "{{ lookup('community.hashi_vault.hashi_vault', 'secret={{ rancher_api_secretkey_path }} validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+
     vault_approle_id: "{{ lookup('env', 'VAULT_ROLE_ID') }}"
     vault_approle_secret: "{{ lookup('env', 'VAULT_SECRET_ID') }}"
     vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
@@ -85,4 +90,4 @@
           sudo chown {{ username }}:{{ username }} /home/{{ username }}/.kube/config
         marker: '# {mark} ANSIBLE MANAGED BLOCK - kubectl'
         insertbefore: EOF
-        create: yes 
+        create: yes

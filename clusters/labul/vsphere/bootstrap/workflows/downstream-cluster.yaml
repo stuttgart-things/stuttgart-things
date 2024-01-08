@@ -115,3 +115,81 @@ spec:
         - "all+[\"oregon.labul.sva.de\"]"
         - "all+[\"oregon-2.labul.sva.de\"]"
         - "all+[\"oregon-3.labul.sva.de\"]"
+---
+# STAGE 2 - CREATE CLUSTER.YAML
+---
+# STAGE 3 - CREATE CLUSTER
+---
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  name: deploy-downstreamcluster-oregon
+  namespace: tektoncd
+spec:
+  pipelineRef:
+    resolver: git
+    params:
+      - name: url
+        value: https://github.com/stuttgart-things/stuttgart-things.git
+      - name: revision
+        value: main
+      - name: pathInRepo
+        value: stageTime/pipelines/execute-ansible-playbooks.yaml
+  workspaces:
+    - name: shared-workspace
+      volumeClaimTemplate:
+        spec:
+          storageClassName: openebs-hostpath
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 1Gi
+  params:
+    - name: ansibleWorkingImage
+      value: "eu.gcr.io/stuttgart-things/sthings-ansible:8.5.0"
+    - name: createInventory
+      value: "true"
+    - name: gitRepoUrl
+      value: https://github.com/stuttgart-things/stuttgart-things.git
+    - name: gitRevision
+      value: "main"
+    - name: gitWorkspaceSubdirectory
+      value: "/ansible/base-os"
+    - name: vaultSecretName
+      value: vault-in-cluster
+    - name: installExtraRoles
+      value: "true"
+    - name: ansibleExtraRoles
+      value:
+        - "https://github.com/stuttgart-things/install-requirements.git"
+        - "https://github.com/stuttgart-things/manage-filesystem.git"
+        - "https://github.com/stuttgart-things/install-configure-vault.git"
+    - name: ansiblePlaybooks
+      value:
+        - "ansible/playbooks/prepare-env.yaml"
+        - "ansible/playbooks/base-os.yaml"
+        - "ansible/playbooks/configure-rke-node"
+        - "ansible/playbooks/create-downstream-cluster.yaml"
+    - name: ansibleVarsFile
+      value:
+        - "manage_filesystem+-true"
+        - "update_packages+-true"
+        - "install_requirements+-true"
+        - "install_motd+-true"
+        - "username+-sthings"
+        - "lvm_home_sizing+-'15%'"
+        - "lvm_root_sizing+-'35%'"
+        - "lvm_var_sizing+-'50%'"
+        - "send_to_msteams+-true"
+        - "reboot_all+-false"
+        - "roles+-oregon:all"
+        - "roles+-oregon-2:worker"
+        - "roles+-oregon-3:worker"
+        - "cluster_name+-oregon"
+    - name: ansibleVarsInventory
+      value:
+        - "all+[\"oregon.labul.sva.de\"]"
+        - "all+[\"oregon-2.labul.sva.de\"]"
+        - "all+[\"oregon-3.labul.sva.de\"]"
+---
