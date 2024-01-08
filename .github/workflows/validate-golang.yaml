@@ -1,0 +1,56 @@
+---
+name: Build & Verify Golang Module
+on:
+  workflow_call:
+    inputs:
+      runs-on:
+        required: true
+        type: string
+      golint-version:
+        default: v1.55
+        required: true
+        type: string
+      golang-version:
+        default: 1.21.5
+        required: true
+        type: string
+      environment-name:
+        default: k8s
+        required: true
+        type: string
+      accept-linterrors:
+        default: false
+        required: true
+        type: boolean
+      accept-failedtests:
+        default: false
+        required: true
+        type: boolean
+
+jobs:
+  Golang-Lint:
+    runs-on: ${{ inputs.runs-on }}
+    container:
+      image: golangci/golangci-lint:${{ inputs.golint-version }}
+    environment: ${{ inputs.environment-name }}
+    continue-on-error: ${{ inputs.accept-linterrors }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.1.1
+      - name: Lint code
+        run: |
+          golangci-lint run
+
+  Test-Golang:
+    runs-on: ${{ inputs.runs-on }}
+    container:
+      image: golang:${{ inputs.golint-version }}
+    environment: ${{ inputs.environment-name }}
+    continue-on-error: ${{ inputs.accept-failedtests }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.1.1
+      - name: Test code
+        run: |
+          go mod tidy
+          go test ./... -v
