@@ -305,7 +305,7 @@ spec:
         namespace: arc-runners
   postBuild:
     substitute:
-      REPOSIORY_NAME: proxmox-vm
+      REPOSIORY_NAME: kaeffken
       GITHUB_URL: https://github.com/stuttgart-things/kaeffken
       STORAGE_CLASS: openebs-hostpath
       STORAGE_REQUEST: 50Mi
