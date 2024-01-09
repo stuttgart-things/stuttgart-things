@@ -6,6 +6,9 @@ on:
       runs-on:
         required: true
         type: string
+      module-name:
+        required: true
+        type: string
       golint-version:
         default: v1.55
         required: true
@@ -28,7 +31,7 @@ on:
         type: boolean
 
 jobs:
-  Golang-Lint:
+  Lint-Go:
     runs-on: ${{ inputs.runs-on }}
     container:
       image: golangci/golangci-lint:${{ inputs.golint-version }}
@@ -41,7 +44,7 @@ jobs:
         run: |
           golangci-lint run
 
-  Test-Golang:
+  Test-Go:
     runs-on: ${{ inputs.runs-on }}
     container:
       image: golang:${{ inputs.golint-version }}
@@ -54,3 +57,18 @@ jobs:
         run: |
           go mod tidy
           go test ./... -v
+
+  Build-Go:
+    runs-on: ${{ inputs.runs-on }}
+    container:
+      image: golang:${{ inputs.golint-version }}
+    environment: ${{ inputs.environment-name }}
+    continue-on-error: false
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.1.1
+      - name: Test code
+        run: |
+          go mod tidy
+          CGO_ENABLED=0 go build -buildvcs=false -o ${{ inputs.module-name }}   
+          ./${{ inputs.module-name }} -h
