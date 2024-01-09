@@ -47,7 +47,7 @@ jobs:
   Test-Go:
     runs-on: ${{ inputs.runs-on }}
     container:
-      image: golang:${{ inputs.golint-version }}
+      image: golang:${{ inputs.golang-version }}
     environment: ${{ inputs.environment-name }}
     continue-on-error: ${{ inputs.accept-failedtests }}
     steps:
@@ -61,7 +61,7 @@ jobs:
   Build-Go:
     runs-on: ${{ inputs.runs-on }}
     container:
-      image: golang:${{ inputs.golint-version }}
+      image: golang:${{ inputs.golang-version }}
     environment: ${{ inputs.environment-name }}
     continue-on-error: false
     steps:
