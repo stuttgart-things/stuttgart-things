@@ -47,74 +47,78 @@ spec:
  terraform-version: 1.6.6
 ---
 # STAGE 1 - BASE-OS
-apiVersion: tekton.dev/v1
-kind: PipelineRun
-metadata:
-  name: clusternode-oregon-2
-  namespace: tektoncd
-spec:
-  pipelineRef:
-    resolver: git
-    params:
-      - name: url
-        value: https://github.com/stuttgart-things/stuttgart-things.git
-      - name: revision
-        value: main
-      - name: pathInRepo
-        value: stageTime/pipelines/execute-ansible-playbooks.yaml
-  workspaces:
-    - name: shared-workspace
-      volumeClaimTemplate:
-        spec:
-          storageClassName: openebs-hostpath
-          accessModes:
-            - ReadWriteOnce
-          resources:
-            requests:
-              storage: 250Mi
-  params:
-    - name: ansibleWorkingImage
-      value: "eu.gcr.io/stuttgart-things/sthings-ansible:8.5.0"
-    - name: createInventory
-      value: "true"
-    - name: gitRepoUrl
-      value: https://github.com/stuttgart-things/stuttgart-things.git
-    - name: gitRevision
-      value: "main"
-    - name: gitWorkspaceSubdirectory
-      value: "/ansible/oregon"
-    - name: vaultSecretName
-      value: vault
-    - name: installExtraRoles
-      value: "true"
-    - name: ansibleExtraRoles
-      value:
-        - "https://github.com/stuttgart-things/install-requirements.git"
-        - "https://github.com/stuttgart-things/manage-filesystem.git"
-        - "https://github.com/stuttgart-things/install-configure-vault.git"
-    - name: ansiblePlaybooks
-      value:
-        - "ansible/playbooks/prepare-env.yaml"
-        - "ansible/playbooks/base-os.yaml"
-        - "ansible/playbooks/configure-rke-node.yaml"
-    - name: ansibleVarsFile
-      value:
-        - "manage_filesystem+-true"
-        - "update_packages+-true"
-        - "install_requirements+-true"
-        - "install_motd+-true"
-        - "username+-sthings"
-        - "lvm_home_sizing+-'15%'"
-        - "lvm_root_sizing+-'35%'"
-        - "lvm_var_sizing+-'50%'"
-        - "send_to_msteams+-true"
-        - "reboot_all+-false"
-        # - "pause_time+-"
-    - name: ansibleVarsInventory
-      value:
-        - "all+[\"oregon.labul.sva.de\"]"
-        - "all+[\"oregon-2.labul.sva.de\"]"
-        - "all+[\"oregon-3.labul.sva.de\"]"
+# apiVersion: tekton.dev/v1
+# kind: PipelineRun
+# metadata:
+#   name: clusternode-oregon-3
+#   namespace: tektoncd
+# spec:
+#   pipelineRef:
+#     resolver: git
+#     params:
+#       - name: url
+#         value: https://github.com/stuttgart-things/stuttgart-things.git
+#       - name: revision
+#         value: main
+#       - name: pathInRepo
+#         value: stageTime/pipelines/execute-ansible-playbooks.yaml
+#   workspaces:
+#     - name: shared-workspace
+#       volumeClaimTemplate:
+#         spec:
+#           storageClassName: openebs-hostpath
+#           accessModes:
+#             - ReadWriteOnce
+#           resources:
+#             requests:
+#               storage: 250Mi
+#   params:
+#     - name: ansibleWorkingImage
+#       value: "eu.gcr.io/stuttgart-things/sthings-ansible:8.5.0"
+#     - name: createInventory
+#       value: "true"
+#     - name: gitRepoUrl
+#       value: https://github.com/stuttgart-things/stuttgart-things.git
+#     - name: gitRevision
+#       value: "main"
+#     - name: gitWorkspaceSubdirectory
+#       value: "/ansible/oregon"
+#     - name: vaultSecretName
+#       value: vault
+#     - name: installExtraRoles
+#       value: "true"
+#     - name: ansibleExtraRoles
+#       value:
+#         - "https://github.com/stuttgart-things/install-requirements.git"
+#         - "https://github.com/stuttgart-things/manage-filesystem.git"
+#         - "https://github.com/stuttgart-things/install-configure-vault.git"
+#     - name: ansiblePlaybooks
+#       value:
+#         - "ansible/playbooks/prepare-env.yaml"
+#         - "ansible/playbooks/base-os.yaml"
+#         - "ansible/playbooks/configure-rke-node.yaml"
+#         - "ansible/playbooks/create-downstream-cluster.yaml"
+#     - name: ansibleVarsFile
+#       value:
+#         - "manage_filesystem+-true"
+#         - "update_packages+-true"
+#         - "install_requirements+-true"
+#         - "install_motd+-true"
+#         - "username+-sthings"
+#         - "lvm_home_sizing+-'15%'"
+#         - "lvm_root_sizing+-'35%'"
+#         - "lvm_var_sizing+-'50%'"
+#         - "send_to_msteams+-true"
+#         - "reboot_all+-false"
+#         - "rancher_api_secret_path+-apps/data/rancher:apiUrl"
+#         - "rancher_api_accesskey_path+-apps/data/rancher:apiAccessKey"
+#         - "rancher_api_secretkey_path+-apps/data/rancher:apiSecretKey"
+#         # - "pause_time+-"
+#     - name: ansibleVarsInventory
+#       value:
+#         - "all+[\"oregon.labul.sva.de\"]"
+#         - "all+[\"oregon-2.labul.sva.de\"]"
+#         - "all+[\"oregon-3.labul.sva.de\"]"
 ---
 # STAGE 2 - CREATE CLUSTER.YAML
 ---
@@ -123,7 +127,7 @@ spec:
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: deploy-downstreamcluster-oregon-1
+  name: deploy-downstreamcluster-oregon-2
   namespace: tektoncd
 spec:
   pipelineRef:
@@ -155,7 +159,7 @@ spec:
     - name: gitRevision
       value: "main"
     - name: gitWorkspaceSubdirectory
-      value: "/ansible/base-os"
+      value: "/ansible/clusternode"
     - name: vaultSecretName
       value: vault-in-cluster
     - name: installExtraRoles
@@ -187,9 +191,9 @@ spec:
         - "roles+-oregon-2:worker"
         - "roles+-oregon-3:worker"
         - "cluster_name+-oregon"
-        - "rancher_api_secret_path: apps/data/rancher:apiUrl"
-        - "rancher_api_accesskey_path: apps/data/rancher:apiAccessKey"
-        - "rancher_api_secretkey_path: apps/data/rancher:apiSecretKey"
+        - "rancher_api_secret_path+-apps/data/rancher:apiUrl"
+        - "rancher_api_accesskey_path+-apps/data/rancher:apiAccessKey"
+        - "rancher_api_secretkey_path+-apps/data/rancher:apiSecretKey"
     - name: ansibleVarsInventory
       value:
         - "all+[\"oregon.labul.sva.de\"]"
