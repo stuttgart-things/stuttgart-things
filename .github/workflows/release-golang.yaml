@@ -46,7 +46,7 @@ jobs:
         with:
           distribution: goreleaser
           version: "{{ inputs.goreleaser-version }}"
-          args: release --skip-validate
+          args: release --clean
           workdir: .    
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
