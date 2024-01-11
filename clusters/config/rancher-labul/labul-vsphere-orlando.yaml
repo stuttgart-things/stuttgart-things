@@ -10,9 +10,9 @@ metadata:
     provisioning.cattle.io/driver: "vmwarevsphere"
 type: Opaque
 stringData:
-  vmwarevspherecredentialConfig-password: "<path:cloud/data/vsphere#password>"
-  vmwarevspherecredentialConfig-username: "<path:cloud/data/vsphere#username>"
-  vmwarevspherecredentialConfig-vcenter: "<path:cloud/data/vsphere#ip>"
+  vmwarevspherecredentialConfig-password: <path:cloud/data/vsphere#password>
+  vmwarevspherecredentialConfig-username: <path:cloud/data/vsphere#username>
+  vmwarevspherecredentialConfig-vcenter: <path:cloud/data/vsphere#ip>
   vmwarevspherecredentialConfig-vcenterPort: "443"
 ---
 apiVersion: rke-machine-config.cattle.io/v1
