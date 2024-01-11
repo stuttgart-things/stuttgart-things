@@ -41,7 +41,7 @@ jobs:
         run: |
           ls -lta
           pwd
-          git config --global --add safe.directory /__w/{{ inputs.module-name }}/{{ inputs.module-name }}
+          git config --global --add safe.directory "/__w/{{ inputs.module-name }}/{{ inputs.module-name }}"
           git pull origin {{ inputs.branch-name }}
           git fetch --tags
           git tag
