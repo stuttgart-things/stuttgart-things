@@ -23,7 +23,6 @@ on:
         type: string
       branch-name:
         default: main
-        required: true
         type: string
 jobs:
   Go-Release:
