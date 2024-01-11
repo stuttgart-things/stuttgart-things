@@ -20,3 +20,25 @@ spec:
     automated:
       prune: false
       selfHeal: false
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: downstream-labul-austin
+  namespace: argocd
+spec:
+  destination:
+    name: in-cluster
+    namespace: fleet-default
+  source:
+    path: clusters/labul/downstream/austin-vsphere
+    repoURL: https://github.com/stuttgart-things/stuttgart-things.git
+    targetRevision: HEAD
+    # plugin:
+    #   name: argocd-vault-plugin
+  sources: []
+  project: in-cluster
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: false
