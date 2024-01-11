@@ -41,8 +41,7 @@ jobs:
         run: |
           ls -lta
           pwd
-          git config --global git config --global --add safe.directory $(pwd)
-          git pull origin {{ inputs.branch-name }}
+          git config --global --add safe.directory /__w/kaeffken/kaeffken          git pull origin {{ inputs.branch-name }}
           git fetch --tags
           git tag
       - name: Run GoReleaser
