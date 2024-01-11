@@ -41,7 +41,7 @@ jobs:
         run: |
           ls -lta
           pwd
-          git config --global --add safe.directory /__w/kaeffken/kaeffken
+          git config --global --add safe.directory /__w/${{ inputs.module-name }}/${{ inputs.module-name }}
           git pull origin main
           git fetch --tags
           git tag
@@ -49,7 +49,7 @@ jobs:
         uses: goreleaser/goreleaser-action@v5
         with:
           distribution: goreleaser
-          version: {{ inputs.goreleaser-version }}
+          version: ${{ inputs.goreleaser-version }}
           args: release --clean
           workdir: .    
         env:
