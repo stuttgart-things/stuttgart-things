@@ -71,4 +71,4 @@ jobs:
         run: |
           go mod tidy
           CGO_ENABLED=0 go build -buildvcs=false -o ${{ inputs.module-name }}   
-          ./${{ inputs.module-name }} -h
+          du -sh ./${{ inputs.module-name }}
