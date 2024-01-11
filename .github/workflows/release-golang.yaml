@@ -1,0 +1,55 @@
+---
+name: Release Golang Module
+on:
+  workflow_call:
+    inputs:
+      runs-on:
+        required: true
+        type: string
+      golang-version:
+        default: 1.21.5
+        required: true
+        type: string
+      goreleaser-version:
+        default: v1.23.0
+        required: true
+        type: string
+      environment-name:
+        default: k8s
+        required: true
+        type: string
+      module-name:
+        required: true
+        type: string
+      branch-name:
+        default: main
+        type: string
+jobs:
+  Go-Release:
+    runs-on: ${{ inputs.runs-on }}
+    container:
+      image: golang:${{ inputs.golang-version }}
+    environment: ${{ inputs.environment-name }}
+    continue-on-error: false
+    steps: 
+      - name: Checkout code
+        uses: actions/checkout@v4.1.1
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Check git / tags
+        run: |
+          ls -lta
+          git config --global --add safe.directory /__w/${{ inputs.module-name }}/${{ inputs.module-name }}
+          git pull origin main
+          git fetch --tags
+          git tag
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v5
+        with:
+          distribution: goreleaser
+          version: ${{ inputs.goreleaser-version }}
+          args: release --clean
+          workdir: .    
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
