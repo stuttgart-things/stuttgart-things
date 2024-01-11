@@ -21,7 +21,10 @@ on:
       module-name:
         required: true
         type: string
-        
+      branch-name:
+        default: main
+        required: true
+        type: string
 jobs:
   Go-Release:
     runs-on: ${{ inputs.runs-on }}
@@ -40,7 +43,9 @@ jobs:
           ls -lta
           pwd
           git config --global --add safe.directory /__w/{{ inputs.module-name }}/{{ inputs.module-name }}
-          git pull origin main          
+          git pull origin {{ inputs.branch-name }}
+          git fetch --tags
+          git tag
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v5
         with:
