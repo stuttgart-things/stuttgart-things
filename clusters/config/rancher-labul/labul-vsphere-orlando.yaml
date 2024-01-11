@@ -1,19 +1,19 @@
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: labul-vsphere-orlando
-  namespace: cattle-global-data
-  annotations:
-    field.cattle.io/description: "labul-vsphere"
-    field.cattle.io/name: "labul-vsphere"
-    provisioning.cattle.io/driver: "vmwarevsphere"
-type: Opaque
-stringData:
-  vmwarevspherecredentialConfig-password: <path:cloud/data/vsphere#password>
-  vmwarevspherecredentialConfig-username: <path:cloud/data/vsphere#username>
-  vmwarevspherecredentialConfig-vcenter: <path:cloud/data/vsphere#ip>
-  vmwarevspherecredentialConfig-vcenterPort: "443"
+# ---
+# apiVersion: v1
+# kind: Secret
+# metadata:
+#   name: labul-vsphere-orlando
+#   namespace: cattle-global-data
+#   annotations:
+#     field.cattle.io/description: "labul-vsphere"
+#     field.cattle.io/name: "labul-vsphere"
+#     provisioning.cattle.io/driver: "vmwarevsphere"
+# type: Opaque
+# stringData:
+#   vmwarevspherecredentialConfig-password: <path:cloud/data/vsphere#password>
+#   vmwarevspherecredentialConfig-username: <path:cloud/data/vsphere#username>
+#   vmwarevspherecredentialConfig-vcenter: <path:cloud/data/vsphere#ip>
+#   vmwarevspherecredentialConfig-vcenterPort: "443"
 ---
 apiVersion: rke-machine-config.cattle.io/v1
 kind: VmwarevsphereConfig
@@ -109,7 +109,7 @@ metadata:
     #  key: string
   namespace: fleet-default
 spec:
-  cloudCredentialSecretName: cattle-global-data:labul-vsphere-orlando
+  cloudCredentialSecretName: cattle-global-data:labul-vsphere
   clusterAgentDeploymentCustomization:
     appendTolerations:
 #      - effect: string
