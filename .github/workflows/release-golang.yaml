@@ -37,10 +37,9 @@ jobs:
         with:
           ref: main
           fetch-depth: 0
-      - name: Check code
+      - name: Check git / tags
         run: |
           ls -lta
-          pwd
           git config --global --add safe.directory /__w/${{ inputs.module-name }}/${{ inputs.module-name }}
           git pull origin main
           git fetch --tags
