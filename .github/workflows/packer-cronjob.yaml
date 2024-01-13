@@ -38,6 +38,9 @@ jobs:
       - run: |
           ls -lta
           machineShop version
+          git config --global --add safe.directory '*'
+
+
 #jobs:
 #  Packer-PipelineRun-Creation:
 #    runs-on: arc-runner-scale-set-stuttgart-things
