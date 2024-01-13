@@ -17,7 +17,7 @@ on:
         description: ANSIBLE-PROVISIONING
         options:
           - baseos
-          - clusternode
+          - rke2
       cloud:
         type: choice
         description: CLOUD
