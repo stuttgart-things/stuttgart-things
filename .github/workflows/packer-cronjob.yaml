@@ -25,6 +25,10 @@ on:
           - labda
           - labul
           - labul
+      branch-name:
+        required: true
+        type: string
+          
 jobs:
   Packer-Cronjob:
     runs-on: arc-runner-scale-set-stuttgart-things
@@ -40,6 +44,14 @@ jobs:
           machineShop version
           git config --global --add safe.directory '*'
           machineShop render --source local --template machineShop/templates/packer-u23-vsphere.yaml --values "provisioning=baseos, date=$(date '+%Y-%m-%d-%H-%M-%S'), dateShort=$(date '+%Y-%m-%d'), env=${{ inputs.env }}"
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v9.1.3
+        with:
+          author_name: Patrick Hermann
+          author_email: patrick.hermann@sva.de
+          message: 'added packer template for ${{ inputs.env }}'
+          add: '*'
+          new_branch: ${{ inputs.branch-name }}
 
 #jobs:
 #  Packer-PipelineRun-Creation:
