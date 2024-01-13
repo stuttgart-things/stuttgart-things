@@ -2,12 +2,12 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: packer-vsphere-ubuntu23-{{ .provisioning }}-{{ .date }} #12-31-1
+  name: packer-vsphere-ubuntu23-{{ .provisioning }}-{{ .date }}
   namespace: tektoncd
 spec:
   params:
     - name: vmTemplateName
-      value: ubuntu23-{{ .date }}
+      value: ubuntu23-{{ .dateShort }}
     - name: ansibleExtraVars
       value:
         - "updatePackages+true"

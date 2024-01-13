@@ -18,13 +18,13 @@ on:
         options:
           - baseos
           - clusternode
-      env-cloud:
+      env:
         type: choice
-        description: ENV-CLOUD
+        description: ENV
         options:
-          - labda-vsphere
-          - labul-vsphere
-          - labul-pve
+          - labda
+          - labul
+          - labul
 jobs:
   Packer-Cronjob:
     runs-on: arc-runner-scale-set-stuttgart-things
@@ -39,7 +39,7 @@ jobs:
           ls -lta
           machineShop version
           git config --global --add safe.directory '*'
-
+          machineShop render --source local --template machineShop/templates/packer-u23-vsphere.yaml --values "provisioning=baseos, date=$(date '+%Y-%m-%d-%H-%M-%S'), dateShort=$(date '+%Y-%m-%d'), env=${{ inputs.env }}"
 
 #jobs:
 #  Packer-PipelineRun-Creation:
