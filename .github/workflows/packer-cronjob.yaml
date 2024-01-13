@@ -79,10 +79,9 @@ jobs:
         id: pr
         uses: peter-evans/create-pull-request@v5.0.2
         with:
-          add-paths: |
-            clusters/${{ inputs.env }}/${{ inputs.cloud }}/bootstrap/
+          #add-paths: |
+          #  clusters/${{ inputs.env }}/${{ inputs.cloud }}/bootstrap/
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
-          signoff: false
           branch: ${{ inputs.branch-name }}
           delete-branch: true
           
