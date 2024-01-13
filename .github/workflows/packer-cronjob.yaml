@@ -29,7 +29,7 @@ jobs:
   Packer-Cronjob:
     runs-on: arc-runner-scale-set-stuttgart-things
     container:
-      image: eu.gcr.io/stuttgart-things/machineshop:v0.1.53
+      image: eu.gcr.io/stuttgart-things/machineshop:v0.1.53-git
     environment: k8s
     continue-on-error: false
     steps:
