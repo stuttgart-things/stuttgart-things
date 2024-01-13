@@ -1,13 +1,28 @@
----
-name: Build & Verify Terraform Module
+name: Build packer vmtemplate
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - 'main'
+    inputs:
+      os-version:
+        type: choice
+        description: OS-VERSION
+        options:
+          - ubuntu23
+          - rocky9
+      ansible-provisioning:
+        type: choice
+        description: ANSIBLE-PROVISIONING
+        options:
+          - baseos
+          - clusternode
+      env-cloud:
+        type: choice
+        description: ENV-CLOUD
+        options:
+          - labda-vsphere
+          - labul-vsphere
+          - labul-pve
 
 jobs:
-
   Packer-Cronjob:
     runs-on: arc-runner-scale-set-stuttgart-things
     container:
