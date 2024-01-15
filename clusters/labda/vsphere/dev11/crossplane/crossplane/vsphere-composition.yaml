@@ -18,6 +18,8 @@ spec:
           annotations:
             crossplane.io/external-name: vsphere-vm
         spec:
+          providerConfigRef:
+            name: default
           writeConnectionSecretToRef:
             name: vsphere-vm-test
             namespace: crossplane-system
@@ -252,3 +254,6 @@ spec:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.connectionSecret.namespace
           toFieldPath: spec.writeConnectionSecretToRef.namespace
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.providerRef.name
+          toFieldPath: spec.providerConfigRef.name
