@@ -71,6 +71,19 @@ spec:
                       default: terraform.tfvars
                   required:
                     - secretName
+                tfconfig:
+                  type: object
+                  properties:
+                    configMapName:
+                      type: string
+                    configMapNamespace:
+                      type: string
+                      default: default
+                    configMapKey:
+                      type: string
+                      default: terraform.tfvars
+                  required:
+                    - configMapName
                 connectionSecret:
                   type: object
                   properties:
@@ -83,5 +96,6 @@ spec:
                     - name
               required:
                 - vm
+                - tfconfig
                 - tfvars
                 - connectionSecret

@@ -211,6 +211,15 @@ spec:
           fromFieldPath: spec.tfvars.secretKey
           toFieldPath: spec.forProvider.varFiles[0].secretKeyRef.key
         - type: FromCompositeFieldPath
+          fromFieldPath: spec.tfconfig.configMapName
+          toFieldPath: spec.forProvider.varFiles[1].configMapKeyRef.name
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.tfconfig.configMapNamespace
+          toFieldPath: spec.forProvider.varFiles[1].configMapKeyRef.namespace
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.tfconfig.configMapKey
+          toFieldPath: spec.forProvider.varFiles[1].configMapKeyRef.key
+        - type: FromCompositeFieldPath
           fromFieldPath: spec.vm.count
           toFieldPath: spec.forProvider.vars[0].value
         - type: FromCompositeFieldPath
