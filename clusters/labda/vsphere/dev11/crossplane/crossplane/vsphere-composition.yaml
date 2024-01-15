@@ -43,10 +43,15 @@ spec:
               - key: folder
                 type: string
             varFiles:
+              - source: ConfigMapKey
+                configMapKeyRef:
+                  namespace: default
+                  name: vsphere-vars
+                  key: terraform.tfvars
               - source: SecretKey
                 secretKeyRef:
                   namespace: default
-                  name: vsphere-tfvars
+                  name: vsphere-secrets
                   key: terraform.tfvars
             module: |
               module "vsphere-vm" {
