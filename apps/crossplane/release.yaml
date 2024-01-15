@@ -16,3 +16,8 @@ spec:
         name: crossplane-stable
         namespace: crossplane-system
       interval: 12h
+
+
+# provider:
+#   # -- A list of Provider packages to install.
+#   packages: []
