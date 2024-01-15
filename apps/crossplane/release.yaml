@@ -16,9 +16,8 @@ spec:
         name: crossplane-stable
         namespace: crossplane-system
       interval: 12h
-  # values:
-
-
-# provider:
-#   # -- A list of Provider packages to install.
-#   packages: []
+  values:
+    provider:
+      packages:
+        - xpkg.upbound.io/upbound/provider-terraform:v0.13.0
+        - crossplanecontrib/provider-helm:v0.16.0
