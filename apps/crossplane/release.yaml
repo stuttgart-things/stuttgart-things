@@ -16,6 +16,7 @@ spec:
         name: crossplane-stable
         namespace: crossplane-system
       interval: 12h
+  # values:
 
 
 # provider:
