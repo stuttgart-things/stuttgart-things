@@ -46,13 +46,13 @@ spec:
               - source: ConfigMapKey
                 configMapKeyRef:
                   namespace: default
-                  name: vsphere-vars
-                  key: terraform.tfvars
+                  name: labda-config
+                  key: labda-config.tfvars
               - source: SecretKey
                 secretKeyRef:
                   namespace: default
-                  name: vsphere-secrets
-                  key: terraform.tfvars
+                  name: labda-secrets
+                  key: labda-secrets.tfvars
             module: |
               module "vsphere-vm" {
                 source = "github.com/stuttgart-things/vsphere-vm"
