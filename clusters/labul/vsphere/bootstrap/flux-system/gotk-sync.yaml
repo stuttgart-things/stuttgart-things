@@ -135,3 +135,16 @@ spec:
     provider: sops
     secretRef:
       name: sops-age
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: crossplane-1.5.0
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  ref:
+    tag: crossplane-1.5.0
+  secretRef:
+    name: flux-system
+  url: ssh://git@github.com/stuttgart-things/stuttgart-things
