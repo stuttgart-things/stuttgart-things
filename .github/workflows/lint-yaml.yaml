@@ -14,12 +14,18 @@ on:
         default: false
         required: true
         type: boolean
+      lintprofile-path:
+        default: 1
+        type: string
+      yamllint-version:
+        default: .yamllint
+        type: string
 
 jobs:
   Yaml-Lint:
     runs-on: ${{ inputs.runs-on }}
     container:
-      image: cytopia/yamllint:1
+      image: cytopia/yamllint:${{ inputs.yamllint-version }}
     environment: ${{ inputs.environment-name }}
     continue-on-error: ${{ inputs.continue-error }}
     steps:
@@ -29,7 +35,7 @@ jobs:
           fetch-depth: '0'
       - run: |
           ls -lta
-          yamllint . --format github -c .yamllint | tee ./yaml-lint.txt
+          yamllint . --format github -c ${{ inputs.lintprofile-path }} | tee ./yaml-lint.txt
       - uses: actions/upload-artifact@v3
         with:
           name: yaml-lint
