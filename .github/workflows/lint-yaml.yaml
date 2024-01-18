@@ -15,10 +15,10 @@ on:
         required: true
         type: boolean
       lintprofile-path:
-        default: 1
+        default: .yamllint
         type: string
       yamllint-version:
-        default: .yamllint
+        default: 1
         type: string
 
 jobs:
