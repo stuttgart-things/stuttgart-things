@@ -427,7 +427,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./apps/github-docs
+  path: ./apps/github-rss
   prune: true
   wait: true
   patches:
