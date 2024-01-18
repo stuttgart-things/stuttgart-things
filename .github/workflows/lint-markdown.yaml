@@ -20,6 +20,9 @@ on:
       alpine-version:
         default: 3.19.0
         type: string
+      artifact-name:
+        default: md-lint
+        type: string
 
 jobs:
   lint-markdown:
@@ -37,9 +40,9 @@ jobs:
         run: |
           ls -lta
           apk add --update --no-cache ruby-full && gem install mdl --no-document
-          mdl . -s ${{ inputs.lintprofile-path }} | tee ./md-lint.txt        
+          mdl . -s ${{ inputs.lintprofile-path }} | tee ./${{ inputs.artifact-name }}.txt        
       - name: Upload linting results
         uses: actions/upload-artifact@v4.1.0
         with:
-          name: md-lint
-          path: md-lint.txt
+          name: ${{ inputs.artifact-name }}
+          path: ${{ inputs.artifact-name }}.txt
