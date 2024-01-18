@@ -445,6 +445,7 @@ spec:
       GITHUB_URL: https://github.com/stuttgart-things/docs
       STORAGE_CLASS: openebs-hostpath
       STORAGE_REQUEST: 50Mi
+      RUNNER_VERSION: 2.311.0
     substituteFrom:
       - kind: Secret
         name: github-flux-secrets
