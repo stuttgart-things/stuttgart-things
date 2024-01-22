@@ -7,7 +7,7 @@ metadata:
     crossplane.io/external-name: pve-vm
 spec:
   providerConfigRef:
-    name: terraform-default-dallas
+    name: terraform-default
   forProvider:
     source: Remote
     module: git::https://github.com/stuttgart-things/proxmox-vm.git?ref=v2.9.14-1.5.5
