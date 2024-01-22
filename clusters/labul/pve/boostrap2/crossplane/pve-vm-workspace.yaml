@@ -1,0 +1,27 @@
+---
+apiVersion: tf.upbound.io/v1beta1
+kind: Workspace
+metadata:
+  name: dallas42
+  annotations:
+    crossplane.io/external-name: pve-vm
+spec:
+  providerConfigRef:
+    name: terraform-default
+  forProvider:
+    source: Remote
+    module: git::https://github.com/stuttgart-things/proxmox-vm.git?ref=v2.9.14-1.5.5
+    vars:
+      - key: vm_count
+        value: "1"
+      - key: vm_name
+        value: dallas42
+    varFiles:
+      - source: SecretKey
+        secretKeyRef:
+          namespace: default
+          name: pve-tfvars
+          key: terraform.tfvars
+  writeConnectionSecretToRef:
+    namespace: default
+    name: terraform-workspace-dallas42
