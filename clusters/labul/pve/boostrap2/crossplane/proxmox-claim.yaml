@@ -1,0 +1,29 @@
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: ProxmoxVM
+metadata:
+  name: chicago
+  namespace: default
+spec:
+  providerRef:
+    name: terraform-default
+  vm:
+    count: "1"
+    name: chicago
+    cpu: "8"
+    ram: "4096"
+    disk: 32G
+    template: ubuntu22
+    network: vmbr103
+    datastore: v3700
+    folderPath: stuttgart-things
+    clusterNode: sthings-pve1
+  tfvars:
+    secretName: pve-tfvars
+    secretNamespace: default
+    secretKey: terraform.tfvars
+  connectionSecret:
+    name: chicago
+    namespace: default
+  compositionRef:
+    name: proxmox-vm
