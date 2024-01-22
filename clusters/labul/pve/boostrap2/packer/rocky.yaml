@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: create-packer-template-rocky9-7
+  name: create-packer-template-rocky9-8
   namespace: tektoncd
 spec:
   params:
@@ -31,7 +31,7 @@ spec:
     - name: secretPathPassword
       value: cloud/data/pve:api_password
     - name: ansibleProvisioning
-      value: base-os
+      value: play
     - name: vmTemplateName
       value: rocky9-scsi
   pipelineRef:
