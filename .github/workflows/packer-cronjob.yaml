@@ -51,6 +51,7 @@ jobs:
       - name: Checkout code
         id: checkout
         uses: actions/checkout@v4.1.1
+        
       - name: Create packer config
         id: config
         run: |
@@ -65,16 +66,24 @@ jobs:
           --output file \
           --destination ${DESTINATION_DIR}/${{ inputs.env }}/${{ inputs.cloud }}/bootstrap/packer-${{ inputs.os-version }}-${{ inputs.ansible-provisioning }}.yaml
           
-      - name: Add & Commit changes to branch
-        id: branch
-        uses: EndBug/add-and-commit@v9.1.3
-        with:
-          author_name: ${{ github.actor }}
-          author_email: <${{ github.actor }}@users.noreply.github.com>
-          message: 'added ${{ inputs.os-version }} packer template for ${{ inputs.env }}-${{ inputs.cloud }}'
-          add: '*'
-          new_branch: ${{ inputs.branch-name }}
+      #- name: Add & Commit changes to branch
+      #  id: branch
+      #  uses: EndBug/add-and-commit@v9.1.3
+      #  with:
+      #    author_name: ${{ github.actor }}
+      #    author_email: <${{ github.actor }}@users.noreply.github.com>
+      #    message: 'added ${{ inputs.os-version }} packer template for ${{ inputs.env }}-${{ inputs.cloud }}'
+      #    add: '*'
+      #    new_branch: ${{ inputs.branch-name }}
 
+      - name: Create Pull Request
+        id: pr
+        uses: peter-evans/create-pull-request@v5.0.2
+        with:
+          commit-message: '[CI] Roll pinned nightly toolchain'
+          title: 'Update Pinned Nightly Toolchain'
+          branch: ${{ inputs.branch-name }}
+          
       #- name: Create Pull Request
       #  id: pr
       #  uses: peter-evans/create-pull-request@v5.0.2
