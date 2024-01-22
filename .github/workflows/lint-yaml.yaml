@@ -39,7 +39,7 @@ jobs:
         run: |
           ls -lta
           yamllint . --format github -c ${{ inputs.lintprofile-path }} | tee ./${{ inputs.artifact-name }}.txt
-      - name: Upload linting results      
+      - name: Upload linting results
         uses: actions/upload-artifact@v4.1.0
         with:
           name: ${{ inputs.artifact-name }}

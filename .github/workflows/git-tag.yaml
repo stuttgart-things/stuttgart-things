@@ -1,0 +1,42 @@
+name: Create-Git-Tag
+on:
+  workflow_call:
+    inputs:
+      tag-name:
+        required: true
+        type: string
+      runs-on:
+        required: true
+        type: string
+      environment-name:
+        default: k8s
+        required: true
+        type: string
+      alpine-version:
+        default: 3.19.0
+        type: string
+      continue-error:
+        default: false
+        required: true
+        type: boolean
+
+jobs:
+  Create-Git-Tag:
+    permissions:
+      contents: write
+    runs-on: ${{ inputs.runs-on }}
+    container:
+      image: alpine:${{ inputs.alpine-version }}
+    environment: ${{ inputs.environment-name }}
+    continue-on-error: ${{ inputs.continue-error }}
+    steps:
+      - name: Create Tag
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: 'refs/tags/v${{ inputs.tag-name }}',
+              sha: context.sha
+            })

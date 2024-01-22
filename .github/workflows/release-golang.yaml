@@ -31,12 +31,13 @@ jobs:
       image: golang:${{ inputs.golang-version }}
     environment: ${{ inputs.environment-name }}
     continue-on-error: false
-    steps: 
+    steps:
       - name: Checkout code
         uses: actions/checkout@v4.1.1
         with:
           ref: main
           fetch-depth: 0
+
       - name: Check git / tags
         run: |
           ls -lta
@@ -44,12 +45,13 @@ jobs:
           git pull origin main
           git fetch --tags
           git tag
+
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v5
         with:
           distribution: goreleaser
           version: ${{ inputs.goreleaser-version }}
           args: release --clean
-          workdir: .    
+          workdir: .
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
