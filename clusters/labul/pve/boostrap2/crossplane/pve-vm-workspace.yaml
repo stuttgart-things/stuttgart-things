@@ -2,7 +2,7 @@
 apiVersion: tf.upbound.io/v1beta1
 kind: Workspace
 metadata:
-  name: dallas42
+  name: dallas43
   annotations:
     crossplane.io/external-name: pve-vm
 spec:
@@ -19,7 +19,7 @@ spec:
       - key: vm_memory
         value: "4096"
       - key: vm_name
-        value: dallas42
+        value: dallas43
       - key: vm_template
         value: ubuntu22
       - key: pve_network
@@ -40,4 +40,4 @@ spec:
           key: terraform.tfvars
   writeConnectionSecretToRef:
     namespace: default
-    name: terraform-workspace-dallas42
+    name: terraform-workspace-dallas43
