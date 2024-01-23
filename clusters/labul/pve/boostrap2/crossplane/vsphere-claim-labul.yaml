@@ -11,7 +11,7 @@ spec:
     count: "1"
     name: torronto
     ram: "4096"
-    disk: 32G
+    disk: "32"
     cpu: "8"
     firmware: bios
     folderPath: phermann/testing
