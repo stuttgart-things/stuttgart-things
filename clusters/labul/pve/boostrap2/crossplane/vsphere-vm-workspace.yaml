@@ -2,7 +2,7 @@
 apiVersion: tf.upbound.io/v1beta1
 kind: Workspace
 metadata:
-  name: dallas41
+  name: dallas52
   annotations:
     crossplane.io/external-name: vsphere-vm
 spec:
@@ -15,7 +15,7 @@ spec:
       - key: vm_count
         value: "1"
       - key: vsphere_vm_name
-        value: dallas41
+        value: dallas52
       - key: vm_memory
         value: "6144"
       - key: vm_disk_size
@@ -31,17 +31,17 @@ spec:
       - key: vsphere_datastore
         value: /LabUL/datastore/UL-ESX-SAS-02
       - key: vsphere_resource_pool
-        value: Resources
+        value: /LabUL/host/Cluster01/Resources
       - key: vsphere_network
         value: /LabUL/network/LAB-10.31.103
       - key: vsphere_vm_template
         value: /LabUL/vm/phermann/vm-templates/ubuntu22
       - key: bootstrap
-        value: ["echo STUTTGART-THINGS"]
+        value: '["echo STUTTGART-THINGS"]'
       - key: annotation
-        value: VSPHERE-VM BUILD w/ TERRAFORM FOR STUTTGART-THINGS
-      - key: allow_unverified_ssl
-        value: true
+        value: VSPHERE-VM BUILD w/ CROSSPLANE FOR STUTTGART-THINGS
+      - key: unverified_ssl
+        value: "true"
     varFiles:
       - source: SecretKey
         secretKeyRef:
@@ -50,8 +50,4 @@ spec:
           key: vsphere.tfvars
   writeConnectionSecretToRef:
     namespace: default
-    name: terraform-workspace-dallas41
-
-
-
-
+    name: terraform-workspace-dallas52
