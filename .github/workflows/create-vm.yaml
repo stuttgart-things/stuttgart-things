@@ -42,5 +42,5 @@ jobs:
 
           machineShop render \
           --source local \
-          --template ${TEMPLATE_DIR}/${TEMPLATE_NAME} \
+          --template ${TEMPLATE_PATH}/${TEMPLATE_NAME} \
           --values "vmCount=${{ inputs.count-vm }}, vmName=detroit, vmCpu=4, vmMem=4096, vmDisk=96G, vmTemplate=ubuntu22, vmNetwork=vmbr103, vmDatastore=v3700, vmFolder=stuttgart-things, vmNode=sthings-pve1"
