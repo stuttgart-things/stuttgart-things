@@ -15,7 +15,7 @@
 #       - key: vm_count
 #         value: "1"
 #       - key: vsphere_vm_name
-#         value: dallas52
+#         value: dallas70
 #       - key: vm_memory
 #         value: "6144"
 #       - key: vm_disk_size
@@ -25,17 +25,17 @@
 #       - key: firmware
 #         value: bios
 #       - key: vsphere_vm_folder_path
-#         value: phermann/testing
+#         value: stuttgart-things/testing
 #       - key: vsphere_datacenter
-#         value: /LabUL
+#         value: /NetApp-HCI-Datacenter
 #       - key: vsphere_datastore
-#         value: /LabUL/datastore/UL-ESX-SAS-02
+#         value: /NetApp-HCI-Datacenter/datastore/DatastoreCluster/NetApp-HCI-Datastore-02
 #       - key: vsphere_resource_pool
-#         value: /LabUL/host/Cluster01/Resources
+#         value: Resources
 #       - key: vsphere_network
-#         value: /LabUL/network/LAB-10.31.103
+#         value: /NetApp-HCI-Datacenter/network/tiab-prod
 #       - key: vsphere_vm_template
-#         value: /LabUL/vm/phermann/vm-templates/ubuntu22
+#         value: /NetApp-HCI-Datacenter/vm/stuttgart-things/vm-templates/ubuntu22
 #       - key: bootstrap
 #         value: '["echo STUTTGART-THINGS"]'
 #       - key: annotation
@@ -46,8 +46,8 @@
 #       - source: SecretKey
 #         secretKeyRef:
 #           namespace: default
-#           name: vsphere-tfvars
-#           key: vsphere.tfvars
+#           name: vsphere-labda-tfvars
+#           key: vsphere-labda.tfvars
 #   writeConnectionSecretToRef:
 #     namespace: default
 #     name: terraform-workspace-dallas70

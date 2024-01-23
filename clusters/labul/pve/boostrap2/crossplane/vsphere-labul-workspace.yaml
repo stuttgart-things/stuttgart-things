@@ -46,8 +46,8 @@
 #       - source: SecretKey
 #         secretKeyRef:
 #           namespace: default
-#           name: vsphere-tfvars
-#           key: vsphere.tfvars
+#           name: vsphere-labul-tfvars
+#           key: vsphere-labul.tfvars
 #   writeConnectionSecretToRef:
 #     namespace: default
 #     name: terraform-workspace-dallas52
