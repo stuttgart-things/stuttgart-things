@@ -1,0 +1,46 @@
+---
+name: Create Crossplane VM Definition
+on:
+  workflow_dispatch:
+    inputs:
+      count-vm:
+        type: choice
+        description: count of vms
+        options:
+          - 1
+          - 2
+          - 3
+          - 4
+          - 5
+
+env:
+  # DESTINATION_DIR: crossplane/labul/pve/
+  TEMPLATE_NAME: proxmoxvm.yaml
+  TEMPLATE_PATH: crossplane/claims
+
+jobs:
+  Create-VM-Config:
+    permissions:
+      contents: write
+      pull-requests: write
+    runs-on: arc-runner-scale-set-stuttgart-things
+    container:
+      image: eu.gcr.io/stuttgart-things/machineshop:v0.1.53-git
+    environment: k8s
+    continue-on-error: false
+    steps:
+      - name: Checkout code
+        id: checkout
+        uses: actions/checkout@v4.1.1
+
+      - name: Create vm config
+        id: config
+        run: |
+          ls -lta
+          machineShop version
+          git config --global --add safe.directory '*'
+
+          machineShop render \
+          --source local \
+          --template ${TEMPLATE_DIR}/${TEMPLATE_NAME} \
+          --values "vmCount=${{ inputs.count-vm }}, vmName=detroit, vmCpu=4, vmMem=4096, vmDisk=96G, vmTemplate=ubuntu22, vmNetwork=vmbr103, vmDatastore=v3700, vmFolder=stuttgart-things, vmNode=sthings-pve1"
