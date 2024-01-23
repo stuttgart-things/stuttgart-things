@@ -24,9 +24,9 @@ spec:
     annotation: VSPHERE-VM BUILD w/ CROSSPLANE FOR STUTTGART-THINGS
     unverifiedSsl: "True"
   tfvars:
-    secretName: vsphere-tfvars
+    secretName: vsphere-labul-tfvars
     secretNamespace: default
-    secretKey: vsphere.tfvars
+    secretKey: vsphere-labul.tfvars
   connectionSecret:
     name: torronto
     namespace: default
