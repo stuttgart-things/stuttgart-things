@@ -30,35 +30,50 @@ spec:
                       default: "1"
                     name:
                       type: string
-                    cpu:
-                      type: string
-                      default: "4"
                     ram:
                       type: string
                       default: "4096"
                     disk:
                       type: string
                       default: "64"
-                    template:
+                    cpu:
                       type: string
-                    network:
+                      default: "4"
+                    firmware:
+                      type: string
+                      default: "bios"
+                    folderPath:
+                      type: string
+                    datacenter:
                       type: string
                     datastore:
                       type: string
-                    folderPath:
+                    resourcePool:
                       type: string
-                    clusterNode:
+                    network:
                       type: string
+                    template:
+                      type: string
+                    bootstrap:
+                      type: string
+                      default: '["echo STUTTGART-THINGS"]'
+                    annotation:
+                      type: string
+                      default: VSPHERE-VM BUILD w/ CROSSPLANE FOR STUTTGART-THINGS
+                    unverifiedSsl:
+                      type: string
+                      default: "true"
                   required:
                     - name
-                    - cpu
                     - ram
                     - disk
-                    - template
-                    - network
-                    - datastore
+                    - cpu
                     - folderPath
-                    - clusterNode
+                    - datacenter
+                    - datastore
+                    - resourcePool
+                    - network
+                    - template
                 tfvars:
                   type: object
                   properties:
