@@ -5,7 +5,7 @@ on:
     inputs:
       count-vm:
         type: choice
-        description: count of vms
+        description: COUNT OF VMS
         options:
           - 1
           - 2
