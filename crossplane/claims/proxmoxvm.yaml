@@ -2,28 +2,28 @@
 apiVersion: resources.stuttgart-things.com/v1alpha1
 kind: ProxmoxVM
 metadata:
-  name: sandiego9
+  name: "{{ .vmName }}"
   namespace: default
 spec:
   providerRef:
     name: s3-proxmox
   vm:
     count: "{{ .vmCount }}"
-    name: sandiego9
-    cpu: "8"
-    ram: "4096"
-    disk: 32G
-    template: ubuntu22
-    network: vmbr103
-    datastore: v3700
-    folderPath: stuttgart-things
-    clusterNode: sthings-pve1
+    name: "{{ .vmName }}"
+    cpu: "{{ .vmCpu }}"
+    ram: "{{ .vmMem }}"
+    disk: "{{ .vmDisk }}"
+    template: "{{ .vmTemplate }}"
+    network: "{{ .vmNetwork }}"
+    datastore: "{{ .vmDatastore }}"
+    folderPath: "{{ .vmFolder }}"
+    clusterNode: "{{ .vmNode }}"
   tfvars:
     secretName: pve-tfvars
     secretNamespace: default
     secretKey: terraform.tfvars
   connectionSecret:
-    name: sandiego9
+    name: "{{ .vmName }}"
     namespace: default
   compositionRef:
     name: proxmox-vm
