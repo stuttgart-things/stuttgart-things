@@ -12,7 +12,59 @@ on:
           - 3
           - 4
           - 5
-
+      vm-name:
+        required: true
+        type: string
+      vm-cpu:
+        type: choice
+        description: COUNT OF CPUS
+        options:
+          - 2
+          - 4
+          - 6
+          - 8
+      vm-memory:
+        type: choice
+        description: MEMORY OF VM
+        options:
+          - 2048
+          - 4096
+          - 6144
+          - 8196
+      vm-disk:
+        type: choice
+        description: SIZE OF DISK
+        options:
+          - 20
+          - 32
+          - 64
+          - 96
+          - 128
+      vm-template:
+        type: choice
+        description: TEMPLATE OF VM
+        options:
+          - ubuntu22
+          - rocky9
+      vm-network:
+        type: choice
+        description: NETWORK OF VM
+        options:
+          - vmbr102
+          - vmbr103
+      vm-datastore:
+        type: choice
+        description: DATASTORE OF VM
+        options:
+          - v3700
+      vm-folder:
+        type: string
+        description: FOLDER ON PVE
+        default: stuttgart-things
+      vm-node:
+        type: string
+        description: PVE NODE
+        default: sthings-pve1
 env:
   # DESTINATION_DIR: crossplane/labul/pve/
   TEMPLATE_NAME: proxmoxvm.yaml
@@ -43,4 +95,4 @@ jobs:
           machineShop render \
           --source local \
           --template ${TEMPLATE_PATH}/${TEMPLATE_NAME} \
-          --values "vmCount=${{ inputs.count-vm }}, vmName=detroit, vmCpu=4, vmMem=4096, vmDisk=96G, vmTemplate=ubuntu22, vmNetwork=vmbr103, vmDatastore=v3700, vmFolder=stuttgart-things, vmNode=sthings-pve1"
+          --values "vmCount=${{ inputs.count-vm }}, vmName=${{ inputs.vm-name }}, vmCpu=${{ inputs.vm-cpu }}, vmMem=${{ inputs.vm-memory }}, vmDisk=${{ inputs.vm-disk }}, vmTemplate=${{ inputs.vm-template }}, vmNetwork=${{ inputs.vm-network }}, vmDatastore=${{ inputs.vm-datastore }}, vmFolder=${{ inputs.vm-folder }}, vmNode=${{ inputs.vm-node }}"
