@@ -22,7 +22,7 @@ spec:
     template: /LabUL/vm/phermann/vm-templates/ubuntu22
     bootstrap: '["echo STUTTGART-THINGS"]'
     annotation: VSPHERE-VM BUILD w/ CROSSPLANE FOR STUTTGART-THINGS
-    unverifiedSsl: "True"
+    unverifiedSsl: "true"
   tfvars:
     secretName: vsphere-labul-tfvars
     secretNamespace: default
