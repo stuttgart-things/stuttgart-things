@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: aws-account-creds
+  namespace: default
+type: Opaque
+data:
+  credentials: W2RlZmF1bHRdCmF3c19hY2Nlc3Nfa2V5X2lkID0gc3RoaW5ncwphd3Nfc2VjcmV0X2FjY2Vzc19rZXkgPSBBdGxhbjdpcwo=

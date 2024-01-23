@@ -1,0 +1,15 @@
+# vm_name="pve-maverick-8"
+# vm_count=1
+vm_num_cpus=4
+vm_memory=4096
+vm_template="ubuntu22"
+pve_network="vmbr103"
+pve_datastore="v3700"
+vm_disk_size="128G"
+pve_folder_path="stuttgart-things"
+pve_cluster_node="sthings-pve1"
+pve_api_url="https://sthings-pve1.labul.sva.de:8006/api2/json"
+pve_api_user="terraform@pve"
+pve_api_password="Atlan7is"
+vm_ssh_user="sthings"
+vm_ssh_password="Atlan7is"

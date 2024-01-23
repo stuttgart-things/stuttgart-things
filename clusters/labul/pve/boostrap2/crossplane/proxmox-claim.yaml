@@ -2,14 +2,14 @@
 apiVersion: resources.stuttgart-things.com/v1alpha1
 kind: ProxmoxVM
 metadata:
-  name: chicago
+  name: sandiego9
   namespace: default
 spec:
   providerRef:
-    name: terraform-default
+    name: s3-proxmox
   vm:
     count: "1"
-    name: chicago
+    name: sandiego9
     cpu: "8"
     ram: "4096"
     disk: 32G
@@ -23,7 +23,7 @@ spec:
     secretNamespace: default
     secretKey: terraform.tfvars
   connectionSecret:
-    name: chicago
+    name: sandiego9
     namespace: default
   compositionRef:
     name: proxmox-vm

@@ -1,0 +1,48 @@
+# ---
+# apiVersion: tf.upbound.io/v1beta1
+# kind: Workspace
+# metadata:
+#   name: dallas41
+#   annotations:
+#     crossplane.io/external-name: vsphere-vm
+# spec:
+#   providerConfigRef:
+#     name: terraform-default
+#   forProvider:
+#     source: Remote
+#     module: git::https://github.com/stuttgart-things/vsphere-vm.git?ref=v1.6.6-2.6.1
+#     vars:
+#       - key: vm_count
+#         value: "1"
+
+#   vm_count                = 1
+#   vsphere_vm_name         = "michigan"
+#   vm_memory               = 6144
+#   vm_disk_size            = "64"
+#   vm_num_cpus             = 6
+#   firmware                = "bios"
+#   vsphere_vm_folder_path  = "stuttgart-things/testing"
+#   vsphere_datacenter      = "/NetApp-HCI-Datacenter"
+#   vsphere_datastore       = "/NetApp-HCI-Datacenter/datastore/DatastoreCluster/NetApp-HCI-Datastore-02"
+#   vsphere_resource_pool   = "Resources"
+#   vsphere_network         = "/NetApp-HCI-Datacenter/network/tiab-prod"
+#   vsphere_vm_template     = "/NetApp-HCI-Datacenter/vm/stuttgart-things/vm-templates/ubuntu23"
+
+#   bootstrap               = ["echo STUTTGART-THINGS"]
+#   annotation              = "VSPHERE-VM BUILD w/ TERRAFORM FOR STUTTGART-THINGS"
+
+#   allow_unverified_ssl    = true
+
+#     varFiles:
+#       - source: SecretKey
+#         secretKeyRef:
+#           namespace: default
+#           name: vsphere-tfvars
+#           key: vsphere.tfvars
+#   writeConnectionSecretToRef:
+#     namespace: default
+#     name: terraform-workspace-dallas41
+
+
+
+#kubectl create secret generic vsphere-tfvars --from-file=vsphere.tfvars

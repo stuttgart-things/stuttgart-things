@@ -1,0 +1,23 @@
+---
+apiVersion: tf.upbound.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: s3-proxmox
+  namespace: default
+spec:
+  configuration: |
+    terraform {
+      backend "s3" {
+        endpoint = "https://artifacts.app.4sthings.tiab.ssc.sva.de"
+        key = "terraform.tfstate"
+        region = "main"
+        bucket = "proxmox-vm"
+        skip_credentials_validation = true
+        skip_metadata_api_check = true
+        skip_region_validation = true
+        force_path_style = true
+        access_key="sthings"
+        secret_key="Atlan7is"
+
+      }
+    }
