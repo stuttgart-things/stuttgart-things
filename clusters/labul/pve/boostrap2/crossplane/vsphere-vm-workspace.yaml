@@ -15,7 +15,7 @@ spec:
       - key: vm_count
         value: "1"
       - key: vsphere_vm_name
-        value: michigan
+        value: dallas41
       - key: vm_memory
         value: "6144"
       - key: vm_disk_size
