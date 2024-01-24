@@ -1,0 +1,23 @@
+---
+apiVersion: pkg.crossplane.io/v1alpha1
+kind: ControllerConfig
+metadata:
+  name: cert-bundle
+spec:
+  volumeMounts:
+    - name: cert-bundle
+      mountPath: /etc/ssl/certs
+  volumes:
+    - name: cert-bundle
+      configMap:
+        name: cert-bundle
+---
+apiVersion: pkg.crossplane.io/v1
+kind: Provider
+metadata:
+  name: provider-terraform
+spec:
+  package: xpkg.upbound.io/upbound/provider-terraform:v0.13.0
+  controllerConfigRef:
+    name: cert-bundle
+---
