@@ -45,7 +45,7 @@ tasks:
     cmds:
       - task: commit
       - gh pr create -t "{{ .BRANCH }}" -b "{{ .BRANCH }} branch into main"
-      - sleep 20s
+      # - sleep 20s
       # - gh pr checks $(gh pr list | grep "^[^#;]" | awk '{print $1}') --watch
       - gh pr merge $(gh pr list | grep "^[^#;]" | awk '{print $1}') --auto --rebase --delete-branch
       - git checkout main && git pull
