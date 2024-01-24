@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: ca-certificates.crt
+  name: cert-bundle
   namespace: crossplane-system
 data:
-  labul-vsphere.crt: |-
+  ca-certificates.crt: |-
     -----BEGIN CERTIFICATE-----
     MIIFijCCA3KgAwIBAgIUYeYPin86XPfrAupG2t0v+yC2t+AwDQYJKoZIhvcNAQEL
     BQAwQDEMMAoGA1UEChMDU1ZBMRkwFwYDVQQLExBTdHV0dGdhcnQtVGhpbmdzMRUw
