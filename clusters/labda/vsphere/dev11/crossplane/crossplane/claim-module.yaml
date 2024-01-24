@@ -1,0 +1,30 @@
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: VsphereVMmodule
+metadata:
+  name: dallas42
+spec:
+  vm:
+    count: "1"
+    name: dallas42
+    cpu: "4"
+    ram: "4096"
+    disk: "96"
+    templatepath: "/NetApp-HCI-Datacenter/vm/stuttgart-things/vm-templates/ubuntu23"
+    network: "/NetApp-HCI-Datacenter/network/tiab-prod"
+    folder: "stuttgart-things/testing"
+  tfvars:
+    secretName: labda-secrets
+    secretNamespace: default
+    secretKey: labda-secrets.tfvars
+  tfconfig:
+    configMapName: labda-config
+    configMapNamespace: default
+    configMapKey: labda-config.tfvars
+  connectionSecret:
+    name: dallas42
+    namespace: default
+  providerRef:
+    name: incluster
+  compositionRef:
+    name: vsphere-vm-module
