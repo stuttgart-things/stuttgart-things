@@ -49,7 +49,7 @@ tasks:
       - gh pr checks $(gh pr list | grep "^[^#;]" | awk '{print $1}') --watch
       - gh pr merge $(gh pr list | grep "^[^#;]" | awk '{print $1}') --auto --rebase --delete-branch
       - git checkout main && git pull
-  
+
   tag:
     desc: Tag repo
     cmds:

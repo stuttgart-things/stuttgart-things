@@ -12,7 +12,7 @@ spec:
   chart:
     spec:
       chart: minio
-      version: 12.8.18
+      version: 13.2.1
       sourceRef:
         kind: HelmRepository
         name: bitnami
@@ -22,7 +22,7 @@ spec:
     image:
       registry: eu.gcr.io
       repository: stuttgart-things/sthings-minio
-      tag: 12.8.18
+      tag: 13.2.1
     networkPolicy:
       enabled: true
       allowExternal: true
