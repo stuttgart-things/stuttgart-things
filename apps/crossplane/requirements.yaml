@@ -18,8 +18,9 @@ spec:
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: HelmRepository
 metadata:
-  name: crossplane-master
+  name: stuttgart-things
   namespace: crossplane-system
 spec:
-  interval: 24h
-  url: https://charts.crossplane.io/master
+  type: oci
+  interval: 1h
+  url: oci://eu.gcr.io/stuttgart-things

@@ -1,23 +1,47 @@
 ---
-apiVersion: pkg.crossplane.io/v1alpha1
-kind: ControllerConfig
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
 metadata:
-  name: cert-bundle
+  name: crossplane-configuration
+  namespace: crossplane-system
 spec:
-  volumeMounts:
-    - name: cert-bundle
-      mountPath: /etc/ssl/certs
-  volumes:
-    - name: cert-bundle
-      configMap:
-        name: cert-bundle
----
-apiVersion: pkg.crossplane.io/v1
-kind: Provider
-metadata:
-  name: provider-terraform
-spec:
-  package: xpkg.upbound.io/upbound/provider-terraform:v0.13.0
-  controllerConfigRef:
-    name: cert-bundle
----
+  interval: 30m
+  dependsOn:
+    - name: crossplane-deployment
+      namespace: crossplane-system
+  chart:
+    spec:
+      chart: sthings-cluster
+      version: 0.3.10
+      sourceRef:
+        kind: HelmRepository
+        name: stuttgart-things
+        namespace: crossplane-system
+      interval: 12h
+  values:
+    installCRDs: true
+    customresources:
+      controllerConfig:
+        apiVersion: pkg.crossplane.io/v1alpha1
+        kind: ControllerConfig
+        metadata:
+          name: cert-bundle
+          namespace: crossplane-system
+        spec:
+          volumeMounts:
+            - name: cert-bundle
+              mountPath: /etc/ssl/certs
+          volumes:
+            - name: cert-bundle
+              configMap:
+                name: cert-bundle
+      provider:
+        apiVersion: pkg.crossplane.io/v1
+        kind: Provider
+        metadata:
+          name: provider-terraform
+          namespace: crossplane-system
+        spec:
+          package: xpkg.upbound.io/upbound/provider-terraform:v0.13.0
+          controllerConfigRef:
+            name: cert-bundle
