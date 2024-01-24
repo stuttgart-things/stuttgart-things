@@ -19,6 +19,8 @@ spec:
         namespace: minio
       interval: 12h
   values:
+    global:
+      storageClass: ${STORAGE_CLASS:-longhorn}
     image:
       registry: eu.gcr.io
       repository: stuttgart-things/sthings-minio
