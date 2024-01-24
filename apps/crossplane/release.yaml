@@ -21,6 +21,3 @@ spec:
       packages:
         - xpkg.upbound.io/upbound/provider-terraform:v0.13.0
         - crossplanecontrib/provider-helm:v0.16.0
-    registryCaBundleConfig:
-      name: cert-bundle
-      key: ca-certificates.crt
