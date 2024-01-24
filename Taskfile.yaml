@@ -14,6 +14,42 @@ vars:
     sh: if [ $(git rev-parse --abbrev-ref HEAD) != "main" ]; then echo $(git rev-parse --abbrev-ref HEAD) ; fi
 
 tasks:
+  branch:
+    desc: Create branch from main
+    cmds:
+      - git checkout main
+      - git branch
+      - git pull
+      - |
+        echo "Enter to be created (remote) branch:"
+        read BRANCH_NAME;
+        git checkout -b ${BRANCH_NAME}
+        git push origin ${BRANCH_NAME}
+      - git branch
+      - git branch --set-upstream-to=origin/main ${BRANCH_NAME}
+
+  commit:
+    desc: Commit + push code into branch
+    cmds:
+      - git pull
+      - |
+        echo "ENTER COMMIT MESSAGE"
+        read COMMIT_MESSAGE;
+        git add *
+        git add .github/workflows/*
+        git commit -am "$(echo ${COMMIT_MESSAGE})"
+        git push origin -u {{ .BRANCH }}
+
+  pr:
+    desc: Create pull request into main
+    cmds:
+      - task: commit
+      - gh pr create -t "{{ .BRANCH }}" -b "{{ .BRANCH }} branch into main"
+      - sleep 20s
+      - gh pr checks $(gh pr list | grep "^[^#;]" | awk '{print $1}') --watch
+      - gh pr merge $(gh pr list | grep "^[^#;]" | awk '{print $1}') --auto --rebase --delete-branch
+      - git checkout main && git pull
+  
   tag:
     desc: Tag repo
     cmds:
