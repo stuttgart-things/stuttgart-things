@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: ca-pemstore
+  name: ca-certificates.crt
   namespace: crossplane-system
 data:
   labul-vsphere.crt: |-
