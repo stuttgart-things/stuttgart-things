@@ -19,5 +19,5 @@ spec:
   values:
     provider:
       packages:
-        - xpkg.upbound.io/upbound/provider-terraform:v0.13.0
+        # - xpkg.upbound.io/upbound/provider-terraform:v0.13.0
         - crossplanecontrib/provider-helm:v0.16.0

@@ -24,7 +24,7 @@ spec:
 apiVersion: tf.upbound.io/v1beta1
 kind: Workspace
 metadata:
-  name: example-inline
+  name: example-inline2
   annotations:
     crossplane.io/external-name: hello
 spec:
@@ -33,9 +33,9 @@ spec:
   forProvider:
     source: Inline
     module: |
-      output "hello_world" {
-        value = "Hello, World!"
+      output "hello_world2" {
+        value = "Hello, World!2"
       }
   writeConnectionSecretToRef:
     namespace: default
-    name: terraform-workspace-example-inline
+    name: terraform-workspace-example-inline2
