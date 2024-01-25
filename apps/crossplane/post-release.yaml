@@ -28,6 +28,9 @@ spec:
           name: cert-bundle
           namespace: crossplane-system
         spec:
+          envFrom:
+            - secretRef:
+                name: s3
           volumeMounts:
             - name: cert-bundle
               mountPath: /etc/ssl/certs
