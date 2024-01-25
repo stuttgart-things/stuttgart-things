@@ -1,0 +1,69 @@
+# ---
+# apiVersion: resources.stuttgart-things.com/v1alpha1
+# kind: VsphereVM
+# metadata:
+#   name: torronto
+#   namespace: default
+# spec:
+#   providerRef:
+#     name: terraform-default
+#   vm:
+#     count: "1"
+#     name: torronto
+#     ram: "4096"
+#     disk: "32"
+#     cpu: "8"
+#     firmware: bios
+#     folderPath: phermann/testing
+#     datacenter: /LabUL
+#     datastore: /LabUL/datastore/UL-ESX-SAS-02
+#     resourcePool: /LabUL/host/Cluster01/Resources
+#     network: /LabUL/network/LAB-10.31.103
+#     template: /LabUL/vm/phermann/vm-templates/ubuntu22
+#     bootstrap: '["echo STUTTGART-THINGS"]'
+#     annotation: VSPHERE-VM BUILD w/ CROSSPLANE FOR STUTTGART-THINGS
+#     unverifiedSsl: "true"
+#   tfvars:
+#     secretName: vsphere-labul-tfvars
+#     secretNamespace: default
+#     secretKey: vsphere-labul.tfvars
+#   connectionSecret:
+#     name: torronto
+#     namespace: default
+#   compositionRef:
+#     name: vsphere-vm
+---
+# ---
+# apiVersion: resources.stuttgart-things.com/v1alpha1
+# kind: VsphereVM
+# metadata:
+#   name: minnesota
+#   namespace: default
+# spec:
+#   providerRef:
+#     name: terraform-default
+#   vm:
+#     count: "1"
+#     name: minnesota
+#     ram: "4096"
+#     disk: "32"
+#     cpu: "8"
+#     firmware: bios
+#     folderPath: stuttgart-things/testing
+#     datacenter: /NetApp-HCI-Datacenter
+#     datastore: /NetApp-HCI-Datacenter/datastore/DatastoreCluster/NetApp-HCI-Datastore-02
+#     resourcePool: Resources
+#     network: /NetApp-HCI-Datacenter/network/tiab-prod
+#     template: /NetApp-HCI-Datacenter/vm/stuttgart-things/vm-templates/ubuntu22
+#     bootstrap: '["echo STUTTGART-THINGS"]'
+#     annotation: VSPHERE-VM BUILD w/ CROSSPLANE FOR STUTTGART-THINGS
+#     unverifiedSsl: "true"
+#   tfvars:
+#     secretName: vsphere-labda-tfvars
+#     secretNamespace: default
+#     secretKey: vsphere-labda.tfvars
+#   connectionSecret:
+#     name: minnesota
+#     namespace: default
+#   compositionRef:
+#     name: vsphere-vm
