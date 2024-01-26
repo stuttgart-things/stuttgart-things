@@ -32,12 +32,12 @@ spec:
             - secretRef:
                 name: s3
           volumeMounts:
-            - name: cert-bundle
+            - name: cacerts
               mountPath: /etc/ssl/certs
           volumes:
-            - name: cert-bundle
+            - name: cacerts
               configMap:
-                name: cert-bundle
+                name: cacerts
       provider:
         apiVersion: pkg.crossplane.io/v1
         kind: Provider
