@@ -31,13 +31,13 @@ spec:
           envFrom:
             - secretRef:
                 name: s3
-          #volumeMounts:
-          #  - name: cacerts
-          #    mountPath: /etc/ssl/certs
-          #volumes:
-          #  - name: cacerts
-          #    configMap:
-          #      name: cacerts
+          volumeMounts:
+            - name: cacerts
+              mountPath: /etc/ssl/certs/labul-vsphere.crt
+          volumes:
+            - name: cacerts
+              configMap:
+                name: cacerts
       provider:
         apiVersion: pkg.crossplane.io/v1
         kind: Provider
