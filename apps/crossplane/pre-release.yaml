@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: cert-bundle
+  name: cacerts
   namespace: crossplane-system
 data:
   ca-certificates.crt: |-
