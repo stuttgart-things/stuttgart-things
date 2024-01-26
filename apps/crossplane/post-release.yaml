@@ -33,7 +33,7 @@ spec:
                 name: s3
           volumeMounts:
             - name: cacerts
-              mountPath: /etc/ssl/certs/labul-vsphere.crt
+              mountPath: /etc/ssl/certs/labul.pem
           volumes:
             - name: cacerts
               configMap:
