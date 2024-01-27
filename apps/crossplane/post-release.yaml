@@ -43,10 +43,10 @@ spec:
                     name: package-runtime
                     resources: {}
                     volumeMounts:
-                    - mountPath: /etc/ssl/certs/labul-vsphere.crt
+                    - mountPath: /etc/ssl/certs/ca-certificates.crt
                       name: cacerts
-                      subPath: labul-vsphere.crt
-                      readOnly: false  
+                      subPath: ca-certificates.crt
+                      readOnly: false
                   volumes:
                   - configMap:
                       name: cacerts
