@@ -21,23 +21,53 @@ spec:
   values:
     installCRDs: true
     customresources:
-      controllerConfig:
-        apiVersion: pkg.crossplane.io/v1alpha1
-        kind: ControllerConfig
+      deploymentTemplate:
+        apiVersion: pkg.crossplane.io/v1beta1
+        kind: DeploymentRuntimeConfig
         metadata:
-          name: cert-bundle
+          name: cacerts-labul-vsphere
           namespace: crossplane-system
         spec:
-          envFrom:
-            - secretRef:
-                name: s3
-          volumeMounts:
-            - name: cert-bundle
-              mountPath: /etc/ssl/certs
-          volumes:
-            - name: cert-bundle
-              configMap:
-                name: cert-bundle
+          deploymentTemplate:
+            spec:
+              selector: {}
+              strategy: {}
+              template:
+                metadata:
+                  creationTimestamp: "2024-01-27T06:45:20Z"
+                spec:
+                  containers:
+                  - envFrom:
+                    - secretRef:
+                        name: s3
+                    name: package-runtime
+                    resources: {}
+                    volumeMounts:
+                    - mountPath: /etc/ssl/certs/labul-vsphere.crt
+                      name: cacerts
+                      subPath: labul-vsphere.crt
+                      readOnly: false  
+                  volumes:
+                  - configMap:
+                      name: cacerts
+                    name: cacerts
+      #controllerConfig:
+      #  apiVersion: pkg.crossplane.io/v1alpha1
+      #  kind: ControllerConfig
+      #  metadata:
+      #   name: cert-bundle
+      #    namespace: crossplane-system
+      #  spec:
+      #    envFrom:
+      #      - secretRef:
+      #          name: s3
+      #    volumeMounts:
+      #      - name: cacerts
+      #        mountPath: /etc/ssl/certs/labul.pem
+      #    volumes:
+      #      - name: cacerts
+      #        configMap:
+      #          name: cacerts
       provider:
         apiVersion: pkg.crossplane.io/v1
         kind: Provider
@@ -45,6 +75,6 @@ spec:
           name: provider-terraform
           namespace: crossplane-system
         spec:
-          package: xpkg.upbound.io/upbound/provider-terraform:v0.13.0
-          controllerConfigRef:
-            name: cert-bundle
+          package: xpkg.upbound.io/upbound/provider-terraform:v0.14.0
+          runtimeConfigRef:
+            name: cacerts-labul-vsphere
