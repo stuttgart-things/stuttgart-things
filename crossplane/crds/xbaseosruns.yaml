@@ -1,0 +1,35 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: xbaseosruns.resources.stuttgart-things.com
+spec:
+  connectionSecretKeys:
+    - kubeconfig
+  group: example.crossplane.io
+  names:
+    kind: XBaseOsRun
+    listKind: xbaseosruns
+  claimNames:
+    plural: BaseOsRun
+    singular: baseosruns
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          description: A BaseOsRun is a composite resource that represents a Tekton PipelineRun provisioning a base setup on a given set of virual machines
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                repoURL:
+                  type: string
+                  description: URL to ArgoCD application repo
+                path:
+                  type: string
+                  description: path to ArgoCD application in the repo
+              required:
+                - repoURL
+                - path

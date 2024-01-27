@@ -1,15 +1,35 @@
 ---
+apiVersion: tf.upbound.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: sandiego-vsphere-vm
+  namespace: crossplane-system
+spec:
+  configuration: |
+    terraform {
+      backend "s3" {
+        endpoint = "https://artifacts.automation.sthings-vsphere.labul.sva.de"
+        key = "muenster.tfstate"
+        region = "main"
+        bucket = "proxmox-vm"
+        skip_credentials_validation = true
+        skip_metadata_api_check = true
+        skip_region_validation = true
+        force_path_style = true
+      }
+    }
+---
 apiVersion: resources.stuttgart-things.com/v1alpha1
 kind: VsphereVM
 metadata:
-  name: torronto
+  name: sandiego
   namespace: default
 spec:
   providerRef:
-    name: terraform-default
+    name: sandiego-vsphere-vm
   vm:
     count: "1"
-    name: torronto
+    name: sandiego
     ram: "4096"
     disk: "32"
     cpu: "8"
@@ -24,11 +44,11 @@ spec:
     annotation: VSPHERE-VM BUILD w/ CROSSPLANE FOR STUTTGART-THINGS
     unverifiedSsl: "true"
   tfvars:
-    secretName: vsphere-labul-tfvars
-    secretNamespace: default
-    secretKey: vsphere-labul.tfvars
+    secretName: vsphere-tfvars
+    secretNamespace: crossplane-system
+    secretKey: terraform.tfvars
   connectionSecret:
-    name: torronto
-    namespace: default
+    name: sandiego
+    namespace: crossplane-system
   compositionRef:
     name: vsphere-vm
