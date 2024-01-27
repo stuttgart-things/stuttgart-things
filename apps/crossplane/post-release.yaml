@@ -21,23 +21,23 @@ spec:
   values:
     installCRDs: true
     customresources:
-      controllerConfig:
-        apiVersion: pkg.crossplane.io/v1alpha1
-        kind: ControllerConfig
-        metadata:
-          name: cert-bundle
-          namespace: crossplane-system
-        spec:
-          envFrom:
-            - secretRef:
-                name: s3
-          volumeMounts:
-            - name: cacerts
-              mountPath: /etc/ssl/certs/labul.pem
-          volumes:
-            - name: cacerts
-              configMap:
-                name: cacerts
+      #controllerConfig:
+      #  apiVersion: pkg.crossplane.io/v1alpha1
+      #  kind: ControllerConfig
+      #  metadata:
+      #   name: cert-bundle
+      #    namespace: crossplane-system
+      #  spec:
+      #    envFrom:
+      #      - secretRef:
+      #          name: s3
+      #    volumeMounts:
+      #      - name: cacerts
+      #        mountPath: /etc/ssl/certs/labul.pem
+      #    volumes:
+      #      - name: cacerts
+      #        configMap:
+      #          name: cacerts
       provider:
         apiVersion: pkg.crossplane.io/v1
         kind: Provider
