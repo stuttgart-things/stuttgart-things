@@ -77,6 +77,4 @@ spec:
         spec:
           package: xpkg.upbound.io/upbound/provider-terraform:v0.13.0
           runtimeConfigRef:
-            apiVersion: pkg.crossplane.io/v1beta1   # currently apiVersion and kind are optional
-            kind: DeploymentRuntimeConfig
             name: cacerts-labul-vsphere
