@@ -25,7 +25,7 @@ spec:
         apiVersion: pkg.crossplane.io/v1beta1
         kind: DeploymentRuntimeConfig
         metadata:
-          name: cert-bundle
+          name: cacerts-labul-vsphere
           namespace: crossplane-system
         spec:
           deploymentTemplate:
@@ -81,4 +81,4 @@ spec:
           runtimeConfigRef:
             apiVersion: pkg.crossplane.io/v1beta1   # currently apiVersion and kind are optional
             kind: DeploymentRuntimeConfig
-            name: cert-bundle
+            name: cacerts-labul-vsphere
