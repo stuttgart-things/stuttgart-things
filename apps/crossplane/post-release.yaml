@@ -75,6 +75,6 @@ spec:
           name: provider-terraform
           namespace: crossplane-system
         spec:
-          package: xpkg.upbound.io/upbound/provider-terraform:v0.13.0
+          package: xpkg.upbound.io/upbound/provider-terraform:v0.14.0
           runtimeConfigRef:
             name: cacerts-labul-vsphere
