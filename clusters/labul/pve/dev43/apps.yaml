@@ -175,7 +175,7 @@ spec:
   wait: true
   sourceRef:
     kind: GitRepository
-    name: stuttgart-things-github-main
+    name: flux-system
   path: ./crossplane/crds
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -193,6 +193,6 @@ spec:
   wait: true
   sourceRef:
     kind: GitRepository
-    name: stuttgart-things-github-main
+    name: flux-system
   path: ./crossplane/compositions
 ---
