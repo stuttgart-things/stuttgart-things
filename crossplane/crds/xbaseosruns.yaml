@@ -5,13 +5,13 @@ metadata:
 spec:
   connectionSecretKeys:
     - kubeconfig
-  group: example.crossplane.io
+  group: resources.stuttgart-things.com
   names:
     kind: XBaseOsRun
-    listKind: xbaseosruns
+    plural: xbaseosruns
   claimNames:
-    plural: BaseOsRun
-    singular: baseosruns
+    kind: BaseOsRun
+    plural: baseosruns
   versions:
     - name: v1alpha1
       served: true
@@ -24,12 +24,14 @@ spec:
             spec:
               type: object
               properties:
-                repoURL:
+                pipelineRunName:
                   type: string
-                  description: URL to ArgoCD application repo
-                path:
-                  type: string
-                  description: path to ArgoCD application in the repo
+                  description: Name of pipelineRun resource
+                hostNames:
+                  type: array
+                  description: Hostnames for baseos setup
+                  items:
+                    type: string
               required:
-                - repoURL
-                - path
+                - pipelineRunName
+                - hostNames

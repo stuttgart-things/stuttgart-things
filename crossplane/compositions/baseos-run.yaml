@@ -1,4 +1,22 @@
 ---
+# https://blogs.oracle.com/developers/post/a-sneak-peak-into-the-upcoming-oci-crossplane-provider
+
+
+#     - type: FromCompositeFieldPath
+#       fromFieldPath: spec.vcn.cidrBlocks
+#       toFieldPath: spec.forProvider.cidrBlocks
+
+# apiVersion: oci.platformref.crossplane.io/v1alpha1
+# kind: VcnExample1
+# metadata:
+#   name: vcnexample1
+# spec:
+#   compartmentId: ocid1.compartment.
+#   vcn:
+#     name: vcnexample1
+#     cidrBlocks:
+#     - 192.168.0.0/22
+#     dnsLabel: vcn1
 apiVersion: apiextensions.crossplane.io/v1
 kind: Composition
 metadata:
