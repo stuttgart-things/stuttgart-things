@@ -31,7 +31,16 @@ spec:
                   type: string
                   default: tektoncd
                   description: Namespace of pipelineRun resource
-                plabooks:
+                roles:
+                  type: array
+                  description: Ansible playbooks
+                  items:
+                    type: string
+                  default:
+                    - "https://github.com/stuttgart-things/install-requirements.git"
+                    - "https://github.com/stuttgart-things/manage-filesystem.git"
+                    - "https://github.com/stuttgart-things/install-configure-vault.git"
+                playbooks:
                   type: array
                   description: Ansible playbooks
                   items:

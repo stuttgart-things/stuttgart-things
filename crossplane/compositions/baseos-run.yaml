@@ -103,7 +103,7 @@ spec:
           fromFieldPath: spec.pipelineRunNamespace
           toFieldPath: spec.forProvider.manifest.metadata.namespace
         - type: FromCompositeFieldPath
-          fromFieldPath: spec.plabooks
+          fromFieldPath: spec.playbooks
           toFieldPath: spec.forProvider.manifest.spec.params[8].value
 
 
