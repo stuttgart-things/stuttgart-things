@@ -31,7 +31,7 @@ spec:
                     - name: url
                       value: https://github.com/stuttgart-things/stuttgart-things.git
                     - name: revision
-                      value: rancher-280
+                      value: main
                     - name: pathInRepo
                       value: stageTime/pipelines/execute-ansible-playbooks.yaml
                 workspaces:
@@ -102,6 +102,12 @@ spec:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.pipelineRunNamespace
           toFieldPath: spec.forProvider.manifest.metadata.namespace
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.workingImage
+          toFieldPath: spec.forProvider.manifest.spec.params[0].value
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.roles
+          toFieldPath: spec.forProvider.manifest.spec.params[7].value
         - type: FromCompositeFieldPath
           fromFieldPath: spec.playbooks
           toFieldPath: spec.forProvider.manifest.spec.params[8].value

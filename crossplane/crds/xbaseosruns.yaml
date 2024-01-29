@@ -31,6 +31,10 @@ spec:
                   type: string
                   default: tektoncd
                   description: Namespace of pipelineRun resource
+                workingImage:
+                  type: string
+                  default: eu.gcr.io/stuttgart-things/sthings-ansible:9.1.0
+                  description: Name of pipelineRun resource
                 roles:
                   type: array
                   description: Ansible playbooks
