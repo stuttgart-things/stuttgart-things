@@ -31,11 +31,14 @@ spec:
                   type: string
                   default: tektoncd
                   description: Namespace of pipelineRun resource
-                # hostNames:
-                #   type: array
-                #   description: Hostnames for baseos setup
-                #   items:
-                #     type: string
+                plabooks:
+                  type: array
+                  description: Ansible playbooks
+                  items:
+                    type: string
+                  default:
+                    - "ansible/playbooks/prepare-env.yaml"
+                    - "ansible/playbooks/base-os.yaml"
               required:
                 - pipelineRunName
                 # - hostNames
