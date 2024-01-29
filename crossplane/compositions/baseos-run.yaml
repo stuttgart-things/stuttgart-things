@@ -1,22 +1,4 @@
 ---
-# https://blogs.oracle.com/developers/post/a-sneak-peak-into-the-upcoming-oci-crossplane-provider
-
-
-#     - type: FromCompositeFieldPath
-#       fromFieldPath: spec.vcn.cidrBlocks
-#       toFieldPath: spec.forProvider.cidrBlocks
-
-# apiVersion: oci.platformref.crossplane.io/v1alpha1
-# kind: VcnExample1
-# metadata:
-#   name: vcnexample1
-# spec:
-#   compartmentId: ocid1.compartment.
-#   vcn:
-#     name: vcnexample1
-#     cidrBlocks:
-#     - 192.168.0.0/22
-#     dnsLabel: vcn1
 apiVersion: apiextensions.crossplane.io/v1
 kind: Composition
 metadata:
@@ -24,23 +6,28 @@ metadata:
   labels:
     crossplane.io/xrd: xbaseosruns.resources.stuttgart-things.com
 spec:
+  writeConnectionSecretsToNamespace: crossplane-system
   compositeTypeRef:
     apiVersion: resources.stuttgart-things.com/v1alpha1
     kind: XBaseOsRun
   resources:
-    - name: baseos-run
-      base:
+    - base:
         apiVersion: kubernetes.crossplane.io/v1alpha2
         kind: Object
         spec:
+          providerConfigRef:
+            name: kubernetes-labul-bootstrap
           forProvider:
             manifest:
               apiVersion: tekton.dev/v1
               kind: PipelineRun
               metadata:
-                name: baseos
+                name: guestbook
                 namespace: tektoncd
               spec:
+                # metadata:
+                #   name: baseos
+                #   namespace: tektoncd
                 pipelineRef:
                   resolver: git
                   params:
@@ -111,3 +98,30 @@ spec:
                     value:
                       - "initial_master_node+[\"sandiego.labul.sva.de\"]"
                       - "additional_master_nodes+[\"\"]"
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.pipelineRunName
+          toFieldPath: spec.forProvider.manifest.metadata.name
+
+
+        # - type: FromCompositeFieldPath
+        #   fromFieldPath: metadata.labels["crossplane.io/claim-name"]
+        #   toFieldPath: spec.forProvider.manifest.spec.metadata.name
+        # - type: FromCompositeFieldPath
+        #   fromFieldPath: metadata.labels["crossplane.io/claim-namespace"]
+        #   toFieldPath: spec.forProvider.manifest.spec.metadata.namespace
+# https://blogs.oracle.com/developers/post/a-sneak-peak-into-the-upcoming-oci-crossplane-provider
+#     - type: FromCompositeFieldPath
+#       fromFieldPath: spec.vcn.cidrBlocks
+#       toFieldPath: spec.forProvider.cidrBlocks
+# apiVersion: oci.platformref.crossplane.io/v1alpha1
+# kind: VcnExample1
+# metadata:
+#   name: vcnexample1
+# spec:
+#   compartmentId: ocid1.compartment.
+#   vcn:
+#     name: vcnexample1
+#     cidrBlocks:
+#     - 192.168.0.0/22
+#     dnsLabel: vcn1

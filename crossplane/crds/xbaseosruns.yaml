@@ -27,11 +27,15 @@ spec:
                 pipelineRunName:
                   type: string
                   description: Name of pipelineRun resource
-                hostNames:
-                  type: array
-                  description: Hostnames for baseos setup
-                  items:
-                    type: string
+                pipelineNamespace:
+                  type: string
+                  default: tektoncd
+                  description: Namespace of pipelineRun resource
+                # hostNames:
+                #   type: array
+                #   description: Hostnames for baseos setup
+                #   items:
+                #     type: string
               required:
                 - pipelineRunName
-                - hostNames
+                # - hostNames
