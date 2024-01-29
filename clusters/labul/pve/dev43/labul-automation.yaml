@@ -1,0 +1,81 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: Bucket
+metadata:
+  name: artifacts-proxmoxvm
+  namespace: flux-system
+spec:
+  interval: 5m0s
+  endpoint: artifacts.automation.sthings-vsphere.labul.sva.de
+  insecure: false
+  secretRef:
+    name: artifacts-labul-automation
+  bucketName: proxmoxvm
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: Bucket
+metadata:
+  name: artifacts-vspherevm
+  namespace: flux-system
+spec:
+  interval: 5m0s
+  endpoint: artifacts.automation.sthings-vsphere.labul.sva.de
+  insecure: false
+  secretRef:
+    name: artifacts-labul-automation
+  bucketName: vspherevm
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: crossplane-vspherevm
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  prune: true
+  path: ./
+  sourceRef:
+    kind: Bucket
+    name: artifacts-vspherevm
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: crossplane-proxmoxvm
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  prune: true
+  path: ./
+  sourceRef:
+    kind: Bucket
+    name: artifacts-proxmoxvm
+---
+kind: Secret
+apiVersion: v1
+metadata:
+    name: artifacts-labul-automation
+    namespace: flux-system
+stringData:
+    accesskey: ENC[AES256_GCM,data:Z44Rq26t0w==,iv:kdiC/v76D6PnQBTmTyQSko8CfxPwUOS87TctWsrCV5c=,tag:A0o0iONnUoDV4NQQvMWYNw==,type:str]
+    secretkey: ENC[AES256_GCM,data:ubZAXqv9AIA=,iv:3kvOlEefZkwFi26aWUU57jycVHj1I+5neqSD6XNuclk=,tag:AoIXvm87Dy/ENaIO9/lhLQ==,type:str]
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age1g438n4lx6h7x7u42q652e9ygzrkkwlul49e8zsmsrfmxm9k3tvcsykhff4
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB5U2JZMlV1RUR2WFFHdWx6
+            QjFlQ2FlM1FScDU1M3AzNDZyWmFCajlyZHlvCnd3dElseEtiY0FzRzBPZlVDYlZp
+            aUlUSUlCUjVpVkdiTEJab2ZDZUxDODAKLS0tIGdGK1JsczFXSVB5dFpUaUkxQWNF
+            eG5OS3JBYnU4WEVvTmMxRUl0UWhZU2cKv4P5aeAyjxFZLVtt1cscbbDPwq7qaGTG
+            2410cuqHraRd7RbbJEU4lJE6IJhGvRYccxchrxnQjOLuKegsZYiHBg==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2024-01-29T13:08:42Z"
+    mac: ENC[AES256_GCM,data:8WH9Pvh6jhixh1DgxY39YPHz4ooYwAKuNNT3ySDhcwS0BZlKi1omVmXj2viqPGyWb++ZaGp1DltsiY20CsdcGtvVJysSJ6snDfy22FT4LsI5xDmrOSfmeTRNST+q7hNGhxmxA1QuOm/Zo4S8n9+dOjlNfTF1wVyi3tCePKt50Uc=,iv:EWCwa0XI3mHoTZK1rjkPU0gZz9PJeUrmlzbxncuniQw=,tag:4hky3MkGOu7qFNxUcWbnag==,type:str]
+    pgp: []
+    encrypted_regex: ^(data|stringData)$
+    version: 3.8.1
