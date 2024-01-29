@@ -104,7 +104,7 @@ spec:
           toFieldPath: spec.forProvider.manifest.metadata.namespace
         - type: FromCompositeFieldPath
           fromFieldPath: spec.plabooks
-          toFieldPath: spec.forProvider.manifest.spec.params.params[8].value
+          toFieldPath: spec.forProvider.manifest.spec.params[8].value
 
 
         # - type: FromCompositeFieldPath
