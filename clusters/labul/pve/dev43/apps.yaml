@@ -176,7 +176,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./crossplane/crds
+  path: ./crossplane/xcrds
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
