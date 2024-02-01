@@ -1,0 +1,94 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: xansibleruns.resources.stuttgart-things.com
+spec:
+  connectionSecretKeys:
+    - kubeconfig
+  group: resources.stuttgart-things.com
+  names:
+    kind: XAnsibleRun
+    plural: xansibleruns
+  claimNames:
+    kind: AnsibleRun
+    plural: ansibleruns
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          description: A AnsibleRun is a composite resource that represents a Tekton PipelineRun provisioning a base setup on a given set of virual machines
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                pipelineRunName:
+                  type: string
+                  description: Name of pipelineRun resource
+                pipelineNamespace:
+                  type: string
+                  default: tektoncd
+                  description: Namespace of pipelineRun resource
+                workingImage:
+                  type: string
+                  default: eu.gcr.io/stuttgart-things/sthings-ansible:9.1.0
+                  description: Name of pipelineRun resource
+                vaultSecretName:
+                  type: string
+                  default: vault
+                  description: Name of vault secret
+                gitRepoUrl:
+                  type: string
+                  default: https://github.com/stuttgart-things/stuttgart-things.git
+                  description: Git repo url
+                gitRevision:
+                  type: string
+                  default: main
+                  description: Git revision
+                ansibleVarsFile:
+                  type: array
+                  description: Ansible vars file as a list
+                  items:
+                    type: string
+                  default:
+                    - "manage_filesystem+-true"
+                    - "update_packages+-true"
+                    - "install_requirements+-true"
+                    - "install_motd+-true"
+                    - "username+-sthings"
+                    - "lvm_home_sizing+-'15%'"
+                    - "lvm_root_sizing+-'35%'"
+                    - "lvm_var_sizing+-'50%'"
+                    - "send_to_msteams+-true"
+                    - "reboot_all+-false"
+                inventory:
+                  type: array
+                  description: Ansible inventory as a list
+                  items:
+                    type: string
+                  default:
+                    - "initial_master_node+[\"sandiego.labul.sva.de\"]"
+                    - "additional_master_nodes+[\"\"]"
+                roles:
+                  type: array
+                  description: Ansible roles
+                  items:
+                    type: string
+                  default:
+                    - "https://github.com/stuttgart-things/install-requirements.git"
+                    - "https://github.com/stuttgart-things/manage-filesystem.git"
+                    - "https://github.com/stuttgart-things/install-configure-vault.git"
+                playbooks:
+                  type: array
+                  description: Ansible playbooks
+                  items:
+                    type: string
+                  default:
+                    - "ansible/playbooks/prepare-env.yaml"
+                    - "ansible/playbooks/base-os.yaml"
+              required:
+                - pipelineRunName
+                # - hostNames

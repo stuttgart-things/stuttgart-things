@@ -2,14 +2,14 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: Composition
 metadata:
-  name: baseos-run
+  name: ansible-run
   labels:
-    crossplane.io/xrd: xbaseosruns.resources.stuttgart-things.com
+    crossplane.io/xrd: xansibleruns.resources.stuttgart-things.com
 spec:
   writeConnectionSecretsToNamespace: crossplane-system
   compositeTypeRef:
     apiVersion: resources.stuttgart-things.com/v1alpha1
-    kind: XBaseOsRun
+    kind: XAnsibleRun
   resources:
     - base:
         apiVersion: kubernetes.crossplane.io/v1alpha2
@@ -22,7 +22,7 @@ spec:
               apiVersion: tekton.dev/v1
               kind: PipelineRun
               metadata:
-                name: baseos-setup
+                name: ansible-setup
                 namespace: tektoncd
               spec:
                 pipelineRef:
@@ -54,7 +54,7 @@ spec:
                   - name: gitRevision
                     value: "rancher-280"
                   - name: gitWorkspaceSubdirectory
-                    value: "/ansible/rke2"
+                    value: "/ansible/workdir/"
                   - name: vaultSecretName
                     value: vault
                   - name: installExtraRoles
@@ -100,18 +100,32 @@ spec:
           fromFieldPath: spec.pipelineRunName
           toFieldPath: spec.forProvider.manifest.metadata.name
         - type: FromCompositeFieldPath
-          fromFieldPath: spec.pipelineRunNamespace
+          fromFieldPath: spec.pipelineNamespace
           toFieldPath: spec.forProvider.manifest.metadata.namespace
         - type: FromCompositeFieldPath
           fromFieldPath: spec.workingImage
           toFieldPath: spec.forProvider.manifest.spec.params[0].value
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.gitRepoUrl
+          toFieldPath: spec.forProvider.manifest.spec.params[2].value
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.gitRevision
+          toFieldPath: spec.forProvider.manifest.spec.params[3].value
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.vaultSecretName
+          toFieldPath: spec.forProvider.manifest.spec.params[5].value
         - type: FromCompositeFieldPath
           fromFieldPath: spec.roles
           toFieldPath: spec.forProvider.manifest.spec.params[7].value
         - type: FromCompositeFieldPath
           fromFieldPath: spec.playbooks
           toFieldPath: spec.forProvider.manifest.spec.params[8].value
-
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.ansibleVarsFile
+          toFieldPath: spec.forProvider.manifest.spec.params[9].value
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.inventory
+          toFieldPath: spec.forProvider.manifest.spec.params[10].value
 
         # - type: FromCompositeFieldPath
         #   fromFieldPath: metadata.labels["crossplane.io/claim-name"]
