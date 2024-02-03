@@ -1,0 +1,60 @@
+---
+name: K8s-SAST-Polaris
+on:
+  workflow_call:
+    inputs:
+      runs-on:
+        required: true
+        type: string
+        default: self-hosted
+      polaris-image:
+        default: quay.io/fairwinds/polaris:8.5
+        required: true
+        type: string
+      severity:
+        default: danger
+        required: false
+        type: string
+      scan-object:
+        default: manifest
+        required: false
+        type: string
+      scan-path:
+        default: nginx.yaml
+        required: false
+        type: string
+      output-path:
+        default: /tmp/polaris-results.json
+        required: false
+        type: string
+
+
+jobs:
+  scan-manifest-polaris:
+    runs-on: ${{ inputs.runs-on }}
+    container:
+      image: ${{ inputs.polaris-image }}
+    steps:
+      - name: Polaris Audit Manifest files
+        run: |
+          if [[ "${{ inputs.scan-object }}" == "manifest" ]]; then
+            polaris audit \
+            --audit-path ${{ inputs.scan-path }} \
+            --only-show-failed-tests \
+            --severity ${{ inputs.severity }} \
+            --output-file /tmp/output.json
+          fi
+          
+          if [[ "${{ inputs.scan-object }}" == "helm" ]]; then
+            polaris audit \
+            --helm-chart ${{ inputs.scan-path }} \
+            --only-show-failed-tests \
+            --severity ${{ inputs.severity }} \
+            --output-file ${{ output-path }}
+          fi
+          
+      - name: Upload scan results as artifacts    
+        uses: actions/upload-artifact@v4.3.0
+        with:
+          name: polaris-results
+          path: "${{ output-path }}"
