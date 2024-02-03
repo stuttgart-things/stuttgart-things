@@ -23,12 +23,18 @@ on:
         default: nginx.yaml
         required: false
         type: string
-
+      environment-name:
+        default: k8s
+        required: true
+        type: string
+        
 jobs:
   scan-manifest-polaris:
     runs-on: ${{ inputs.runs-on }}
     container:
       image: ${{ inputs.polaris-image }}
+    environment: ${{ inputs.environment-name }}
+    continue-on-error: false
     steps:
       - name: Polaris Audit Manifest files
         run: |
