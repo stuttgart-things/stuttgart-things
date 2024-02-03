@@ -8,8 +8,12 @@ on:
         type: string
         default: self-hosted
       polaris-image:
-        default: eu.gcr.io/stuttgart-things/sthings-polaris:8.5.4
-        required: true
+        default: eu.gcr.io/stuttgart-things/sthings-polaris:8.5.4-3.14.0
+        required: false
+        type: string
+      python-image:
+        default: python:alpine3.19
+        required: false
         type: string
       severity:
         default: danger
@@ -39,8 +43,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4.1.1
         with:
-          ref: main
           fetch-depth: 0
+
       - name: Polaris Audit Manifest files
         run: |
           if [[ "${{ inputs.scan-object }}" == "manifest" ]]; then
@@ -64,3 +68,25 @@ jobs:
         with:
           name: polaris-results
           path: /tmp/polaris-results.json
+
+  transform-manifest-polaris:
+    needs: scan-manifest-polaris
+    runs-on: ${{ inputs.runs-on }}
+    container:
+      image: ${{ inputs.polaris-image }}
+    environment: ${{ inputs.environment-name }}
+    continue-on-error: false
+    steps:
+      - uses: actions/download-artifact@v4.1.1
+        with:
+          name: polaris-results
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - uses: jannekem/run-python-script-action@v1
+        with:
+          script: |
+            import os
+            print("Directory contents:")
+            for f in os.listdir():
+                print(f)
