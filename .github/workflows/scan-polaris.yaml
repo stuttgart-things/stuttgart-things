@@ -23,11 +23,6 @@ on:
         default: nginx.yaml
         required: false
         type: string
-      output-path:
-        default: /tmp/polaris-results.json
-        required: false
-        type: string
-
 
 jobs:
   scan-manifest-polaris:
@@ -42,7 +37,7 @@ jobs:
             --audit-path ${{ inputs.scan-path }} \
             --only-show-failed-tests \
             --severity ${{ inputs.severity }} \
-            --output-file /tmp/output.json
+            --output-file /tmp/polaris-results.json
           fi
           
           if [[ "${{ inputs.scan-object }}" == "helm" ]]; then
@@ -50,11 +45,11 @@ jobs:
             --helm-chart ${{ inputs.scan-path }} \
             --only-show-failed-tests \
             --severity ${{ inputs.severity }} \
-            --output-file ${{ output-path }}
+            --output-file /tmp/polaris-results.json
           fi
           
       - name: Upload scan results as artifacts    
         uses: actions/upload-artifact@v4.3.0
         with:
           name: polaris-results
-          path: ${{ output-path }}
+          path: /tmp/polaris-results.json
