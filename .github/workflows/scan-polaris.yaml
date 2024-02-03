@@ -8,7 +8,7 @@ on:
         type: string
         default: self-hosted
       polaris-image:
-        default: quay.io/fairwinds/polaris:8.5
+        default: eu.gcr.io/stuttgart-things/sthings-polaris:8.5.4
         required: true
         type: string
       severity:
@@ -27,7 +27,7 @@ on:
         default: k8s
         required: true
         type: string
-        
+
 jobs:
   scan-manifest-polaris:
     runs-on: ${{ inputs.runs-on }}
@@ -38,7 +38,7 @@ jobs:
     steps:
       #- name: Checkout code
       #  uses: actions/checkout@v4.1.1
-    
+
       - name: Polaris Audit Manifest files
         run: |
           if [[ "${{ inputs.scan-object }}" == "manifest" ]]; then
@@ -48,7 +48,7 @@ jobs:
             --severity ${{ inputs.severity }} \
             --output-file /tmp/polaris-results.json
           fi
-          
+
           if [[ "${{ inputs.scan-object }}" == "helm" ]]; then
             polaris audit \
             --helm-chart ${{ inputs.scan-path }} \
@@ -56,8 +56,8 @@ jobs:
             --severity ${{ inputs.severity }} \
             --output-file /tmp/polaris-results.json
           fi
-          
-      - name: Upload scan results as artifacts    
+
+      - name: Upload scan results as artifacts
         uses: actions/upload-artifact@v4.3.0
         with:
           name: polaris-results
