@@ -80,10 +80,10 @@ jobs:
       - uses: actions/download-artifact@v4.1.1
         with:
           name: polaris-results
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'
-      - uses: jannekem/run-python-script-action@v1
+      # - uses: actions/setup-python@v4
+      #   with:
+      #     python-version: '3.x'
+      - uses: jannekem/run-python-script-action@v1.7
         with:
           script: |
             import os
