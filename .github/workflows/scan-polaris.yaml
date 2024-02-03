@@ -82,7 +82,12 @@ jobs:
         with:
           name: polaris-results
 
-      - uses: jannekem/run-python-script-action@v1.7
+      - name: Install dependecies
+        run: |
+          pip install jinja2
+
+      - name: Run transformation
+        uses: jannekem/run-python-script-action@v1.7
         with:
           script: |
             import subprocess
