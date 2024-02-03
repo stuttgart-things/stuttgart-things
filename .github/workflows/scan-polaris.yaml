@@ -77,16 +77,32 @@ jobs:
     environment: ${{ inputs.environment-name }}
     continue-on-error: false
     steps:
-      - uses: actions/download-artifact@v4.1.1
+      - name: Download polaris artifacts
+        uses: actions/download-artifact@v4.1.1
         with:
           name: polaris-results
-      # - uses: actions/setup-python@v4
-      #   with:
-      #     python-version: '3.x'
+
       - uses: jannekem/run-python-script-action@v1.7
         with:
           script: |
+            import subprocess
+            import json
             import os
-            print("Directory contents:")
-            for f in os.listdir():
-                print(f)
+            from datetime import datetime
+            from jinja2 import Environment, FileSystemLoader
+
+            # VARIABLES
+            now = datetime.now()
+            upload_address = "https://artifacts.app.4sthings.tiab.ssc.sva.de"
+            current_dir = os.path.dirname(os.path.realpath(__file__))
+
+            # INPUT
+            polaris_output_filepath = '/tmp/polaris2.json'
+            grafana_template_filename = 'grafana-template.json'
+
+            # OUTPUT
+            scan_id = f'{now.year}-{now.month}-{now.day}-{now.minute}-{now.second}'
+            data_json_outputfile = 'data-'+scan_id+'.json'
+            template_json_outputfile = 'template-'+scan_id+'.json'
+
+            print(scan_id)
