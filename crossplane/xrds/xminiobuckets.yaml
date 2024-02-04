@@ -1,0 +1,69 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: xminiobuckets.resources.stuttgart-things.com
+spec:
+  group: resources.stuttgart-things.com
+  names:
+    kind: XMinioBucket
+    plural: xminiobuckets
+  claimNames:
+    kind: MinioBucket
+    plural: miniobuckets
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                url:
+                  type: string
+                bucket:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                  required:
+                    - name
+                tfvars:
+                  type: object
+                  properties:
+                    secretName:
+                      type: string
+                    secretNamespace:
+                      type: string
+                      default: default
+                    secretKey:
+                      type: string
+                      default: terraform.tfvars
+                  required:
+                    - secretName
+                connectionSecret:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    namespace:
+                      type: string
+                      default: default
+                  required:
+                    - name
+                providerRef:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                  required:
+                    - name
+              required:
+                - url
+                - bucket
+                - tfvars
+                - connectionSecret
+                - providerRef

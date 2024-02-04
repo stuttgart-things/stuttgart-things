@@ -45,3 +45,16 @@ spec:
             name: ${CLUSTER_ISSUER}
             kind: ClusterIssuer
           secretName: ${INGRESS_HOSTNAME_API}-ingress-tls
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: minio-deployment
+  namespace: minio
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: nfs4-csi
