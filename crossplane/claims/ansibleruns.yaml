@@ -23,36 +23,12 @@ spec:
     - "lvm_var_sizing+-'50%'"
     - "send_to_msteams+-true"
     - "reboot_all+-false"
-  # gitRepoUrl: https://github.com/stuttgart-things/stuttgart-things.git
-  # gitRevision: main
-  # vaultSecretName: vault
-  # pipelineNamespace: tektoncd
-  # workingImage: eu.gcr.io/stuttgart-things/sthings-ansible:9.1.0
-  # roles:
-  #   - "https://github.com/stuttgart-things/install-requirements.git"
-  #   - "https://github.com/stuttgart-things/manage-filesystem.git"
-  #   - "https://github.com/stuttgart-things/install-configure-vault.git"
-
-
-  # providerRef:
-  #   name: s3-proxmox
-  # vm:
-  #   count: "{{ .vmCount }}"
-  #   name: "{{ .vmName }}"
-  #   cpu: "{{ .vmCpu }}"
-  #   ram: "{{ .vmMem }}"
-  #   disk: "{{ .vmDisk }}"
-  #   template: "{{ .vmTemplate }}"
-  #   network: "{{ .vmNetwork }}"
-  #   datastore: "{{ .vmDatastore }}"
-  #   folderPath: "{{ .vmFolder }}"
-  #   clusterNode: "{{ .vmNode }}"
-  # tfvars:
-  #   secretName: pve-tfvars
-  #   secretNamespace: default
-  #   secretKey: terraform.tfvars
-  # connectionSecret:
-  #   name: "{{ .vmName }}"
-  #   namespace: default
-  # compositionRef:
-  #   name: proxmox-vm
+  gitRepoUrl: https://github.com/stuttgart-things/stuttgart-things.git
+  gitRevision: main
+  vaultSecretName: vault
+  pipelineNamespace: tektoncd
+  workingImage: eu.gcr.io/stuttgart-things/sthings-ansible:9.1.0
+  roles:
+    - "https://github.com/stuttgart-things/install-requirements.git"
+    - "https://github.com/stuttgart-things/manage-filesystem.git"
+    - "https://github.com/stuttgart-things/install-configure-vault.git"

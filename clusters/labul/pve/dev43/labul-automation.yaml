@@ -15,6 +15,19 @@ spec:
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: Bucket
 metadata:
+  name: artifacts-ansiblerun
+  namespace: flux-system
+spec:
+  interval: 5m0s
+  endpoint: artifacts.automation.sthings-vsphere.labul.sva.de
+  insecure: false
+  secretRef:
+    name: artifacts-labul-automation
+  bucketName: ansiblerun
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: Bucket
+metadata:
   name: artifacts-vspherevm
   namespace: flux-system
 spec:
@@ -37,6 +50,19 @@ spec:
   sourceRef:
     kind: Bucket
     name: artifacts-vspherevm
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: crossplane-ansiblerun
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  prune: true
+  path: ./
+  sourceRef:
+    kind: Bucket
+    name: artifacts-ansiblerun
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
