@@ -3,6 +3,7 @@ apiVersion: resources.stuttgart-things.com/v1alpha1
 kind: VsphereVM
 metadata:
   name: vsphere-vm-claim-11
+  namespace: default
 spec:
   vm:
     count: "1"
