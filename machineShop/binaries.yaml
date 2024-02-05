@@ -85,6 +85,7 @@ binary:
       url: https://github.com/FairwindsOps/polaris/releases/download/{{ or .polaris "8.5.3" }}/polaris_linux_amd64.tar.gz
       bin: polaris
 
+# https://github.com/vmware/govmomi/releases/download/v0.34.2/govc_Linux_x86_64.tar.gz
 
   #- argocd-vault-plugin:
     #  url: https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/v{{ or .avpVersion "1.17.0" }}/argocd-vault-plugin_{{ or .avpVersion "1.17.0" }}_linux_amd64
