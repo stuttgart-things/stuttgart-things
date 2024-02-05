@@ -2,12 +2,12 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: packer-vsphere-rocky9-baseos-12-25-4
+  name: packer-vsphere-rocky9-baseos-24-2-5
   namespace: tektoncd
 spec:
   params:
     - name: vmTemplateName
-      value: rocky9-12-25
+      value: rocky9-24-2-5
     - name: ansibleExtraVars
       value:
         - "updatePackages+true"
@@ -34,7 +34,7 @@ spec:
     - name: osVersion
       value: rocky9
     - name: packerWorkingImage
-      value: eu.gcr.io/stuttgart-things/sthings-packer:1.10.0-9.1.0
+      value: eu.gcr.io/stuttgart-things/sthings-packer:1.10.1-9.2.0
     - name: vaultSecretName
       value: vault
     - name: cloud

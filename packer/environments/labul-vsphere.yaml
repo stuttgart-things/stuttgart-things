@@ -18,8 +18,8 @@ createUser: true
 rebootBeforeAnsible: false
 
 # UBUNTU23
-ubuntu23PackerMinVersion: 1.10.0
-ubuntu23PackerVMwarePluginMinVersion: 1.2.3
+ubuntu23PackerMinVersion: 1.10.1
+ubuntu23PackerVMwarePluginMinVersion: 1.2.4
 ubuntu23DiskSize: 15360
 ubuntu23networkCard: vmxnet3
 ubuntu23User: ubuntu
@@ -44,8 +44,8 @@ installRequirements: true
 copyNetworkConfig: true
 
 # ROCKY9
-rocky9PackerMinVersion: 1.10.0
-rocky9PackerVMwarePluginMinVersion: 1.2.3
+rocky9PackerMinVersion: 1.10.1
+rocky9PackerVMwarePluginMinVersion: 1.2.4
 rocky9tmpSSHUser: root
 rocky9tmpSSHPassword: ch0coLate
 rocky9IsoUrl: https://download.rockylinux.org/pub/rocky/9/isos/x86_64/Rocky-9.3-x86_64-minimal.iso
@@ -87,9 +87,10 @@ cloudPassword: ref+vault://cloud/vsphere/password
 vcenterServer: 10.31.101.51
 cluster: /LabUL/host/Cluster-V6.5
 datastore: /LabUL/datastore/UL-V5010-01-LUN3
-folder: /phermann/packer
+folder: /stuttgart-things/packer
 host: /LabUL/host/Cluster-V6.5/10.31.101.41
 network: /LabUL/network/LAB-10.31.102
+
 # VAULT
 vaultCloudPath: /cloud/data/vsphere
 vaultCloudKeyUsername: username
