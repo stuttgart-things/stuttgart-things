@@ -39,3 +39,21 @@ spec:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.url
           toFieldPath: spec.forProvider.vars[0].value
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.tfvars.secretName
+          toFieldPath: spec.forProvider.varFiles[0].secretKeyRef.name
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.tfvars.secretNamespace
+          toFieldPath: spec.forProvider.varFiles[0].secretKeyRef.namespace
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.tfvars.secretKey
+          toFieldPath: spec.forProvider.varFiles[0].secretKeyRef.key
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.connectionSecret.name
+          toFieldPath: spec.writeConnectionSecretToRef.name
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.connectionSecret.namespace
+          toFieldPath: spec.writeConnectionSecretToRef.namespace
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.providerRef.name
+          toFieldPath: spec.providerConfigRef.name
