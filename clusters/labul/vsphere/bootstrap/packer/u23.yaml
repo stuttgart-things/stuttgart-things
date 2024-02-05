@@ -2,12 +2,12 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: packer-vsphere-ubuntu23-baseos-12-31-1
+  name: packer-vsphere-ubuntu23-baseos-24-2-5
   namespace: tektoncd
 spec:
   params:
     - name: vmTemplateName
-      value: ubuntu23-01-17
+      value: ubuntu23-24-2-5
     - name: ansibleExtraVars
       value:
         - "updatePackages+true"
@@ -45,16 +45,6 @@ spec:
       value: cloud/data/vsphere:password
     - name: ansibleProvisioning
       value: play
-    - name: ghCliArgs
-      value:
-        - pr
-        - merge
-        - -t
-        - 'tekton-test1'
-        - -b
-        - 'tekton'
-    - name: mergePullRequest
-      value: "true"
   pipelineRef:
     resolver: git
     params:
