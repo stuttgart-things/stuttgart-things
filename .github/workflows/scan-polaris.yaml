@@ -73,7 +73,7 @@ jobs:
     needs: scan-manifest-polaris
     runs-on: ${{ inputs.runs-on }}
     container:
-      image: ${{ inputs.polaris-image }}
+      image: ${{ inputs.python-image }}
     environment: ${{ inputs.environment-name }}
     continue-on-error: false
     steps:
