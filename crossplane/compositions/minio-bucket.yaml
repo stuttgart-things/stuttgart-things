@@ -1,0 +1,41 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: minio-bucket
+  labels:
+    crossplane.io/xrd: xminiobuckets.resources.stuttgart-things.com
+spec:
+  compositeTypeRef:
+    apiVersion: resources.stuttgart-things.com/v1alpha1
+    kind: XMinioBucket
+  resources:
+    - name: minio-bucket
+      base:
+        kind: Workspace
+        apiVersion: tf.upbound.io/v1beta1
+        metadata:
+          annotations:
+            crossplane.io/external-name: minio-bucket
+        spec:
+          providerConfigRef:
+            name: terraform-default
+          writeConnectionSecretToRef:
+            name: minio-bucket
+            namespace: crossplane-system
+          forProvider:
+            source: Remote
+            module: git::https://github.com/stuttgart-things/s3-minio-config?ref=2.0.1-02
+            vars:
+              - key: minio_server
+                type: string
+            varFiles:
+              - source: SecretKey
+                secretKeyRef:
+                  namespace: default
+                  name: s3-tfvars
+                  key: terraform.tfvars
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.url
+          toFieldPath: spec.forProvider.vars[0].value

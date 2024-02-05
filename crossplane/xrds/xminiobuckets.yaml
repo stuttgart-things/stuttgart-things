@@ -24,13 +24,13 @@ spec:
               properties:
                 url:
                   type: string
-                bucket:
-                  type: object
-                  properties:
-                    name:
-                      type: string
-                  required:
-                    - name
+                # bucket:
+                #   type: object
+                #   properties:
+                #     name:
+                #       type: string
+                #   required:
+                #     - name
                 tfvars:
                   type: object
                   properties:
@@ -63,7 +63,7 @@ spec:
                     - name
               required:
                 - url
-                - bucket
+                # - bucket
                 - tfvars
                 - connectionSecret
                 - providerRef
