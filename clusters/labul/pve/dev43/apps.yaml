@@ -185,7 +185,7 @@ metadata:
   namespace: flux-system
 spec:
   dependsOn:
-    - name: crossplane-crds
+    - name: crossplane-xrds
   interval: 1h
   retryInterval: 2m
   timeout: 10m
