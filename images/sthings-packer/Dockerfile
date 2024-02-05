@@ -9,9 +9,9 @@ LABEL version=1.10.0-9.1.0
 
 USER root
 
-ARG PACKER_VERSION=1.10.0
+ARG PACKER_VERSION=1.10.1
 ARG MACHINE_SHOP_VERSION=0.1.52
-ARG GOVC_VERSION=0.33.0
+ARG GOVC_VERSION=0.34.2
 
 RUN apk add --no-cache alpine-sdk build-base apk-tools alpine-conf busybox fakeroot syslinux xorriso squashfs-tools sudo mtools dosfstools grub-efi
 
