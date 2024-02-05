@@ -1,16 +1,16 @@
 ARG REGISTRY=eu.gcr.io
 ARG REPOSITORY=stuttgart-things
 ARG IMAGE=sthings-ansible
-ARG TAG=9.1.0
+ARG TAG=9.2.0
 
 FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
-LABEL version=1.10.0-9.1.0
+LABEL version=1.10.1-9.2.0
 
 USER root
 
 ARG PACKER_VERSION=1.10.1
-ARG MACHINE_SHOP_VERSION=0.1.52
+ARG MACHINE_SHOP_VERSION=v0.1.60
 ARG GOVC_VERSION=0.34.2
 
 RUN apk add --no-cache alpine-sdk build-base apk-tools alpine-conf busybox fakeroot syslinux xorriso squashfs-tools sudo mtools dosfstools grub-efi
@@ -27,7 +27,7 @@ RUN wget -q https://github.com/vmware/govmomi/releases/download/v${GOVC_VERSION}
     && rm -rf govc_Linux_x86_64.tar.gz
 
 # MACHINE-SHOP
-RUN wget -q https://github.com/stuttgart-things/machineShop/releases/download/v${MACHINE_SHOP_VERSION}/machineShop_Linux_x86_64.tar.gz \
+RUN wget -q https://github.com/stuttgart-things/machineShop/releases/download/${MACHINE_SHOP_VERSION}/machineShop_Linux_x86_64.tar.gz \
     && tar -xvf machineShop_Linux_x86_64.tar.gz -C /usr/bin/ machineShop \
     && rm -rf machineShop_Linux_x86_64.tar.gz
 
