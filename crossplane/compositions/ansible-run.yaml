@@ -126,7 +126,9 @@ spec:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.inventory
           toFieldPath: spec.forProvider.manifest.spec.params[10].value
-
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.providerRef.name
+          toFieldPath: spec.providerConfigRef.name
         # - type: FromCompositeFieldPath
         #   fromFieldPath: metadata.labels["crossplane.io/claim-name"]
         #   toFieldPath: spec.forProvider.manifest.spec.metadata.name

@@ -1,0 +1,19 @@
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: MinioBucket
+metadata:
+  name: labul-automation-config
+  namespace: default
+spec:
+  providerRef:
+    name: default
+  url: artifacts.automation.sthings-vsphere.labul.sva.de:443
+  tfvars:
+    secretName: automation-buckets-tfvars
+    secretNamespace: default
+    secretKey: s3.tfvars
+  connectionSecret:
+    name: labul-automation-config
+    namespace: default
+  compositionRef:
+    name: minio-bucket

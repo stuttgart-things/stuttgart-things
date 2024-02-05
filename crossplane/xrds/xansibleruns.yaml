@@ -89,6 +89,13 @@ spec:
                   default:
                     - "ansible/playbooks/prepare-env.yaml"
                     - "ansible/playbooks/base-os.yaml"
+                providerRef:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                  required:
+                    - name
               required:
                 - pipelineRunName
-                # - hostNames
+                - providerRef

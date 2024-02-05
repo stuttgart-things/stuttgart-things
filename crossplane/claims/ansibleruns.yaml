@@ -25,6 +25,8 @@ spec:
     - "reboot_all+-false"
   gitRepoUrl: https://github.com/stuttgart-things/stuttgart-things.git
   gitRevision: main
+  providerRef:
+    name: kubernetes-labul-bootstrap
   vaultSecretName: vault
   pipelineNamespace: tektoncd
   workingImage: eu.gcr.io/stuttgart-things/sthings-ansible:9.1.0
