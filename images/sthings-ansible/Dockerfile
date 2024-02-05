@@ -1,16 +1,17 @@
 ARG REGISTRY=eu.gcr.io
 ARG REPOSITORY=stuttgart-things
 ARG IMAGE=sthings-alpine
-ARG TAG=3.12.0-alpine3.18
+ARG TAG=3.12.1-alpine3.19
 
 FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
 
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
-LABEL version=9.1.0
+LABEL version=9.2.0
 
-ARG FLUX_VERSION=2.1.2
+ARG FLUX_VERSION=2.2.3
 ARG YQ_VERSION=4.40.5
-ARG ANSIBLE_VERSION=9.1.0
+ARG ANSIBLE_VERSION=9.2.0
+
 ENV USER_ID=65532
 ENV GROUP_ID=65532
 

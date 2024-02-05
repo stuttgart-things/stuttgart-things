@@ -90,6 +90,10 @@ spec:
     env:
       - name: ANSIBLE_HOST_KEY_CHECKING
         value: "False"
+      - name: PACKER_LOG
+        value: "1"
+      - name: PACKER_LOG_PATH
+        value: "packerlog.log"
       - name: VAULT_ADDR
         valueFrom:
           secretKeyRef:
