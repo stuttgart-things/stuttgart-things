@@ -34,7 +34,7 @@ spec:
     - name: osVersion
       value: ubuntu23
     - name: packerWorkingImage
-      value: eu.gcr.io/stuttgart-things/sthings-packer:1.10.0-9.1.0
+      value: eu.gcr.io/stuttgart-things/sthings-packer:1.10.0-9.2.0
     - name: vaultSecretName
       value: vault
     - name: cloud
