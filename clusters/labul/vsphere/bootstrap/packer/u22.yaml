@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: packer-vsphere-ubuntu22-baseos-24-2-6-1
+  name: packer-vsphere-ubuntu22-baseos-24-2-6-2
   namespace: tektoncd
 spec:
   params:
@@ -34,7 +34,7 @@ spec:
     - name: osVersion
       value: ubuntu22
     - name: packerWorkingImage
-      value: eu.gcr.io/stuttgart-things/sthings-packer:1.10.0-9.2.0
+      value: eu.gcr.io/stuttgart-things/sthings-packer:1.10.1-9.2.0
     - name: vaultSecretName
       value: vault
     - name: cloud
