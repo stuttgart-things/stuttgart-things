@@ -6,8 +6,6 @@ ansibleProvisioner: github.com/hashicorp/ansible
 ansibleProvisionerMinVersion: 1.1.1
 ipSettleTimeout: 20s
 bootWait: 5s
-ubuntu23IsoUrl: https://releases.ubuntu.com/lunar/ubuntu-23.04-live-server-amd64.iso
-ubuntu23IsoChecksum: c7cda48494a6d7d9665964388a3fc9c824b3bef0c9ea3818a1be982bc80d346b
 cpu: 8
 ram: 8192
 diskSize: 16384
@@ -16,7 +14,20 @@ sshHandshakeAttempts: 900
 createUser: true
 rebootBeforeAnsible: false
 
+# UBUNTU22
+ubuntu22IsoUrl: https://releases.ubuntu.com/jammy/ubuntu-22.04.3-live-server-amd64.iso
+ubuntu22IsoChecksum: a4acfda10b18da50e2ec50ccaf860d7f20b389df8765611142305c0e911d16fd
+ubuntu22PackerMinVersion: 1.10.1
+ubuntu22PackerVMwarePluginMinVersion: 1.2.4
+ubuntu22DiskSize: 15360
+ubuntu22networkCard: vmxnet3
+ubuntu22User: ubuntu
+ubuntu22Password: ubuntu
+ubuntu22ShellProvisioner: "sudo apt-get -y update; sudo apt-get -y upgrade; sudo apt-get -y install python3; sudo apt-get autoremove --purge -y && sudo apt-get autoclean -y && sudo apt-get clean -y; sudo truncate -s 0 /etc/machine-id && echo 'machine-id was reset successfully'; sudo systemctl stop systemd-resolved; sudo sed -i 's/#DNSStubListener=yes/DNSStubListener=no/g' /etc/systemd/resolved.conf; sudo rm /etc/resolv.conf; sudo ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf; sudo systemctl start systemd-resolved"
+
 # UBUNTU23
+ubuntu23IsoUrl: https://releases.ubuntu.com/lunar/ubuntu-23.04-live-server-amd64.iso
+ubuntu23IsoChecksum: c7cda48494a6d7d9665964388a3fc9c824b3bef0c9ea3818a1be982bc80d346b
 ubuntu23PackerMinVersion: 1.10.1
 ubuntu23PackerVMwarePluginMinVersion: 1.2.4
 ubuntu23DiskSize: 15360
@@ -27,20 +38,6 @@ ubuntu23ShellProvisioner: "sudo apt-get -y update; sudo apt-get -y upgrade; sudo
 staticIp: 10.31.102.221/24
 gateway: 10.31.102.251
 nameserver: 10.31.101.50
-
-# ANSIBLE
-ansibleOsProvioning: baseos-setup
-configureClusterNode: false
-installCloudInit: false
-createRkeUser: false
-updateOs: true
-installDocker: false
-installDockerCompose: false
-setDockerProxy: false
-templateCreationSetup: false
-updatePackages: true
-installRequirements: true
-copyNetworkConfig: true
 
 # ROCKY9
 rocky9PackerMinVersion: 1.10.1
@@ -57,7 +54,19 @@ rocky9appStreamRepoUrl: https://download.rockylinux.org/pub/rocky/9/AppStream/x8
 templateCreator: Patrick Hermann (patrick.hermann@sva.de)\n/Christian Mueller (christian.mueller@sva.de)\n
 diskThinProvisioned: true
 
-## ANSIBLE
+# ANSIBLE
+ansibleOsProvioning: baseos-setup
+configureClusterNode: false
+installCloudInit: false
+createRkeUser: false
+updateOs: true
+installDocker: false
+installDockerCompose: false
+setDockerProxy: false
+templateCreationSetup: false
+updatePackages: true
+installRequirements: true
+copyNetworkConfig: true
 ansibleUser: sthings
 ansiblePlayMountPath: /home/nonroot/ansible
 packerConfigMountPath: /home/nonroot/packer
