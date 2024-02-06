@@ -11,7 +11,6 @@ ubuntu23IsoChecksum: c7cda48494a6d7d9665964388a3fc9c824b3bef0c9ea3818a1be982bc80
 cpu: 8
 ram: 8192
 diskSize: 16384
-osVersion: ubuntu23
 sshTimeout: 30m
 sshHandshakeAttempts: 900
 createUser: true
