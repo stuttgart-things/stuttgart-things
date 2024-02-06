@@ -7,7 +7,7 @@ metadata:
 spec:
   params:
     - name: vmTemplateName
-      value: rocky9-24-2-6
+      value: rocky9-24-2-7
     - name: ansibleExtraVars
       value:
         - "updatePackages+true"
