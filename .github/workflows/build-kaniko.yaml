@@ -8,17 +8,19 @@ on:
         type: string
       environment-name:
         default: k8s
-        required: true
+        required: false
         type: string
       dockerfile:
         required: false
         default: "./Dockerfile"
         type: string
       registry:
-        required: true
+        required: false
+        default: "./Dockerfile"
         type: string
       repository:
-        required: true
+        required: false
+        default: "ghcr.io"
         type: string
       image:
         required: true
