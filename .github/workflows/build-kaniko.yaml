@@ -36,6 +36,7 @@ on:
         required: false
         type: string
         default: v1.20.1
+
 jobs:
   kaniko-build:
     runs-on: ${{ inputs.runs-on }}
