@@ -1,0 +1,60 @@
+---
+name: Kaniko Build
+on:
+  workflow_call:
+    inputs:
+      runs-on:
+        required: true
+        type: string
+      environment-name:
+        default: k8s
+        required: true
+        type: string
+      destination:
+        required: true
+        type: string
+      dockerfile:
+        required: false
+        default: "./Dockerfile"
+        type: string
+      registry:
+        required: true
+        type: string
+      repository:
+        required: true
+        type: string
+      image:
+        required: true
+        type: string
+      tag:
+        required: true
+        type: string
+
+jobs:
+  kaniko-build:
+    runs-on: ${{ inputs.runs-on }}
+    environment: ${{ inputs.environment-name }}
+    container:
+      image: gcr.io/kaniko-project/executor:debug # the kaniko image
+    permissions:
+      contents: read # GIT
+    #   packages: write # PUSH TO GCR
+
+    steps:
+      - name: Build and push container test
+        run: |
+          # WRITE CONFIG FILE, CHANGE TO YOUR DESTINATION REGISTRY
+
+          echo ${{ secrets.DOCKER }} | base64 -d > /kaniko/.docker/config.json
+          cat /kaniko/.docker/config.json
+
+          # CONFIGURE GIT
+          export GIT_USERNAME="kaniko-bot"
+          export GIT_PASSWORD="${{ secrets.GITHUB_TOKEN }}"
+
+          # BUILD AND PUSH
+          /kaniko/executor --dockerfile="${{ inputs.dockerfile }}" \
+          --context="${{ github.repositoryUrl }}" \
+          --destination="${{ inputs.registry }}/${{ inputs.repository }}/${{ inputs.image }}:${{ inputs.tag }}" \
+          --push-retry 5 \
+          --image-name-with-digest-file /workspace/image-digest.txt
