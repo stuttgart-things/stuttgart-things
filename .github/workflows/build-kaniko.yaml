@@ -10,9 +10,6 @@ on:
         default: k8s
         required: true
         type: string
-      destination:
-        required: true
-        type: string
       dockerfile:
         required: false
         default: "./Dockerfile"
