@@ -28,24 +28,28 @@ on:
       tag:
         required: true
         type: string
+      kaniko-image:
+        required: false
+        type: string
+        default: gcr.io/kaniko-project/executor
+      kaniko-tag:
+        required: false
+        type: string
+        default: debug
 
 jobs:
   kaniko-build:
     runs-on: ${{ inputs.runs-on }}
     environment: ${{ inputs.environment-name }}
     container:
-      image: gcr.io/kaniko-project/executor:debug # the kaniko image
+      image: ${{ inputs.kaniko-image }}:${{ inputs.kaniko-tag }}
     permissions:
       contents: read # GIT
-    #   packages: write # PUSH TO GCR
-
     steps:
-      - name: Build and push container test
+      - name: Build and push image w/ kaniko
         run: |
-          # WRITE CONFIG FILE, CHANGE TO YOUR DESTINATION REGISTRY
-
-          echo ${{ secrets.DOCKER }} | base64 -d > /kaniko/.docker/config.json
-          cat /kaniko/.docker/config.json
+          # WRITE CONFIG FILE
+          echo ${{ secrets.DOCKER_CONFIG }} | base64 -d > /kaniko/.docker/config.json
 
           # CONFIGURE GIT
           export GIT_USERNAME="kaniko-bot"
