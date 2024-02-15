@@ -35,7 +35,7 @@ on:
       kaniko-tag:
         required: false
         type: string
-        default: v1.20.1
+        default: debug
 
 jobs:
   kaniko-build:
