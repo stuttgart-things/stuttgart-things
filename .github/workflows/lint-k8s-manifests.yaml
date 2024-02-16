@@ -20,6 +20,10 @@ on:
       helm-chart:
         default: false
         type: boolean
+      manifest-path:
+        default: false
+        type: string
+        
 jobs:
   render-helm-chart:
     runs-on: ${{ inputs.runs-on }}
@@ -33,10 +37,11 @@ jobs:
         uses: actions/checkout@v4.1.1
         with:
           fetch-depth: '0'
-      - name: Run kubelinter
+      - name: Template helm chart to manifests
         run: |
-          ls -lta
-          helm version
+          cd ${{ inputs.manifest-path }}
+          helm dep update
+          helm template .
 
   lint-k8s-manifests:
     runs-on: ${{ inputs.runs-on }}
