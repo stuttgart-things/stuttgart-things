@@ -48,6 +48,13 @@ jobs:
     steps:
       - name: Build and push image w/ kaniko
         run: |
+
+          # GENERATE TAG IF NONE IS GIVEN
+          if [ -z "${{ inputs.tag }}" ]
+          then
+            echo 'generate tag'  
+          fi
+
           # WRITE CONFIG FILE
           echo ${{ secrets.DOCKER_CONFIG }} | base64 -d > /kaniko/.docker/config.json
 
