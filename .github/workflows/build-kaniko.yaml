@@ -67,6 +67,6 @@ jobs:
           # BUILD AND PUSH
           /kaniko/executor --dockerfile="${{ inputs.dockerfile }}" \
           --context="${{ github.repositoryUrl }}" \
-          --destination="${{ inputs.registry }}/${{ inputs.repository }}/${{ inputs.image }}:${IMAGE_TAG}
+          --destination="${{ inputs.registry }}/${{ inputs.repository }}/${{ inputs.image }}:${IMAGE_TAG}"
           --push-retry 5 \
           --image-name-with-digest-file /workspace/image-digest.txt
