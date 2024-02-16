@@ -16,11 +16,11 @@ on:
         type: string
       registry:
         required: false
-        default: "./Dockerfile"
+        default:  ghcr.io
         type: string
       repository:
         required: false
-        default: "ghcr.io"
+        default: stuttgart-things
         type: string
       image:
         required: true
