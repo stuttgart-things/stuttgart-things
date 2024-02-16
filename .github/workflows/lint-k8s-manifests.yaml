@@ -43,7 +43,14 @@ jobs:
           cd ${{ inputs.manifest-path }}
           helm dep update
           helm template . > /tmp/renderedHelmtoScan.yaml
-          
+
+      - name: Cache Manifests
+        id: cache-manifests
+        uses: actions/cache@v4
+        with:
+          path: |
+            /tmp/renderedHelmtoScan.yaml
+
       - name: Upload manifest
         uses: actions/upload-artifact@v4.1.0
         with:
