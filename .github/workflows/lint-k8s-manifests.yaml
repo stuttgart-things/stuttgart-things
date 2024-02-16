@@ -17,8 +17,27 @@ on:
       kube-linter-version:
         default: 0.6.7
         type: string
-
+      helm-chart:
+        default: false
+        type: boolean
 jobs:
+  render-helm-chart:
+    runs-on: ${{ inputs.runs-on }}
+    if: ${{ inputs.helm-chart }}
+    container:
+      image: ghcr.io/dtzar/helm-kubectl:3.14.1
+    environment: ${{ inputs.environment-name }}
+    continue-on-error: ${{ inputs.continue-error }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.1.1
+        with:
+          fetch-depth: '0'
+      - name: Run kubelinter
+        run: |
+          ls -lta
+          helm version
+
   lint-k8s-manifests:
     runs-on: ${{ inputs.runs-on }}
     container:
@@ -34,8 +53,4 @@ jobs:
         run: |
           ls -lta
           /kube-linter version
-#      - name: Upload linting results
-#        uses: actions/upload-artifact@v4.1.0
-#        with:
-#          name: ${{ inputs.artifact-name }}
-#          path: ${{ inputs.artifact-name }}.txt
+
