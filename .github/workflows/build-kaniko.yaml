@@ -54,8 +54,9 @@ jobs:
           # GENERATE TAG IF NONE IS GIVEN
           if [ -z "${IMAGE_TAG}" ]
           then
-            echo 'generate tag' 
-            echo "IMAGE_TAG=$(date '+%Y-%m-%d-%H-%M-%S')" >> $GITHUB_ENV
+            echo 'GENERATE DATE TAG' 
+            DATE=$(date '+%Y-%m-%d-%H-%M-%S')
+            echo "IMAGE_TAG=${DATE} >> $GITHUB_ENV
           fi
 
           # WRITE CONFIG FILE
