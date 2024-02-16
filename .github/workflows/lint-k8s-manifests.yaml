@@ -22,7 +22,7 @@ jobs:
   lint-k8s-manifests:
     runs-on: ${{ inputs.runs-on }}
     container:
-      image: stackrox/kube-linter:${{ inputs.kube-linter-version }}-alpine
+      image: stackrox/kube-linter:v${{ inputs.kube-linter-version }}-alpine
     environment: ${{ inputs.environment-name }}
     continue-on-error: ${{ inputs.continue-error }}
     steps:
