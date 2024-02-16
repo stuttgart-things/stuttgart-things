@@ -33,7 +33,7 @@ jobs:
       - name: Run kubelinter
         run: |
           ls -lta
-          kubelinter version
+          /kube-linter version
 #      - name: Upload linting results
 #        uses: actions/upload-artifact@v4.1.0
 #        with:
