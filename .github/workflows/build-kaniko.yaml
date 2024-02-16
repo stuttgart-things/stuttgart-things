@@ -41,6 +41,8 @@ jobs:
   kaniko-build:
     runs-on: ${{ inputs.runs-on }}
     environment: ${{ inputs.environment-name }}
+    env:
+      IMAGE_TAG: ${{ inputs.tag }}
     container:
       image: ${{ inputs.kaniko-image }}:${{ inputs.kaniko-tag }}
     permissions:
@@ -50,9 +52,10 @@ jobs:
         run: |
 
           # GENERATE TAG IF NONE IS GIVEN
-          if [ -z "${{ inputs.tag }}" ]
+          if [ -z "${IMAGE_TAG}" ]
           then
-            echo 'generate tag'  
+            echo 'generate tag' 
+            echo "IMAGE_TAG=$(date '+%Y-%m-%d-%H-%M-%S')" >> $GITHUB_ENV
           fi
 
           # WRITE CONFIG FILE
@@ -65,6 +68,6 @@ jobs:
           # BUILD AND PUSH
           /kaniko/executor --dockerfile="${{ inputs.dockerfile }}" \
           --context="${{ github.repositoryUrl }}" \
-          --destination="${{ inputs.registry }}/${{ inputs.repository }}/${{ inputs.image }}:${{ inputs.tag }}" \
+          --destination="${{ inputs.registry }}/${{ inputs.repository }}/${{ inputs.image }}:${IMAGE_TAG}
           --push-retry 5 \
           --image-name-with-digest-file /workspace/image-digest.txt
