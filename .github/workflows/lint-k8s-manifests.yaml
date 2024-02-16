@@ -1,0 +1,41 @@
+---
+name: Lint kubernetes manifests
+on:
+  workflow_call:
+    inputs:
+      runs-on:
+        required: true
+        type: string
+      environment-name:
+        default: k8s
+        required: true
+        type: string
+      continue-error:
+        default: false
+        required: true
+        type: boolean
+      kube-linter-version:
+        default: 0.6.7
+        type: string
+
+jobs:
+  lint-k8s-manifests:
+    runs-on: ${{ inputs.runs-on }}
+    container:
+      image: stackrox/kube-linter:${{ inputs.kube-linter-version }}-alpine
+    environment: ${{ inputs.environment-name }}
+    continue-on-error: ${{ inputs.continue-error }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.1.1
+        with:
+          fetch-depth: '0'
+      - name: Install & Run Markdownlint
+        run: |
+          ls -lta
+          kube-linter version
+#      - name: Upload linting results
+#        uses: actions/upload-artifact@v4.1.0
+#        with:
+#          name: ${{ inputs.artifact-name }}
+#          path: ${{ inputs.artifact-name }}.txt
