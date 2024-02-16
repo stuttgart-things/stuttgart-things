@@ -36,7 +36,10 @@ on:
         required: false
         type: string
         default: debug
-
+      push-retrys:
+        required: false
+        type: string
+        default: "5"
 jobs:
   kaniko-build:
     runs-on: ${{ inputs.runs-on }}
@@ -67,6 +70,9 @@ jobs:
           # BUILD AND PUSH
           /kaniko/executor --dockerfile="${{ inputs.dockerfile }}" \
           --context="${{ github.repositoryUrl }}" \
-          --destination="${{ inputs.registry }}/${{ inputs.repository }}/${{ inputs.image }}:${IMAGE_TAG}"
-          --push-retry 5 \
+          --destination="${{ inputs.registry }}/${{ inputs.repository }}/${{ inputs.image }}:${IMAGE_TAG}" \
+          --push-retry ${{ inputs.push-retrys }} \
           --image-name-with-digest-file /workspace/image-digest.txt
+
+          # CHECK DIGEST
+          cat /workspace/image-digest.txt
