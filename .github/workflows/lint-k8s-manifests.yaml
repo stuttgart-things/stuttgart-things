@@ -50,6 +50,7 @@ jobs:
         with:
           path: |
             /tmp/renderedHelmtoScan.yaml
+          key: manifests
 
       - name: Upload manifest
         uses: actions/upload-artifact@v4.1.0
