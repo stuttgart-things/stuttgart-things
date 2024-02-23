@@ -42,7 +42,9 @@ spec:
       hostname: ${INGRESS_HOSTNAME_CONSOLE}.${INGRESS_DOMAIN}
     apiIngress:
       enabled: true
-      ingressClassName: "nginx"
+      ingressClassName: nginx
+      annotations:
+        nginx.org/client-max-body-size: "999m"      
       tls: true
       extraTls:
         - hosts:
