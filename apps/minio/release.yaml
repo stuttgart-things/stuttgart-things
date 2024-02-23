@@ -34,7 +34,7 @@ spec:
       ingressClassName: nginx
       tls: true
       annotations:
-        nginx.org/client-max-body-size: "999m"
+        nginx.ingress.kubernetes.io/proxy-body-size: 500m
       extraTls:
         - hosts:
             - ${INGRESS_HOSTNAME_CONSOLE}.${INGRESS_DOMAIN}
@@ -44,7 +44,7 @@ spec:
       enabled: true
       ingressClassName: nginx
       annotations:
-        nginx.org/client-max-body-size: "999m"      
+        nginx.ingress.kubernetes.io/proxy-body-size: 500m    
       tls: true
       extraTls:
         - hosts:
