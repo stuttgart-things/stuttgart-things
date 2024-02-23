@@ -33,6 +33,8 @@ spec:
       enabled: true
       ingressClassName: nginx
       tls: true
+      annotations:
+        nginx.org/client-max-body-size: "999m"
       extraTls:
         - hosts:
             - ${INGRESS_HOSTNAME_CONSOLE}.${INGRESS_DOMAIN}
