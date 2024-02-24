@@ -25,10 +25,9 @@ spec:
           aws_access_key_id=${MINIO_ADMIN_USER}
           aws_secret_access_key=${MINIO_ADMIN_PASSWORD}
     configuration:
-      provider: aws
       backupStorageLocation:
         - name: artifacts
-          provider: minio
+          provider: aws
           bucket: velero
           default: true
           caCert: ${VAULT_CA_BUNDLE}
