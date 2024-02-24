@@ -13,7 +13,7 @@ spec:
   timeout: 5m
   sourceRef:
     kind: GitRepository
-    name: stuttgart-things
+    name: flux-system
   path: ./apps/minio
   prune: true
   wait: true
