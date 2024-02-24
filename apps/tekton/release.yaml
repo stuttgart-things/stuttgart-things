@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: tekton-base
-      version: v0.53.4
+      version: v0.53.4 #v0.57.1
       sourceRef:
         kind: HelmRepository
         name: stuttgart-things
