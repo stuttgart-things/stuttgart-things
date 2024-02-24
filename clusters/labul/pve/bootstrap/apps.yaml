@@ -53,7 +53,7 @@ spec:
         name: crossplane-deployment
         namespace: crossplane-system
     - patch: |-
-        - op: add
+        - op: replace
           path: /spec/values/provider
           value:
             - name: packages
