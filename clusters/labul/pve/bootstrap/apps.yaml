@@ -43,6 +43,9 @@ spec:
   path: ./apps/crossplane
   prune: true
   wait: true
+  postBuild:
+    substitute:
+      S3_SECRET_NAME: s3
   patches:
     - patch: |-
         - op: replace

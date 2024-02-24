@@ -39,7 +39,7 @@ spec:
                   containers:
                   - envFrom:
                     - secretRef:
-                        name: s3
+                        name: ${S3_SECRET_NAME:-s3}
                     name: package-runtime
                     resources: {}
                     volumeMounts:
