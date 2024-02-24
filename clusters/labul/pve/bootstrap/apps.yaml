@@ -74,3 +74,39 @@ spec:
       kind: Deployment
       name: crossplane
       namespace: crossplane-system
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: crossplane-xrds
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: crossplane
+  interval: 1h
+  retryInterval: 2m
+  timeout: 10m
+  prune: true
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./crossplane/xrds
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: crossplane-compositions
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: crossplane-crds
+  interval: 1h
+  retryInterval: 2m
+  timeout: 10m
+  prune: true
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./crossplane/compositions
