@@ -25,7 +25,7 @@ spec:
           aws_access_key_id=${MINIO_ADMIN_USER}
           aws_secret_access_key=${MINIO_ADMIN_PASSWORD}
     configuration:
-      volumeSnapshotLocation:
+      backupStorageLocation:
         - name: artifacts
           provider: aws
           bucket: velero
@@ -36,7 +36,7 @@ spec:
             s3ForcePathStyle: true
             s3Url: https://${INGRESS_HOSTNAME_MINIO}.${INGRESS_DOMAIN_MINIO}
             publicUrl: https://${INGRESS_HOSTNAME_MINIO}.${INGRESS_DOMAIN_MINIO}
-      backupStorageLocation:
+      volumeSnapshotLocation:
         - name: artifacts
           provider: aws
           bucket: velero
