@@ -27,15 +27,16 @@ spec:
     configuration:
       provider: aws
       backupStorageLocation:
-        name: artifacts
-        bucket: velero
-        default: true
-        caCert: ${VAULT_CA_BUNDLE}
-        config:
-          region: minio
-          s3ForcePathStyle: true
-          s3Url: https://${INGRESS_HOSTNAME_MINIO}.${INGRESS_DOMAIN_MINIO}
-          publicUrl: https://${INGRESS_HOSTNAME_MINIO}.${INGRESS_DOMAIN_MINIO}
+        - name: artifacts
+          provider: minio
+          bucket: velero
+          default: true
+          caCert: ${VAULT_CA_BUNDLE}
+          config:
+            region: minio
+            s3ForcePathStyle: true
+            s3Url: https://${INGRESS_HOSTNAME_MINIO}.${INGRESS_DOMAIN_MINIO}
+            publicUrl: https://${INGRESS_HOSTNAME_MINIO}.${INGRESS_DOMAIN_MINIO}
     initContainers:
       - name: velero-plugin-for-aws
         image: velero/velero-plugin-for-aws:v1.9.0
