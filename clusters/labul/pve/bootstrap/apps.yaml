@@ -61,6 +61,10 @@ spec:
                 - crossplanecontrib/provider-helm:v0.17.0
                 - xpkg.upbound.io/upbound/provider-terraform:v0.14.1
                 - crossplanecontrib/provider-kubernetes:v0.12.0
+      target:
+        kind: HelmRelease
+        name: crossplane-deployment
+        namespace: crossplane-system
   healthChecks:
     - apiVersion: helm.toolkit.fluxcd.io/v2beta1
       kind: HelmRelease
