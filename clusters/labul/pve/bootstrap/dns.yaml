@@ -5,9 +5,9 @@ metadata:
   name: pdns-entry-pve-gude
   namespace: default
 spec:
-  pipelineRunName: pdns-entry-pve-gude
+  pipelineRunName: pdns-entry-pve-gude1
   inventory:
-    - "localhost"
+    - "all+[\"localhost\"]"
   playbooks:
     - "ansible/playbooks/pdns-ingress-entry.yaml"
   ansibleVarsFile:
