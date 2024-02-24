@@ -6,13 +6,13 @@ metadata:
     app.kubernetes.io/component: webhook
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
-    pipeline.tekton.dev/release: "v0.53.2"
+    pipeline.tekton.dev/release: "v0.57.0"
 webhooks:
   - admissionReviewVersions: ["v1"]
     clientConfig:
       service:
         name: tekton-pipelines-webhook
-        namespace: {{ .Values.pipelinesNamespace }}
+        namespace: tekton-pipelines
     failurePolicy: Fail
     sideEffects: None
     name: webhook.pipeline.tekton.dev
