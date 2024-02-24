@@ -1,4 +1,4 @@
-# Copyright 2020 The Tekton Authors
+# Copyright 2023 The Tekton Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,13 +13,14 @@
 # limitations under the License.
 
 apiVersion: v1
-kind: Secret
+kind: ConfigMap
 metadata:
-  name: webhook-certs
-  namespace: {{ .Values.pipelinesNamespace }}
+  name: http-resolver-config
+  namespace: {{ .Values.pipelinesNamespace }}-resolvers
   labels:
-    app.kubernetes.io/component: webhook
+    app.kubernetes.io/component: resolvers
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
-    pipeline.tekton.dev/release: "v0.57.0"
-# The data is populated at install time.
+data:
+  # The maximum amount of time the http resolver will wait for a response from the server.
+  fetch-timeout: "1m"
