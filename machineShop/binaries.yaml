@@ -20,7 +20,7 @@ binary:
       bin: kind-linux-amd64
   - velero:
       url: https://github.com/vmware-tanzu/velero/releases/download/v{{ or .veleroVersion "1.13.0" }}/velero-v{{ or .veleroVersion "1.13.0" }}-linux-arm64.tar.gz
-      bin: velero
+      bin: velero-v1.13.0-linux-arm64/velero
 #   - gh:
 #       url: https://github.com/cli/cli/releases/download/v{{ or .ghVersion 2.34.0" }}/gh_{{ or .ghVersion 2.34.0" }}_linux_amd64.tar.gz
 #       bin: gh_2.34.0_linux_amd64/bin/gh
