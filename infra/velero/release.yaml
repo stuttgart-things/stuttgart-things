@@ -26,7 +26,7 @@ spec:
           aws_secret_access_key=${MINIO_ADMIN_PASSWORD}
     configuration:
       backupStorageLocation:
-        - name: artifacts
+        - name: default
           provider: aws
           bucket: velero
           default: true
