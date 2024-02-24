@@ -24,18 +24,18 @@ spec:
           [default]
           aws_access_key_id=${MINIO_ADMIN_USER}
           aws_secret_access_key=${MINIO_ADMIN_PASSWORD}
-    VolumeSnapshotLocation:
-      - name: artifacts
-        provider: aws
-        bucket: velero
-        default: true
-        caCert: ${VAULT_CA_BUNDLE}
-        config:
-          region: minio
-          s3ForcePathStyle: true
-          s3Url: https://${INGRESS_HOSTNAME_MINIO}.${INGRESS_DOMAIN_MINIO}
-          publicUrl: https://${INGRESS_HOSTNAME_MINIO}.${INGRESS_DOMAIN_MINIO}
     configuration:
+      volumeSnapshotLocation:
+        - name: artifacts
+          provider: aws
+          bucket: velero
+          default: true
+          caCert: ${VAULT_CA_BUNDLE}
+          config:
+            region: minio
+            s3ForcePathStyle: true
+            s3Url: https://${INGRESS_HOSTNAME_MINIO}.${INGRESS_DOMAIN_MINIO}
+            publicUrl: https://${INGRESS_HOSTNAME_MINIO}.${INGRESS_DOMAIN_MINIO}
       backupStorageLocation:
         - name: artifacts
           provider: aws
