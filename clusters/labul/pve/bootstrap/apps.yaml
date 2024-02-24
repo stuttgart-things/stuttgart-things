@@ -59,8 +59,8 @@ spec:
         - op: replace
           path: /spec/values/provider/packages
           value:
-            - crossplanecontrib/provider-helm:v0.17.0
-            - crossplanecontrib/provider-kubernetes:v0.12.0
+            - xpkg.upbound.io/crossplane-contrib/provider-kubernetes:v0.12.0
+            - xpkg.upbound.io/crossplane-contrib/provider-helm:v0.17.0
       target:
         kind: HelmRelease
         name: crossplane-deployment
