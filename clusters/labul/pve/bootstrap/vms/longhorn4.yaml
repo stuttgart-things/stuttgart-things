@@ -54,7 +54,7 @@ metadata:
   name: baseos-longhorn-4
   namespace: crossplane-system
 spec:
-  pipelineRunName: baseos-longhorn-4
+  pipelineRunName: baseos-longhorn-41
   inventory:
     - "all+[\"longhorn-4.labul.sva.de\"]"
   playbooks:
