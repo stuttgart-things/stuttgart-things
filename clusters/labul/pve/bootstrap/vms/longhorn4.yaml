@@ -20,7 +20,7 @@ spec:
     clusterNode: sthings-pve1
   tfvars:
     secretName: pve-tfvars
-    secretNamespace: default
+    secretNamespace: crossplane-system
     secretKey: terraform.tfvars
   connectionSecret:
     name: longhorn-4-output
