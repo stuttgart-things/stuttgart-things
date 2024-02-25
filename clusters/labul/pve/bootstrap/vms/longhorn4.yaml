@@ -10,7 +10,7 @@ spec:
   vm:
     count: "1"
     name: longhorn-4
-    cpu: "8"
+    cpu: "10"
     ram: "12228"
     disk: 96G
     template: ubuntu23-rke2
