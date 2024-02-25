@@ -1,0 +1,49 @@
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: ProxmoxVM
+metadata:
+  name: longhorn-4
+  namespace: crossplane-system
+spec:
+  compositionRef:
+    name: proxmox-vm
+  vm:
+    count: "1"
+    name: longhorn-4
+    cpu: "8"
+    ram: "8192"
+    disk: 64G
+    template: ubuntu22
+    network: vmbr103
+    datastore: v3700
+    folderPath: stuttgart-things
+    clusterNode: sthings-pve1
+  tfvars:
+    secretName: pve-tfvars
+    secretNamespace: default
+    secretKey: terraform.tfvars
+  connectionSecret:
+    name: longhorn-4-output
+    namespace: crossplane-system
+  providerRef:
+    name: longhorn-4-state
+---
+apiVersion: tf.upbound.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: longhorn-4-state
+  namespace: crossplane-system
+spec:
+  configuration: |
+    terraform {
+      backend "s3" {
+        endpoint = "https://artifacts.automation.sthings-vsphere.labul.sva.de"
+        key = "longhorn-4.tfstate"
+        region = "main"
+        bucket = "state-proxmoxvm"
+        skip_credentials_validation = true
+        skip_metadata_api_check = true
+        skip_region_validation = true
+        force_path_style = true
+      }
+    }
