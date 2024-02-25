@@ -13,7 +13,7 @@ spec:
     cpu: "8"
     ram: "12228"
     disk: 96G
-    template: ubuntu22
+    template: ubuntu23-rke2
     network: vmbr103
     datastore: v3700
     folderPath: stuttgart-things
