@@ -1,4 +1,3 @@
-
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
@@ -19,5 +18,4 @@ spec:
   values:
     provider:
       packages:
-        # - xpkg.upbound.io/upbound/provider-terraform:v0.13.0
         - crossplanecontrib/provider-helm:v0.16.0
