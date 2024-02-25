@@ -52,12 +52,11 @@ apiVersion: resources.stuttgart-things.com/v1alpha1
 kind: AnsibleRun
 metadata:
   name: baseos-longhorn-4
-  namespace: default
+  namespace: crossplane-system
 spec:
   pipelineRunName: baseos-longhorn-4
   inventory:
     - "all+[\"longhorn-4.labul.sva.de\"]"
-    - "additional_master_nodes+[\"\"]"
   playbooks:
     - "ansible/playbooks/prepare-env.yaml"
     - "ansible/playbooks/base-os.yaml"
@@ -78,7 +77,7 @@ spec:
     name: kubernetes-incluster
   vaultSecretName: vault
   pipelineNamespace: tektoncd
-  workingImage: eu.gcr.io/stuttgart-things/sthings-ansible:9.1.0
+  workingImage: eu.gcr.io/stuttgart-things/sthings-ansible:9.2.0
   roles:
     - "https://github.com/stuttgart-things/install-requirements.git"
     - "https://github.com/stuttgart-things/manage-filesystem.git"
