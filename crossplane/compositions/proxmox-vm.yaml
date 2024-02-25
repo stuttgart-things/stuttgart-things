@@ -56,6 +56,9 @@ spec:
               - key: pve_cluster_node
                 type: string
                 value: sthings-pve1
+              - key: vm_storage_controller
+                type: string
+                value: virtio-scsi-single
             varFiles:
               - source: SecretKey
                 secretKeyRef:
