@@ -12,7 +12,7 @@ spec:
     name: longhorn-4
     cpu: "10"
     ram: "12228"
-    disk: 96G
+    disk: 82G
     template: ubuntu23-rke2
     network: vmbr103
     datastore: v3700
