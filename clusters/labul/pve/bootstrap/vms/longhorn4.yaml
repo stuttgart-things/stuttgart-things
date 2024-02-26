@@ -82,3 +82,49 @@ spec:
     - "https://github.com/stuttgart-things/install-requirements.git"
     - "https://github.com/stuttgart-things/manage-filesystem.git"
     - "https://github.com/stuttgart-things/install-configure-vault.git"
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: AnsibleRun
+metadata:
+  name: rke2-manager-sthings
+  namespace: default
+spec:
+  pipelineRunName: rke2-manager-sthings
+  inventory:
+    - "initial_master_node+[\"manager-sthings.labul.sva.de\"]"
+    - "additional_master_nodes+[\"\"]"
+  playbooks:
+    - "ansible/playbooks/prepare-env.yaml"
+    - "ansible/playbooks/base-os.yaml"
+    - "ansible/playbooks/deploy-rke2.yaml"
+    - "ansible/playbooks/upload-kubeconfig-vault.yaml"
+  ansibleVarsFile:
+    - "manage_filesystem+-true"
+    - "update_packages+-true"
+    - "install_requirements+-true"
+    - "install_motd+-true"
+    - "username+-sthings"
+    - "lvm_home_sizing+-'15%'"
+    - "lvm_root_sizing+-'35%'"
+    - "lvm_var_sizing+-'50%'"
+    - "send_to_msteams+-true"
+    - "reboot_all+-false"
+    - "cluster_name+-sthings-app1"
+    - "rke2_k8s_version+-1.28.7"
+    - "rke2_release_kind+-rke2r1"
+    - "cluster_setup+-multinode"
+    - "target_host+-manager-sthings.labul.sva.de"
+    - "kubeconfig_path+-/etc/rancher/rke2/rke2.yaml"
+    - "secret_path_kubeconfig+-kubeconfigs"
+  gitRepoUrl: https://github.com/stuttgart-things/stuttgart-things.git
+  gitRevision: main
+  providerRef:
+    name: kubernetes-incluster
+  vaultSecretName: vault
+  pipelineNamespace: tektoncd
+  workingImage: eu.gcr.io/stuttgart-things/sthings-ansible:9.2.0
+  roles:
+    - "https://github.com/stuttgart-things/install-requirements.git"
+    - "https://github.com/stuttgart-things/manage-filesystem.git"
+    - "https://github.com/stuttgart-things/install-configure-vault.git"
+    - "https://github.com/stuttgart-things/deploy-configure-rke"
