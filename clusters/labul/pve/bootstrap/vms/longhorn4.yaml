@@ -1,84 +1,84 @@
----
-apiVersion: resources.stuttgart-things.com/v1alpha1
-kind: ProxmoxVM
-metadata:
-  name: longhorn-4
-  namespace: crossplane-system
-spec:
-  compositionRef:
-    name: proxmox-vm
-  vm:
-    count: "1"
-    name: longhorn-4
-    cpu: "10"
-    ram: "12228"
-    disk: 82G
-    template: ubuntu23-rke2
-    network: vmbr103
-    datastore: v3700
-    folderPath: stuttgart-things
-    clusterNode: sthings-pve1
-  tfvars:
-    secretName: pve-tfvars
-    secretNamespace: crossplane-system
-    secretKey: terraform.tfvars
-  connectionSecret:
-    name: longhorn-4-output
-    namespace: crossplane-system
-  providerRef:
-    name: longhorn-4-state
----
-apiVersion: tf.upbound.io/v1beta1
-kind: ProviderConfig
-metadata:
-  name: longhorn-4-state
-  namespace: crossplane-system
-spec:
-  configuration: |
-    terraform {
-      backend "s3" {
-        endpoint = "https://artifacts.automation.sthings-vsphere.labul.sva.de"
-        key = "longhorn-4.tfstate"
-        region = "main"
-        bucket = "state-proxmoxvm"
-        skip_credentials_validation = true
-        skip_metadata_api_check = true
-        skip_region_validation = true
-        force_path_style = true
-      }
-    }
----
-apiVersion: resources.stuttgart-things.com/v1alpha1
-kind: AnsibleRun
-metadata:
-  name: baseos-longhorn-4
-  namespace: crossplane-system
-spec:
-  pipelineRunName: baseos-longhorn-41
-  inventory:
-    - "all+[\"longhorn-4.labul.sva.de\"]"
-  playbooks:
-    - "ansible/playbooks/prepare-env.yaml"
-    - "ansible/playbooks/base-os.yaml"
-  ansibleVarsFile:
-    - "manage_filesystem+-true"
-    - "update_packages+-true"
-    - "install_requirements+-true"
-    - "install_motd+-true"
-    - "username+-sthings"
-    - "lvm_home_sizing+-'15%'"
-    - "lvm_root_sizing+-'35%'"
-    - "lvm_var_sizing+-'50%'"
-    - "send_to_msteams+-true"
-    - "reboot_all+-false"
-  gitRepoUrl: https://github.com/stuttgart-things/stuttgart-things.git
-  gitRevision: main
-  providerRef:
-    name: kubernetes-incluster
-  vaultSecretName: vault
-  pipelineNamespace: tektoncd
-  workingImage: eu.gcr.io/stuttgart-things/sthings-ansible:9.2.0
-  roles:
-    - "https://github.com/stuttgart-things/install-requirements.git"
-    - "https://github.com/stuttgart-things/manage-filesystem.git"
-    - "https://github.com/stuttgart-things/install-configure-vault.git"
+# ---
+# apiVersion: resources.stuttgart-things.com/v1alpha1
+# kind: ProxmoxVM
+# metadata:
+#   name: longhorn-4
+#   namespace: crossplane-system
+# spec:
+#   compositionRef:
+#     name: proxmox-vm
+#   vm:
+#     count: "1"
+#     name: longhorn-4
+#     cpu: "10"
+#     ram: "12228"
+#     disk: 64G
+#     template: ubuntu23-rke2
+#     network: vmbr103
+#     datastore: v3700
+#     folderPath: stuttgart-things
+#     clusterNode: sthings-pve1
+#   tfvars:
+#     secretName: pve-tfvars
+#     secretNamespace: crossplane-system
+#     secretKey: terraform.tfvars
+#   connectionSecret:
+#     name: longhorn-4-output
+#     namespace: crossplane-system
+#   providerRef:
+#     name: longhorn-4-state
+# ---
+# apiVersion: tf.upbound.io/v1beta1
+# kind: ProviderConfig
+# metadata:
+#   name: longhorn-4-state
+#   namespace: crossplane-system
+# spec:
+#   configuration: |
+#     terraform {
+#       backend "s3" {
+#         endpoint = "https://artifacts.automation.sthings-vsphere.labul.sva.de"
+#         key = "longhorn-4.tfstate"
+#         region = "main"
+#         bucket = "state-proxmoxvm"
+#         skip_credentials_validation = true
+#         skip_metadata_api_check = true
+#         skip_region_validation = true
+#         force_path_style = true
+#       }
+#     }
+# ---
+# apiVersion: resources.stuttgart-things.com/v1alpha1
+# kind: AnsibleRun
+# metadata:
+#   name: baseos-longhorn-4
+#   namespace: crossplane-system
+# spec:
+#   pipelineRunName: baseos-longhorn-41
+#   inventory:
+#     - "all+[\"longhorn-4.labul.sva.de\"]"
+#   playbooks:
+#     - "ansible/playbooks/prepare-env.yaml"
+#     - "ansible/playbooks/base-os.yaml"
+#   ansibleVarsFile:
+#     - "manage_filesystem+-true"
+#     - "update_packages+-true"
+#     - "install_requirements+-true"
+#     - "install_motd+-true"
+#     - "username+-sthings"
+#     - "lvm_home_sizing+-'15%'"
+#     - "lvm_root_sizing+-'35%'"
+#     - "lvm_var_sizing+-'50%'"
+#     - "send_to_msteams+-true"
+#     - "reboot_all+-false"
+#   gitRepoUrl: https://github.com/stuttgart-things/stuttgart-things.git
+#   gitRevision: main
+#   providerRef:
+#     name: kubernetes-incluster
+#   vaultSecretName: vault
+#   pipelineNamespace: tektoncd
+#   workingImage: eu.gcr.io/stuttgart-things/sthings-ansible:9.2.0
+#   roles:
+#     - "https://github.com/stuttgart-things/install-requirements.git"
+#     - "https://github.com/stuttgart-things/manage-filesystem.git"
+#     - "https://github.com/stuttgart-things/install-configure-vault.git"
