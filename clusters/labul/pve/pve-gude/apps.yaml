@@ -46,12 +46,13 @@ spec:
         namespace: minio
     - patch: |-
         - op: add
-          path: /spec/values/containerSecurityContext
+          path: /spec/values/deployment
           value:
-            runAsUser: root
-            runAsNonRoot: false
-            privileged: true
-            allowPrivilegeEscalation: true
+            containerSecurityContext:
+              runAsUser: root
+              runAsNonRoot: false
+              privileged: true
+              allowPrivilegeEscalation: true
       target:
         kind: HelmRelease
         name: minio-deployment
