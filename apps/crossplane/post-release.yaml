@@ -35,14 +35,14 @@ spec:
               template:
                 spec:
                   containers:
-                  - args:
-                    - -d
-                    - --poll=5m
-                    - --max-reconcile-rate=40
                   - envFrom:
                     - secretRef:
                         name: ${S3_SECRET_NAME:-s3}
                     name: package-runtime
+                    - args:
+                      - -d
+                      - --poll=5m
+                      - --max-reconcile-rate=40
                     resources: {}
                     volumeMounts:
                     - mountPath: /etc/ssl/certs/ca-certificates.crt
