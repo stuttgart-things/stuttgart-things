@@ -35,6 +35,10 @@ spec:
               template:
                 spec:
                   containers:
+                  - args:
+                    - -d
+                    - --poll=5m
+                    - --max-reconcile-rate=40
                   - envFrom:
                     - secretRef:
                         name: ${S3_SECRET_NAME:-s3}
