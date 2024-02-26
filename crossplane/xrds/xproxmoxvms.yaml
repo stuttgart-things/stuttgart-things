@@ -49,6 +49,9 @@ spec:
                       type: string
                     clusterNode:
                       type: string
+                    storageController:
+                      type: string
+                      default: "virtio-scsi-pci"
                   required:
                     - name
                     - cpu

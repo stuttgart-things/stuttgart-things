@@ -58,7 +58,7 @@ spec:
                 value: sthings-pve1
               - key: vm_storage_controller
                 type: string
-                value: virtio-scsi-single
+                value: virtio-scsi-pci
             varFiles:
               - source: SecretKey
                 secretKeyRef:
@@ -96,6 +96,9 @@ spec:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.vm.clusterNode
           toFieldPath: spec.forProvider.vars[9].value
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.vm.storageController
+          toFieldPath: spec.forProvider.vars[10].value
         - type: FromCompositeFieldPath
           fromFieldPath: spec.tfvars.secretName
           toFieldPath: spec.forProvider.varFiles[0].secretKeyRef.name
