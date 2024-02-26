@@ -42,7 +42,7 @@ spec:
                     args:
                       - -d
                       - --poll=5m
-                      - --max-reconcile-rate=40
+                      - --max-reconcile-rate=1
                     resources: {}
                     volumeMounts:
                     - mountPath: /etc/ssl/certs/ca-certificates.crt
