@@ -78,6 +78,7 @@ spec:
   wait: true
   postBuild:
     substitute:
+      MINIO_NAMESPACE: longhorn-minio
       INGRESS_HOSTNAME_API: longhorn-minio
       INGRESS_HOSTNAME_CONSOLE: longhorn-minio-console
       INGRESS_DOMAIN: gude.sthings-pve.labul.sva.de
