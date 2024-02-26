@@ -39,7 +39,7 @@ spec:
                     - secretRef:
                         name: ${S3_SECRET_NAME:-s3}
                     name: package-runtime
-                    - args:
+                    args:
                       - -d
                       - --poll=5m
                       - --max-reconcile-rate=40
