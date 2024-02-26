@@ -3,11 +3,11 @@ apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: minio-deployment
-  namespace: minio
+  namespace: ${MINIO_NAMESPACE:-minio}
 spec:
   dependsOn:
     - name: minio-certificate-configuration
-      namespace: minio
+      namespace: ${MINIO_NAMESPACE:-minio}
   interval: 30m
   chart:
     spec:
@@ -44,7 +44,7 @@ spec:
       enabled: true
       ingressClassName: nginx
       annotations:
-        nginx.ingress.kubernetes.io/proxy-body-size: 500m    
+        nginx.ingress.kubernetes.io/proxy-body-size: 500m
       tls: true
       extraTls:
         - hosts:
