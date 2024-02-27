@@ -89,7 +89,7 @@ metadata:
   name: rke2-manager-sthings
   namespace: default
 spec:
-  pipelineRunName: rke2-manager-sthings
+  pipelineRunName: rke2-manager-sthings1
   inventory:
     - "initial_master_node+[\"manager-sthings.labul.sva.de\"]"
     - "additional_master_nodes+[\"\"]"
