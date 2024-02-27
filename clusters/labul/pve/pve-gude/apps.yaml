@@ -23,7 +23,7 @@ spec:
       INGRESS_HOSTNAME_CONSOLE: artifacts-console
       INGRESS_DOMAIN: gude.sthings-pve.labul.sva.de
       CLUSTER_ISSUER: cluster-issuer-approle
-      STORAGE_CLASS: nfs3-csi
+      STORAGE_CLASS: nfs4-csi
     substituteFrom:
       - kind: Secret
         name: s3-flux-secrets
