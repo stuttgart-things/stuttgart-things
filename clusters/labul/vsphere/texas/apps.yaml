@@ -44,19 +44,6 @@ spec:
         kind: HelmRelease
         name: minio-deployment
         namespace: minio
-    # - patch: |-
-    #     - op: add
-    #       path: /spec/values/deployment
-    #       value:
-    #         containerSecurityContext:
-    #           runAsUser: root
-    #           runAsNonRoot: false
-    #           privileged: true
-    #           allowPrivilegeEscalation: true
-    #   target:
-    #     kind: HelmRelease
-    #     name: minio-deployment
-    #     namespace: minio
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -104,3 +91,37 @@ spec:
         kind: HelmRelease
         name: minio-deployment
         namespace: minio
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: velero
+  namespace: flux-system
+spec:
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infra/velero
+  prune: true
+  wait: true
+  postBuild:
+    substitute:
+      INGRESS_HOSTNAME_MINIO: artifacts
+      INGRESS_DOMAIN_MINIO: texas.sthings-vsphere.labul.sva.de
+    substituteFrom:
+      - kind: Secret
+        name: s3-flux-secrets
+      - kind: Secret
+        name: vault-flux-secrets
+  patches:
+    - patch: |-
+        - op: replace
+          path: /spec/chart/spec/version
+          value: 5.4.1
+      target:
+        kind: HelmRelease
+        name: velero
+        namespace: velero

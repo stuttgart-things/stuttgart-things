@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: velero
+  name: ${VELERO_NAMESPACE:-velero}
   labels:
     toolkit.fluxcd.io/tenant: sthings-team
 ---
@@ -10,7 +10,17 @@ apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: HelmRepository
 metadata:
   name: vmware-tanzu
-  namespace: velero
+  namespace: ${VELERO_NAMESPACE:-velero}
 spec:
   interval: 24h
   url: https://vmware-tanzu.github.io/helm-charts
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: stuttgart-things
+  namespace: ${VELERO_NAMESPACE:-velero}
+spec:
+  type: oci
+  interval: 1h
+  url: oci://eu.gcr.io/stuttgart-things
