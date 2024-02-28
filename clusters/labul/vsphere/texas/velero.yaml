@@ -26,30 +26,41 @@ spec:
     name: kubernetes-csi
   path: ./client/config/crd/
 ---
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
+# apiVersion: kustomize.toolkit.fluxcd.io/v1
+# kind: Kustomization
+# metadata:
+#   name: csi-snapshot-controller
+#   namespace: flux-system
+# spec:
+#   interval: 1h
+#   retryInterval: 1m
+#   timeout: 5m
+#   sourceRef:
+#     kind: GitRepository
+#     name: flux-system
+#   path: ./infra/snapshot-controller
+#   prune: true
+#   wait: true
+#   postBuild:
+#     substitute:
+#       SNAPSHOT_CONTROLLER_NAMESPACE: csi-snapshot-controller
+#   patches:
+#     - patch: |-
+#         - op: replace
+#           path: /spec/chart/spec/version
+#           value: 2.2.0
+#       target:
+#         kind: HelmRelease
+#         name: snapshot-controller
+#         namespace: csi-snapshot-controller
+---
+kind: VolumeSnapshotClass
+apiVersion: snapshot.storage.k8s.io/v1
 metadata:
-  name: csi-snapshot-controller
-  namespace: flux-system
-spec:
-  interval: 1h
-  retryInterval: 1m
-  timeout: 5m
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: ./infra/snapshot-controller
-  prune: true
-  wait: true
-  postBuild:
-    substitute:
-      SNAPSHOT_CONTROLLER_NAMESPACE: csi-snapshot-controller
-  patches:
-    - patch: |-
-        - op: replace
-          path: /spec/chart/spec/version
-          value: 2.2.0
-      target:
-        kind: HelmRelease
-        name: snapshot-controller
-        namespace: csi-snapshot-controller
+  name: longhorn-snapshot-vsc
+  labels:
+    velero.io/csi-volumesnapshot-class: "true"
+driver: driver.longhorn.io
+deletionPolicy: Delete
+parameters:
+  type: bak
