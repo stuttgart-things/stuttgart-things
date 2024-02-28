@@ -1,0 +1,16 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ${SNAPSHOT_CONTROLLER_NAMESPACE:-csi-snapshot-controller}
+  labels:
+    toolkit.fluxcd.io/tenant: sthings-team
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: piraeus-charts
+  namespace: ${SNAPSHOT_CONTROLLER_NAMESPACE:-csi-snapshot-controller}
+spec:
+  interval: 24h
+  url: https://piraeus.io/helm-charts/

@@ -13,7 +13,6 @@ metadata:
     pod-security.kubernetes.io/warn-version: latest
   name: flux-system
 ---
----
 apiVersion: v1
 kind: ConfigMap
 metadata:
