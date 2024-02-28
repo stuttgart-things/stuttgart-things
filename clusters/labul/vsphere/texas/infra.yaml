@@ -112,6 +112,7 @@ spec:
     substitute:
       NFS_SERVER_FQDN: 10.31.101.26
       NFS_SHARE_PATH: /data/col1/sthings
+      CLUSTER_NAME: texas
   patches:
     - patch: |-
         - op: replace
