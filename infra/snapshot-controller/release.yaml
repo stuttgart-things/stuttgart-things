@@ -5,7 +5,8 @@ metadata:
   name: snapshot-controller
   namespace: ${SNAPSHOT_CONTROLLER_NAMESPACE:-csi-snapshot-controller}
 spec:
-  interval: 20m
+  interval: 15m
+  timeout: 5m
   chart:
     spec:
       chart: snapshot-controller
@@ -14,5 +15,3 @@ spec:
         kind: HelmRepository
         name: piraeus-charts
         namespace: ${SNAPSHOT_CONTROLLER_NAMESPACE:-csi-snapshot-controller}
-      interval: 15m
-      timeout: 5m
