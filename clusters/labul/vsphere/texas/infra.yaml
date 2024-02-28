@@ -155,3 +155,25 @@ spec:
         kind: HelmRelease
         name: nfs-csi
         namespace: kube-system
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: 56-nfs-sc
+provisioner: nfs.csi.k8s.io
+parameters:
+  server: 10.31.101.26
+  share: /data/col1/sthings
+  subDir: "${pvc.metadata.namespace}-${pvc.metadata.name}"
+  mountPermissions: "0"
+  onDelete: "archive"
+reclaimPolicy: Delete
+volumeBindingMode: Immediate
+allowVolumeExpansion: true
+mountOptions:
+  - nfsvers=3
+  - rsize=1048576
+  - wsize=1048576
+  - tcp
+  - hard
+  - nolock
