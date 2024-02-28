@@ -14,5 +14,5 @@ spec:
         kind: HelmRepository
         name: piraeus-charts
         namespace: ${SNAPSHOT_CONTROLLER_NAMESPACE:-csi-snapshot-controller}
-    interval: 15m
-    timeout: 5m
+      interval: 15m
+      timeout: 5m
