@@ -26,7 +26,7 @@ spec:
         parameters:
           server: ${NFS_SERVER_FQDN}
           share: ${NFS_SHARE_PATH}
-          subDir: "${pvc.metadata.namespace}-${pvc.metadata.name}"
+          subDir: ${SUBDIR_PATTERN:-${pvc.metadata.namespace}-${pvc.metadata.name}}
           mountPermissions: "0"
           onDelete: "archive"
         volumeBindingMode: Immediate
