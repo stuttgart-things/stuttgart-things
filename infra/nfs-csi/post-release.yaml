@@ -26,12 +26,19 @@ spec:
         parameters:
           server: ${NFS_SERVER_FQDN}
           share: ${NFS_SHARE_PATH}
-          mountPermissions: "0777"
-        backendType: ontap-nas
+          subDir: "${pvc.metadata.namespace}-${pvc.metadata.name}"
+          mountPermissions: "0"
+          onDelete: "archive"
         volumeBindingMode: Immediate
+        allowVolumeExpansion: true
         reclaimPolicy: Delete
         mountOptions:
           - nfsvers=3
+          - rsize=1048576
+          - wsize=1048576
+          - tcp
+          - hard
+          - nolock
       nfs4-csi:
         name: nfs4-csi
         provisioner: nfs.csi.k8s.io
@@ -39,7 +46,6 @@ spec:
           server: ${NFS_SERVER_FQDN}
           share: "${NFS_SHARE_PATH}"
           mountPermissions: "0777"
-        backendType: ontap-nas
         volumeBindingMode: Immediate
         reclaimPolicy: Delete
         mountOptions:
