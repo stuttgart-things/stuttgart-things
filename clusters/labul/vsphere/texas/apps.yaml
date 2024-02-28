@@ -111,6 +111,7 @@ spec:
     substitute:
       INGRESS_HOSTNAME_MINIO: artifacts
       INGRESS_DOMAIN_MINIO: texas.sthings-vsphere.labul.sva.de
+      VELERO_NAMESPACE: velero
     substituteFrom:
       - kind: Secret
         name: s3-flux-secrets
