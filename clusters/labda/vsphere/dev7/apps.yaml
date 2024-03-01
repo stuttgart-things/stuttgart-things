@@ -504,40 +504,6 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: crossplane
-  namespace: flux-system
-spec:
-  interval: 1h
-  retryInterval: 1m
-  timeout: 5m
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: ./apps/crossplane
-  prune: true
-  wait: true
-  patches:
-    - patch: |-
-        - op: replace
-          path: /spec/chart/spec/version
-          value: 1.14.5
-      target:
-        kind: HelmRelease
-        name: crossplane-deployment
-        namespace: crossplane-system
-  healthChecks:
-    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
-      kind: HelmRelease
-      name: crossplane-deployment
-      namespace: crossplane-system
-    - apiVersion: apps/v1
-      kind: Deployment
-      name: crossplane
-      namespace: crossplane-system
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
   name: github-rss-sthings-slides
   namespace: flux-system
 spec:
