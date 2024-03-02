@@ -95,4 +95,14 @@ jobs:
           machineShop render \
           --source local \
           --template ${TEMPLATE_PATH}/${TEMPLATE_NAME} \
-          --values "vmCount=${{ inputs.count-vm }}, vmName=${{ inputs.vm-name }}, vmCpu=${{ inputs.vm-cpu }}, vmMem=${{ inputs.vm-memory }}, vmDisk=${{ inputs.vm-disk }}, vmTemplate=${{ inputs.vm-template }}, vmNetwork=${{ inputs.vm-network }}, vmDatastore=${{ inputs.vm-datastore }}, vmFolder=${{ inputs.vm-folder }}, vmNode=${{ inputs.vm-node }}"
+          --values "vmCount=${{ inputs.count-vm }}, vmName=${{ inputs.vm-name }}, vmCpu=${{ inputs.vm-cpu }}, vmMem=${{ inputs.vm-memory }}, vmDisk=${{ inputs.vm-disk }}, vmTemplate=${{ inputs.vm-template }}, vmNetwork=${{ inputs.vm-network }}, vmDatastore=${{ inputs.vm-datastore }}, vmFolder=${{ inputs.vm-folder }}, vmNode=${{ inputs.vm-node }}" \
+          --output file \
+          --destination "clusters/${{ inputs.vm-name }}.yaml"
+          
+      - name: Create Pull Request
+        id: pr
+        uses: peter-evans/create-pull-request@v6.0.1
+        with:
+          commit-message: '[CI][CROSSPLANE] - Created vmconfig'
+          title: 'Created crossplane vmconfig'
+          branch: ${{ inputs.vm-name }}
