@@ -1,0 +1,29 @@
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: ProxmoxVM
+metadata:
+  name: "losangeles"
+  namespace: default
+spec:
+  providerRef:
+    name: s3-proxmox
+  vm:
+    count: "1"
+    name: "losangeles"
+    cpu: "2"
+    ram: "2048"
+    disk: "20"
+    template: "ubuntu22"
+    network: "vmbr102"
+    datastore: "v3700"
+    folderPath: "stuttgart-things"
+    clusterNode: "sthings-pve1"
+  tfvars:
+    secretName: pve-tfvars
+    secretNamespace: default
+    secretKey: terraform.tfvars
+  connectionSecret:
+    name: "losangeles"
+    namespace: default
+  compositionRef:
+    name: proxmox-vm
