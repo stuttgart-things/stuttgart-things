@@ -124,6 +124,7 @@ spec:
       GITHUB_URL: https://github.com/stuttgart-things/kaeffken
       STORAGE_CLASS: openebs-hostpath
       STORAGE_REQUEST: 50Mi
+      RUNNER_VERSION: 2.314.1
     substituteFrom:
       - kind: Secret
         name: github-flux-secrets
