@@ -23,3 +23,9 @@ spec:
       destination:
         name: manager
         namespace: crossplane-system
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
+        automated:
+          prune: true
+          selfHeal: false
