@@ -1,0 +1,26 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: crossplane
+  namespace: argocd
+spec:
+  clusterResourceBlacklist:
+    - group: ""
+      kind: ""
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  description: crossplane
+  destinations:
+    - name: manager
+      namespace: '*'
+      server: https://10.31.101.141:6443
+  namespaceResourceBlacklist:
+    - group: ""
+      kind: ""
+  namespaceResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  sourceRepos:
+    - '*'

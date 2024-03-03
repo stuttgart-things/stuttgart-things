@@ -1,0 +1,25 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: crossplane-vspherevm-labul
+  namespace: argocd
+spec:
+  generators:
+  - git:
+      repoURL: https://github.com/stuttgart-things/stuttgart-things.git
+      revision: HEAD
+      directories:
+      - path: crossplane/claims/vspherevm/labul/*
+  template:
+    metadata:
+      name: '{{path.basename}}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/stuttgart-things/stuttgart-things.git
+        targetRevision: HEAD
+        path: '{{ path }}'
+      destination:
+        name: manager
+        namespace: crossplane-system
