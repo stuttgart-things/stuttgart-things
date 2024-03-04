@@ -86,7 +86,7 @@ jobs:
         id: config
         run: |
           echo 'countVM: ${{ inputs.count-vm }}' >> values.yaml
-          echo 'vmName: ${{ inputs.vm-name }} >> values.yaml
+          echo 'vmName: ${{ inputs.vm-name }}' >> values.yaml
           cat values.yaml
 
   # Create-Proxmox-Vm:
