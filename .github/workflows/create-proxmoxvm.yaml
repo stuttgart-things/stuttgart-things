@@ -1,5 +1,5 @@
 ---
-name: Create ProxmoxVm
+name: Create ProxmoxVM
 on:
   workflow_dispatch:
     inputs:
@@ -81,6 +81,13 @@ jobs:
       - name: Checkout code
         id: checkout
         uses: actions/checkout@v4.1.1
+
+      - name: Create vm config
+        id: config
+        run: |
+          echo 'countVM: ${{ inputs.count-vm }}' >> values.yaml
+          echo 'vmName: ${{ inputs.vm-name }} >> values.yaml
+          cat values.yaml
 
   # Create-Proxmox-Vm:
   #   name: Release Golang
