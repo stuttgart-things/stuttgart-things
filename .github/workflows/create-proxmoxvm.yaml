@@ -78,9 +78,6 @@ jobs:
       image: eu.gcr.io/stuttgart-things/machineshop:v0.1.53-git
     continue-on-error: false
     steps:
-      - name: Checkout code
-        id: checkout
-        uses: actions/checkout@v4.1.1
 
       - name: Create vm config
         id: config
@@ -100,6 +97,7 @@ jobs:
   Create-Proxmox-Vm:
     name: Release Golang
     uses: stuttgart-things/stuttgart-things/.github/workflows/render-pr-vm.yaml@main
+    needs: Create-VM-Config
     with:
       environment-name: k8s
       runs-on: arc-runner-scale-set-stuttgart-things
