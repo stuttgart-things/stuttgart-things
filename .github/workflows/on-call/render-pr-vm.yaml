@@ -30,6 +30,7 @@ jobs:
         uses: actions/checkout@v4.1.1
 
       - name: Download VM config
+        id: download
         uses: actions/download-artifact@v4.1.4
         with:
           name: ${{ inputs.vm-name }}
