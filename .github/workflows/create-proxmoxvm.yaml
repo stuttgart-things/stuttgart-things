@@ -85,9 +85,16 @@ jobs:
       - name: Create vm config
         id: config
         run: |
-          echo 'countVM: ${{ inputs.count-vm }}' >> values.yaml
-          echo 'vmName: ${{ inputs.vm-name }}' >> values.yaml
+          echo 'countVM: ${{ inputs.count-vm }}' >> ./${{ inputs.vm-name }}.yaml.yaml
+          echo 'vmName: ${{ inputs.vm-name }}' >> ./${{ inputs.vm-name }}.yaml.yaml
           cat values.yaml
+
+      - name: Upload linting results
+        id: upload
+        uses: actions/upload-artifact@v4.1.0
+        with:
+          name: ${{ inputs.vm-name }}
+          path: ${{ inputs.vm-name }}.yaml
 
   # Create-Proxmox-Vm:
   #   name: Release Golang
