@@ -1,0 +1,43 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: crossplane-vspherevm-labul-pullrequest
+  namespace: argocd
+spec:
+  generators:
+    - matrix:
+        generators:
+          - pullRequest:
+              github:
+                owner: stuttgart-things
+                repo: stuttgart-things
+                tokenRef:
+                  secretName: github
+                  key: GITHUB_TOKEN
+                # labels:
+                #   - build # label on PR that trigger review app
+              requeueAfterSeconds: 300
+          - git:
+              repoURL: https://github.com/stuttgart-things/stuttgart-things.git
+              revision: HEAD
+              directories:
+              - path: crossplane/claims/vspherevm/labul/*
+  template:
+    metadata:
+      name: 'vspherevm-{{ branch_slug }}-{{ number }}'
+    spec:
+      project: default
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: false
+      destination:
+        name: manager
+        namespace: crossplane-system
+      source:
+        repoURL: https://github.com/stuttgart-things/stuttgart-things.git
+        targetRevision: '{{ branch_slug }}'
+        path: 'crossplane/claims/vspherevm/labul/{{ branch_slug }}'
+        directory:
+          recurse: true
