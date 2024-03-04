@@ -103,6 +103,7 @@ jobs:
     with:
       environment-name: k8s
       runs-on: arc-runner-scale-set-stuttgart-things
+      vm-name: ${{ inputs.vm-name }}
     secrets: inherit
 
 
