@@ -1,5 +1,5 @@
 ---
-name: Create ProxmoxVm Crossplane VM Definition
+name: Create ProxmoxVm
 on:
   workflow_dispatch:
     inputs:
@@ -61,10 +61,7 @@ on:
         type: string
         description: FOLDER ON PVE
         default: stuttgart-things
-      vm-node:
-        type: string
-        description: PVE NODE
-        default: sthings-pve1
+
 env:
   # DESTINATION_DIR: crossplane/labul/pve/
   TEMPLATE_NAME: proxmoxvm.yaml
@@ -75,8 +72,8 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
-    runs-on: ${{ inputs.runs-on }}
-    environment: ${{ inputs.environment-name }}
+    runs-on: arc-runner-scale-set-stuttgart-things
+    environment: k8s
     container:
       image: eu.gcr.io/stuttgart-things/machineshop:v0.1.53-git
     continue-on-error: false
