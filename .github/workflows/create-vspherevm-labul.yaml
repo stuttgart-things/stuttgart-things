@@ -82,4 +82,11 @@ jobs:
           echo '---' >> ./${{ inputs.vm-name }}.yaml
           echo 'countVM: ${{ inputs.count-vm }}' >> ./${{ inputs.vm-name }}.yaml
           echo 'vmName: ${{ inputs.vm-name }}' >> ./${{ inputs.vm-name }}.yaml
+          echo 'vmCpu: ${{ inputs.vm-cpu }}' >> ./${{ inputs.vm-name }}.yaml
+          echo 'vmMemory: ${{ inputs.vm-memory }}' >> ./${{ inputs.vm-name }}.yaml
+          echo 'vmDisk: ${{ inputs.vm-disk }}' >> ./${{ inputs.vm-name }}.yaml
+          echo 'vmTemplate: ${{ inputs.vm-template }}' >> ./${{ inputs.vm-name }}.yaml
+          echo 'vmNetwork: ${{ inputs.vm-network }}' >> ./${{ inputs.vm-name }}.yaml
+          echo 'datastore: ${{ inputs.datastore }}' >> ./${{ inputs.vm-name }}.yaml
+          echo 'vmFolder: ${{ inputs.vm-folder }}' >> ./${{ inputs.vm-name }}.yaml
           cat ${{ inputs.vm-name }}.yaml
