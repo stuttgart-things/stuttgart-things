@@ -16,6 +16,9 @@ on:
       template-path:
         required: true
         type: string
+      destination-dir:
+        required: true
+        type: string
 
 jobs:
   Create-VM-Config:
@@ -44,7 +47,11 @@ jobs:
           cat ${{ inputs.vm-name }}.yaml
           cat ${{ inputs.template-path }}
 
+          mkdir -p ${{ inputs.destination-dir }}
+          
           machineShop render \
           --source local \
           --template ${{ inputs.template-path }} \
-          --defaults ${{ inputs.vm-name }}.yaml
+          --defaults ${{ inputs.vm-name }}.yaml \
+          --output file \
+          --destination ${{ inputs.destination-dir }}/${{ inputs.vm-name }}.yaml
