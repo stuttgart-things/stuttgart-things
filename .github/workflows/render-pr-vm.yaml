@@ -38,8 +38,13 @@ jobs:
         with:
           name: ${{ inputs.vm-name }}
 
-      - name: Render ProxmoxVM CR
+      - name: Render VsphereVM CustomResource
         id: config
         run: |
           cat ${{ inputs.vm-name }}.yaml
-          echo ${{ inputs.template-path }}
+          cat ${{ inputs.template-path }}
+
+          machineshop render \
+          --source local \
+          --template ${{ inputs.template-path }} \
+          --defaults ${{ inputs.vm-name }}.yaml
