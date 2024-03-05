@@ -104,3 +104,21 @@ jobs:
           echo 'resourcePool: /LabUL/host/Cluster01/Resources' >> ./${{ inputs.vm-name }}.yaml
           echo 'templatePath: /LabUL/vm/phermann/vm-templates' >> ./${{ inputs.vm-name }}.yaml
           cat ${{ inputs.vm-name }}.yaml
+
+      - name: Upload VM config
+        id: upload
+        uses: actions/upload-artifact@v4.1.0
+        with:
+          name: ${{ inputs.vm-name }}
+          path: ${{ inputs.vm-name }}.yaml
+
+  Create-VsphereVM-CR:
+    name: Render And Create VsphereVM CR
+    uses: stuttgart-things/stuttgart-things/.github/workflows/render-pr-vm.yaml@main
+    needs: Create-VM-Config
+    with:
+      environment-name: k8s
+      runs-on: arc-runner-scale-set-stuttgart-things
+      vm-name: ${{ inputs.vm-name }}
+      template-path: crossplane/claims/vspherevm.yaml
+    secrets: inherit
