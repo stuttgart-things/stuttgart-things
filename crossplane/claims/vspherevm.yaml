@@ -2,24 +2,24 @@
 apiVersion: resources.stuttgart-things.com/v1alpha1
 kind: VsphereVM
 metadata:
-  name: torronto
+  name: {{ .vmName }}
   namespace: default
 spec:
   providerRef:
     name: terraform-default
   vm:
-    count: "1"
-    name: torronto
-    ram: "4096"
-    disk: "32"
-    cpu: "8"
+    count: "{{ .vmCount }}"
+    name: {{ .vmName }}
+    cpu: "{{ .vmCpu }}"
+    ram: "{{ .vmMem }}"
+    disk: "{{ .vmDisk }}"
     firmware: bios
     folderPath: phermann/testing
     datacenter: /LabUL
-    datastore: /LabUL/datastore/UL-ESX-SAS-02
+    datastore: {{ .datastore }}
     resourcePool: /LabUL/host/Cluster01/Resources
-    network: /LabUL/network/LAB-10.31.103
-    template: /LabUL/vm/phermann/vm-templates/ubuntu22
+    network: {{ .network }}
+    template: /LabUL/vm/phermann/vm-templates/{{ .template }}
     bootstrap: '["echo STUTTGART-THINGS"]'
     annotation: VSPHERE-VM BUILD w/ CROSSPLANE FOR STUTTGART-THINGS
     unverifiedSsl: "true"
