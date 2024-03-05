@@ -13,6 +13,9 @@ on:
       vm-name:
         required: true
         type: string
+      template-path:
+        required: true
+        type: string
 
 jobs:
   Create-VM-Config:
@@ -39,3 +42,4 @@ jobs:
         id: config
         run: |
           cat ${{ inputs.vm-name }}.yaml
+          echo ${{ inputs.template-path }}
