@@ -95,7 +95,7 @@ jobs:
           path: ${{ inputs.vm-name }}.yaml
 
   Create-Proxmox-Vm:
-    name: Release Golang
+    name: Render ProxmoxVM CR
     uses: stuttgart-things/stuttgart-things/.github/workflows/render-pr-vm.yaml@main
     needs: Create-VM-Config
     with:

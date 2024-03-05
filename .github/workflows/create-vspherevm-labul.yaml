@@ -1,0 +1,85 @@
+---
+name: Create VsphereVM LabUL
+on:
+  workflow_dispatch:
+    inputs:
+      count-vm:
+        type: choice
+        description: COUNT OF VMS
+        options:
+          - 1
+          - 2
+          - 3
+          - 4
+          - 5
+      vm-name:
+        required: true
+        type: string
+      vm-cpu:
+        type: choice
+        description: COUNT OF CPUS
+        options:
+          - 2
+          - 4
+          - 6
+          - 8
+      vm-memory:
+        type: choice
+        description: MEMORY OF VM
+        options:
+          - 2048
+          - 4096
+          - 6144
+          - 8196
+      vm-disk:
+        type: choice
+        description: SIZE OF DISK
+        options:
+          - 20
+          - 32
+          - 64
+          - 96
+          - 128
+      vm-template:
+        type: choice
+        description: TEMPLATE OF VM
+        options:
+          - sthings-u23
+          - sthings-r9
+      vm-network:
+        type: choice
+        description: NETWORK OF VM
+        options:
+          - /LabUL/network/LAB-10.31.102
+          - /LabUL/network/LAB-10.31.103
+          - /LabUL/network/LAB-10.31.104
+      datastore:
+        type: choice
+        description: DATASTORE OF VM
+        options:
+          - /LabUL/datastore/UL-ESX-SAS-02
+      vm-folder:
+        type: choice
+        description: FOLDER ON PVE
+        options:
+          - stuttgart-things/testing
+          - stuttgart-things/infra
+
+jobs:
+  Create-VM-Config:
+    permissions:
+      contents: write
+      pull-requests: write
+    runs-on: arc-runner-scale-set-stuttgart-things
+    environment: k8s
+    container:
+      image: eu.gcr.io/stuttgart-things/machineshop:v0.1.53-git
+    continue-on-error: false
+    steps:
+      - name: Create vm config
+        id: config
+        run: |
+          echo '---' >> ./${{ inputs.vm-name }}.yaml
+          echo 'countVM: ${{ inputs.count-vm }}' >> ./${{ inputs.vm-name }}.yaml
+          echo 'vmName: ${{ inputs.vm-name }}' >> ./${{ inputs.vm-name }}.yaml
+          cat ${{ inputs.vm-name }}.yaml
