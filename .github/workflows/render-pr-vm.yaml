@@ -44,7 +44,7 @@ jobs:
           cat ${{ inputs.vm-name }}.yaml
           cat ${{ inputs.template-path }}
 
-          machineshop render \
+          machineShop render \
           --source local \
           --template ${{ inputs.template-path }} \
           --defaults ${{ inputs.vm-name }}.yaml
