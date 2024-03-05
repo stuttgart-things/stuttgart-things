@@ -11,59 +11,24 @@ spec:
     count: "{{ .vmCount }}"
     name: {{ .vmName }}
     cpu: "{{ .vmCpu }}"
-    ram: "{{ .vmMem }}"
+    ram: "{{ .vmMemory }}"
     disk: "{{ .vmDisk }}"
-    firmware: bios
-    folderPath: phermann/testing
-    datacenter: /LabUL
-    datastore: {{ .datastore }}
-    resourcePool: /LabUL/host/Cluster01/Resources
-    network: {{ .network }}
-    template: /LabUL/vm/phermann/vm-templates/{{ .template }}
+    firmware: {{ .vmFirmware }}
+    folderPath: {{ .vmFolder }}
+    datacenter: {{ .datacenter }}
+    datastore: {{ .vmDatastore }}
+    resourcePool: {{ .resourcePool }}
+    network: {{ .vmNetwork }}
+    template: {{ .templatePath }}/{{ .vmTemplate }}
     bootstrap: '["echo STUTTGART-THINGS"]'
     annotation: VSPHERE-VM BUILD w/ CROSSPLANE FOR STUTTGART-THINGS
     unverifiedSsl: "true"
   tfvars:
-    secretName: vsphere-labul-tfvars
-    secretNamespace: default
-    secretKey: vsphere-labul.tfvars
+    secretName: vsphere-{{ .lab }}-tfvars
+    secretNamespace: {{ .namespace }}
+    secretKey: vsphere-{{ .lab }}.tfvars
   connectionSecret:
-    name: torronto
-    namespace: default
+    name: {{ .vmName }}
+    namespace: {{ .namespace }}
   compositionRef:
     name: vsphere-vm
----
-# ---
-# apiVersion: resources.stuttgart-things.com/v1alpha1
-# kind: VsphereVM
-# metadata:
-#   name: minnesota
-#   namespace: default
-# spec:
-#   providerRef:
-#     name: terraform-default
-#   vm:
-#     count: "1"
-#     name: minnesota
-#     ram: "4096"
-#     disk: "32"
-#     cpu: "8"
-#     firmware: bios
-#     folderPath: stuttgart-things/testing
-#     datacenter: /NetApp-HCI-Datacenter
-#     datastore: /NetApp-HCI-Datacenter/datastore/DatastoreCluster/NetApp-HCI-Datastore-02
-#     resourcePool: Resources
-#     network: /NetApp-HCI-Datacenter/network/tiab-prod
-#     template: /NetApp-HCI-Datacenter/vm/stuttgart-things/vm-templates/ubuntu22
-#     bootstrap: '["echo STUTTGART-THINGS"]'
-#     annotation: VSPHERE-VM BUILD w/ CROSSPLANE FOR STUTTGART-THINGS
-#     unverifiedSsl: "true"
-#   tfvars:
-#     secretName: vsphere-labda-tfvars
-#     secretNamespace: default
-#     secretKey: vsphere-labda.tfvars
-#   connectionSecret:
-#     name: minnesota
-#     namespace: default
-#   compositionRef:
-#     name: vsphere-vm

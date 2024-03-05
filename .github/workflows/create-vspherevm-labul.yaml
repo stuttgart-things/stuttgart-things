@@ -88,13 +88,20 @@ jobs:
         id: config
         run: |
           echo '---' >> ./${{ inputs.vm-name }}.yaml
-          echo 'countVM: ${{ inputs.count-vm }}' >> ./${{ inputs.vm-name }}.yaml
+          echo 'vmCount: ${{ inputs.count-vm }}' >> ./${{ inputs.vm-name }}.yaml
           echo 'vmName: ${{ inputs.vm-name }}' >> ./${{ inputs.vm-name }}.yaml
           echo 'vmCpu: ${{ inputs.vm-cpu }}' >> ./${{ inputs.vm-name }}.yaml
           echo 'vmMemory: ${{ inputs.vm-memory }}' >> ./${{ inputs.vm-name }}.yaml
           echo 'vmDisk: ${{ inputs.vm-disk }}' >> ./${{ inputs.vm-name }}.yaml
           echo 'vmTemplate: ${{ inputs.vm-template }}' >> ./${{ inputs.vm-name }}.yaml
           echo 'vmNetwork: ${{ inputs.vm-network }}' >> ./${{ inputs.vm-name }}.yaml
-          echo 'datastore: ${{ inputs.datastore }}' >> ./${{ inputs.vm-name }}.yaml
+          echo 'vmDatastore: ${{ inputs.datastore }}' >> ./${{ inputs.vm-name }}.yaml
           echo 'vmFolder: ${{ inputs.vm-folder }}' >> ./${{ inputs.vm-name }}.yaml
+          echo 'lab: labul >> ./${{ inputs.vm-name }}.yaml
+          echo 'namespace: crossplane-system >> ./${{ inputs.vm-name }}.yaml
+          echo 'vmFirmware: bios >> ./${{ inputs.vm-name }}.yaml
+          echo 'datacenter: /LabUL >> ./${{ inputs.vm-name }}.yaml
+          echo 'resourcePool: /LabUL/host/Cluster01/Resources >> ./${{ inputs.vm-name }}.yaml
+          echo 'templatePath: /LabUL/vm/phermann/vm-templates >> ./${{ inputs.vm-name }}.yaml
+
           cat ${{ inputs.vm-name }}.yaml
