@@ -47,11 +47,13 @@ jobs:
           cat ${{ inputs.vm-name }}.yaml
           cat ${{ inputs.template-path }}
 
-          mkdir -p ${{ inputs.destination-dir }}
+          mkdir -p ${{ inputs.destination-dir }}/${{ inputs.vm-name }}
           
           machineShop render \
           --source local \
           --template ${{ inputs.template-path }} \
           --defaults ${{ inputs.vm-name }}.yaml \
           --output file \
-          --destination ${{ inputs.destination-dir }}/${{ inputs.vm-name }}.yaml
+          --destination ${{ inputs.destination-dir }}/${{ inputs.vm-name }}/${{ inputs.vm-name }}-vm.yaml
+
+          ls -lta ${{ inputs.destination-dir }}/${{ inputs.vm-name }}/
