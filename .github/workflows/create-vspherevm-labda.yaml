@@ -1,0 +1,14 @@
+---
+name: Create VsphereVM LabDA
+on:
+  workflow_dispatch:
+  inputs:
+    count-vm:
+    type: choice
+    description: COUNT OF VMS
+    options:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
