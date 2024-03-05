@@ -78,7 +78,6 @@ jobs:
       image: eu.gcr.io/stuttgart-things/machineshop:v0.1.53-git
     continue-on-error: false
     steps:
-
       - name: Create vm config
         id: config
         run: |
