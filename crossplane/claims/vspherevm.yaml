@@ -24,7 +24,7 @@ spec:
     annotation: VSPHERE-VM BUILD w/ CROSSPLANE FOR STUTTGART-THINGS
     unverifiedSsl: "true"
   tfvars:
-    secretName: vsphere-{{ .lab }}-tfvars
+    secretName: {{ .tfvars }}
     secretNamespace: {{ .namespace }}
     secretKey: vsphere-{{ .lab }}.tfvars
   connectionSecret:
