@@ -14,6 +14,9 @@ spec:
   path: ./infra/longhorn
   prune: true
   wait: true
+  postBuild:
+    substitute:
+      LONGHORN_NAMESPACE: longhorn-system
   patches:
     - patch: |-
         - op: replace
