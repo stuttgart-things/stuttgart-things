@@ -1,0 +1,34 @@
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: VsphereVM
+metadata:
+  name: test-pr6
+  namespace: crossplane-system
+spec:
+  providerRef:
+    name: default
+  vm:
+    count: "1"
+    name: test-pr6
+    cpu: "2"
+    ram: "2048"
+    disk: "20"
+    firmware: bios
+    folderPath: stuttgart-things/testing
+    datacenter: /LabUL
+    datastore: /LabUL/datastore/UL-ESX-SAS-01
+    resourcePool: /LabUL/host/Cluster-V6.5/Resources
+    network: /LabUL/network/MGMT-10.31.101
+    template: /LabUL/vm/stuttgart-things/vm-templates/sthings-u23
+    bootstrap: '["echo STUTTGART-THINGS"]'
+    annotation: VSPHERE-VM BUILD w/ CROSSPLANE FOR STUTTGART-THINGS
+    unverifiedSsl: "true"
+  tfvars:
+    secretName: vsphere-tfvars
+    secretNamespace: crossplane-system
+    secretKey: terraform.tfvars
+  connectionSecret:
+    name: test-pr6
+    namespace: crossplane-system
+  compositionRef:
+    name: vsphere-vm
