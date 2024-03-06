@@ -44,7 +44,6 @@ on:
         type: choice
         description: TEMPLATE OF VM
         options:
-          - sthings-u22
           - sthings-u23
           - sthings-r9
       vm-network:
