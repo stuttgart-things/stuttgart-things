@@ -1,0 +1,16 @@
+---
+vmCount: 1
+vmName: losangeles
+vmCpu: 2
+vmMemory: 2048
+vmDisk: 20
+vmTemplate: sthings-u22
+vmNetwork: /LabUL/network/MGMT-10.31.101
+vmDatastore: /LabUL/datastore/UL-ESX-SAS-01
+vmFolder: stuttgart-things/testing
+lab: labul
+namespace: crossplane-system
+vmFirmware: bios
+datacenter: /LabUL
+resourcePool: /LabUL/host/Cluster01/Resources
+templatePath: /LabUL/vm/phermann/vm-templates
