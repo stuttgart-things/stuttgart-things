@@ -26,7 +26,7 @@ spec:
   tfvars:
     secretName: {{ .tfvars }}
     secretNamespace: {{ .namespace }}
-    secretKey: vsphere-{{ .lab }}.tfvars
+    secretKey: {{ .secretKey }}
   connectionSecret:
     name: {{ .vmName }}
     namespace: {{ .namespace }}

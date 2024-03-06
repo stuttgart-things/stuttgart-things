@@ -110,7 +110,7 @@ jobs:
           echo 'resourcePool: /LabUL/host/Cluster01/Resources' >> ./${{ inputs.vm-name }}.yaml
           echo 'templatePath: /LabUL/vm/phermann/vm-templates' >> ./${{ inputs.vm-name }}.yaml
           echo 'tfvars: vsphere-tfvars' >> ./${{ inputs.vm-name }}.yaml
-
+          echo 'secretKey: terraform.tfvars' >> ./${{ inputs.vm-name }}.yaml
           cat ${{ inputs.vm-name }}.yaml
 
       - name: Upload VM config
