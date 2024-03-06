@@ -40,7 +40,7 @@ on:
           - 128
           - 20
           - 32
-        vm-template:
+      vm-template:
         type: choice
         description: TEMPLATE OF VM
         options:
