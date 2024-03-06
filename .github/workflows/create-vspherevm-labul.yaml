@@ -35,12 +35,12 @@ on:
         type: choice
         description: SIZE OF DISK
         options:
-          - 20
-          - 32
           - 64
           - 96
           - 128
-      vm-template:
+          - 20
+          - 32
+        vm-template:
         type: choice
         description: TEMPLATE OF VM
         options:
