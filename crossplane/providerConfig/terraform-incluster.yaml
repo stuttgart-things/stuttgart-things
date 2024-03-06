@@ -1,0 +1,15 @@
+---
+apiVersion: tf.upbound.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: {{ .vmName }}
+  namespace: {{ .namespace }}
+spec:
+  configuration: |
+    terraform {
+      backend "kubernetes" {
+        secret_suffix     = "{{ .vmName }}"
+        namespace         = "{{ .namespace }}"
+        in_cluster_config = true
+      }
+    }
