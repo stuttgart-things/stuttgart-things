@@ -107,7 +107,7 @@ jobs:
           echo 'namespace: crossplane-system' >> ./${{ inputs.vm-name }}.yaml
           echo 'vmFirmware: bios' >> ./${{ inputs.vm-name }}.yaml
           echo 'datacenter: /LabUL' >> ./${{ inputs.vm-name }}.yaml
-          echo 'resourcePool: /LabUL/host/Cluster01/Resources' >> ./${{ inputs.vm-name }}.yaml
+          echo 'resourcePool: /LabUL/host/Cluster-V6.5/Resources' >> ./${{ inputs.vm-name }}.yaml
           echo 'templatePath: /LabUL/vm/phermann/vm-templates' >> ./${{ inputs.vm-name }}.yaml
           echo 'tfvars: vsphere-tfvars' >> ./${{ inputs.vm-name }}.yaml
           echo 'secretKey: terraform.tfvars' >> ./${{ inputs.vm-name }}.yaml
