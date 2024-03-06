@@ -19,7 +19,7 @@ on:
       destination-dir:
         required: true
         type: string
-      crossplane-provider:
+      provider-template-path:
         required: false
         default: incluster
         type: string
@@ -62,7 +62,7 @@ jobs:
 
           machineShop render \
           --source local \
-          --template crossplane/providerConfig/terraform-${{ inputs.crossplane-provider }} \
+          --template ${{ inputs.provider-template-path }} \
           --defaults ${{ inputs.vm-name }}.yaml \
           --output file \
           --destination ${{ inputs.destination-dir }}/${{ inputs.vm-name }}/${{ inputs.vm-name }}-provider.yaml

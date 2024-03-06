@@ -131,5 +131,5 @@ jobs:
       vm-name: ${{ inputs.vm-name }}
       template-path: crossplane/claims/vspherevm.yaml
       destination-dir: crossplane/claims/vspherevm/labul/
-      crossplane-provider: ${{ inputs.crossplane-provider }}
+      provider-template-path: crossplane/providerConfig/terraform-${{ inputs.crossplane-provider }}.yaml
     secrets: inherit
