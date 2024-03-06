@@ -19,6 +19,10 @@ on:
       destination-dir:
         required: true
         type: string
+      crossplane-provider:
+        required: false
+        default: incluster
+        type: string
 
 jobs:
   Create-VM-Config:
@@ -55,6 +59,13 @@ jobs:
           --defaults ${{ inputs.vm-name }}.yaml \
           --output file \
           --destination ${{ inputs.destination-dir }}/${{ inputs.vm-name }}/${{ inputs.vm-name }}-vm.yaml
+
+          machineShop render \
+          --source local \
+          --template crossplane/providerConfig/terraform-${{ inputs.crossplane-provider }} \
+          --defaults ${{ inputs.vm-name }}.yaml \
+          --output file \
+          --destination ${{ inputs.destination-dir }}/${{ inputs.vm-name }}/${{ inputs.vm-name }}-provider.yaml
 
           ls -lta ${{ inputs.destination-dir }}/${{ inputs.vm-name }}/
 
