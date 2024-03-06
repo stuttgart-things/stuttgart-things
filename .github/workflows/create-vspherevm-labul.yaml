@@ -73,7 +73,11 @@ on:
         options:
           - stuttgart-things/testing
           - stuttgart-things/infra
-
+      crossplane-provider:
+        type: choice
+        description: CROSSPLANE PROVIDER NAME
+        options:
+          - default
 jobs:
   Create-VM-Config:
     permissions:
@@ -99,11 +103,13 @@ jobs:
           echo 'vmDatastore: ${{ inputs.datastore }}' >> ./${{ inputs.vm-name }}.yaml
           echo 'vmFolder: ${{ inputs.vm-folder }}' >> ./${{ inputs.vm-name }}.yaml
           echo 'lab: labul' >> ./${{ inputs.vm-name }}.yaml
+          echo 'crossplaneProvider: ${{ inputs.crossplane-provider }}' >> ./${{ inputs.vm-name }}.yaml
           echo 'namespace: crossplane-system' >> ./${{ inputs.vm-name }}.yaml
           echo 'vmFirmware: bios' >> ./${{ inputs.vm-name }}.yaml
           echo 'datacenter: /LabUL' >> ./${{ inputs.vm-name }}.yaml
           echo 'resourcePool: /LabUL/host/Cluster01/Resources' >> ./${{ inputs.vm-name }}.yaml
           echo 'templatePath: /LabUL/vm/phermann/vm-templates' >> ./${{ inputs.vm-name }}.yaml
+
           cat ${{ inputs.vm-name }}.yaml
 
       - name: Upload VM config
