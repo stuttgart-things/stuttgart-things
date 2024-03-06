@@ -3,10 +3,10 @@ apiVersion: resources.stuttgart-things.com/v1alpha1
 kind: VsphereVM
 metadata:
   name: {{ .vmName }}
-  namespace: default
+  namespace: {{ .namespace }}
 spec:
   providerRef:
-    name: terraform-default
+    name: {{ .crossplaneProvider }}
   vm:
     count: "{{ .vmCount }}"
     name: {{ .vmName }}
