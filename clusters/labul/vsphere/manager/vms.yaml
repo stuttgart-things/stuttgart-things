@@ -1,50 +1,50 @@
----
-apiVersion: resources.stuttgart-things.com/v1alpha1
-kind: VsphereVM
-metadata:
-  name: texas
-  namespace: default
-spec:
-  providerRef:
-    name: default
-  vm:
-    count: "4"
-    name: texas
-    ram: "8192"
-    disk: "64"
-    cpu: "8"
-    firmware: bios
-    folderPath: stuttgart-things/testing
-    datacenter: /LabUL
-    datastore: /LabUL/datastore/UL-ESX-SAS-02
-    resourcePool: /LabUL/host/Cluster-V6.5/Resources
-    network: /LabUL/network/LAB-10.31.103
-    template: /LabUL/vm/stuttgart-things/vm-templates/sthings-u23
-    bootstrap: '["echo STUTTGART-THINGS"]'
-    annotation: VSPHERE-VM BUILD w/ CROSSPLANE FOR STUTTGART-THINGS
-    unverifiedSsl: "true"
-  tfvars:
-    secretName: vsphere-tfvars
-    secretNamespace: crossplane-system
-    secretKey: terraform.tfvars
-  connectionSecret:
-    name: texas
-    namespace: crossplane-system
-  compositionRef:
-    name: vsphere-vm
+# ---
+# apiVersion: resources.stuttgart-things.com/v1alpha1
+# kind: VsphereVM
+# metadata:
+#   name: sthings-cicd
+#   namespace: default
+# spec:
+#   providerRef:
+#     name: default
+#   vm:
+#     count: "4"
+#     name: sthings-cicd
+#     ram: "8192"
+#     disk: "64"
+#     cpu: "8"
+#     firmware: bios
+#     folderPath: stuttgart-things/testing
+#     datacenter: /LabUL
+#     datastore: /LabUL/datastore/UL-ESX-SAS-02
+#     resourcePool: /LabUL/host/Cluster-V6.5/Resources
+#     network: /LabUL/network/LAB-10.31.103
+#     template: /LabUL/vm/stuttgart-things/vm-templates/sthings-u23
+#     bootstrap: '["echo STUTTGART-THINGS"]'
+#     annotation: VSPHERE-VM BUILD w/ CROSSPLANE FOR STUTTGART-THINGS
+#     unverifiedSsl: "true"
+#   tfvars:
+#     secretName: vsphere-tfvars
+#     secretNamespace: crossplane-system
+#     secretKey: terraform.tfvars
+#   connectionSecret:
+#     name: sthings-cicd
+#     namespace: crossplane-system
+#   compositionRef:
+#     name: vsphere-vm
 ---
 apiVersion: resources.stuttgart-things.com/v1alpha1
 kind: AnsibleRun
 metadata:
-  name: baseos-texas-2
+  name: baseos-sthings-cicd-2
   namespace: crossplane-system
 spec:
-  pipelineRunName: baseos-texas2
+  pipelineRunName: baseos-sthings-cicd2
   inventory:
-    - "all+[\"losangeles.labul.sva.de\"]"
-    - "all+[\"texas-2.labul.sva.de\"]"
-    - "all+[\"texas-3.labul.sva.de\"]"
-    - "all+[\"texas-4.labul.sva.de\"]"
+    - "all+[\"sthings-cicd.labul.sva.de\"]"
+    - "all+[\"sthings-cicd-2.labul.sva.de\"]"
+    - "all+[\"sthings-cicd-3.labul.sva.de\"]"
+    - "all+[\"sthings-cicd-4.labul.sva.de\"]"
   playbooks:
     - "ansible/playbooks/prepare-env.yaml"
     - "ansible/playbooks/base-os.yaml"
