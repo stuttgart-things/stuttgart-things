@@ -48,7 +48,7 @@ jobs:
           cat ${{ inputs.template-path }}
 
           mkdir -p ${{ inputs.destination-dir }}/${{ inputs.vm-name }}
-          
+
           machineShop render \
           --source local \
           --template ${{ inputs.template-path }} \
@@ -57,3 +57,11 @@ jobs:
           --destination ${{ inputs.destination-dir }}/${{ inputs.vm-name }}/${{ inputs.vm-name }}-vm.yaml
 
           ls -lta ${{ inputs.destination-dir }}/${{ inputs.vm-name }}/
+
+      - name: Create Pull Request
+        id: pr
+        uses: peter-evans/create-pull-request@v6.0.1
+        with:
+          commit-message: '[CI][CROSSPLANE] - Created config for vm ${{ inputs.vm-name }}'
+          title: 'Created crossplane vmconfig'
+          branch: ${{ inputs.vm-name }}
