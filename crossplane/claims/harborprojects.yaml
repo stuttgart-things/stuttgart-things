@@ -1,0 +1,19 @@
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: HarborProject
+metadata:
+  name: crossplane-claim3
+  namespace: crossplane-system
+spec:
+  compositionRef:
+    name: harbor-project
+  name: crossplane-claim3
+  providerRef:
+    name: harbor-project-incluster
+  tfvars:
+    secretName: harbor-tfvars
+    secretNamespace: crossplane-system
+    secretKey: terraform.tfvars
+  connectionSecret:
+    name: crossplane-claim3
+    namespace: crossplane-system

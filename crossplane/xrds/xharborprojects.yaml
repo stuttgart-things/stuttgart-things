@@ -1,0 +1,63 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: xharborprojects.resources.stuttgart-things.com
+spec:
+  group: resources.stuttgart-things.com
+  names:
+    kind: XHarborProject
+    plural: xharborprojects
+  claimNames:
+    kind: HarborProject
+    plural: harborprojects
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          description: A HarborProject is a composite resource that represents a Project Definition in Harbor Registry
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Name of harbor project
+                tfvars:
+                  type: object
+                  properties:
+                    secretName:
+                      type: string
+                    secretNamespace:
+                      type: string
+                      default: default
+                    secretKey:
+                      type: string
+                      default: terraform.tfvars
+                  required:
+                    - secretName
+                connectionSecret:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    namespace:
+                      type: string
+                      default: default
+                  required:
+                    - name
+                providerRef:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                  required:
+                    - name
+              required:
+                - name
+                - tfvars
+                - connectionSecret
+                - providerRef
