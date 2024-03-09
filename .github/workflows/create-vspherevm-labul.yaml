@@ -127,7 +127,7 @@ jobs:
     needs: Create-VM-Config
     with:
       environment-name: k8s
-      runs-on: arc-runner-scale-set-stuttgart-things
+      runs-on: ghr-stuttgart-things-sthings-cicd
       vm-name: ${{ inputs.vm-name }}
       template-path: crossplane/claims/vspherevm.yaml
       destination-dir: crossplane/claims/vspherevm/labul/
