@@ -21,11 +21,12 @@ spec:
           value: 0.8.0
       target:
         kind: HelmRelease
-        name: arc-runner-scale-set-docs
+        name: ghr-docs-sthings-cicd
         namespace: arc-runners
   postBuild:
     substitute:
       REPOSIORY_NAME: docs
+      CLUSTER_NAME: sthings-cicd
       GITHUB_URL: https://github.com/stuttgart-things/docs
       STORAGE_CLASS: openebs-hostpath
       STORAGE_REQUEST: 50Mi
@@ -56,11 +57,12 @@ spec:
           value: 0.8.0
       target:
         kind: HelmRelease
-        name: arc-runner-scale-set-kaeffken
+        name: ghr-kaeffken-sthings-cicd
         namespace: arc-runners
   postBuild:
     substitute:
       REPOSIORY_NAME: kaeffken
+      CLUSTER_NAME: sthings-cicd
       GITHUB_URL: https://github.com/stuttgart-things/kaeffken
       STORAGE_CLASS: openebs-hostpath
       STORAGE_REQUEST: 50Mi
@@ -91,11 +93,12 @@ spec:
           value: 0.8.0
       target:
         kind: HelmRelease
-        name: arc-runner-scale-set-aws-ec2-vm
+        name: ghr-aws-ec2-vm-sthings-cicd
         namespace: arc-runners
   postBuild:
     substitute:
       REPOSIORY_NAME: aws-ec2-vm
+      CLUSTER_NAME: sthings-cicd
       GITHUB_URL: https://github.com/stuttgart-things/aws-ec2-vm
       STORAGE_CLASS: openebs-hostpath
       STORAGE_REQUEST: 50Mi
@@ -126,11 +129,12 @@ spec:
           value: 0.8.0
       target:
         kind: HelmRelease
-        name: arc-runner-scale-set-machineshop
+        name: ghr-machineshop-sthings-cicd
         namespace: arc-runners
   postBuild:
     substitute:
       REPOSIORY_NAME: machineshop
+      CLUSTER_NAME: sthings-cicd
       GITHUB_URL: https://github.com/stuttgart-things/machineshop
       STORAGE_CLASS: openebs-hostpath
       STORAGE_REQUEST: 50Mi
@@ -161,11 +165,12 @@ spec:
           value: 0.8.0
       target:
         kind: HelmRelease
-        name: sthings-cicd-stuttgart-things
+        name: ghr-stuttgart-things-sthings-cicd
         namespace: arc-runners
   postBuild:
     substitute:
       REPOSIORY_NAME: stuttgart-things
+      CLUSTER_NAME: sthings-cicd
       GITHUB_URL: https://github.com/stuttgart-things/stuttgart-things
       STORAGE_CLASS: openebs-hostpath
       STORAGE_REQUEST: 50Mi

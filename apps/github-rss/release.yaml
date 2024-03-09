@@ -2,7 +2,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: arc-runner-scale-set-${REPOSIORY_NAME}
+  name: ghr-${REPOSIORY_NAME}-${CLUSTER_NAME}
   namespace: arc-runners
 spec:
   interval: 30m
