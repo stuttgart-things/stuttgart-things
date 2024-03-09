@@ -112,6 +112,7 @@ jobs:
           echo 'templatePath: /LabUL/vm/stuttgart-things/vm-templates' >> ./${{ inputs.vm-name }}.yaml
           echo 'tfvars: vsphere-tfvars' >> ./${{ inputs.vm-name }}.yaml
           echo 'secretKey: terraform.tfvars' >> ./${{ inputs.vm-name }}.yaml
+          echo 'crossplaneProvider: ${{ crossplane-provider }}-${{ inputs.vm-name }}' >> ./${{ inputs.vm-name }}.yaml
           cat ${{ inputs.vm-name }}.yaml
 
       - name: Upload VM config
