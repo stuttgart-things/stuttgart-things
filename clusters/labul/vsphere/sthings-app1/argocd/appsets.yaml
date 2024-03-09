@@ -5,6 +5,8 @@ metadata:
   name: crossplane-vspherevm-labul-pullrequest
   namespace: argocd
 spec:
+  syncPolicy:
+    preserveResourcesOnDeletion: true
   generators:
     - matrix:
         generators:
@@ -29,7 +31,6 @@ spec:
     spec:
       project: default
       syncPolicy:
-        preserveResourcesOnDeletion: true
         automated:
           prune: true
           selfHeal: false
