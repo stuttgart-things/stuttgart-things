@@ -161,7 +161,7 @@ spec:
           value: 0.8.0
       target:
         kind: HelmRelease
-        name: arc-runner-scale-set-stuttgart-things
+        name: sthings-cicd-stuttgart-things
         namespace: arc-runners
   postBuild:
     substitute:
