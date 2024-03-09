@@ -29,6 +29,7 @@ spec:
     spec:
       project: default
       syncPolicy:
+        preserveResourcesOnDeletion: true
         automated:
           prune: true
           selfHeal: false
@@ -41,7 +42,6 @@ spec:
         path: 'crossplane/claims/vspherevm/labul/{{ branch_slug }}'
         directory:
           recurse: true
----
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
