@@ -1,0 +1,20 @@
+---
+apiVersion: tf.upbound.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: minio-test-pr61
+  namespace: crossplane-system
+spec:
+  configuration: |
+    terraform {
+      backend "s3" {
+        endpoint = "https://artifacts.app1.sthings-vsphere.labul.sva.de"
+        key = "/LabUL/network/LAB-10.31.102.tfstate"
+        region = "main"
+        bucket = "/LabUL/network/LAB-10.31.102"
+        skip_credentials_validation = true
+        skip_metadata_api_check = true
+        skip_region_validation = true
+        force_path_style = true
+      }
+    }
