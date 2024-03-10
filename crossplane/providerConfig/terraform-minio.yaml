@@ -2,16 +2,16 @@
 apiVersion: tf.upbound.io/v1beta1
 kind: ProviderConfig
 metadata:
-  name: artifacts-labul-vsphere
-  namespace: default
+  name: {{ .crossplaneProvider }}
+  namespace: {{ .namespace }}
 spec:
   configuration: |
     terraform {
       backend "s3" {
-        endpoint = "https://artifacts.automation.sthings-vsphere.labul.sva.de"
-        key = "terraform2.tfstate"
-        region = "main"
-        bucket = "terraform"
+        endpoint = "{{ .s3Endpoint }}"
+        key = "{{ .stateKey }}.tfstate"
+        region = "{{ .s3Region }}"
+        bucket = "{{ .stateKey }}"
         skip_credentials_validation = true
         skip_metadata_api_check = true
         skip_region_validation = true

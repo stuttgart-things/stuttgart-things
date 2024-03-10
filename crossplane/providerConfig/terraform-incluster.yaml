@@ -8,7 +8,7 @@ spec:
   configuration: |
     terraform {
       backend "kubernetes" {
-        secret_suffix     = "{{ .vmName }}"
+        secret_suffix     = "{{ .stateKey }}"
         namespace         = "{{ .namespace }}"
         in_cluster_config = true
       }
