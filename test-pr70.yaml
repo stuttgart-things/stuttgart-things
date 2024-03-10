@@ -1,0 +1,23 @@
+---
+vmCount: 1
+vmName: test-pr70
+vmCpu: 4
+vmMemory: 4096
+vmDisk: 64
+vmTemplate: sthings-u23
+vmNetwork: /LabUL/network/LAB-10.31.103
+vmDatastore: /LabUL/datastore/UL-ESX-SAS-01
+vmFolder: stuttgart-things/testing
+lab: labul
+namespace: crossplane-system
+vmFirmware: bios
+datacenter: /LabUL
+resourcePool: /LabUL/host/Cluster-V6.5/Resources
+templatePath: /LabUL/vm/stuttgart-things/vm-templates
+tfvars: vsphere-tfvars
+secretKey: terraform.tfvars
+crossplaneProvider: minio-test-pr70
+s3Region: main
+s3Bucket: vspherevm-labul
+s3Endpoint: https://artifacts.app1.sthings-vsphere.labul.sva.de
+stateKey: test-pr70
