@@ -2,6 +2,36 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: nfs-csi
+  namespace: flux-system
+spec:
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infra/nfs-csi
+  prune: true
+  wait: true
+  postBuild:
+    substitute:
+      NFS_SERVER_FQDN: 10.31.101.26
+      NFS_SHARE_PATH: /data/col1/sthings
+      CLUSTER_NAME: texas
+  patches:
+    - patch: |-
+        - op: replace
+          path: /spec/chart/spec/version
+          value: v4.6.0
+      target:
+        kind: HelmRelease
+        name: nfs-csi
+        namespace: kube-system
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: longhorn
   namespace: flux-system
 spec:
