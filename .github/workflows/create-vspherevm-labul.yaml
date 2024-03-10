@@ -115,7 +115,7 @@ jobs:
           echo 'crossplaneProvider: ${{ inputs.crossplane-provider }}-${{ inputs.vm-name }}' >> ./${{ inputs.vm-name }}.yaml
           echo 's3Region: main' >> ./${{ inputs.vm-name }}.yaml
           echo 's3Bucket: vspherevm-labul' >> ./${{ inputs.vm-name }}.yaml
-          echo 's3Endpoint: https://artifacts.automation.sthings-vsphere.labul.sva.de' >> ./${{ inputs.vm-name }}.yaml
+          echo 's3Endpoint: https://artifacts.app1.sthings-vsphere.labul.sva.de' >> ./${{ inputs.vm-name }}.yaml
           echo 'stateKey: ${{ inputs.vm-network }}' >> ./${{ inputs.vm-name }}.yaml
           cat ${{ inputs.vm-name }}.yaml
 
