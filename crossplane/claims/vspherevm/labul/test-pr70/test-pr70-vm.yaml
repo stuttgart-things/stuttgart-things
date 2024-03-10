@@ -10,7 +10,7 @@ spec:
   vm:
     count: "1"
     name: test-pr70
-    cpu: "4"
+    cpu: "6"
     ram: "4096"
     disk: "64"
     firmware: bios
