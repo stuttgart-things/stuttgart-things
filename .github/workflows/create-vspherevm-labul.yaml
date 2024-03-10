@@ -77,8 +77,8 @@ on:
         type: choice
         description: CROSSPLANE PROVIDER NAME
         options:
-          - incluster
           - minio
+          - incluster
 
 jobs:
   Create-VM-Config:
