@@ -117,6 +117,10 @@ jobs:
           echo 's3Bucket: vspherevm-labul' >> ./${{ inputs.vm-name }}.yaml
           echo 's3Endpoint: https://artifacts.app1.sthings-vsphere.labul.sva.de' >> ./${{ inputs.vm-name }}.yaml
           echo 'stateKey: ${{ inputs.vm-name }}' >> ./${{ inputs.vm-name }}.yaml
+          # TEKTON
+          echo 'playbooks: [ansible/playbooks/prepare-env.yaml, ansible/playbooks/base-os.yaml]' >> ./${{ inputs.vm-name }}.yaml
+          echo 'ansibleWorkingImage: eu.gcr.io/stuttgart-things/sthings-ansible:9.21.0' >> ./${{ inputs.vm-name }}.yaml
+          echo 'tektonProviderRef: kubernetes-incluster' >> ./${{ inputs.vm-name }}.yaml
           cat ${{ inputs.vm-name }}.yaml
 
       - name: Upload VM config
