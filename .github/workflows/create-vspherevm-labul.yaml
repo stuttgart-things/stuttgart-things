@@ -169,7 +169,7 @@ jobs:
                 # SET VM STATS
 
 
-                set_env(DISK, print(disk['L']))
+                set_env("DISK", print(disk['L']))
 
                 print(memory['L'])
                 print(cpu['L'])
