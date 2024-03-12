@@ -182,8 +182,6 @@ jobs:
                 # WRITE VM CONFIG YAML TO DISK
                 write_yaml_todisk('./${{ inputs.vm-name }}.yaml')
 
-                vm-size
-
                 print(memory['L'])
                 print(cpu['L'])
                 print(os['labul-vsphere']['ubuntu23'])
