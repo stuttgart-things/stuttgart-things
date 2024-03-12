@@ -91,7 +91,7 @@ jobs:
       - name: Pip install
         id: pip
         run: |
-          pip install jinja2
+          pip install jinja2 pyyaml
 
       - name: Create vm config
         id: config1
@@ -101,6 +101,7 @@ jobs:
             from jinja2 import Template
             import os
             import random
+            import yaml
 
             inventoryTemplate = "[{% for count in range(0, vm_count) %}{% if loop.first%}{{ vm }}.{{ domain }}{% else %}{{ vm }}.{{ domain }}-{{ loop.index }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %}]"
 
@@ -152,6 +153,15 @@ jobs:
                 'labul-vsphere': ['/LabUL/network/MGMT-10.31.101', '/LabUL/network/LAB-10.31.102', '/LabUL/network/LAB-10.31.103', '/LabUL/network/LAB-10.31.104'],
             }
 
+            data = {
+              "vmName" : ${{ inputs.vm-name }},
+              "mode" : os['labul-vsphere']['ubuntu23'],
+            }
+
+            def write_yaml_todisk(output_path):
+              with open(output_path, 'w') as outfile:
+                yaml.dump(data, outfile, default_flow_style=False, sort_keys=False)
+
             def render_template(values):
               template = Template(inventoryTemplate)
               renderedTemplate = template.render(values)
@@ -167,9 +177,9 @@ jobs:
             def main():
 
                 # SET VM STATS
-                print(${{ inputs.vm-name }})
+                print('${{ inputs.vm-name }}')
+                write_yaml_todisk('./'${{ inputs.vm-name }}+'.yaml')
 
-                set_env("DISK", print(disk['L']))
 
                 print(memory['L'])
                 print(cpu['L'])
