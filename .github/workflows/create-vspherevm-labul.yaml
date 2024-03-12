@@ -15,31 +15,31 @@ on:
       vm-name:
         required: true
         type: string
-      vm-cpu:
+      vm-size:
         type: choice
-        description: COUNT OF CPUS
+        description: T-Shirt Size of VM
         options:
-          - 2
-          - 4
-          - 6
-          - 8
-      vm-memory:
-        type: choice
-        description: MEMORY OF VM
-        options:
-          - 2048
-          - 4096
-          - 6144
-          - 8196
-      vm-disk:
-        type: choice
-        description: SIZE OF DISK
-        options:
-          - 64
-          - 96
-          - 128
-          - 20
-          - 32
+          - S
+          - M
+          - L
+          - XL
+      # vm-memory:
+      #   type: choice
+      #   description: MEMORY OF VM
+      #   options:
+      #     - 2048
+      #     - 4096
+      #     - 6144
+      #     - 8196
+      # vm-disk:
+      #   type: choice
+      #   description: SIZE OF DISK
+      #   options:
+      #     - 64
+      #     - 96
+      #     - 128
+      #     - 20
+      #     - 32
       vm-template:
         type: choice
         description: TEMPLATE OF VM
@@ -47,23 +47,23 @@ on:
           - sthings-u22
           - sthings-u23
           - sthings-r9
-      vm-network:
-        type: choice
-        description: NETWORK OF VM
-        options:
-          - /LabUL/network/MGMT-10.31.101
-          - /LabUL/network/LAB-10.31.102
-          - /LabUL/network/LAB-10.31.103
-          - /LabUL/network/LAB-10.31.104
-      datastore:
-        type: choice
-        description: DATASTORE OF VM
-        options:
-          - /LabUL/datastore/UL-ESX-SAS-01
-          - /LabUL/datastore/UL-ESX-SAS-02
-          - /LabUL/datastore/UL-V5010-01-LUN1
-          - /LabUL/datastore/UL-V5010-01-LUN2
-          - /LabUL/datastore/UL-V5010-01-LUN3
+      # vm-network:
+      #   type: choice
+      #   description: NETWORK OF VM
+      #   options:
+      #     - /LabUL/network/MGMT-10.31.101
+      #     - /LabUL/network/LAB-10.31.102
+      #     - /LabUL/network/LAB-10.31.103
+      #     - /LabUL/network/LAB-10.31.104
+      # datastore:
+      #   type: choice
+      #   description: DATASTORE OF VM
+      #   options:
+      #     - /LabUL/datastore/UL-ESX-SAS-01
+      #     - /LabUL/datastore/UL-ESX-SAS-02
+      #     - /LabUL/datastore/UL-V5010-01-LUN1
+      #     - /LabUL/datastore/UL-V5010-01-LUN2
+      #     - /LabUL/datastore/UL-V5010-01-LUN3
       vm-folder:
         type: choice
         description: FOLDER ON PVE
@@ -154,8 +154,11 @@ jobs:
             }
 
             data = {
+              "vmCount" : '${{ inputs.count-vm }}',
               "vmName" : '${{ inputs.vm-name }}',
-              "mode" : os['labul-vsphere']['ubuntu23'],
+              "vmMemory" : memory['${{ inputs.vm-size }}'],
+              "vmCpu" : cpu['${{ inputs.vm-size }}'],
+              "vmTemplate" : os['labul-vsphere']['ubuntu23'],
             }
 
             def write_yaml_todisk(output_path):
@@ -176,10 +179,10 @@ jobs:
 
             def main():
 
-                # SET VM STATS
-                print('${{ inputs.vm-name }}')
+                # WRITE VM CONFIG YAML TO DISK
                 write_yaml_todisk('./${{ inputs.vm-name }}.yaml')
 
+                vm-size
 
                 print(memory['L'])
                 print(cpu['L'])
