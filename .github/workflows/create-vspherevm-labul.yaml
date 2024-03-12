@@ -167,7 +167,10 @@ jobs:
             def main():
 
                 # SET VM STATS
-                print(disk['L'])
+
+
+                set_env(DISK, print(disk['L']))
+
                 print(memory['L'])
                 print(cpu['L'])
                 print(os['labul-vsphere']['ubuntu23'])
@@ -187,6 +190,7 @@ jobs:
         id: config2
         run: |
           echo '---' >> ./${{ inputs.vm-name }}.yaml
+          echo 'DISKKK: ${{ env.DISK }}' >> ./${{ inputs.vm-name }}.yaml
           echo 'vmCount: ${{ inputs.count-vm }}' >> ./${{ inputs.vm-name }}.yaml
           echo 'vmName: ${{ inputs.vm-name }}' >> ./${{ inputs.vm-name }}.yaml
           echo 'vmCpu: ${{ inputs.vm-cpu }}' >> ./${{ inputs.vm-name }}.yaml
