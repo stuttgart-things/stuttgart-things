@@ -154,7 +154,7 @@ jobs:
             }
 
             data = {
-              "vmName" : ${{ inputs.vm-name }},
+              "vmName" : '${{ inputs.vm-name }}',
               "mode" : os['labul-vsphere']['ubuntu23'],
             }
 
