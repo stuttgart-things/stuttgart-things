@@ -167,7 +167,7 @@ jobs:
             def main():
 
                 # SET VM STATS
-
+                print(${{ inputs.vm-name }})
 
                 set_env("DISK", print(disk['L']))
 
