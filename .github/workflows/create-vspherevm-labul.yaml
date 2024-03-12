@@ -178,7 +178,7 @@ jobs:
 
                 # SET VM STATS
                 print('${{ inputs.vm-name }}')
-                write_yaml_todisk('./'${{ inputs.vm-name }}+'.yaml')
+                write_yaml_todisk('./'+${{ inputs.vm-name }}+'.yaml')
 
 
                 print(memory['L'])
