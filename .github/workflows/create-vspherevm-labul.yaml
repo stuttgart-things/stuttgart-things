@@ -88,6 +88,10 @@ jobs:
       image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2
     continue-on-error: false
     steps:
+      - name: Pip install
+        id: pip
+        run: |
+          pip install jinja2
 
       - name: Create vm config
         id: config1
