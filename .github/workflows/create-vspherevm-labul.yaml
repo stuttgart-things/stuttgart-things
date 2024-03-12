@@ -64,9 +64,6 @@ on:
           - /LabUL/datastore/UL-V5010-01-LUN1
           - /LabUL/datastore/UL-V5010-01-LUN2
           - /LabUL/datastore/UL-V5010-01-LUN3
-          - /LabUL/datastore/UL-V5010-02-LUN1
-          - /LabUL/datastore/UL-V5010-02-LUN2
-          - /LabUL/datastore/UL-V5010-02-LUN3
       vm-folder:
         type: choice
         description: FOLDER ON PVE
@@ -91,8 +88,99 @@ jobs:
       image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2
     continue-on-error: false
     steps:
+
       - name: Create vm config
-        id: config
+        id: config1
+        uses: jannekem/run-python-script-action@v1.7
+        with:
+          script: |
+            from jinja2 import Template
+            import os
+            import random
+
+            inventoryTemplate = "[{% for count in range(0, vm_count) %}{% if loop.first%}{{ vm }}.{{ domain }}{% else %}{{ vm }}.{{ domain }}-{{ loop.index }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %}]"
+
+            domain = {
+                'labul': 'labul.sva.de',
+                'labda': 'tiab.labda.sva.de',
+            }
+
+            values = {
+                'vm': 'minnesota',
+                'domain': domain['labul'],
+                'vm_count': 4,
+            }
+
+            cpu = {
+                'S': 2,
+                'M': 4,
+                'L': 6,
+                'XL': 8,
+            }
+
+            memory = {
+                'S': 4069,
+                'M': 6144,
+                'L': 8192,
+                'XL': 12288,
+            }
+
+            disk = {
+                'S': 32,
+                'M': 64,
+                'L': 96,
+                'XL': 128,
+            }
+
+            os = {
+                'labul-vsphere': {
+                    'ubuntu22': 'sthings-u2',
+                    'ubuntu23': 'sthings-u23',
+                    'rocky9': 'sthings-r9'
+                }
+            }
+
+            datastores = {
+                'labul-vsphere': ['/LabUL/datastore/UL-ESX-SAS-01', '/LabUL/datastore/UL-ESX-SAS-02', '/LabUL/datastore/UL-V5010-01-LUN1', '/LabUL/datastore/UL-V5010-01-LUN2', '/LabUL/datastore/UL-V5010-01-LUN3'],
+            }
+
+            networks = {
+                'labul-vsphere': ['/LabUL/network/MGMT-10.31.101', '/LabUL/network/LAB-10.31.102', '/LabUL/network/LAB-10.31.103', '/LabUL/network/LAB-10.31.104'],
+            }
+
+            def render_template(values):
+              template = Template(inventoryTemplate)
+              renderedTemplate = template.render(values)
+
+              return str(renderedTemplate)
+
+            # GET RANDOM ITEM FROM LIST
+            def get_random_fromlist(list):
+              random_num = random.choice(list)
+
+              return str(random_num)
+
+            def main():
+
+                # SET VM STATS
+                print(disk['L'])
+                print(memory['L'])
+                print(cpu['L'])
+                print(os['labul-vsphere']['ubuntu23'])
+
+                print(get_random_fromlist(datastores['labul-vsphere']))
+                print(get_random_fromlist(networks['labul-vsphere']))
+
+                # TEKTON RENDER HOSTS
+                renderedHosts = render_template(values)
+                print(renderedHosts)
+
+            if __name__ == '__main__':
+                main()
+
+
+      - name: Create vm config
+        id: config2
         run: |
           echo '---' >> ./${{ inputs.vm-name }}.yaml
           echo 'vmCount: ${{ inputs.count-vm }}' >> ./${{ inputs.vm-name }}.yaml
@@ -130,15 +218,15 @@ jobs:
           name: ${{ inputs.vm-name }}
           path: ${{ inputs.vm-name }}.yaml
 
-  Create-VsphereVM-CR:
-    name: Render And Create VsphereVM CR
-    uses: stuttgart-things/stuttgart-things/.github/workflows/render-pr-vm.yaml@main
-    needs: Create-VM-Config
-    with:
-      environment-name: k8s
-      runs-on: ghr-stuttgart-things-sthings-cicd
-      vm-name: ${{ inputs.vm-name }}
-      template-path: crossplane/claims/vspherevm.yaml
-      destination-dir: crossplane/claims/vspherevm/labul/
-      provider-template-path: crossplane/providerConfig/terraform-${{ inputs.crossplane-provider }}.yaml
-    secrets: inherit
+  # Create-VsphereVM-CR:
+  #   name: Render And Create VsphereVM CR
+  #   uses: stuttgart-things/stuttgart-things/.github/workflows/render-pr-vm.yaml@main
+  #   needs: Create-VM-Config
+  #   with:
+  #     environment-name: k8s
+  #     runs-on: ghr-stuttgart-things-sthings-cicd
+  #     vm-name: ${{ inputs.vm-name }}
+  #     template-path: crossplane/claims/vspherevm.yaml
+  #     destination-dir: crossplane/claims/vspherevm/labul/
+  #     provider-template-path: crossplane/providerConfig/terraform-${{ inputs.crossplane-provider }}.yaml
+  #   secrets: inherit
