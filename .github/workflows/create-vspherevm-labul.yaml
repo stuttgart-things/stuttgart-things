@@ -23,47 +23,20 @@ on:
           - M
           - L
           - XL
-      # vm-memory:
-      #   type: choice
-      #   description: MEMORY OF VM
-      #   options:
-      #     - 2048
-      #     - 4096
-      #     - 6144
-      #     - 8196
-      # vm-disk:
-      #   type: choice
-      #   description: SIZE OF DISK
-      #   options:
-      #     - 64
-      #     - 96
-      #     - 128
-      #     - 20
-      #     - 32
-      vm-template:
+      os-version:
         type: choice
         description: TEMPLATE OF VM
         options:
-          - sthings-u22
-          - sthings-u23
-          - sthings-r9
-      # vm-network:
-      #   type: choice
-      #   description: NETWORK OF VM
-      #   options:
-      #     - /LabUL/network/MGMT-10.31.101
-      #     - /LabUL/network/LAB-10.31.102
-      #     - /LabUL/network/LAB-10.31.103
-      #     - /LabUL/network/LAB-10.31.104
-      # datastore:
-      #   type: choice
-      #   description: DATASTORE OF VM
-      #   options:
-      #     - /LabUL/datastore/UL-ESX-SAS-01
-      #     - /LabUL/datastore/UL-ESX-SAS-02
-      #     - /LabUL/datastore/UL-V5010-01-LUN1
-      #     - /LabUL/datastore/UL-V5010-01-LUN2
-      #     - /LabUL/datastore/UL-V5010-01-LUN3
+          - ubuntu22
+          - ubuntu23
+          - rocky9
+      lab-cloud:
+        type: choice
+        description: Lab + Cloud
+        options:
+          - labul-vsphere
+          - labda-vsphere
+          - labul-pve
       vm-folder:
         type: choice
         description: FOLDER ON PVE
@@ -110,10 +83,10 @@ jobs:
                 'labda': 'tiab.labda.sva.de',
             }
 
-            values = {
-                'vm': 'minnesota',
+            inventory = {
+                'vm': '${{ inputs.vm-name }}',
                 'domain': domain['labul'],
-                'vm_count': 4,
+                'vm_count': ${{ inputs.count-vm }},
             }
 
             cpu = {
@@ -145,6 +118,7 @@ jobs:
                 }
             }
 
+
             datastores = {
                 'labul-vsphere': ['/LabUL/datastore/UL-ESX-SAS-01', '/LabUL/datastore/UL-ESX-SAS-02', '/LabUL/datastore/UL-V5010-01-LUN1', '/LabUL/datastore/UL-V5010-01-LUN2', '/LabUL/datastore/UL-V5010-01-LUN3'],
             }
@@ -153,19 +127,63 @@ jobs:
                 'labul-vsphere': ['/LabUL/network/MGMT-10.31.101', '/LabUL/network/LAB-10.31.102', '/LabUL/network/LAB-10.31.103', '/LabUL/network/LAB-10.31.104'],
             }
 
-            data = {
+            env = {
+                'labul-vsphere': {
+                    'lab': 'labul',
+                    'rootFolder': 'stuttgart-things',
+                    'vmFirmware': 'bios',
+                    'datacenter': '/LabUL',
+                    'resourcePool': '/LabUL/host/Cluster-V6.5/Resources',
+                    'templatePath': '/LabUL/vm/stuttgart-things/vm-templates',
+
+                }
+            }
+
+            crossplane = {
+                'labul-vsphere' : {
+                    'namespace' : 'crossplane-system',
+                    'rootFolder' : 'stuttgart-things',
+                    'tfvars' : 'vsphere-tfvars',
+                    'secretKey' : 'terraform.tfvars',
+                    's3Region' : 'main',
+                    's3Bucket': 'vspherevm-labul'
+                    's3Endpoint' : 'https://artifacts.app1.sthings-vsphere.labul.sva.de',
+                    'stateKey' : '${{ inputs.count-vm }}',
+                    'crossplaneProvider' : '${{ inputs.crossplane-provider }}-${{ inputs.vm-name }}',
+                }
+            }
+
+            vm_config = {
               "vmCount" : '${{ inputs.count-vm }}',
               "vmName" : '${{ inputs.vm-name }}',
               "vmMemory" : memory['${{ inputs.vm-size }}'],
               "vmCpu" : cpu['${{ inputs.vm-size }}'],
-              "vmTemplate" : os['labul-vsphere']['ubuntu23'],
+              "vmTemplate" : os['${{ inputs.lab-cloud }}']['${{ inputs.os-version }}'],
+              "vmDisk" : disk['${{ inputs.vm-size }}'],
+              "vmDatastore" : get_random_fromlist(datastores['${{ inputs.lab-cloud }}']),
+              "vmNetwork" : get_random_fromlist(networks['${{ inputs.lab-cloud }}']),
+              "hosts" : render_inventory(inventory),
+              "lab" : env['${{ inputs.lab-cloud }}']['lab'],
+              "vmFolder" : env['${{ inputs.lab-cloud }}']['rootFolder']/
+              "namespace" : crossplane['${{ inputs.lab-cloud }}']['namespace']/
+              "vmFirmware" : env['${{ inputs.lab-cloud }}']['lab'],
+              "datacenter" : env['${{ inputs.lab-cloud }}']['datacenter'],
+              "resourcePool" : env['${{ inputs.lab-cloud }}']['resourcePool'],
+              "templatePath" : env['${{ inputs.lab-cloud }}']['templatePath'],
+              "tfvars" : crossplane['${{ inputs.lab-cloud }}']['tfvars']/,
+              "secretKey" : crossplane['${{ inputs.lab-cloud }}']['secretKey']/,
+              "crossplaneProvider" : ${{ inputs.crossplane-provider }}-${{ inputs.vm-name }},
+              "s3Region" : crossplane['${{ inputs.lab-cloud }}']['s3Region']/,
+              "s3Bucket" : crossplane['${{ inputs.lab-cloud }}']['s3Bucket']/,
+              "s3Endpoint" : crossplane['${{ inputs.lab-cloud }}']['s3Endpoint']/,
+              "stateKey" : crossplane['${{ inputs.lab-cloud }}']['stateKey']/,
             }
 
             def write_yaml_todisk(output_path):
               with open(output_path, 'w') as outfile:
-                yaml.dump(data, outfile, default_flow_style=False, sort_keys=False)
+                yaml.dump(vm_config, outfile, default_flow_style=False, sort_keys=False)
 
-            def render_template(values):
+            def render_inventory(values):
               template = Template(inventoryTemplate)
               renderedTemplate = template.render(values)
 
@@ -182,17 +200,6 @@ jobs:
                 # WRITE VM CONFIG YAML TO DISK
                 write_yaml_todisk('./${{ inputs.vm-name }}.yaml')
 
-                print(memory['L'])
-                print(cpu['L'])
-                print(os['labul-vsphere']['ubuntu23'])
-
-                print(get_random_fromlist(datastores['labul-vsphere']))
-                print(get_random_fromlist(networks['labul-vsphere']))
-
-                # TEKTON RENDER HOSTS
-                renderedHosts = render_template(values)
-                print(renderedHosts)
-
             if __name__ == '__main__':
                 main()
 
@@ -200,16 +207,6 @@ jobs:
       - name: Create vm config
         id: config2
         run: |
-          echo '---' >> ./${{ inputs.vm-name }}.yaml
-          echo 'DISKKK: ${{ env.DISK }}' >> ./${{ inputs.vm-name }}.yaml
-          echo 'vmCount: ${{ inputs.count-vm }}' >> ./${{ inputs.vm-name }}.yaml
-          echo 'vmName: ${{ inputs.vm-name }}' >> ./${{ inputs.vm-name }}.yaml
-          echo 'vmCpu: ${{ inputs.vm-cpu }}' >> ./${{ inputs.vm-name }}.yaml
-          echo 'vmMemory: ${{ inputs.vm-memory }}' >> ./${{ inputs.vm-name }}.yaml
-          echo 'vmDisk: ${{ inputs.vm-disk }}' >> ./${{ inputs.vm-name }}.yaml
-          echo 'vmTemplate: ${{ inputs.vm-template }}' >> ./${{ inputs.vm-name }}.yaml
-          echo 'vmNetwork: ${{ inputs.vm-network }}' >> ./${{ inputs.vm-name }}.yaml
-          echo 'vmDatastore: ${{ inputs.datastore }}' >> ./${{ inputs.vm-name }}.yaml
           echo 'vmFolder: ${{ inputs.vm-folder }}' >> ./${{ inputs.vm-name }}.yaml
           echo 'lab: labul' >> ./${{ inputs.vm-name }}.yaml
           echo 'namespace: crossplane-system' >> ./${{ inputs.vm-name }}.yaml
