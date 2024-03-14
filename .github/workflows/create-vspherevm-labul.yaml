@@ -145,10 +145,10 @@ jobs:
                     'rootFolder' : 'stuttgart-things',
                     'tfvars' : 'vsphere-tfvars',
                     'secretKey' : 'terraform.tfvars',
-                    's3Region' : 'main',
-                    's3Bucket' : 'vspherevm-labul'
-                    's3Endpoint' : 'https://artifacts.app1.sthings-vsphere.labul.sva.de',
-                    'stateKey' : '${{ inputs.count-vm }}',
+                    's3_region' : 'main',
+                    's3_bucket' : 'vspherevm-labul'
+                    's3_endpoint' : 'https://artifacts.app1.sthings-vsphere.labul.sva.de',
+                    'state_key' : '${{ inputs.count-vm }}',
                     'crossplaneProvider' : '${{ inputs.crossplane-provider }}-${{ inputs.vm-name }}',
                 }
             }
@@ -173,10 +173,10 @@ jobs:
               "tfvars" : crossplane['${{ inputs.lab-cloud }}']['tfvars']/,
               "secretKey" : crossplane['${{ inputs.lab-cloud }}']['secretKey']/,
               "crossplaneProvider" : ${{ inputs.crossplane-provider }}-${{ inputs.vm-name }},
-              "s3Region" : crossplane['${{ inputs.lab-cloud }}']['s3Region']/,
-              "s3Bucket" : crossplane['${{ inputs.lab-cloud }}']['s3Bucket']/,
-              "s3Endpoint" : crossplane['${{ inputs.lab-cloud }}']['s3Endpoint']/,
-              "stateKey" : crossplane['${{ inputs.lab-cloud }}']['stateKey']/,
+              "s3Region" : crossplane['${{ inputs.lab-cloud }}']['s3_region']/,
+              "s3Bucket" : crossplane['${{ inputs.lab-cloud }}']['s3_bucket']/,
+              "s3Endpoint" : crossplane['${{ inputs.lab-cloud }}']['s3_endpoint']/,
+              "stateKey" : crossplane['${{ inputs.lab-cloud }}']['state_key']/,
             }
 
             def write_yaml_todisk(output_path):
