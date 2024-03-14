@@ -165,7 +165,7 @@ jobs:
               "hosts" : render_inventory(inventory),
               "lab" : env['${{ inputs.lab-cloud }}']['lab'],
               "vmFolder" : env['${{ inputs.lab-cloud }}']['rootFolder']+${{ inputs.vm-folder }},
-              "namespace" : crossplane['${{ inputs.lab-cloud }}']['namespace']/,
+              "namespace" : crossplane['${{ inputs.lab-cloud }}']['namespace'],
               "vmFirmware" : env['${{ inputs.lab-cloud }}']['lab'],
               "datacenter" : env['${{ inputs.lab-cloud }}']['datacenter'],
               "resourcePool" : env['${{ inputs.lab-cloud }}']['resourcePool'],
