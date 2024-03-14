@@ -76,6 +76,24 @@ jobs:
             import random
             import yaml
 
+            # WRITE YAML TO DISK
+            def write_yaml_todisk(output_path):
+              with open(output_path, 'w') as outfile:
+                yaml.dump(vm_config, outfile, default_flow_style=False, sort_keys=False)
+
+            # RENDER INVENTORY
+            def render_inventory(values):
+              template = Template(inventoryTemplate)
+              renderedTemplate = template.render(values)
+
+              return str(renderedTemplate)
+
+            # GET RANDOM ITEM FROM LIST
+            def get_random_fromlist(list):
+              random_num = random.choice(list)
+
+              return str(random_num)
+
             inventoryTemplate = "[{% for count in range(0, vm_count) %}{% if loop.first%}{{ vm }}.{{ domain }}{% else %}{{ vm }}.{{ domain }}-{{ loop.index }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %}]"
 
             domain = {
@@ -117,7 +135,6 @@ jobs:
                     'rocky9': 'sthings-r9'
                 }
             }
-
 
             datastores = {
                 'labul-vsphere': ['/LabUL/datastore/UL-ESX-SAS-01', '/LabUL/datastore/UL-ESX-SAS-02', '/LabUL/datastore/UL-V5010-01-LUN1', '/LabUL/datastore/UL-V5010-01-LUN2', '/LabUL/datastore/UL-V5010-01-LUN3'],
@@ -178,22 +195,6 @@ jobs:
               "s3Endpoint" : crossplane['${{ inputs.lab-cloud }}']['s3_endpoint'],
               "stateKey" : crossplane['${{ inputs.lab-cloud }}']['state_key'],
             }
-
-            def write_yaml_todisk(output_path):
-              with open(output_path, 'w') as outfile:
-                yaml.dump(vm_config, outfile, default_flow_style=False, sort_keys=False)
-
-            def render_inventory(values):
-              template = Template(inventoryTemplate)
-              renderedTemplate = template.render(values)
-
-              return str(renderedTemplate)
-
-            # GET RANDOM ITEM FROM LIST
-            def get_random_fromlist(list):
-              random_num = random.choice(list)
-
-              return str(random_num)
 
             def main():
 
