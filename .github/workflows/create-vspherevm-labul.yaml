@@ -170,13 +170,13 @@ jobs:
               "datacenter" : env['${{ inputs.lab-cloud }}']['datacenter'],
               "resourcePool" : env['${{ inputs.lab-cloud }}']['resourcePool'],
               "templatePath" : env['${{ inputs.lab-cloud }}']['templatePath'],
-              "tfvars" : crossplane['${{ inputs.lab-cloud }}']['tfvars']/,
-              "secretKey" : crossplane['${{ inputs.lab-cloud }}']['secretKey']/,
+              "tfvars" : crossplane['${{ inputs.lab-cloud }}']['tfvars'],
+              "secretKey" : crossplane['${{ inputs.lab-cloud }}']['secretKey'],
               "crossplaneProvider" : ${{ inputs.crossplane-provider }}-${{ inputs.vm-name }},
-              "s3Region" : crossplane['${{ inputs.lab-cloud }}']['s3_region']/,
-              "s3Bucket" : crossplane['${{ inputs.lab-cloud }}']['s3_bucket']/,
-              "s3Endpoint" : crossplane['${{ inputs.lab-cloud }}']['s3_endpoint']/,
-              "stateKey" : crossplane['${{ inputs.lab-cloud }}']['state_key']/,
+              "s3Region" : crossplane['${{ inputs.lab-cloud }}']['s3_region'],
+              "s3Bucket" : crossplane['${{ inputs.lab-cloud }}']['s3_bucket'],
+              "s3Endpoint" : crossplane['${{ inputs.lab-cloud }}']['s3_endpoint'],
+              "stateKey" : crossplane['${{ inputs.lab-cloud }}']['state_key'],
             }
 
             def write_yaml_todisk(output_path):
