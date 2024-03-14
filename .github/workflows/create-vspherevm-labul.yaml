@@ -164,8 +164,8 @@ jobs:
               "vmNetwork" : get_random_fromlist(networks['${{ inputs.lab-cloud }}']),
               "hosts" : render_inventory(inventory),
               "lab" : env['${{ inputs.lab-cloud }}']['lab'],
-              "vmFolder" : env['${{ inputs.lab-cloud }}']['rootFolder']/
-              "namespace" : crossplane['${{ inputs.lab-cloud }}']['namespace']/
+              "vmFolder" : env['${{ inputs.lab-cloud }}']['rootFolder']/,
+              "namespace" : crossplane['${{ inputs.lab-cloud }}']['namespace']/,
               "vmFirmware" : env['${{ inputs.lab-cloud }}']['lab'],
               "datacenter" : env['${{ inputs.lab-cloud }}']['datacenter'],
               "resourcePool" : env['${{ inputs.lab-cloud }}']['resourcePool'],
