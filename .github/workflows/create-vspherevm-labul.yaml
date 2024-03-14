@@ -146,7 +146,7 @@ jobs:
                     'tfvars' : 'vsphere-tfvars',
                     'secretKey' : 'terraform.tfvars',
                     's3Region' : 'main',
-                    's3Bucket': 'vspherevm-labul'
+                    's3Bucket' : 'vspherevm-labul'
                     's3Endpoint' : 'https://artifacts.app1.sthings-vsphere.labul.sva.de',
                     'stateKey' : '${{ inputs.count-vm }}',
                     'crossplaneProvider' : '${{ inputs.crossplane-provider }}-${{ inputs.vm-name }}',
