@@ -147,7 +147,7 @@ jobs:
             env = {
                 'labul-vsphere': {
                     'lab': 'labul',
-                    'rootFolder': 'stuttgart-things/',
+                    'rootFolder': 'stuttgart-things',
                     'vmFirmware': 'bios',
                     'datacenter': '/LabUL',
                     'resourcePool': '/LabUL/host/Cluster-V6.5/Resources',
@@ -181,7 +181,7 @@ jobs:
               "vmNetwork" : get_random_fromlist(networks['${{ inputs.lab-cloud }}']),
               "hosts" : render_inventory(inventory),
               "lab" : env['${{ inputs.lab-cloud }}']['lab'],
-              "vmFolder" : env['${{ inputs.lab-cloud }}']['rootFolder']+${{ inputs.vm-folder }},
+              "vmFolder" : env['${{ inputs.lab-cloud }}']['rootFolder']+'/${{ inputs.vm-folder }}',
               "namespace" : crossplane['${{ inputs.lab-cloud }}']['namespace'],
               "vmFirmware" : env['${{ inputs.lab-cloud }}']['lab'],
               "datacenter" : env['${{ inputs.lab-cloud }}']['datacenter'],
