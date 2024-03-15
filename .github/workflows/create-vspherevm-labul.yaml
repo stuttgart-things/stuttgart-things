@@ -231,10 +231,14 @@ jobs:
         id: check
         run: |
           cat ${{ inputs.vm-name }}.yaml
+          LAB=$(echo "${{ inputs.lab-cloud }}" | cut -d'-' -f1)
+          CR_NAME=$(echo "${{ inputs.lab-cloud }}" | cut -d'-' -f2)vm
+          echo $CR_NAME
+
           echo "template=crossplane/claims/vspherevm.yaml" >> "$GITHUB_OUTPUT"
-          echo "destination=crossplane/claims/vspherevm/$(echo "${{ inputs.lab-cloud }}" | cut -d'-' -f1)/" >> "$GITHUB_OUTPUT"
+          echo "destination=crossplane/claims/vspherevm/${LAB}/" >> "$GITHUB_OUTPUT"
           echo "provider=crossplane/providerConfig/terraform-${{ inputs.crossplane-provider }}.yaml" >> "$GITHUB_OUTPUT"
-          echo $(echo "${{ inputs.lab-cloud }}" | cut -d'-' -f2)
+
 
       - name: Upload VM config
         id: upload
