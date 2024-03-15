@@ -62,7 +62,7 @@ jobs:
       pull-requests: write
     runs-on: ${{ inputs.runner }}
     outputs:
-      lab: ${{ steps.renderConfig.outputs.lab }}
+      template: ${{ steps.config2.outputs.template }}
     environment: k8s
     container:
       image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2
@@ -220,7 +220,6 @@ jobs:
 
                 # WRITE VM CONFIG YAML TO DISK
                 write_yaml_todisk('./${{ inputs.vm-name }}.yaml')
-                set_output('lab', env['${{ inputs.lab-cloud }}']['lab'])
 
             if __name__ == '__main__':
                 main()
@@ -229,6 +228,7 @@ jobs:
         id: config2
         run: |
           cat ${{ inputs.vm-name }}.yaml
+          echo "template=crossplane/claims/vspherevm.yaml" >> "$GITHUB_OUTPUT"
 
       - name: Upload VM config
         id: upload
@@ -245,7 +245,7 @@ jobs:
       environment-name: k8s
       runs-on: ${{ inputs.runner }}
       vm-name: ${{ inputs.vm-name }}
-      template-path: crossplane/claims/vspherevm.yaml
+      template-path: ${{ needs.Create-VM-Config.outputs.template }}
       destination-dir: crossplane/claims/vspherevm/labul/
       provider-template-path: crossplane/providerConfig/terraform-${{ inputs.crossplane-provider }}.yaml
     secrets: inherit
