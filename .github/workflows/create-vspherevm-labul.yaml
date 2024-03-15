@@ -59,10 +59,10 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
-    runs-on: ghr-stuttgart-things-sthings-cicd
+    runs-on: ${runner}
     environment: k8s
     container:
-      image: ${{ env.runner }}
+      image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2
     continue-on-error: false
     steps:
       - name: Pip install
