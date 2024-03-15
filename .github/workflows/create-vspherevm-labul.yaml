@@ -165,7 +165,6 @@ jobs:
                     's3_region' : 'main',
                     's3_bucket' : 'vspherevm-labul',
                     's3_endpoint' : 'https://artifacts.app1.sthings-vsphere.labul.sva.de',
-                    'state_key' : '${{ inputs.count-vm }}',
                 }
             }
 
@@ -192,7 +191,7 @@ jobs:
               "s3Region" : crossplane['${{ inputs.lab-cloud }}']['s3_region'],
               "s3Bucket" : crossplane['${{ inputs.lab-cloud }}']['s3_bucket'],
               "s3Endpoint" : crossplane['${{ inputs.lab-cloud }}']['s3_endpoint'],
-              "stateKey" : crossplane['${{ inputs.lab-cloud }}']['state_key'],
+              "stateKey" : ${{ inputs.vm-name }},
             }
 
             def main():
@@ -207,20 +206,20 @@ jobs:
       - name: Create vm config
         id: config2
         run: |
-          echo 'vmFolder: ${{ inputs.vm-folder }}' >> ./${{ inputs.vm-name }}.yaml
-          echo 'lab: labul' >> ./${{ inputs.vm-name }}.yaml
-          echo 'namespace: crossplane-system' >> ./${{ inputs.vm-name }}.yaml
-          echo 'vmFirmware: bios' >> ./${{ inputs.vm-name }}.yaml
-          echo 'datacenter: /LabUL' >> ./${{ inputs.vm-name }}.yaml
-          echo 'resourcePool: /LabUL/host/Cluster-V6.5/Resources' >> ./${{ inputs.vm-name }}.yaml
-          echo 'templatePath: /LabUL/vm/stuttgart-things/vm-templates' >> ./${{ inputs.vm-name }}.yaml
-          echo 'tfvars: vsphere-tfvars' >> ./${{ inputs.vm-name }}.yaml
-          echo 'secretKey: terraform.tfvars' >> ./${{ inputs.vm-name }}.yaml
-          echo 'crossplaneProvider: ${{ inputs.crossplane-provider }}-${{ inputs.vm-name }}' >> ./${{ inputs.vm-name }}.yaml
-          echo 's3Region: main' >> ./${{ inputs.vm-name }}.yaml
-          echo 's3Bucket: vspherevm-labul' >> ./${{ inputs.vm-name }}.yaml
-          echo 's3Endpoint: https://artifacts.app1.sthings-vsphere.labul.sva.de' >> ./${{ inputs.vm-name }}.yaml
-          echo 'stateKey: ${{ inputs.vm-name }}' >> ./${{ inputs.vm-name }}.yaml
+          # echo 'vmFolder: ${{ inputs.vm-folder }}' >> ./${{ inputs.vm-name }}.yaml
+          # echo 'lab: labul' >> ./${{ inputs.vm-name }}.yaml
+          # echo 'namespace: crossplane-system' >> ./${{ inputs.vm-name }}.yaml
+          # echo 'vmFirmware: bios' >> ./${{ inputs.vm-name }}.yaml
+          # echo 'datacenter: /LabUL' >> ./${{ inputs.vm-name }}.yaml
+          # echo 'resourcePool: /LabUL/host/Cluster-V6.5/Resources' >> ./${{ inputs.vm-name }}.yaml
+          # echo 'templatePath: /LabUL/vm/stuttgart-things/vm-templates' >> ./${{ inputs.vm-name }}.yaml
+          # echo 'tfvars: vsphere-tfvars' >> ./${{ inputs.vm-name }}.yaml
+          # echo 'secretKey: terraform.tfvars' >> ./${{ inputs.vm-name }}.yaml
+          # echo 'crossplaneProvider: ${{ inputs.crossplane-provider }}-${{ inputs.vm-name }}' >> ./${{ inputs.vm-name }}.yaml
+          # echo 's3Region: main' >> ./${{ inputs.vm-name }}.yaml
+          # echo 's3Bucket: vspherevm-labul' >> ./${{ inputs.vm-name }}.yaml
+          # echo 's3Endpoint: https://artifacts.app1.sthings-vsphere.labul.sva.de' >> ./${{ inputs.vm-name }}.yaml
+          # echo 'stateKey: ${{ inputs.vm-name }}' >> ./${{ inputs.vm-name }}.yaml
           # TEKTON
           echo 'playbooks: [ansible/playbooks/prepare-env.yaml, ansible/playbooks/base-os.yaml]' >> ./${{ inputs.vm-name }}.yaml
           echo 'ansibleWorkingImage: eu.gcr.io/stuttgart-things/sthings-ansible:9.21.0' >> ./${{ inputs.vm-name }}.yaml
