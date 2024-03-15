@@ -220,7 +220,7 @@ jobs:
 
                 # WRITE VM CONFIG YAML TO DISK
                 write_yaml_todisk('./${{ inputs.vm-name }}.yaml')
-                set_output(lab, env['${{ inputs.lab-cloud }}']['lab'])
+                set_output('lab', env['${{ inputs.lab-cloud }}']['lab'])
 
             if __name__ == '__main__':
                 main()
