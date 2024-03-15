@@ -140,7 +140,7 @@ jobs:
 
             os = {
                 'labul-vsphere': {
-                    'ubuntu22': 'sthings-u2',
+                    'ubuntu22': 'sthings-u22',
                     'ubuntu23': 'sthings-u23',
                     'rocky9': 'sthings-r9'
                 }
@@ -162,7 +162,6 @@ jobs:
                     'datacenter': '/LabUL',
                     'resourcePool': '/LabUL/host/Cluster-V6.5/Resources',
                     'templatePath': '/LabUL/vm/stuttgart-things/vm-templates',
-
                 }
             }
 
