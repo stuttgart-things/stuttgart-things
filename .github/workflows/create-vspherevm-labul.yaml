@@ -66,7 +66,7 @@ jobs:
         run: |
           pip install jinja2 pyyaml
 
-      - name: Create vm config
+      - name: Create VM config
         id: config1
         uses: jannekem/run-python-script-action@v1.7
         with:
@@ -156,6 +156,12 @@ jobs:
                 }
             }
 
+            tekton = {
+              'ansibleWorkingImage' : 'eu.gcr.io/stuttgart-things/sthings-ansible:9.21.0',
+              'tektonProviderRef: kubernetes-incluster',
+              'playbooks: ['ansible/playbooks/prepare-env.yaml', 'ansible/playbooks/base-os.yaml'],
+            }
+
             crossplane = {
                 'labul-vsphere' : {
                     'namespace' : 'crossplane-system',
@@ -166,6 +172,12 @@ jobs:
                     's3_bucket' : 'vspherevm-labul',
                     's3_endpoint' : 'https://artifacts.app1.sthings-vsphere.labul.sva.de',
                 }
+            }
+
+            tekton = {
+              'ansibleWorkingImage' : 'eu.gcr.io/stuttgart-things/sthings-ansible:9.21.0',
+              'tektonProviderRef: kubernetes-incluster',
+              'playbooks: ['ansible/playbooks/prepare-env.yaml', 'ansible/playbooks/base-os.yaml'],
             }
 
             vm_config = {
@@ -192,6 +204,9 @@ jobs:
               "s3Bucket" : crossplane['${{ inputs.lab-cloud }}']['s3_bucket'],
               "s3Endpoint" : crossplane['${{ inputs.lab-cloud }}']['s3_endpoint'],
               "stateKey" : '${{ inputs.vm-name }}',
+              "ansibleWorkingImage" : tekton['ansibleWorkingImage'],
+              "tektonProviderRef" : tekton['tektonProviderRef'],
+              "playbooks" : tekton['playbooks'],
             }
 
             def main():
@@ -203,27 +218,9 @@ jobs:
                 main()
 
 
-      - name: Create vm config
+      - name: Output VM config
         id: config2
         run: |
-          # echo 'vmFolder: ${{ inputs.vm-folder }}' >> ./${{ inputs.vm-name }}.yaml
-          # echo 'lab: labul' >> ./${{ inputs.vm-name }}.yaml
-          # echo 'namespace: crossplane-system' >> ./${{ inputs.vm-name }}.yaml
-          # echo 'vmFirmware: bios' >> ./${{ inputs.vm-name }}.yaml
-          # echo 'datacenter: /LabUL' >> ./${{ inputs.vm-name }}.yaml
-          # echo 'resourcePool: /LabUL/host/Cluster-V6.5/Resources' >> ./${{ inputs.vm-name }}.yaml
-          # echo 'templatePath: /LabUL/vm/stuttgart-things/vm-templates' >> ./${{ inputs.vm-name }}.yaml
-          # echo 'tfvars: vsphere-tfvars' >> ./${{ inputs.vm-name }}.yaml
-          # echo 'secretKey: terraform.tfvars' >> ./${{ inputs.vm-name }}.yaml
-          # echo 'crossplaneProvider: ${{ inputs.crossplane-provider }}-${{ inputs.vm-name }}' >> ./${{ inputs.vm-name }}.yaml
-          # echo 's3Region: main' >> ./${{ inputs.vm-name }}.yaml
-          # echo 's3Bucket: vspherevm-labul' >> ./${{ inputs.vm-name }}.yaml
-          # echo 's3Endpoint: https://artifacts.app1.sthings-vsphere.labul.sva.de' >> ./${{ inputs.vm-name }}.yaml
-          # echo 'stateKey: ${{ inputs.vm-name }}' >> ./${{ inputs.vm-name }}.yaml
-          # TEKTON
-          echo 'playbooks: [ansible/playbooks/prepare-env.yaml, ansible/playbooks/base-os.yaml]' >> ./${{ inputs.vm-name }}.yaml
-          echo 'ansibleWorkingImage: eu.gcr.io/stuttgart-things/sthings-ansible:9.21.0' >> ./${{ inputs.vm-name }}.yaml
-          echo 'tektonProviderRef: kubernetes-incluster' >> ./${{ inputs.vm-name }}.yaml
           cat ${{ inputs.vm-name }}.yaml
 
       - name: Upload VM config
