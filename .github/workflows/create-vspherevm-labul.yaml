@@ -176,8 +176,8 @@ jobs:
 
             tekton = {
               'ansibleWorkingImage' : 'eu.gcr.io/stuttgart-things/sthings-ansible:9.21.0',
-              'tektonProviderRef: kubernetes-incluster',
-              'playbooks: ['ansible/playbooks/prepare-env.yaml', 'ansible/playbooks/base-os.yaml'],
+              'tektonProviderRef': kubernetes-incluster',
+              'playbooks': ['ansible/playbooks/prepare-env.yaml', 'ansible/playbooks/base-os.yaml'],
             }
 
             vm_config = {
