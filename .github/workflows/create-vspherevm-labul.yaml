@@ -50,6 +50,10 @@ on:
           - minio
           - incluster
 
+env:
+  runner: ghr-stuttgart-things-sthings-cicd
+
+
 jobs:
   Create-VM-Config:
     permissions:
@@ -58,7 +62,7 @@ jobs:
     runs-on: ghr-stuttgart-things-sthings-cicd
     environment: k8s
     container:
-      image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2
+      image: ${{ env.runner }}
     continue-on-error: false
     steps:
       - name: Pip install
@@ -230,15 +234,15 @@ jobs:
           name: ${{ inputs.vm-name }}
           path: ${{ inputs.vm-name }}.yaml
 
-  # Create-VsphereVM-CR:
-  #   name: Render And Create VsphereVM CR
-  #   uses: stuttgart-things/stuttgart-things/.github/workflows/render-pr-vm.yaml@main
-  #   needs: Create-VM-Config
-  #   with:
-  #     environment-name: k8s
-  #     runs-on: ghr-stuttgart-things-sthings-cicd
-  #     vm-name: ${{ inputs.vm-name }}
-  #     template-path: crossplane/claims/vspherevm.yaml
-  #     destination-dir: crossplane/claims/vspherevm/labul/
-  #     provider-template-path: crossplane/providerConfig/terraform-${{ inputs.crossplane-provider }}.yaml
-  #   secrets: inherit
+  Create-VM-Claim:
+    name: Render VM Claim
+    uses: stuttgart-things/stuttgart-things/.github/workflows/render-pr-vm.yaml@main
+    needs: Create-VM-Config
+    with:
+      environment-name: k8s
+      runs-on: ghr-stuttgart-things-sthings-cicd
+      vm-name: ${{ inputs.vm-name }}
+      template-path: crossplane/claims/vspherevm.yaml
+      destination-dir: crossplane/claims/vspherevm/labul/
+      provider-template-path: crossplane/providerConfig/terraform-${{ inputs.crossplane-provider }}.yaml
+    secrets: inherit
