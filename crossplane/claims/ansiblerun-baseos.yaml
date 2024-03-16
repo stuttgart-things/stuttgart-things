@@ -7,10 +7,10 @@ metadata:
 spec:
   pipelineRunName: baseos-{{ .vmName }}
   inventory:
-    {{ range $value := .hosts }}-"all+[\"{{ $value }}\"]"
+    {{ range $value := .hosts }}- "all+[\"{{ $value }}\"]"
     {{ end }}
   playbooks:
-    {{ range $value := .playbooks }}-"{{ $value }}"
+    {{ range $value := .playbooks }}- "{{ $value }}"
     {{ end }}
   ansibleVarsFile:
     - "manage_filesystem+-true"
@@ -31,5 +31,5 @@ spec:
   pipelineNamespace: tektoncd
   workingImage: {{ .workingImage }}
   roles:
-    {{ range $value := .roles }}-"{{ $value }}"
+    {{ range $value := .roles }}- "{{ $value }}"
     {{ end }}
