@@ -187,6 +187,7 @@ jobs:
               'workingImage' : 'eu.gcr.io/stuttgart-things/sthings-ansible:9.21.0',
               'tektonProviderRef': 'kubernetes-incluster',
               'playbooks': ['ansible/playbooks/prepare-env.yaml', 'ansible/playbooks/base-os.yaml'],
+              'roles': ['https://github.com/stuttgart-things/install-requirements.git', 'https://github.com/stuttgart-things/manage-filesystem.git', 'https://github.com/stuttgart-things/install-configure-vault.git'],
             }
 
             vm_config = {
@@ -216,6 +217,7 @@ jobs:
               "workingImage" : tekton['workingImage'],
               "tektonProviderRef" : tekton['tektonProviderRef'],
               "playbooks" : tekton['playbooks'],
+              "roles" : tekton['roles'],
             }
 
             def main():
