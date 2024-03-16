@@ -62,8 +62,9 @@ jobs:
     runs-on: ${{ inputs.runner }}
     outputs:
       template: ${{ steps.check.outputs.template }}
-      destination: ${{ steps.check.outputs.destination }}
       provider: ${{ steps.check.outputs.provider }}
+      ansible: ${{ steps.check.outputs.ansible }}
+      destination: ${{ steps.check.outputs.destination }}
 
     environment: k8s
     container:
@@ -165,7 +166,7 @@ jobs:
             }
 
             tekton = {
-              'ansibleWorkingImage' : 'eu.gcr.io/stuttgart-things/sthings-ansible:9.21.0',
+              'workingImage' : 'eu.gcr.io/stuttgart-things/sthings-ansible:9.21.0',
               'tektonProviderRef': 'kubernetes-incluster',
               'playbooks': ['ansible/playbooks/prepare-env.yaml', 'ansible/playbooks/base-os.yaml'],
             }
@@ -183,7 +184,7 @@ jobs:
             }
 
             tekton = {
-              'ansibleWorkingImage' : 'eu.gcr.io/stuttgart-things/sthings-ansible:9.21.0',
+              'workingImage' : 'eu.gcr.io/stuttgart-things/sthings-ansible:9.21.0',
               'tektonProviderRef': 'kubernetes-incluster',
               'playbooks': ['ansible/playbooks/prepare-env.yaml', 'ansible/playbooks/base-os.yaml'],
             }
@@ -201,7 +202,7 @@ jobs:
               "lab" : env['${{ inputs.lab-cloud }}']['lab'],
               "vmFolder" : env['${{ inputs.lab-cloud }}']['rootFolder']+'/${{ inputs.vm-folder }}',
               "namespace" : crossplane['${{ inputs.lab-cloud }}']['namespace'],
-              "vmFirmware" : env['${{ inputs.lab-cloud }}']['lab'],
+              "vmFirmware" : env['${{ inputs.lab-cloud }}']['vmFirmware'],
               "datacenter" : env['${{ inputs.lab-cloud }}']['datacenter'],
               "resourcePool" : env['${{ inputs.lab-cloud }}']['resourcePool'],
               "templatePath" : env['${{ inputs.lab-cloud }}']['templatePath'],
@@ -212,7 +213,7 @@ jobs:
               "s3Bucket" : crossplane['${{ inputs.lab-cloud }}']['s3_bucket'],
               "s3Endpoint" : crossplane['${{ inputs.lab-cloud }}']['s3_endpoint'],
               "stateKey" : '${{ inputs.vm-name }}',
-              "ansibleWorkingImage" : tekton['ansibleWorkingImage'],
+              "workingImage" : tekton['workingImage'],
               "tektonProviderRef" : tekton['tektonProviderRef'],
               "playbooks" : tekton['playbooks'],
             }
@@ -233,8 +234,9 @@ jobs:
           CR_NAME=$(echo "${{ inputs.lab-cloud }}" | cut -d'-' -f2)vm
 
           echo "template=crossplane/claims/${CR_NAME}.yaml" >> "$GITHUB_OUTPUT"
-          echo "destination=crossplane/claims/${CR_NAME}/${LAB}/" >> "$GITHUB_OUTPUT"
           echo "provider=crossplane/providerConfig/terraform-${{ inputs.crossplane-provider }}.yaml" >> "$GITHUB_OUTPUT"
+          echo "ansible=crossplane/providerConfig/ansiblerun-baseos.yaml" >> "$GITHUB_OUTPUT"
+          echo "destination=crossplane/claims/${CR_NAME}/${LAB}/" >> "$GITHUB_OUTPUT"
 
       - name: Upload VM config
         id: upload
@@ -252,6 +254,7 @@ jobs:
       runs-on: ${{ inputs.runner }}
       vm-name: ${{ inputs.vm-name }}
       template-path: ${{ needs.Create-VM-Config.outputs.template }}
-      destination-dir: ${{ needs.Create-VM-Config.outputs.destination }}
       provider-template-path: ${{ needs.Create-VM-Config.outputs.provider }}
+      ansible-template-path: ${{ needs.Create-VM-Config.outputs.ansible }}
+      destination-dir: ${{ needs.Create-VM-Config.outputs.destination }}
     secrets: inherit
