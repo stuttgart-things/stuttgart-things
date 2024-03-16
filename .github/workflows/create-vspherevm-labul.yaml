@@ -235,7 +235,7 @@ jobs:
 
           echo "template=crossplane/claims/${CR_NAME}.yaml" >> "$GITHUB_OUTPUT"
           echo "provider=crossplane/providerConfig/terraform-${{ inputs.crossplane-provider }}.yaml" >> "$GITHUB_OUTPUT"
-          echo "ansible=crossplane/providerConfig/ansiblerun-baseos.yaml" >> "$GITHUB_OUTPUT"
+          echo "ansible=crossplane/claims/ansiblerun-baseos.yaml" >> "$GITHUB_OUTPUT"
           echo "destination=crossplane/claims/${CR_NAME}/${LAB}/" >> "$GITHUB_OUTPUT"
 
       - name: Upload VM config
