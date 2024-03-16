@@ -7,11 +7,9 @@ metadata:
 spec:
   pipelineRunName: baseos-{{ .vmName }}
   inventory:
-    {{ range $value := .hosts }}-"all+[\"{{ $value }}\"]"
-    {{ end }}
+    {{ range $value := .hosts }}-"all+[\"{{ $value }}\"]"{{ end }}
   playbooks:
-    {{ range $value := .playbooks }}-"{{ $value }}"
-    {{ end }}
+    {{ range $value := .playbooks }}-"{{ $value }}"{{ end }}
   ansibleVarsFile:
     - "manage_filesystem+-true"
     - "update_packages+-true"
@@ -29,8 +27,6 @@ spec:
     name: kubernetes-incluster
   vaultSecretName: vault
   pipelineNamespace: tektoncd
-  workingImage: {{ .workingImage }} 
+  workingImage: {{ .workingImage }}
   roles:
-    - "https://github.com/stuttgart-things/install-requirements.git"
-    - "https://github.com/stuttgart-things/manage-filesystem.git"
-    - "https://github.com/stuttgart-things/install-configure-vault.git"
+    {{ range $value := .roles }}-"{{ $value }}"{{ end }}
