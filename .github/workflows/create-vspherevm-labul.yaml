@@ -50,10 +50,9 @@ on:
           - minio
           - incluster
       runner:
-        type: choice
-        description: GITHUB RUNNER
-        options:
-          - ghr-stuttgart-things-sthings-cicd
+        required: true
+        type: string
+        default: ghr-stuttgart-things-sthings-cicd
 
 jobs:
   Create-VM-Config:
