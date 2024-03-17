@@ -167,6 +167,19 @@ spec:
         kind: HelmRelease
         name: ghr-install-configure-docker-sthings-cicd
         namespace: arc-runners
+    - patch: |-
+        - op: add
+          path: /spec/values/template/spec/initContainers
+          value:
+            - name: kube-init
+              image: ghcr.io/actions/actions-runner:latest
+              command: ["/bin/sh", "-c"]
+              args:
+                - |
+                  sudo chown -R 1001:123 /home/runner/_work
+              volumeMounts:
+                - name: work
+                  mountPath: /home/runner/_work
   postBuild:
     substitute:
       REPOSIORY_NAME: install-configure-docker
