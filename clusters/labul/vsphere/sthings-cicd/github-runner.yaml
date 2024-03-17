@@ -168,7 +168,7 @@ spec:
         name: ghr-install-configure-docker-sthings-cicd
         namespace: arc-runners
     - patch: |-
-        - op: add
+        - op: replace
           path: /spec/values/template/spec/initContainers
           value:
             - name: kube-init
