@@ -180,6 +180,10 @@ spec:
               volumeMounts:
                 - name: work
                   mountPath: /home/runner/_work
+      target:
+        kind: HelmRelease
+        name: ghr-install-configure-docker-sthings-cicd
+        namespace: arc-runners
   postBuild:
     substitute:
       REPOSIORY_NAME: install-configure-docker
