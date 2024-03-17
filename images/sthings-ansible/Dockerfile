@@ -6,11 +6,12 @@ ARG TAG=3.12.1-alpine3.19
 FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
 
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
-LABEL version=9.2.0
+LABEL version=9.3.0
 
 ARG FLUX_VERSION=2.2.3
-ARG YQ_VERSION=4.40.5
-ARG ANSIBLE_VERSION=9.2.0
+ARG YQ_VERSION=4.42.1
+ARG ANSIBLE_VERSION=9.3.0
+ARG ANSIBLE_LINT_VERSION=24.2.1
 
 ENV USER_ID=65532
 ENV GROUP_ID=65532
@@ -37,7 +38,7 @@ RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
 ENV PATH="/root/.cargo/bin:${PATH}"
 
 RUN /usr/local/bin/python -m pip install --upgrade pip && pip install pip --upgrade
-RUN pip install --no-cache-dir cryptography hvac "hvac[parser]" paramiko jmespath openshift kubernetes boto3 passlib kubernetes-validate==1.27.0 proxmoxer netaddr setuptools requests pyVim PyVmomi python.dateutil dnspython pycrypto pywinrm pytz ansible==${ANSIBLE_VERSION}
+RUN pip install --no-cache-dir cryptography hvac "hvac[parser]" paramiko jmespath openshift kubernetes boto3 passlib kubernetes-validate==1.27.0 proxmoxer netaddr setuptools requests pyVim PyVmomi python.dateutil dnspython pycrypto pywinrm pytz ansible==${ANSIBLE_VERSION} ansible-lint==${ANSIBLE_LINT_VERSION}
 
 RUN mkdir -p /home/nonroot/.ansible && chown -R ${USER_ID}:${GROUP_ID} /home/nonroot/.ansible
 
