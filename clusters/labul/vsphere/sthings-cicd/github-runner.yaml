@@ -175,7 +175,7 @@ spec:
       STORAGE_CLASS: openebs-hostpath
       STORAGE_REQUEST: 50Mi
       RUNNER_VERSION: 2.314.1
-      INIT_COMMAND: 'sudo chown -R 65532:65532 /home/runner/_work'
+      INIT_COMMAND: 'sudo chown -R 1001:123 /home/runner/_work'
     substituteFrom:
       - kind: Secret
         name: github-flux-secrets
