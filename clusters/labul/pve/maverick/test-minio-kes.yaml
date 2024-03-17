@@ -94,4 +94,3 @@ spec:
         name: minio-deployment
         namespace: minio
 ---
-
