@@ -42,11 +42,11 @@ spec:
                   fieldPath: metadata.name
         initContainers:
           - name: kube-init
-            image: ghcr.io/actions/actions-runner:latest
+            image: ghcr.io/actions/actions-runner:${RUNNER_VERSION:-2.311.0}
             command: ["/bin/sh", "-c"]
             args:
               - |
-                sudo chown -R 1001:123 /home/runner/_work
+                ${INIT_COMMAND:-whoami}
             volumeMounts:
               - name: work
                 mountPath: /home/runner/_work

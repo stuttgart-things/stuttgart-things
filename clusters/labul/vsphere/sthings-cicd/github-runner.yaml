@@ -167,24 +167,6 @@ spec:
         kind: HelmRelease
         name: ghr-install-configure-docker-sthings-cicd
         namespace: arc-runners
-    - patch: |-
-        - op: replace
-          path: /spec/values/template/spec/initContainers
-          value: {}
-          # value:
-          #   - name: kube-init
-          #     image: ghcr.io/actions/actions-runner:latest
-          #     command: ["/bin/sh", "-c"]
-          #     args:
-          #       - |
-          #         sudo chown -R 1001:123 /home/runner/_work
-          #     volumeMounts:
-          #       - name: work
-          #         mountPath: /home/runner/_work
-      target:
-        kind: HelmRelease
-        name: ghr-install-configure-docker-sthings-cicd
-        namespace: arc-runners
   postBuild:
     substitute:
       REPOSIORY_NAME: install-configure-docker
@@ -193,6 +175,7 @@ spec:
       STORAGE_CLASS: openebs-hostpath
       STORAGE_REQUEST: 50Mi
       RUNNER_VERSION: 2.314.1
+      INIT_COMMAND: 'sudo chown -R 65532:65532 /home/runner/_work'
     substituteFrom:
       - kind: Secret
         name: github-flux-secrets
