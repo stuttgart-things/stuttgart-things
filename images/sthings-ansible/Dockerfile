@@ -47,3 +47,5 @@ ADD requirements.yaml /home/nonroot/requirements.yaml
 
 USER 65532
 RUN ansible-galaxy install -r /home/nonroot/requirements.yaml
+
+USER root
