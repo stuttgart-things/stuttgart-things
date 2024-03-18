@@ -1,12 +1,12 @@
 ARG REGISTRY=eu.gcr.io
 ARG REPOSITORY=stuttgart-things
 ARG IMAGE=sthings-alpine
-ARG TAG=3.12.1-alpine3.19
+ARG TAG=3.12.2-alpine3.19
 
 FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
 
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
-LABEL version=9.3.0
+LABEL version=9.3.0-1
 
 ARG FLUX_VERSION=2.2.3
 ARG YQ_VERSION=4.42.1
