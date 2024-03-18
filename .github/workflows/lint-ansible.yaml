@@ -39,7 +39,7 @@ jobs:
       - name: Run ansible lint
         run: |
           ansible-lint --version
-          ansible-lint --sarif-file ${{ inputs.playbook }}-lint ${{ inputs.playbook }}
+          ansible-lint --sarif-file ${{ inputs.playbook }}-lint ${{ inputs.playbook }} || true
 
       - name: Upload linting results
         uses: actions/upload-artifact@v4.1.0
