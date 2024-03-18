@@ -1,5 +1,5 @@
 ---
-name: Lint yaml code
+name: Lint yaml files
 on:
   workflow_call:
     inputs:
@@ -23,6 +23,7 @@ on:
       artifact-name:
         default: yaml-lint
         type: string
+
 jobs:
   Yaml-Lint:
     runs-on: ${{ inputs.runs-on }}
@@ -35,10 +36,12 @@ jobs:
         uses: actions/checkout@v4.1.1
         with:
           fetch-depth: '0'
+
       - name: Run yaml lint
         run: |
           ls -lta
           yamllint . --format github -c ${{ inputs.lintprofile-path }} | tee ./${{ inputs.artifact-name }}.txt
+
       - name: Upload linting results
         uses: actions/upload-artifact@v4.1.0
         with:
