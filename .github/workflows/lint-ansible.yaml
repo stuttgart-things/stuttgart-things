@@ -19,7 +19,6 @@ on:
         required: true
         type: boolean
       playbook:
-        default: false
         type: string
         required: true
 
@@ -36,7 +35,7 @@ jobs:
         with:
           path: ''
           fetch-depth: '0'
-          
+
       - name: Run ansible lint
         run: |
           ansible-lint --version
