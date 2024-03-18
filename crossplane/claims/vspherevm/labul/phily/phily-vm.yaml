@@ -1,0 +1,34 @@
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: VsphereVM
+metadata:
+  name: phily
+  namespace: crossplane-system
+spec:
+  providerRef:
+    name: minio-phily
+  vm:
+    count: "1"
+    name: phily
+    cpu: "6"
+    ram: "8192"
+    disk: "96"
+    firmware: bios
+    folderPath: stuttgart-things/testing
+    datacenter: /LabUL
+    datastore: /LabUL/datastore/UL-V5010-01-LUN1
+    resourcePool: /LabUL/host/Cluster-V6.5/Resources
+    network: /LabUL/network/LAB-10.31.102
+    template: /LabUL/vm/stuttgart-things/vm-templates/sthings-r9
+    bootstrap: '["echo STUTTGART-THINGS"]'
+    annotation: VSPHERE-VM BUILD w/ CROSSPLANE FOR STUTTGART-THINGS
+    unverifiedSsl: "true"
+  tfvars:
+    secretName: vsphere-tfvars
+    secretNamespace: crossplane-system
+    secretKey: terraform.tfvars
+  connectionSecret:
+    name: phily
+    namespace: crossplane-system
+  compositionRef:
+    name: vsphere-vm
