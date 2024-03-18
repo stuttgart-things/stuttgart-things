@@ -50,7 +50,6 @@
         - name: Render VsphereVM CustomResource
           id: config
           run: |
-            whoami
             cat ${{ inputs.vm-name }}.yaml
             cat ${{ inputs.template-path }}
 
