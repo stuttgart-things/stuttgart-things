@@ -1,0 +1,49 @@
+---
+name: Lint ansible code
+on:
+  workflow_call:
+    inputs:
+      runs-on:
+        required: true
+        type: string
+      environment-name:
+        default: k8s
+        required: true
+        type: string
+      ansible-image:
+        default: eu.gcr.io/stuttgart-things/sthings-ansible:9.3.0-1
+        type: string
+        required: false
+      continue-error:
+        default: false
+        required: true
+        type: boolean
+      playbook:
+        default: false
+        type: string
+        required: true
+
+jobs:
+  Ansible-Lint:
+    runs-on: ${{ inputs.runs-on }}
+    container:
+      image: ${{ inputs.ansible-image }}
+    environment: ${{ inputs.environment-name }}
+    continue-on-error: ${{ inputs.continue-error }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.1.1
+        with:
+          path: ''
+          fetch-depth: '0'
+          
+      - name: Run ansible lint
+        run: |
+          ansible-lint --version
+          ansible-lint ${{ inputs.playbook }} > ${{ inputs.playbook }}-lint.yaml
+
+      - name: Upload linting results
+        uses: actions/upload-artifact@v4.1.0
+        with:
+          name: ${{ inputs.playbook }}
+          path: ${{ inputs.playbook }}-lint.yaml
