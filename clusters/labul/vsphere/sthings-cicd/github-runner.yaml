@@ -277,7 +277,7 @@ sops:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: arc-runner-scale-set-proxmox-vm
+  name: github-rss-proxmox-vm
   namespace: flux-system
 spec:
   interval: 1h
@@ -296,7 +296,7 @@ spec:
           value: 0.8.0
       target:
         kind: HelmRelease
-        name: ghr-proxmox-vm-sthings-cicd
+        name: arc-runner-scale-set-proxmox-vm
         namespace: arc-runners
   postBuild:
     substitute:
