@@ -273,3 +273,39 @@ sops:
     pgp: []
     encrypted_regex: ^(data|stringData)$
     version: 3.8.1
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: github-rss-proxmox-vm
+  namespace: flux-system
+spec:
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./apps/github-rss
+  prune: true
+  wait: true
+  patches:
+    - patch: |-
+        - op: replace
+          path: /spec/chart/spec/version
+          value: 0.8.0
+      target:
+        kind: HelmRelease
+        name: ghr-proxmox-vm-sthings-cicd
+        namespace: arc-runners
+  postBuild:
+    substitute:
+      REPOSIORY_NAME: proxmox-vm
+      CLUSTER_NAME: sthings-cicd
+      GITHUB_URL: https://github.com/stuttgart-things/proxmox-vm
+      STORAGE_CLASS: openebs-hostpath
+      STORAGE_REQUEST: 50Mi
+      RUNNER_VERSION: 2.314.1
+    substituteFrom:
+      - kind: Secret
+        name: github-flux-secrets
