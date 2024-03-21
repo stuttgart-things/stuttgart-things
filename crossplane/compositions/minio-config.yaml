@@ -1,0 +1,73 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: minio-config
+  labels:
+    crossplane.io/xrd: xminioconfigs.resources.stuttgart-things.com
+spec:
+  compositeTypeRef:
+    apiVersion: resources.stuttgart-things.com/v1alpha1
+    kind: XMinioConfig
+  resources:
+    - name: minio-config
+      base:
+        kind: Workspace
+        apiVersion: tf.upbound.io/v1beta1
+        metadata:
+          annotations:
+            crossplane.io/external-name: minio-config
+        spec:
+          providerConfigRef:
+            name: terraform-default
+          writeConnectionSecretToRef:
+            name: minio-config
+            namespace: crossplane-system
+          forProvider:
+            source: Remote
+            module: git::https://github.com/stuttgart-things/s3-minio-config?ref=2.0.1-02
+            vars:
+              - key: minio_server
+                type: string
+            varFiles:
+              - source: ConfigMapKey
+                configMapKeyRef:
+                  namespace: default
+                  name: minio-config
+                  key: config.tfvars
+              - source: SecretKey
+                secretKeyRef:
+                  namespace: default
+                  name: minio-secrets
+                  key: secrets.tfvars
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.url
+          toFieldPath: spec.forProvider.vars[0].value
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.config.configName
+          toFieldPath: spec.forProvider.varFiles[0].configMapKeyRef.name
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.config.configNamespace
+          toFieldPath: spec.forProvider.varFiles[0].configMapKeyRef.namespace
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.config.configKey
+          toFieldPath: spec.forProvider.varFiles[0].configMapKeyRef.key
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.secrets.secretName
+          toFieldPath: spec.forProvider.varFiles[1].secretKeyRef.name
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.secrets.secretNamespace
+          toFieldPath: spec.forProvider.varFiles[1].secretKeyRef.namespace
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.secrets.secretKey
+          toFieldPath: spec.forProvider.varFiles[1].secretKeyRef.key
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.connectionSecret.name
+          toFieldPath: spec.writeConnectionSecretToRef.name
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.connectionSecret.namespace
+          toFieldPath: spec.writeConnectionSecretToRef.namespace
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.providerRef.name
+          toFieldPath: spec.providerConfigRef.name
