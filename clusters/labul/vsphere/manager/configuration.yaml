@@ -53,6 +53,28 @@ spec:
     name: flux-system
   path: ./crossplane/claims/minioconfig
 ---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: crossplane-secrets
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: crossplane
+  interval: 1h
+  retryInterval: 2m
+  timeout: 10m
+  path: ./crossplane/secrets
+  prune: true
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
+---
 apiVersion: kubernetes.crossplane.io/v1alpha1
 kind: ProviderConfig
 metadata:
