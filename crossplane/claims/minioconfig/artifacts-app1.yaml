@@ -16,6 +16,14 @@ data:
         acl  = "public"
       }
     ]
+
+    users = [
+      {
+        name = "patrick"
+        secret = null
+        policy = null
+      }
+    ]
 ---
 apiVersion: resources.stuttgart-things.com/v1alpha1
 kind: MinioConfig
