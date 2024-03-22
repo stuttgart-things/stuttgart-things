@@ -12,11 +12,7 @@ data:
         acl  = "public"
       },
       {
-        name = "images"
-        acl  = "public"
-      },
-      {
-        name = "proxmoxvm"
+        name = "proxmoxvm-labul"
         acl  = "public"
       }
     ]
