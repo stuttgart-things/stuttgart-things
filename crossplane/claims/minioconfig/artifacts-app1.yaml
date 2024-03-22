@@ -18,6 +18,10 @@ data:
       {
         name = "media"
         acl  = "public"
+      },
+      {
+        name = "slides"
+        acl  = "public"
       }
     ]
 
