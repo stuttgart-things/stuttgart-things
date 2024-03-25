@@ -48,4 +48,5 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4.1.1
       - run: |
+          ls -lta
           tflint --recursive
