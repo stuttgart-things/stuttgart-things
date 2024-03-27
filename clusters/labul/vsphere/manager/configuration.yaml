@@ -96,3 +96,15 @@ spec:
         in_cluster_config = true
       }
     }
+---
+apiVersion: helm.crossplane.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: cicd
+spec:
+  credentials:
+    source: Secret
+    secretRef:
+      name: kubeconfig-cicd
+      namespace: crossplane-system
+      key: sthings-cicd
