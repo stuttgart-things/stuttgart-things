@@ -35,15 +35,20 @@ jobs:
         id: git
         uses: actions/checkout@v4.1.1
         with:
-          path: ''
+          path: source
           fetch-depth: '0'
           
-      - name: Init ansible collection
-        id: build
+      - name: Init collection
+        id: init
         run: |
-          cat ${{ inputs.collection-file }}
-          yq -r ".requirements" ${{ inputs.collection-file }} > ./roles.yaml
-          ansible-galaxy collection init $(yq -r ".namespace" ${{ inputs.collection-file }}).$(yq -r ".name" ${{ inputs.collection-file }})
-         
-          #ansible-galaxy install -r ./roles.yaml -p ./roles
+          ls -lta
+          cat source/${{ inputs.collection-file }}
+          yq -r ".requirements" source/${{ inputs.collection-file }} > ./roles.yaml
+          ansible-galaxy collection init $(yq -r ".namespace" source/${{ inputs.collection-file }}).$(yq -r ".name" source/${{ inputs.collection-file }})
+
+      - name: Install roles
+        id: roles
+        run: |
+          ls -ltr ./ | grep '^d' | tail -1
+          ansible-galaxy install -r ./roles.yaml -p ./roles
           
