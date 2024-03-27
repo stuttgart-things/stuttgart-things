@@ -10,8 +10,11 @@ spec:
       name: gha-runner-scale-set
       repository: oci://ghcr.io/actions/actions-runner-controller-charts
       version: 0.8.0
+      pullSecretRef:
+        name: ghcr
+        namespace: crossplane-system
     namespace: arc-systems
-    insecureSkipTLSVerify: true
+    insecureSkipTLSVerify: false
     skipCreateNamespace: false
     wait: true
     skipCRDs: true
