@@ -23,7 +23,6 @@ on:
         required: false
         type: string
 
-
 jobs:
   Ansible-Collection-Build:
     runs-on: ${{ inputs.runs-on }}
