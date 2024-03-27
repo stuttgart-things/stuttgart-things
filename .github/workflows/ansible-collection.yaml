@@ -37,10 +37,15 @@ jobs:
         with:
           path: ''
           fetch-depth: '0'
-      - name: Create ansible collection
+          
+      - name: Init ansible collection
         id: build
         run: |
           cat ${{ inputs.collection-file }}
-          yq -r ".name" ${{ inputs.collection-file }}
-          yq -r ".namespace" ${{ inputs.collection-file }}
-          yq -r ".requirements" ${{ inputs.collection-file }}
+          COLLECTION_NAME=yq -r ".name" ${{ inputs.collection-file }}
+          NAMESPACE=yq -r ".namespace" ${{ inputs.collection-file }}
+          yq -r ".requirements" ${{ inputs.collection-file }} > ./roles.yaml
+          ansible-galaxy collection init ${NAMESPACE}.${COLLECTION_NAME}
+         
+          #ansible-galaxy install -r ./roles.yaml -p ./roles
+          
