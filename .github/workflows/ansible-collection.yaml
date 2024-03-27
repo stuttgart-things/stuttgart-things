@@ -41,14 +41,12 @@ jobs:
       - name: Init collection
         id: init
         run: |
-          ls -lta
           cat source/${{ inputs.collection-file }}
           yq -r ".requirements" source/${{ inputs.collection-file }} > ./roles.yaml
           ansible-galaxy collection init $(yq -r ".namespace" source/${{ inputs.collection-file }}).$(yq -r ".name" source/${{ inputs.collection-file }})
 
-      - name: Install roles
+      - name: Install roles into collection
         id: roles
         run: |
-          ls -ltr ./ | grep '^d' | tail -1
-          ansible-galaxy install -r ./roles.yaml -p ./roles
-          
+          ls -ltr $(yq -r ".namespace" source/${{ inputs.collection-file }})/$(yq -r ".name" source/${{ inputs.collection-file }})
+          ansible-galaxy install -r ./roles.yaml -p $(yq -r ".namespace" source/${{ inputs.collection-file }})/$(yq -r ".name" source/${{ inputs.collection-file }})/roles
