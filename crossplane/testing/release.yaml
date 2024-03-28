@@ -4,6 +4,8 @@ kind: Release
 metadata:
   name: ghr-deploy-configure-rke-cicd
   namespace: crossplane-system
+  annotations:
+    crossplane.io/external-name: github-runner
 spec:
   forProvider:
     chart:

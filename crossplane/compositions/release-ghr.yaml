@@ -1,0 +1,70 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: wordpressclusters.example.crossplane.io
+spec:
+  writeConnectionSecretsToNamespace: crossplane-system
+  compositeTypeRef:
+    apiVersion: example.crossplane.io/v1alpha1
+    kind: WordpressCluster
+  resources:
+    - base:
+        apiVersion: helm.crossplane.io/v1beta1
+        kind: Release
+        metadata:
+          annotations:
+            crossplane.io/external-name: wordpress
+        spec:
+          forProvider:
+            chart:
+              name: gha-runner-scale-set
+              repository: oci://ghcr.io/actions/actions-runner-controller-charts
+              version: 0.8.0
+              pullSecretRef:
+                name: ghcr
+                namespace: crossplane-system
+            namespace: arc-systems
+            insecureSkipTLSVerify: false
+            skipCreateNamespace: false
+            wait: true
+            skipCRDs: true
+            set:
+              - name: githubConfigSecret.github_token
+                valueFrom:
+                  secretKeyRef:
+                    key: GITHUB_TOKEN
+                    name: github-flux-secrets
+                    namespace: flux-system
+            values:
+              githubConfigUrl: https://github.com/stuttgart-things/deploy-configure-rke
+              containerMode:
+                type: kubernetes
+                kubernetesModeWorkVolumeClaim:
+                  accessModes: ["ReadWriteOnce"]
+                  storageClassName: openebs-hostpath
+                  resources:
+                    requests:
+                      storage: 50Mi
+              template:
+                spec:
+                  containers:
+                  - name: runner
+                    image: ghcr.io/actions/actions-runner:2.314.1
+                    command: ["/home/runner/run.sh"]
+                    env:
+                      - name: ACTIONS_RUNNER_REQUIRE_JOB_CONTAINER
+                        value: "false"
+                      - name: ACTIONS_RUNNER_POD_NAME
+                        valueFrom:
+                          fieldRef:
+                            fieldPath: metadata.name
+                  initContainers:
+                    - name: kube-init
+                      image: ghcr.io/actions/actions-runner:2.314.1
+                      command: ["/bin/sh", "-c"]
+                      args:
+                        - |
+                          whoami
+                      volumeMounts:
+                        - name: work
+                          mountPath: /home/runner/_work
