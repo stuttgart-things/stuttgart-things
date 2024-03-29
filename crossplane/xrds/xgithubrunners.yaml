@@ -1,0 +1,36 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: xgithubrunners.resources.stuttgart-things.com
+spec:
+  connectionSecretKeys:
+    - kubeconfig
+  group: resources.stuttgart-things.com
+  names:
+    kind: XGithubRunner
+    plural: xgithubrunners
+  claimNames:
+    kind: GithubRunner
+    plural: githubrunners
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          description: A GithubRunner is a composite resource that represents a helm release for a github runner deployment
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: name of runner (release)
+                url:
+                  type: string
+                  description: github repo url
+              required:
+                - name
+                - url

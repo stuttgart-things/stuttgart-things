@@ -1,19 +1,22 @@
+---
 apiVersion: apiextensions.crossplane.io/v1
 kind: Composition
 metadata:
-  name: wordpressclusters.example.crossplane.io
+  name: github-runner
+  labels:
+    crossplane.io/xrd: xgithubrunners.resources.stuttgart-things.com
 spec:
   writeConnectionSecretsToNamespace: crossplane-system
   compositeTypeRef:
-    apiVersion: example.crossplane.io/v1alpha1
-    kind: WordpressCluster
+    apiVersion: resources.stuttgart-things.com/v1alpha1
+    kind: XGithubRunner
   resources:
     - base:
         apiVersion: helm.crossplane.io/v1beta1
         kind: Release
         metadata:
           annotations:
-            crossplane.io/external-name: wordpress
+            crossplane.io/external-name: github-runner
         spec:
           forProvider:
             chart:
