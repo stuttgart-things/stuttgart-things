@@ -31,6 +31,10 @@ spec:
                 url:
                   type: string
                   description: github repo url
+                clusterConfig:
+                  type: string
+                  default: in-cluster
+                  description: cluster name/helm provider name
               required:
                 - name
                 - url
