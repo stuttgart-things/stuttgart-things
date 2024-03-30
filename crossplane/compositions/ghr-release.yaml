@@ -82,7 +82,7 @@ spec:
             strategy: string
             string:
               fmt: "ghr-%s-%s"
-          toFieldPath: metadata.name
+          toFieldPath: "metadata.annotations[crossplane.io/external-name]"
         # - fromFieldPath: "metadata.name"
         #   toFieldPath: "metadata.annotations[crossplane.io/external-name]"
         #   transforms:
