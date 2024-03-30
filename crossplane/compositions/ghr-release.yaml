@@ -76,7 +76,7 @@ spec:
       patches:
         - fromFieldPath: spec.clusterConfig
           toFieldPath: spec.providerConfigRef.name
-        - fromFieldPath: spec.name
-          toFieldPath: spec.providerConfigRef.name
+        - fromFieldPath: spec.deploymentNamespace
+          toFieldPath: spec.forProvider.namespace.value
         - fromFieldPath: spec.url
           toFieldPath: spec.providerConfigRef.name

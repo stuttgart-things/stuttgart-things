@@ -25,9 +25,10 @@ spec:
             spec:
               type: object
               properties:
-                name:
+                namespace:
                   type: string
-                  description: name of runner (release)
+                  default: arc-systems
+                  description: namespace of runner (release)
                 url:
                   type: string
                   description: github repo url
