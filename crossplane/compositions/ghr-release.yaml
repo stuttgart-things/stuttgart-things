@@ -74,12 +74,21 @@ spec:
                         - name: work
                           mountPath: /home/runner/_work
       patches:
-        - fromFieldPath: "metadata.name"
-          toFieldPath: "metadata.annotations[crossplane.io/external-name]"
-          transforms:
-            - type: string
-              string:
-                fmt: "hc-%s"
+        - type: CombineFromComposite
+          combine:
+            variables:
+              - fromFieldPath: metadata.name
+              - fromFieldPath: spec.clusterConfig
+            strategy: string
+            string:
+              fmt: "ghr-%s-%s"
+          toFieldPath: metadata.name
+        # - fromFieldPath: "metadata.name"
+        #   toFieldPath: "metadata.annotations[crossplane.io/external-name]"
+        #   transforms:
+        #     - type: string
+        #       string:
+        #         fmt: "ghr-%s"
         - fromFieldPath: spec.clusterConfig
           toFieldPath: spec.providerConfigRef.name
         - fromFieldPath: spec.deploymentNamespace
