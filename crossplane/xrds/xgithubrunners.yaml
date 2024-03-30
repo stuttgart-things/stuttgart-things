@@ -25,7 +25,7 @@ spec:
             spec:
               type: object
               properties:
-                namespace:
+                deploymentNamespace:
                   type: string
                   default: arc-systems
                   description: namespace of runner (release)
@@ -37,5 +37,4 @@ spec:
                   default: in-cluster
                   description: cluster name/helm provider name
               required:
-                - name
                 - url
