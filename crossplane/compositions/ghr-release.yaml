@@ -18,6 +18,8 @@ spec:
           annotations:
             crossplane.io/external-name: github-runner
         spec:
+          providerConfigRef:
+            name: in-cluster
           forProvider:
             chart:
               name: gha-runner-scale-set
@@ -71,3 +73,10 @@ spec:
                       volumeMounts:
                         - name: work
                           mountPath: /home/runner/_work
+      patches:
+        - fromFieldPath: spec.clusterConfig
+          toFieldPath: spec.providerConfigRef.name
+        - fromFieldPath: spec.name
+          toFieldPath: spec.providerConfigRef.name
+        - fromFieldPath: spec.url
+          toFieldPath: spec.providerConfigRef.name
