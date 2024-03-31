@@ -276,7 +276,7 @@ jobs:
               
               # COMBINE DICTS
               print(all_overwrites)
-              updated_vm_config = merge_two_dicts(values, all_overwrites)
+              updated_vm_config = merge_two_dicts(all_overwrites, values)
               print(updated_vm_config)
 
               write_yaml_todisk(updated_vm_config, './${{ inputs.vm-name }}.yaml')
