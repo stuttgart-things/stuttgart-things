@@ -86,5 +86,15 @@ jobs:
         run: |
           echo 'BUILD COLLECTION'
           ansible-galaxy collection build ${{ env.COLLECTION_DIR }}
-          ls -lta
-          
+          echo "COLLECTION_PACKAGE=$(ls -t *.gz | head -1) >> $GITHUB_ENV
+          echo "COLLECTION_PACKAGE_PATH=$GITHUB_WORKSPACE/$(ls -t *.gz | head -1) >> $GITHUB_ENV
+
+          echo ${{ env.COLLECTION_PACKAGE }}
+          echo ${{ env.COLLECTION_PACKAGE_PATH }}
+      #- name: Upload collection
+      #  id: upload
+      #  uses: actions/upload-artifact@v4.1.0
+      #  with:
+      #    name: ${{ inputs.vm-name }}
+      #    path: |
+      #      ${{ env.COLLECTION_DIR }}
