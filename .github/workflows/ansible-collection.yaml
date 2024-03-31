@@ -50,3 +50,11 @@ jobs:
         run: |
           ls -ltr $(yq -r ".namespace" source/${{ inputs.collection-file }})/$(yq -r ".name" source/${{ inputs.collection-file }})
           ansible-galaxy install -r ./roles.yaml -p $(yq -r ".namespace" source/${{ inputs.collection-file }})/$(yq -r ".name" source/${{ inputs.collection-file }})/roles
+
+      - name: Change role references
+        id: role-refs
+        run: |
+          roles_dir=$($(yq -r ".namespace" source/${{ inputs.collection-file }})/$(yq -r ".name" source/${{ inputs.collection-file }})/roles)
+          echo $roles_dir
+
+        
