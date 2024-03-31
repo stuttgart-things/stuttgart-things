@@ -87,7 +87,7 @@ jobs:
           echo 'BUILD COLLECTION'
           ansible-galaxy collection build ${{ env.COLLECTION_DIR }}
           echo "COLLECTION_PACKAGE=$(ls -t *.gz | head -1) >> $GITHUB_ENV
-          echo "COLLECTION_PACKAGE_PATH=$(pwd/$(ls -t *.gz | head -1) >> $GITHUB_ENV
+          echo "COLLECTION_PACKAGE_PATH=$PWD/$(ls -t *.gz | head -1) >> $GITHUB_ENV
 
       - name: Test collection
         id: test
