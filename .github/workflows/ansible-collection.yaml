@@ -85,7 +85,7 @@ jobs:
       - name: Adding playbooks
         id: plays
         run: |
-          play_dir=${{ env.COLLECTION_PACKAGE_PATH }}/playbooks
+          play_dir=${{ env.COLLECTION_DIR }}/playbooks
           mkdir -p ${play_dir}
           
           # GET COUNT OF ALL KEYS OF SUBKEY PLAYBOOKS
@@ -108,7 +108,7 @@ jobs:
 
           # LIST CREATED PLAYS
           ls -lta ${play_dir}
-  
+          
       - name: Build collection
         id: build
         run: |
