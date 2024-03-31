@@ -95,15 +95,19 @@ jobs:
           COUNTER=0
           while [ $COUNTER != $count_plays ]; do
              echo PROCESS PLAYBOOK: $COUNTER
-          
-             yq ".playbooks[$COUNTER].name" ${{ env.COLLECTION_FILEPATH }}
-             filename=$(yq ".playbooks[$COUNTER].name" ${{ env.COLLECTION_FILEPATH }}
-             play_content=$(yq ".playbooks[$COUNTER].play" ${{ env.COLLECTION_FILEPATH }}
 
-             # CREATE PLAYBOOK
+             # GET PLAYBOOK NAME AND CONTENT
+             yq ".playbooks[$COUNTER].name" ${{ env.COLLECTION_FILEPATH }}
+             filename=$(yq ".playbooks[$COUNTER].name" ${{ env.COLLECTION_FILEPATH }})
+             play_content=$(yq ".playbooks[$COUNTER].play" ${{ env.COLLECTION_FILEPATH }})
+
+             # CREATE PLAYBOOK ON FS
              echo "$play_content" > "${play_dir}/${filename}.yaml"
              let COUNTER=COUNTER+1
           done
+
+          # LIST CREATED PLAYS
+          ls -lta ${play_dir}
   
       - name: Build collection
         id: build
