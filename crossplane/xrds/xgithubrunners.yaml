@@ -29,9 +29,13 @@ spec:
                   type: string
                   default: arc-systems
                   description: namespace of runner (release)
-                url:
+                repository:
                   type: string
-                  description: github repo url
+                  description: github repository name
+                group:
+                  type: string
+                  default: stuttgart-things
+                  description: github group name
                 clusterConfig:
                   type: string
                   default: in-cluster

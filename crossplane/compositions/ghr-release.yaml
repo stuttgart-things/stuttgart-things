@@ -77,21 +77,22 @@ spec:
         - type: CombineFromComposite
           combine:
             variables:
-              - fromFieldPath: metadata.name
+              - fromFieldPath: spec.repository
               - fromFieldPath: spec.clusterConfig
             strategy: string
             string:
               fmt: "ghr-%s-%s"
           toFieldPath: "metadata.annotations[crossplane.io/external-name]"
-        # - fromFieldPath: "metadata.name"
-        #   toFieldPath: "metadata.annotations[crossplane.io/external-name]"
-        #   transforms:
-        #     - type: string
-        #       string:
-        #         fmt: "ghr-%s"
+        - type: CombineFromComposite
+          combine:
+            variables:
+              - fromFieldPath: spec.group
+              - fromFieldPath: spec.repository
+            strategy: string
+            string:
+              fmt: "https://github.com/%s/%s"
+          toFieldPath: spec.forProvider.values.githubConfigUrl
         - fromFieldPath: spec.clusterConfig
           toFieldPath: spec.providerConfigRef.name
         - fromFieldPath: spec.deploymentNamespace
           toFieldPath: spec.forProvider.namespace
-        - fromFieldPath: spec.url
-          toFieldPath: spec.forProvider.values.githubConfigUrl
