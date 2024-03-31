@@ -108,3 +108,21 @@ spec:
       name: kubeconfig-cicd
       namespace: crossplane-system
       key: sthings-cicd
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: crossplane-githubrunner-claims
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: crossplane
+  interval: 1h
+  retryInterval: 2m
+  timeout: 10m
+  prune: true
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./crossplane/claims/githubrunner/labul-vsphere
