@@ -1,0 +1,9 @@
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: GithubRunner
+metadata:
+  name: {{ .repositoryName }} # e.g. install-requirements
+  namespace: {{ .namespace }} # e.g. crossplane-system
+spec:
+  repository: {{ .repositoryName }} # e.g. install-requirements
+  clusterConfig: {{ .targetClusterName }} # e.g. cicd

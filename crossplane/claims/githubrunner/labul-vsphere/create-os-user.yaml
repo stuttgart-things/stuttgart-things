@@ -1,0 +1,9 @@
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: GithubRunner
+metadata:
+  name: create-os-user
+  namespace: crossplane-system
+spec:
+  repository: create-os-user
+  clusterConfig: cicd
