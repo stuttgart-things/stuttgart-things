@@ -41,4 +41,4 @@ spec:
                   default: in-cluster
                   description: cluster name/helm provider name
               required:
-                - url
+                - repository
