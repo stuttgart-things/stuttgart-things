@@ -80,7 +80,12 @@ jobs:
           done
 
           ls -lta ${{ env.COLLECTION_ROLES_DIR }}
-          
+
+      - name: Adding playbooks
+        id: playbooks
+        run: |
+          echo 'ADDING COLLECTION'
+  
       - name: Build collection
         id: build
         run: |
@@ -88,16 +93,11 @@ jobs:
           ansible-galaxy collection build ${{ env.COLLECTION_DIR }}
           echo "COLLECTION_PACKAGE=$(ls -t *.gz | head -1)" >> $GITHUB_ENV
           echo "COLLECTION_PACKAGE_PATH=$PWD/$(ls -t *.gz | head -1)" >> $GITHUB_ENV
-
-      - name: Test collection
-        id: test
-        run: |
-          du -sh ${{ env.COLLECTION_PACKAGE }}
-          echo ${{ env.COLLECTION_PACKAGE_PATH }}
           
       - name: Upload collection
         id: upload
         uses: actions/upload-artifact@v4.1.0
         with:
           name: ${{ env.COLLECTION_PACKAGE }}
-          path: ${{ github.workspace }}/*tar.gz*
+          #path: ${{ github.workspace }}/*tar.gz*
+          path: ${{ env.COLLECTION_PACKAGE_PATH }}
