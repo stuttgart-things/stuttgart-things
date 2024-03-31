@@ -255,6 +255,10 @@ jobs:
                 z.update(y)
                 return z
 
+            def write_yaml_todisk(vm_config, output_path):
+              with open(output_path, 'w') as outfile:
+                yaml.dump(vm_config, outfile, default_flow_style=False, sort_keys=False)
+
             def main():
               with open('./${{ inputs.vm-name }}.yaml', 'r') as f:
                   values = yaml.load(f, Loader=yaml.SafeLoader)
@@ -272,8 +276,10 @@ jobs:
               
               # COMBINE DICTS
               print(all_overwrites)
-              updated = merge_two_dicts(values, all_overwrites)
-              print(updated)
+              updated_vm_config = merge_two_dicts(values, all_overwrites)
+              print(updated_vm_config)
+
+              write_yaml_todisk(updated_vm_config, './${{ inputs.vm-name }}.yaml')
               
             if __name__ == '__main__':
                 main()
