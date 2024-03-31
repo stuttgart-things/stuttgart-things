@@ -92,7 +92,7 @@ jobs:
       - name: Test collection
         id: test
         run: |
-          echo ${{ env.COLLECTION_PACKAGE }}
+          du -sh ${{ env.COLLECTION_PACKAGE }}
           echo ${{ env.COLLECTION_PACKAGE_PATH }}
       #- name: Upload collection
       #  id: upload
