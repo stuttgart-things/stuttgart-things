@@ -82,9 +82,27 @@ jobs:
           ls -lta ${{ env.COLLECTION_ROLES_DIR }}
 
       - name: Adding playbooks
-        id: playbooks
+        id: plays
         run: |
-          echo 'ADDING COLLECTION'
+          play_dir=${{ env.COLLECTION_PACKAGE_PATH }}/playbooks
+          mkdir -p ${play_dir}
+          
+          # GET COUNT OF ALL KEYS OF SUBKEY PLAYBOOKS
+          count_plays=$(yq '.playbooks | keys' ${{ inputs.collection-file }} | wc -l)
+          echo FOUND $count_plays PLAYBOOKS FOR THIS COLLECTION
+          
+          COUNTER=0
+          while [ $COUNTER != $count_plays ]; do
+             echo PROCESS PLAYBOOK: $COUNTER
+          
+             yq ".playbooks[$COUNTER].name" ${{ inputs.collection-file }}
+             filename=$(yq ".playbooks[$COUNTER].name" ${{ inputs.collection-file }}
+             play_content=$(yq ".playbooks[$COUNTER].play" ${{ inputs.collection-file }})
+
+             # CREATE PLAYBOOK
+             echo "$play_content" > "${play_dir}/${filename}.yaml"
+             let COUNTER=COUNTER+1
+          done
   
       - name: Build collection
         id: build
