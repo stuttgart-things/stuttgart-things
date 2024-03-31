@@ -80,3 +80,11 @@ jobs:
           done
 
           ls -lta ${{ env.COLLECTION_ROLES_DIR }}
+          
+      - name: Build collection
+        id: build
+        run: |
+          echo 'BUILD COLLECTION'
+          ansible-galaxy collection build ${{ env.COLLECTION_DIR }}
+          ls -lta
+          
