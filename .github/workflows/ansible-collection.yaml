@@ -100,4 +100,4 @@ jobs:
         uses: actions/upload-artifact@v4.1.0
         with:
           name: ${{ env.COLLECTION_PACKAGE }}
-          path: ${{ env.COLLECTION_PACKAGE_PATH }}
+          path: ${{ github.workspace }}/*tar.gz*
