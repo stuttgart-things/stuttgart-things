@@ -89,6 +89,9 @@ jobs:
           echo "COLLECTION_PACKAGE=$(ls -t *.gz | head -1) >> $GITHUB_ENV
           echo "COLLECTION_PACKAGE_PATH=$GITHUB_WORKSPACE/$(ls -t *.gz | head -1) >> $GITHUB_ENV
 
+      - name: Test collection
+        id: test
+        run: |
           echo ${{ env.COLLECTION_PACKAGE }}
           echo ${{ env.COLLECTION_PACKAGE_PATH }}
       #- name: Upload collection
