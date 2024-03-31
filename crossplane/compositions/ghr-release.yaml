@@ -15,6 +15,7 @@ spec:
         apiVersion: helm.crossplane.io/v1beta1
         kind: Release
         metadata:
+          name: ghr
           annotations:
             crossplane.io/external-name: github-runner
         spec:
@@ -79,10 +80,10 @@ spec:
             variables:
               - fromFieldPath: spec.repository
               - fromFieldPath: spec.clusterConfig
-            strategy: string
+            strategy: strings
             string:
               fmt: "ghr-%s-%s"
-          toFieldPath: "metadata.annotations[crossplane.io/external-name]"
+          toFieldPath: "metadata.name"
         - type: CombineFromComposite
           combine:
             variables:
