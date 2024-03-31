@@ -47,7 +47,8 @@ jobs:
 
           echo 'INIT COLLECTION'
           ansible-galaxy collection init $(yq -r ".namespace" source/${{ inputs.collection-file }}).$(yq -r ".name" source/${{ inputs.collection-file }})
-          
+
+          # SET WORKING DIRS AS ENV-VARS
           echo "COLLECTION_ROLES_DIR=$GITHUB_WORKSPACE/$(yq -r ".namespace" source/${{ inputs.collection-file }})/$(yq -r ".name" source/${{ inputs.collection-file }})/roles" >> $GITHUB_ENV
           echo "COLLECTION_DIR=$GITHUB_WORKSPACE/$(yq -r ".namespace" source/${{ inputs.collection-file }})/$(yq -r ".name" source/${{ inputs.collection-file }})" >> $GITHUB_ENV
 
@@ -62,5 +63,20 @@ jobs:
         run: |
           for role in "${{ env.COLLECTION_ROLES_DIR }}"/*
           do
-            echo role_name: $(basename $role)          
+            # SET/ECHO ROLE NAMES
+            collection_role_name=$(echo "$( basename $role)" | tr - _)
+            echo existing role names: $(basename $role)       
+            echo "collection role names: $collection_role_name"
+
+            # GET ALL FILES IN ROLE
+            all_files_role=$(find ${{ env.COLLECTION_ROLES_DIR }}/$(basename $role) -type f)
+            echo all_files_role: $all_files_role
+
+            echo REPLACE ALL ROLE REFERENCES
+            sed -i "s/$(basename $role)/${collection_role_name}/g" $all_files_role
+
+            echo RENAME ROLE DIR
+            mv ${{ env.COLLECTION_ROLES_DIR }}/$(basename $role) ${{ env.COLLECTION_ROLES_DIR }}/$collection_role_name
           done
+
+          ls -lta ${{ env.COLLECTION_ROLES_DIR }}
