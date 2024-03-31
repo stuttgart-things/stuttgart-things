@@ -41,20 +41,26 @@ jobs:
       - name: Init collection
         id: init
         run: |
+          echo 'READ COLLECTION FILE'
           cat source/${{ inputs.collection-file }}
           yq -r ".requirements" source/${{ inputs.collection-file }} > ./roles.yaml
+
+          echo 'INIT COLLECTION'
           ansible-galaxy collection init $(yq -r ".namespace" source/${{ inputs.collection-file }}).$(yq -r ".name" source/${{ inputs.collection-file }})
+          
+          echo "COLLECTION_ROLES_DIR=$GITHUB_WORKSPACE/$(yq -r ".namespace" source/${{ inputs.collection-file }})/$(yq -r ".name" source/${{ inputs.collection-file }})/roles" >> $GITHUB_ENV
+          echo "COLLECTION_DIR=$GITHUB_WORKSPACE/$(yq -r ".namespace" source/${{ inputs.collection-file }})/$(yq -r ".name" source/${{ inputs.collection-file }})" >> $GITHUB_ENV
 
       - name: Install roles into collection
         id: roles
         run: |
-          ls -ltr $(yq -r ".namespace" source/${{ inputs.collection-file }})/$(yq -r ".name" source/${{ inputs.collection-file }})
-          ansible-galaxy install -r ./roles.yaml -p $(yq -r ".namespace" source/${{ inputs.collection-file }})/$(yq -r ".name" source/${{ inputs.collection-file }})/roles
-          echo "COLLECTION_ROLES_DIR=$GITHUB_WORKSPACE/$(yq -r ".namespace" source/${{ inputs.collection-file }})/$(yq -r ".name" source/${{ inputs.collection-file }})/roles" >> $GITHUB_ENV
+          echo 'INSTALL ROLES INTO COLLECTION'
+          ansible-galaxy install -r ./roles.yaml -p ${{ env.COLLECTION_ROLES_DIR }}
           
       - name: Change role references
         id: role-refs
         run: |
-          echo ${{ env.COLLECTION_ROLES_DIR }}
-
-        
+          for role in "${{ env.COLLECTION_ROLES_DIR }}"/*
+          do
+            echo role_name: $(basename $role)          
+          done
