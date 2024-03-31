@@ -94,10 +94,10 @@ jobs:
         run: |
           du -sh ${{ env.COLLECTION_PACKAGE }}
           echo ${{ env.COLLECTION_PACKAGE_PATH }}
-      #- name: Upload collection
-      #  id: upload
-      #  uses: actions/upload-artifact@v4.1.0
-      #  with:
-      #    name: ${{ inputs.vm-name }}
-      #    path: |
-      #      ${{ env.COLLECTION_DIR }}
+          
+      - name: Upload collection
+        id: upload
+        uses: actions/upload-artifact@v4.1.0
+        with:
+          name: ${{ env.COLLECTION_PACKAGE }}
+          path: ${{ env.COLLECTION_PACKAGE }}
