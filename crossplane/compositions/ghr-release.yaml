@@ -80,9 +80,10 @@ spec:
             variables:
               - fromFieldPath: spec.repository
               - fromFieldPath: spec.clusterConfig
-            strategy: strings
+            strategy: string
             string:
               fmt: "ghr-%s-%s"
+          #toFieldPath: "metadata.annotations[crossplane.io/external-name]"
           toFieldPath: "metadata.name"
         - type: CombineFromComposite
           combine:
