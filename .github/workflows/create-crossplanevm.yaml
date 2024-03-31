@@ -43,6 +43,10 @@ on:
         options:
           - testing
           - infra
+      overwrites:
+        required: false
+        type: string
+        default: ""
       crossplane-provider:
         type: choice
         description: CROSSPLANE PROVIDER NAME
@@ -74,7 +78,7 @@ jobs:
       - name: Pip install
         id: pip
         run: |
-          pip install jinja2 pyyaml
+          pip install jinja2 pyyaml argparse
 
       - name: Create VM config
         id: renderConfig
@@ -235,6 +239,41 @@ jobs:
                 # WRITE VM CONFIG YAML TO DISK
                 write_yaml_todisk('./${{ inputs.vm-name }}.yaml')
 
+            if __name__ == '__main__':
+                main()
+
+      - name: Merge overwrites
+        id: mergeOverwrites
+        uses: jannekem/run-python-script-action@v1.7
+        with:
+          script: |
+            import argparse
+        
+            def merge_two_dicts(x, y):
+                z = x.copy() 
+                z.update(y)
+                return z
+
+            def main():
+              with open('./${{ inputs.vm-name }}.yaml', 'r') as f:
+                  values = yaml.load(f, Loader=yaml.SafeLoader)
+
+              # SPLIT ARGS BY DELIMITER
+              overwrites = '${{ inputs.overwrites }}'
+              overwrite = overwrites.split(";")
+              
+              all_overwrites = {}
+              
+              # LOOP OVER ARGS
+              for x in overwrite:
+                split = x.split("=")
+                all_overwrites[split[0]]=split[1]
+              
+              # COMBINE DICTS
+              print(all_overwrites)
+              updated = merge_two_dicts(values, all_overwrites)
+              print(updated)
+              
             if __name__ == '__main__':
                 main()
 
