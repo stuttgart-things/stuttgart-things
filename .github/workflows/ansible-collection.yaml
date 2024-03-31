@@ -49,6 +49,7 @@ jobs:
           ansible-galaxy collection init $(yq -r ".namespace" source/${{ inputs.collection-file }}).$(yq -r ".name" source/${{ inputs.collection-file }})
 
           # SET WORKING DIRS AS ENV-VARS
+          echo "COLLECTION_FILEPATH=source/${{ inputs.collection-file }}" >> $GITHUB_ENV
           echo "COLLECTION_ROLES_DIR=$GITHUB_WORKSPACE/$(yq -r ".namespace" source/${{ inputs.collection-file }})/$(yq -r ".name" source/${{ inputs.collection-file }})/roles" >> $GITHUB_ENV
           echo "COLLECTION_DIR=$GITHUB_WORKSPACE/$(yq -r ".namespace" source/${{ inputs.collection-file }})/$(yq -r ".name" source/${{ inputs.collection-file }})" >> $GITHUB_ENV
 
@@ -88,16 +89,16 @@ jobs:
           mkdir -p ${play_dir}
           
           # GET COUNT OF ALL KEYS OF SUBKEY PLAYBOOKS
-          count_plays=$(yq '.playbooks | keys' ${{ inputs.collection-file }} | wc -l)
+          count_plays=$(yq '.playbooks | keys' ${{ env.COLLECTION_FILEPATH }} | wc -l)
           echo FOUND $count_plays PLAYBOOKS FOR THIS COLLECTION
           
           COUNTER=0
           while [ $COUNTER != $count_plays ]; do
              echo PROCESS PLAYBOOK: $COUNTER
           
-             yq ".playbooks[$COUNTER].name" ${{ inputs.collection-file }}
-             filename=$(yq ".playbooks[$COUNTER].name" ${{ inputs.collection-file }}
-             play_content=$(yq ".playbooks[$COUNTER].play" ${{ inputs.collection-file }})
+             yq ".playbooks[$COUNTER].name" ${{ env.COLLECTION_FILEPATH }}
+             filename=$(yq ".playbooks[$COUNTER].name" ${{ env.COLLECTION_FILEPATH }}
+             play_content=$(yq ".playbooks[$COUNTER].play" ${{ env.COLLECTION_FILEPATH }}
 
              # CREATE PLAYBOOK
              echo "$play_content" > "${play_dir}/${filename}.yaml"
