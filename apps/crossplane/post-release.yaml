@@ -35,10 +35,11 @@ spec:
               template:
                 spec:
                   containers:
-                  # - envFrom:
-                  #   - secretRef:
-                  #       name: ${S3_SECRET_NAME:-s3}
+                  - envFrom:
+                    - secretRef:
+                        name: ${S3_SECRET_NAME:-s3}
                     name: package-runtime
+                    image: eu.gcr.io/stuttgart-things/sthings-cptf:1.7.5
                     args:
                       - -d
                       - --poll=10m
