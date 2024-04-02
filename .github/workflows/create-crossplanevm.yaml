@@ -263,23 +263,28 @@ jobs:
               with open('./${{ inputs.vm-name }}.yaml', 'r') as f:
                   values = yaml.load(f, Loader=yaml.SafeLoader)
 
+              # HANDLING OF OVERWRITES
+              
               # SPLIT ARGS BY DELIMITER
               overwrites = '${{ inputs.overwrites }}'
-              overwrite = overwrites.split(";")
-              
-              all_overwrites = {}
-              
-              # LOOP OVER ARGS
-              for x in overwrite:
-                split = x.split("=")
-                all_overwrites[split[0].strip()]=split[1].strip()
-              
-              # COMBINE DICTS
-              print(all_overwrites)
-              updated_vm_config = merge_two_dicts(values, all_overwrites)
-              print(updated_vm_config)
 
-              write_yaml_todisk(updated_vm_config, './${{ inputs.vm-name }}.yaml')
+              if len(overwrites) > 0: 
+              
+                overwrite = overwrites.split(";")
+              
+                all_overwrites = {}
+                
+                # LOOP OVER ARGS
+                for x in overwrite:
+                  split = x.split("=")
+                  all_overwrites[split[0].strip()]=split[1].strip()
+                
+                # COMBINE DICTS
+                print(all_overwrites)
+                updated_vm_config = merge_two_dicts(values, all_overwrites)
+                print(updated_vm_config)
+  
+                write_yaml_todisk(updated_vm_config, './${{ inputs.vm-name }}.yaml')
               
             if __name__ == '__main__':
                 main()
