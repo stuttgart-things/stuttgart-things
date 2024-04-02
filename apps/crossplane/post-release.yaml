@@ -35,14 +35,14 @@ spec:
               template:
                 spec:
                   containers:
-                  - envFrom:
-                    - secretRef:
-                        name: ${S3_SECRET_NAME:-s3}
+                  # - envFrom:
+                  #   - secretRef:
+                  #       name: ${S3_SECRET_NAME:-s3}
                     name: package-runtime
                     args:
                       - -d
-                      - --poll=5m
-                      - --max-reconcile-rate=1
+                      - --poll=10m
+                      - --max-reconcile-rate=10
                     resources: {}
                     volumeMounts:
                     - mountPath: /etc/ssl/certs/ca-certificates.crt
@@ -60,6 +60,6 @@ spec:
           name: provider-terraform
           namespace: crossplane-system
         spec:
-          package: xpkg.upbound.io/upbound/provider-terraform:v0.14.1
+          package: xpkg.upbound.io/upbound/provider-terraform:v0.15.0
           runtimeConfigRef:
             name: cacerts-labul-vsphere
