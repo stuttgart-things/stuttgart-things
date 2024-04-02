@@ -5,7 +5,7 @@
 ```
 # INSTALL OS REQUIREMENTS
 sudo apt install -y sshpass unzip
-pip3 install ansible --upgrade
+pip install ansible --upgrade
 
 # INSTALL PACKER
 wget https://releases.hashicorp.com/packer/1.10.2/packer_1.10.2_linux_amd64.zip
