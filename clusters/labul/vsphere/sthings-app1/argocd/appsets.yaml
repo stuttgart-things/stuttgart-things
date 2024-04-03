@@ -74,3 +74,34 @@ spec:
         automated:
           prune: true
           selfHeal: false
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: rancher-labul-downstreamcluster
+  namespace: argocd
+spec:
+  generators:
+  - git:
+      repoURL: https://github.com/stuttgart-things/stuttgart-things.git
+      revision: HEAD
+      directories:
+      - path: clusters/labul/downstream/*
+  template:
+    metadata:
+      name: '{{ path.basename }}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/stuttgart-things/stuttgart-things.git
+        targetRevision: HEAD
+        path: '{{ path }}'
+      destination:
+        name: in-cluster
+        namespace: fleet-default
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
+        automated:
+          prune: true
+          selfHeal: false
