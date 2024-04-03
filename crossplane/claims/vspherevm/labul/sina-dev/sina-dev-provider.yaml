@@ -1,0 +1,25 @@
+---
+apiVersion: tf.upbound.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: minio-sina-dev
+  namespace: crossplane-system
+spec:
+  configuration: |
+    terraform {
+      backend "s3" {
+        endpoints = {
+          s3 = "https://artifacts.app1.sthings-vsphere.labul.sva.de"
+        }
+        skip_requesting_account_id = true
+        skip_s3_checksum = true
+        key = "sina-dev.tfstate"
+        bucket = "vspherevm-labul"
+        region = "main"
+        skip_credentials_validation = true
+        skip_metadata_api_check = true
+        skip_region_validation = true
+        force_path_style = true
+        workspace_key_prefix = "sina-dev"
+      }
+    }
