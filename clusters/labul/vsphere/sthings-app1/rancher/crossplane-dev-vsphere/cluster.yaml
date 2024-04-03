@@ -2,9 +2,9 @@
 apiVersion: provisioning.cattle.io/v1
 kind: Cluster
 metadata:
-  name: ulle
+  name: crossplane-dev
   annotations:
-    field.cattle.io/description: ulle
+    field.cattle.io/description: crossplane-dev
     #  key: string
   labels:
     {}
@@ -280,11 +280,11 @@ spec:
         etcdRole: true
         controlPlaneRole: true
         workerRole: true
-        quantity: 1
+        quantity: 3
         unhealthyNodeTimeout: 0m
         machineConfigRef:
           kind: VmwarevsphereConfig
-          name: medium-aio-ulle
+          name: medium-aio-crossplane-dev
         drainBeforeDelete: true
         machineOS: linux
         labels: {}
