@@ -1,0 +1,35 @@
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: AnsibleRun
+metadata:
+  name: baseos-packer-dev
+  namespace: crossplane-system
+spec:
+  pipelineRunName: baseos-packer-dev
+  inventory:
+    - "all+[\"packer-dev.labul.sva.de\"]"
+  playbooks:
+    - "ansible/playbooks/prepare-env.yaml"
+    - "ansible/playbooks/base-os.yaml"
+  ansibleVarsFile:
+    - "manage_filesystem+-true"
+    - "update_packages+-true"
+    - "install_requirements+-true"
+    - "install_motd+-true"
+    - "username+-sthings"
+    - "lvm_home_sizing+-'15%'"
+    - "lvm_root_sizing+-'35%'"
+    - "lvm_var_sizing+-'50%'"
+    - "send_to_msteams+-true"
+    - "reboot_all+-false"
+  gitRepoUrl: https://github.com/stuttgart-things/stuttgart-things.git
+  gitRevision: main
+  providerRef:
+    name: kubernetes-incluster
+  vaultSecretName: vault
+  pipelineNamespace: tektoncd
+  workingImage: eu.gcr.io/stuttgart-things/sthings-ansible:9.3.0
+  roles:
+    - "https://github.com/stuttgart-things/install-requirements.git"
+    - "https://github.com/stuttgart-things/manage-filesystem.git"
+    - "https://github.com/stuttgart-things/install-configure-vault.git"
