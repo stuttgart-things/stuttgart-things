@@ -32,18 +32,21 @@ on:
           - rocky9
       lab-cloud:
         type: choice
-        description: Lab + Cloud
+        description: LAB + CLOUD
         options:
           - labul-vsphere
           - labda-vsphere
           - labul-pve
       vm-folder:
         type: choice
-        description: FOLDER ON PVE
+        description: VM FOLDER
         options:
           - testing
           - infra
+          - dev
+          - rancher-things
       overwrites:
+        description: OVERWRITES AS DELMITED STRING BY SEMICOLON
         required: false
         type: string
         default: ""
@@ -54,6 +57,7 @@ on:
           - minio
           - incluster
       runner:
+        description: RUNNER NAME
         required: true
         type: string
         default: ghr-stuttgart-things-sthings-cicd
