@@ -1,9 +1,9 @@
-# ---
-# apiVersion: resources.stuttgart-things.com/v1alpha1
-# kind: GithubRunner
-# metadata:
-#   name: manage-filesystem
-#   namespace: crossplane-system
-# spec:
-#   repository: manage-filesystem
-#   clusterConfig: cicd
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: GithubRunner
+metadata:
+  name: manage-filesystem
+  namespace: crossplane-system
+spec:
+  repository: manage-filesystem
+  clusterConfig: cicd
