@@ -83,6 +83,7 @@ spec:
             strategy: string
             string:
               fmt: "ghr-%s-%s"
+          toFieldPath: metadata.name
         - type: CombineFromComposite
           combine:
             variables:
