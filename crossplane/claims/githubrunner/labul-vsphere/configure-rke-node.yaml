@@ -1,9 +1,9 @@
----
-apiVersion: resources.stuttgart-things.com/v1alpha1
-kind: GithubRunner
-metadata:
-  name: configure-rke-node
-  namespace: crossplane-system
-spec:
-  repository: configure-rke-node
-  clusterConfig: cicd
+# ---
+# apiVersion: resources.stuttgart-things.com/v1alpha1
+# kind: GithubRunner
+# metadata:
+#   name: configure-rke-node
+#   namespace: crossplane-system
+# spec:
+#   repository: configure-rke-node
+#   clusterConfig: cicd
