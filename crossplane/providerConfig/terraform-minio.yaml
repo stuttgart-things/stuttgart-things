@@ -8,7 +8,11 @@ spec:
   configuration: |
     terraform {
       backend "s3" {
-        endpoint = "{{ .s3Endpoint }}"
+        endpoints = {
+          s3 = "{{ .s3Endpoint }}"
+        }
+        skip_requesting_account_id = true
+        skip_s3_checksum = true
         key = "{{ .stateKey }}.tfstate"
         region = "{{ .s3Region }}"
         bucket = "{{ .s3Bucket }}"
@@ -16,5 +20,7 @@ spec:
         skip_metadata_api_check = true
         skip_region_validation = true
         force_path_style = true
+        workspace_key_prefix = "{{ .stateKey }}"
       }
     }
+
