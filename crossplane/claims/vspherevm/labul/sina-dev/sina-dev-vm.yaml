@@ -18,7 +18,7 @@ spec:
     datacenter: /LabUL
     datastore: /LabUL/datastore/UL-V5010-01-LUN2
     resourcePool: /LabUL/host/Cluster-V6.5/Resources
-    network: /LabUL/network/MGMT-10.31.101
+    network: /LabUL/network/LAB-10.31.103
     template: /LabUL/vm/stuttgart-things/vm-templates/sthings-u23
     bootstrap: '["echo STUTTGART-THINGS"]'
     annotation: VSPHERE-VM BUILD w/ CROSSPLANE FOR STUTTGART-THINGS
