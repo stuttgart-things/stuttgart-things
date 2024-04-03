@@ -2,21 +2,26 @@
 apiVersion: tf.upbound.io/v1beta1
 kind: ProviderConfig
 metadata:
-  name: minio-cgn-dev3
+  name: minio-cgn-dev4
   namespace: crossplane-system
 spec:
   configuration: |
     terraform {
       backend "s3" {
-        endpoint = "https://artifacts.app1.sthings-vsphere.labul.sva.de"
-        key = "cgn-dev3.tfstate"
-        region = "main"
+        endpoints = {
+          s3 = "https://artifacts.app1.sthings-vsphere.labul.sva.de"
+        }
+        skip_requesting_account_id = true
+        access_key="sthings"           # Access and secret keys
+        secret_key="Atlan7is"
+        skip_s3_checksum = true
+        key = "cologne2.tfstate"
         bucket = "vspherevm-labul"
+        region = "main"
         skip_credentials_validation = true
         skip_metadata_api_check = true
         skip_region_validation = true
         force_path_style = true
-        access_key="sthings"           # Access and secret keys
-        secret_key="Atlan7is"
+        workspace_key_prefix = false
       }
     }

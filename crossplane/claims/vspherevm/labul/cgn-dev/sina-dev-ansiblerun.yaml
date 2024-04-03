@@ -2,12 +2,12 @@
 apiVersion: resources.stuttgart-things.com/v1alpha1
 kind: AnsibleRun
 metadata:
-  name: baseos-cgn-dev3
+  name: baseos-cgn-dev4
   namespace: crossplane-system
 spec:
-  pipelineRunName: baseos-cgn-dev3
+  pipelineRunName: baseos-cgn-dev4
   inventory:
-    - "all+[\"cgn-dev3.labul.sva.de\"]"
+    - "all+[\"cgn-dev4.labul.sva.de\"]"
 
   playbooks:
     - "ansible/playbooks/prepare-env.yaml"

@@ -2,14 +2,14 @@
 apiVersion: resources.stuttgart-things.com/v1alpha1
 kind: VsphereVM
 metadata:
-  name: cgn-dev3
+  name: cgn-dev4
   namespace: crossplane-system
 spec:
   providerRef:
-    name: minio-cgn-dev3
+    name: minio-cgn-dev4
   vm:
     count: "1"
-    name: cgn-dev3
+    name: cgn-dev4
     cpu: "6"
     ram: "8192"
     disk: "96"
@@ -28,7 +28,7 @@ spec:
     secretNamespace: crossplane-system
     secretKey: terraform.tfvars
   connectionSecret:
-    name: cgn-dev3
+    name: cgn-dev4
     namespace: crossplane-system
   compositionRef:
     name: vsphere-vm
