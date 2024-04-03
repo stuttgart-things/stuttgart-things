@@ -7,7 +7,7 @@ metadata:
 boot2dockerUrl: ""
 cfgparam:
   - disk.enableUUID=TRUE
-cloneFrom: /LabUL/vm/stuttgart-things/packer/u23-rke2 #/LabUL/vm/stuttgart-things/vm-templates/sthings-u23
+cloneFrom: /LabUL/vm/stuttgart-things/vm-templates/u23-rke2 #/LabUL/vm/stuttgart-things/vm-templates/sthings-u23
 cloudConfig: |-
   #cloud-config
   package_update: true
