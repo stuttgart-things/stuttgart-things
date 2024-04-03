@@ -5,7 +5,7 @@ metadata:
   name: baseos-packer-dev
   namespace: crossplane-system
 spec:
-  pipelineRunName: baseos-packer-dev
+  pipelineRunName: baseos-packer-dev2
   inventory:
     - "all+[\"packer-dev.labul.sva.de\"]"
   playbooks:
