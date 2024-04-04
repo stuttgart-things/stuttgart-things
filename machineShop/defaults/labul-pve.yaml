@@ -1,4 +1,0 @@
----
-vmNetwork: Network Device Name|vmbr101;vmbr102;vmbr103;vmbr104
-tfVersion: Terraform version|1.5.7
-clusterNode: Cluster node|sthings-pve1;
