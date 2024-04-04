@@ -1,0 +1,126 @@
+---
+binary:
+  - argocd:
+      url: https://github.com/argoproj/argo-cd/releases/download/v{{ or .argocdVersion "2.8.4" }}/argocd-linux-amd64
+      bin: argocd-linux-amd64
+  - kubectl:
+      url: https://dl.k8s.io/release/v{{ or .kubectlVersion "1.28.2" }}/bin/linux/amd64/kubectl
+      bin: kubectl
+  - sops:
+      url: https://github.com/getsops/sops/releases/download/v{{ or .sopsVersion "3.8.1" }}/sops-v{{ or .sopsVersion "3.8.1" }}.linux.amd64
+      bin: sops-v3.8.1.linux.amd64
+  - age:
+      url: https://github.com/FiloSottile/age/releases/download/v1.1.1/age-v1.1.1-linux-amd64.tar.gz
+      bin: sops-v3.8.1.linux.amd64
+  - tkn:
+      url: https://github.com/tektoncd/cli/releases/download/v{{ or .tknVersion "0.32.0" }}/tkn_{{ or .tknVersion "0.32.0" }}_Linux_x86_64.tar.gz
+      bin: tkn
+  - kind:
+      url: https://kind.sigs.k8s.io/dl/v{{ or .kindVersion "0.20.0" }}/kind-linux-amd64
+      bin: kind-linux-amd64
+  - velero:
+      url: https://github.com/vmware-tanzu/velero/releases/download/v{{ or .veleroVersion "1.13.0" }}/velero-v{{ or .veleroVersion "1.13.0" }}-linux-amd64.tar.gz
+      bin: velero-v1.13.0-linux-amd64/velero
+#   - gh:
+#       url: https://github.com/cli/cli/releases/download/v{{ or .ghVersion 2.34.0" }}/gh_{{ or .ghVersion 2.34.0" }}_linux_amd64.tar.gz
+#       bin: gh_2.34.0_linux_amd64/bin/gh
+  - helm:
+      url: https://get.helm.sh/helm-v{{ or .helmVersion "3.13.0" }}-linux-amd64.tar.gz
+      bin: linux-amd64/helm
+  - kompose:
+      url: https://github.com/kubernetes/kompose/releases/download/v{{ or .komposeVersion "1.26.0" }}/kompose-linux-amd64
+      bin: kompose-linux-amd64
+  - k9s:
+      url: https://github.com/derailed/k9s/releases/download/v{{ or .k9Version "0.27.4" }}/k9s_Linux_amd64.tar.gz
+      bin: k9s
+  - kube-linter:
+      url: https://github.com/stackrox/kube-linter/releases/download/v{{ or .k9Version "0.6.4" }}/kube-linter-linux.tar.gz
+      bin: kube-linter
+  - helmfile:
+      url: https://github.com/helmfile/helmfile/releases/download/v{{ or .helmfileVersion "0.157.0" }}/helmfile_{{ or .helmfileVersion "0.157.0" }}_linux_amd64.tar.gz
+      bin: helmfile
+  - task:
+      url: https://github.com/go-task/task/releases/download/v{{ or .taskVersion "3.30.1" }}/task_linux_386.tar.gz
+      bin: task
+  - flux:
+      url: https://github.com/fluxcd/flux2/releases/download/v{{ or .fluxVersion "2.1.2" }}/flux_{{ or .fluxVersion "2.1.2" }}_linux_amd64.tar.gz
+      bin: flux
+  - kubectl-slice:
+      url: https://github.com/patrickdappollonio/kubectl-slice/releases/download/v{{ or .kubectlSliceVersion "1.2.7" }}/kubectl-slice_linux_x86_64.tar.gz
+      bin: kubectl-slice
+  - skopeo:
+      url: https://github.com/lework/skopeo-binary/releases/download/v{{ or .skopeoVersion "1.13.3" }}/skopeo-linux-amd64
+      bin: skopeo
+  - trivy:
+      url: https://github.com/aquasecurity/trivy/releases/download/v{{ or .trivyVersion "0.45.1" }}/trivy_{{ or .trivyVersion "0.45.1" }}_Linux-64bit.tar.gz
+      bin: trivy
+  - packer:
+      url: https://releases.hashicorp.com/packer/{{ or .packerVersion "1.10.2" }}/packer_{{ or .packerVersion "1.10.2" }}_linux_amd64.zip
+      bin: packer
+  - yq:
+      url: https://github.com/mikefarah/yq/releases/download/v{{ or .yqVersion "4.35.2" }}/yq_linux_amd64.tar.gz
+      bin: yq
+  - machineShop:
+      url: https://github.com/stuttgart-things/machineShop/releases/download/v{{ or .machineShopVersion "0.1.52" }}/machineShop_Linux_x86_64.tar.gz
+      bin: machineShop
+  - vcluster:
+      url: https://github.com/loft-sh/vcluster/releases/download/v{{ or .vClusterVersion "0.16.4" }}/vcluster-linux-amd64
+      bin: vcluster-linux-amd64
+  - clusterctl:
+      url: https://github.com/kubernetes-sigs/cluster-api/releases/download/v{{ or .clusterctlVersion "1.5.3" }}/clusterctl-linux-amd64
+      bin: clusterctl-linux-amd64
+  - kube-capacity:
+      url: https://github.com/robscott/kube-capacity/releases/download/v{{ or .kubeCapacityVersion "0.7.4" }}/kube-capacity_v{{ or .kubeCapacityVersion "0.7.4" }}_linux_x86_64.tar.gz
+      bin: kube-capacity
+  - oras:
+      url: https://github.com/oras-project/oras/releases/download/v{{ or .orasVersion "1.1.0" }}/oras_{{ or .orasVersion "1.1.0" }}_linux_amd64.tar.gz
+      bin: oras
+  - terraform:
+      url: https://releases.hashicorp.com/terraform/{{ or .terraformVersion "1.6.6" }}/terraform_{{ or .terraformVersion "1.6.6" }}_linux_amd64.zip
+      bin: terraform
+  - mc:
+      url: https://dl.min.io/client/mc/release/linux-amd64/mc
+      bin: mc
+  - rclone:
+      url: https://github.com/rclone/rclone/releases/download/v{{ or .rcloneVersion "1.65.0" }}/rclone-v{{ or .rcloneVersion "1.65.0" }}.tar.gz
+      bin: rclone-v1.65.0-linux-amd64
+  - polaris:
+      url: https://github.com/FairwindsOps/polaris/releases/download/{{ or .polaris "8.5.3" }}/polaris_linux_amd64.tar.gz
+      bin: polaris
+
+# https://github.com/vmware/govmomi/releases/download/v0.34.2/govc_Linux_x86_64.tar.gz
+
+  #- argocd-vault-plugin:
+    #  url: https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/v{{ or .avpVersion "1.17.0" }}/argocd-vault-plugin_{{ or .avpVersion "1.17.0" }}_linux_amd64
+    #  bin: argocd-vault-plugin_{{ or .avpVersion "1.17.0" }}_linux_amd64
+
+
+script:
+  - age:
+      script: |
+        go install filippo.io/age/cmd/...@v1.1.1
+  - azure-cli:
+      script: |
+        curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+  - nerdctl:
+      script: |
+        wget https://github.com/containerd/nerdctl/releases/download/v{{ or .nerdctlVersion "1.6.0" }}/nerdctl-full-{{ or .nerdctlVersion "1.6.0" }}-linux-amd64.tar.gz
+        sudo tar Cxzvvf /usr/local nerdctl-full-{{ or .nerdctlVersion "1.6.0" }}-linux-amd64.tar.gz
+        rm -rf nerdctl-full-{{ or .nerdctlVersion "1.6.0" }}-linux-amd64.tar.gz
+        sudo systemctl enable --now containerd
+        sudo systemctl enable --now buildkit
+  - age:
+      script: |
+        curl https://dl.min.io/client/mc/release/linux-amd64/mc \
+        --create-dirs \
+        -o $HOME/minio-binaries/mc
+
+        chmod +x $HOME/minio-binaries/mc
+        export PATH=$PATH:$HOME/minio-binaries/
+  - argo:
+      script: |
+        curl -sLO https://github.com/argoproj/argo-workflows/releases/download/v{{ or .argocdVersion "3.5.2" }}/argo-linux-amd64.gz
+        gunzip argo-linux-amd64.gz
+        chmod +x argo-linux-amd64
+        mv ./argo-linux-amd64 /usr/bin/argo
+        argo version

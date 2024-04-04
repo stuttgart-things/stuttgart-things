@@ -1,0 +1,18 @@
+---
+profile:
+  name: Create virtal machine
+  defaults:
+    - default.yaml
+    - labul-pve.yaml
+
+templates:
+  - build-vm-terraform:
+      template: terraform-{{ call .SingleSelectSurvey "vmTemplate" }}.yaml
+      defaultTargetDir: clusters/{{ lab }}/{{ cloud }}
+  - provision-machine-ansible:
+      template: ansible-{{ call .SingleSelectSurvey "ansiblePlabook" }}.yaml
+      defaultTargetDir: clusters/{{ lab }}/{{ cloud }}
+
+defaults: |
+  vmTemplate: VM template|vsphere;pve
+  ansiblePlabook: Ansible playbook|baseos

@@ -1,0 +1,61 @@
+---
+defaults: |
+  countVMs: VM count|1;2;3;4;5
+  numCPUs: CPU count|4;6;8;10;12
+  vmMemory: RAM in MB|4096;8192;12288
+  vmDisk: DiskSize in GB|64;32;96;128;196;256
+  vmTemplate: Name of vm template|ubuntu23;ubuntu22
+  vsphereFolder: VM folder|phermann/testing;phermann/infra
+  resourceNamespace: Operator namespace|machine-shop-operator-system
+  terraformVersion: Terraform version|1.6.6;1.6.5
+  vmName: Name of vm|var+resourceName
+  resourceName: Name of custom resource|var+resourceName
+  moduleName: Name of module|var+resourceName
+  backendKey: Key of s3 backend state|var+resourceName
+  vsphereProviderVersion: Vsphere Provider version|2.6.1;2.4.1
+
+template: |
+  apiVersion: machineshop.sthings.tiab.ssc.sva.de/v1beta1
+  kind: Terraform
+  metadata:
+    name: {{ call .SingleInputSurvey "resourceName" }}
+    namespace: {{ call .SingleInputSurvey "resourceNamespace" }}
+  labels:
+    app.kubernetes.io/created-by: machine-shop-operator
+    app.kubernetes.io/name: terraform
+    app.kubernetes.io/part-of: machine-shop-operator
+  spec:
+    variables:
+      - vsphere_vm_name="{{ call .SingleInputSurvey "moduleName" }}"
+      - vm_count={{ call .SingleSelectSurvey "countVMs" }}
+      - vm_num_cpus={{ call .SingleSelectSurvey "numCPUs" }}
+      - vm_memory={{ call .SingleSelectSurvey "vmMemory" }}
+      - vm_disk_size={{ call .SingleSelectSurvey "vmDisk" }}
+      - vsphere_vm_template="/LabUL/host/Cluster01/10.31.101.40/{{ call .SingleSelectSurvey "vmTemplate" }}"
+      - vsphere_vm_folder_path="{{ call .SingleSelectSurvey "vsphereFolder" }}"
+      - vsphere_network="/LabUL/host/Cluster01/10.31.101.41/MGMT-10.31.101"
+      - vsphere_datastore="/LabUL/host/Cluster01/10.31.101.41/UL-ESX-SAS-01"
+      - vsphere_resource_pool="/LabUL/host/Cluster01/Resources"
+      - vsphere_datacenter="LabUL"
+    backend:
+      - access_key=apps/data/artifacts:accessKey
+      - secret_key=apps/data/artifacts:secretKey
+    module:
+      - moduleName={{ call .SingleInputSurvey "moduleName" }}
+      - backendKey={{ call .SingleInputSurvey "backendKey" }}.tfstate
+      - moduleSourceUrl=https://artifacts.tiab.labda.sva.de/modules/vsphere-vm.zip
+      - backendEndpoint=https://artifacts.app.4sthings.tiab.ssc.sva.de
+      - backendRegion=main
+      - backendBucket=vsphere-vm
+      - tfProviderName=vsphere
+      - tfProviderSource=hashicorp/vsphere
+      - tfProviderVersion={{ call .SingleSelectSurvey "vsphereProviderVersion" }}
+      - tfVersion={{ call .SingleSelectSurvey "terraformVersion" }}
+    secrets:
+      - vsphere_user=cloud/data/vsphere:username
+      - vsphere_password=cloud/data/vsphere:password
+      - vsphere_server=cloud/data/vsphere:ip
+      - vm_ssh_user=cloud/data/vsphere:vm_ssh_user
+      - vm_ssh_password=cloud/data/vsphere:vm_ssh_password
+    template: vsphere-vm
+    terraform-version: 1.6.6
