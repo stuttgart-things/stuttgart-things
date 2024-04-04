@@ -34,7 +34,7 @@ machineShop render \
 --template kickstart/ubuntu-vsphere.yaml \
 --defaults environments/labul-vsphere.yaml \
 --output file \
---destination /home/sthings/packer/u23-labul-vsphere/user_data
+--destination /home/sthings/packer/u23-labul-vsphere/user-data
 ```
 
 ## RENDER PLAYBOOK w/ machineShop
