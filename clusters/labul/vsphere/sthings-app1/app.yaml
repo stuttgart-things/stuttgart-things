@@ -31,7 +31,7 @@ spec:
     - patch: |-
         - op: replace
           path: /spec/chart/spec/version
-          value: 2.8.0
+          value: 2.8.1
       target:
         kind: HelmRelease
         name: rancher-deployment
