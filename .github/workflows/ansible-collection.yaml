@@ -49,11 +49,12 @@ jobs:
           ansible-galaxy collection init $(yq -r ".namespace" source/${{ inputs.collection-file }}).$(yq -r ".name" source/${{ inputs.collection-file }})
 
           # SET WORKING DIRS AS ENV-VARS
-          echo "COLLECTION_NAME=$(yq -r ".namespace" source/${{ inputs.collection-file }})" >> $GITHUB_ENV
-          echo "COLLECTION_NAMESPACE=$(yq -r ".name" source/${{ inputs.collection-file }})" >> $GITHUB_ENV
+          echo "COLLECTION_NAME=$(yq -r ".name" source/${{ inputs.collection-file }})" >> $GITHUB_ENV
+          echo "COLLECTION_NAMESPACE=$(yq -r ".namespace" source/${{ inputs.collection-file }})" >> $GITHUB_ENV
           echo "COLLECTION_FILEPATH=source/${{ inputs.collection-file }}" >> $GITHUB_ENV
           echo "COLLECTION_ROLES_DIR=$GITHUB_WORKSPACE/$(yq -r ".namespace" source/${{ inputs.collection-file }})/$(yq -r ".name" source/${{ inputs.collection-file }})/roles" >> $GITHUB_ENV
           echo "COLLECTION_DIR=$GITHUB_WORKSPACE/$(yq -r ".namespace" source/${{ inputs.collection-file }})/$(yq -r ".name" source/${{ inputs.collection-file }})" >> $GITHUB_ENV
+      
       - name: Install roles into collection
         id: roles
         run: |
