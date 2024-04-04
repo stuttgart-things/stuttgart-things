@@ -10,7 +10,7 @@ spec:
   timeout: 5m
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: crossplane-1-4-5
   path: ./apps/tekton
   prune: true
   wait: true
@@ -39,7 +39,7 @@ spec:
   timeout: 5m
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: crossplane-1-4-5
   path: ./apps/crossplane
   prune: true
   wait: true
