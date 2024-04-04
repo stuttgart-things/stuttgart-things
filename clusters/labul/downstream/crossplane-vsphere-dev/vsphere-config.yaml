@@ -1,0 +1,85 @@
+---
+apiVersion: rke-machine-config.cattle.io/v1
+kind: VmwarevsphereConfig
+metadata:
+  name: medium-aio-dev-crossplane
+  namespace: fleet-default
+  annotations:
+    field.cattle.io/description: dev-crossplane
+    field.cattle.io/creatorId: patrick
+boot2dockerUrl: ""
+cfgparam:
+  - disk.enableUUID=TRUE
+cloneFrom: /LabUL/vm/stuttgart-things/vm-templates/u23-rke2 #/LabUL/vm/stuttgart-things/vm-templates/sthings-u23
+cloudConfig: |-
+  #cloud-config
+  package_update: true
+  package_upgrade: true
+  packages:
+    - git
+    - curl
+    - wget
+    - git
+  resize_rootfs: true
+  growpart:
+    mode: auto
+    devices: ['/']
+    ignore_growroot_disabled: false
+  ansible:
+    package_name: ansible-core
+    install_method: distro
+    pull:
+      url: "https://github.com/stuttgart-things/stuttgart-things.git"
+      playbook_name: ansible/playbooks/base-os-cloudinit.yaml
+    run_ansible:
+      timeout: 5
+    galaxy:
+      actions:
+        - ["ansible-galaxy", "collection", "install", "community.crypto"]
+        - ["ansible-galaxy", "collection", "install", "community.general"]
+        - ["ansible-galaxy", "collection", "install", "ansible.posix"]
+        - ["ansible-galaxy", "install", "git+https://github.com/stuttgart-things/manage-filesystem.git"]
+        - ["ansible-galaxy", "install", "git+https://github.com/stuttgart-things/install-configure-vault.git"]
+        - ["ansible-galaxy", "install", "git+https://github.com/stuttgart-things/install-requirements.git"]
+        - ["ansible-galaxy", "install", "git+https://github.com/stuttgart-things/download-install-binary.git"]
+        - ["ansible-galaxy", "install", " git+https://github.com/stuttgart-things/create-os-user.git"]
+        - ["ansible-galaxy", "install", " git+https://github.com/stuttgart-things/create-send-webhook.git"]
+  runcmd:
+    - wget -O /usr/local/share/ca-certificates/labda-vsphere-ca.crt https://vault-vsphere.tiab.labda.sva.de:8200/v1/pki/ca/pem --no-check-certificate
+    - wget -O /usr/local/share/ca-certificates/labul-vsphere-ca.crt https://vault-vsphere.labul.sva.de:8200/v1/pki/ca/pem --no-check-certificate
+    - wget -O /usr/local/share/ca-certificates/labul-ca.crt https://vault.labul.sva.de:8200/v1/pki/ca/pem --no-check-certificate
+    - wget -O /usr/local/share/ca-certificates/labda-ca.crt https://vault.tiab.labda.sva.de:8200/v1/pki/ca/pem --no-check-certificate
+    - update-ca-certificates
+cloudinit: ""
+common:
+  labels: null
+  taints: []
+contentLibrary: ""
+cpuCount: "8"
+creationType: template
+customAttribute: []
+datacenter: /LabUL
+datastore: /LabUL/datastore/UL-ESX-SAS-02
+datastoreCluster: ""
+diskSize: "50000"
+folder: /LabUL/vm/stuttgart-things/rancher-things
+gracefulShutdownTimeout: "0"
+hostsystem: null
+memorySize: "10240"
+network:
+  - /LabUL/network/LAB-10.31.103
+os: linux
+password: ""
+pool: /LabUL/host/Cluster-V6.7/Resources
+sshPassword: tcuser
+sshPort: "22"
+sshUser: docker
+sshUserGroup: staff
+tag: []
+username: ""
+vappIpallocationpolicy: null
+vappIpprotocol: null
+vappProperty: []
+vappTransport: null
+vcenter: ""
+vcenterPort: "443"
