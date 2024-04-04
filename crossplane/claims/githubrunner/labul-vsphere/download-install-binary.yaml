@@ -1,9 +1,9 @@
-# ---
-# apiVersion: resources.stuttgart-things.com/v1alpha1
-# kind: GithubRunner
-# metadata:
-#   name: download-install-binary
-#   namespace: crossplane-system
-# spec:
-#   repository: download-install-binary
-#   clusterConfig: cicd
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: GithubRunner
+metadata:
+  name: download-install-binary
+  namespace: crossplane-system
+spec:
+  repository: download-install-binary
+  clusterConfig: cicd
