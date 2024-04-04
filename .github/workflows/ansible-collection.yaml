@@ -103,13 +103,13 @@ jobs:
                   echo OLD ROLE NAME: $OLD_ROLE_NAME
                   echo NEW ROLE NAME: $NEW_ROLE_NAME
           
-                  ls ${DIR}/${ROLE_NAME}/tasks
+                  ls ${ROLES_DIR}/${ROLE_NAME}/tasks
 
                   # FIND FILES
-                  find ${{ env.COLLECTION_ROLES_DIR }}/${ROLE_NAME}/tasks -type f
+                  find ${ROLES_DIR}/${ROLE_NAME}/tasks -type f
 
                   # REPLACE
-                  sed -i "s/${OLD_ROLE_NAME}/${NEW_ROLE_NAME}/g" $(find ./${{ env.COLLECTION_ROLES_DIR }}/${ROLE_NAME}/tasks -type f)
+                  sed -i "s/${OLD_ROLE_NAME}/${NEW_ROLE_NAME}/g" $(find ${ROLES_DIR}/${ROLE_NAME}/tasks -type f)
               done        
           done
 
