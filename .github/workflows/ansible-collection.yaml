@@ -89,7 +89,7 @@ jobs:
           ROLES_DIR=$(ls ${{ env.COLLECTION_ROLES_DIR }})
 
           # LOOP OVER ALL ROLES
-          for role in ${ROLES_DIR};       
+          for ROLE in ${ROLES_DIR};       
             do
             echo CHECKING: ${ROLE}
           
@@ -102,13 +102,13 @@ jobs:
                   echo OLD ROLE NAME: $OLD_ROLE_NAME
                   echo NEW ROLE NAME: $NEW_ROLE_NAME
           
-                  ls ${DIR}/${ROLE_NAME}/tasks
+                  ls ${DIR}/${ROLE}/tasks
 
                   # FIND FILES
-                  find ./roles/${ROLE_NAME}/tasks -type f
+                  find ./roles/${ROLE}/tasks -type f
 
                   # REPLACE
-                  sed -i "s/${OLD_ROLE_NAME}/${NEW_ROLE_NAME}/g" $(find ./roles/${ROLE_NAME}/tasks -type f)
+                  sed -i "s/${OLD_ROLE_NAME}/${NEW_ROLE_NAME}/g" $(find ./roles/${ROLE}/tasks -type f)
               done        
           done
 
