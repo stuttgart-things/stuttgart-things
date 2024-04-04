@@ -82,6 +82,32 @@ jobs:
 
           ls -lta ${{ env.COLLECTION_ROLES_DIR }}
 
+      - name: Rewrite role includes
+        id: rewrite-role-includes
+        run: |
+
+          ROLES_DIR=$(ls ${{ env.COLLECTION_ROLES_DIR }})
+          
+          for role in ${ROLES_DIR};       
+            do
+            echo CHECKING: ${role}
+          
+              for role_name in ${DIRS};
+          
+                do
+                  OLD_ROLE_NAME=$(echo ${role} | tr _ -)
+                  NEW_ROLE_NAME=$(echo sthings.deploy_rke.${role}) #"sthings.deploy_rke.install_requirements"
+          
+                  echo OLD ROLE NAME: $OLD_ROLE_NAME
+                  echo NEW ROLE NAME: $NEW_ROLE_NAME
+          
+                  ls ${DIR}/${role_name}/tasks
+          
+                  find ./roles/${role_name}/tasks -type f
+                  sed -i "s/${OLD_ROLE_NAME}/${NEW_ROLE_NAME}/g" $(find ./roles/${role_name}/tasks -type f)
+              done        
+          done
+
       - name: Adding playbooks
         id: plays
         run: |
