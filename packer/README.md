@@ -66,6 +66,6 @@ machineShop render \
 ```bash
 cd /home/sthings/packer/u23-labul-vsphere/
 touch meta-data
-packer init ubuntu23.pkr.hcl
-packer build -force -var "username=<USERNAME>" -var "password=<PASSWORD>" ubuntu23.pkr.hcl
+packer init u23.pkr.hcl
+packer build -force -var "username=<USERNAME>" -var "password=<PASSWORD>" u23.pkr.hcl
 ```
