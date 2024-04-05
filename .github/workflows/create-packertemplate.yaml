@@ -37,8 +37,12 @@ jobs:
         id: checkout
         uses: actions/checkout@v4.1.1
 
-      - name: test
-        id: test
+      - name: create Folder
+        id: createFolder
+        run: mkdir packer/builds/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }} -p
+
+      - name: RENDER OS-TEMPLATE w/ machineShop
+        id: renderOsTemplate
         run: |
           echo ${{ inputs.os-version }}
           echo ${{ inputs.cloud }}
@@ -51,5 +55,38 @@ jobs:
           --template packer/template/${{ inputs.os-version }}-${{ inputs.cloud }}.pkr.tpl.hcl \
           --defaults packer/environments/${{ inputs.lab }}-${{ inputs.cloud }}.yaml \
           --brackets square \
-          --values "vmTemplateName=${{ inputs.os-version }}, packerConfigMountPath=/home/sthings/packer/u23-${{ inputs.lab }}-${{ inputs.cloud }}, ansiblePlayMountPath=/home/sthings/packer/u23-${{ inputs.lab }}-${{ inputs.cloud }}, ansibleOsProvioning=base-os, osVersion=${{ inputs.os-version }}" \
+          --values "vmTemplateName=${{ inputs.os-version }}, packerConfigMountPath=/home/sthings/packer/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}, ansiblePlayMountPath=/home/sthings/packer/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}, ansibleOsProvioning=base-os, osVersion=${{ inputs.os-version }}" \
+          --destination /home/sthings/packer/builds/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}/ubuntu23.pkr.hcl \
           --output stdout
+
+      - name: RENDER KICKSTART w/ machineShop
+        id: renderKickstart
+        run: |
+          machineShop render \
+          --source local \
+          --template kickstart/ubuntu-${{ inputs.cloud }}.yaml \
+          --defaults environments/${{ inputs.lab }}-${{ inputs.cloud }}.yaml \
+          --output stdout \
+          --destination /home/sthings/packer/builds/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}/user-data
+
+      - name: RENDER PLAYBOOK w/ machineShop base-os
+        id: renderBase-os
+        run: |
+          machineShop render \
+          --source local \
+          --template ansible/play.yaml \
+          --defaults environments/${{ inputs.lab }}-${{ inputs.cloud }}.yaml \
+          --output stdout \
+          --brackets square \
+          --destination /home/sthings/packer/builds/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}/base-os.yaml
+
+      - name: RENDER PLAYBOOK w/ machineShop requirements
+        id: renderRequirements
+        run: |
+          machineShop render \
+          --source local \
+          --template ansible/requirements.yaml \
+          --defaults environments/${{ inputs.lab }}-${{ inputs.cloud }}.yaml \
+          --output stdout \
+          --brackets square \
+          --destination /home/sthings/packer/builds/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}/requirements.yaml
