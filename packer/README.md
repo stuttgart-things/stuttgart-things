@@ -21,7 +21,8 @@ machineShop render \
 --source local \
 --template template/ubuntu23-vsphere.pkr.tpl.hcl \
 --defaults environments/labul-vsphere.yaml \
---brackets square --values "vmTemplateName=u23-04-24, packerConfigMountPath=/home/sthings/packer/u23-labul-vsphere, ansiblePlayMountPath=/home/sthings/packer/u23-labul-vsphere, ansibleOsProvioning=base-os, osVersion=ubuntu23" \
+--brackets square \
+--values "vmTemplateName=u23-04-24, packerConfigMountPath=/home/sthings/packer/u23-labul-vsphere, ansiblePlayMountPath=/home/sthings/packer/u23-labul-vsphere, ansibleOsProvioning=base-os, osVersion=ubuntu23" \
 --destination /home/sthings/packer/u23-labul-vsphere/u23.pkr.hcl \
 --output file
 ```
