@@ -53,7 +53,7 @@ jobs:
 
       - name: CREATE METADATA
         id: createMetadata
-        run: touch meta-data
+        run: touch ${{ env.WORKING_DIR }}/meta-data
 
       - name: RENDER OS-TEMPLATE w/ machineShop
         id: renderOsTemplate
