@@ -57,7 +57,7 @@ jobs:
           --brackets square \
           --values "vmTemplateName=${{ inputs.os-version }}, packerConfigMountPath=/home/sthings/packer/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}, ansiblePlayMountPath=/home/sthings/packer/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}, ansibleOsProvioning=base-os, osVersion=${{ inputs.os-version }}" \
           --destination /home/sthings/packer/builds/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}/ubuntu23.pkr.hcl \
-          --output stdout
+          --output file
 
       - name: RENDER KICKSTART w/ machineShop
         id: renderKickstart
@@ -66,7 +66,7 @@ jobs:
           --source local \
           --template packer/kickstart/ubuntu-${{ inputs.cloud }}.yaml \
           --defaults packer/environments/${{ inputs.lab }}-${{ inputs.cloud }}.yaml \
-          --output stdout \
+          --output file \
           --destination /home/sthings/packer/builds/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}/user-data
 
       - name: RENDER PLAYBOOK w/ machineShop base-os
@@ -76,7 +76,7 @@ jobs:
           --source local \
           --template packer/ansible/play.yaml \
           --defaults packer/environments/${{ inputs.lab }}-${{ inputs.cloud }}.yaml \
-          --output stdout \
+          --output file \
           --brackets square \
           --destination /home/sthings/packer/builds/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}/base-os.yaml
 
@@ -87,6 +87,6 @@ jobs:
           --source local \
           --template packer/ansible/requirements.yaml \
           --defaults packer/environments/${{ inputs.lab }}-${{ inputs.cloud }}.yaml \
-          --output stdout \
+          --output file \
           --brackets square \
           --destination /home/sthings/packer/builds/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}/requirements.yaml
