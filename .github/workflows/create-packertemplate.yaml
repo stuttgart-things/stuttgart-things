@@ -20,6 +20,11 @@ on:
         options:
           - labda
           - labul
+      ansible-provisioning:
+        type: choice
+        description: provisioning
+        options:
+          - base-os
       runner:
         description: RUNNER NAME
         required: true
@@ -60,7 +65,7 @@ jobs:
           --template packer/template/${{ inputs.os-version }}-${{ inputs.cloud }}.pkr.tpl.hcl \
           --defaults packer/environments/${{ inputs.lab }}-${{ inputs.cloud }}.yaml \
           --brackets square \
-          --values "vmTemplateName=${{ inputs.os-version }}, packerConfigMountPath=/home/sthings/packer/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}, ansiblePlayMountPath=/home/sthings/packer/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}, ansibleOsProvioning=base-os, osVersion=${{ inputs.os-version }}" \
+          --values "vmTemplateName=${{ inputs.os-version }}, packerConfigMountPath=., ansiblePlayMountPath=., ansibleOsProvioning=${{ inputs.ansible-provisioning }}, osVersion=${{ inputs.os-version }}" \
           --destination ${{ env.WORKING_DIR }}//ubuntu23.pkr.hcl \
           --output file
 
