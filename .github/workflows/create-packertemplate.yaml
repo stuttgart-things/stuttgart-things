@@ -1,0 +1,28 @@
+---
+name: Create Packer Template
+on:
+  workflow_dispatch:
+    inputs:
+      os-version:
+        type: choice
+        description: os version
+        options:
+          - ubuntu23
+      runner:
+        description: RUNNER NAME
+        required: true
+        type: string
+        default: ghr-stuttgart-things-sthings-cicd
+        
+jobs:
+  Create-Packer-Config:
+    runs-on: ${{ inputs.runner }}
+    environment: k8s
+    container:
+      image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2
+    continue-on-error: false
+    steps:
+      - name: test
+        id: test
+        run: |
+          echo Hello
