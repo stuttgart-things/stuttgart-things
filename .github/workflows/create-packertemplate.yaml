@@ -65,7 +65,7 @@ jobs:
           machineShop render \
           --source local \
           --template packer/kickstart/ubuntu-${{ inputs.cloud }}.yaml \
-          --defaults environments/${{ inputs.lab }}-${{ inputs.cloud }}.yaml \
+          --defaults packer/environments/${{ inputs.lab }}-${{ inputs.cloud }}.yaml \
           --output stdout \
           --destination /home/sthings/packer/builds/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}/user-data
 
