@@ -8,6 +8,18 @@ on:
         description: os version
         options:
           - ubuntu23
+      cloud:
+        type: choice
+        description: cloud
+        options:
+          - vsphere
+          - proxmox
+     lab:
+        type: choice
+        description: lab
+        options:
+          - labda
+          - labul
       runner:
         description: RUNNER NAME
         required: true
