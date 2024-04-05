@@ -51,6 +51,10 @@ jobs:
           echo "WORKING_DIR=packer/builds/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}" >> $GITHUB_ENV
           mkdir -p packer/builds/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}
 
+      - name: CREATE METADATA
+        id: createMetadata
+        run: touch meta-data
+
       - name: RENDER OS-TEMPLATE w/ machineShop
         id: renderOsTemplate
         run: |
