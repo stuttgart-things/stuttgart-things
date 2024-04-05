@@ -41,13 +41,15 @@ jobs:
         id: test
         run: |
           echo ${{ inputs.os-version }}
+          echo ${{ inputs.cloud }}
+          echo ${{ inputs.lab }}
           ls
 
           # RENDER PACKER-CONFIG
           machineShop render \
           --source local \
-          --template packer/template/${{ inputs.os-version }}-vsphere.pkr.tpl.hcl \
-          --defaults packer/environments/labul-vsphere.yaml \
+          --template packer/template/${{ inputs.os-version }}-${{ inputs.cloud }}.pkr.tpl.hcl \
+          --defaults packer/environments/${{ inputs.cloud }}-${{ inputs.cloud }}.yaml \
           --brackets square \
-          --values "vmTemplateName=${{ inputs.os-version }}, packerConfigMountPath=/home/sthings/packer/u23-labul-vsphere, ansiblePlayMountPath=/home/sthings/packer/u23-labul-vsphere, ansibleOsProvioning=base-os, osVersion=${{ inputs.os-version }}" \
+          --values "vmTemplateName=${{ inputs.os-version }}, packerConfigMountPath=/home/sthings/packer/u23-${{ inputs.cloud }}-${{ inputs.cloud }}, ansiblePlayMountPath=/home/sthings/packer/u23-${{ inputs.cloud }}-${{ inputs.cloud }}, ansibleOsProvioning=base-os, osVersion=${{ inputs.os-version }}" \
           --output stdout
