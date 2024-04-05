@@ -33,15 +33,15 @@ jobs:
       image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2
     continue-on-error: false
     steps:
-      - name: Checkout code
+      - name: CHECKOUT CODE
         id: checkout
         uses: actions/checkout@v4.1.1
 
-      - name: create Folder
+      - name: CREATE WORKINGDIR
         id: createFolder
         run: |
           echo "WORKING_DIR=packer/builds/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}" >> $GITHUB_ENV
-          mkdir -p ${{ env.WORKING_DIR }}
+          mkdir -p packer/builds/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}
 
       - name: RENDER OS-TEMPLATE w/ machineShop
         id: renderOsTemplate
