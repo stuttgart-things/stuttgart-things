@@ -14,7 +14,7 @@ on:
         options:
           - vsphere
           - proxmox
-     lab:
+      lab:
         type: choice
         description: lab
         options:
