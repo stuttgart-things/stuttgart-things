@@ -32,6 +32,9 @@ jobs:
     container:
       image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2
     continue-on-error: false
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - name: CHECKOUT CODE
         id: checkout
@@ -92,3 +95,11 @@ jobs:
           --output file \
           --brackets square \
           --destination ${{ env.WORKING_DIR }}/requirements.yaml
+
+      - name: Create Pull Request
+        id: pr
+        uses: peter-evans/create-pull-request@v6.0.1
+        with:
+          commit-message: '[CI][PACKER] - Created template config for vm ${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}'
+          title: 'Created packer template'
+          branch: ${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}
