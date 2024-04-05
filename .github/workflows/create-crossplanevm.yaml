@@ -61,7 +61,6 @@ on:
         required: true
         type: string
         default: ghr-stuttgart-things-sthings-cicd
-
 jobs:
   Create-VM-Config:
     permissions:
@@ -73,7 +72,6 @@ jobs:
       provider: ${{ steps.check.outputs.provider }}
       ansible: ${{ steps.check.outputs.ansible }}
       destination: ${{ steps.check.outputs.destination }}
-
     environment: k8s
     container:
       image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2
