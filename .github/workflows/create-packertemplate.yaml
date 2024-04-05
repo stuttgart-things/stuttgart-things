@@ -13,7 +13,7 @@ on:
         required: true
         type: string
         default: ghr-stuttgart-things-sthings-cicd
-        
+
 jobs:
   Create-Packer-Config:
     runs-on: ${{ inputs.runner }}
@@ -22,7 +22,12 @@ jobs:
       image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2
     continue-on-error: false
     steps:
+      - name: Checkout code
+        id: checkout
+        uses: actions/checkout@v4.1.1
+
       - name: test
         id: test
         run: |
-          echo Hello
+          echo ${{ inputs.os-version }}
+          ls
