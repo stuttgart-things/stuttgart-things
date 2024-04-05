@@ -22,8 +22,8 @@ machineShop render \
 --template template/ubuntu23-vsphere.pkr.tpl.hcl \
 --defaults environments/labul-vsphere.yaml \
 --brackets square \
---values "vmTemplateName=u23-04-24, packerConfigMountPath=/home/sthings/packer/u23-labul-vsphere, ansiblePlayMountPath=/home/sthings/packer/u23-labul-vsphere, ansibleOsProvioning=base-os, osVersion=ubuntu23" \
---destination /home/sthings/packer/u23-labul-vsphere/u23.pkr.hcl \
+--values "vmTemplateName=ubuntu23-04-24, packerConfigMountPath=/home/sthings/packer/ubuntu23-labul-vsphere, ansiblePlayMountPath=/home/sthings/packer/ubuntu23-labul-vsphere, ansibleOsProvioning=base-os, osVersion=ubuntu23" \
+--destination /home/sthings/packer/ubuntu23-labul-vsphere/ubuntu23.pkr.hcl \
 --output file
 ```
 
@@ -35,7 +35,7 @@ machineShop render \
 --template kickstart/ubuntu-vsphere.yaml \
 --defaults environments/labul-vsphere.yaml \
 --output file \
---destination /home/sthings/packer/u23-labul-vsphere/user-data
+--destination /home/sthings/packer/ubuntu23-labul-vsphere/user-data
 ```
 
 ## RENDER PLAYBOOK w/ machineShop
@@ -47,7 +47,7 @@ machineShop render \
 --defaults environments/labul-vsphere.yaml \
 --output file \
 --brackets square \
---destination /home/sthings/packer/u23-labul-vsphere/base-os.yaml
+--destination /home/sthings/packer/ubuntu23-labul-vsphere/base-os.yaml
 ```
 
 ## RENDER PLAYBOOK w/ machineShop
@@ -59,14 +59,14 @@ machineShop render \
 --defaults environments/labul-vsphere.yaml \
 --output file \
 --brackets square \
---destination /home/sthings/packer/u23-labul-vsphere/requirements.yaml
+--destination /home/sthings/packer/ubuntu23-labul-vsphere/requirements.yaml
 ```
 
 ## PACKER BUILD
 
 ```bash
-cd /home/sthings/packer/u23-labul-vsphere/
+cd /home/sthings/packer/ubuntu23-labul-vsphere/
 touch meta-data
-packer init u23.pkr.hcl
-packer build -force -var "username=<USERNAME>" -var "password=<PASSWORD>" u23.pkr.hcl
+packer init ubuntu23.pkr.hcl
+packer build -force -var "username=<USERNAME>" -var "password=<PASSWORD>" ubuntu23.pkr.hcl
 ```
