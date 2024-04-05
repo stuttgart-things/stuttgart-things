@@ -39,7 +39,9 @@ jobs:
 
       - name: create Folder
         id: createFolder
-        run: mkdir packer/builds/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }} -p
+        run: |
+          echo "WORKING_DIR=packer/builds/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}" >> $GITHUB_ENV
+          mkdir -p ${{ env.WORKING_DIR }}
 
       - name: RENDER OS-TEMPLATE w/ machineShop
         id: renderOsTemplate
@@ -56,7 +58,7 @@ jobs:
           --defaults packer/environments/${{ inputs.lab }}-${{ inputs.cloud }}.yaml \
           --brackets square \
           --values "vmTemplateName=${{ inputs.os-version }}, packerConfigMountPath=/home/sthings/packer/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}, ansiblePlayMountPath=/home/sthings/packer/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}, ansibleOsProvioning=base-os, osVersion=${{ inputs.os-version }}" \
-          --destination /home/sthings/packer/builds/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}/ubuntu23.pkr.hcl \
+          --destination ${{ env.WORKING_DIR }}//ubuntu23.pkr.hcl \
           --output file
 
       - name: RENDER KICKSTART w/ machineShop
@@ -67,7 +69,7 @@ jobs:
           --template packer/kickstart/ubuntu-${{ inputs.cloud }}.yaml \
           --defaults packer/environments/${{ inputs.lab }}-${{ inputs.cloud }}.yaml \
           --output file \
-          --destination /home/sthings/packer/builds/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}/user-data
+          --destination ${{ env.WORKING_DIR }}/user-data
 
       - name: RENDER PLAYBOOK w/ machineShop base-os
         id: renderBase-os
@@ -78,7 +80,7 @@ jobs:
           --defaults packer/environments/${{ inputs.lab }}-${{ inputs.cloud }}.yaml \
           --output file \
           --brackets square \
-          --destination /home/sthings/packer/builds/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}/base-os.yaml
+          --destination ${{ env.WORKING_DIR }}/base-os.yaml
 
       - name: RENDER PLAYBOOK w/ machineShop requirements
         id: renderRequirements
@@ -89,4 +91,4 @@ jobs:
           --defaults packer/environments/${{ inputs.lab }}-${{ inputs.cloud }}.yaml \
           --output file \
           --brackets square \
-          --destination /home/sthings/packer/builds/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}/requirements.yaml
+          --destination ${{ env.WORKING_DIR }}/requirements.yaml
