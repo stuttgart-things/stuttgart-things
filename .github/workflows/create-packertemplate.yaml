@@ -31,3 +31,12 @@ jobs:
         run: |
           echo ${{ inputs.os-version }}
           ls
+
+          # RENDER PACKER-CONFIG
+          machineShop render \
+          --source local \
+          --template packer/template/${{ inputs.os-version }}-vsphere.pkr.tpl.hcl \
+          --defaults packer/environments/labul-vsphere.yaml \
+          --brackets square \
+          --values "vmTemplateName=${{ inputs.os-version }}, packerConfigMountPath=/home/sthings/packer/u23-labul-vsphere, ansiblePlayMountPath=/home/sthings/packer/u23-labul-vsphere, ansibleOsProvioning=base-os, osVersion=${{ inputs.os-version }}" \
+          --output stdout
