@@ -25,7 +25,6 @@ on:
         required: true
         type: string
         default: ghr-stuttgart-things-sthings-cicd
-
 jobs:
   Create-Packer-Config:
     runs-on: ${{ inputs.runner }}
