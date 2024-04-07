@@ -48,7 +48,7 @@ jobs:
         run: echo "test=hello" >> "$GITHUB_OUTPUT"
 
       - id: step2
-        run: echo "version=$(yq -r '.version' source/${{ inputs.collection-file }})"
+        run: echo "version=$(yq -r '.version' source/${{ inputs.collection-file }})" >> "$GITHUB_OUTPUT"
         shell: bash
         
       - name: Init collection
