@@ -26,7 +26,10 @@ on:
       collection-version:
         description: version of ansible collection
         value: ${{ jobs.Ansible-Collection-Build.outputs.version }}
-
+      artifact-name:
+        description: name of uploaded ansible collection package
+        value: ${{ jobs.Ansible-Collection-Build.outputs.artifact }}
+        
 jobs:
   Ansible-Collection-Build:
     outputs:
