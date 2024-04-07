@@ -31,7 +31,8 @@ jobs:
     continue-on-error: ${{ inputs.continue-error }}
     steps:
       - name: Output tag version
-        run: echo TAG NAME: ${{ inputs.tag-name }}
+        run: |
+          echo 'TAG NAME: ${{ inputs.tag-name }}'
         
       - name: Create Tag
         uses: actions/github-script@v7.0.1
