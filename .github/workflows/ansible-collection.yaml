@@ -49,7 +49,8 @@ jobs:
 
       - id: step2
         run: echo yq -r ".version" source/${{ inputs.collection-file }})
-
+        shell: bash
+        
       - name: Init collection
         id: init
         run: |
