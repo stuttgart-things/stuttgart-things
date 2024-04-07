@@ -30,7 +30,7 @@ on:
 jobs:
   Ansible-Collection-Build:
     outputs:
-      version: ${{ steps.step2.outputs.version }} #${{ steps.step1.outputs.test }} # 1.2.3 #
+      version: ${{ steps.version.outputs.version }}
     runs-on: ${{ inputs.runs-on }}
     container:
       image: ${{ inputs.ansible-image }}
@@ -44,10 +44,7 @@ jobs:
           path: source
           fetch-depth: '0'
 
-      - id: step1
-        run: echo "test=hello" >> "$GITHUB_OUTPUT"
-
-      - id: step2
+      - id: version
         run: echo "version=$(yq -r '.version' source/${{ inputs.collection-file }})" >> "$GITHUB_OUTPUT"
         shell: bash
         
@@ -64,7 +61,6 @@ jobs:
           # SET WORKING DIRS AS ENV-VARS
           echo "COLLECTION_NAME=$(yq -r ".name" source/${{ inputs.collection-file }})" >> $GITHUB_ENV
           echo "COLLECTION_NAMESPACE=$(yq -r ".namespace" source/${{ inputs.collection-file }})" >> $GITHUB_ENV
-          echo "version=$(yq -r ".version" source/${{ inputs.collection-file }})" >> $GITHUB_ENV
           echo "COLLECTION_FILEPATH=source/${{ inputs.collection-file }}" >> $GITHUB_ENV
           echo "COLLECTION_ROLES_DIR=$GITHUB_WORKSPACE/$(yq -r ".namespace" source/${{ inputs.collection-file }})/$(yq -r ".name" source/${{ inputs.collection-file }})/roles" >> $GITHUB_ENV
           echo "COLLECTION_DIR=$GITHUB_WORKSPACE/$(yq -r ".namespace" source/${{ inputs.collection-file }})/$(yq -r ".name" source/${{ inputs.collection-file }})" >> $GITHUB_ENV
