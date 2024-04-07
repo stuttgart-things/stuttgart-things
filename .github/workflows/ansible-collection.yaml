@@ -30,7 +30,7 @@ on:
 jobs:
   Ansible-Collection-Build:
     outputs:
-      version: 1.2.3 #${{ steps.init.outputs.COLLECTION_NAME }}
+      version: ${{ steps.step1.outputs.test }} # 1.2.3 #${{ steps.init.outputs.COLLECTION_NAME }}
     runs-on: ${{ inputs.runs-on }}
     container:
       image: ${{ inputs.ansible-image }}
@@ -43,6 +43,9 @@ jobs:
         with:
           path: source
           fetch-depth: '0'
+
+      - id: step1
+        run: echo "test=hello" >> "$GITHUB_OUTPUT"
 
       - name: Init collection
         id: init
