@@ -22,6 +22,10 @@ on:
         default: "./collection.yaml"
         required: false
         type: string
+    outputs:
+      collection-version:
+        description: version of ansible collection
+        value: ${{ jobs.Ansible-Collection-Build.outputs.version }}
 
 jobs:
   Ansible-Collection-Build:
@@ -39,7 +43,7 @@ jobs:
         with:
           path: source
           fetch-depth: '0'
-          
+
       - name: Init collection
         id: init
         run: |
@@ -63,7 +67,7 @@ jobs:
         run: |
           echo 'INSTALL ROLES INTO COLLECTION'
           ansible-galaxy install -r ./roles.yaml -p ${{ env.COLLECTION_ROLES_DIR }}
-          
+
       - name: Change role references
         id: role-refs
         run: |
@@ -71,7 +75,7 @@ jobs:
           do
             # SET/ECHO ROLE NAMES
             collection_role_name=$(echo "$( basename $role)" | tr - _)
-            echo existing role names: $(basename $role)       
+            echo existing role names: $(basename $role)
             echo "collection role names: $collection_role_name"
 
             # GET ALL FILES IN ROLE
@@ -94,20 +98,20 @@ jobs:
           ROLES_DIR=$(ls ${{ env.COLLECTION_ROLES_DIR }})
 
           # LOOP OVER ALL ROLES
-          for ROLE in ${ROLES_DIR};       
+          for ROLE in ${ROLES_DIR};
             do
-            
+
             echo CHECKING: ${ROLE}
-          
+
               for ROLE_NAME in ${ROLES_DIR};
-          
+
                 do
                   OLD_ROLE_NAME=$(echo ${ROLE} | tr _ -)
                   NEW_ROLE_NAME=$(echo ${{ env.COLLECTION_NAMESPACE }}.${{ env.COLLECTION_NAME }}.${ROLE})
-                  
+
                   echo OLD ROLE NAME: $OLD_ROLE_NAME
                   echo NEW ROLE NAME: $NEW_ROLE_NAME
-          
+
                   ls ${{ env.COLLECTION_ROLES_DIR }}/${ROLE_NAME}/tasks
 
                   # FIND FILES
@@ -115,7 +119,7 @@ jobs:
 
                   # REPLACE
                   sed -i "s/${OLD_ROLE_NAME}/${NEW_ROLE_NAME}/g" $(find ${{ env.COLLECTION_ROLES_DIR }}/${ROLE_NAME}/tasks -type f)
-              done        
+              done
           done
 
       - name: Adding playbooks
@@ -123,11 +127,11 @@ jobs:
         run: |
           play_dir=${{ env.COLLECTION_DIR }}/playbooks
           mkdir -p ${play_dir}
-          
+
           # GET COUNT OF ALL KEYS OF SUBKEY PLAYBOOKS
           count_plays=$(yq '.playbooks | keys' ${{ env.COLLECTION_FILEPATH }} | wc -l)
           echo FOUND $count_plays PLAYBOOKS FOR THIS COLLECTION
-          
+
           COUNTER=0
           while [ $COUNTER != $count_plays ]; do
              echo PROCESS PLAYBOOK: $COUNTER
@@ -144,7 +148,7 @@ jobs:
 
           # LIST CREATED PLAYS
           ls -lta ${play_dir}
-          
+
       - name: Build collection
         id: build
         run: |
@@ -152,7 +156,7 @@ jobs:
           ansible-galaxy collection build ${{ env.COLLECTION_DIR }}
           echo "COLLECTION_PACKAGE=$(ls -t *.gz | head -1)" >> $GITHUB_ENV
           echo "COLLECTION_PACKAGE_PATH=$PWD/$(ls -t *.gz | head -1)" >> $GITHUB_ENV
-          
+
       - name: Upload collection
         id: upload
         uses: actions/upload-artifact@v4.1.0
