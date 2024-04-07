@@ -30,8 +30,11 @@ jobs:
     environment: ${{ inputs.environment-name }}
     continue-on-error: ${{ inputs.continue-error }}
     steps:
+      - name: Output tag version
+        run: echo TAG NAME: ${{ inputs.tag-name }}
+        
       - name: Create Tag
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7.0.1
         with:
           script: |
             github.rest.git.createRef({
