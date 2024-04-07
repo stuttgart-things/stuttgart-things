@@ -31,6 +31,7 @@ jobs:
   Ansible-Collection-Build:
     outputs:
       version: ${{ steps.version.outputs.version }}
+      artifact: ${{ steps.build.outputs.artifact }}
     runs-on: ${{ inputs.runs-on }}
     container:
       image: ${{ inputs.ansible-image }}
@@ -159,6 +160,7 @@ jobs:
           ansible-galaxy collection build ${{ env.COLLECTION_DIR }}
           echo "COLLECTION_PACKAGE=$(ls -t *.gz | head -1)" >> $GITHUB_ENV
           echo "COLLECTION_PACKAGE_PATH=$PWD/$(ls -t *.gz | head -1)" >> $GITHUB_ENV
+          echo "artifact=$(ls -t *.gz | head -1)"  >> $GITHUB_OUTPUT
 
       - name: Upload collection
         id: upload
