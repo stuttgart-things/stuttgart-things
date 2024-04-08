@@ -1,0 +1,9 @@
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: GithubRunner
+metadata:
+  name: docs
+  namespace: crossplane-system
+spec:
+  repository: docs
+  clusterConfig: cicd
