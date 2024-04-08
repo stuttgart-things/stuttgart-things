@@ -117,7 +117,7 @@ jobs:
           --template packer/README.md.tpl \
           --output file \
           --values "packerVersion=${{ inputs.packer-version }}, osVersion=${{ inputs.os-version }}, lab=${{ inputs.lab }}, cloud=${{ inputs.cloud }}" \
-          --destination /home/openlab/packer/u23-labda-vsphere/README.md
+          --destination ${{ env.WORKING_DIR }}/README.md
 
       - name: Create Pull Request
         id: pr
