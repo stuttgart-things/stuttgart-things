@@ -171,3 +171,13 @@ jobs:
         with:
           name: ${{ env.COLLECTION_PACKAGE }}
           path: ${{ env.COLLECTION_PACKAGE_PATH }}
+
+      - name: Release module
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: ncipollo/release-action@v1.14.0
+        with:
+          name: ${{ env.COLLECTION_PACKAGE }}
+          artifacts: ${{ env.COLLECTION_PACKAGE_PATH }}
+          body: ${{ env.COLLECTION_PACKAGE }}
+          tag: 1.2.6 #${{ needs.Build-Collection.outputs.collection-version }}
+          
