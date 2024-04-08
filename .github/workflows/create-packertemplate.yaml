@@ -111,7 +111,7 @@ jobs:
           --destination ${{ env.WORKING_DIR }}/requirements.yaml
 
       - name: RENDER README-TEMPLATE w/ machineShop
-        id: renderOsTemplate
+        id: renderReadMeTemplate
         run: |
           machineShop render \
           --source local \
