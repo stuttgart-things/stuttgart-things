@@ -22,13 +22,6 @@ on:
         default: "./collection.yaml"
         required: false
         type: string
-    outputs:
-      collection-version:
-        description: version of ansible collection
-        value: ${{ jobs.Ansible-Collection-Build.outputs.version }}
-      artifact-name:
-        description: name of uploaded ansible collection package
-        value: ${{ jobs.Ansible-Collection-Build.outputs.artifact }}
         
 jobs:
   Ansible-Collection-Build:
@@ -47,10 +40,6 @@ jobs:
         with:
           path: source
           fetch-depth: '0'
-
-      - id: version
-        run: echo "version=$(yq -r '.version' source/${{ inputs.collection-file }})" >> "$GITHUB_OUTPUT"
-        shell: bash
         
       - name: Init collection
         id: init
@@ -68,6 +57,7 @@ jobs:
           echo "COLLECTION_FILEPATH=source/${{ inputs.collection-file }}" >> $GITHUB_ENV
           echo "COLLECTION_ROLES_DIR=$GITHUB_WORKSPACE/$(yq -r ".namespace" source/${{ inputs.collection-file }})/$(yq -r ".name" source/${{ inputs.collection-file }})/roles" >> $GITHUB_ENV
           echo "COLLECTION_DIR=$GITHUB_WORKSPACE/$(yq -r ".namespace" source/${{ inputs.collection-file }})/$(yq -r ".name" source/${{ inputs.collection-file }})" >> $GITHUB_ENV
+          echo "COLLECTION_VERSION=$(yq -r ".version" source/${{ inputs.collection-file }})" >> $GITHUB_ENV
 
       - name: Install roles into collection
         id: roles
@@ -176,8 +166,8 @@ jobs:
         if: ${{ github.ref == 'refs/heads/main' }}
         uses: ncipollo/release-action@v1.14.0
         with:
-          name: ${{ env.COLLECTION_PACKAGE }}
+          name: "${{ env.COLLECTION_NAMESPACE }}.${{ env.COLLECTION_NAME }}-${{ env.COLLECTION_VERSION }}"
           artifacts: ${{ env.COLLECTION_PACKAGE_PATH }}
-          body: ${{ env.COLLECTION_PACKAGE }}
-          tag: 1.2.6 #${{ needs.Build-Collection.outputs.collection-version }}
+          body: "${{ env.COLLECTION_NAMESPACE }}.${{ env.COLLECTION_NAME }}-${{ env.COLLECTION_VERSION }}"
+          tag: ${{ env.COLLECTION_VERSION }}
           
