@@ -25,6 +25,10 @@ on:
         description: provisioning
         options:
           - base-os
+      packer-version:
+        type: choice
+        description: packer version
+        required: true
       runner:
         description: RUNNER NAME
         required: true
@@ -104,6 +108,16 @@ jobs:
           --output file \
           --brackets square \
           --destination ${{ env.WORKING_DIR }}/requirements.yaml
+
+      - name: RENDER README-TEMPLATE w/ machineShop
+        id: renderOsTemplate
+        run: |
+          machineShop render \
+          --source local \
+          --template packer/README.md.tpl \
+          --output file \
+          --values "packerVersion=${{ inputs.packer-version }}, osVersion=${{ inputs.os-version }}, lab=${{ inputs.lab }}, cloud=${{ inputs.cloud }}" \
+          --destination /home/openlab/packer/u23-labda-vsphere/README.md
 
       - name: Create Pull Request
         id: pr
