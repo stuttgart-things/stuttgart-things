@@ -26,10 +26,9 @@ on:
         options:
           - base-os
       packer-version:
-        type: choice
+        type: string
         description: packer version
-        options:
-          - "1.10.2"
+        default: 1.10.2
       runner:
         description: RUNNER NAME
         required: true
@@ -75,7 +74,7 @@ jobs:
           --defaults packer/environments/${{ inputs.lab }}-${{ inputs.cloud }}.yaml \
           --brackets square \
           --values "vmTemplateName=${{ inputs.os-version }}, packerConfigMountPath=., ansiblePlayMountPath=., ansibleOsProvioning=${{ inputs.ansible-provisioning }}, osVersion=${{ inputs.os-version }}" \
-          --destination ${{ env.WORKING_DIR }}//ubuntu23.pkr.hcl \
+          --destination ${{ env.WORKING_DIR }}//${{ inputs.os-version }}.pkr.hcl \
           --output file
 
       - name: RENDER KICKSTART w/ machineShop
@@ -117,6 +116,7 @@ jobs:
           --source local \
           --template packer/README.md.tpl \
           --output file \
+          --brackets square \
           --values "packerVersion=${{ inputs.packer-version }}, osVersion=${{ inputs.os-version }}, lab=${{ inputs.lab }}, cloud=${{ inputs.cloud }}" \
           --destination ${{ env.WORKING_DIR }}/README.md
 
