@@ -1,0 +1,9 @@
+name: Build Packer Template
+on:  
+  pull_request:
+    branches:
+      - main
+
+#jobs:
+#  Build-Packer-Template:
+#    if: contains(github.event.pull_request.labels.*.name, 'packer-build')
