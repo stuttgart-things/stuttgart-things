@@ -28,8 +28,6 @@ on:
       packer-version:
         type: choice
         description: packer version
-        required: true
-        default: "1.10.2"
       runner:
         description: RUNNER NAME
         required: true
