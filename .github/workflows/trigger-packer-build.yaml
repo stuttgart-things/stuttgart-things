@@ -15,7 +15,6 @@ jobs:
       build-date: ${{ steps.set.outputs.BUILD_DATE }}
     container:
       image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2
-    # options: --user=root
     runs-on: ghr-stuttgart-things-sthings-cicd
     steps:
       - name: Set Build Details
@@ -32,17 +31,16 @@ jobs:
     environment: ${{ needs.Get-Packer-Config.outputs.lab }}-${{ needs.Get-Packer-Config.outputs.cloud }}
     container:
       image: eu.gcr.io/stuttgart-things/sthings-packer:1.10.2-9.4.0-2
+      # options: --user=root
     env:
       PACKER_LOG_PATH: packer.log
       PACKER_LOG: 1
     steps:
-      - name: Get Build Details
-        id: get
+      - name: Show app versions
+        id: versions
         run: |
           packer --version
           ansible --version
-          echo BUILDING ${{ needs.Get-Packer-Config.outputs.cloud }}/${{ needs.Get-Packer-Config.outputs.os-version }}
-          echo
 
       - name: Checkout code/branch
         id: checkout
@@ -55,6 +53,8 @@ jobs:
           ls -lta
 
           packer init $(ls *.hcl)
+
+          echo BUILDING ${{ needs.Get-Packer-Config.outputs.cloud }}/${{ needs.Get-Packer-Config.outputs.os-version }}
 
           packer build -force \
           -var "username=${{ secrets.USERNAME }}" \
