@@ -33,3 +33,7 @@ jobs:
        run: |
          cd packer/builds/${{ github.event.pull_request.head.ref }}/
          packer init ubuntu23.pkr.hcl
+         packer build -force \
+         -var "username=${{ secrets.USERNAME }}" \
+         -var "password=${{ secrets.PASSWORD }}" \
+         ubuntu23.pkr.hcl
