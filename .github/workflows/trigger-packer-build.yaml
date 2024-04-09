@@ -17,11 +17,11 @@ jobs:
     PACKER_LOG_PATH: packer.log
     PACKER_LOG: 1
    steps:
-     - name: Get Build Details
+     - name: Set Build Details
        run: |
-         echo "${{ github.event.pull_request.head.ref }}" | cut -d "-" -f 1
-         echo "${{ github.event.pull_request.head.ref }}" | cut -d "-" -f 2
-         echo "${{ github.event.pull_request.head.ref }}" | cut -d "-" -f 3
+         echo "OS_VERSION=${{ github.event.pull_request.head.ref }} | cut -d '-'' -f 1" >> "$GITHUB_OUTPUT"
+         echo "LAB=${{ github.event.pull_request.head.ref }} | cut -d '-' -f 2" >> "$GITHUB_OUTPUT"
+         echo "CLOUD=${{ github.event.pull_request.head.ref }} | cut -d '-'' -f 3" >> "$GITHUB_OUTPUT"
 
 
   # Build-Packer-Template:
