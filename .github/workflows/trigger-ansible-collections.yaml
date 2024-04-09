@@ -2,11 +2,11 @@
 name: Build Ansible Collection
 on:
   push:
-    paths:
-    - 'ansible/collections'
-  pull_request:
-    paths:
-    - 'ansible/collections'
+#     paths:
+#     - 'ansible/collections'
+#   pull_request:
+#     paths:
+#     - 'ansible/collections'
 env:
   environment: k8s
 
