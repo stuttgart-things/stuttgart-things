@@ -1,0 +1,32 @@
+---
+name: base_os
+version: 0.1.0
+namespace: sthings
+requirements: |
+  roles:
+    - src: https://github.com/stuttgart-things/download-install-binary.git
+      scm: git
+      version: main
+
+playbooks:
+  - name: install_bins
+    play: |
+      - hosts: all
+        become: true
+        vars:
+          download_dir: "/tmp/downloads" # dir will be created if it doesent exists
+          bin:
+            terraform:
+              bin_name: 'terraform'
+              bin_version: '0.12.24'
+              source_url: "https://releases.hashicorp.com/terraform/0.12.24/terraform_0.12.24_linux_amd64.zip"
+              bin_to_copy: "terraform"
+              bin_dir: "/usr/local/bin"
+              to_remove: "terraform"
+              check_bin_version_before_installing: true
+
+        tasks:
+          - name: Call role download_binary in a loop
+            include_role:
+              name: sthings.deploy_rke.download_install_binary
+            loop: "{{ lookup('dict', bin, wantlist=True) }}"
