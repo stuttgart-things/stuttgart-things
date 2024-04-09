@@ -23,7 +23,7 @@ jobs:
 
      - name: Test
        run: |
-         echo "${{ toJson(github.event.pull_request.labels.*.name)[1] }}"
+         echo "${{ toJson(github.event.pull_request.labels.*.name) }}[1]"
 
     #  - name: Check config / app versions
     #    id: check
