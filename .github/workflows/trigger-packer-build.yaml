@@ -12,6 +12,7 @@ jobs:
       lab: ${{ steps.set.outputs.LAB }}
       cloud: ${{ steps.set.outputs.CLOUD }}
       os-version: ${{ steps.set.outputs.OS_VERSION }}
+      build-date: ${{ steps.set.outputs.BUILD_DATE }}
     container:
       image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2
     # options: --user=root
@@ -23,6 +24,7 @@ jobs:
           echo "OS_VERSION=$(echo ${{ github.event.pull_request.head.ref }} | cut -d '-' -f 1)" >> "$GITHUB_OUTPUT"
           echo "LAB=$(echo ${{ github.event.pull_request.head.ref }} | cut -d '-' -f 2)" >> "$GITHUB_OUTPUT"
           echo "CLOUD=$(echo ${{ github.event.pull_request.head.ref }} | cut -d '-' -f 3)" >> "$GITHUB_OUTPUT"
+          echo "BUILD_DATE=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
 
   Build-Packer-Template:
     needs: Get-Packer-Config
@@ -37,37 +39,27 @@ jobs:
       - name: Get Build Details
         id: get
         run: |
-          echo ${{ needs.Get-Packer-Config.outputs.cloud }}
-          echo ${{ needs.Get-Packer-Config.outputs.os-version }}
+          packer --version
+          ansible --version
+          echo BUILDING ${{ needs.Get-Packer-Config.outputs.cloud }}/${{ needs.Get-Packer-Config.outputs.os-version }}
+          echo
 
+      - name: Checkout code/branch
+        id: checkout
+        uses: actions/checkout@v4
 
+      - name: Packer build
+        id: build
+        run: |
+          cd packer/builds/${{ github.event.pull_request.head.ref }}/
+          ls -lta
 
+          packer init $(ls *.hcl)
 
+          packer build -force \
+          -var "username=${{ secrets.USERNAME }}" \
+          -var "password=${{ secrets.PASSWORD }}" \
+          -var "name=${{ needs.Get-Packer-Config.outputs.os-version }}-${{ needs.Get-Packer-Config.outputs.build-date }}" \
+          $(ls *.hcl)
 
-    # environment: ${{ github.event.pull_request.head.ref }}
-
-
-    # - name: Checkout code/branch
-    # id: checkout
-    # uses: actions/checkout@v4
-
-    #  - name: Check config / app versions
-    #    id: check
-    #    run: |
-    #      ls -lta packer/builds/${{ github.event.pull_request.head.ref }}/
-    #      packer --version
-    #      ansible --version
-
-    #  - name: Packer build
-    #    id: build
-    #    run: |
-    #      cd packer/builds/${{ github.event.pull_request.head.ref }}/
-
-    #      packer init $(ls *.hcl)
-
-    #      packer build -force \
-    #      -var "username=${{ secrets.USERNAME }}" \
-    #      -var "password=${{ secrets.PASSWORD }}" \
-    #      ubuntu23.pkr.hcl
-
-    #      ls -lta
+          ls -lta
