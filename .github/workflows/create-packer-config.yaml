@@ -119,7 +119,7 @@ jobs:
         uses: peter-evans/create-pull-request@v6.0.2
         with:
           commit-message: '[CI][PACKER] - Created template config for vm ${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}'
-          title: 'Created packer template'
+          title: Created Packer CONFIG  ${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}
           branch: ${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}
           # author: ${{ github.actor }}
           delete-branch: true
