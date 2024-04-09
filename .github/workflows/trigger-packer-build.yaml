@@ -6,26 +6,35 @@ on:
       - reopened
 
 jobs:
- Build-Packer-Template:
+ Get-Packer-Config:
    if: contains(github.event.pull_request.labels.*.name, 'packer')
-   environment: ${{ github.event.pull_request.head.ref }}
+  #  environment: k8s
    container:
-    image: eu.gcr.io/stuttgart-things/sthings-packer:1.10.2-9.4.0-2
+    image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2
     # options: --user=root
    runs-on: ghr-stuttgart-things-sthings-cicd
    env:
     PACKER_LOG_PATH: packer.log
     PACKER_LOG: 1
    steps:
-     - name: Checkout code/branch
-       id: checkout
-       uses: actions/checkout@v4
-
-     - name: Test
+     - name: Get Build Details
        run: |
-         echo ${{ github.event.pull_request.labels.*.name }}
+         echo "${{ github.event.pull_request.head.ref }}" | cut -d "-" -f 1
+         echo "${{ github.event.pull_request.head.ref }}" | cut -d "-" -f 2
+         echo "${{ github.event.pull_request.head.ref }}" | cut -d "-" -f 3
 
 
+  # Build-Packer-Template:
+    # image: eu.gcr.io/stuttgart-things/sthings-packer:1.10.2-9.4.0-2
+
+
+
+    # environment: ${{ github.event.pull_request.head.ref }}
+
+
+    # - name: Checkout code/branch
+    # id: checkout
+    # uses: actions/checkout@v4
 
     #  - name: Check config / app versions
     #    id: check
