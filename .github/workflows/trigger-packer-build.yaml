@@ -23,7 +23,7 @@ jobs:
 
      - name: Test
        run: |
-         format('Hello {0} {1}', ${{ github.event.pull_request.labels.*.name }})
+         echo ${{ github.event.pull_request.labels.*.name }}
 
 
 
