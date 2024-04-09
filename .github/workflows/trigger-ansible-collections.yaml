@@ -9,7 +9,6 @@ on:
     paths:
     - 'ansible/collections'
 env:
-  runs_on: ghr-stuttgart-things-sthings-cicd
   environment: k8s
 
 jobs:
@@ -17,7 +16,7 @@ jobs:
     name: Build Ansible Collection
     uses: stuttgart-things/stuttgart-things/.github/workflows/build-ansible-collection.yaml@main
     with:
-      runs-on: ${runs_on}
+      runs-on: ghr-stuttgart-things-sthings-cicd
       environment-name: ${environment}
       continue-error: false
       collection-file: ansible/collections/base-os.yaml
