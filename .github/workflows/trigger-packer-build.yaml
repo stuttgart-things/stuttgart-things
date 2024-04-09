@@ -1,7 +1,9 @@
 name: Build Packer Template
 on:
   pull_request:
-    types: [opened, reopened]
+    types:
+      - opened
+      - reopened
 
 jobs:
  Build-Packer-Template:
@@ -29,5 +31,5 @@ jobs:
      - name: Packer build
        id: build
        run: |
-         cd -lta packer/builds/${{ github.event.pull_request.head.ref }}/
+         cd packer/builds/${{ github.event.pull_request.head.ref }}/
          packer init ubuntu23.pkr.hcl
