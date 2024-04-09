@@ -176,3 +176,4 @@ jobs:
           artifacts: ${{ env.COLLECTION_PACKAGE_PATH }}
           body: "${{ env.COLLECTION_NAMESPACE }}.${{ env.COLLECTION_NAME }}-${{ env.COLLECTION_VERSION }}"
           tag: ${{ env.COLLECTION_VERSION }}
+          allowUpdates: true # existing release can be overwritten
