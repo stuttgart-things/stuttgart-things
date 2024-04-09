@@ -23,7 +23,9 @@ jobs:
 
      - name: Test
        run: |
-         echo "${{ startsWith(github.event.pull_request.labels.*.name, 'pa*') }}"
+         format('Hello {0} {1}', ${{ github.event.pull_request.labels.*.name }})
+
+
 
     #  - name: Check config / app versions
     #    id: check
