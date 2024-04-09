@@ -5,7 +5,7 @@ ARG TAG=9.4.0
 
 FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
-LABEL version=1.10.2-9.4.0-1
+LABEL version=1.10.2-9.4.0-2
 
 USER root
 
@@ -33,4 +33,4 @@ RUN wget -q https://github.com/stuttgart-things/machineShop/releases/download/${
 
 RUN mkdir -m 1777 /__w
 
-USER 65532
+# USER 65532
