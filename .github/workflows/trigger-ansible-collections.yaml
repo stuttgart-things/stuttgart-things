@@ -4,10 +4,10 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - 'ansible/collections'
+    - 'ansible/collections'
   pull_request:
     paths:
-      - 'ansible/collections'
+    - 'ansible/collections'
 env:
   environment: k8s
 
