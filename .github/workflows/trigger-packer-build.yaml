@@ -2,8 +2,8 @@ name: Build Packer Template
 on:
   pull_request:
     types:
-      - opened
-      # - reopened
+      - labeled
+      - reopened
 
 jobs:
  Build-Packer-Template:
