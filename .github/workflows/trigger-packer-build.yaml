@@ -20,9 +20,9 @@ jobs:
       - name: Set Build Details
         id: set
         run: |
-          echo "OS_VERSION=${{ github.event.pull_request.head.ref }} | cut -d '-'' -f 1" >> "$GITHUB_OUTPUT"
-          echo "LAB=${{ github.event.pull_request.head.ref }} | cut -d '-' -f 2" >> "$GITHUB_OUTPUT"
-          echo "CLOUD=${{ github.event.pull_request.head.ref }} | cut -d '-'' -f 3" >> "$GITHUB_OUTPUT"
+          echo "OS_VERSION=$(echo ${{ github.event.pull_request.head.ref }} | cut -d '-' -f 1)" >> "$GITHUB_OUTPUT"
+          echo "LAB=$(echo ${{ github.event.pull_request.head.ref }} | cut -d '-' -f 2)" >> "$GITHUB_OUTPUT"
+          echo "CLOUD=$(echo ${{ github.event.pull_request.head.ref }} | cut -d '-'' -f 3)" >> "$GITHUB_OUTPUT"
 
   Build-Packer-Template:
     needs: Get-Packer-Config
