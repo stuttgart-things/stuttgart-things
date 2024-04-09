@@ -23,7 +23,7 @@ jobs:
 
      - name: Test
        run: |
-         echo ${{ github.event.pull_request.label.0.name }}
+         echo ${{ github.event.pull_request.label.*.name}}
 
     #  - name: Check config / app versions
     #    id: check
