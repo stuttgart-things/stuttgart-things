@@ -39,35 +39,29 @@ jobs:
     runs-on: ${{ inputs.runner }}
     environment: k8s
     container:
-      image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2
+      image: eu.gcr.io/stuttgart-things/machineShop:v1.7.2
     continue-on-error: false
     permissions:
       contents: write
       pull-requests: write
     steps:
-      - name: CHECKOUT CODE
+      - name: Checkout code
         id: checkout
         uses: actions/checkout@v4.1.1
 
-      - name: CREATE WORKINGDIR
+      - name: Create workingdir
         id: createFolder
         run: |
           echo "WORKING_DIR=packer/builds/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}" >> $GITHUB_ENV
           mkdir -p packer/builds/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}
 
-      - name: CREATE METADATA
+      - name: Create metadata
         id: createMetadata
         run: touch ${{ env.WORKING_DIR }}/meta-data
 
-      - name: RENDER OS-TEMPLATE w/ machineShop
+      - name: Render os-template w/ machineShop
         id: renderOsTemplate
         run: |
-          echo ${{ inputs.os-version }}
-          echo ${{ inputs.cloud }}
-          echo ${{ inputs.lab }}
-          ls
-
-          # RENDER PACKER-CONFIG
           machineShop render \
           --source local \
           --template packer/template/${{ inputs.os-version }}-${{ inputs.cloud }}.pkr.tpl.hcl \
@@ -77,7 +71,7 @@ jobs:
           --destination ${{ env.WORKING_DIR }}//${{ inputs.os-version }}.pkr.hcl \
           --output file
 
-      - name: RENDER KICKSTART w/ machineShop
+      - name: Render kickstart file w/ machineShop
         id: renderKickstart
         run: |
           machineShop render \
@@ -87,7 +81,7 @@ jobs:
           --output file \
           --destination ${{ env.WORKING_DIR }}/user-data
 
-      - name: RENDER PLAYBOOK w/ machineShop base-os
+      - name: Render playbook w/ machineShop
         id: renderBase-os
         run: |
           machineShop render \
@@ -98,7 +92,7 @@ jobs:
           --brackets square \
           --destination ${{ env.WORKING_DIR }}/base-os.yaml
 
-      - name: RENDER PLAYBOOK w/ machineShop requirements
+      - name: Render playbook w/ machineShop requirements
         id: renderRequirements
         run: |
           machineShop render \
@@ -109,7 +103,7 @@ jobs:
           --brackets square \
           --destination ${{ env.WORKING_DIR }}/requirements.yaml
 
-      - name: RENDER README-TEMPLATE w/ machineShop
+      - name: Render readme-template w/ machineShop
         id: renderReadMeTemplate
         run: |
           machineShop render \
@@ -120,10 +114,13 @@ jobs:
           --values "packerVersion=${{ inputs.packer-version }}, osVersion=${{ inputs.os-version }}, lab=${{ inputs.lab }}, cloud=${{ inputs.cloud }}" \
           --destination ${{ env.WORKING_DIR }}/README.md
 
-      - name: Create Pull Request
+      - name: Create Pull Request for packer config
         id: pr
-        uses: peter-evans/create-pull-request@v6.0.1
+        uses: peter-evans/create-pull-request@v6.0.2
         with:
           commit-message: '[CI][PACKER] - Created template config for vm ${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}'
           title: 'Created packer template'
           branch: ${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}
+          labels: |
+            packer
+            ${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}
