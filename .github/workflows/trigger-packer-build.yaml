@@ -12,7 +12,9 @@ jobs:
    runs-on: ghr-stuttgart-things-sthings-cicd
    steps:
      - uses: actions/checkout@v4
-     - name : Print Title of PR
+     - name: Print Title of PR
        run: echo The Title of your PR is ${{ github.event.pull_request.title }}
+     - name: Print branch name
+       run: echo The branch name from of your PR is ${{ github.event.pull_request.head.ref }}
      - name : List file contents
-       run: ls -lta
+       run: ls -lta packer/
