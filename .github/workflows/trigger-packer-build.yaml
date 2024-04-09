@@ -9,15 +9,9 @@ jobs:
    environment: ${{ github.event.pull_request.head.ref }}
    container:
     image: eu.gcr.io/stuttgart-things/sthings-packer:1.10.2-9.4.0-2
-    options: --user=root
+    # options: --user=root
    runs-on: ghr-stuttgart-things-sthings-cicd
    steps:
-     - name: Check config / folder content
-       id: checkuser
-       run: |
-         whoami
-         pwd
-
      - name: Checkout code/branch
        id: checkout
        uses: actions/checkout@v4
