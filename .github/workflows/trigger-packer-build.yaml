@@ -1,7 +1,5 @@
 name: Build Packer Template
 on:
-  repository_dispatch:
-    types: [create-pull-request]
   pull_request:
     types:
       - opened
@@ -25,7 +23,7 @@ jobs:
 
      - name: Test
        run: |
-         echo ${{ github.event.pull_request.label.[0].name }}
+         echo ${{ github.event.pull_request.label.0.name }}
 
     #  - name: Check config / app versions
     #    id: check
