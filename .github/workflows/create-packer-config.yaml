@@ -121,7 +121,7 @@ jobs:
           commit-message: '[CI][PACKER] - Created template config for vm ${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}'
           title: 'Created packer template'
           branch: ${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}
-          author: ${{ github.actor }}
+          # author: ${{ github.actor }}
           delete-branch: true
           labels: |
             packer
