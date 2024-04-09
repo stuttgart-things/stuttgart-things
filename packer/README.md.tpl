@@ -8,7 +8,7 @@ sudo apt install -y sshpass unzip
 pip install ansible --upgrade
 ```
 
-# INSTALL PACKER
+## INSTALL PACKER
 
 ```bash
 wget https://releases.hashicorp.com/packer/[[ .packerVersion ]]/packer_[[ .packerVersion ]]_linux_amd64.zip
