@@ -23,7 +23,7 @@ jobs:
 
      - name: Test
        run: |
-         echo "${{ contains(github.event.pull_request.labels.*.name, 'lab') }}"
+         echo "${{ startsWith(github.event.pull_request.labels.*.name, 'pa*') }}"
 
     #  - name: Check config / app versions
     #    id: check
