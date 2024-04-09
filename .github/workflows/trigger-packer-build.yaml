@@ -1,9 +1,15 @@
-#name: Build Packer Template
-#on:  
-#  pull_request:
-#    branches:
-#      - main
+name: Build Packer Template
+on:
+ pull_request:
+   branches:
+     - main
 
-#jobs:
-#  Build-Packer-Template:
-#    if: contains(github.event.pull_request.labels.*.name, 'packer-build')
+jobs:
+ Build-Packer-Template:
+   if: contains(github.event.pull_request.labels.*.name, 'packer')
+   environment: k8s
+   container:
+    image: eu.gcr.io/stuttgart-things/machineShop:v1.7.2
+   runs-on: ghr-stuttgart-things-sthings-cicd
+   steps:
+     - uses: actions/checkout@v4
