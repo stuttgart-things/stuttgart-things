@@ -4,6 +4,7 @@ on:
     types: [create-pull-request]
   pull_request:
     types:
+      - opened
       - reopened
 
 jobs:
