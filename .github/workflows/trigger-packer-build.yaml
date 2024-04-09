@@ -6,7 +6,7 @@ on:
 jobs:
  Build-Packer-Template:
    if: contains(github.event.pull_request.labels.*.name, 'packer')
-   environment: k8s
+   environment: ${{ github.event.pull_request.head.ref }}
    container:
     image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2
    runs-on: ghr-stuttgart-things-sthings-cicd
