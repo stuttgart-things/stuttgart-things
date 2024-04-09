@@ -1,7 +1,6 @@
 ---
 name: Build Ansible Collection
 on:
-#   workflow_dispatch:
   push:
     paths:
     - 'ansible/collections'
