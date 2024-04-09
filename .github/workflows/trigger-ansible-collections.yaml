@@ -2,13 +2,15 @@
 name: Build Ansible Collection
 on:
   push:
-#     paths:
-#     - 'ansible/collections'
+    branches:
+      - main
+    paths:
+      - 'ansible/collections'
 #   pull_request:
 #     paths:
 #     - 'ansible/collections'
 env:
-  environment: k8s
+  environment:
 
 jobs:
   Build-Collection:
@@ -16,6 +18,6 @@ jobs:
     uses: stuttgart-things/stuttgart-things/.github/workflows/build-ansible-collection.yaml@main
     with:
       runs-on: ghr-stuttgart-things-sthings-cicd
-      environment-name: ${environment}
+      environment-name: k8s
       continue-error: false
       collection-file: ansible/collections/base-os.yaml
