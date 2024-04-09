@@ -14,26 +14,34 @@ jobs:
     # options: --user=root
    runs-on: ghr-stuttgart-things-sthings-cicd
    env:
-    PACKER_LOG_PATH: packerlog.txt
+    PACKER_LOG_PATH: packer.log
     PACKER_LOG: 1
    steps:
      - name: Checkout code/branch
        id: checkout
        uses: actions/checkout@v4
 
-     - name: Check config / app versions
-       id: check
+     - name: Test
        run: |
-         ls -lta packer/builds/${{ github.event.pull_request.head.ref }}/
-         packer --version
-         ansible --version
+         echo ${{ github.event.pull_request.label.[0].name }}
 
-     - name: Packer build
-       id: build
-       run: |
-         cd packer/builds/${{ github.event.pull_request.head.ref }}/
-         packer init ubuntu23.pkr.hcl
-         packer build -force \
-         -var "username=${{ secrets.USERNAME }}" \
-         -var "password=${{ secrets.PASSWORD }}" \
-         ubuntu23.pkr.hcl
+    #  - name: Check config / app versions
+    #    id: check
+    #    run: |
+    #      ls -lta packer/builds/${{ github.event.pull_request.head.ref }}/
+    #      packer --version
+    #      ansible --version
+
+    #  - name: Packer build
+    #    id: build
+    #    run: |
+    #      cd packer/builds/${{ github.event.pull_request.head.ref }}/
+
+    #      packer init $(ls *.hcl)
+
+    #      packer build -force \
+    #      -var "username=${{ secrets.USERNAME }}" \
+    #      -var "password=${{ secrets.PASSWORD }}" \
+    #      ubuntu23.pkr.hcl
+
+    #      ls -lta
