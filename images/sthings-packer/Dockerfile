@@ -31,4 +31,6 @@ RUN wget -q https://github.com/stuttgart-things/machineShop/releases/download/${
     && tar -xvf machineShop_Linux_x86_64.tar.gz -C /usr/bin/ machineShop \
     && rm -rf machineShop_Linux_x86_64.tar.gz
 
+RUN mkdir -m 1777 /__w
+
 USER 65532
