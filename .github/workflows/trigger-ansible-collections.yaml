@@ -1,0 +1,22 @@
+---
+name: Build Ansible Collection
+on:
+  push:
+    paths:
+    - 'ansible/collections'
+  pull_request:
+    paths:
+    - 'ansible/collections'
+env:
+  runs_on: ghr-stuttgart-things-sthings-cicd
+  environment: k8s
+
+jobs:
+  Build-Collection:
+    name: Build Ansible Collection
+    uses: stuttgart-things/stuttgart-things/.github/workflows/build-ansible-collection.yaml@main
+    with:
+      runs-on: ${runs_on}
+      environment-name: ${environment}
+      continue-error: false
+      collection-file: ansible/collections/base-os.yaml
