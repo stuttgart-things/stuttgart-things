@@ -39,7 +39,7 @@ jobs:
     runs-on: ${{ inputs.runner }}
     environment: k8s
     container:
-      image: eu.gcr.io/stuttgart-things/machineShop:v1.7.2
+      image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2
     continue-on-error: false
     permissions:
       contents: write
@@ -71,7 +71,7 @@ jobs:
           --destination ${{ env.WORKING_DIR }}//${{ inputs.os-version }}.pkr.hcl \
           --output file
 
-      - name: Render kickstart file w/ machineShop
+      - name: Render Kickstart w/ machineShop
         id: renderKickstart
         run: |
           machineShop render \
@@ -81,7 +81,7 @@ jobs:
           --output file \
           --destination ${{ env.WORKING_DIR }}/user-data
 
-      - name: Render playbook w/ machineShop
+      - name: Render Playbook w/ machineShop
         id: renderBase-os
         run: |
           machineShop render \
@@ -92,7 +92,7 @@ jobs:
           --brackets square \
           --destination ${{ env.WORKING_DIR }}/base-os.yaml
 
-      - name: Render playbook w/ machineShop requirements
+      - name: Render ansible requirements w/ machineShop requirements
         id: renderRequirements
         run: |
           machineShop render \
@@ -103,7 +103,7 @@ jobs:
           --brackets square \
           --destination ${{ env.WORKING_DIR }}/requirements.yaml
 
-      - name: Render readme-template w/ machineShop
+      - name: Render Readme template w/ machineShop
         id: renderReadMeTemplate
         run: |
           machineShop render \
