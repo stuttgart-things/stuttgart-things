@@ -1,8 +1,8 @@
-name: Build Packer Template
-on:  
-  pull_request:
-    branches:
-      - main
+#name: Build Packer Template
+#on:  
+#  pull_request:
+#    branches:
+#      - main
 
 #jobs:
 #  Build-Packer-Template:
