@@ -6,26 +6,41 @@ on:
       - reopened
 
 jobs:
- Get-Packer-Config:
-   if: contains(github.event.pull_request.labels.*.name, 'packer')
-  #  environment: k8s
-   container:
-    image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2
+  Get-Packer-Config:
+    if: contains(github.event.pull_request.labels.*.name, 'packer')
+    outputs:
+      lab: ${{ steps.set.outputs.LAB }}
+      cloud: ${{ steps.set.outputs.CLOUD }}
+      os-version: ${{ steps.set.outputs.OS_VERSION }}
+    container:
+      image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2
     # options: --user=root
-   runs-on: ghr-stuttgart-things-sthings-cicd
-   env:
-    PACKER_LOG_PATH: packer.log
-    PACKER_LOG: 1
-   steps:
-     - name: Set Build Details
-       run: |
-         echo "OS_VERSION=${{ github.event.pull_request.head.ref }} | cut -d '-'' -f 1" >> "$GITHUB_OUTPUT"
-         echo "LAB=${{ github.event.pull_request.head.ref }} | cut -d '-' -f 2" >> "$GITHUB_OUTPUT"
-         echo "CLOUD=${{ github.event.pull_request.head.ref }} | cut -d '-'' -f 3" >> "$GITHUB_OUTPUT"
+    runs-on: ghr-stuttgart-things-sthings-cicd
+    steps:
+      - name: Set Build Details
+        id: set
+        run: |
+          echo "OS_VERSION=${{ github.event.pull_request.head.ref }} | cut -d '-'' -f 1" >> "$GITHUB_OUTPUT"
+          echo "LAB=${{ github.event.pull_request.head.ref }} | cut -d '-' -f 2" >> "$GITHUB_OUTPUT"
+          echo "CLOUD=${{ github.event.pull_request.head.ref }} | cut -d '-'' -f 3" >> "$GITHUB_OUTPUT"
+
+  Build-Packer-Template:
+    needs: Get-Packer-Config
+    runs-on: ghr-stuttgart-things-sthings-cicd
+    environment: ${{ needs.Get-Packer-Config.outputs.lab }}
+    container:
+      image: eu.gcr.io/stuttgart-things/sthings-packer:1.10.2-9.4.0-2
+    env:
+      PACKER_LOG_PATH: packer.log
+      PACKER_LOG: 1
+    steps:
+      - name: Get Build Details
+        id: get
+        run: |
+          echo ${{ needs.Get-Packer-Config.outputs.cloud }}
+          echo ${{ needs.Get-Packer-Config.outputs.os-version }}
 
 
-  # Build-Packer-Template:
-    # image: eu.gcr.io/stuttgart-things/sthings-packer:1.10.2-9.4.0-2
 
 
 
