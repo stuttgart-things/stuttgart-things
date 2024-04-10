@@ -17,6 +17,7 @@ wget https://releases.hashicorp.com/packer/[[ .packerVersion ]]/packer_[[ .packe
 unzip packer_[[ .packerVersion ]]_linux_amd64.zip
 sudo mv packer /usr/bin/packer
 sudo chmod +x /usr/bin/packer
+rm -rf packer_[[ .packerVersion ]]_linux_amd64.zip
 ```
 
 ## CLONE/CHANGE TO CONFIG DIR
