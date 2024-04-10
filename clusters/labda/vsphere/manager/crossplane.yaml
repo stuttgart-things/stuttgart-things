@@ -1,0 +1,78 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: crossplane
+  namespace: flux-system
+spec:
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./apps/crossplane
+  prune: true
+  wait: true
+  postBuild:
+    substitute:
+      S3_SECRET_NAME: s3
+  patches:
+    - patch: |-
+        - op: replace
+          path: /spec/chart/spec/version
+          value: 1.15.1
+      target:
+        kind: HelmRelease
+        name: crossplane-deployment
+        namespace: crossplane-system
+    - patch: |-
+        - op: replace
+          path: /spec/values/provider/packages
+          value:
+            - xpkg.upbound.io/crossplane-contrib/provider-kubernetes:v0.13.0
+            - xpkg.upbound.io/crossplane-contrib/provider-helm:v0.18.0
+      target:
+        kind: HelmRelease
+        name: crossplane-deployment
+        namespace: crossplane-system
+  healthChecks:
+    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
+      kind: HelmRelease
+      name: crossplane-deployment
+      namespace: crossplane-system
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: crossplane
+      namespace: crossplane-system
+---
+apiVersion: v1
+kind: Secret
+metadata:
+    name: s3
+    namespace: crossplane-system
+data:
+    AWS_ACCESS_KEY_ID: ENC[AES256_GCM,data:C2kDM7/+BCKAcsL3,iv:Uz4qomUPCGZZGEjnxddz18uExkyFxniCkv3xTpPg+a0=,tag:LBrFBjpNST9hKFCVqXRYJg==,type:str]
+    AWS_SECRET_ACCESS_KEY: ENC[AES256_GCM,data:NGgvCnHENLdfxSO+,iv:6QuB0WZIjrux+JNOEv3TUl4jOOYOkANtuuJ+Ez9svVA=,tag:lyFn0N8Aej/WwN2AfuIIcg==,type:str]
+type: Opaque
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age1g438n4lx6h7x7u42q652e9ygzrkkwlul49e8zsmsrfmxm9k3tvcsykhff4
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAwZWJSNGJzc3hFOVYzaXEy
+            bnIvTkxxakxKNEVIeHZLYUM4dFQ5Z2NHOHlJCnlkZ3ZvRUJnY3NpR3R6SDN6bFFC
+            R2xLWFhLcFBoVjhlbVRRNnZwK3hYdlUKLS0tIHQ0Qmo1QWJoSmh4TVMwTjV2NlNE
+            eFE5cUFLZ2k3U1V5bnBhVVZJZDNhaDgKWpQ6H0XWJGx55O4hSn+r2qV0isCIT8Ha
+            vm0BaWdER9jksefcOWlVnQlHWc70w+Ah0SSrGtXeS/3VrX6S9sPHsg==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2024-02-27T13:17:55Z"
+    mac: ENC[AES256_GCM,data:8NEb1XV7a/2UwNpPfPLSPwES+i4/wuwDGfza7ssYTYvZJylQj05B8g/0JyPeFHCVUkK0fsk3kadBnhUx792V/TJ9JVXaKSYeEIiWmxZpZYN/zMp4JeFWsRR8EGLzvnYRN6+pLCKQMRIAENY8I+hue9nyvuN46mEgytLPFJvsCZI=,iv:h4tXQyiaFpubpglgH+yASNDfD9XgK/IY82Q2t1NNN5Q=,tag:t+Jw7p9QmGVTzPJkBTvWaA==,type:str]
+    pgp: []
+    encrypted_regex: ^(data|stringData)$
+    version: 3.8.1
+---
