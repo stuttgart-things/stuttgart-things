@@ -64,5 +64,5 @@ jobs:
         id: upload
         uses: actions/upload-artifact@v4.1.0
         with:
-          name: ${{ needs.Get-Packer-Config.outputs.lab }}-${{ needs.Get-Packer-Config.outputs.cloud }}-${{ needs.Get-Packer-Config.outputs.os-version }}-${{ needs.Get-Packer-Config.outputs.build-date }}.log
+          name: ${{ needs.Get-Packer-Config.outputs.lab }}-${{ needs.Get-Packer-Config.outputs.cloud }}-${{ needs.Get-Packer-Config.outputs.os-version }}-${{ needs.Get-Packer-Config.outputs.build-date }}
           path: packer/builds/${{ github.event.pull_request.head.ref }}/packer.log
