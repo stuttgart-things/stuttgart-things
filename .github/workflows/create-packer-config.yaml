@@ -29,11 +29,19 @@ on:
         type: string
         description: packer version
         default: 1.10.2
+      build-engine:
+        type: choice
+        description: build engine
+        options:
+          - gh-workflows
+          - tekton-pipelines
+          - render-only
       runner:
         description: RUNNER NAME
         required: true
         type: string
         default: ghr-stuttgart-things-sthings-cicd
+        
 jobs:
   Create-Packer-Config:
     runs-on: ${{ inputs.runner }}
@@ -121,16 +129,27 @@ jobs:
           app_id: ${{ secrets.PULLREQUESTER_APP_ID }}
           private_key: ${{ secrets.PULLREQUESTER_APP_KEY }}
 
+      - name: Set labels for pull request
+        id: set-build-label
+        run: |
+          if [[ "${{ inputs.build-engine }}" == "gh-workflows" ]]; then
+             echo "LABEL=packer" >> $GITHUB_ENV
+          fi
+          if [[ "${{ inputs.build-engine }}" == "tekton-pipelines" ]]; then
+             echo "LABEL=tekton-packer" >> $GITHUB_ENV
+          fi
+          if [[ "${{ inputs.build-engine }}" == "render-only" ]]; then
+             echo "LABEL=packer-config" >> $GITHUB_ENV
+          fi
+          
       - name: Create Pull Request for packer config
         id: pr
         uses: peter-evans/create-pull-request@v6.0.2
         with:
           commit-message: '[CI][PACKER] - Created template config for vm ${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}'
-          title: Created Packer CONFIG  ${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}
+          title: Created Packer Config ${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }} ${{ inputs.build-engine }}
           branch: ${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}
-          # author: ${{ github.actor }}
           delete-branch: true
           token: ${{ steps.generate-token.outputs.token }}
           labels: |
-            packer
-            ${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}
+            ${{ env.LABEL }}
