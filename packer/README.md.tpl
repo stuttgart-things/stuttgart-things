@@ -1,6 +1,8 @@
 # stuttgart-things/packer
 
-## OS REQUIREMENTS
+this file was created at: [[ .date ]]
+
+## INSTALL OS-REQUIREMENTS
 
 ```bash
 # INSTALL OS REQUIREMENTS
@@ -17,14 +19,29 @@ sudo mv packer /usr/bin/packer
 sudo chmod +x /usr/bin/packer
 ```
 
-## PACKER BUILD
+## CLONE/CHANGE TO CONFIG DIR
 
 ```bash
+# CLONE FROM BRANCH
 git clone --branch [[ .osVersion ]]-[[ .lab ]]-[[ .cloud ]] https://github.com/stuttgart-things/stuttgart-things
-cd packer/builds/[[ .osVersion ]]-[[ .lab ]]-[[ .cloud ]]/
-rm -rf ~/.ssh/known_hosts
+
+# OR CLONE FROM MAIN AFTER A PREVIOUS PR-MERGE
+git clone https://github.com/stuttgart-things/stuttgart-things
+
+# CHANGE TO DIR
+cd stuttgart-things/packer/builds/[[ .osVersion ]]-[[ .lab ]]-[[ .cloud ]]/
+```
+
+## START PACKER BUILD
+
+```bash
+# ADD LOGGING
 export PACKER_LOG_PATH="packerlog.txt"
 export PACKER_LOG=1
+
+# IF BUILD WITH FIXED IP IN CONFIG MAYBE NEEDED OR EDIT KNOWN HOSTS FILE
+rm -rf ~/.ssh/known_hosts
+
 packer init [[ .osVersion ]].pkr.hcl
 packer build -force -var "username=<USERNAME>" -var "password=<PASSWORD>" [[ .osVersion ]].pkr.hcl
 ```
