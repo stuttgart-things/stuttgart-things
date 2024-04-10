@@ -151,9 +151,9 @@ jobs:
                     'rocky9': 'sthings-r9'
                 },
                 'labda-vsphere': {
-                  'ubuntu22': 'ubuntu22',
-                  'ubuntu23': 'ubuntu23',
-                  'rocky9': 'rocky9'
+                    'ubuntu22': 'ubuntu22',
+                    'ubuntu23': 'ubuntu23',
+                    'rocky9': 'rocky9'
                 }
             }
 
