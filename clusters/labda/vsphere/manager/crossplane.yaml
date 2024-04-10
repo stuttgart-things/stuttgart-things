@@ -76,3 +76,31 @@ sops:
     encrypted_regex: ^(data|stringData)$
     version: 3.8.1
 ---
+apiVersion: v1
+kind: Secret
+metadata:
+    name: vsphere-tfvars
+    namespace: crossplane-system
+stringData:
+    terraform.tfvars: ENC[AES256_GCM,data:qNVcSBR6FABSv2jK1j2g7QVUdK8Kd0q+U6n75VltK2RNy10Ya+P+uWlSIyJ5Q8RnUbmtuDlNZd/KG+F0bDqRU4nUpdGL6Q9m3nFJYReBcDylo0d44DMY3qZQAGRoakDWn7pjb/Wja09T18UtipIZed4p7H9OzJMx6zJcI2tHqqdfIKkG+Cknr2KviuHqlkC225EiKa5TQxHnUZ+CaocG,iv:mlbJ8o4oEsX+4Ak/cTHgRn31JoCiuDNrxgx+e9J0rfQ=,tag:QpGNpD+qciPtislWrjWhKw==,type:str]
+type: Opaque
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age1g438n4lx6h7x7u42q652e9ygzrkkwlul49e8zsmsrfmxm9k3tvcsykhff4
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBLVEFBM0JBZk5nR1JSTWly
+            eDRLYkNRS3Nyb2JUWEFickxld1lrM3VwNEhRCkxMZU1VV2QxUXJYOTl1OU1GQzN1
+            RzVJWVpCclpDNkpDMm5hRVJTQUd4NFEKLS0tIDJlK1gvNDB5bnBlOU1pLzN4dk9t
+            OXJkK2VxaEdMUmxVYnp6V041eEF1Rm8KDi+Fm2Dgo9pkeRvJ+UEezOxkjCuLWvws
+            I7IW/t16PYEZ+fBj3Uv5D3GEs8gL4ZC3am9MR3zgRNKDXcvOyijLAA==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2024-04-10T12:56:27Z"
+    mac: ENC[AES256_GCM,data:cd0yxgQRQXF64Gjmo3Ma5tCNEvQMFVWqN9RaQnjmvx0VRg93EqC3lxMR4NnD3jfpWJ+B1fC1DmtOYutdix7uIaDPFubzVHY/wAgzbnyt0MPQbT19OMH7eYCNrv4ZhmPMCfKs17R/xZ3iLrO/uZVbwTubkNKLAW0HnO9gC9sUCG4=,iv:hLcoVuV+AjOm7wyiVkMbfV0UtAXRVsVl6bbjFYi+PcA=,tag:qWQbqML8DuQY96f4+IPGnw==,type:str]
+    pgp: []
+    encrypted_regex: ^(data|stringData)$
+    version: 3.8.1
