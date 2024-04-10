@@ -43,5 +43,12 @@ export PACKER_LOG=1
 rm -rf ~/.ssh/known_hosts
 
 packer init [[ .osVersion ]].pkr.hcl
-packer build -force -var "username=<USERNAME>" -var "password=<PASSWORD>" [[ .osVersion ]].pkr.hcl
+
+DATE=$(echo $(date +'%Y-%m-%d'))
+
+packer build -force \
+-var "name=${DATE}-[[ .osVersion ]]-[[ .lab ]]-[[ .cloud ]]" \
+-var "password=<PASSWORD>" \
+-var "password=<PASSWORD>" \
+[[ .osVersion ]].pkr.hcl
 ```
