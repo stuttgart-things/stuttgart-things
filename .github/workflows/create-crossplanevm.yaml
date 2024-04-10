@@ -149,6 +149,11 @@ jobs:
                     'ubuntu22': 'sthings-u22',
                     'ubuntu23': 'sthings-u23',
                     'rocky9': 'sthings-r9'
+                },
+                'labda-vsphere': {
+                  'ubuntu22': 'ubuntu22',
+                  'ubuntu23': 'ubuntu23',
+                  'rocky9': 'rocky9'
                 }
             }
 
@@ -253,7 +258,7 @@ jobs:
             import yaml
 
             def merge_two_dicts(x, y):
-                z = x.copy() 
+                z = x.copy()
                 z.update(y)
                 return z
 
@@ -266,28 +271,28 @@ jobs:
                   values = yaml.load(f, Loader=yaml.SafeLoader)
 
               # HANDLING OF OVERWRITES
-              
+
               # SPLIT ARGS BY DELIMITER
               overwrites = '${{ inputs.overwrites }}'
 
-              if len(overwrites) > 0: 
-              
+              if len(overwrites) > 0:
+
                 overwrite = overwrites.split(";")
-              
+
                 all_overwrites = {}
-                
+
                 # LOOP OVER ARGS
                 for x in overwrite:
                   split = x.split("=")
                   all_overwrites[split[0].strip()]=split[1].strip()
-                
+
                 # COMBINE DICTS
                 print(all_overwrites)
                 updated_vm_config = merge_two_dicts(values, all_overwrites)
                 print(updated_vm_config)
-  
+
                 write_yaml_todisk(updated_vm_config, './${{ inputs.vm-name }}.yaml')
-              
+
             if __name__ == '__main__':
                 main()
 
