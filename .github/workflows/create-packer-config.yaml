@@ -114,8 +114,7 @@ jobs:
       - name: Render Readme template w/ machineShop
         id: renderReadMeTemplate
         run: |
-          DATE=$(echo $(date +'%Y-%m-%d'))
-
+          DATE=$(echo `date "+%Y-%m-%d %H:%M"`)
           machineShop render \
           --source local \
           --template packer/README.md.tpl \
