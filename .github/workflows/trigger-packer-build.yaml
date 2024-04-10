@@ -31,10 +31,10 @@ jobs:
     environment: ${{ needs.Get-Packer-Config.outputs.lab }}-${{ needs.Get-Packer-Config.outputs.cloud }}
     container:
       image: eu.gcr.io/stuttgart-things/sthings-packer:1.10.2-9.4.0-2
-      # options: --user=root
     env:
       PACKER_LOG_PATH: packer.log
       PACKER_LOG: 1
+      PACKER_BUILD_PATH: packer/builds/
     steps:
       - name: Show app versions
         id: versions
@@ -49,17 +49,20 @@ jobs:
       - name: Packer build
         id: build
         run: |
-          cd packer/builds/${{ github.event.pull_request.head.ref }}/
+          cd ${PACKER_BUILD_PATH}/${{ github.event.pull_request.head.ref }}/
           ls -lta
 
           packer init $(ls *.hcl)
-
-          echo BUILDING ${{ needs.Get-Packer-Config.outputs.cloud }}/${{ needs.Get-Packer-Config.outputs.os-version }}
-
+          
           packer build -force \
           -var "username=${{ secrets.USERNAME }}" \
           -var "password=${{ secrets.PASSWORD }}" \
           -var "name=${{ needs.Get-Packer-Config.outputs.os-version }}-${{ needs.Get-Packer-Config.outputs.build-date }}" \
           $(ls *.hcl)
 
-          ls -lta
+      - name: Upload Packer logfile
+        id: upload
+        uses: actions/upload-artifact@v4.1.0
+        with:
+          name: ${{ needs.Get-Packer-Config.outputs.lab }}-${{ needs.Get-Packer-Config.outputs.cloud }}-${{ needs.Get-Packer-Config.outputs.os-version }}-${{ needs.Get-Packer-Config.outputs.build-date }}.log
+          path: packer/builds/${{ github.event.pull_request.head.ref }}/packer.log
