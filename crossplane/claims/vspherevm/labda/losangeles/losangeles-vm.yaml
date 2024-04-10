@@ -1,4 +1,19 @@
 ---
+apiVersion: tf.upbound.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: incluster-losangeles
+  namespace: crossplane-system
+spec:
+  configuration: |
+    terraform {
+      backend "kubernetes" {
+        secret_suffix     = "losangeles"
+        namespace         = "crossplane-system"
+        in_cluster_config = true
+      }
+    }
+---
 apiVersion: resources.stuttgart-things.com/v1alpha1
 kind: VsphereVM
 metadata:
@@ -6,7 +21,7 @@ metadata:
   namespace: crossplane-system
 spec:
   providerRef:
-    name: minio-losangeles
+    name: incluster-losangeles
   vm:
     count: "1"
     name: losangeles
@@ -24,7 +39,7 @@ spec:
     annotation: VSPHERE-VM BUILD w/ CROSSPLANE FOR STUTTGART-THINGS
     unverifiedSsl: "true"
   tfvars:
-    secretName: vsphere-labda-tfvars
+    secretName: vsphere-tfvars
     secretNamespace: crossplane-system
     secretKey: terraform.tfvars
   connectionSecret:
