@@ -12,7 +12,6 @@ on:
         type: string
         default: ghr-stuttgart-things-sthings-cicd
 
-
 jobs:
   Render-Runner-Config:
     # permissions:
@@ -21,7 +20,7 @@ jobs:
     runs-on: ${{ inputs.runner }}
     environment: k8s
     container:
-      image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2
+      image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2-1
     continue-on-error: false
     steps:
       - name: Checkout code
