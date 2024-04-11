@@ -3,8 +3,10 @@ template: crossplane/claims/githubrunners.yaml
 runners:
   - repository: download-install-binary
     cluster: cicd
+    profile: ansible
   - repository: vsphere-vm
     cluster: cicd
+    profile: terraform
 
 clusters:
   cicd:
@@ -12,6 +14,17 @@ clusters:
     folder: clusters/labul/vsphere/sthings-cicd/githubrunners
     # folder: test/githubrunners
 
-# workflows:
-#   lint-ansible:
-#     template:
+profiles:
+  ansible:
+    templates:
+      - yaml-lint
+      - ansible-lint
+  terraform:
+    templates:
+      - terraform-lint
+  golang:
+    templates:
+      - golang-lint
+      - golang-build
+      - golang-test
+
