@@ -3,14 +3,15 @@ name: Manage GitHub Runners
 on:
   workflow_dispatch:
     inputs:
-      runner:
-        description: NAME OF RUNNER FOR THIS WORKFLOW
-        type: string
-        default: ghr-stuttgart-things-sthings-cicd
       runner-config:
         description: RUNNER CONFIG FILE
         type: string
         default: .github/workflows/config/runners.yaml
+      runner:
+        description: NAME OF RUNNER FOR THIS WORKFLOW
+        type: string
+        default: ghr-stuttgart-things-sthings-cicd
+
 
 jobs:
   Render-Runner-Config:
@@ -30,6 +31,8 @@ jobs:
       - name: Render runner config
         id: render
         run: |
+          apk add --update --no-cache jq
+
           cat ${{ inputs.runner-config }}
 
           for runner in $(yq eval -o=j ${{ inputs.runner-config }} | jq -cr '.runners[]'); do
