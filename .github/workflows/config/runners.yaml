@@ -1,0 +1,17 @@
+---
+template: ../stuttgart-things/crossplane/claims/githubrunners.yaml
+runners:
+  - repository: download-install-binary
+    cluster: cicd
+  - repository: vsphere-vm
+    cluster: cicd
+
+clusters:
+  cicd:
+    namespace: crossplane-system
+    #folder: clusters/labul/vsphere/sthings-cicd/
+    folder: test/githubrunners
+
+# workflows:
+#   lint-ansible:
+#     template:
