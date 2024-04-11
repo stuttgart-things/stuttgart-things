@@ -30,8 +30,6 @@ jobs:
       - name: Render runner config
         id: render
         run: |
-          apk add --update --no-cache jq
-
           cat ${{ inputs.runner-config }}
 
           for runner in $(yq eval -o=j ${{ inputs.runner-config }} | jq -cr '.runners[]'); do
