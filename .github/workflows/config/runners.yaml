@@ -9,8 +9,8 @@ runners:
 clusters:
   cicd:
     namespace: crossplane-system
-    #folder: clusters/labul/vsphere/sthings-cicd/
-    folder: test/githubrunners
+    folder: clusters/labul/vsphere/sthings-cicd/githubrunners
+    # folder: test/githubrunners
 
 # workflows:
 #   lint-ansible:

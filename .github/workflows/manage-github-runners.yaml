@@ -4,17 +4,16 @@ on:
   workflow_dispatch:
     inputs:
       runner:
-        description: name of runner for this workflow
+        description: NAME OF RUNNER FOR THIS WORKFLOW
         type: string
         default: ghr-stuttgart-things-sthings-cicd
       runner-config:
-        description: runner config file
+        description: RUNNER CONFIG FILE
         type: string
         default: .github/workflows/config/runners.yaml
 
-
 jobs:
-  Create-Runner-Config:
+  Render-Runner-Config:
     # permissions:
     #   contents: write
     #   pull-requests: write
@@ -32,3 +31,25 @@ jobs:
         id: render
         run: |
           cat ${{ inputs.runner-config }}
+
+          for runner in $(yq eval -o=j ${{ inputs.runner-config }} | jq -cr '.runners[]'); do
+
+              repository=$(echo $runner | jq -r '.repository' -)
+              cluster=$(echo $runner | jq -r '.cluster' -)
+              namespace=$(yq -r ".clusters.${cluster}.namespace" ${{ inputs.runner-config }})
+              folder=$(yq -r ".clusters.${cluster}.folder" ${{ inputs.runner-config }})
+              template=$(yq -r ".template" ${{ inputs.runner-config }})
+              echo template=$template repository=$repository, cluster=$cluster, namespace=$namespace, folder=$folder
+
+              mkdir -p ${folder}
+
+              machineshop render \
+              --source local \
+              --template ${template} \
+              --values "repositoryName=${repository}, namespace=${namespace}, targetClusterName=${cluster}" \
+              --output file \
+              --destination ${folder}/${repository}.yaml
+
+              ls -lta ${folder}
+
+          done
