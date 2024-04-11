@@ -1,5 +1,5 @@
 ---
-template: ../stuttgart-things/crossplane/claims/githubrunners.yaml
+template: crossplane/claims/githubrunners.yaml
 runners:
   - repository: download-install-binary
     cluster: cicd
