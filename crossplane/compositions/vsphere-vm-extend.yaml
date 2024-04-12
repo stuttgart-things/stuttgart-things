@@ -194,6 +194,8 @@ spec:
         metadata:
           name: ansible-run
         spec:
+          providerConfigRef:
+            name: kubernetes-incluster
           forProvider:
             manifest:
               apiVersion: resources.stuttgart-things.com/v1alpha1
@@ -204,13 +206,14 @@ spec:
               spec:
                 pipelineRunName: baseos-losangeles
                 inventory:
-                  - "all+[\"losangeles.labul.sva.de\"]"
+                  - "all+[\"losangeles7.tiab.labda.sva.de\"]"
                 playbooks:
                   - "ansible/playbooks/prepare-env.yaml"
                   - "ansible/playbooks/base-os.yaml"
                 ansibleVarsFile:
                   - "manage_filesystem+-true"
                   - "update_packages+-true"
+                  - "hello+-true"
                   - "install_requirements+-true"
                   - "install_motd+-true"
                   - "username+-sthings"
@@ -232,7 +235,7 @@ spec:
                   - "https://github.com/stuttgart-things/install-configure-vault.git"
       patches:
         - fromFieldPath: status.share.vmIP
-          toFieldPath: spec.forProvider.manifest.spec.ansibleVarsFile[11].value
+          toFieldPath: spec.forProvider.manifest.spec.ansibleVarsFile[2].value
           policy:
             fromFieldPath: Required
           transforms:

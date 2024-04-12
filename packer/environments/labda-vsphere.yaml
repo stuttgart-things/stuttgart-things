@@ -14,8 +14,6 @@ diskSize: 16
 osVersion: ubuntu23
 sshTimeout: 20m
 sshHandshakeAttempts: 900
-createUser: true
-rebootBeforeAnsible: false
 
 # UBUNTU23
 ubuntu23PackerMinVersion: 1.10.0
@@ -28,20 +26,6 @@ ubuntu23ShellProvisioner: "sudo apt-get -y update; sudo apt-get -y upgrade; sudo
 staticIp: 10.100.136.210/24
 gateway: 10.100.136.254
 nameserver: 10.100.101.5
-
-# ANSIBLE
-ansibleOsProvioning: baseos-setup
-configureClusterNode: false
-installCloudInit: false
-createRkeUser: false
-updateOs: true
-installDocker: false
-installDockerCompose: false
-setDockerProxy: false
-templateCreationSetup: false
-updatePackages: true
-installRequirements: true
-copyNetworkConfig: true
 
 # ROCKY9
 rocky9PackerMinVersion: 1.8.6
@@ -70,7 +54,3 @@ network: /NetApp-HCI-Datacenter/host/NetApp-HCI-Cluster-01/10.100.135.44/tiab-pr
 vaultCloudPath: /cloud/data/vsphere
 vaultCloudKeyUsername: username
 vaultCloudKeyPassword: password
-
-# MS-TEAMS
-sendToMSteams: true
-msTeamsWebHookUrl: https://365sva.webhook.office.com/webhookb2/2f14a9f8-4736-46dd-9c8c-31547ec37180@0a65cb1e-37d5-41ff-980a-647d9d0e4f0b/IncomingWebhook/37a805a0a2624dc2ac1aedd7dec6ad49/dc3a27ed-396c-40b7-a9b2-f1a2b6b44efe

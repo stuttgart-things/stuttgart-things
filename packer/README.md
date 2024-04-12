@@ -44,13 +44,13 @@ machineShop render \
 machineShop render \
 --source local \
 --template ansible/play.yaml \
---defaults environments/labul-vsphere.yaml \
+--defaults ansible/base-os.yaml \
 --output file \
 --brackets square \
 --destination /home/sthings/packer/ubuntu23-labul-vsphere/base-os.yaml
 ```
 
-## RENDER PLAYBOOK w/ machineShop
+## RENDER ANSIBLE REQUIREMENTS w/ machineShop
 
 ```bash
 machineShop render \
