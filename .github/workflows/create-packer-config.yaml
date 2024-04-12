@@ -68,7 +68,7 @@ jobs:
         id: createMetadata
         run: touch ${{ env.WORKING_DIR }}/meta-data
 
-      - name: Render os-template w/ machineShop
+      - name: Render OS template w/ machineShop
         id: renderOsTemplate
         run: |
           machineShop render \
@@ -96,10 +96,10 @@ jobs:
           machineShop render \
           --source local \
           --template packer/ansible/play.yaml \
-          --defaults packer/environments/${{ inputs.lab }}-${{ inputs.cloud }}.yaml \
+          --defaults packer/ansible/${{ inputs.ansible-provisioning }}.yaml \
           --output file \
           --brackets square \
-          --destination ${{ env.WORKING_DIR }}/base-os.yaml
+          --destination ${{ env.WORKING_DIR }}/${{ inputs.ansible-provisioning }}.yaml
 
       - name: Render ansible requirements w/ machineShop requirements
         id: renderRequirements
@@ -107,7 +107,7 @@ jobs:
           machineShop render \
           --source local \
           --template packer/ansible/requirements.yaml \
-          --defaults packer/environments/${{ inputs.lab }}-${{ inputs.cloud }}.yaml \
+          --defaults packer/ansible/${{ inputs.ansible-provisioning }}.yaml \
           --output file \
           --brackets square \
           --destination ${{ env.WORKING_DIR }}/requirements.yaml

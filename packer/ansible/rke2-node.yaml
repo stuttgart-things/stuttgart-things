@@ -1,5 +1,5 @@
 # ANSIBLE
-ansibleOsProvioning: rke2-upi
+ansibleOsProvioning: rke2-node
 configureClusterNode: true
 templateCreationSetup: true
 installCloudInit: true
