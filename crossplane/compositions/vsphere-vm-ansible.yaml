@@ -2,32 +2,32 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: Composition
 metadata:
-  name: vsphere-vm
+  name: vsphere-vm-ansible
   labels:
-    crossplane.io/xrd: xvspherevms.resources.stuttgart-things.com
+    crossplane.io/xrd: xvspherevmansibles.resources.stuttgart-things.com
 spec:
   compositeTypeRef:
     apiVersion: resources.stuttgart-things.com/v1alpha1
-    kind: XVsphereVM
+    kind: XVsphereVMAnsible
   resources:
-    - name: vsphere-vm
+    - name: vsphere-vm-ansible
       base:
         kind: Workspace
         apiVersion: tf.upbound.io/v1beta1
         metadata:
           annotations:
-            crossplane.io/external-name: vsphere-vm
+            crossplane.io/external-name: vsphere-vm-ansible
         spec:
           providerConfigRef:
             name: terraform-default
           writeConnectionSecretToRef:
-            name: vsphere-vm-test
+            name: vsphere-vm-ansible-test
             namespace: crossplane-system
           forProvider:
             source: Inline
             module: |
-              module "vsphere-vm" {
-                source                 = "github.com/stuttgart-things/vsphere-vm?ref=v1.7.5-2.7.0"
+              module "vsphere-vm-ansible" {
+                source                 = "github.com/stuttgart-things/vsphere-vm-ansible?ref=v1.7.5-2.7.0"
                 vm_count               = var.vm_count
                 vsphere_vm_name        = var.vsphere_vm_name
                 vm_memory              = var.vm_memory
@@ -71,7 +71,7 @@ spec:
               variable "vsphere_server" { type= string }
 
               output "ip" {
-                value = [module.vsphere-vm.ip]
+                value = [module.vsphere-vm-ansible.ip]
               }
             vars:
               - key: vm_count

@@ -2,29 +2,29 @@
 apiVersion: tf.upbound.io/v1beta1
 kind: ProviderConfig
 metadata:
-  name: incluster-losangeles9
+  name: incluster-losangeles10
   namespace: crossplane-system
 spec:
   configuration: |
     terraform {
       backend "kubernetes" {
-        secret_suffix     = "losangeles9"
+        secret_suffix     = "losangeles10"
         namespace         = "crossplane-system"
         in_cluster_config = true
       }
     }
 ---
 apiVersion: resources.stuttgart-things.com/v1alpha1
-kind: VsphereVM
+kind: VsphereVMAnsible
 metadata:
-  name: losangeles9
+  name: losangeles10
   namespace: crossplane-system
 spec:
   providerRef:
-    name: incluster-losangeles9
+    name: incluster-losangeles10
   vm:
     count: "1"
-    name: losangeles9
+    name: losangeles10
     cpu: "2"
     ram: "4096"
     disk: "32"
