@@ -121,7 +121,7 @@ jobs:
           --template packer/README.md.tpl \
           --output file \
           --brackets square \
-          --values "packerVersion=${{ inputs.packer-version }}, osVersion=${{ inputs.os-version }}, lab=${{ inputs.lab }}, cloud=${{ inputs.cloud }}, date=${DATE}" \
+          --values "packerVersion=${{ inputs.packer-version }}, osVersion=${{ inputs.os-version }}, lab=${{ inputs.lab }}, cloud=${{ inputs.cloud }}, hclConfig=${{ env.WORKING_DIR }}//${{ inputs.os-version }}-${{ inputs.ansible-provisioning }}, date=${DATE}" \
           --destination ${{ env.WORKING_DIR }}/README.md
 
       - name: Get token for creating pull request
