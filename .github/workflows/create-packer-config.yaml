@@ -77,7 +77,7 @@ jobs:
           --defaults packer/environments/${{ inputs.lab }}-${{ inputs.cloud }}.yaml \
           --brackets square \
           --values "packerConfigMountPath=., ansiblePlayMountPath=., ansibleOsProvioning=${{ inputs.ansible-provisioning }}, osVersion=${{ inputs.os-version }}" \
-          --destination ${{ env.WORKING_DIR }}//${{ inputs.os-version }}.pkr.hcl \
+          --destination ${{ env.WORKING_DIR }}//${{ inputs.os-version }}-${{ inputs.ansible-provisioning }}.pkr.hcl \
           --output file
 
       - name: Render Kickstart w/ machineShop
