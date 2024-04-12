@@ -10,7 +10,7 @@ spec:
   timeout: 5m
   sourceRef:
     kind: GitRepository
-    name: crossplane-1-4-5
+    name: flux-system
   path: ./apps/tekton
   prune: true
   wait: true
