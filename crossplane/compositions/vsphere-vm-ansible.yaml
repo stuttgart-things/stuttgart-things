@@ -199,14 +199,38 @@ spec:
               apiVersion: v1
               kind: ConfigMap
               metadata:
-                name: demo-config
+                # name: demo-config
                 namespace: crossplane-system
+                annotations:
+                  imageregistry: "https://hub.docker.com/"
               data:
                 database_host: "192.168.0.1"
                 debug_mode: "1"
           providerConfigRef:
             name: kubernetes-incluster
       patches:
+        - fromFieldPath: status.share.vmIP
+          toFieldPath: spec.forProvider.manifest.metadata.annotations.imageregistry
+          policy:
+            fromFieldPath: Required
+          transforms:
+            - type: string
+              string:
+                type: Join
+                join:
+                  separator: ","
+            - type: string
+              string:
+                type: TrimPrefix
+                trim: "["
+            - type: string
+              string:
+                type: TrimSuffix
+                trim: "]"
+          # transforms:
+          #   - type: convert
+          #     convert:
+          #       toType: string
         - fromFieldPath: status.share.vmIP
           toFieldPath: spec.forProvider.manifest.data.database_host
           policy:
@@ -217,7 +241,6 @@ spec:
                 type: Join
                 join:
                   separator: ","
-
     # - name: ansible-run
     #   base:
     #     apiVersion: kubernetes.crossplane.io/v1alpha2

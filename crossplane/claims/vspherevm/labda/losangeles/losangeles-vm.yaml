@@ -2,13 +2,13 @@
 apiVersion: tf.upbound.io/v1beta1
 kind: ProviderConfig
 metadata:
-  name: incluster-losangeles12
+  name: incluster-losangeles16
   namespace: crossplane-system
 spec:
   configuration: |
     terraform {
       backend "kubernetes" {
-        secret_suffix     = "losangeles12"
+        secret_suffix     = "losangeles16"
         namespace         = "crossplane-system"
         in_cluster_config = true
       }
@@ -17,14 +17,14 @@ spec:
 apiVersion: resources.stuttgart-things.com/v1alpha1
 kind: VsphereVMAnsible
 metadata:
-  name: losangeles12
+  name: losangeles16
   namespace: crossplane-system
 spec:
   providerRef:
-    name: incluster-losangeles12
+    name: incluster-losangeles16
   vm:
     count: "1"
-    name: losangeles12
+    name: losangeles16
     cpu: "2"
     ram: "4096"
     disk: "32"
@@ -43,7 +43,7 @@ spec:
     secretNamespace: crossplane-system
     secretKey: terraform.tfvars
   connectionSecret:
-    name: losangeles12
+    name: losangeles16
     namespace: crossplane-system
   compositionRef:
     name: vsphere-vm-ansible
