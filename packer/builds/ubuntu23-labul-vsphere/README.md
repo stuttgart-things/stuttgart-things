@@ -1,6 +1,6 @@
 # stuttgart-things/packer
 
-this file was created at: 2024-04-10
+this file was created at: 2024-04-12 07:12
 
 ## INSTALL OS-REQUIREMENTS
 
@@ -17,6 +17,7 @@ wget https://releases.hashicorp.com/packer/1.10.2/packer_1.10.2_linux_amd64.zip
 unzip packer_1.10.2_linux_amd64.zip
 sudo mv packer /usr/bin/packer
 sudo chmod +x /usr/bin/packer
+rm -rf packer_1.10.2_linux_amd64.zip
 ```
 
 ## CLONE/CHANGE TO CONFIG DIR
