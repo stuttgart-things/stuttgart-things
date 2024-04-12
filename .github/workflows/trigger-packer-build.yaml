@@ -13,6 +13,7 @@ jobs:
       cloud: ${{ steps.set.outputs.CLOUD }}
       os-version: ${{ steps.set.outputs.OS_VERSION }}
       build-date: ${{ steps.set.outputs.BUILD_DATE }}
+      provisioning: ${{ steps.set.outputs.PROVISIONING }}
     container:
       image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2
     runs-on: ghr-stuttgart-things-sthings-cicd
@@ -24,6 +25,7 @@ jobs:
           echo "LAB=$(echo ${{ github.event.pull_request.head.ref }} | cut -d '-' -f 2)" >> "$GITHUB_OUTPUT"
           echo "CLOUD=$(echo ${{ github.event.pull_request.head.ref }} | cut -d '-' -f 3)" >> "$GITHUB_OUTPUT"
           echo "BUILD_DATE=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+          echo "PROVISIONING=$(echo ${{ github.event.pull_request.head.ref }} | cut -d '-' -f 4)-$(echo ${{ github.event.pull_request.head.ref }} | cut -d '-' -f 5)" >> $GITHUB_OUTPUT
 
   Build-Packer-Template:
     needs: Get-Packer-Config
@@ -57,7 +59,7 @@ jobs:
           packer build -force \
           -var "username=${{ secrets.USERNAME }}" \
           -var "password=${{ secrets.PASSWORD }}" \
-          -var "name=${{ needs.Get-Packer-Config.outputs.os-version }}-${{ needs.Get-Packer-Config.outputs.build-date }}" \
+          -var "name=${{ needs.Get-Packer-Config.outputs.os-version }}-${{ needs.Get-Packer-Config.outputs.build-date }}-${{ needs.Get-Packer-Config.outputs.provisioning}}" \
           $(ls *.hcl)
 
       - name: Upload Packer logfile
