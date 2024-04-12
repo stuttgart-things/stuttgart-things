@@ -43,7 +43,7 @@ export PACKER_LOG=1
 # IF BUILD WITH FIXED IP IN CONFIG MAYBE NEEDED OR EDIT KNOWN HOSTS FILE
 rm -rf ~/.ssh/known_hosts
 
-packer init [[ .osVersion ]].pkr.hcl
+packer init [[ .hclConfig ]].pkr.hcl
 
 DATE=$(echo $(date +'%Y-%m-%d'))
 
@@ -51,5 +51,5 @@ packer build -force \
 -var "name=${DATE}-[[ .osVersion ]]-[[ .lab ]]-[[ .cloud ]]" \
 -var "password=<PASSWORD>" \
 -var "password=<PASSWORD>" \
-[[ .osVersion ]].pkr.hcl
+[[ .hclConfig ]].pkr.hcl
 ```
