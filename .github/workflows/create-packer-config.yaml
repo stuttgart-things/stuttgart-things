@@ -61,8 +61,8 @@ jobs:
       - name: Create workingdir
         id: createFolder
         run: |
-          echo "WORKING_DIR=packer/builds/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}" >> $GITHUB_ENV
-          mkdir -p packer/builds/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}
+          echo "WORKING_DIR=packer/builds/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}-${{ inputs.ansible-provisioning }}" >> $GITHUB_ENV
+          mkdir -p packer/builds/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}-${{ inputs.ansible-provisioning }}
 
       - name: Create metadata
         id: createMetadata
@@ -150,7 +150,7 @@ jobs:
         with:
           commit-message: '[CI][PACKER] - Created template config for vm ${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}'
           title: Created Packer Config ${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }} ${{ inputs.build-engine }}
-          branch: ${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}
+          branch: ${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}-${{ inputs.ansible-provisioning }}
           delete-branch: true
           token: ${{ steps.generate-token.outputs.token }}
           labels: |
