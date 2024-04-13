@@ -53,3 +53,22 @@ jobs:
               ls -lta ${folder}
 
           done
+          
+      - name: Get token for creating pull request
+        uses: tibdex/github-app-token@v1
+        id: generate-token
+        with:
+          app_id: ${{ secrets.PULLREQUESTER_APP_ID }}
+          private_key: ${{ secrets.PULLREQUESTER_APP_KEY }}
+
+      - name: Create Pull Request for arc runner confi
+        id: pr
+        uses: peter-evans/create-pull-request@v6.0.2
+        with:
+          commit-message: '[CI][GITHUB] - Created arc runner config'
+          title: Created arc runner config
+          branch: test
+          delete-branch: true
+          token: ${{ steps.generate-token.outputs.token }}
+          labels: |
+            test
