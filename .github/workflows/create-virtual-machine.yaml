@@ -50,12 +50,15 @@ on:
         required: false
         type: string
         default: ""
-      crossplane-provider:
+      build-engine:
         type: choice
-        description: CROSSPLANE PROVIDER NAME
+        description: build engine
         options:
-          - minio
-          - incluster
+          - gh-workflows-tf
+          - crossplane-k8s-tf
+          - tekton-pipelines-tf
+          - render-only-tf
+          - render-only-crossplane
       runner:
         description: RUNNER NAME
         required: true
