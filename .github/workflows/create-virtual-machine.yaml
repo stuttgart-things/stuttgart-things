@@ -1,5 +1,5 @@
 ---
-name: Create CrossplaneVM
+name: Create Virtual Machine
 on:
   workflow_dispatch:
     inputs:
