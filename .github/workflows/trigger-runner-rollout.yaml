@@ -10,7 +10,11 @@ jobs:
     if: contains(github.event.pull_request.labels.*.name, 'test')
     container:
       image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2
-    permissions: write-all
+    permissions:
+      contents: write
+      pull-requests: write
+      repository-projects: write
+      id-token: write
     runs-on: ghr-stuttgart-things-sthings-cicd
     steps:
       - name: Set Build Details
@@ -35,38 +39,8 @@ jobs:
         with:
           script: |
             github.rest.issues.createComment({
-              issue_number: (await github.rest.repos.listPullRequestsAssociatedWithCommit({
-                commit_sha: context.sha,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-              })).data[0].number,
+              issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: '👋 Thanks for reporting!'
             })
-
-      - name: Get PR SHA
-        id: sha
-        uses: actions/github-script@v6
-        with:
-          result-encoding: string
-          script: |
-            const { owner, repo, number } = context.issue;
-            const pr = await github.rest.pulls.get({
-              owner,
-              repo,
-              pull_number: number,
-            });
-            return pr.data.head.sha
-
-      - name: Add Label
-        uses: actions/github-script@v6
-        #if: ${{ steps.test.outcome }} == 'success'
-        with:
-          script: |        
-            github.rest.issues.addLabels({
-              issue_number: ${{ steps.sha.outputs.result }},
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              labels[].name: ["ready to merge"]
-            }) 
