@@ -10,9 +10,7 @@ jobs:
     if: contains(github.event.pull_request.labels.*.name, 'test')
     container:
       image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2
-    permissions:
-      contents: write
-      pull-requests: write
+    permissions: write-all
     runs-on: ghr-stuttgart-things-sthings-cicd
     steps:
       - name: Set Build Details
