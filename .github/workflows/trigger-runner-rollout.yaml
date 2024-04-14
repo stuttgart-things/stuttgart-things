@@ -1,0 +1,25 @@
+name: Rollout GitHub Runner
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+
+jobs:
+  Get-Runner-Config:
+    if: contains(github.event.pull_request.labels.*.name, 'test')
+    container:
+      image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2
+    runs-on: ghr-stuttgart-things-sthings-cicd
+    steps:
+      - name: Set Build Details
+        id: set
+        run: |
+          echo "HELLO"
+
+      - name: Comment PR with execution number
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            _(execution **${{ github.run_id }}** / attempt **${{ github.run_attempt }}**)_
+          comment_tag: execution
