@@ -31,7 +31,7 @@ jobs:
             Hello world ! :wave:
 
       - name: Add Label
-        uses: actions/github-script@v7.0.1
+        uses: actions/github-script@v6
         #if: ${{ steps.test.outcome }} == 'success'
         with:
           script: |        
