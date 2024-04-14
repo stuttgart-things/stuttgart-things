@@ -35,12 +35,13 @@ jobs:
           message: |
             Hello world ! :wave:
 
-      - uses: actions/github-script@v6
+      - name: Add please-review label on command in issue comment
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
         with:
           script: |
-            github.rest.issues.createComment({
+            await github.rest.issues.addLabels({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: '👋 Thanks for reporting!'
+              labels: ["please-review"]
             })
