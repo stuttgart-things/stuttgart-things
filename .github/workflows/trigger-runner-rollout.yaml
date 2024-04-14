@@ -10,6 +10,11 @@ jobs:
     if: contains(github.event.pull_request.labels.*.name, 'test')
     container:
       image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2
+    permissions:
+      contents: write
+      pull-requests: write
+      repository-projects: write
+      id-token: write
     runs-on: ghr-stuttgart-things-sthings-cicd
     steps:
       - name: Set Build Details
@@ -30,27 +35,11 @@ jobs:
           message: |
             Hello world ! :wave:
 
-      - name: Get PR SHA
-        id: sha
-        uses: actions/github-script@v6
+      - uses: actions/github-script@v6
         with:
-          result-encoding: string
           script: |
-            const { owner, repo, number } = context.issue;
-            const pr = await github.rest.pulls.get({
-              owner,
-              repo,
-              pull_number: number,
-            });
-            return pr.data.head.sha
-
-      - name: Add Label
-        uses: actions/github-script@v6
-        #if: ${{ steps.test.outcome }} == 'success'
-        with:
-          script: |        
-            github.rest.issues.addLabels({
-              issue_number: ${{ steps.sha.outputs.result }},
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              labels[].name: ["ready to merge"]
+
