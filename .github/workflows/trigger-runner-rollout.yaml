@@ -34,6 +34,7 @@ jobs:
         run: |
           echo "HELLO"
           echo ${{ github.event.pull_request.number }}
+          git config --global --add safe.directory /__w/stuttgart-things/stuttgart-things
           gh pr list
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
