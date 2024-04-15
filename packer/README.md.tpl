@@ -53,3 +53,23 @@ packer build -force \
 -var "password=<PASSWORD>" \
 [[ .hclConfig ]].pkr.hcl
 ```
+
+## TERRAFORM
+
+```bash
+#go to the folder where main.tf is located  
+cd [[ .osVersion ]]-[[ .lab ]]-[[ .cloud ]]-${{ inputs.ansible-provisioning }}/test-vm/
+
+terraform init
+
+#export Secrets and VM Template
+export TF_VAR_vsphere_user=<CLOUD_USERNAME>
+export TF_VAR_vsphere_password=<CLOUD_PASSWORD>
+export TF_VAR_vm_ssh_user=<SSH_USERNAME>
+export TF_VAR_vm_ssh_password=<SSH_PASSWORD>
+export TF_VAR_vsphere_vm_template=<CLOUD_VM_TEMPLATE>
+
+terraform apply
+
+#after the apply process check the ip-address and connect to the vm
+```

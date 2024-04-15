@@ -1,10 +1,9 @@
-module "packer-test-vm" {
+module "${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}-${{ inputs.ansible-provisioning }}" {
   source                 = "[[ .testVmModuleSource ]]"
   vm_count               = [[ .testVmCount ]]
   vsphere_vm_name        = "[[ .osVersion ]]-[[ .lab ]]-[[ .cloud ]]-testvm"
   vm_memory              = [[ .testVmRam ]]
   vsphere_vm_template    = var.vsphere_vm_template
-
   vm_disk_size           = "[[ .testVmDiskSize ]]"
   vm_num_cpus            = [[ .testCpu ]]
   firmware               = "bios"
@@ -18,8 +17,8 @@ module "packer-test-vm" {
   vsphere_server         = "[[ .vcenterServer ]]"
   vsphere_user           = var.vsphere_user
   vsphere_password       = var.vsphere_password
-  vm_ssh_user = var.vm_ssh_user
-  vm_ssh_password = var.vm_ssh_password
+  vm_ssh_user            = var.vm_ssh_user
+  vm_ssh_password        = var.vm_ssh_password
 }
 
 variable "vsphere_vm_template" {
@@ -40,7 +39,6 @@ variable "vm_ssh_password" {
   description = "password of ssh user"
   }
 
-
 variable "vsphere_user" {
   default     = false
   type        = string
@@ -51,4 +49,8 @@ variable "vsphere_password" {
   default     = false
   type        = string
   description = "password of vsphere user"
+}
+
+output "ip" {
+  value = [module.packer-test-vm.ip]
 }
