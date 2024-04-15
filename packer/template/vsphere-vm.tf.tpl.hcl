@@ -52,5 +52,5 @@ variable "vsphere_password" {
 }
 
 output "ip" {
-  value = [module.packer-test-vm.ip]
+  value = [module.[[ .osVersion ]]-[[ .lab ]]-[[ .cloud ]]-[[ .ansibleOsProvisioning ]].ip]
 }
