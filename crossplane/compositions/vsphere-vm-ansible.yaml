@@ -215,9 +215,6 @@ spec:
               metadata:
                 annotations:
                   inventory: "host.domain"
-                  test:
-                    - bla
-                    - blabla
                 namespace: crossplane-system
               spec:
                 pipelineRunName: baseos-host
@@ -287,19 +284,6 @@ spec:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.ansible.pipelineNamespace
           toFieldPath: spec.forProvider.manifest.spec.pipelineNamespace
-
-        # - type: CombineToComposite
-        #   combine:
-        #     variables:
-        #       - fromFieldPath: metadata.name
-        #       - fromFieldPath: status.share.timestampApply
-        #     strategy: string
-        #     string:
-        #       fmt: "%s-%s"
-        #   toFieldPath: spec.forProvider.manifest.spec.pipelineRunName
-        #   policy:
-        #     fromFieldPath: Required
-
         - fromFieldPath: status.share.vmIP
           toFieldPath: spec.forProvider.manifest.metadata.annotations.inventory
           policy:
@@ -322,3 +306,13 @@ spec:
               string:
                 type: Format
                 fmt: 'all+[\"%s\"]'
+        - fromFieldPath: status.share.vmIP
+          toFieldPath: spec.forProvider.manifest.spec.playbooks
+          # transforms:
+          #   - type: convert
+          #     convert:
+          #       toType: array
+          # policy:
+          #   fromFieldPath: Required
+
+          #       format: json
