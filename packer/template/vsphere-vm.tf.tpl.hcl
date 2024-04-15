@@ -1,4 +1,4 @@
-module "[[ .os-version ]]"-"[[ inputs.lab ]]"-"[[ inputs.cloud ]]"-"[[ inputs.ansible-provisioning ]]" {
+module "[[ .os-version ]]"-"[[ .lab ]]"-"[[ .cloud ]]"-"[[ .ansible-provisioning ]]" {
   source                 = "[[ .testVmModuleSource ]]"
   vm_count               = [[ .testVmCount ]]
   vsphere_vm_name        = "[[ .osVersion ]]-[[ .lab ]]-[[ .cloud ]]-testvm"
