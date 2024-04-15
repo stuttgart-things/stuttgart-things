@@ -69,6 +69,8 @@ jobs:
       - name: Checkout code
         id: checkout
         uses: actions/checkout@v4.1.1
+        with:
+          ref: main
 
       - name: Create Pull Request for arc runner config
         id: pr
