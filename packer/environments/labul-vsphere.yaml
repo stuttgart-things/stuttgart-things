@@ -1,9 +1,12 @@
 ---
 # GLOBAL
+packerVersion: 1.10.0
+vmWwarePluginMinVersion: 1.2.7
+ansibleProvisionerMinVersion: 1.1.1
+
 ipWaitTimeout: 30m
 vmWareProvider: github.com/hashicorp/vsphere
 ansibleProvisioner: github.com/hashicorp/ansible
-ansibleProvisionerMinVersion: 1.1.1
 ipSettleTimeout: 20s
 bootWait: 5s
 cpu: 8
@@ -17,8 +20,6 @@ rebootBeforeAnsible: false
 # UBUNTU22
 ubuntu22IsoUrl: https://releases.ubuntu.com/jammy/ubuntu-22.04.3-live-server-amd64.iso
 ubuntu22IsoChecksum: a4acfda10b18da50e2ec50ccaf860d7f20b389df8765611142305c0e911d16fd
-ubuntu22PackerMinVersion: 1.10.1
-ubuntu22PackerVMwarePluginMinVersion: 1.2.4
 ubuntu22DiskSize: 15360
 ubuntu22networkCard: vmxnet3
 ubuntu22User: ubuntu
@@ -28,8 +29,6 @@ ubuntu22ShellProvisioner: "sudo apt-get -y update; sudo apt-get -y upgrade; sudo
 # UBUNTU23
 ubuntu23IsoUrl: https://releases.ubuntu.com/lunar/ubuntu-23.04-live-server-amd64.iso
 ubuntu23IsoChecksum: c7cda48494a6d7d9665964388a3fc9c824b3bef0c9ea3818a1be982bc80d346b
-ubuntu23PackerMinVersion: 1.10.1
-ubuntu23PackerVMwarePluginMinVersion: 1.2.4
 ubuntu23DiskSize: 15360
 ubuntu23networkCard: vmxnet3
 ubuntu23User: ubuntu

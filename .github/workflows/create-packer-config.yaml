@@ -76,7 +76,7 @@ jobs:
           --template packer/template/${{ inputs.os-version }}-${{ inputs.cloud }}.pkr.tpl.hcl \
           --defaults packer/environments/${{ inputs.lab }}-${{ inputs.cloud }}.yaml \
           --brackets square \
-          --values "packerConfigMountPath=., ansiblePlayMountPath=., ansibleOsProvioning=${{ inputs.ansible-provisioning }}, osVersion=${{ inputs.os-version }}" \
+          --values "packerVersion=${{ inputs.packer-version }}, packerConfigMountPath=., ansiblePlayMountPath=., ansibleOsProvioning=${{ inputs.ansible-provisioning }}, osVersion=${{ inputs.os-version }}" \
           --destination ${{ env.WORKING_DIR }}//${{ inputs.os-version }}-${{ inputs.ansible-provisioning }}.pkr.hcl \
           --output file
 

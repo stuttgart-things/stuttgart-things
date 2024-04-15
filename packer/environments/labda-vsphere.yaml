@@ -1,9 +1,12 @@
 ---
 # GLOBAL
+packerVersion: 1.10.0
+vmWwarePluginMinVersion: 1.2.7
+ansibleProvisionerMinVersion: 1.1.1
+
 ipWaitTimeout: 10m
 vmWareProvider: github.com/hashicorp/vsphere
 ansibleProvisioner: github.com/hashicorp/ansible
-ansibleProvisionerMinVersion: 1.1.1
 ipSettleTimeout: 20s
 bootWait: 5s
 ubuntu23IsoUrl: https://releases.ubuntu.com/lunar/ubuntu-23.04-live-server-amd64.iso
@@ -16,8 +19,6 @@ sshTimeout: 20m
 sshHandshakeAttempts: 900
 
 # UBUNTU23
-ubuntu23PackerMinVersion: 1.10.0
-ubuntu23PackerVMwarePluginMinVersion: 1.2.3
 ubuntu23DiskSize: 15360
 ubuntu23networkCard: vmxnet3
 ubuntu23User: ubuntu
@@ -28,8 +29,6 @@ gateway: 10.100.136.254
 nameserver: 10.100.101.5
 
 # ROCKY9
-rocky9PackerMinVersion: 1.8.6
-rocky9PackerVMwarePluginMinVersion: 1.0.7
 rocky9tmpSSHUser: root
 rocky9tmpSSHPassword: ch0coLate
 rocky9IsoUrl: https://download.rockylinux.org/pub/rocky/9/isos/x86_64/Rocky-9.2-x86_64-boot.iso
