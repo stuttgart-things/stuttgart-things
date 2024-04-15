@@ -66,20 +66,3 @@ jobs:
               repo: context.repo.repo,
               name: ["test"]
             })
-      - name: Checkout code
-        id: checkout
-        uses: actions/checkout@v4.1.1
-        with:
-          ref: main
-
-      - name: Create Pull Request for arc runner config
-        id: pr
-        uses: peter-evans/create-pull-request@v6.0.2
-        with:
-          commit-message: '[CI][GITHUB] - Created arc runner config'
-          title: Created arc runner config
-          branch: test
-          delete-branch: true
-          token: ${{ steps.generate-token.outputs.token }}
-          labels: |
-            please-review2
