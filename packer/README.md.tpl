@@ -60,18 +60,25 @@ packer build -force \
 #go to the folder where main.tf is located  
 cd [[ .osVersion ]]-[[ .lab ]]-[[ .cloud ]]-[[ .ansibleOsProvisioning ]]/test-vm/
 
+#create vars file
 touch terraform.tfvars
 
+#initialize terraform
 terraform init
 
-#export Secrets and VM Template
+#export secrets and VM template name
 export TF_VAR_vsphere_user=<CLOUD_USERNAME>
 export TF_VAR_vsphere_password=<CLOUD_PASSWORD>
 export TF_VAR_vm_ssh_user=<SSH_USERNAME>
 export TF_VAR_vm_ssh_password=<SSH_PASSWORD>
 export TF_VAR_vsphere_vm_template=<CLOUD_VM_TEMPLATE>
 
-terraform apply
+#deploy infrastructure
+terraform apply -auto-approve
 
 #after the apply process check the ip-address and connect to the vm
+ssh <SSH_USERNAME>@<IP>
+
+#destroy the project
+terraform destroy -auto-approve
 ```
