@@ -54,6 +54,7 @@ templateCreator: Patrick Hermann (patrick.hermann@sva.de)\n/Christian Mueller (c
 diskThinProvisioned: true
 
 # CLOUD
+lab: labul
 cloud: vsphere
 cloudUsername: ref+vault://cloud/vsphere/username
 cloudPassword: ref+vault://cloud/vsphere/password
@@ -63,3 +64,9 @@ datastore: /LabUL/datastore/UL-ESX-SAS-01
 folder: /stuttgart-things/packer
 host: /LabUL/host/Cluster-V6.5/10.31.101.41
 network: /LabUL/network/LAB-10.31.102
+
+# TEST VM
+testVmModuleSource: github.com/stuttgart-things/vsphere-vm?ref=v1.7.5-2.7.0
+testVmCount: 1
+testVmDiskSize: 40
+testVmRam: 8192
