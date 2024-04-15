@@ -53,18 +53,17 @@ jobs:
             :wave: successful build of vm template: ubuntu23-vsphere-base-os
 
 
-
-      # - name: Add please-review label on command in issue comment
-      #   uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
-      #   with:
-      #     github-token: ${{ steps.generate-token.outputs.token }}
-      #     script: |
-      #       await github.rest.issues.addLabels({
-      #         issue_number: context.issue.number,
-      #         owner: context.repo.owner,
-      #         repo: context.repo.repo,
-      #         labels: ["please-review2"]
-      #       })
+      - name: Add please-review label on command in issue comment
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+        with:
+          github-token: ${{ steps.generate-token.outputs.token }}
+          script: |
+            await github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ["please-review2"]
+            })
 
       - name: Remove label
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
@@ -77,3 +76,13 @@ jobs:
               repo: context.repo.repo,
               name: ["test"]
             })
+
+      - name: Set Build Details
+        id: reopen
+        run: |
+          git config --global --add safe.directory /__w/stuttgart-things/stuttgart-things
+          gh pr close ${{ github.event.pull_request.number }}
+          gh pr reopen ${{ github.event.pull_request.number }}
+          gh pr list
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
