@@ -74,6 +74,76 @@ spec:
                     - resourcePool
                     - network
                     - template
+                ansible:
+                  type: object
+                  properties:
+                    pipelineNamespace:
+                      type: string
+                      default: tektoncd
+                      description: Namespace of pipelineRun resource
+                    workingImage:
+                      type: string
+                      default: eu.gcr.io/stuttgart-things/sthings-ansible:9.1.0
+                      description: Name of pipelineRun resource
+                    vaultSecretName:
+                      type: string
+                      default: vault
+                      description: Name of vault secret
+                    gitRepoUrl:
+                      type: string
+                      default: https://github.com/stuttgart-things/stuttgart-things.git
+                      description: Git repo url
+                    gitRevision:
+                      type: string
+                      default: main
+                      description: Git revision
+                    ansibleVarsFile:
+                      type: array
+                      description: Ansible vars file as a list
+                      items:
+                        type: string
+                      default:
+                        - "manage_filesystem+-true"
+                        - "update_packages+-true"
+                        - "install_requirements+-true"
+                        - "install_motd+-true"
+                        - "username+-sthings"
+                        - "lvm_home_sizing+-'15%'"
+                        - "lvm_root_sizing+-'35%'"
+                        - "lvm_var_sizing+-'50%'"
+                        - "send_to_msteams+-true"
+                        - "reboot_all+-false"
+                    inventory:
+                      type: array
+                      description: Ansible inventory as a list
+                      items:
+                        type: string
+                      default:
+                        - "initial_master_node+[\"sandiego.labul.sva.de\"]"
+                        - "additional_master_nodes+[\"\"]"
+                    roles:
+                      type: array
+                      description: Ansible roles
+                      items:
+                        type: string
+                      default:
+                        - "https://github.com/stuttgart-things/install-requirements.git"
+                        - "https://github.com/stuttgart-things/manage-filesystem.git"
+                        - "https://github.com/stuttgart-things/install-configure-vault.git"
+                    playbooks:
+                      type: array
+                      description: Ansible playbooks
+                      items:
+                        type: string
+                      default:
+                        - "ansible/playbooks/prepare-env.yaml"
+                        - "ansible/playbooks/base-os.yaml"
+                    k8sProviderRef:
+                      type: string
+                      default: kubernetes-incluster
+                      description: kubernetes provider
+                  required:
+                    - k8sProviderRef
                 tfvars:
                   type: object
                   properties:

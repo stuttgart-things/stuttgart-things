@@ -38,6 +38,8 @@ spec:
     bootstrap: '["echo STUTTGART-THINGS"]'
     annotation: VSPHERE-VM BUILD w/ CROSSPLANE FOR STUTTGART-THINGS
     unverifiedSsl: "true"
+  ansible:
+    k8sProviderRef: kubernetes-incluster
   tfvars:
     secretName: vsphere-tfvars
     secretNamespace: crossplane-system

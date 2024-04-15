@@ -214,10 +214,10 @@ spec:
               kind: AnsibleRun
               metadata:
                 annotations:
-                  inventory: "losangeles16.tiab.labda.sva.de"
+                  inventory: "host.domain"
                 namespace: crossplane-system
               spec:
-                pipelineRunName: baseos-losangeles16
+                pipelineRunName: baseos-host
                 inventory:
                   - "all+[\"losangeles16.tiab.labda.sva.de\"]"
                 playbooks:
@@ -257,6 +257,31 @@ spec:
               string:
                 type: Format
                 fmt: 'ansible-%s'
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.ansible.k8sProviderRef
+          toFieldPath: spec.forProvider.manifest.spec.providerRef.name
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.ansible.workingImage
+          toFieldPath: spec.forProvider.manifest.spec.workingImage
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.ansible.gitRepoUrl
+          toFieldPath: spec.forProvider.manifest.spec.gitRepoUrl
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.ansible.gitRevision
+          toFieldPath: spec.forProvider.manifest.spec.gitRevision
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.ansible.vaultSecretName
+          toFieldPath: spec.forProvider.manifest.spec.vaultSecretName
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.ansible.roles
+          toFieldPath: spec.forProvider.manifest.spec.roles
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.ansible.playbooks
+          toFieldPath: spec.forProvider.manifest.spec.playbooks
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.ansible.ansibleVarsFile
+          toFieldPath: spec.forProvider.manifest.spec.ansibleVarsFile
+
 
         # - type: CombineToComposite
         #   combine:
