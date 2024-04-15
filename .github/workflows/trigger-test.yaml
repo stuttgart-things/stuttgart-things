@@ -17,19 +17,16 @@ jobs:
       id-token: write
     runs-on: ghr-stuttgart-things-sthings-cicd
     steps:
-      - name: Set Build Details
-        id: set
-        run: |
-          echo "HELLO"
-
-      - name: Find Comment
+      - name: Find PR Comment
         uses: peter-evans/find-comment@v3
         id: fc
         with:
           issue-number: ${{ github.event.pull_request.number }}
-          body-includes: Hello
+          body-includes: successful
       - run: |
           echo ${{ steps.fc.outputs.comment-id }}
           echo ${{ steps.fc.outputs.comment-node-id }}
           echo ${{ steps.fc.outputs.comment-body }}
           echo ${{ steps.fc.outputs.comment-author }}
+          TEMPLATE=apk=$(echo ${{ steps.fc.outputs.comment-body }} | sed 's/.*\://')
+          echo §{TEMPLATE}

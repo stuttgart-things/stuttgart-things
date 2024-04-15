@@ -33,7 +33,7 @@ jobs:
         uses: thollander/actions-comment-pull-request@v2
         with:
           message: |
-            Hello world ! :wave:
+            :wave: successful build of vm template: ubuntu23-vsphere-base-os
 
       - name: Add please-review label on command in issue comment
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
@@ -56,15 +56,3 @@ jobs:
               repo: context.repo.repo,
               name: ["test"]
             })
-
-      - name: Find Comment
-        uses: peter-evans/find-comment@v3
-        id: fc
-        with:
-          issue-number: ${{ github.event.pull_request.number }}
-          body-includes: Hello
-      - run: |
-          echo ${{ steps.fc.outputs.comment-id }}
-          echo ${{ steps.fc.outputs.comment-node-id }}
-          echo ${{ steps.fc.outputs.comment-body }}
-          echo ${{ steps.fc.outputs.comment-author }}
