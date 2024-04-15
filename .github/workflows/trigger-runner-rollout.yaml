@@ -43,17 +43,17 @@ jobs:
           app_id: ${{ secrets.PULLREQUESTER_APP_ID }}
           private_key: ${{ secrets.PULLREQUESTER_APP_KEY }}
 
-      - name: Add please-review label on command in issue comment
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
-        with:
-          github-token: ${{ steps.generate-token.outputs.token }}
-          script: |
-            await github.rest.issues.addLabels({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              labels: ["please-review2"]
-            })
+      # - name: Add please-review label on command in issue comment
+      #   uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+      #   with:
+      #     github-token: ${{ steps.generate-token.outputs.token }}
+      #     script: |
+      #       await github.rest.issues.addLabels({
+      #         issue_number: context.issue.number,
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #         labels: ["please-review2"]
+      #       })
 
       - name: Remove label
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
@@ -66,3 +66,15 @@ jobs:
               repo: context.repo.repo,
               name: ["test"]
             })
+
+      - name: Create Pull Request for arc runner config
+        id: pr
+        uses: peter-evans/create-pull-request@v6.0.2
+        with:
+          commit-message: '[CI][GITHUB] - Created arc runner config'
+          title: Created arc runner config
+          branch: test
+          delete-branch: true
+          token: ${{ steps.generate-token.outputs.token }}
+          labels: |
+            please-review2
