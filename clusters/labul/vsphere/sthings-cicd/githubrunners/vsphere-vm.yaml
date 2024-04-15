@@ -1,0 +1,9 @@
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: GithubRunner
+metadata:
+  name: vsphere-vm # e.g. install-requirements
+  namespace: crossplane-system # e.g. crossplane-system
+spec:
+  repository: vsphere-vm # e.g. install-requirements
+  clusterConfig: cicd # e.g. cicd
