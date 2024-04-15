@@ -215,6 +215,9 @@ spec:
               metadata:
                 annotations:
                   inventory: "host.domain"
+                  test:
+                    - bla
+                    - blabla
                 namespace: crossplane-system
               spec:
                 pipelineRunName: baseos-host
@@ -281,7 +284,9 @@ spec:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.ansible.ansibleVarsFile
           toFieldPath: spec.forProvider.manifest.spec.ansibleVarsFile
-
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.ansible.pipelineNamespace
+          toFieldPath: spec.forProvider.manifest.spec.pipelineNamespace
 
         # - type: CombineToComposite
         #   combine:
@@ -313,3 +318,7 @@ spec:
               string:
                 type: TrimSuffix
                 trim: "]"
+            - type: string
+              string:
+                type: Format
+                fmt: 'all+[\"%s\"]'

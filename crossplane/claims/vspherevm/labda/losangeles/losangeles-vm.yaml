@@ -40,6 +40,28 @@ spec:
     unverifiedSsl: "true"
   ansible:
     k8sProviderRef: kubernetes-incluster
+    vaultSecretName: vault
+    pipelineNamespace: tektoncd
+    gitRepoUrl: https://github.com/stuttgart-things/stuttgart-things.git
+    gitRevision: main
+    playbooks:
+      - "ansible/playbooks/prepare-env.yaml"
+      - "ansible/playbooks/base-os.yaml"
+    ansibleVarsFile:
+      - "manage_filesystem+-true"
+      - "update_packages+-true"
+      - "install_requirements+-true"
+      - "install_motd+-true"
+      - "username+-sthings"
+      - "lvm_home_sizing+-'15%'"
+      - "lvm_root_sizing+-'35%'"
+      - "lvm_var_sizing+-'50%'"
+      - "send_to_msteams+-true"
+      - "reboot_all+-false"
+    roles:
+      - "https://github.com/stuttgart-things/install-requirements.git"
+      - "https://github.com/stuttgart-things/manage-filesystem.git"
+      - "https://github.com/stuttgart-things/install-configure-vault.git"
   tfvars:
     secretName: vsphere-tfvars
     secretNamespace: crossplane-system
