@@ -1,6 +1,6 @@
 # stuttgart-things/packer
 
-this file was created at: 2024-04-12 07:19
+this file was created at: 2024-04-15 06:31
 
 ## INSTALL OS-REQUIREMENTS
 
@@ -43,7 +43,7 @@ export PACKER_LOG=1
 # IF BUILD WITH FIXED IP IN CONFIG MAYBE NEEDED OR EDIT KNOWN HOSTS FILE
 rm -rf ~/.ssh/known_hosts
 
-packer init ubuntu23.pkr.hcl
+packer init packer/builds/ubuntu23-labul-vsphere-rke2-node//ubuntu23-rke2-node.pkr.hcl
 
 DATE=$(echo $(date +'%Y-%m-%d'))
 
@@ -51,5 +51,5 @@ packer build -force \
 -var "name=${DATE}-ubuntu23-labul-vsphere" \
 -var "password=<PASSWORD>" \
 -var "password=<PASSWORD>" \
-ubuntu23.pkr.hcl
+packer/builds/ubuntu23-labul-vsphere-rke2-node//ubuntu23-rke2-node.pkr.hcl
 ```
