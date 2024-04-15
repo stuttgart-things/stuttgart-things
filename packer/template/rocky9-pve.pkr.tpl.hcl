@@ -72,7 +72,7 @@ build {
     ansible_env_vars       = ["ANSIBLE_REMOTE_TEMP=/tmp", "ANSIBLE_HOST_KEY_CHECKING=False", "ANSIBLE_SSH_ARGS=-oForwardAgent=yes -oControlMaster=auto -oControlPersist=60s -oHostKeyAlgorithms=+ssh-rsa   -oPubkeyAcceptedKeyTypes=+ssh-rsa", "ANSIBLE_NOCOLOR=True"]
     extra_arguments        = ["--scp-extra-args", "'-O'", "-e ansible_ssh_pass=[[ .rocky9Password ]]"]
     keep_inventory_file    = "true"
-    playbook_file          = "[[ .ansiblePlayMountPath ]]/[[ .ansibleOsProvioning ]].yaml"
+    playbook_file          = "[[ .ansiblePlayMountPath ]]/[[ .ansibleOsProvisioning ]].yaml"
     user                   = "[[ .rocky9User ]]"
     galaxy_file            = "[[ .ansiblePlayMountPath ]]/requirements.yaml"
     galaxy_force_install   = "true"

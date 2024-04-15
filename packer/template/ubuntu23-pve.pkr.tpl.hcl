@@ -70,7 +70,7 @@ build {
     ansible_env_vars       = ["ANSIBLE_REMOTE_TEMP=/tmp", "ANSIBLE_HOST_KEY_CHECKING=False", "ANSIBLE_SSH_ARGS=-oForwardAgent=yes -oControlMaster=auto -oControlPersist=60s -oHostKeyAlgorithms=+ssh-rsa   -oPubkeyAcceptedKeyTypes=+ssh-rsa", "ANSIBLE_NOCOLOR=True"]
     extra_arguments        = ["--scp-extra-args", "'-O'"]
     keep_inventory_file    = "true"
-    playbook_file          = "[[ .ansiblePlayMountPath ]]/[[ .ansibleOsProvioning ]].yaml"
+    playbook_file          = "[[ .ansiblePlayMountPath ]]/[[ .ansibleOsProvisioning ]].yaml"
     user                   = "[[ .ubuntu23User ]]"
   }
 

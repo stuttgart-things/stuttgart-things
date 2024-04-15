@@ -130,7 +130,7 @@ spec:
         --brackets square \
         --defaults ./$(params.DEFAULT_ENVIRONMENT_PATH) \
         --destination ./$(params.OS_VERSION)/$(params.OS_VERSION).pkr.hcl \
-        --values "packerConfigMountPath=$(workspaces.source.path)/$(params.SUB_DIRECTORY)/$(params.OS_VERSION), ansiblePlayMountPath=$(workspaces.source.path)/$(params.SUB_DIRECTORY)/$(params.OS_VERSION), ansibleOsProvioning=$(params.ANSIBLE_PROVISIONING), vmTemplateName=$(params.VM_TEMPLATE_NAME)"
+        --values "packerConfigMountPath=$(workspaces.source.path)/$(params.SUB_DIRECTORY)/$(params.OS_VERSION), ansiblePlayMountPath=$(workspaces.source.path)/$(params.SUB_DIRECTORY)/$(params.OS_VERSION), ansibleOsProvisioning=$(params.ANSIBLE_PROVISIONING), vmTemplateName=$(params.VM_TEMPLATE_NAME)"
 
         echo "OUTPUT RENDERED VMTEMPLATE"
         cat ./$(params.OS_VERSION)/$(params.OS_VERSION).pkr.hcl

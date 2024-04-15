@@ -1,5 +1,5 @@
 # ANSIBLE
-ansibleOsProvioning: baseos-setup
+ansibleOsProvisioning: baseos-setup
 configureClusterNode: false
 installCloudInit: false
 createRkeUser: false

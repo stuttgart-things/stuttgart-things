@@ -78,7 +78,7 @@ jobs:
           --template packer/template/${{ inputs.os-version }}-${{ inputs.cloud }}.pkr.tpl.hcl \
           --defaults packer/environments/${{ inputs.lab }}-${{ inputs.cloud }}.yaml \
           --brackets square \
-          --values "packerVersion=${{ inputs.packer-version }}, packerConfigMountPath=., ansiblePlayMountPath=., ansibleOsProvioning=${{ inputs.ansible-provisioning }}, osVersion=${{ inputs.os-version }}" \
+          --values "packerVersion=${{ inputs.packer-version }}, packerConfigMountPath=., ansiblePlayMountPath=., ansibleOsProvisioning=${{ inputs.ansible-provisioning }}, osVersion=${{ inputs.os-version }}" \
           --destination ${{ env.WORKING_DIR }}//${{ inputs.os-version }}-${{ inputs.ansible-provisioning }}.pkr.hcl \
           --output file
 
@@ -123,7 +123,7 @@ jobs:
           --output file \
           --brackets square \
           --defaults packer/environments/${{ inputs.lab }}-${{ inputs.cloud }}.yaml \
-          --values osVersion="${{ inputs.os-version }}, lab=${{ inputs.lab }}, cloud=${{ inputs.cloud }}" \
+          --values osVersion="${{ inputs.os-version }}, lab=${{ inputs.lab }}, cloud=${{ inputs.cloud }}, ansibleOsProvisioning=${{ inputs.ansible-provisioning }}" \
           --destination ${{ env.WORKING_DIR }}/test-vm/main.tf
 
       - name: Render Readme template w/ machineShop
@@ -135,7 +135,7 @@ jobs:
           --template packer/README.md.tpl \
           --output file \
           --brackets square \
-          --values "packerVersion=${{ inputs.packer-version }}, osVersion=${{ inputs.os-version }}, lab=${{ inputs.lab }}, cloud=${{ inputs.cloud }}, hclConfig=${{ env.WORKING_DIR }}//${{ inputs.os-version }}-${{ inputs.ansible-provisioning }}, date=${DATE}" \
+          --values "packerVersion=${{ inputs.packer-version }}, osVersion=${{ inputs.os-version }}, lab=${{ inputs.lab }}, cloud=${{ inputs.cloud }}, ansibleOsProvisioning=${{ inputs.ansible-provisioning }}, hclConfig=${{ env.WORKING_DIR }}//${{ inputs.os-version }}-${{ inputs.ansible-provisioning }}, date=${DATE}" \
           --destination ${{ env.WORKING_DIR }}/README.md
 
       - name: Get token for creating pull request
