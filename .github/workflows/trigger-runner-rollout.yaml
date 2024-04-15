@@ -8,6 +8,7 @@ on:
 jobs:
   Get-Runner-Config:
     if: contains(github.event.pull_request.labels.*.name, 'test')
+    environment: k8s
     container:
       image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2
     permissions:
