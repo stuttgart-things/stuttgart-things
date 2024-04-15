@@ -73,6 +73,15 @@ spec:
               output "ip" {
                 value = [module.vsphere-vm-ansible.ip]
               }
+
+              locals {
+                timestamp = "${timestamp()}"
+                timestamp_sanitized = "${replace("${local.timestamp}", "/[-| |T|Z|:]/", "")}"
+              }
+
+              output "timestamp" {
+                value = "${local.timestamp_sanitized}"
+              }
             vars:
               - key: vm_count
                 type: integer
@@ -122,6 +131,11 @@ spec:
         - type: ToCompositeFieldPath
           fromFieldPath: status.atProvider.outputs.ip
           toFieldPath: status.share.vmIP
+          policy:
+            fromFieldPath: Required
+        - type: ToCompositeFieldPath
+          fromFieldPath: status.atProvider.outputs.timestamp
+          toFieldPath: status.share.timestampApply
           policy:
             fromFieldPath: Required
         - type: FromCompositeFieldPath
@@ -187,57 +201,7 @@ spec:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.providerRef.name
           toFieldPath: spec.providerConfigRef.name
-    - name: test-configmap
-      base:
-        apiVersion: kubernetes.crossplane.io/v1alpha2
-        kind: Object
-        metadata:
-          name: sample-namespace
-        spec:
-          forProvider:
-            manifest:
-              apiVersion: v1
-              kind: ConfigMap
-              metadata:
-                # name: demo-config
-                namespace: crossplane-system
-                annotations:
-                  imageregistry: "https://hub.docker.com/"
-              data:
-                database_host: "192.168.0.1"
-                debug_mode: "1"
-          providerConfigRef:
-            name: kubernetes-incluster
-      patches:
-        - fromFieldPath: status.share.vmIP
-          toFieldPath: spec.forProvider.manifest.metadata.annotations.imageregistry
-          policy:
-            fromFieldPath: Required
-          transforms:
-            - type: string
-              string:
-                type: Join
-                join:
-                  separator: ","
-            - type: string
-              string:
-                type: TrimPrefix
-                trim: "["
-            - type: string
-              string:
-                type: TrimSuffix
-                trim: "]"
-        - fromFieldPath: status.share.vmIP
-          toFieldPath: spec.forProvider.manifest.data.database_host
-          policy:
-            fromFieldPath: Required
-          transforms:
-            - type: string
-              string:
-                type: Join
-                join:
-                  separator: ","
-    - name: test-configmap
+    - name: tekton-ansiblerun
       base:
         apiVersion: kubernetes.crossplane.io/v1alpha2
         kind: Object
@@ -249,9 +213,8 @@ spec:
               apiVersion: resources.stuttgart-things.com/v1alpha1
               kind: AnsibleRun
               metadata:
-                name: baseos-losangeles16
                 annotations:
-                  imageregistry: "https://hub.docker.com/"
+                  inventory: "losangeles16.tiab.labda.sva.de"
                 namespace: crossplane-system
               spec:
                 pipelineRunName: baseos-losangeles16
@@ -284,62 +247,26 @@ spec:
                   - "https://github.com/stuttgart-things/install-configure-vault.git"
           providerConfigRef:
             name: kubernetes-incluster
-
-
-    # - name: ansible-run
-    #   base:
-    #     apiVersion: kubernetes.crossplane.io/v1alpha2
-    #     kind: Object
-    #     metadata:
-    #       name: ansible-run
-    #     spec:
-    #       providerConfigRef:
-    #         name: kubernetes-incluster
-    #       forProvider:
-    #         manifest:
-    #           apiVersion: resources.stuttgart-things.com/v1alpha1
-    #           kind: AnsibleRun
-    #           metadata:
-    #             name: baseos-losangeles
-    #             namespace: crossplane-system
-    #           spec:
-    #             pipelineRunName: baseos-losangeles
-    #             inventory:
-    #               - "all+[\"losangeles7.tiab.labda.sva.de\"]"
-    #             playbooks:
-    #               - "ansible/playbooks/prepare-env.yaml"
-    #               - "ansible/playbooks/base-os.yaml"
-    #             ansibleVarsFile:
-    #               - "manage_filesystem+-true"
-    #               - "update_packages+-true"
-    #               - "hello+-true"
-    #               - "install_requirements+-true"
-    #               - "install_motd+-true"
-    #               - "username+-sthings"
-    #               - "lvm_home_sizing+-'15%'"
-    #               - "lvm_root_sizing+-'35%'"
-    #               - "lvm_var_sizing+-'50%'"
-    #               - "send_to_msteams+-true"
-    #               - "reboot_all+-false"
-    #             gitRepoUrl: https://github.com/stuttgart-things/stuttgart-things.git
-    #             gitRevision: main
-    #             providerRef:
-    #               name: kubernetes-incluster
-    #             vaultSecretName: vault
-    #             pipelineNamespace: tektoncd
-    #             workingImage: eu.gcr.io/stuttgart-things/sthings-ansible:9.3.0
-    #             roles:
-    #               - "https://github.com/stuttgart-things/install-requirements.git"
-    #               - "https://github.com/stuttgart-things/manage-filesystem.git"
-    #               - "https://github.com/stuttgart-things/install-configure-vault.git"
-    #   patches:
-    #     - fromFieldPath: status.share.vmIP
-    #       toFieldPath: spec.forProvider.manifest.spec.ansibleVarsFile[2].value
-    #       policy:
-    #         fromFieldPath: Required
-    #       transforms:
-    #         - type: string
-    #           string:
-    #             type: Join
-    #             join:
-    #               separator: ","
+      patches:
+        - fromFieldPath: status.share.timestampApply
+          toFieldPath: spec.forProvider.manifest.spec.pipelineRunName
+          policy:
+            fromFieldPath: Required
+        - fromFieldPath: status.share.vmIP
+          toFieldPath: spec.forProvider.manifest.metadata.annotations.inventory
+          policy:
+            fromFieldPath: Required
+          transforms:
+            - type: string
+              string:
+                type: Join
+                join:
+                  separator: ","
+            - type: string
+              string:
+                type: TrimPrefix
+                trim: "["
+            - type: string
+              string:
+                type: TrimSuffix
+                trim: "]"

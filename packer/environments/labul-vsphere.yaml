@@ -4,7 +4,7 @@ packerVersion: 1.10.0
 vmWwarePluginMinVersion: 1.2.7
 ansibleProvisionerMinVersion: 1.1.1
 
-ipWaitTimeout: 30m
+ipWaitTimeout: 40m
 vmWareProvider: github.com/hashicorp/vsphere
 ansibleProvisioner: github.com/hashicorp/ansible
 ipSettleTimeout: 20s
