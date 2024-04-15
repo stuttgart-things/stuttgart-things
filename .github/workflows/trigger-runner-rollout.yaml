@@ -35,9 +35,17 @@ jobs:
           message: |
             :wave: successful build of vm template: ubuntu23-vsphere-base-os
 
+      - name: Get token for creating pull request
+        uses: tibdex/github-app-token@v1
+        id: generate-token
+        with:
+          app_id: ${{ secrets.PULLREQUESTER_APP_ID }}
+          private_key: ${{ secrets.PULLREQUESTER_APP_KEY }}
+
       - name: Add please-review label on command in issue comment
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
         with:
+          github-token: ${{ steps.generate-token.outputs.token }}
           script: |
             await github.rest.issues.addLabels({
               issue_number: context.issue.number,
@@ -49,6 +57,7 @@ jobs:
       - name: Remove label
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
         with:
+          github-token: ${{ steps.generate-token.outputs.token }}
           script: |
             await github.rest.issues.removeLabel({
               issue_number: context.issue.number,

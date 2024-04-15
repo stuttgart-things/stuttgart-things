@@ -75,7 +75,6 @@ jobs:
           message: |
             :wave: successful build of vm template: ${{ needs.Get-Packer-Config.outputs.os-version }}-${{ needs.Get-Packer-Config.outputs.build-date }}-${{ needs.Get-Packer-Config.outputs.provisioning}}
 
-
       - name: Get token for creating pull request
         uses: tibdex/github-app-token@v1
         id: generate-token
