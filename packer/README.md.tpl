@@ -58,7 +58,7 @@ packer build -force \
 
 ```bash
 #go to the folder where main.tf is located  
-cd [[ .osVersion ]]-[[ .lab ]]-[[ .cloud ]]-${{ inputs.ansible-provisioning }}/test-vm/
+cd [[ .osVersion ]]-[[ .lab ]]-[[ .cloud ]]-[[ .ansible-provisioning ]]/test-vm/
 
 terraform init
 
