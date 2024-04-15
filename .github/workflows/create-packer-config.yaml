@@ -123,7 +123,7 @@ jobs:
           --output file \
           --brackets square \
           --defaults packer/environments/${{ inputs.lab }}-${{ inputs.cloud }}.yaml \
-          --values osVersion=${{ inputs.os-version }}, lab=${{ inputs.lab }}, cloud=${{ inputs.cloud }} \
+          --values osVersion="${{ inputs.os-version }}, lab=${{ inputs.lab }}, cloud=${{ inputs.cloud }}" \
           --destination ${{ env.WORKING_DIR }}/test-vm/main.tf
 
       - name: Render Readme template w/ machineShop
