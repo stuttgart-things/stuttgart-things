@@ -227,10 +227,6 @@ spec:
               string:
                 type: TrimSuffix
                 trim: "]"
-          # transforms:
-          #   - type: convert
-          #     convert:
-          #       toType: string
         - fromFieldPath: status.share.vmIP
           toFieldPath: spec.forProvider.manifest.data.database_host
           policy:
