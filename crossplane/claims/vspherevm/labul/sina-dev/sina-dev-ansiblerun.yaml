@@ -2,12 +2,12 @@
 apiVersion: resources.stuttgart-things.com/v1alpha1
 kind: AnsibleRun
 metadata:
-  name: baseos-sina-dev
+  name: baseos-losangeles16
   namespace: crossplane-system
 spec:
-  pipelineRunName: baseos-sina-dev
+  pipelineRunName: baseos-losangeles16
   inventory:
-    - "all+[\"sina-dev.labul.sva.de\"]"
+    - "all+[\"losangeles16.tiab.labda.sva.de\"]"
   playbooks:
     - "ansible/playbooks/prepare-env.yaml"
     - "ansible/playbooks/base-os.yaml"

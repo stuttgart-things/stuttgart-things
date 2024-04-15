@@ -37,6 +37,7 @@ rocky9ShellCmd: "dnf update -y; dnf install -y python3-dnf cloud-utils-growpart;
 rocky9NetworkInstall: https://download.rockylinux.org/pub/rocky/9/BaseOS/x86_64/os/
 rocky9appStreamRepoUrl: https://download.rockylinux.org/pub/rocky/9/AppStream/x86_64/os/
 templateCreator: Patrick Hermann (patrick.hermann@sva.de)\n/Christian Mueller (christian.mueller@sva.de)\n
+diskThinProvisioned: true
 
 # CLOUD
 cloud: vsphere
