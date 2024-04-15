@@ -1,0 +1,37 @@
+---
+name: Ansible lint Workflows
+on:
+  push:
+    branches:
+    - main
+    - feature/*
+    - fix/*
+  pull_request:
+    branches:
+    - main
+    - feature/*
+    - fix/*
+  workflow_dispatch:
+  
+jobs:
+  yaml-lint:
+    name: Lint yaml files
+    uses: stuttgart-things/stuttgart-things/.github/workflows/lint-yaml.yaml@yaml-lint-1
+    with:
+      runs-on: [[ .runsOn ]]
+      environment-name: [[ .environmentName ]]
+      continue-error: true
+      yamllint-version: 1
+      lintprofile-path: .yamllint
+      artifact-name: yaml-lint
+
+  ansible-lint:
+    name: Lint ansible code
+    uses: stuttgart-things/stuttgart-things/.github/workflows/lint-ansible.yaml@main #ansible-lint-24.2.1
+    with:
+      runs-on: [[ .runsOn ]]
+      environment-name: [[ .environmentName ]]
+      continue-error: true
+      ansible-image: eu.gcr.io/stuttgart-things/sthings-ansible:9.3.0-1
+      playbook: tests/test.yml
+    needs: yaml-lint

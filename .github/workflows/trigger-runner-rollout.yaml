@@ -1,0 +1,58 @@
+name: Rollout GitHub Runner
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+
+jobs:
+  Get-Runner-Config:
+    if: contains(github.event.pull_request.labels.*.name, 'test')
+    container:
+      image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2
+    permissions:
+      contents: write
+      pull-requests: write
+      repository-projects: write
+      id-token: write
+    runs-on: ghr-stuttgart-things-sthings-cicd
+    steps:
+      - name: Set Build Details
+        id: set
+        run: |
+          echo "HELLO"
+
+      - name: Comment PR with execution number
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            _(execution **${{ github.run_id }}** / attempt **${{ github.run_attempt }}**)_
+          comment_tag: execution
+
+      - name: Comment PR
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            Hello world ! :wave:
+
+      - name: Add please-review label on command in issue comment
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+        with:
+          script: |
+            await github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ["please-review2"]
+            })
+
+      - name: Remove label
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+        with:
+          script: |
+            await github.rest.issues.removeLabel({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: ["test"]
+            })
