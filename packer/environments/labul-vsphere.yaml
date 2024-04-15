@@ -56,8 +56,6 @@ diskThinProvisioned: true
 # CLOUD
 lab: labul
 cloud: vsphere
-cloudUsername: ref+vault://cloud/vsphere/username
-cloudPassword: ref+vault://cloud/vsphere/password
 vcenterServer: 10.31.101.51
 cluster: /LabUL/host/Cluster-V6.5
 datastore: /LabUL/datastore/UL-ESX-SAS-01
