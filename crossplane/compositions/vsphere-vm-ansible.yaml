@@ -248,10 +248,19 @@ spec:
           providerConfigRef:
             name: kubernetes-incluster
       patches:
-        - fromFieldPath: status.share.timestampApply
+        # - fromFieldPath: status.share.timestampApply
+        #   toFieldPath: spec.forProvider.manifest.spec.pipelineRunName
+        #   policy:
+        #     fromFieldPath: Required
+        - type: CombineToComposite
+          combine:
+            variables:
+              - fromFieldPath: metadata.name
+              - fromFieldPath: status.share.timestampApply
+            strategy: string
+            string:
+              fmt: "%s-%s"
           toFieldPath: spec.forProvider.manifest.spec.pipelineRunName
-          policy:
-            fromFieldPath: Required
         - fromFieldPath: status.share.vmIP
           toFieldPath: spec.forProvider.manifest.metadata.annotations.inventory
           policy:
