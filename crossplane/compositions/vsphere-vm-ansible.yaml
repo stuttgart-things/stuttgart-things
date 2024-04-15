@@ -80,7 +80,7 @@ spec:
               }
 
               output "timestamp" {
-                value = "${local.timestamp_sanitized}"
+                value = "${var.vsphere_vm_name}-${local.timestamp_sanitized}"
               }
             vars:
               - key: vm_count
@@ -248,19 +248,28 @@ spec:
           providerConfigRef:
             name: kubernetes-incluster
       patches:
-        # - fromFieldPath: status.share.timestampApply
+        - fromFieldPath: status.share.timestampApply
+          toFieldPath: spec.forProvider.manifest.spec.pipelineRunName
+          policy:
+            fromFieldPath: Required
+          transforms:
+            - type: string
+              string:
+                type: Format
+                fmt: 'ansible-%s'
+
+        # - type: CombineToComposite
+        #   combine:
+        #     variables:
+        #       - fromFieldPath: metadata.name
+        #       - fromFieldPath: status.share.timestampApply
+        #     strategy: string
+        #     string:
+        #       fmt: "%s-%s"
         #   toFieldPath: spec.forProvider.manifest.spec.pipelineRunName
         #   policy:
         #     fromFieldPath: Required
-        - type: CombineToComposite
-          combine:
-            variables:
-              - fromFieldPath: metadata.name
-              - fromFieldPath: status.share.timestampApply
-            strategy: string
-            string:
-              fmt: "%s-%s"
-          toFieldPath: spec.forProvider.manifest.spec.pipelineRunName
+
         - fromFieldPath: status.share.vmIP
           toFieldPath: spec.forProvider.manifest.metadata.annotations.inventory
           policy:
