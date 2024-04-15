@@ -8,6 +8,7 @@ on:
         description: os version
         options:
           - ubuntu23
+          - rocky9
       cloud:
         type: choice
         description: cloud
