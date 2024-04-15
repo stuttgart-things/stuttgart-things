@@ -15,11 +15,18 @@ jobs:
       os-version: ${{ steps.set.outputs.OS_VERSION }}
       build-date: ${{ steps.set.outputs.BUILD_DATE }}
       provisioning: ${{ steps.set.outputs.PROVISIONING }}
-      gh-token: ${{ steps.generate-token.outputs.token }}
+      gh-token: ${{ steps.set.outputs.GH_TOKEN }}
     container:
       image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2
     runs-on: ghr-stuttgart-things-sthings-cicd
     steps:
+      - name: Get token for creating pull request
+        uses: tibdex/github-app-token@v1
+        id: generate-token
+        with:
+          app_id: ${{ secrets.PULLREQUESTER_APP_ID }}
+          private_key: ${{ secrets.PULLREQUESTER_APP_KEY }}
+
       - name: Set Build Details
         id: set
         run: |
@@ -28,13 +35,7 @@ jobs:
           echo "CLOUD=$(echo ${{ github.event.pull_request.head.ref }} | cut -d '-' -f 3)" >> "$GITHUB_OUTPUT"
           echo "BUILD_DATE=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
           echo "PROVISIONING=$(echo ${{ github.event.pull_request.head.ref }} | cut -d '-' -f 4)-$(echo ${{ github.event.pull_request.head.ref }} | cut -d '-' -f 5)" >> $GITHUB_OUTPUT
-
-      - name: Get token for creating pull request
-        uses: tibdex/github-app-token@v1
-        id: generate-token
-        with:
-          app_id: ${{ secrets.PULLREQUESTER_APP_ID }}
-          private_key: ${{ secrets.PULLREQUESTER_APP_KEY }}
+          echo "GH_TOKEN=$(echo ${{ steps.generate-token.outputs.token }})"  >> $GITHUB_OUTPUT
 
   Build-Packer-Template:
     needs: Get-Packer-Config
