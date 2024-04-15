@@ -306,13 +306,5 @@ spec:
               string:
                 type: Format
                 fmt: 'all+[\"%s\"]'
-        - fromFieldPath: status.share.vmIP
-          toFieldPath: spec.forProvider.manifest.spec.playbooks
-          # transforms:
-          #   - type: convert
-          #     convert:
-          #       toType: array
-          # policy:
-          #   fromFieldPath: Required
-
-          #       format: json
+        - fromFieldPath: spec.ansible.inventory
+          toFieldPath: spec.forProvider.manifest.spec.inventory

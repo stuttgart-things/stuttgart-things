@@ -56,3 +56,15 @@ jobs:
               repo: context.repo.repo,
               name: ["test"]
             })
+
+      - name: Find Comment
+        uses: peter-evans/find-comment@v3
+        id: fc
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body-includes: search string 1
+      - run: |
+          echo ${{ steps.fc.outputs.comment-id }}
+          echo ${{ steps.fc.outputs.comment-node-id }}
+          echo ${{ steps.fc.outputs.comment-body }}
+          echo ${{ steps.fc.outputs.comment-author }}

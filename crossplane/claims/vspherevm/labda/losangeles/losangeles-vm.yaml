@@ -39,6 +39,8 @@ spec:
     annotation: VSPHERE-VM BUILD w/ CROSSPLANE FOR STUTTGART-THINGS
     unverifiedSsl: "true"
   ansible:
+    inventory:
+      - "all+[\"losangeles.labul.sva.de\"]"
     k8sProviderRef: kubernetes-incluster
     vaultSecretName: vault
     pipelineNamespace: tektoncd
