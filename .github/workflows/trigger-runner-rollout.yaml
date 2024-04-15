@@ -10,7 +10,7 @@ jobs:
     if: contains(github.event.pull_request.labels.*.name, 'test')
     environment: k8s
     container:
-      image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2
+      image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2-1
     permissions:
       contents: write
       pull-requests: write
@@ -66,6 +66,9 @@ jobs:
               repo: context.repo.repo,
               name: ["test"]
             })
+      - name: Checkout code
+        id: checkout
+        uses: actions/checkout@v4.1.1
 
       - name: Create Pull Request for arc runner config
         id: pr
