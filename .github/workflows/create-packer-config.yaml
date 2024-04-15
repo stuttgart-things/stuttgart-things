@@ -64,6 +64,7 @@ jobs:
         run: |
           echo "WORKING_DIR=packer/builds/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}-${{ inputs.ansible-provisioning }}" >> $GITHUB_ENV
           mkdir -p packer/builds/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}-${{ inputs.ansible-provisioning }}
+          mkdir -p packer/builds/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}-${{ inputs.ansible-provisioning }}/test-vm
 
       - name: Create metadata
         id: createMetadata
@@ -112,6 +113,18 @@ jobs:
           --output file \
           --brackets square \
           --destination ${{ env.WORKING_DIR }}/requirements.yaml
+
+      - name: Render Terraform template w/ machineShop
+        id: renderTerraformTemplate
+        run: |
+          machineShop render \
+          --source local \
+          --template packer/template/${{ inputs.cloud }}-vm.tf.tpl.hcl \
+          --output file \
+          --brackets square \
+          --defaults packer/environments/${{ inputs.lab }}-${{ inputs.cloud }} \
+          --values osVersion=${{ inputs.os-version }}, lab=${{ inputs.lab }}, cloud=${{ inputs.cloud }} \
+          --destination ${{ env.WORKING_DIR }}/test-vm/main.tf
 
       - name: Render Readme template w/ machineShop
         id: renderReadMeTemplate
