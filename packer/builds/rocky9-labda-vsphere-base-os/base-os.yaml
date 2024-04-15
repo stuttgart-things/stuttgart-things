@@ -1,0 +1,135 @@
+---
+- name: Provision vm template during packer build w/ ansible
+  hosts: default
+  become: true
+
+  vars:
+    update_packages: true
+    install_requirements: true
+    install_motd: false
+    cloudinit: false
+    create_rke_user: false
+    update_os: true
+    install_docker: false
+    install_docker_compose: false
+    set_docker_proxy: false
+    template_creation_setup: false
+    configure_rke_node: false
+    create_user: true
+    admin_group: "{{ 'wheel' if ansible_os_family == 'RedHat' else 'sudo' }}"
+    reboot_prio_provisioning: false
+    send_to_msteams: true
+    vault_instances:
+      - https://vault.tiab.labda.sva.de:8200
+      - https://vault.labul.sva.de:8200
+      - https://vault-vsphere.labul.sva.de:8200
+      - https://vault-vsphere.tiab.labda.sva.de:8200
+      - https://vault-vsphere.tiab.labda.sva.de:8200
+    ubuntu_network_config: |
+      # This is the network config written by 'subiquity'
+      network:
+        ethernets:
+          ens18:
+            dhcp4: true
+            dhcp-identifier: mac
+        version: 2
+        renderer: NetworkManager
+    path_ubuntu_network_config: /etc/netplan/00-installer-config.yaml
+    copy_network_config: true
+
+    msteams_webhook_url: "https://365sva.webhook.office.com/webhookb2/2f14a9f8-4736-46dd-9c8c-31547ec37180@0a65cb1e-37d5-41ff-980a-647d9d0e4f0b/IncomingWebhook/37a805a0a2624dc2ac1aedd7dec6ad49/dc3a27ed-396c-40b7-a9b2-f1a2b6b44efe"
+    groups_to_create:
+      - name: sthings
+        gid: 3000
+
+    users:
+      - username: sthings
+        name: sthings user
+        uid: 1112
+        home: /home/sthings
+        enable_ssh_tcp_forwarding: false
+        groups: ["{{ admin_group }}", "sthings"]
+        password: "$6$rounds=656000$7ala77Ra$8/cD2EL.AIGNZhXyjB/MJS2Uru0k37I3yWZ.7jFKwQiG1VvMZtKb.B.z5nX2jb.bsLGlZejM4JwGgVrQHyONO."
+        ssh_key:
+          - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCslDwiVO/EvWLVVY1Twpc7Lhr9laLPgu+iiOuvMEg8E4hnEDHRPZpdD6YnnJYsLnVHbi8Y3EPDQ2UDbHnfgeYPa94XHdhGSCsIX+tA5+PLFSFgoyCtA5oWc3vrm58RX6DQXf7fPytwxIESPjIgEDv2BTOEc+pk0S09e3jttmFsrKzB7tOutB3FktcLnxGD75JgBa9/i0zmfcchF2VNZcgZRXJ5JiMGKhaKB7qZ6AoMQlDmCvllLSdCxGIxu/quiBcGhaJBMmpkSTeRouU1YWg05wEjyg47DwJyyEMzvYe6LIHxN3zBXMTBzUKJC1thGNC9yaFeywrz+iaIk66RGcjL sthings"
+          - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCsHiyet7tO+qXYKEy6XBiHNICRfGsBZYIo/JBQ2i16WgkC7rq6bkGwBYtni2j0X2pp0JVtcMO+hthqj37LcGH02hKa24eAoj2UdnFU+bhYxA6Mau1B/5MCkvs8VvBjxtM3FVJE7mY5bZ19YrKJ9ZIosAQaVHiGUu1kk49rzQqMrwT/1PNbUYW19P8J2LsfnaYJIl4Ljbxr0k52MGdbKwgxdph3UKciQz2DhutrmO0gf3Ncn4zpdClldaBtDB0EMMqD3BAtEVsucttzqdeYQwixMTtyuGpAKAJNUqhpleeVhShPZLke0vXxlA6/fyfkSM78gN2FQcRGVPN6hOMkns/b patrick@TPPHERMANN"
+          - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDvaTdixTdzySc6qQZavxvrBk1KNy4g30pIu9SbxVe6GuPyJzEWUYHvJt6d4YqdpavT21IQkmuex7n4qxg8ZgrmXUTpELLM2y2Uu7va/OUol4t2Q0O7hFr9nsE4CybXBxxutFCfekv4NedJ5WW0zUdrXdM6SWvN4f9kdn7FaECjAdWfz5I4nAz4nztwDh/obWqkNSe0ASPqnTqpxCbsIxLB6dxUnw43v8qBgWVUbIldhos/xtsVQyGRKHNOvGTg+7rCbhhgsy3vpiiCaTBdMtfBEjWrKR9SsHTlS7ftisJXCIBJMbhmc0mjnZ834m9qHXYe1+IoyL3d9dourDTerhBAe3DRLavcUynV6yrMIZor6FWgGrvxf/ZlKPYaFllL7WrAKMGiZLNhwoMvTYmdhXAfZjx2vab+pTvXzDlELKf3kxJcGuasWxV8BdN2x3uzMYvmf+Fp+nfTVk0z9ecEDTwK1wyghGudc4zAo61mHII+GdNMADDDnrg4HLB+9NHPKjNKCmETKymFdQnaoraQ7sj+sSYyWncPZVaYCCA6tMJxEOnu2AnK0G9CG4mF7xmR3LFoVPnHuF4maroPolMInSsCbSNU6IehWujHKGmyVyO09rcEbRaYo0cI9l4X8OBEXbLFeUp7PNnOocU1sjK6zAFxXR9DUOQyKi722vhdporoFQ== odittus"
+          - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCv17/cfbIKB8JBeDY/SoWz55tYu7e64BarYpj3UeYrbG/UjbyWh3EnsLyG9cL/Sg4C9by2rsyW2ppJSDCO7R3u+b46RufDVebznHqq1KV1vLwR+eEDANCDnkZswFNG1CZd9VU0zwLuEw8e/gy//qDO2DU4pALe/4BtnHkrNodY+Y6szMP4zkouag+myK4Hzn/vz+95sZ0w+/WUc726uiak8CI1IEBofTnFZCSSKYLRxY779D1+j+rOqE6IW4IOwojGBj0c6UDRQVAhSreLiOvVltyAASZWUGJjoa8zzeC4wH4mtOR/86mHI/zaovHuA6hzoBfP/gYWw74TO+WXQwqMBPvW1n8l3WIthvny2y53OTmdGG4GGI0UcLxehsxRp/ZiAlrwSGA9R735Qnq/IH6jt5NQ/qIxs5S+Ww5oQq90J/5MGAqSv8od1fNqTDRoNDvQRo/wSH0Dt11GNCqk4weqFBpij3h3oykhsRXniuYbsM2n/RRmJ4Q9dL2xdYKfBA0= acalva@TPACALVA-1"
+
+  pre_tasks:
+
+    - name: Create pip config dir
+      ansible.builtin.file:
+        path: /root/.config/pip/
+        state: directory
+
+    - name: Create pip config
+      ansible.builtin.copy:
+        dest: /root/.config/pip/pip.conf
+        content: |
+          [global]
+          break-system-packages = true
+
+    - name: Remove maybe existing apt lock
+      block:
+
+        - name: Reboot template
+          ansible.builtin.reboot:
+          when: reboot_prio_provisioning == 'Ubuntu'
+
+        - name: Remove maybe existing lock
+          ansible.builtin.shell: |
+            sudo rm -rf /var/lib/apt/lists/*
+            sudo apt-get clean
+            sudo apt-get update
+
+        - name: Update apt list
+          ansible.builtin.apt:
+            update_cache: yes
+
+      when: ansible_distribution == 'Ubuntu'
+
+  roles:
+    - role: install-requirements
+      when: install_requirements|bool
+
+    - role: create-os-user
+      when: create_user|bool
+
+    - role: configure-rke-node
+      when: configure_rke_node|bool
+
+  post_tasks:
+    - name: Install vault ca certificate to local system from multiple instances
+      ansible.builtin.include_role:
+        name: install-configure-vault
+        tasks_from: install-ca-auth
+      vars:
+        vault_url: "{{ vault_instance }}"
+      loop: "{{ vault_instances }}"
+      loop_control:
+        loop_var: vault_instance
+      when: vault_instances is defined
+
+    - name: Copy network config for enabling dhcp on ubuntu
+      ansible.builtin.copy:
+        content: "{{ ubuntu_network_config }}"
+        dest: "{{ path_ubuntu_network_config }}"
+      when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' and copy_network_config|bool
+
+    - name: Send webhook to msteams
+      ansible.builtin.include_role:
+        name: create-send-webhook
+      vars:
+        summary_text: base-os-setup during packer build was executed
+        msteams_url: https://365sva.webhook.office.com/webhookb2/2f14a9f8-4736-46dd-9c8c-31547ec37180@0a65cb1e-37d5-41ff-980a-647d9d0e4f0b/IncomingWebhook/37a805a0a2624dc2ac1aedd7dec6ad49/dc3a27ed-396c-40b7-a9b2-f1a2b6b44efe
+        card_title: base-os-setup was executed
+        act_image: "{{ logo_pic }}"
+        act_title: "{{ quotes | random }}"
+        act_text: "{{ quotes | random }}"
+        os_facts: |
+          base-os-setup during packer build was executed on "{{ ansible_fqdn }}"
+        ms_teams_notification_type: "simple"
+      tags: notify
+      ignore_errors: true
+      when: send_to_msteams|bool
