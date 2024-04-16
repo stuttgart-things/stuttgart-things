@@ -72,7 +72,9 @@ jobs:
           path: packer/builds/${{ github.event.pull_request.head.ref }}/packer.log
 
   Update-Packer-PullRequest:
-    needs: Build-Packer-Template
+    needs:
+      - Get-Packer-Config
+      - Build-Packer-Template
     environment: k8s
     container:
       image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2-2
