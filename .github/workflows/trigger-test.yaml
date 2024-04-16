@@ -7,7 +7,7 @@ on:
 
 jobs:
   Get-Runner-Config:
-    if: contains(github.event.pull_request.labels.*.name, 'please-review2')
+    if: contains(github.event.pull_request.labels.*.name, 'test-vm')
     container:
       image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2
     permissions:
