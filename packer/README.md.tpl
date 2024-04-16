@@ -57,6 +57,14 @@ packer build -force \
 ## TERRAFORM
 
 ```bash
+TERRAFORM_VERSION=1.7.5
+wget -O terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+sudo unzip terraform.zip -d /usr/bin/
+rm terraform.zip
+terraform --version
+```
+
+```bash
 # CHANGE TO TERRAFORM DIR
 cd [[ .osVersion ]]-[[ .lab ]]-[[ .cloud ]]-[[ .ansibleOsProvisioning ]]/test-vm/
 
