@@ -40,9 +40,8 @@ templateCreator: Patrick Hermann (patrick.hermann@sva.de)\n/Christian Mueller (c
 diskThinProvisioned: true
 
 # CLOUD
+lab: labda
 cloud: vsphere
-cloudUsername: ref+vault://cloud/vsphere/username
-cloudPassword: ref+vault://cloud/vsphere/password
 vcenterServer: 10.100.135.50
 cluster: /NetApp-HCI-Datacenter/host/NetApp-HCI-Cluster-01
 datastore: /NetApp-HCI-Datacenter/host/NetApp-HCI-Cluster-01/10.100.135.44/nfs06
@@ -54,3 +53,14 @@ network: /NetApp-HCI-Datacenter/host/NetApp-HCI-Cluster-01/10.100.135.44/tiab-pr
 vaultCloudPath: /cloud/data/vsphere
 vaultCloudKeyUsername: username
 vaultCloudKeyPassword: password
+
+# TEST VM
+testVmModuleSource: github.com/stuttgart-things/vsphere-vm?ref=v1.7.5-2.7.0
+testVmCount: 1
+testVmDiskSize: 32
+testCpu: 8
+testVmRam: 8192
+testDatastore: /NetApp-HCI-Datacenter/host/NetApp-HCI-Cluster-01/10.100.135.44//nfs06
+testNetwork: /NetApp-HCI-Datacenter/host/NetApp-HCI-Cluster-01/10.100.135.44/tiab-prod
+testDatacenter: /NetApp-HCI-Datacenter/
+testAnnotation: VSPHERE-VM
