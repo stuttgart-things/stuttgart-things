@@ -15,6 +15,7 @@ jobs:
       os-version: ${{ steps.set.outputs.OS_VERSION }}
       build-date: ${{ steps.set.outputs.BUILD_DATE }}
       provisioning: ${{ steps.set.outputs.PROVISIONING }}
+      runs-on: ghr-stuttgart-things-sthings-cicd
     container:
       image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2-2
     runs-on: ghr-stuttgart-things-sthings-cicd
@@ -30,7 +31,7 @@ jobs:
 
   Build-Packer-Template:
     needs: Get-Packer-Config
-    runs-on: ghr-stuttgart-things-sthings-cicd
+    runs-on: ${{ needs.Get-Packer-Config.outputs.runs-on }}
     environment: ${{ needs.Get-Packer-Config.outputs.lab }}-${{ needs.Get-Packer-Config.outputs.cloud }}
     container:
       image: eu.gcr.io/stuttgart-things/sthings-packer:1.10.2-9.4.0-2
@@ -70,6 +71,17 @@ jobs:
           name: ${{ needs.Get-Packer-Config.outputs.lab }}-${{ needs.Get-Packer-Config.outputs.cloud }}-${{ needs.Get-Packer-Config.outputs.os-version }}-${{ needs.Get-Packer-Config.outputs.build-date }}
           path: packer/builds/${{ github.event.pull_request.head.ref }}/packer.log
 
+  Update-Packer-PullRequest:
+    needs: Build-Packer-Template
+    environment: k8s
+    container:
+      image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2-2
+    runs-on: ${{ needs.Get-Packer-Config.outputs.runs-on }}
+    steps:
+      - name: Checkout code/branch
+        id: checkout
+        uses: actions/checkout@v4
+        
       - name: Get token for creating pull request
         uses: tibdex/github-app-token@v1
         id: generate-token
