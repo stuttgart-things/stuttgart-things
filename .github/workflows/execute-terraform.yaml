@@ -41,27 +41,9 @@ jobs:
           fetch-depth: '0'
           ref: ${{ inputs.branch }}
 
-      - name: Import Secrets
-        id: import-secrets
-        uses: hashicorp/vault-action@v2
-        with:
-          url: https://vault-vsphere.labul.sva.de:8200
-          token: ${{ secrets.VAULT_TOKEN }}
-          caCertificate: ${{ secrets.VAULT_CA_CERT }}
-          secrets: |
-              apps/data/rancher accessKey | RANCHER_ACCESS_KEY_ID ;
-
-      - name: Step following 'Import Secrets'
+      - name: Render terraform.tfvars
         run: |
-          RANCHER_ACCESS_KEY_ID = "${{ steps.import-secrets.outputs.RANCHER_ACCESS_KEY_ID }}"
-          echo ${RANCHER_ACCESS_KEY_ID} > test.yaml
-
-      - name: Upload VM variables
-        id: upload
-        uses: actions/upload-artifact@v4.1.0
-        with:
-          name: test
-          path: test.yaml
+          #tail -1 /tmp/source | cut -c 3-
 
       - name: Terraform init
         run: |
