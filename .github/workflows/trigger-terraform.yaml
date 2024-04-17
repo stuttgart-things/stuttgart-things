@@ -13,6 +13,12 @@ on:
         description: RUNNER NAME
         type: string
         default: ghr-stuttgart-things-sthings-cicd
+      environment-name:
+        type: choice
+        description: ENVIRONMENT NAME
+        options:
+          - labda-vsphere
+          - labul-vsphere
 
 
 
@@ -25,5 +31,5 @@ jobs:
       branch: ubuntu23-labul-vsphere
       operation: ${{ inputs.operation }}
       working-image: eu.gcr.io/stuttgart-things/sthings-terraform:1.7.5-1
-      environment-name: k8s
+      environment-name: ${{ inputs.environment-name }}
       runs-on: ${{ inputs.runner }}
