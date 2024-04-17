@@ -1,0 +1,62 @@
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: VsphereVMAnsible
+metadata:
+  name: miami-rke2
+  namespace: crossplane-system
+spec:
+  providerRef:
+    name: incluster-miami-rke2
+  vm:
+    count: "3"
+    name: miami-rke2
+    cpu: "8"
+    ram: "6144"
+    disk: "64"
+    firmware: bios
+    folderPath: stuttgart-things/testing
+    datacenter: /NetApp-HCI-Datacenter
+    datastore: /NetApp-HCI-Datacenter/datastore/DatastoreCluster/NetApp-HCI-Datastore-01
+    resourcePool: Resources
+    network: /NetApp-HCI-Datacenter/network/tiab-prod
+    template: /NetApp-HCI-Datacenter/vm/stuttgart-things/vm-templates/ubuntu23
+    bootstrap: '["echo STUTTGART-THINGS"]'
+    annotation: VSPHERE-VM TEST VM BUILD w/ CROSSPLANE FOR STUTTGART-THINGS
+    unverifiedSsl: "true"
+  ansible:
+    inventory:
+      - "all+[\"miami-rke2.tiab.labda.sva.de\"]"
+      - "all+[\"miami-rke2-2.tiab.labda.sva.de\"]"
+      - "all+[\"miami-rke2-3.tiab.labda.sva.de\"]"
+    k8sProviderRef: kubernetes-incluster
+    vaultSecretName: vault
+    pipelineNamespace: tektoncd
+    gitRepoUrl: https://github.com/stuttgart-things/stuttgart-things.git
+    gitRevision: main
+    playbooks:
+      - "ansible/playbooks/prepare-env.yaml"
+      - "ansible/playbooks/base-os.yaml"
+    ansibleVarsFile:
+      - "manage_filesystem+-true"
+      - "update_packages+-true"
+      - "install_requirements+-true"
+      - "install_motd+-true"
+      - "username+-sthings"
+      - "lvm_home_sizing+-'15%'"
+      - "lvm_root_sizing+-'35%'"
+      - "lvm_var_sizing+-'50%'"
+      - "send_to_msteams+-true"
+      - "reboot_all+-false"
+    roles:
+      - "https://github.com/stuttgart-things/install-requirements.git"
+      - "https://github.com/stuttgart-things/manage-filesystem.git"
+      - "https://github.com/stuttgart-things/install-configure-vault.git"
+  tfvars:
+    secretName: vsphere-tfvars
+    secretNamespace: crossplane-system
+    secretKey: terraform.tfvars
+  connectionSecret:
+    name: miami-rke2
+    namespace: crossplane-system
+  compositionRef:
+    name: vsphere-vm-ansible
