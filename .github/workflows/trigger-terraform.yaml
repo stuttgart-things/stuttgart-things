@@ -24,8 +24,6 @@ on:
         type: string
         default: eu.gcr.io/stuttgart-things/sthings-terraform:1.8.1-1
 
-
-
 jobs:
   execute-terraform:
     name: Execute Terraform
@@ -37,3 +35,4 @@ jobs:
       working-image: ${{ inputs.working-image}}
       environment-name: ${{ inputs.environment-name }}
       runs-on: ${{ inputs.runner }}
+    secrets: inherit

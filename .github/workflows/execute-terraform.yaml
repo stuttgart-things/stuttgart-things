@@ -29,6 +29,7 @@ jobs:
   execute-terraform:
     runs-on: ${{ inputs.runs-on }}
     environment: ${{ inputs.environment-name }}
+    secrets: inherit
     container:
       image: ${{ inputs.working-image}}
     steps:
@@ -42,7 +43,7 @@ jobs:
         run: |
           ls -lta ${{ inputs.folder }}
           terraform --version
-          terraform -chdir=${{ inputs.folder }} init 
+          terraform -chdir=${{ inputs.folder }} init
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_ACCESS_KEY }}

@@ -48,8 +48,7 @@ jobs:
       IMAGE_TAG: ${{ inputs.tag }}
     container:
       image: ${{ inputs.kaniko-image }}:${{ inputs.kaniko-tag }}
-    permissions:
-      contents: read # GIT
+    secrets: inherit
     steps:
       - name: Build and push image w/ kaniko
         run: |
