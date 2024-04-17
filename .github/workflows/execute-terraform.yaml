@@ -49,11 +49,11 @@ jobs:
           token: ${{ secrets.VAULT_TOKEN }}
           caCertificate: ${{ secrets.VAULT_CA_CERT }}
           secrets: |
-            apps/data/rancher accessKey | RANCHER_ACCESS_KEY_ID ;
+              apps/data/rancher accessKey | RANCHER_ACCESS_KEY_ID ;
 
       - name: Step following 'Import Secrets'
         run: |
-          RANCHER_ACCESS_KEY_ID = "${{ env.RANCHER_ACCESS_KEY_ID }}"
+          RANCHER_ACCESS_KEY_ID = "${{ steps.import-secrets.outputs.RANCHER_ACCESS_KEY_ID }}"
           echo ${RANCHER_ACCESS_KEY_ID} > test.yaml
 
       - name: Upload VM variables
