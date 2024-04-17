@@ -13,7 +13,5 @@ module "{{ .vmName }}" {
   vsphere_resource_pool = {{ .resourcePool }}
   vsphere_network = {{ .vmNetwork }}
   bootstrap = ["echo STUTTGART-THINGS"]
-  annotation = "VSPHERE-VM BUILD w/ TERRAFORM FOR STUTTGART-THINGS"
+  annotation = "VSPHERE-VM {{ .vmName }} {{ .vmTemplate }} BUILD w/ TERRAFORM FOR STUTTGART-THINGS"
 }
-
-
