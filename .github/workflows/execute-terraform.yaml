@@ -29,7 +29,6 @@ jobs:
   execute-terraform:
     runs-on: ${{ inputs.runs-on }}
     environment: ${{ inputs.environment-name }}
-    secrets: inherit
     container:
       image: ${{ inputs.working-image}}
     steps:
