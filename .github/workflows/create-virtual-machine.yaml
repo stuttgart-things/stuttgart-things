@@ -324,4 +324,5 @@ jobs:
         id: config
         run: |
           cat ${{ inputs.vm-name }}.yaml
+          echo ${{ env.template }}
           cat ${{ env.template }}
