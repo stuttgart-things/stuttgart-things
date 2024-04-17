@@ -1,6 +1,6 @@
 ---
 name: base_os
-version: 0.1.5
+version: 0.1.6
 namespace: sthings
 requirements: |
   roles:
@@ -14,21 +14,11 @@ playbooks:
       - hosts: all
         become: true
         vars:
-          download_dir: "/tmp/downloads" # dir will be created if it doesent exists
-          cli:
-            kubectl:
-              bin_name: "kubectl"
-              bin_version: "1.29.3"
-              check_bin_version_before_installing: true
-              source_url: "https://dl.k8s.io/v1.29.3/bin/linux/amd64/kubectl"
-              bin_to_copy: "kubectl"
-              to_remove: "kubectl"
-              bin_dir: "/usr/local/bin"
-              version_cmd: " version --client"
-              target_version: v1.29.3
-              md5_checksum: "07b43208389cbc779941b94a05cf89bc"
+          download_dir: "/tmp/downloads"
+        vars_files:
+          - ../vars/binaries.yaml
       
-        tasks:
-          - name: Start download_install_binary
-            ansible.builtin.include_role:
-              name: download_install_binary
+        roles:
+          - role: sthings.base_os.download_install_binaries
+
+vars: {}
