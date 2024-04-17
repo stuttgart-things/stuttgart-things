@@ -42,6 +42,7 @@ jobs:
         run: |
           ls -lta ${{ inputs.folder }}
           terraform --version
+          terraform init -chdir=${{ inputs.folder }}
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_ACCESS_KEY }}
