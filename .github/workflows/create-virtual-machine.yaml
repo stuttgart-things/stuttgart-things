@@ -251,7 +251,8 @@ jobs:
             def main():
                 # WRITE VM CONFIG YAML TO DISK
                 write_yaml_todisk('./${{ inputs.vm-name }}.yaml')
-
+                set_env(hello, thisisthat)
+                
             if __name__ == '__main__':
                 main()
 
@@ -370,6 +371,7 @@ jobs:
           --source local \
           --destination ${{ env.destination }}/terraform.tfvars
 
+          echo ${{ env.hello }}
       - name: Render README.md
         id: readme
         run: |
