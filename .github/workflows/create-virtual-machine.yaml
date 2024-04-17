@@ -246,7 +246,7 @@ jobs:
               "roles" : tekton['roles'],
               "tfversion" : '1.7.5',
               "date" : datetime.now().strftime("%Y-%m-%d, %H:%M"),
-              "secrets" : 'password=apps/data/scr:password,username=apps/data/scr:username',              
+              "vaultSecretPaths" : 'password=apps/data/scr:password,username=apps/data/scr:username',              
             }
 
             def main():
