@@ -54,11 +54,8 @@ on:
         type: choice
         description: build engine
         options:
-          - gh-workflows-tf
-          - crossplane-k8s-tf
-          - tekton-pipelines-tf
-          - render-only-tf
-          - render-only-crossplane
+          - crossplane
+          - terraform
       runner:
         description: RUNNER NAME
         required: true
@@ -299,35 +296,37 @@ jobs:
             if __name__ == '__main__':
                 main()
 
+      - name: Upload VM variables
+        id: upload
+        uses: actions/upload-artifact@v4.1.0
+        with:
+          name: ${{ inputs.vm-name }}-variables
+          path: ${{ inputs.vm-name }}.yaml
+
       - name: Output VM config
-        id: check
+        id: set
         run: |
           cat ${{ inputs.vm-name }}.yaml
           LAB=$(echo "${{ inputs.lab-cloud }}" | cut -d'-' -f1)
           CR_NAME=$(echo "${{ inputs.lab-cloud }}" | cut -d'-' -f2)vm
 
-          echo "template=crossplane/claims/${CR_NAME}.yaml" >> "$GITHUB_OUTPUT"
-          echo "provider=crossplane/providerConfig/terraform-${{ inputs.crossplane-provider }}.yaml" >> "$GITHUB_OUTPUT"
-          echo "ansible=crossplane/claims/ansiblerun-baseos.yaml" >> "$GITHUB_OUTPUT"
-          echo "destination=crossplane/claims/${CR_NAME}/${LAB}/" >> "$GITHUB_OUTPUT"
+          if [[ "${{ inputs.build-engine }}" == "crossplane" ]]; then
+              echo "template=crossplane/claims/${CR_NAME}vm.yaml" >> $GITHUB_ENV
+              echo "destination=crossplane/claims/${CR_NAME}/${LAB}/" >> $GITHUB_ENV
+          fi
 
-      - name: Upload VM config
-        id: upload
-        uses: actions/upload-artifact@v4.1.0
-        with:
-          name: ${{ inputs.vm-name }}
-          path: ${{ inputs.vm-name }}.yaml
+          if [[ "${{ inputs.build-engine }}" == "terraform" ]]; then
+              echo "template=terraform/${CR_NAME}vm.tf" >> $GITHUB_ENV
+              echo "destination=terraform/builds/${CR_NAME}/${LAB}/" >> $GITHUB_ENV
+          fi
 
-  Create-VM-Claim:
-    name: Render VM Claim
-    uses: stuttgart-things/stuttgart-things/.github/workflows/render-pr-vm.yaml@main
-    needs: Create-VM-Config
-    with:
-      environment-name: k8s
-      runs-on: ${{ inputs.runner }}
-      vm-name: ${{ inputs.vm-name }}
-      template-path: ${{ needs.Create-VM-Config.outputs.template }}
-      provider-template-path: ${{ needs.Create-VM-Config.outputs.provider }}
-      ansible-template-path: ${{ needs.Create-VM-Config.outputs.ansible }}
-      destination-dir: ${{ needs.Create-VM-Config.outputs.destination }}
-    secrets: inherit
+      - name: Create VM/Branch directory
+        id: dir
+        run: |
+          mkdir -p ${{ env.destination }}/${{ inputs.vm-name }}
+
+      - name: Render resouces
+        id: config
+        run: |
+          cat ${{ inputs.vm-name }}.yaml
+          cat ${{ env.template }}

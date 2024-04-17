@@ -36,11 +36,13 @@ jobs:
         uses: actions/checkout@v4.1.1
         with:
           fetch-depth: '0'
+
       - name: Install & Run Markdownlint
         run: |
           ls -lta
           apk add --update --no-cache ruby-full && gem install mdl --no-document
-          mdl . -s ${{ inputs.lintprofile-path }} | tee ./${{ inputs.artifact-name }}.txt        
+          mdl . -s ${{ inputs.lintprofile-path }} | tee ./${{ inputs.artifact-name }}.txt
+
       - name: Upload linting results
         uses: actions/upload-artifact@v4.1.0
         with:
