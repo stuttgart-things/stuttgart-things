@@ -311,15 +311,19 @@ jobs:
           fi
 
           if [[ "${{ inputs.build-engine }}" == "terraform" ]]; then
-              echo "template=terraform/${CR_NAME}.tf" >> $GITHUB_ENV
+              echo "template=terraform/${CR_NAME}.tf.tpl" >> $GITHUB_ENV
               echo "destination=terraform/builds/${CR_NAME}/${LAB}" >> $GITHUB_ENV
           fi
+
+      - name: Checkout code
+        uses: actions/checkout@v4.1.1
+        with:
+          fetch-depth: '0'
 
       - name: Create VM/Branch directory
         id: dir
         run: |
           mkdir -p ${{ env.destination }}/${{ inputs.vm-name }}/
-          echo ${{ env.template }}
 
       - name: Render resouces
         id: config
