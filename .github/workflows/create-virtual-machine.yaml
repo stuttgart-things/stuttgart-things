@@ -175,6 +175,7 @@ jobs:
                     'datacenter': '/LabUL',
                     'resourcePool': '/LabUL/host/Cluster-V6.5/Resources',
                     'templatePath': '/LabUL/vm/stuttgart-things/vm-templates',
+                    'cloud': 'vsphere',
                 },
                 'labda-vsphere': {
                     'lab': 'labda',
@@ -183,6 +184,7 @@ jobs:
                     'datacenter': '/NetApp-HCI-Datacenter',
                     'resourcePool': 'Resources',
                     'templatePath': '/NetApp-HCI-Datacenter/vm/stuttgart-things/vm-templates',
+                    'cloud': 'vsphere',
                 }
             }
 
