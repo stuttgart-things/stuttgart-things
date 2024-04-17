@@ -1,6 +1,6 @@
 ---
 name: base_os
-version: 0.1.4
+version: 0.1.5
 namespace: sthings
 requirements: |
   roles:
@@ -31,4 +31,4 @@ playbooks:
         tasks:
           - name: Start download_install_binary
             ansible.builtin.include_role:
-              name: download-install-binary
+              name: download_install_binary
