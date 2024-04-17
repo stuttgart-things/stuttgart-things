@@ -22,7 +22,7 @@ on:
       working-image:
         description: WORKING IMAGE
         type: string
-        default: eu.gcr.io/stuttgart-things/sthings-terraform:1.8.1
+        default: eu.gcr.io/stuttgart-things/sthings-terraform:1.8.1-1
 
 
 
