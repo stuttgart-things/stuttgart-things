@@ -241,6 +241,7 @@ jobs:
               "playbooks" : tekton['playbooks'],
               "roles" : tekton['roles'],
               "tfversion" : '1.7.5',
+              "date" : '$(echo `date "+%Y-%m-%d %H:%M"`)',
             }
 
             def main():
