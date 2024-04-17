@@ -245,7 +245,7 @@ jobs:
               "playbooks" : tekton['playbooks'],
               "roles" : tekton['roles'],
               "tfversion" : '1.7.5',
-              "date" : now.strftime("%d/%m/%Y %H:%M:%S"),
+              "date" : datetime.now(),
             }
 
             def main():
