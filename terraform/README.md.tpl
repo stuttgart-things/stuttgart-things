@@ -1,7 +1,7 @@
 ## TERRAFORM
 
 ```bash
-TERRAFORM_VERSION={{ .tfversion }}
+TERRAFORM_VERSION="{{ .tfversion }}"
 wget -O terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
 sudo unzip terraform.zip -d /usr/bin/
 rm terraform.zip
@@ -10,7 +10,7 @@ terraform --version
 
 ```bash
 # CHANGE TO DIR
-cd builds/{{ .destination }}/
+cd builds/"{{ .destination }}"/
 
 # INITIALIZE TERRAFORM
 terraform init
