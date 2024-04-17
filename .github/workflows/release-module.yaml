@@ -1,5 +1,5 @@
 ---
-name: Package Terraform Module
+name: Release module
 on:
   workflow_call:
     inputs:
@@ -9,6 +9,10 @@ on:
       tag-name:
         required: true
         type: string
+      archive-kind:
+        required: false
+        type: string
+        default: zip
       release-message:
         required: true
         type: string
@@ -25,28 +29,42 @@ on:
         type: boolean
 
 jobs:
-  Package-Terraform:
+  Package-Relase-Module:
     runs-on: ${{ inputs.runs-on }}
     container:
       image: joshkeegan/zip:3.19.0
     environment: ${{ inputs.environment-name }}
     permissions:
       contents: write
-    continue-on-error:  ${{ inputs.continue-error }}
+    continue-on-error: ${{ inputs.continue-error }}
     steps:
       - name: Checkout code
+        id: checkout
         uses: actions/checkout@v4.1.1
         with:
           fetch-depth: '0'
 
-      - name: Package module
+      - name: Package module (zip)
+        id: zip
+        if: "${{ inputs.continue-error }} == 'zip' }}"
         run: |
           zip -r ${{ inputs.module-name }}.zip * -j
+          echo "artifact=${{ inputs.module-name }}.zip" >> $GITHUB_ENV
+
+      - name: Package module (tar.gz)
+        id: tar
+        if: "${{ inputs.continue-error }} == 'tar.gz' }}"
+        run: |
+          artifact=$(basename $PWD).tar.gz
+          touch ${artifact}
+          tar -czf ${artifact} --exclude=${artifact} .
+          echo "artifact=${artifact}" >> $GITHUB_ENV
 
       - name: Release module
+        id: release
         uses: ncipollo/release-action@v1.13.0
         with:
           name: ${{ inputs.tag-name }}
-          artifacts: ${{ inputs.module-name }}.zip
+          artifacts: ${{ env.artifact }}
           body: ${{ inputs.release-message }}
           tag: ${{ inputs.tag-name }}
