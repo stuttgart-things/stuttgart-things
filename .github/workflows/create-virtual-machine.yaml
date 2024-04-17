@@ -370,6 +370,7 @@ jobs:
           --defaults ${{ inputs.vm-name }}.yaml \
           --brackets square \
           --source local \
+          --output file \
           --destination ${{ env.destination }}/${{ inputs.build-engine }}.tfvars
 
       - name: Render README.md
