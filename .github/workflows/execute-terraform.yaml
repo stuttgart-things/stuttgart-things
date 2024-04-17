@@ -41,6 +41,16 @@ jobs:
           fetch-depth: '0'
           ref: ${{ inputs.branch }}
 
+      - name: Import Secrets
+        id: import-secrets
+        uses: hashicorp/vault-action@v2
+        with:
+          url: https://vault-vsphere.labul.sva.de:8200
+          token: ${{ secrets.VAULT_TOKEN }}
+          caCertificate: ${{ secrets.VAULT_CA_CERT }}
+          secrets: |
+              secret/data/apps/rancher accessKey | RANCHER_ACCESS_KEY_ID ;
+
       - name: Terraform init
         run: |
           ls -lta ${{ inputs.folder }}
