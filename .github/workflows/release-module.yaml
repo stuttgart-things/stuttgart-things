@@ -46,14 +46,14 @@ jobs:
 
       - name: Package module (zip)
         id: zip
-        if: "${{ inputs.continue-error }} == 'zip' }}"
+        if: "${{ inputs.archive-kind }} == 'zip' }}"
         run: |
           zip -r ${{ inputs.module-name }}.zip * -j
           echo "artifact=${{ inputs.module-name }}.zip" >> $GITHUB_ENV
 
       - name: Package module (tar.gz)
         id: tar
-        if: "${{ inputs.continue-error }} == 'tar.gz' }}"
+        if: "${{ inputs.archive-kindr }} == 'tar.gz' }}"
         run: |
           artifact=$(basename $PWD).tar.gz
           touch ${artifact}
