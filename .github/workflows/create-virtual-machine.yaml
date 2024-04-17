@@ -246,7 +246,7 @@ jobs:
               "roles" : tekton['roles'],
               "tfversion" : '1.7.5',
               "date" : datetime.now().strftime("%Y-%m-%d, %H:%M"),
-              "secrets" : '# password=apps/data/scr:password,username=apps/data/scr:username',              
+              "vaultSecretPaths" : '# password=apps/data/scr:password,username=apps/data/scr:username',              
             }
 
             def main():
@@ -367,11 +367,11 @@ jobs:
           machineShop render \
           --source local \
           --template ${{ env.secrets_template }} \
+          --defaults ${{ inputs.vm-name }}.yaml \          
           --brackets square \
           --source local \
           --destination ${{ env.destination }}/terraform.tfvars
 
-          echo ${{ steps.renderConfig.outputs.hello }}
       - name: Render README.md
         id: readme
         run: |
