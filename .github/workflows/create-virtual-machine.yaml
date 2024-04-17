@@ -91,6 +91,7 @@ jobs:
             import os
             import random
             import yaml
+            from datetime import date
 
             # WRITE YAML TO DISK
             def write_yaml_todisk(output_path):
@@ -244,7 +245,7 @@ jobs:
               "playbooks" : tekton['playbooks'],
               "roles" : tekton['roles'],
               "tfversion" : '1.7.5',
-              "date" : '$(echo `date "+%Y-%m-%d %H:%M"`)',
+              "date" : now.strftime("%d/%m/%Y %H:%M:%S"),
             }
 
             def main():

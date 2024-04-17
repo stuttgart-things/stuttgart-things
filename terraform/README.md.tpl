@@ -19,9 +19,6 @@ cd builds/"{{ .cloud }}"vm/"{{ .lab }}"/"{{ .vmName }}"/
 # INITIALIZE TERRAFORM
 terraform init
 
-# CREATE vars file
-touch terraform.tfvars
-
 # EXPORT SECRETS AND VM TEMPLATE NAME
 export TF_VAR_vsphere_user=<CLOUD_USERNAME>
 export TF_VAR_vsphere_password=<CLOUD_PASSWORD>
