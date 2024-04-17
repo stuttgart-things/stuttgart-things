@@ -77,6 +77,11 @@ jobs:
         run: |
           pip install jinja2 pyyaml argparse
 
+      - name: Checkout code
+        uses: actions/checkout@v4.1.1
+        with:
+          fetch-depth: '0'
+
       - name: Create VM config
         id: renderConfig
         uses: jannekem/run-python-script-action@v1.7
@@ -314,11 +319,6 @@ jobs:
               echo "template=terraform/${CR_NAME}.tf.tpl" >> $GITHUB_ENV
               echo "destination=terraform/builds/${CR_NAME}/${LAB}" >> $GITHUB_ENV
           fi
-
-      - name: Checkout code
-        uses: actions/checkout@v4.1.1
-        with:
-          fetch-depth: '0'
 
       - name: Create VM/Branch directory
         id: dir
