@@ -12,13 +12,8 @@ module "{{ .vmName }}" {
   vsphere_datastore = {{ .vmDatastore }}
   vsphere_resource_pool = {{ .resourcePool }}
   vsphere_network = {{ .vmNetwork }}
-  bootstrap = {{ . }}
-  annotation = {{ . }}
-  vsphere_server = {{ . }}
-  vsphere_user = {{ . }}
-  vsphere_password = {{ . }}
-  vm_ssh_user = {{ . }}
-  vm_ssh_password = {{ . }}
+  bootstrap = ["echo STUTTGART-THINGS"]
+  annotation = "VSPHERE-VM BUILD w/ TERRAFORM FOR STUTTGART-THINGS"
 }
 
 
