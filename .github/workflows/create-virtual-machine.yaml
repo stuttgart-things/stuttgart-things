@@ -251,7 +251,7 @@ jobs:
             def main():
                 # WRITE VM CONFIG YAML TO DISK
                 write_yaml_todisk('./${{ inputs.vm-name }}.yaml')
-                set_env(hello, thisisthat)
+                set_env("hello", "thisisthat")
                 
             if __name__ == '__main__':
                 main()
