@@ -329,6 +329,7 @@ jobs:
               echo "provider_template=terraform/state-provider.tf.tpl" >> $GITHUB_ENV
               echo "provider_name=backend" >> $GITHUB_ENV
               echo "readme_template=terraform/README.md.tpl" >> $GITHUB_ENV
+              echo "secrets_template=terraform/vspherevm-tfvars.tpl" >> $GITHUB_ENV
           fi
 
           echo "LAB=$(echo "${{ inputs.lab-cloud }}" | cut -d'-' -f1)" >> $GITHUB_ENV
@@ -359,7 +360,17 @@ jobs:
           --output file \
           --destination ${{ env.destination }}/${{ env.provider_name }}.${{ env.extension }}
     
-      - name: Render README
+      - name: Render secrets template
+        id: secrets
+        run: |
+          machineShop render \
+          --source local \
+          --template ${{ env.secrets_template }} \
+          --brackets square \
+          --source local \
+          --destination ${{ env.destination }}/terraform.tfvars
+
+      - name: Render README.md
         id: readme
         run: |
           machineShop render \
