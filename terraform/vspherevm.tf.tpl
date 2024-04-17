@@ -52,5 +52,5 @@ variable "vsphere_password" {
 }
 
 output "ip" {
-  value = [module."{{ .vmName }}".ip]
+  value = [module.{{ .vmName }}.ip]
 }
