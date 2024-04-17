@@ -52,5 +52,5 @@ variable "vsphere_password" {
 }
 
 output "ip" {
-  value = [module.ubuntu23-labul-vsphere-base-os.ip]
+  value = [module."{{ .vmName }}".ip]
 }
