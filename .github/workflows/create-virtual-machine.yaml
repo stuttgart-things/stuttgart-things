@@ -91,7 +91,7 @@ jobs:
             import os
             import random
             import yaml
-            from datetime import date
+            from datetime import datetime
 
             # WRITE YAML TO DISK
             def write_yaml_todisk(output_path):
