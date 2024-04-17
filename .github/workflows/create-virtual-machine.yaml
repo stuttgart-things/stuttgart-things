@@ -240,7 +240,7 @@ jobs:
               "tektonProviderRef" : tekton['tektonProviderRef'],
               "playbooks" : tekton['playbooks'],
               "roles" : tekton['roles'],
-              "tfversion" : "1.7.5",
+              "tfversion" : '1.7.5',
             }
 
             def main():
