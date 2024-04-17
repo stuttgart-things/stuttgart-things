@@ -67,11 +67,6 @@ jobs:
       contents: write
       pull-requests: write
     runs-on: ${{ inputs.runner }}
-    outputs:
-      template: ${{ steps.check.outputs.template }}
-      provider: ${{ steps.check.outputs.provider }}
-      ansible: ${{ steps.check.outputs.ansible }}
-      destination: ${{ steps.check.outputs.destination }}
     environment: k8s
     container:
       image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2
@@ -311,13 +306,13 @@ jobs:
           CR_NAME=$(echo "${{ inputs.lab-cloud }}" | cut -d'-' -f2)vm
 
           if [[ "${{ inputs.build-engine }}" == "crossplane" ]]; then
-              echo "template=crossplane/claims/${CR_NAME}vm.yaml" >> $GITHUB_ENV
+              echo "template=crossplane/claims/${CR_NAME}.yaml" >> $GITHUB_ENV
               echo "destination=crossplane/claims/${CR_NAME}/${LAB}/" >> $GITHUB_ENV
           fi
 
           if [[ "${{ inputs.build-engine }}" == "terraform" ]]; then
-              echo "template=terraform/${CR_NAME}vm.tf" >> $GITHUB_ENV
-              echo "destination=terraform/builds/${CR_NAME}/${LAB}/" >> $GITHUB_ENV
+              echo "template=terraform/${CR_NAME}.tf" >> $GITHUB_ENV
+              echo "destination=terraform/builds/${CR_NAME}/${LAB}" >> $GITHUB_ENV
           fi
 
       - name: Create VM/Branch directory
