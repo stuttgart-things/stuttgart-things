@@ -371,7 +371,7 @@ jobs:
           --source local \
           --destination ${{ env.destination }}/terraform.tfvars
 
-          echo ${{ env.hello }}
+          echo ${{ steps.renderConfig.outputs.hello }}
       - name: Render README.md
         id: readme
         run: |
