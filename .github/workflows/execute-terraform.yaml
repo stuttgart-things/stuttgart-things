@@ -1,0 +1,37 @@
+---
+name: Execute Terraform
+on:
+  workflow_call:
+    inputs:
+      folder:
+        required: true
+        type: string
+      brannch:
+        required: true
+        type: string
+      operation:
+        required: false
+        type: string
+        default: apply
+      runs-on:
+        required: true
+        type: string
+      environment-name:
+        default: k8s
+        required: false
+        type: string
+      working-image:
+        type: string
+        default: eu.gcr.io/stuttgart-things/sthings-terraform:1.7.5-1
+        required: false
+
+jobs:
+  execute-terraform:
+    runs-on: ${{ inputs.runs-on }}
+    environment: ${{ inputs.environment-name }}
+    container:
+      image: ${{ inputs.working-image}}
+    steps:
+      - name: Test
+        run: |
+          echo ${{ inputs.folder }}
