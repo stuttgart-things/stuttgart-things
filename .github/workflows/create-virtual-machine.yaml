@@ -312,7 +312,7 @@ jobs:
 
           if [[ "${{ inputs.build-engine }}" == "crossplane" ]]; then
               echo "template=crossplane/claims/${CR_NAME}.yaml" >> $GITHUB_ENV
-              echo "destination=crossplane/claims/${CR_NAME}/${LAB}/" >> $GITHUB_ENV
+              echo "destination=crossplane/claims/${CR_NAME}/${LAB}/${{ inputs.vm-name }}" >> $GITHUB_ENV
               echo "extension=yaml" >> $GITHUB_ENV
           fi
 
@@ -322,7 +322,7 @@ jobs:
               echo "extension=tf" >> $GITHUB_ENV
           fi
 
-          echo "LAB=${LAB}" >> $GITHUB_ENV
+          echo "LAB=$(echo "${{ inputs.lab-cloud }}" | cut -d'-' -f1)" >> $GITHUB_ENV
           echo "CLOUD=$(echo "${{ inputs.lab-cloud }}" | cut -d'-' -f2)" >> $GITHUB_ENV
 
       - name: Create VM/Branch directory
@@ -334,7 +334,7 @@ jobs:
         id: config
         run: |
           machineShop render \
-          --source local \
+          --source local \s
           --template ${{ env.template }} \
           --defaults ${{ inputs.vm-name }}.yaml \
           --output file \
@@ -347,13 +347,13 @@ jobs:
           app_id: ${{ secrets.PULLREQUESTER_APP_ID }}
           private_key: ${{ secrets.PULLREQUESTER_APP_KEY }}
 
-      - name: Create Pull Request for packer config
+      - name: Create Pull Request for VM config
         id: pr
         uses: peter-evans/create-pull-request@v6.0.2
         with:
-          commit-message: '[CI][${{ inputs.build-engine }}] - Created template config for vm ${{ inputs.os-version }}-${{ env.lab }}-${{ env.cloud }}'
-          title: Created VM Config ${{ inputs.os-version }}-${{ env.lab }}-${{ env.cloud }} w/ ${{ inputs.build-engine }}
-          branch: ${{ inputs.os-version }}-${{ env.lab }}-${{ env.cloud }}
+          commit-message: '[CI][${{ inputs.build-engine }}] - Created template config for vm ${{ inputs.os-version }}-${{ env.LAB }}-${{ env.CLOUD }}'
+          title: Created VM Config ${{ inputs.os-version }}-${{ env.LAB }}-${{ env.CLOUD }} w/ ${{ inputs.build-engine }}
+          branch: ${{ inputs.os-version }}-${{ env.LAB }}-${{ env.CLOUD }}
           delete-branch: true
           token: ${{ steps.generate-token.outputs.token }}
           labels: |
