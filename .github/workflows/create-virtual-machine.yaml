@@ -354,7 +354,7 @@ jobs:
           --output file \
           --destination ${{ env.destination }}/${{ env.provider_name }}.${{ env.extension }}
     
-     - name: Render README
+      - name: Render README
         id: readme
         run: |
           machineShop render \
