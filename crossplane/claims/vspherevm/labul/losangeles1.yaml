@@ -1,0 +1,34 @@
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: VsphereVM
+metadata:
+  name: losangeles1
+  namespace: crossplane-system
+spec:
+  providerRef:
+    name: -losangeles1
+  vm:
+    count: "1"
+    name: losangeles1
+    cpu: "2"
+    ram: "4096"
+    disk: "32"
+    firmware: bios
+    folderPath: stuttgart-things/testing
+    datacenter: /LabUL
+    datastore: /LabUL/datastore/UL-V5010-01-LUN3
+    resourcePool: /LabUL/host/Cluster-V6.5/Resources
+    network: /LabUL/network/MGMT-10.31.101
+    template: /LabUL/vm/stuttgart-things/vm-templates/sthings-u22
+    bootstrap: '["echo STUTTGART-THINGS"]'
+    annotation: VSPHERE-VM BUILD w/ CROSSPLANE FOR STUTTGART-THINGS
+    unverifiedSsl: "true"
+  tfvars:
+    secretName: vsphere-tfvars
+    secretNamespace: crossplane-system
+    secretKey: terraform.tfvars
+  connectionSecret:
+    name: losangeles1
+    namespace: crossplane-system
+  compositionRef:
+    name: vsphere-vm
