@@ -318,11 +318,11 @@ jobs:
       - name: Create VM/Branch directory
         id: dir
         run: |
-          mkdir -p ${{ env.destination }}/${{ inputs.vm-name }}
+          mkdir -p ${{ env.destination }}/${{ inputs.vm-name }}/
+          echo ${{ env.template }}
 
       - name: Render resouces
         id: config
         run: |
           cat ${{ inputs.vm-name }}.yaml
-          echo ${{ env.template }}
           cat ${{ env.template }}
