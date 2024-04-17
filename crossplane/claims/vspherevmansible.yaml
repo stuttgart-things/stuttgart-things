@@ -1,0 +1,61 @@
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: VsphereVMAnsible
+metadata:
+  name: {{ .vmName }}
+  namespace: {{ .namespace }}
+spec:
+  providerRef:
+    name: {{ .crossplaneProvider }}
+  vm:
+    count: "{{ .vmCount }}"
+    name: {{ .vmName }}
+    cpu: "{{ .vmCpu }}"
+    ram: "{{ .vmMemory }}"
+    disk: "{{ .vmDisk }}"
+    firmware: {{ .vmFirmware }}
+    folderPath: {{ .vmFolder }}
+    datacenter: {{ .datacenter }}
+    datastore: {{ .vmDatastore }}
+    resourcePool: {{ .resourcePool }}
+    network: {{ .vmNetwork }}
+    template: {{ .templatePath }}/{{ .vmTemplate }}
+    bootstrap: '["echo STUTTGART-THINGS"]'
+    annotation: VSPHERE-VM BUILD w/ CROSSPLANE FOR STUTTGART-THINGS
+    unverifiedSsl: "true"
+  ansible:
+  inventory:
+    {{ range $value := .hosts }}- "all+[\"{{ $value }}\"]"
+    {{ end }}
+    k8sProviderRef: kubernetes-incluster
+    vaultSecretName: vault
+    pipelineNamespace: tektoncd
+    gitRepoUrl: https://github.com/stuttgart-things/stuttgart-things.git
+    gitRevision: main
+    workingImage: {{ .workingImage }}
+    playbooks:
+      {{ range $value := .playbooks }}- "{{ $value }}"
+      {{ end }}
+    ansibleVarsFile:
+      - "manage_filesystem+-true"
+      - "update_packages+-true"
+      - "install_requirements+-true"
+      - "install_motd+-true"
+      - "username+-sthings"
+      - "lvm_home_sizing+-'15%'"
+      - "lvm_root_sizing+-'35%'"
+      - "lvm_var_sizing+-'50%'"
+      - "send_to_msteams+-true"
+      - "reboot_all+-false"
+    roles:
+      {{ range $value := .roles }}- "{{ $value }}"
+      {{ end }}
+  tfvars:
+    secretName: {{ .tfvars }}
+    secretNamespace: {{ .namespace }}
+    secretKey: {{ .secretKey }}
+  connectionSecret:
+    name: {{ .vmName }}
+    namespace: {{ .namespace }}
+  compositionRef:
+    name: vsphere-vm-ansible
