@@ -246,12 +246,12 @@ jobs:
               "roles" : tekton['roles'],
               "tfversion" : '1.7.5',
               "date" : datetime.now().strftime("%Y-%m-%d, %H:%M"),
+              "secrets" : '# password=apps/data/scr:password,username=apps/data/scr:username',              
             }
 
             def main():
                 # WRITE VM CONFIG YAML TO DISK
                 write_yaml_todisk('./${{ inputs.vm-name }}.yaml')
-                set_output("hello", "thisisthat")
                 
             if __name__ == '__main__':
                 main()
