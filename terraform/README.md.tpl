@@ -1,6 +1,6 @@
 # stuttgart-things/terraform
 
-this file was created at: "{{ .date }}
+this file was created at: {{ .date }}
 
 ## TERRAFORM
 
@@ -14,7 +14,7 @@ terraform --version
 
 ```bash
 # CHANGE TO DIR
-cd builds/"{{ .cloud }}"vm/"{{ .lab }}"/"{{ .vmName }}"/
+cd builds/{{ .cloud }}vm/{{ .lab }}/{{ .vmName }}/
 
 # INITIALIZE TERRAFORM
 terraform init
