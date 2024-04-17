@@ -1,32 +1,34 @@
 ---
 name: base_os
-version: 0.1.3
+version: 0.1.4
 namespace: sthings
 requirements: |
   roles:
     - src: https://github.com/stuttgart-things/download-install-binary.git
       scm: git
-      version: main
+      version: 2024-04-17
 
 playbooks:
-  - name: install_bins
+  - name: download_install_binaries
     play: |
       - hosts: all
         become: true
         vars:
           download_dir: "/tmp/downloads" # dir will be created if it doesent exists
-          bin:
-            terraform:
-              bin_name: 'terraform'
-              bin_version: '0.12.24'
-              source_url: "https://releases.hashicorp.com/terraform/0.12.24/terraform_0.12.24_linux_amd64.zip"
-              bin_to_copy: "terraform"
-              bin_dir: "/usr/local/bin"
-              to_remove: "terraform"
+          cli:
+            kubectl:
+              bin_name: "kubectl"
+              bin_version: "1.29.3"
               check_bin_version_before_installing: true
-
+              source_url: "https://dl.k8s.io/v1.29.3/bin/linux/amd64/kubectl"
+              bin_to_copy: "kubectl"
+              to_remove: "kubectl"
+              bin_dir: "/usr/local/bin"
+              version_cmd: " version --client"
+              target_version: v1.29.3
+              md5_checksum: "07b43208389cbc779941b94a05cf89bc"
+      
         tasks:
-          - name: Call role download_binary in a loop
-            include_role:
-              name: sthings.deploy_rke.download_install_binary
-            loop: "{{ lookup('dict', bin, wantlist=True) }}"
+          - name: Start download_install_binary
+            ansible.builtin.include_role:
+              name: download-install-binary
