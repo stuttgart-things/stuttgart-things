@@ -41,3 +41,4 @@ jobs:
       - name: Test
         run: |
           ls -lta ${{ inputs.folder }}
+          terraform --version
