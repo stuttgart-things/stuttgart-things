@@ -215,6 +215,7 @@ spec:
               metadata:
                 annotations:
                   inventory: "host.domain"
+                  id: date
                 namespace: crossplane-system
               spec:
                 pipelineRunName: baseos-host
@@ -248,8 +249,17 @@ spec:
           providerConfigRef:
             name: kubernetes-incluster
       patches:
-        - fromFieldPath: status.share.timestampApply
+        - fromFieldPath: spec.vm.name
           toFieldPath: spec.forProvider.manifest.spec.pipelineRunName
+          policy:
+            fromFieldPath: Required
+          transforms:
+            - type: string
+              string:
+                type: Format
+                fmt: 'ansible-%s'
+        - fromFieldPath: status.share.timestampApply
+          toFieldPath: spec.forProvider.manifest.metadata.annotations.id
           policy:
             fromFieldPath: Required
           transforms:
