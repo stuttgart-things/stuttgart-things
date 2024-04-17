@@ -16,7 +16,7 @@ on:
 
 jobs:
   execute-terraform:
-    name: Valdiate
+    name: Execute Terraform
     uses: stuttgart-things/stuttgart-things/.github/workflows/execute-terraform.yaml@main
     with:
       folder: terraform/builds/vspherevm/labul/test

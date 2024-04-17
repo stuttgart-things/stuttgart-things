@@ -32,6 +32,12 @@ jobs:
     container:
       image: ${{ inputs.working-image}}
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.1.1
+        with:
+          fetch-depth: '0'
+          ref: ${{ inputs.branch }}
+
       - name: Test
         run: |
-          echo ${{ inputs.folder }}
+          ls -lta ${{ inputs.folder }}
