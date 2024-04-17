@@ -6,7 +6,7 @@ on:
       folder:
         required: true
         type: string
-      brannch:
+      branch:
         required: true
         type: string
       operation:

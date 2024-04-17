@@ -1,0 +1,27 @@
+---
+name: Trigger terraform run
+on:
+  workflow_dispatch:
+    inputs:
+      operation:
+        type: choice
+        description: TERRAFORM OPERATION
+        options:
+          - apply
+          - destroy
+      runner:
+        description: RUNNER NAME
+        type: string
+        default: ghr-stuttgart-things-sthings-cicd
+
+jobs:
+  execute-terraform:
+    name: Valdiate
+    uses: stuttgart-things/stuttgart-things/.github/workflows/execute-terraform.yaml@main
+    with:
+      folder: terraform/builds/vspherevm/labul/test
+      branch: ubuntu23-labul-vsphere
+      operation: ${{ inputs.operation }}
+      working-image: eu.gcr.io/stuttgart-things/sthings-terraform:1.7.5-1
+      environment-name: k8s
+      runs-on: ${{ inputs.runner }}
