@@ -1,19 +1,20 @@
 FROM docker.io/library/ubuntu:22.04@sha256:0bced47fffa3361afa981854fcabcd4577cd43cebbb808cea2b1f33a3dd7f508
 
-LABEL version=1.7.5-1
+LABEL version=1.8.1
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 
 # SWITCH TO ROOT FOR THE ABILITY TO PERFORM INSTALL
 USER root
 
 ARG DEBIAN_FRONTEND=noninteractive
-ARG TERRAFORM_VERSION=1.7.5
+ARG TERRAFORM_VERSION=1.8.1
 
 # INSTALL TOOLS NEEDED FOR YOUR REPO-SERVER TO RETRIEVE & DECRYPT SECRETS, RENDER MANIFESTS
 RUN apt-get update && \
     apt-get install -y \
         curl \
         wget \
+        git \
         gawk \
         unzip \
         awscli \
