@@ -14,7 +14,7 @@ terraform --version
 
 ```bash
 # CHANGE TO DIR
-cd builds/"{{ .destination }}"/
+cd builds/"{{ .cloud }}"vm//"{{ .lab }}"//"{{ .vmName }}"/
 
 # INITIALIZE TERRAFORM
 terraform init

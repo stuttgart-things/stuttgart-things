@@ -223,6 +223,7 @@ jobs:
               "vmNetwork" : get_random_fromlist(networks['${{ inputs.lab-cloud }}']),
               "hosts" : render_inventory(inventory),
               "lab" : env['${{ inputs.lab-cloud }}']['lab'],
+              "cloud" : env['${{ inputs.lab-cloud }}']['cloud'],
               "vmFolder" : env['${{ inputs.lab-cloud }}']['rootFolder']+'/${{ inputs.vm-folder }}',
               "namespace" : crossplane['${{ inputs.lab-cloud }}']['namespace'],
               "vmFirmware" : env['${{ inputs.lab-cloud }}']['vmFirmware'],
