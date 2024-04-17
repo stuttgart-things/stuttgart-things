@@ -19,6 +19,10 @@ on:
         options:
           - labda-vsphere
           - labul-vsphere
+      working-image:
+        description: WORKING IMAGE
+        type: string
+        default: sthings-terraform:1.8.1
 
 
 
@@ -30,6 +34,6 @@ jobs:
       folder: terraform/builds/vspherevm/labul/test
       branch: ubuntu23-labul-vsphere
       operation: ${{ inputs.operation }}
-      working-image: eu.gcr.io/stuttgart-things/sthings-terraform:1.7.5-1
+      working-image: ${{ inputs.working-image}}
       environment-name: ${{ inputs.environment-name }}
       runs-on: ${{ inputs.runner }}
