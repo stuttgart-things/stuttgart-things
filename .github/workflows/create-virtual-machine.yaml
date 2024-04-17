@@ -325,7 +325,7 @@ jobs:
           echo "LAB=$(echo "${{ inputs.lab-cloud }}" | cut -d'-' -f1)" >> $GITHUB_ENV
           echo "CLOUD=$(echo "${{ inputs.lab-cloud }}" | cut -d'-' -f2)" >> $GITHUB_ENV
 
-      - name: Create VM/Branch directory
+      - name: Create VM directory
         id: dir
         run: |
           mkdir -p ${{ env.destination }}/
@@ -334,7 +334,7 @@ jobs:
         id: config
         run: |
           machineShop render \
-          --source local \s
+          --source local \
           --template ${{ env.template }} \
           --defaults ${{ inputs.vm-name }}.yaml \
           --output file \
