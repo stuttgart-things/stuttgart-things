@@ -320,6 +320,7 @@ jobs:
               echo "template=terraform/${CR_NAME}.tf.tpl" >> $GITHUB_ENV
               echo "destination=terraform/builds/${CR_NAME}/${LAB}/${{ inputs.vm-name }}" >> $GITHUB_ENV
               echo "extension=tf" >> $GITHUB_ENV
+              echo "provider_template=terraform/state-provider.tf.tpl" >> $GITHUB_ENV
           fi
 
           echo "LAB=$(echo "${{ inputs.lab-cloud }}" | cut -d'-' -f1)" >> $GITHUB_ENV
@@ -339,6 +340,16 @@ jobs:
           --defaults ${{ inputs.vm-name }}.yaml \
           --output file \
           --destination ${{ env.destination }}/${{ inputs.vm-name }}.${{ env.extension }}
+
+      - name: Render provider config
+        id: provider
+        run: |
+          machineShop render \
+          --source local \
+          --template ${{ env.provider_template }} \
+          --defaults ${{ inputs.vm-name }}.yaml \
+          --output file \
+          --destination ${{ env.destination }}/state-provider.${{ env.extension }}
 
       - name: Get token for creating pull request
         uses: tibdex/github-app-token@v1
