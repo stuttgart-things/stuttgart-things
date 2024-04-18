@@ -49,7 +49,7 @@ jobs:
             echo "${TFVARS_FILE} exists."
             values=$(tail -1 ${TFVARS_FILE}| cut -c 3-)
 
-            machineshop render \
+            machineShop render \
             --source local \
             --template ${TFVARS_FILE} \
             --output file \
