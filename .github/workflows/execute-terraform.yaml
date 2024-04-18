@@ -75,20 +75,7 @@ jobs:
           terraform -chdir=${{ inputs.folder }} plan
         shell: bash
 
-      - name: Terraform apply
+      - name: Terraform execution
         run: |
-          if ${{ inputs.operation }} apply; then
-
-            terraform -chdir=${{ inputs.folder }} ${{ inputs.operation }}
-
-          fi
-        shell: bash
-
-      - name: Terraform destroy
-        run: |
-          if ${{ inputs.operation }} destroy; then
-
-            terraform -chdir=${{ inputs.folder }} ${{ inputs.operation }}
-
-          fi
+          terraform -chdir=${{ inputs.folder }} ${{ inputs.operation }}
         shell: bash
