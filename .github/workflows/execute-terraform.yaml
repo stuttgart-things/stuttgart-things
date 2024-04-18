@@ -22,7 +22,7 @@ on:
         type: string
       working-image:
         type: string
-        default: eu.gcr.io/stuttgart-things/sthings-terraform:1.8.1-1
+        default: eu.gcr.io/stuttgart-things/sthings-terraform:1.8.1-2
         required: false
 
 jobs:
@@ -34,6 +34,7 @@ jobs:
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_ACCESS_KEY }}
+      TFVARS_FILE: ${{ inputs.folder }}/terraform.tfvars
     steps:
       - name: Checkout code
         uses: actions/checkout@v4.1.1
@@ -41,9 +42,12 @@ jobs:
           fetch-depth: '0'
           ref: ${{ inputs.branch }}
 
-      - name: Render terraform.tfvars
+      - name: Render terraform.tfvars (if exists)
         run: |
-          #tail -1 /tmp/source | cut -c 3-
+          if test -f "${TFVARS_FILE}"; then
+            echo "${TFVARS_FILE} exists."
+            tail -1 ${TFVARS_FILE}| cut -c 3-
+          fi
 
       - name: Terraform init
         run: |
