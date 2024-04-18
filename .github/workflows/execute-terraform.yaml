@@ -45,8 +45,17 @@ jobs:
       - name: Render terraform.tfvars (if exists)
         run: |
           if test -f "${TFVARS_FILE}"; then
+
             echo "${TFVARS_FILE} exists."
-            tail -1 ${TFVARS_FILE}| cut -c 3-
+            values=$(tail -1 ${TFVARS_FILE}| cut -c 3-)
+
+            machineshop render \
+            --source local \
+            --template ${TFVARS_FILE} \
+            --output file \
+            --values "$values" \
+            --destination ${TFVARS_FILE}
+
           fi
 
       - name: Terraform init
@@ -54,4 +63,9 @@ jobs:
           ls -lta ${{ inputs.folder }}
           terraform --version
           terraform -chdir=${{ inputs.folder }} init
+        shell: bash
+
+      - name: Terraform plan
+        run: |
+          terraform -chdir=${{ inputs.folder }} plan
         shell: bash
