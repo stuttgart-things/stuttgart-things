@@ -394,7 +394,7 @@ jobs:
         id: pr
         uses: peter-evans/create-pull-request@v6.0.2
         with:
-          commit-message: '[CI][${{ inputs.build-engine }}] - Created template config for vm ${{ inputs.os-version }}-${{ env.LAB }}-${{ env.CLOUD }}'
+          commit-message: '[CI][${{ inputs.build-engine }}] - Created template config for vm ${{ inputs.vm-name }} ${{ inputs.os-version }}-${{ env.LAB }}-${{ env.CLOUD }}'
           title: Created VM Config ${{ inputs.os-version }}-${{ env.LAB }}-${{ env.CLOUD }} w/ ${{ inputs.build-engine }}
           branch: ${{ inputs.build-engine }}-${{ inputs.os-version }}-${{ env.LAB }}-${{ env.CLOUD }}-${{ inputs.vm-name }}
           delete-branch: true
