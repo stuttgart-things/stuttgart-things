@@ -30,7 +30,7 @@ on:
       folder:
         description: FOLDER NAME
         type: string
-        default: terraform/builds/vspherevm/labul/<VMNAME>
+        default: terraform/builds/vspherevm/labul/losangeles1
 
 jobs:
   execute-terraform:
