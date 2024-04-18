@@ -246,13 +246,13 @@ jobs:
               "roles" : tekton['roles'],
               "tfversion" : '1.7.5',
               "date" : datetime.now().strftime("%Y-%m-%d, %H:%M"),
-              "vaultSecretPaths" : 'password=apps/data/scr:password,username=apps/data/scr:username',              
+              "vaultSecretPaths" : 'password=cloud/data/vsphere:password, user=cloud/data/vsphere:username, server=cloud/data/vsphere:ip, sshUser=cloud/data/vsphere:vm_ssh_user, sshPassword=cloud/data/vsphere:vm_ssh_password',
             }
 
             def main():
                 # WRITE VM CONFIG YAML TO DISK
                 write_yaml_todisk('./${{ inputs.vm-name }}.yaml')
-                
+
             if __name__ == '__main__':
                 main()
 
@@ -360,7 +360,7 @@ jobs:
           --defaults ${{ inputs.vm-name }}.yaml \
           --output file \
           --destination ${{ env.destination }}/${{ env.provider_name }}.${{ env.extension }}
-    
+
       - name: Render secrets template
         id: secrets
         run: |
