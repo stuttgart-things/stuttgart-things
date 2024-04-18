@@ -13,6 +13,10 @@ on:
         description: RUNNER NAME
         type: string
         default: ghr-stuttgart-things-sthings-cicd
+      branch-name:
+        type: string
+        description: BRANCH NAME
+        default: ghr-stuttgart-things-sthings-cicd
       environment-name:
         type: choice
         description: ENVIRONMENT NAME
@@ -23,14 +27,18 @@ on:
         description: WORKING IMAGE
         type: string
         default: eu.gcr.io/stuttgart-things/sthings-terraform:1.8.1-1
+      folder:
+        description: FOLDER NAME
+        type: string
+        default: terraform/builds/vspherevm/labul/<VMNAME>
 
 jobs:
   execute-terraform:
     name: Execute Terraform
     uses: stuttgart-things/stuttgart-things/.github/workflows/execute-terraform.yaml@main
     with:
-      folder: terraform/builds/vspherevm/labul/test
-      branch: ubuntu23-labul-vsphere
+      folder: ${{ inputs.folder }}
+      branch: ${{ inputs.branch-name }}
       operation: ${{ inputs.operation }}
       working-image: ${{ inputs.working-image}}
       environment-name: ${{ inputs.environment-name }}
