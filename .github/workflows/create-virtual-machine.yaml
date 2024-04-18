@@ -396,7 +396,7 @@ jobs:
         with:
           commit-message: '[CI][${{ inputs.build-engine }}] - Created template config for vm ${{ inputs.os-version }}-${{ env.LAB }}-${{ env.CLOUD }}'
           title: Created VM Config ${{ inputs.os-version }}-${{ env.LAB }}-${{ env.CLOUD }} w/ ${{ inputs.build-engine }}
-          branch: ${{ inputs.os-version }}-${{ env.LAB }}-${{ env.CLOUD }}
+          branch: ${{ inputs.build-engine }}-${{ inputs.os-version }}-${{ env.LAB }}-${{ env.CLOUD }}-${{ inputs.vm-name }}
           delete-branch: true
           token: ${{ steps.generate-token.outputs.token }}
           labels: |
