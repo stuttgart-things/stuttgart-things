@@ -315,6 +315,7 @@ jobs:
         run: |
           cat ${{ inputs.vm-name }}.yaml
           LAB=$(echo "${{ inputs.lab-cloud }}" | cut -d'-' -f1)
+          CLOUD=$(echo "${{ inputs.lab-cloud }}" | cut -d'-' -f2)
 
           if [[ "${{ inputs.build-engine }}" == "crossplane" ]]; then
               CR_NAME=$(echo "${{ inputs.lab-cloud }}" | cut -d'-' -f2)vm
@@ -324,7 +325,7 @@ jobs:
           fi
 
           if [[ "${{ inputs.build-engine }}" == "terraform" ]]; then
-              echo "template=terraform/${{ inputs.lab-cloud }}-vm.tf.tpl" >> $GITHUB_ENV
+              echo "template=terraform/${ CLOUD }-vm.tf.tpl" >> $GITHUB_ENV
               echo "destination=${{ inputs.build-engine }}/builds/${{ inputs.lab-cloud }}-${{ inputs.vm-name }}-vm" >> $GITHUB_ENV
               echo "extension=tf" >> $GITHUB_ENV
               echo "provider_template=terraform/state-provider.tf.tpl" >> $GITHUB_ENV
