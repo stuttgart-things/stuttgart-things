@@ -17,17 +17,22 @@ jobs:
       operation: ${{ steps.set.outputs.OPERATION }}
       working_image: ${{ steps.set.outputs.WORKING_IMAGE }}
       environment: ${{ steps.set.outputs.ENVIRONMENT }}
+      runs_on: ${{ steps.set.outputs.RUNS_ON }}
     runs-on: ghr-stuttgart-things-sthings-cicd
     steps:
       - name: Set Execution Details
         id: set
         run: |
-          echo "TF_WORKING_DIR=${{ github.event.pull_request.head.ref }}/" >> "$GITHUB_OUTPUT"
-          echo "BRANCH=${{ github.event.pull_request.head.ref }}" >> "$GITHUB_OUTPUT"
+          # HARDCODED (FOR NOW)
           echo "OPERATION=apply" >> "$GITHUB_OUTPUT"
           echo "WORKING_IMAGE=eu.gcr.io/stuttgart-things/sthings-terraform:1.8.1-2" >> "$GITHUB_OUTPUT"
+          echo "RUNS_ON=ghr-stuttgart-things-sthings-cicd" >> "$GITHUB_OUTPUT"
+
+          # PULL REQUEST/BRANCH RELATED
+          echo "TF_WORKING_DIR=${{ github.event.pull_request.head.ref }}/" >> "$GITHUB_OUTPUT"
+          echo "BRANCH=${{ github.event.pull_request.head.ref }}" >> "$GITHUB_OUTPUT"
           SPLIT=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'/' -f3)
-          echo "ENVIRONMENT=(echo ${SPLIT} | cut -d'-' -f1)-$(echo ${SPLIT} | cut -d'-' -f2)" >> "$GITHUB_OUTPUT"
+          echo "ENVIRONMENT=$(echo ${SPLIT} | cut -d'-' -f1)-$(echo ${SPLIT} | cut -d'-' -f2)" >> "$GITHUB_OUTPUT"
 
   execute-terraform:
     name: Execute Terraform
@@ -39,5 +44,5 @@ jobs:
       operation: ${{ needs.Get-Terraform-Config.outputs.operation }}
       working-image: ${{ needs.Get-Terraform-Config.outputs.working_image }}
       environment-name: ${{ needs.Get-Terraform-Config.outputs.environment }}
-      runs-on: ghr-stuttgart-things-sthings-cicd
+      runs-on: ${{ needs.Get-Terraform-Config.outputs.runs_on }}
     secrets: inherit
