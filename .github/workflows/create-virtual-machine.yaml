@@ -330,7 +330,7 @@ jobs:
               echo "provider_template=terraform/state-provider.tf.tpl" >> $GITHUB_ENV
               echo "provider_name=backend" >> $GITHUB_ENV
               echo "readme_template=terraform/README.md.tpl" >> $GITHUB_ENV
-              echo "secrets_template=terraform/vspherevm-tfvars.tpl" >> $GITHUB_ENV
+              echo "secrets_template=terraform/vsphere-vm-tfvars.tpl" >> $GITHUB_ENV
           fi
 
           echo "LAB=$(echo "${{ inputs.lab-cloud }}" | cut -d'-' -f1)" >> $GITHUB_ENV
