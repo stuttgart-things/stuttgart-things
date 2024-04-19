@@ -11,12 +11,34 @@ jobs:
     environment: k8s
     container:
       image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2-2
+    outputs:
+      tf_working_dir: ${{ steps.set.outputs.TF_WORKING_DIR }}
+
     runs-on: ghr-stuttgart-things-sthings-cicd
     steps:
       - name: Set Execution Details
         id: set
         run: |
-            SPLIT=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'/' -f3)
-            TF_WORKING_DIR=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'/' -f1)/$(echo ${{ github.event.pull_request.head.ref }} | cut -d'/' -f2)
-            echo ${SPLIT}
-            echo ${TF_WORKING_DIR}
+          echo "TF_WORKING_DIR=${{ github.event.pull_request.head.ref }}" >> "$GITHUB_OUTPUT"
+          echo "OPERATION=apply" >> "$GITHUB_OUTPUT"
+          echo "WORKING_IMAGE=eu.gcr.io/stuttgart-things/sthings-terraform:1.8.1-2" >> "$GITHUB_OUTPUT"
+
+          echo ${{ github.event.pull_request.base.ref }}
+
+          SPLIT=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'/' -f3)
+          ENV=$(echo ${SPLIT} | cut -d'-' -f1)-$(echo ${SPLIT} | cut -d'-' -f2)
+
+          echo ${SPLIT}
+          echo ${ENV}
+
+#   execute-terraform:
+#     name: Execute Terraform
+#     uses: stuttgart-things/stuttgart-things/.github/workflows/execute-terraform.yaml@main
+#     with:
+#       folder: ${{ inputs.folder }}
+#       branch: ${{ inputs.branch-name }}
+#       operation: ${{ inputs.operation }}
+#       working-image: ${{ inputs.working-image}}
+#       environment-name: ${{ inputs.environment-name }}
+#       runs-on: ${{ inputs.runner }}
+#     secrets: inherit
