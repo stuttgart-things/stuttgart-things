@@ -325,7 +325,7 @@ jobs:
           fi
 
           if [[ "${{ inputs.build-engine }}" == "terraform" ]]; then
-              echo "template=terraform/${ CLOUD }-vm.tf.tpl" >> $GITHUB_ENV
+              echo "template=terraform/${CLOUD}-vm.tf.tpl" >> $GITHUB_ENV
               echo "destination=${{ inputs.build-engine }}/builds/${{ inputs.lab-cloud }}-${{ inputs.vm-name }}-vm" >> $GITHUB_ENV
               echo "extension=tf" >> $GITHUB_ENV
               echo "provider_template=terraform/state-provider.tf.tpl" >> $GITHUB_ENV
