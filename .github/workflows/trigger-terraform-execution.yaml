@@ -24,7 +24,7 @@ jobs:
           echo "WORKING_IMAGE=eu.gcr.io/stuttgart-things/sthings-terraform:1.8.1-2" >> "$GITHUB_OUTPUT"
 
           echo ${{ github.event.pull_request.head.sha }}
-          echo ${{ github.event.pull_request.base }}
+          echo ${{ github.ref_name }}
 
           SPLIT=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'/' -f3)
           ENV=$(echo ${SPLIT} | cut -d'-' -f1)-$(echo ${SPLIT} | cut -d'-' -f2)
