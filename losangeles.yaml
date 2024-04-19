@@ -1,24 +1,25 @@
 vmCount: '1'
 vmName: losangeles
-vmMemory: 4096
-vmCpu: 2
-vmTemplate: ubuntu23
-vmDisk: 32
-vmDatastore: /NetApp-HCI-Datacenter/datastore/DatastoreCluster/NetApp-HCI-Datastore-01
-vmNetwork: /NetApp-HCI-Datacenter/network/tiab-prod
+vmMemory: 8192
+vmCpu: 6
+vmTemplate: sthings-u23
+vmDisk: 96
+vmDatastore: /LabUL/datastore/UL-V5010-01-LUN2
+vmNetwork: /LabUL/network/MGMT-10.31.101
 hosts: '[losangeles.labul.sva.de]'
-lab: labda
+lab: labul
+cloud: vsphere
 vmFolder: stuttgart-things/testing
 namespace: crossplane-system
 vmFirmware: bios
-datacenter: /NetApp-HCI-Datacenter
-resourcePool: Resources
-templatePath: /NetApp-HCI-Datacenter/vm/stuttgart-things/vm-templates
-tfvars: vsphere-labda-tfvars
+datacenter: /LabUL
+resourcePool: /LabUL/host/Cluster-V6.5/Resources
+templatePath: /LabUL/vm/stuttgart-things/vm-templates
+tfvars: vsphere-tfvars
 secretKey: terraform.tfvars
-crossplaneProvider: minio-losangeles
+crossplaneProvider: -losangeles
 s3Region: main
-s3Bucket: vspherevm-labda
+s3Bucket: vspherevm-labul
 s3Endpoint: https://artifacts.app1.sthings-vsphere.labul.sva.de
 stateKey: losangeles
 workingImage: eu.gcr.io/stuttgart-things/sthings-ansible:9.3.0
@@ -30,3 +31,7 @@ roles:
 - https://github.com/stuttgart-things/install-requirements.git
 - https://github.com/stuttgart-things/manage-filesystem.git
 - https://github.com/stuttgart-things/install-configure-vault.git
+tfversion: 1.7.5
+date: 2024-04-19, 12:39
+vaultSecretPaths: password=cloud/data/vsphere:password, user=cloud/data/vsphere:username,
+  server=cloud/data/vsphere:ip, sshUser=cloud/data/vsphere:vm_ssh_user, sshPassword=cloud/data/vsphere:vm_ssh_password
