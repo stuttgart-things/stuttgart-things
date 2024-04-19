@@ -315,17 +315,17 @@ jobs:
         run: |
           cat ${{ inputs.vm-name }}.yaml
           LAB=$(echo "${{ inputs.lab-cloud }}" | cut -d'-' -f1)
-          CR_NAME=$(echo "${{ inputs.lab-cloud }}" | cut -d'-' -f2)vm
 
           if [[ "${{ inputs.build-engine }}" == "crossplane" ]]; then
+              CR_NAME=$(echo "${{ inputs.lab-cloud }}" | cut -d'-' -f2)vm
               echo "template=crossplane/claims/${CR_NAME}.yaml" >> $GITHUB_ENV
               echo "destination=crossplane/claims/${CR_NAME}/${LAB}/${{ inputs.vm-name }}" >> $GITHUB_ENV
               echo "extension=yaml" >> $GITHUB_ENV
           fi
 
           if [[ "${{ inputs.build-engine }}" == "terraform" ]]; then
-              echo "template=terraform/${CR_NAME}.tf.tpl" >> $GITHUB_ENV
-              echo "destination=terraform/builds/${CR_NAME}/${LAB}/${{ inputs.vm-name }}" >> $GITHUB_ENV
+              echo "template=terraform/${{ inputs.lab-cloud }}tf.tpl" >> $GITHUB_ENV
+              echo "destination=${{ inputs.build-engine }}/builds/${{ inputs.lab-cloud }}-${{ inputs.vm-name }}-vm" >> $GITHUB_ENV
               echo "extension=tf" >> $GITHUB_ENV
               echo "provider_template=terraform/state-provider.tf.tpl" >> $GITHUB_ENV
               echo "provider_name=backend" >> $GITHUB_ENV
@@ -396,7 +396,7 @@ jobs:
         with:
           commit-message: '[CI][${{ inputs.build-engine }}] - Created template config for vm ${{ inputs.vm-name }} ${{ inputs.os-version }}-${{ env.LAB }}-${{ env.CLOUD }}'
           title: Created VM Config ${{ inputs.os-version }}-${{ env.LAB }}-${{ env.CLOUD }} w/ ${{ inputs.build-engine }}
-          branch: ${{ inputs.build-engine }}-${{ inputs.os-version }}-${{ env.LAB }}-${{ env.CLOUD }}-${{ inputs.vm-name }}
+          branch: ${{ env.destination }}
           delete-branch: true
           token: ${{ steps.generate-token.outputs.token }}
           labels: |
