@@ -16,4 +16,7 @@ jobs:
       - name: Set Execution Details
         id: set
         run: |
-            echo ${{ github.event.pull_request.head.ref }}
+            SPLIT=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'/' -f3)
+            TF_WORKING_DIR=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'/' -f1)/$(echo ${{ github.event.pull_request.head.ref }} | cut -d'/' -f2)
+            echo ${SPLIT}
+            echo ${TF_WORKING_DIR}
