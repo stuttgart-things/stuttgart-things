@@ -2,63 +2,99 @@
 apiVersion: helm.crossplane.io/v1beta1
 kind: Release
 metadata:
-  name: ghr-deploy-configure-rke-cicd
-  namespace: crossplane-system
-  annotations:
-    crossplane.io/external-name: github-runner
+  name: metallb
 spec:
   forProvider:
     chart:
-      name: gha-runner-scale-set
-      repository: oci://ghcr.io/actions/actions-runner-controller-charts
-      version: 0.8.0
-      pullSecretRef:
-        name: ghcr
-        namespace: crossplane-system
-    namespace: arc-systems
-    insecureSkipTLSVerify: false
+      name: metallb
+      repository: https://charts.bitnami.com/bitnami
+      version: 5.0.3
+    namespace: metallb-system
+    insecureSkipTLSVerify: true
     skipCreateNamespace: false
     wait: true
     skipCRDs: true
-    set:
-      - name: githubConfigSecret.github_token
-        valueFrom:
-          secretKeyRef:
-            key: GITHUB_TOKEN
-            name: github-flux-secrets
-            namespace: flux-system
-    values:
-      githubConfigUrl: https://github.com/stuttgart-things/deploy-configure-rke
-      containerMode:
-        type: kubernetes
-        kubernetesModeWorkVolumeClaim:
-          accessModes: ["ReadWriteOnce"]
-          storageClassName: openebs-hostpath
-          resources:
-            requests:
-              storage: 50Mi
-      template:
-        spec:
-          containers:
-          - name: runner
-            image: ghcr.io/actions/actions-runner:2.314.1
-            command: ["/home/runner/run.sh"]
-            env:
-              - name: ACTIONS_RUNNER_REQUIRE_JOB_CONTAINER
-                value: "false"
-              - name: ACTIONS_RUNNER_POD_NAME
-                valueFrom:
-                  fieldRef:
-                    fieldPath: metadata.name
-          initContainers:
-            - name: kube-init
-              image: ghcr.io/actions/actions-runner:2.314.1
-              command: ["/bin/sh", "-c"]
-              args:
-                - |
-                  whoami
-              volumeMounts:
-                - name: work
-                  mountPath: /home/runner/_work
   providerConfigRef:
-    name: cicd
+    name: labda-test
+---
+# apiVersion: helm.crossplane.io/v1beta1
+# kind: Release
+# metadata:
+#   name: ingress-nginx
+# spec:
+#   forProvider:
+#     chart:
+#       name: ingress-nginx
+#       repository: https://kubernetes.github.io/ingress-nginx
+#       version: 4.10.0
+#     namespace: ingress-nginx
+#     insecureSkipTLSVerify: true
+#     skipCreateNamespace: false
+#     wait: true
+#     skipCRDs: true
+#   providerConfigRef:
+#     name: labda-test
+# ---
+# apiVersion: helm.crossplane.io/v1beta1
+# kind: Release
+# metadata:
+#   name: ghr-deploy-configure-rke-cicd
+#   namespace: crossplane-system
+#   annotations:
+#     crossplane.io/external-name: github-runner
+# spec:
+#   forProvider:
+#     chart:
+#       name: gha-runner-scale-set
+#       repository: oci://ghcr.io/actions/actions-runner-controller-charts
+#       version: 0.8.0
+#       pullSecretRef:
+#         name: ghcr
+#         namespace: crossplane-system
+#     namespace: arc-systems
+#     insecureSkipTLSVerify: false
+#     skipCreateNamespace: false
+#     wait: true
+#     skipCRDs: true
+#     set:
+#       - name: githubConfigSecret.github_token
+#         valueFrom:
+#           secretKeyRef:
+#             key: GITHUB_TOKEN
+#             name: github-flux-secrets
+#             namespace: flux-system
+#     values:
+#       githubConfigUrl: https://github.com/stuttgart-things/deploy-configure-rke
+#       containerMode:
+#         type: kubernetes
+#         kubernetesModeWorkVolumeClaim:
+#           accessModes: ["ReadWriteOnce"]
+#           storageClassName: openebs-hostpath
+#           resources:
+#             requests:
+#               storage: 50Mi
+#       template:
+#         spec:
+#           containers:
+#           - name: runner
+#             image: ghcr.io/actions/actions-runner:2.314.1
+#             command: ["/home/runner/run.sh"]
+#             env:
+#               - name: ACTIONS_RUNNER_REQUIRE_JOB_CONTAINER
+#                 value: "false"
+#               - name: ACTIONS_RUNNER_POD_NAME
+#                 valueFrom:
+#                   fieldRef:
+#                     fieldPath: metadata.name
+#           initContainers:
+#             - name: kube-init
+#               image: ghcr.io/actions/actions-runner:2.314.1
+#               command: ["/bin/sh", "-c"]
+#               args:
+#                 - |
+#                   whoami
+#               volumeMounts:
+#                 - name: work
+#                   mountPath: /home/runner/_work
+#   providerConfigRef:
+#     name: cicd

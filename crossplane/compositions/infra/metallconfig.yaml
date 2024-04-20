@@ -1,0 +1,87 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: metallbconfig
+  labels:
+    crossplane.io/xrd: xmetallbconfigs.resources.stuttgart-things.com
+spec:
+  writeConnectionSecretsToNamespace: crossplane-system
+  compositeTypeRef:
+    apiVersion: resources.stuttgart-things.com/v1alpha1
+    kind: XMetalLBconfig
+  resources:
+    - name: metallb-release
+      base:
+        apiVersion: resources.stuttgart-things.com/v1alpha1
+        kind: XMetalLB
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: metadata.name
+          toFieldPath: metadata.name
+        - type: FromCompositeFieldPath
+          fromFieldPath: metadata.namespace
+          toFieldPath: metadata.namespace
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.clusterName
+          toFieldPath: spec.clusterName
+        # - type: ToCompositeFieldPath
+        #   fromFieldPath: status.share
+        #   toFieldPath: status.clusterName
+        #   policy:
+        #     fromFieldPath: Required
+    - name: ip-pool
+      base:
+        apiVersion: kubernetes.crossplane.io/v1alpha2
+        kind: Object
+        metadata:
+          name: ip-pool
+        spec:
+          forProvider:
+            manifest:
+              apiVersion: metallb.io/v1beta1
+              kind: IPAddressPool
+              metadata:
+                namespace: metallb-system
+              spec:
+                addresses:
+                  - 10.100.136.225-10.100.136.226
+          providerConfigRef:
+            name: kubernetes-labda-test
+    - name: metallb-config
+      base:
+        apiVersion: kubernetes.crossplane.io/v1alpha2
+        kind: Object
+        metadata:
+          name: pool-advertisement
+        spec:
+          forProvider:
+            manifest:
+              apiVersion: metallb.io/v1beta1
+              kind: L2Advertisement
+              metadata:
+                name: l2advertisement
+                namespace: metallb-system
+              spec:
+                ipaddresspools:
+                  - ip-pool
+          providerConfigRef:
+            name: kubernetes-labda-test
+      # patches:
+      #   - fromFieldPath: status.clusterName
+      #     toFieldPath: spec.forProvider.manifest.metadata.labels.test
+      #     policy:
+      #       fromFieldPath: Required
+
+      #     providerConfigRef:
+      #       name: kubernetes-incluster
+      # patches:
+      #   - type: FromCompositeFieldPath
+      #     fromFieldPath: spec.clusterName
+      #     toFieldPath: spec.clusterName
+
+        # - type: ToCompositeFieldPath
+        #   fromFieldPath: status.share.revision
+        #   toFieldPath: status.clusterName
+        #   policy:
+        #     fromFieldPath: Required

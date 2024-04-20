@@ -2,14 +2,50 @@
 apiVersion: kubernetes.crossplane.io/v1alpha2
 kind: Object
 metadata:
-  name: sample-namespace
+  name: ip-pool
 spec:
   forProvider:
     manifest:
-      apiVersion: v1
-      kind: Namespace
+      apiVersion: metallb.io/v1beta1
+      kind: IPAddressPool
       metadata:
-        labels:
-          example: "true"
+        namespace: metallb-system
+      spec:
+        addresses:
+          - 10.100.136.225-10.100.136.226
   providerConfigRef:
-    name: kubernetes-incluster
+    name: kubernetes-labda-test
+---
+apiVersion: kubernetes.crossplane.io/v1alpha2
+kind: Object
+metadata:
+  name: pool-advertisement
+spec:
+  forProvider:
+    manifest:
+      apiVersion: metallb.io/v1beta1
+      kind: L2Advertisement
+      metadata:
+        name: l2advertisement
+        namespace: metallb-system
+      spec:
+          ipaddresspools:
+            - ip-pool
+  providerConfigRef:
+    name: kubernetes-labda-test
+---
+# ---
+# apiVersion: kubernetes.crossplane.io/v1alpha2
+# kind: Object
+# metadata:
+#   name: sample-namespace
+# spec:
+#   forProvider:
+#     manifest:
+#       apiVersion: v1
+#       kind: Namespace
+#       metadata:
+#         labels:
+#           example: "true"
+#   providerConfigRef:
+#     name: kubernetes-incluster
