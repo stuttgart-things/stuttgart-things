@@ -19,7 +19,7 @@ spec:
       referenceable: true
       schema:
         openAPIV3Schema:
-          description: A MetalLBconfig is a composite resource that represents a helm release for a metallb deployment
+          description: A MetalLBconfig is a composite resource that represents a helm release for a metallb deployment and configuration
           type: object
           properties:
             spec:

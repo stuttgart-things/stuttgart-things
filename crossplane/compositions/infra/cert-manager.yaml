@@ -1,0 +1,48 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: cert-manager
+  labels:
+    crossplane.io/xrd: xcertmanagers.resources.stuttgart-things.com
+spec:
+  writeConnectionSecretsToNamespace: crossplane-system
+  compositeTypeRef:
+    apiVersion: resources.stuttgart-things.com/v1alpha1
+    kind: XCertManager
+  resources:
+    - base:
+        apiVersion: helm.crossplane.io/v1beta1
+        kind: Release
+        metadata:
+          name: cert-manager
+          annotations:
+            crossplane.io/external-name: cert-manager
+        spec:
+          forProvider:
+            chart:
+              name: cert-manager
+              repository: https://charts.jetstack.io
+              version: v1.14.4
+            namespace: cert-manager
+            insecureSkipTLSVerify: true
+            skipCreateNamespace: false
+            wait: true
+            skipCRDs: false
+            values:
+              installCRDs: true
+      patches:
+        - type: CombineFromComposite
+          combine:
+            variables:
+              - fromFieldPath: spec.clusterName
+            strategy: string
+            string:
+              fmt: "cert-manager-%s"
+          toFieldPath: metadata.name
+        - fromFieldPath: spec.deploymentNamespace
+          toFieldPath: spec.forProvider.namespace
+        - fromFieldPath: spec.clusterName
+          toFieldPath: spec.providerConfigRef.name
+        - fromFieldPath: spec.version
+          toFieldPath: spec.forProvider.chart.version

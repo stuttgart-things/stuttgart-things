@@ -1,0 +1,8 @@
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: CertManagerConfig
+metadata:
+  name: labda-test
+  namespace: crossplane-system
+spec:
+  clusterName: labda-test

@@ -2,38 +2,95 @@
 apiVersion: kubernetes.crossplane.io/v1alpha2
 kind: Object
 metadata:
-  name: ip-pool
+  name: secretpatch
 spec:
+  references:
+  - patchesFrom:
+      apiVersion: v1
+      kind: Secret
+      name: test
+      namespace: crossplane-system
+      fieldPath: data.approle
+    toFieldPath: data.approle
   forProvider:
     manifest:
-      apiVersion: metallb.io/v1beta1
-      kind: IPAddressPool
+      apiVersion: v1
+      kind: Secret
       metadata:
-        namespace: metallb-system
-      spec:
-        addresses:
-          - 10.100.136.225-10.100.136.226
+        namespace: cert-manager
+      data: {}
   providerConfigRef:
-    name: kubernetes-labda-test
+    name: labda-test
 ---
 apiVersion: kubernetes.crossplane.io/v1alpha2
 kind: Object
 metadata:
-  name: pool-advertisement
+  name: issuer
 spec:
+  references:
+    - patchesFrom:
+        apiVersion: v1
+        kind: Secret
+        name: test
+        namespace: crossplane-system
+        fieldPath: data.caBundle
+      toFieldPath: vault.caBundle
   forProvider:
     manifest:
-      apiVersion: metallb.io/v1beta1
-      kind: L2Advertisement
+      apiVersion: cert-manager.io/v1
+      kind: ClusterIssuer
       metadata:
-        name: l2advertisement
-        namespace: metallb-system
+        namespace: cert-manager
       spec:
-          ipaddresspools:
-            - ip-pool
+        vault:
+          # caBundle: empty
+          path: pki/sign/sthings-vsphere.labul.sva.de
+          server: https://vault-vsphere.labul.sva.de:8200
+          auth:
+            appRole:
+              path: approle
+              roleId: 1d42d7e7-8c14-e5f9-801d-b3ecef416616
+              secretRef:
+                key: approle
+                name: cert-manager-vault-approle
   providerConfigRef:
-    name: kubernetes-labda-test
----
+    name: labda-test
+# ---
+# apiVersion: kubernetes.crossplane.io/v1alpha2
+# kind: Object
+# metadata:
+#   name: ip-pool
+# spec:
+#   forProvider:
+#     manifest:
+#       apiVersion: metallb.io/v1beta1
+#       kind: IPAddressPool
+#       metadata:
+#         namespace: metallb-system
+#       spec:
+#         addresses:
+#           - 10.100.136.225-10.100.136.226
+#   providerConfigRef:
+#     name: kubernetes-labda-test
+# ---
+# apiVersion: kubernetes.crossplane.io/v1alpha2
+# kind: Object
+# metadata:
+#   name: pool-advertisement
+# spec:
+#   forProvider:
+#     manifest:
+#       apiVersion: metallb.io/v1beta1
+#       kind: L2Advertisement
+#       metadata:
+#         name: l2advertisement
+#         namespace: metallb-system
+#       spec:
+#           ipaddresspools:
+#             - ip-pool
+#   providerConfigRef:
+#     name: kubernetes-labda-test
+# ---
 # ---
 # apiVersion: kubernetes.crossplane.io/v1alpha2
 # kind: Object

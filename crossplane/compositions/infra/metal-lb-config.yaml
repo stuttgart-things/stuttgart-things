@@ -43,7 +43,7 @@ spec:
           toFieldPath: spec.clusterName
         - type: ToCompositeFieldPath
           fromFieldPath: status.share.revision
-          toFieldPath: status.share.revision
+          toFieldPath: status.share
           policy:
             fromFieldPath: Required
     - name: ip-pool
