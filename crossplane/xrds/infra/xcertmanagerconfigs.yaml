@@ -37,6 +37,15 @@ spec:
                   type: string
                   default: v1.14.4
                   description: helm chart version for cert-manager
+                approle:
+                  type: object
+                  properties:
+                    secretName:
+                      type: string
+                      default: cert-manager
+                    secretNamespace:
+                      type: string
+                      default: crossplane-system
               required:
                 - clusterName
             status:

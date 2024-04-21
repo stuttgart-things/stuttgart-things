@@ -66,10 +66,18 @@ spec:
                 namespace: cert-manager
               data: {}
       patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.approle.secretName
+          toFieldPath: spec.references.references[0].patchesFrom[0].name
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.approle.secretNamespace
+          toFieldPath: spec.references.references[0].patchesFrom.namespace
         - type: PatchSet
           patchSetName: provider
         - type: PatchSet
           patchSetName: namespace
+
+
       #   - type: FromCompositeFieldPath
       #     fromFieldPath: spec.ipRanges
       #     toFieldPath: spec.forProvider.manifest.spec.addresses
