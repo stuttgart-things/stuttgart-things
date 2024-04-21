@@ -41,11 +41,11 @@ spec:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.clusterName
           toFieldPath: spec.clusterName
-        # - type: ToCompositeFieldPath
-        #   fromFieldPath: status.share
-        #   toFieldPath: status.clusterName
-        #   policy:
-        #     fromFieldPath: Required
+        - type: ToCompositeFieldPath
+          fromFieldPath: status.share.revision
+          toFieldPath: status.share.revision
+          policy:
+            fromFieldPath: Required
     - name: ip-pool
       base:
         apiVersion: kubernetes.crossplane.io/v1alpha2

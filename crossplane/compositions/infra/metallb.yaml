@@ -20,9 +20,6 @@ spec:
           annotations:
             crossplane.io/external-name: metallb
         spec:
-          writeConnectionSecretToRef:
-            name: metallb-secrets
-            namespace: crossplane-system
           providerConfigRef:
             name: in-cluster
           forProvider:
@@ -57,6 +54,12 @@ spec:
           toFieldPath: spec.providerConfigRef.name
         - fromFieldPath: spec.version
           toFieldPath: spec.forProvider.chart.version
-        # - fromFieldPath: spec.connectionDetails[0].namespace
-        #   toFieldPath:
-        #   type: FromCompositeFieldPath
+        - type: ToCompositeFieldPath
+          fromFieldPath: status.atProvider.revision
+          toFieldPath: status.share.revision
+          policy:
+            fromFieldPath: Required
+      connectionDetails:
+        - name: config
+          fromConnectionSecretKey: config
+          # toFieldPath: status.share
