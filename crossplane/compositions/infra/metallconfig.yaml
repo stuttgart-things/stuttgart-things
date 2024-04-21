@@ -6,6 +6,22 @@ metadata:
   labels:
     crossplane.io/xrd: xmetallbconfigs.resources.stuttgart-things.com
 spec:
+  patchSets:
+    - name: provider
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.clusterName
+          toFieldPath: spec.providerConfigRef.name
+    - name: name
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.ipPoolName
+          toFieldPath: spec.forProvider.manifest.metadata.name
+    - name: namespace
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.deploymentNamespace
+          toFieldPath: spec.forProvider.manifest.metadata.namespace
   writeConnectionSecretsToNamespace: crossplane-system
   compositeTypeRef:
     apiVersion: resources.stuttgart-things.com/v1alpha1
@@ -48,17 +64,16 @@ spec:
                   - rangeStart-rangeEnd
       patches:
         - type: FromCompositeFieldPath
-          fromFieldPath: spec.clusterName
-          toFieldPath: spec.providerConfigRef.name
+          fromFieldPath: spec.ipRanges
+        - type: PatchSet
+          patchSetName: provider
+        - type: PatchSet
+          patchSetName: name
+        - type: PatchSet
+          patchSetName: namespace
         - type: FromCompositeFieldPath
           fromFieldPath: spec.ipRanges
           toFieldPath: spec.forProvider.manifest.spec.addresses
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.ipPoolName
-          toFieldPath: spec.forProvider.manifest.metadata.name
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.deploymentNamespace
-          toFieldPath: spec.forProvider.manifest.metadata.namespace
     - name: l2-advertisement
       base:
         apiVersion: kubernetes.crossplane.io/v1alpha2
@@ -77,14 +92,11 @@ spec:
                   - ip-pool
       patches:
         - type: FromCompositeFieldPath
-          fromFieldPath: spec.clusterName
-          toFieldPath: spec.providerConfigRef.name
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.ipPoolName
-          toFieldPath: spec.forProvider.manifest.metadata.name
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.deploymentNamespace
-          toFieldPath: spec.forProvider.manifest.metadata.namespace
-        - type: FromCompositeFieldPath
           fromFieldPath: spec.ipPoolName
           toFieldPath: spec.forProvider.manifest.spec.ipaddresspools
+        - type: PatchSet
+          patchSetName: provider
+        - type: PatchSet
+          patchSetName: name
+        - type: PatchSet
+          patchSetName: namespace
