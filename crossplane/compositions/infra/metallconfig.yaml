@@ -37,51 +37,54 @@ spec:
         metadata:
           name: ip-pool
         spec:
+          providerConfigRef:
+            name: kubernetes-clustername
           forProvider:
             manifest:
               apiVersion: metallb.io/v1beta1
               kind: IPAddressPool
-              metadata:
-                namespace: metallb-system
               spec:
                 addresses:
-                  - 10.100.136.225-10.100.136.226
-          providerConfigRef:
-            name: kubernetes-labda-test
-    - name: metallb-config
+                  - rangeStart-rangeEnd
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.clusterName
+          toFieldPath: spec.providerConfigRef.name
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.ipRanges
+          toFieldPath: spec.forProvider.manifest.spec.addresses
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.ipPoolName
+          toFieldPath: spec.forProvider.manifest.metadata.name
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.deploymentNamespace
+          toFieldPath: spec.forProvider.manifest.metadata.namespace
+    - name: l2-advertisement
       base:
         apiVersion: kubernetes.crossplane.io/v1alpha2
         kind: Object
         metadata:
           name: pool-advertisement
         spec:
+          providerConfigRef:
+            name: kubernetes-clustername
           forProvider:
             manifest:
               apiVersion: metallb.io/v1beta1
               kind: L2Advertisement
-              metadata:
-                name: l2advertisement
-                namespace: metallb-system
               spec:
-                ipaddresspools:
+                ipAddressPools:
                   - ip-pool
-          providerConfigRef:
-            name: kubernetes-labda-test
-      # patches:
-      #   - fromFieldPath: status.clusterName
-      #     toFieldPath: spec.forProvider.manifest.metadata.labels.test
-      #     policy:
-      #       fromFieldPath: Required
-
-      #     providerConfigRef:
-      #       name: kubernetes-incluster
-      # patches:
-      #   - type: FromCompositeFieldPath
-      #     fromFieldPath: spec.clusterName
-      #     toFieldPath: spec.clusterName
-
-        # - type: ToCompositeFieldPath
-        #   fromFieldPath: status.share.revision
-        #   toFieldPath: status.clusterName
-        #   policy:
-        #     fromFieldPath: Required
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.clusterName
+          toFieldPath: spec.providerConfigRef.name
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.ipPoolName
+          toFieldPath: spec.forProvider.manifest.metadata.name
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.deploymentNamespace
+          toFieldPath: spec.forProvider.manifest.metadata.namespace
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.ipPoolName
+          toFieldPath: spec.forProvider.manifest.spec.ipaddresspools

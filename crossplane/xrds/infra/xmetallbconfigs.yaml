@@ -33,12 +33,22 @@ spec:
                   type: string
                   default: in-cluster
                   description: cluster name/helm provider name
+                ipPoolName:
+                  type: string
+                  default: ip-pool
+                  description: name of ip pool
                 version:
                   type: string
                   default: 5.0.3
                   description: helm chart version for metallb
+                ipRanges:
+                  type: array
+                  description: IP-Ranges
+                  items:
+                    type: string
               required:
                 - clusterName
+                - ipRanges
             status:
               description: A Status represents the observed state
               properties:

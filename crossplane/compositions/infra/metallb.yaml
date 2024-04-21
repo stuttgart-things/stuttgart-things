@@ -57,3 +57,6 @@ spec:
           toFieldPath: spec.providerConfigRef.name
         - fromFieldPath: spec.version
           toFieldPath: spec.forProvider.chart.version
+        # - fromFieldPath: spec.connectionDetails[0].namespace
+        #   toFieldPath:
+        #   type: FromCompositeFieldPath

@@ -6,3 +6,6 @@ metadata:
   namespace: crossplane-system
 spec:
   clusterName: labda-test
+  ipPoolName: pool1
+  ipRanges:
+    - 10.100.136.225-10.100.136.226
