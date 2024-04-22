@@ -46,3 +46,8 @@ spec:
           toFieldPath: spec.providerConfigRef.name
         - fromFieldPath: spec.version
           toFieldPath: spec.forProvider.chart.version
+        # - type: ToCompositeFieldPath
+        #   fromFieldPath: status.atProvider.revision
+        #   toFieldPath: status.share.revision
+        #   policy:
+        #     fromFieldPath: Required

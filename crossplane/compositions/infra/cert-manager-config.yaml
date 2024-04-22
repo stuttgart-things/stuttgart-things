@@ -7,6 +7,11 @@ metadata:
     crossplane.io/xrd: xcertmanagerconfigs.resources.stuttgart-things.com
 spec:
   patchSets:
+    - name: name
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.issuerName
+          toFieldPath: metadata.name
     - name: provider
       patches:
         - type: FromCompositeFieldPath
@@ -36,11 +41,11 @@ spec:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.clusterName
           toFieldPath: spec.clusterName
-        - type: ToCompositeFieldPath
-          fromFieldPath: status.share.revision
-          toFieldPath: status.share
-          policy:
-            fromFieldPath: Required
+        # - type: ToCompositeFieldPath
+        #   fromFieldPath: status.share.revision
+        #   toFieldPath: status.share
+        #   policy:
+        #     fromFieldPath: Required
     - name: cert-manager-vault-approle
       base:
         apiVersion: kubernetes.crossplane.io/v1alpha2
@@ -54,9 +59,9 @@ spec:
             - patchesFrom:
                 apiVersion: v1
                 kind: Secret
-                name: test
+                name: cert-manager
                 namespace: crossplane-system
-                fieldPath: data.approle
+                fieldPath: data.approleSecret
               toFieldPath: data.approle
           forProvider:
             manifest:
@@ -68,42 +73,73 @@ spec:
       patches:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.approle.secretName
-          toFieldPath: spec.references.references[0].patchesFrom[0].name
+          toFieldPath: spec.references[0].patchesFrom.name
         - type: FromCompositeFieldPath
           fromFieldPath: spec.approle.secretNamespace
-          toFieldPath: spec.references.references[0].patchesFrom.namespace
+          toFieldPath: spec.references[0].patchesFrom.namespace
         - type: PatchSet
           patchSetName: provider
         - type: PatchSet
           patchSetName: namespace
-
-
-      #   - type: FromCompositeFieldPath
-      #     fromFieldPath: spec.ipRanges
-      #     toFieldPath: spec.forProvider.manifest.spec.addresses
-    # - name: l2-advertisement
-    #   base:
-    #     apiVersion: kubernetes.crossplane.io/v1alpha2
-    #     kind: Object
-    #     metadata:
-    #       name: pool-advertisement
-    #     spec:
-    #       providerConfigRef:
-    #         name: kubernetes-clustername
-    #       forProvider:
-    #         manifest:
-    #           apiVersion: metallb.io/v1beta1
-    #           kind: L2Advertisement
-    #           spec:
-    #             ipAddressPools:
-    #               - ip-pool
-    #   patches:
-    #     - type: FromCompositeFieldPath
-    #       fromFieldPath: spec.ipPoolName
-    #       toFieldPath: spec.forProvider.manifest.spec.ipaddresspools
-    #     - type: PatchSet
-    #       patchSetName: provider
-    #     - type: PatchSet
-    #       patchSetName: name
-    #     - type: PatchSet
-    #       patchSetName: namespace
+        - type: PatchSet
+          patchSetName: name
+    - name: clutster-issuer
+      base:
+        apiVersion: kubernetes.crossplane.io/v1alpha2
+        kind: Object
+        metadata:
+          name: cert-manager-vault-approle
+        spec:
+          providerConfigRef:
+            name: kubernetes-clustername
+          references:
+            - patchesFrom:
+                apiVersion: v1
+                kind: Secret
+                name: cert-manager
+                namespace: crossplane-system
+                fieldPath: data.caBundle
+              toFieldPath: spec.vault.caBundle
+          forProvider:
+            manifest:
+              apiVersion: cert-manager.io/v1
+              kind: ClusterIssuer
+              metadata:
+                namespace: cert-manager
+              spec:
+                vault:
+                  caBundle: tbs
+                  #path: tbs
+                  #server: tbs
+                  auth:
+                    appRole:
+                      path: approle
+                      roleId: tbs
+                      secretRef:
+                        key: approle
+                        name: cert-manager-vault-approle
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.approle.secretName
+          toFieldPath: spec.references[0].patchesFrom.name
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.approle.secretNamespace
+          toFieldPath: spec.references[0].patchesFrom.namespace
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.approle.pkiPath
+          toFieldPath: spec.forProvider.manifest.spec.vault.path
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.approle.vaultAddr
+          toFieldPath: spec.forProvider.manifest.spec.vault.server
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.approle.approleID
+          toFieldPath: spec.forProvider.manifest.spec.vault.auth.appRole.roleId
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.issuerName
+          toFieldPath: spec.forProvider.manifest.spec.vault.auth.appRole.secretRef.name
+        - type: PatchSet
+          patchSetName: provider
+        - type: PatchSet
+          patchSetName: namespace
+        - type: PatchSet
+          patchSetName: name

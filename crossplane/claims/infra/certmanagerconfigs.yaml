@@ -6,3 +6,10 @@ metadata:
   namespace: crossplane-system
 spec:
   clusterName: labda-test
+  issuerName: vault-approle
+  approle:
+    secretName: cert-manager
+    secretNamespace: crossplane-system
+    pkiPath: pki/sign/sthings-vsphere.labul.sva.de
+    vaultAddr: https://vault-vsphere.labul.sva.de:8200
+    approleID: 1d42d7e7-8c14-e5f9-801d-b3ecef416616
