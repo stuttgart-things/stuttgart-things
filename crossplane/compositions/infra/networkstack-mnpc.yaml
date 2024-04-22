@@ -1,0 +1,48 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: networkstackmnpc
+  labels:
+    crossplane.io/xrd: xnetworkstackmnpcs.resources.stuttgart-things.com
+spec:
+  patchSets:
+    - name: provider
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.clusterName
+          toFieldPath: spec.providerConfigRef.name
+    - name: name
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.ipPoolName
+          toFieldPath: spec.forProvider.manifest.metadata.name
+    - name: namespace
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.deploymentNamespace
+          toFieldPath: spec.forProvider.manifest.metadata.namespace
+  writeConnectionSecretsToNamespace: crossplane-system
+  compositeTypeRef:
+    apiVersion: resources.stuttgart-things.com/v1alpha1
+    kind: XMetalLBconfig
+  resources:
+    - name: metallb-release
+      base:
+        apiVersion: resources.stuttgart-things.com/v1alpha1
+        kind: XMetalLB
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: metadata.name
+          toFieldPath: metadata.name
+        - type: FromCompositeFieldPath
+          fromFieldPath: metadata.namespace
+          toFieldPath: metadata.namespace
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.clusterName
+          toFieldPath: spec.clusterName
+        - type: ToCompositeFieldPath
+          fromFieldPath: status.share.revision
+          toFieldPath: status.share
+          policy:
+            fromFieldPath: Required
