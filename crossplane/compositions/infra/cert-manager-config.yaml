@@ -117,7 +117,7 @@ spec:
                       roleId: tbs
                       secretRef:
                         key: approle
-                        name: cert-manager-vault-approle
+                        #name: cert-manager-vault-approle
       patches:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.approle.secretName
