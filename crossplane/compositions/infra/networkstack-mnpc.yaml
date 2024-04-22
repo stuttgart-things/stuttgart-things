@@ -25,12 +25,12 @@ spec:
   writeConnectionSecretsToNamespace: crossplane-system
   compositeTypeRef:
     apiVersion: resources.stuttgart-things.com/v1alpha1
-    kind: XMetalLBconfig
+    kind: XNetworkStackMNPC
   resources:
-    - name: metallb-release
+    - name: metallb-release-config
       base:
         apiVersion: resources.stuttgart-things.com/v1alpha1
-        kind: XMetalLB
+        kind: XMetalLBconfig
       patches:
         - type: FromCompositeFieldPath
           fromFieldPath: metadata.name
@@ -41,8 +41,17 @@ spec:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.clusterName
           toFieldPath: spec.clusterName
-        - type: ToCompositeFieldPath
-          fromFieldPath: status.share.revision
-          toFieldPath: status.share
-          policy:
-            fromFieldPath: Required
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.ipRanges
+          toFieldPath: spec.ipRanges
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.ipPoolName
+          toFieldPath: spec.ipPoolName
+        # - type: FromCompositeFieldPath
+        #   fromFieldPath: status.share
+        #   toFieldPath: status.share
+        # - type: ToCompositeFieldPath
+        #   fromFieldPath: status.share.revision
+        #   toFieldPath: status.share
+        #   policy:
+        #     fromFieldPath: Required
