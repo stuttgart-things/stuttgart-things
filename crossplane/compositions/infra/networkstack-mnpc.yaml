@@ -47,11 +47,49 @@ spec:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.ipPoolName
           toFieldPath: spec.ipPoolName
-        # - type: FromCompositeFieldPath
-        #   fromFieldPath: status.share
-        #   toFieldPath: status.share
-        # - type: ToCompositeFieldPath
-        #   fromFieldPath: status.share.revision
-        #   toFieldPath: status.share
-        #   policy:
-        #     fromFieldPath: Required
+    - name: ingress-nginx-deployment
+      base:
+        apiVersion: resources.stuttgart-things.com/v1alpha1
+        kind: XIngressNginx
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: metadata.name
+          toFieldPath: metadata.name
+        - type: FromCompositeFieldPath
+          fromFieldPath: metadata.namespace
+          toFieldPath: metadata.namespace
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.clusterName
+          toFieldPath: spec.clusterName
+    - name: certmanager-release-config
+      base:
+        apiVersion: resources.stuttgart-things.com/v1alpha1
+        kind: XCertManagerConfig
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: metadata.name
+          toFieldPath: metadata.name
+        - type: FromCompositeFieldPath
+          fromFieldPath: metadata.namespace
+          toFieldPath: metadata.namespace
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.clusterName
+          toFieldPath: spec.clusterName
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.issuerName
+          toFieldPath: spec.issuerName
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.approle.secretName
+          toFieldPath: spec.approle.secretName
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.approle.secretNamespace
+          toFieldPath: spec.approle.secretNamespace
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.approle.pkiPath
+          toFieldPath: spec.approle.pkiPath
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.approle.vaultAddr
+          toFieldPath: spec.approle.vaultAddr
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.approle.approleID
+          toFieldPath: spec.approle.approleID
