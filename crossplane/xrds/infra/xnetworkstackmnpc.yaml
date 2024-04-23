@@ -25,6 +25,10 @@ spec:
             spec:
               type: object
               properties:
+                issuerName:
+                  type: string
+                  default: cert-manager-vault-approle
+                  description: name of cluster issuer
                 deploymentNamespace:
                   type: string
                   default: metallb-system
@@ -46,6 +50,26 @@ spec:
                   description: IP-Ranges
                   items:
                     type: string
+                approle:
+                  type: object
+                  properties:
+                    vaultAddr:
+                      type: string
+                      description: vault addr
+                    approleID:
+                      type: string
+                      description: vault approle ID
+                    pkiPath:
+                      type: string
+                      description: pki path
+                    secretName:
+                      type: string
+                      default: cert-manager
+                      description: name of secret
+                    secretNamespace:
+                      type: string
+                      default: crossplane-system
+                      description: namespace of secret
               required:
                 - clusterName
                 - ipRanges
