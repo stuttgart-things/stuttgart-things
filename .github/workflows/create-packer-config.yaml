@@ -114,6 +114,23 @@ jobs:
           --brackets square \
           --destination ${{ env.WORKING_DIR }}/requirements.yaml
 
+      - name: Render secrets template
+        id: secrets
+        run: |
+          cat <<EOF > secret-defaults.yaml
+          vaultSecretPaths: password=cloud/data/vsphere:password, user=cloud/data/vsphere:username, server=cloud/data/vsphere:ip, sshUser=cloud/data/vsphere:vm_ssh_user, sshPassword=cloud/data/vsphere:vm_ssh_
+          password
+          EOF
+        
+          machineShop render \
+          --source local \
+          --template terraform/vsphere-vm-tfvars.tpl \
+          --defaults secret-defaults.yaml \
+          --brackets square \
+          --source local \
+          --output file \
+          --destination ${{ env.WORKING_DIR }}/terraform.tfvars
+
       - name: Render Terraform template w/ machineShop
         id: renderTerraformTemplate
         run: |
