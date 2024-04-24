@@ -22,11 +22,7 @@ jobs:
       contents: read
       pull-requests: read
     runs-on: ghr-stuttgart-things-sthings-cicd
-    steps:
-      - name: Checkout code
-        id: checkout
-        uses: actions/checkout@v4.1.1
-    
+    steps:          
       - name: Get VM-Template name
         uses: peter-evans/find-comment@v3
         id: fc
@@ -52,8 +48,6 @@ jobs:
           echo "RUNS_ON=ghr-stuttgart-things-sthings-cicd" >> "$GITHUB_OUTPUT"
           LAB=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'-' -f2)
           echo "ENVIRONMENT=$(echo ${LAB})" >> "$GITHUB_OUTPUT"
-
-          echo ${LAB}
 
   execute-terraform:
     name: Execute Terraform
