@@ -40,7 +40,7 @@ jobs:
       - name: Set values for terraform execution
         id: set
         run: |
-          echo "FOLDER=$(echo ${{ steps.test.outputs.comment-body }} | sed 's/.*\://')" >> "$GITHUB_OUTPUT"
+          echo "FOLDER=$(echo ${{ steps.test.outputs.comment-body }} | sed 's/.*\://')/" >> "$GITHUB_OUTPUT"
           echo "TEMPLATE_NAME=$(echo ${{ steps.fc.outputs.comment-body }} | sed 's/.*\://')" >> "$GITHUB_OUTPUT"
           echo "BRANCH=${{ github.event.pull_request.head.ref }}" >> "$GITHUB_OUTPUT"
           echo "OPERATION=apply" >> "$GITHUB_OUTPUT"
