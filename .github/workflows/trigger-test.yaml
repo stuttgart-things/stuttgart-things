@@ -8,6 +8,13 @@ on:
 jobs:
   Get-Runner-Config:
     if: contains(github.event.pull_request.labels.*.name, 'test-vm')
+    outputs:
+      folder: ${{ steps.set.outputs.FOLDER }}
+      template-name: ${{ steps.set.outputs.TEMPLATE_NAME }}
+      branch: ${{ steps.set.outputs.BRANCH }}   
+      operation: ${{ steps.set.outputs.OPERATION }}   
+      environment: ${{ steps.set.outputs.ENVIRONMENT }}
+      runs_on: ${{ steps.set.outputs.RUNS_ON }}
     container:
       image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2
     permissions:
@@ -32,10 +39,15 @@ jobs:
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body-includes: test
-          
-      - run: |
-          TEMPLATE_NAME=$(echo ${{ steps.fc.outputs.comment-body }} | sed 's/.*\://')
-          FOLDER=$(echo ${{ steps.test.outputs.comment-body }} | sed 's/.*\://')
-          echo ${TEMPLATE_NAME}
-          echo ${FOLDER}
-          echo ${{ github.event.pull_request.head.ref }}
+
+      - name: Set values for terraform execution
+        id: set
+        run: |
+          echo "FOLDER=$(echo ${{ steps.test.outputs.comment-body }} | sed 's/.*\://')" >> "$GITHUB_OUTPUT"
+          echo "TEMPLATE_NAME=$(echo ${{ steps.fc.outputs.comment-body }} | sed 's/.*\://')" >> "$GITHUB_OUTPUT"
+          echo "BRANCH=${{ github.event.pull_request.head.ref }}" >> "$GITHUB_OUTPUT"
+          echo "OPERATION=apply" >> "$GITHUB_OUTPUT"
+          echo "WORKING_IMAGE=eu.gcr.io/stuttgart-things/sthings-terraform:1.8.1-2" >> "$GITHUB_OUTPUT"
+          echo "RUNS_ON=ghr-stuttgart-things-sthings-cicd" >> "$GITHUB_OUTPUT"
+          SPLIT=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'/' -f3)
+          echo "ENVIRONMENT=$(echo ${SPLIT} | cut -d'-' -f1)-$(echo ${SPLIT} | cut -d'-' -f2)" >> "$GITHUB_OUTPUT"
