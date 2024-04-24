@@ -118,8 +118,7 @@ jobs:
         id: secrets
         run: |
           cat <<EOF > secret-defaults.yaml
-          vaultSecretPaths: password=cloud/data/vsphere:password, user=cloud/data/vsphere:username, server=cloud/data/vsphere:ip, sshUser=cloud/data/vsphere:vm_ssh_user, sshPassword=cloud/data/vsphere:vm_ssh_
-          password
+          vaultSecretPaths: password=cloud/data/vsphere:password, user=cloud/data/vsphere:username, server=cloud/data/vsphere:ip, sshUser=cloud/data/vsphere:vm_ssh_user, sshPassword=cloud/data/vsphere:vm_ssh_password
           EOF
         
           machineShop render \
