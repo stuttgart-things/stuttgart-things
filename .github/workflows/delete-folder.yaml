@@ -10,20 +10,14 @@ on:
       branch-name:
         type: string
         description: BRANCH NAME
-        default: terraform/builds/labul-vsphere-losangeles-vm
-      working-image:
-        description: WORKING IMAGE
-        type: string
-        default: eu.gcr.io/stuttgart-things/sthings-terraform:1.8.1-2
+        default: terraform/builds/labul-vsphere-test-vm
       folder:
         description: FOLDER NAME
         type: string
-        default: terraform/builds/labul-vsphere-losangeles-vm
+        default: terraform/builds/labul-vsphere-test-vm
 jobs:
-  execute-terraform:
+  delete-folder:
     runs-on: ${{ inputs.runner }}
-    container:
-      image: ${{ inputs.working-image }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4.1.1
