@@ -48,10 +48,16 @@ jobs:
         with:
           fetch-depth: '0'
           ref: ${{ inputs.branch-name }}
-      - name: delete folder
+      - name: check folder 1
         run: |
           ls -lda terraform/builds
+        shell: bash
+      - name: delete folder
+        run: |
           rm -rf ${{ inputs.folder }}
+        shell: bash
+      - name: check folder 2
+        run: |
           ls -lda terraform/builds
         shell: bash
       - name: Get token for creating pull request
