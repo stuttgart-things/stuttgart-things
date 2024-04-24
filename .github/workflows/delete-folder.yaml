@@ -3,6 +3,21 @@ name: Delete Folder
 on:
   workflow_dispatch:
     inputs:
+      vm-name:
+        required: true
+        type: string
+      cloud:
+        type: choice
+        description: cloud
+        options:
+          - vsphere
+          - proxmox
+      lab:
+        type: choice
+        description: lab
+        options:
+          - labda
+          - labul
       runner:
         description: RUNNER NAME
         type: string
@@ -15,7 +30,12 @@ on:
         description: FOLDER NAME
         type: string
         default: terraform/builds/labul-vsphere-test-vm
-        
+      build-engine:
+        type: choice
+        description: build engine
+        options:
+          - crossplane
+          - terraform
 jobs:
   delete-folder:
     runs-on: ${{ inputs.runner }}
@@ -25,7 +45,21 @@ jobs:
         with:
           fetch-depth: '0'
           ref: ${{ inputs.branch-name }}
-          
       - name: delete folder
         run: rm -r ${{ inputs.folder }}
         shell: bash
+      - name: Get token for creating pull request
+        uses: tibdex/github-app-token@v1
+        id: generate-token
+        with:
+          app_id: ${{ secrets.PULLREQUESTER_APP_ID }}
+          private_key: ${{ secrets.PULLREQUESTER_APP_KEY }}
+      - name: Create Pull Request for terraform config file deletion
+        id: pr
+        uses: peter-evans/create-pull-request@v6.0.2
+        with:
+          commit-message: '[CI][TERRAFORM] - Deleted terraform config files ${{ inputs.lab }}-${{ inputs.cloud }}-${{ inputs.vm-name }}'
+          title: Deleted Terraform Config Files ${{ inputs.lab }}-${{ inputs.cloud }} ${{ inputs.vm-name }}
+          branch: ${{ inputs.build-engine }}/builds/${{ inputs.lab }}-${{ inputs.cloud }}-${{ inputs.vm-name }}-vm
+          delete-branch: true
+          token: ${{ steps.generate-token.outputs.token }}
