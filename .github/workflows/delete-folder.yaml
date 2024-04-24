@@ -26,7 +26,6 @@ jobs:
           ref: ${{ inputs.branch }}
       - name: delete folder
         run: |
-          ls -l
-          git branch
+          ls -l terraform/
           rm -r ${{ inputs.folder }}
         shell: bash
