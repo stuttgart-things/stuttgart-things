@@ -26,5 +26,7 @@ jobs:
           ref: ${{ inputs.branch }}
       - name: delete folder
         run: |
+          ls -l
+          git branch
           rm -r ${{ inputs.folder }}
         shell: bash
