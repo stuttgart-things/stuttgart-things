@@ -39,6 +39,7 @@ on:
 jobs:
   delete-folder:
     runs-on: ${{ inputs.runner }}
+    environment: ${{ inputs.lab }}-${{ inputs.cloud }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4.1.1
