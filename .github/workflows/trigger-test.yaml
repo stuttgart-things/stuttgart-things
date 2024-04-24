@@ -50,4 +50,8 @@ jobs:
           echo "WORKING_IMAGE=eu.gcr.io/stuttgart-things/sthings-terraform:1.8.1-2" >> "$GITHUB_OUTPUT"
           echo "RUNS_ON=ghr-stuttgart-things-sthings-cicd" >> "$GITHUB_OUTPUT"
           SPLIT=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'/' -f3)
-          echo "ENVIRONMENT=$(echo ${SPLIT} | cut -d'-' -f1)-$(echo ${SPLIT} | cut -d'-' -f2)" >> "$GITHUB_OUTPUT"
+          echo "ENVIRONMENT=$()" >> "$GITHUB_OUTPUT"
+
+          echo ${SPLIT} | cut -d'-' -f1)-$(echo ${SPLIT} | cut -d'-' -f2
+          
+
