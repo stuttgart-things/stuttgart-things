@@ -19,26 +19,23 @@ jobs:
         id: checkout
         uses: actions/checkout@v4.1.1
     
-      - name: Find PR Comment
+      - name: Get VM-Template name
         uses: peter-evans/find-comment@v3
         id: fc
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body-includes: successful
-      - run: |
-          echo ${{ steps.fc.outputs.comment-id }}
-          echo ${{ steps.fc.outputs.comment-node-id }}
-          echo ${{ steps.fc.outputs.comment-body }}
-          echo ${{ steps.fc.outputs.comment-author }}
-          TEMPLATE=apk=$(echo ${{ steps.fc.outputs.comment-body }} | sed 's/.*\://')
-          echo ${TEMPLATE}
-          echo ${{ github.event.pull_request.head.ref }}
-
-      - name: Find PR Comment
+          
+      - name: Get Test vm -path
         uses: peter-evans/find-comment@v3
         id: test
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body-includes: test
+          
       - run: |
-          echo ${{ steps.test.outputs.comment-body }}
+          TEMPLATE_NAME=$(echo ${{ steps.fc.outputs.comment-body }} | sed 's/.*\://')
+          FOLDER=$(echo ${{ steps.test.outputs.comment-body }} | sed 's/.*\://')
+          echo ${TEMPLATE_NAME}
+          echo ${FOLDER}
+          echo ${{ github.event.pull_request.head.ref }}
