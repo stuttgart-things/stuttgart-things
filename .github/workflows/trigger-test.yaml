@@ -11,12 +11,14 @@ jobs:
     container:
       image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2
     permissions:
-      contents: write
-      pull-requests: write
-      repository-projects: write
-      id-token: write
+      contents: read
+      pull-requests: read
     runs-on: ghr-stuttgart-things-sthings-cicd
     steps:
+      - name: Checkout code
+        id: checkout
+        uses: actions/checkout@v4.1.1
+    
       - name: Find PR Comment
         uses: peter-evans/find-comment@v3
         id: fc
@@ -29,4 +31,5 @@ jobs:
           echo ${{ steps.fc.outputs.comment-body }}
           echo ${{ steps.fc.outputs.comment-author }}
           TEMPLATE=apk=$(echo ${{ steps.fc.outputs.comment-body }} | sed 's/.*\://')
-          echo §{TEMPLATE}
+          echo ${TEMPLATE}
+          echo ${{ github.event.pull_request.head.ref }}
