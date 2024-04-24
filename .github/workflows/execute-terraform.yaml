@@ -81,7 +81,7 @@ jobs:
         shell: bash
 
   delete-terraform-config:
-    if: ${{ inputs.operation }} == 'destroy' }}
+    if: ${{ inputs.operation == 'destroy' }}
     needs: execute-terraform
     runs-on: ${{ inputs.runs-on }}
     environment: ${{ inputs.environment-name }}
