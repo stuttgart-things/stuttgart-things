@@ -117,6 +117,7 @@ jobs:
       - name: Render secrets template
         id: secrets
         run: |
+          # WORKAROUND FOR NOW
           cat <<EOF > secret-defaults.yaml
           vaultSecretPaths: password=cloud/data/vsphere:password, user=cloud/data/vsphere:username, server=cloud/data/vsphere:ip, sshUser=cloud/data/vsphere:vm_ssh_user, sshPassword=cloud/data/vsphere:vm_ssh_password
           EOF
@@ -128,7 +129,7 @@ jobs:
           --brackets square \
           --source local \
           --output file \
-          --destination ${{ env.WORKING_DIR }}/terraform.tfvars
+          --destination ${{ env.WORKING_DIR }}/test-vm/terraform.tfvars
 
       - name: Render Terraform template w/ machineShop
         id: renderTerraformTemplate
