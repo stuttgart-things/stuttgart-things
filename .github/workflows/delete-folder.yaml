@@ -72,6 +72,5 @@ jobs:
         with:
           commit-message: '[CI][TERRAFORM] - Deleted terraform config files ${{ inputs.lab }}-${{ inputs.cloud }}-${{ inputs.vm-name }}'
           title: Deleted Terraform Config Files ${{ inputs.lab }}-${{ inputs.cloud }} ${{ inputs.vm-name }}
-          branch: ${{ inputs.build-engine }}/builds/${{ inputs.lab }}-${{ inputs.cloud }}-${{ inputs.vm-name }}-vm
           delete-branch: true
           token: ${{ steps.generate-token.outputs.token }}
