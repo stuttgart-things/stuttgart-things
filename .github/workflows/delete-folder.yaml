@@ -39,7 +39,9 @@ on:
 jobs:
   delete-folder:
     runs-on: ${{ inputs.runner }}
-    environment: ${{ inputs.lab }}-${{ inputs.cloud }}
+    environment: k8s
+    container:
+      image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2-2
     steps:
       - name: Checkout code
         uses: actions/checkout@v4.1.1
