@@ -33,3 +33,12 @@ jobs:
           TEMPLATE=apk=$(echo ${{ steps.fc.outputs.comment-body }} | sed 's/.*\://')
           echo ${TEMPLATE}
           echo ${{ github.event.pull_request.head.ref }}
+
+      - name: Find PR Comment
+        uses: peter-evans/find-comment@v3
+        id: test
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body-includes: test
+      - run: |
+          echo ${{ steps.test.outputs.comment-body }}
