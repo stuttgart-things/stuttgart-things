@@ -50,7 +50,7 @@ jobs:
           ref: ${{ inputs.branch-name }}
       - name: check folder 1
         run: |
-          ls -lda terraform/builds
+          ls -lta terraform/builds
         shell: bash
       - name: delete folder
         run: |
@@ -58,7 +58,7 @@ jobs:
         shell: bash
       - name: check folder 2
         run: |
-          ls -lda terraform/builds
+          ls -lta terraform/builds
         shell: bash
       - name: Get token for creating pull request
         uses: tibdex/github-app-token@v1
