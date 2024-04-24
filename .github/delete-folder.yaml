@@ -1,0 +1,36 @@
+---
+name: Delete Folder
+on:
+  workflow_dispatch:
+    inputs:
+      runner:
+        description: RUNNER NAME
+        type: string
+        default: ghr-stuttgart-things-sthings-cicd
+      branch-name:
+        type: string
+        description: BRANCH NAME
+        default: terraform/builds/labul-vsphere-losangeles-vm
+      working-image:
+        description: WORKING IMAGE
+        type: string
+        default: eu.gcr.io/stuttgart-things/sthings-terraform:1.8.1-2
+      folder:
+        description: FOLDER NAME
+        type: string
+        default: terraform/builds/labul-vsphere-losangeles-vm
+jobs:
+  execute-terraform:
+    runs-on: ${{ inputs.runner }}
+    container:
+      image: ${{ inputs.working-image }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.1.1
+        with:
+          fetch-depth: '0'
+          ref: ${{ inputs.branch }}
+      - name: delete folder
+        run: |
+          rm -r ${{ inputs.folder }}
+        shell: bash
