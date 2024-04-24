@@ -31,5 +31,5 @@ jobs:
           ls -lta terraform/
           ls -lta terraform/builds
           
-          #rm -r ${{ inputs.folder }}
+          rm -r ${{ inputs.folder }}
         shell: bash
