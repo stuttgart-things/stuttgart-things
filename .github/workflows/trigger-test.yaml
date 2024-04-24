@@ -6,7 +6,7 @@ on:
       - reopened
 
 jobs:
-  Get-Runner-Config:
+  Get-Packer-Config:
     if: contains(github.event.pull_request.labels.*.name, 'test-vm')
     outputs:
       folder: ${{ steps.set.outputs.FOLDER }}
@@ -14,7 +14,8 @@ jobs:
       branch: ${{ steps.set.outputs.BRANCH }}   
       operation: ${{ steps.set.outputs.OPERATION }}   
       environment: ${{ steps.set.outputs.ENVIRONMENT }}
-      runs_on: ${{ steps.set.outputs.RUNS_ON }}
+      runs-on: ${{ steps.set.outputs.RUNS_ON }}
+      working-image: ${{ steps.set.outputs.WORKING_IMAGE }}
     container:
       image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2
     permissions:
@@ -53,3 +54,16 @@ jobs:
           echo "ENVIRONMENT=$(echo ${LAB})" >> "$GITHUB_OUTPUT"
 
           echo ${LAB}
+
+  execute-terraform:
+    name: Execute Terraform
+    uses: stuttgart-things/stuttgart-things/.github/workflows/execute-terraform.yaml@main
+    needs: Get-Packer-Config
+    with:
+      folder: ${{ needs.Get-Packer-Config.outputs.folder }}
+      branch: ${{ needs.Get-Packer-Config.outputs.branch }}
+      operation: ${{ needs.Get-Packer-Config.outputs.operation }}
+      working-image: ${{ needs.Get-Packer-Config.outputs.working-image }}
+      environment-name: ${{ needs.Get-Packer-Config.outputs.environment }}
+      runs-on: ${{ needs.Get-Packer-Config.outputs.runs-on }}
+    secrets: inherit
