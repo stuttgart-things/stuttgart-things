@@ -15,6 +15,7 @@ on:
         description: FOLDER NAME
         type: string
         default: terraform/builds/labul-vsphere-test-vm
+        
 jobs:
   delete-folder:
     runs-on: ${{ inputs.runner }}
@@ -24,8 +25,11 @@ jobs:
         with:
           fetch-depth: '0'
           ref: ${{ inputs.branch }}
+          
       - name: delete folder
         run: |
-          ls -l terraform/
-          rm -r ${{ inputs.folder }}
+          ls -lta terraform/
+          ls -lta terraform/builds
+          
+          #rm -r ${{ inputs.folder }}
         shell: bash
