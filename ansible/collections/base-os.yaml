@@ -1,6 +1,6 @@
 ---
 name: base_os
-version: 0.1.6
+version: 0.1.7
 namespace: sthings
 requirements: |
   roles:
@@ -14,6 +14,7 @@ requirements: |
 playbooks:
   - name: download_install_binaries
     play: |
+      ---
       - hosts: all
         become: true
         vars:
@@ -26,7 +27,8 @@ playbooks:
 
 vars: 
   - name: download_install_binaries
-    vars: |
+    file: |
+      ---
       users:
         - username: rke
           name: rke user
