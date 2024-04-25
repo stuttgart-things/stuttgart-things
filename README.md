@@ -28,13 +28,13 @@ cat <<EOF > inv
 EOF
 ```
 
-#### DEPLOY BINARIES
+#### DEPLOY BINARIES (DEV-MACHINE PROFILE)
 
 ```bash
-ansible-playbook sthings.base_os \
+ansible-playbook sthings.base_os.download_install_binaries \
 -i inv -vv \
 -e target_host=all \
--e profile=sthings-bins \
+-e profile=dev \
 -vv
 ```
 
