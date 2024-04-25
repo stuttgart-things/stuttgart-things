@@ -5,40 +5,40 @@ used for configuration code like gitops configuration, ansible playbooks, Docker
 
 ## INFRASTRUCTURE AS CODE
 
-<details><summary>ANSIBLE</summary>
+### ANSIBLE
+
+<details><summary>sthings-base_os</summary>
+
+#### INSTALL 
+
+[CHECK RELEASES](https://github.com/stuttgart-things/stuttgart-things/releases)
+
+```bash
+# INSTALL ROLE - EXAMPLE VERSION
+COLLECTION_VERSION=0.1.8
+ansible-galaxy collection install -f \
+https://github.com/stuttgart-things/stuttgart-things/releases/download/${COLLECTION_VERSION}/sthings-base_os-${COLLECTION_VERSION}.tar.gz
+```
+
+#### EXAMPLE INVENTORY FILE 
+
+```bash
+cat <<EOF > inv
+10.100.136.151 #example host
+EOF
+```
+
+#### DEPLOY BINARIES
+
+```bash
+ansible-playbook sthings.base_os \
+-i inv -vv \
+-e target_host=all \
+-e profile=sthings-bins \
+-vv
+```
 
 </details>
-
-<details><summary>PACKER</summary>
-
-</details>
-
-<details><summary>TERRAFORM</summary>
-
-</details>
-
-## K8S
-
-<details><summary>FLUX</summary>
-
-</details>
-
-<details><summary>ARGO-CD</summary>
-
-</details>
-
-<details><summary>TEKTON</summary>
-
-</details>
-
-<details><summary>DOCKERFILES</summary>
-
-</details>
-
-<details><summary>HELM</summary>
-
-</details>
-
 
 Author Information
 ------------------
