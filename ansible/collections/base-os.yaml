@@ -15,7 +15,7 @@ playbooks:
   - name: download_install_binaries
     play: |
       ---
-      - hosts: all
+      - hosts: "{{ target_host }}"
         become: true
         vars:
           download_dir: "/tmp/downloads"
@@ -25,8 +25,20 @@ playbooks:
         roles:
           - role: sthings.base_os.download_install_binaries
 
+  - name: create_users
+    play: |
+      ---
+      - hosts: "{{ target_host }}"
+        gather_facts: true
+        become: true
+        vars_files:
+          - "{{ profile }}.yaml"
+      
+        roles:
+          - role: sthings.base_os.create_os_user
+
 vars: 
-  - name: download_install_binaries
+  - name: sthings-users
     file: |
       ---
       users:
