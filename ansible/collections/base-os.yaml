@@ -23,7 +23,7 @@ playbooks:
           - "{{ profile }}.yaml"
       
         roles:
-          - role: sthings.base_os.download_install_binaries
+          - role: sthings.base_os.download_install_binary
 
   - name: create_users
     play: |
@@ -52,7 +52,7 @@ vars:
           generate_ssh_key: true
           enable_ssh_tcp_forwarding: true
 
-  - name: sthings-bins
+  - name: dev
     file: |
       ---
       bin:
