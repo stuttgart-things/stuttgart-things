@@ -1,6 +1,6 @@
 ---
 name: base_os
-version: 0.1.7
+version: 0.1.8
 namespace: sthings
 requirements: |
   roles:
@@ -20,7 +20,7 @@ playbooks:
         vars:
           download_dir: "/tmp/downloads"
         vars_files:
-          - ../vars/binaries.yaml
+          - "{{ profile }}.yaml"
       
         roles:
           - role: sthings.base_os.download_install_binaries
@@ -51,3 +51,74 @@ vars:
             alias ll='ls -ahl'
           generate_ssh_key: true
           enable_ssh_tcp_forwarding: true
+
+  - name: sthings-bins
+    file: |
+      ---
+      bin:
+        velero:
+          bin_name: "velero"
+          bin_version: "1.13.1"
+          check_bin_version_before_installing: true
+          source_url: "https://github.com/vmware-tanzu/velero/releases/download/v1.13.1/velero-v1.13.1-linux-amd64.tar.gz"
+          bin_to_copy: "velero-v1.13.1-linux-amd64/velero"
+          to_remove: "velero-v1.13.1-linux-amd64"
+          bin_dir: "/usr/local/bin"
+          version_cmd: " version --client-only"
+          target_version: v1.13.1
+          md5_checksum: "30ab57f9520ae2318ab28eefbc81728c"
+        terraform:
+          bin_name: "terraform"
+          bin_version: "1.8.0"
+          check_bin_version_before_installing: true
+          source_url: "https://releases.hashicorp.com/terraform/1.8.0/terraform_1.8.0_linux_amd64.zip"
+          bin_to_copy: "terraform"
+          to_remove: "terraform"
+          bin_dir: "/usr/local/bin"
+          version_cmd: " --version"
+          target_version: v1.8.0
+          md5_checksum: "2c6638e53cf5474c4d1363c17e8653ef"
+        helm:
+          bin_name: "helm"
+          bin_version: "3.14.3"
+          check_bin_version_before_installing: true
+          source_url: "https://get.helm.sh/helm-v3.14.3-linux-amd64.tar.gz"
+          bin_to_copy: "linux-amd64/helm"
+          to_remove: "linux-amd64"
+          bin_dir: "/usr/local/bin"
+          version_cmd: " version"
+          target_version: v3.14.3
+          md5_checksum: "8dd2ecdbb70ef4e3a55083e8d5ebf352"
+        kubectl:
+          bin_name: "kubectl"
+          bin_version: "1.29.3"
+          check_bin_version_before_installing: true
+          source_url: "https://dl.k8s.io/v1.29.3/bin/linux/amd64/kubectl"
+          bin_to_copy: "kubectl"
+          to_remove: "kubectl"
+          bin_dir: "/usr/local/bin"
+          version_cmd: " version --client"
+          target_version: v1.29.3
+          md5_checksum: "07b43208389cbc779941b94a05cf89bc"
+        packer:
+          bin_name: "packer"
+          bin_version: "1.10.2"
+          check_bin_version_before_installing: true
+          source_url: "https://releases.hashicorp.com/packer/1.10.2/packer_1.10.2_linux_amd64.zip"
+          bin_to_copy: "packer"
+          to_remove: "packer"
+          bin_dir: "/usr/local/bin"
+          version_cmd: " --version"
+          target_version: v1.10.2
+          md5_checksum: "374f22185f1f8cb25bc53187a2154ef0"
+        k9s:
+          bin_name: "k9s"
+          bin_version: "0.32.4"
+          check_bin_version_before_installing: true
+          source_url: "https://github.com/derailed/k9s/releases/download/v0.32.4/k9s_Linux_amd64.tar.gz"
+          bin_to_copy: "k9s"
+          to_remove: "k9s"
+          bin_dir: "/usr/local/bin"
+          version_cmd: " version --short"
+          target_version: v0.32.4
+          md5_checksum: "04ba6f524a433f8ceb9095c4c8292240"
