@@ -7,7 +7,10 @@ requirements: |
     - src: https://github.com/stuttgart-things/download-install-binary.git
       scm: git
       version: 2024.07.04
-
+    - src: https://github.com/stuttgart-things/create-os-user.git
+      scm: git
+      version: 2024.04.25
+      
 playbooks:
   - name: download_install_binaries
     play: |
@@ -21,4 +24,16 @@ playbooks:
         roles:
           - role: sthings.base_os.download_install_binaries
 
-vars: {}
+vars: 
+  - name: download_install_binaries
+    vars: |
+      users:
+        - username: rke
+          name: rke user
+          groups: ['{{ admin_group }}', 'k8s-admins']
+          uid: 1005
+          home: /home/rke
+          profile: |
+            alias ll='ls -ahl'
+          generate_ssh_key: true
+          enable_ssh_tcp_forwarding: true
