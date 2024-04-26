@@ -1,0 +1,94 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: xtridentconfigs.resources.stuttgart-things.com
+spec:
+  connectionSecretKeys:
+    - kubeconfig
+  group: resources.stuttgart-things.com
+  names:
+    kind: XTridentConfig
+    plural: xtridentconfigs
+  claimNames:
+    kind: TridentConfig
+    plural: tridentconfigs
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          description: A TridentConfig is a composite resource that represents a helm release for a trident and configuration
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                deploymentNamespace:
+                  type: string
+                  default: trident
+                  description: namespace for open ebs
+                clusterName:
+                  type: string
+                  default: in-cluster
+                  description: cluster name/helm provider name
+                version:
+                  type: string
+                  default: 100.2402.0
+                  description: helm chart version for cert-manager
+                backendConfig:
+                  type: object
+                  properties:
+                    managementLIF:
+                      type: string
+                      description: management LIF address
+                    dataLIF:
+                      type: string
+                      description: data LIF address
+                    backendName:
+                      type: string
+                      description: data LIF address
+                    storageDriverName:
+                      type: string
+                      description: name of storageDriver
+                    storageClassName:
+                      type: string
+                      description: name of backend
+                      default: ontap
+                    svm:
+                      type: string
+                      description: name of backend
+                    nfsMountOptions:
+                      type: string
+                      description: name of backend
+                      default: nfsvers=3
+                    credentialsName:
+                      type: string
+                      description: credentials name for bacnekdn config
+                      default: trident-backend
+                    secretName:
+                      type: string
+                      default: trident
+                      description: name of secret
+                    secretNamespace:
+                      type: string
+                      default: crossplane-system
+                      description: namespace of secret
+                  required:
+                    - managementLIF
+                    - dataLIF
+                    - backendName
+                    - svm
+                    - storageDriverName
+              required:
+                - clusterName
+                - backendConfig
+            status:
+              description: A Status represents the observed state
+              properties:
+                share:
+                  description: Freeform field containing status information
+                  type: object
+                  x-kubernetes-preserve-unknown-fields: true
+              type: object
