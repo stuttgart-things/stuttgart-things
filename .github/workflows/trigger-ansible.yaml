@@ -29,7 +29,7 @@ on:
       private-key:
         type: string
         description: Private Key
-        default: ssh/data/sthings:privateKey
+        default: "ssh/data/sthings:privateKey"
       requirements-file:
         type: string
         description: Requirements File
