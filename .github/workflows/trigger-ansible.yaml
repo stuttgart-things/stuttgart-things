@@ -27,6 +27,14 @@ on:
         type: string
         description: ENVIRONMENT NAME
         default: k8s
+      private-key:
+        type: string
+        description: Private Key
+        default: ssh/data/sthings:privateKey
+      requirements-file:
+        type: string
+        description: Requirements File
+        default: ansible/requirements.yaml
 
 jobs:
   execute-terraform:
@@ -39,4 +47,6 @@ jobs:
       runs-on: ${{ inputs.runner }}
       inventory: ${{ inputs.inventory }}
       environment-name: ${{ inputs.environment-name }}
+      private-key: ${{ inputs.private-key }}
+      requirements-file: ${{ inputs.requirements-file }}
     secrets: inherit

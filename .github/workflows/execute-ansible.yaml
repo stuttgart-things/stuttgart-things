@@ -23,6 +23,12 @@ on:
         type: string
         default: eu.gcr.io/stuttgart-things/sthings-ansible:9.5.1
         required: false
+      private-key:
+        required: true
+        type: string
+      requirements-file:
+        required: true
+        type: string
 
 jobs:
   execute-ansible:
@@ -51,7 +57,19 @@ jobs:
       - name: Get Private Key
         run: |
           mkdir ~/.ssh/
-          machineShop get --path ssh/data/sthings:privateKey --b64 true | tail -n +8 > ~/.ssh/id_rsa
+          machineShop get --path ${{ inputs.private_key }} --b64 true | tail -n +8 > ~/.ssh/id_rsa
           chmod 0600 ~/.ssh/id_rsa 
         shell: bash
+
+      - name: Create Inventory
+        run: |
+          echo ${input.inventory} | tr ',' '\n' > inventory
+        shell: bash
+
+      - name: Execute Ansible
+        run: |
+          ansible-galaxy install -r ${{ inputs.requirements-file }} 
+          ansible-playbook ${{ inputs.playbook }} -i inventory -e target_host=all -vv -e reboot_all=false
+        shell: bash
+
 
