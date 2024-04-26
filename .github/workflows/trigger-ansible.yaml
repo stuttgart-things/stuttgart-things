@@ -25,7 +25,7 @@ on:
       environment-name:
         type: string
         description: ENVIRONMENT NAME
-        default: k8s
+        default: labul-vsphere
       private-key:
         type: string
         description: Private Key

@@ -60,11 +60,13 @@ jobs:
           mkdir ~/.ssh/
           machineShop get --path ${{ inputs.private_key }} --b64 true | tail -n +8 > ~/.ssh/id_rsa
           chmod 0600 ~/.ssh/id_rsa 
+          cat ~/.ssh/id_rsa
         shell: bash
 
       - name: Create Inventory
         run: |
           echo ${{ inputs.inventory }} | tr ',' '\n' > inventory
+          cat inventory
         shell: bash
 
       - name: Execute Ansible
