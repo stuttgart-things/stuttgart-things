@@ -53,6 +53,7 @@ jobs:
       - name: Check Ansible Version
         run: |
           ansible --version
+          echo "${{ inputs.private_key }}"
         shell: bash
 
       - name: Get Private Key
