@@ -21,7 +21,7 @@ on:
         type: string
       working-image:
         type: string
-        default: eu.gcr.io/stuttgart-things/sthings-ansible:9.4.0
+        default: eu.gcr.io/stuttgart-things/sthings-ansible:9.5.1
         required: false
 
 jobs:
@@ -31,7 +31,11 @@ jobs:
     container:
       image: ${{ inputs.working-image }}
     env:
-      SSH_KEY: ${{ secrets.SSH_KEY }}
+      VAULT_AUTH_METHOD: ${{ secrets.VAULT_AUTH_METHOD }}
+      VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
+      VAULT_SECRET_ID: ${{ secrets.VAULT_SECRET_ID }}
+      VAULT_ROLE_ID: ${{ secrets.VAULT_ROLE_ID }}
+      VAULT_NAMESPACE: ${{ secrets.VAULT_NAMESPACE }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4.1.1
@@ -43,3 +47,11 @@ jobs:
         run: |
           ansible --version
         shell: bash
+
+      - name: Get Private Key
+        run: |
+          mkdir ~/.ssh/
+          machineShop get --path ssh/data/sthings:privateKey --b64 true | tail -n +8 > ~/.ssh/id_rsa
+          chmod 0600 ~/.ssh/id_rsa 
+        shell: bash
+
