@@ -1,5 +1,5 @@
 ---
-name: Ansible terraform run
+name: Trigger Ansible
 on:
   workflow_dispatch:
     inputs:
