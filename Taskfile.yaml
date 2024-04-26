@@ -114,7 +114,6 @@ tasks:
     cmds:
       - git pull origin {{ .BRANCH }}
       - git config advice.addIgnoredFile false
-      - git add *
       - |
         echo "Enter commit message:"
         read COMMIT_MESSAGE;
