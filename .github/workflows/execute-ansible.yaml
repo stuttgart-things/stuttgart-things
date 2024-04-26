@@ -63,7 +63,7 @@ jobs:
 
       - name: Create Inventory
         run: |
-          echo ${{ input.inventory }} | tr ',' '\n' > inventory
+          echo ${{ inputs.inventory }} | tr ',' '\n' > inventory
         shell: bash
 
       - name: Execute Ansible
