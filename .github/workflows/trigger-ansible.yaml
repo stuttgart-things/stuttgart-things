@@ -22,7 +22,6 @@ on:
       inventory:
         description: INVENTORY NAME
         type: string
-        default: inventory.yaml
       environment-name:
         type: string
         description: ENVIRONMENT NAME
