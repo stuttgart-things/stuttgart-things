@@ -1,0 +1,83 @@
+---
+- hosts: all
+  become: true
+  vars:
+    golang_users:
+      - username: otto
+        name: otto user
+        group: golang
+        uid: 1011
+        home: /home/otto
+        profile: |
+          alias ll='ls -ahl'
+          export GOROOT=/usr/local/go
+          export PATH=$GOROOT/bin:$PATH
+          export GOPATH=/home/otto/usr/local/go
+          export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
+        generate_ssh_key: true
+        #ssh_key:
+        #  - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+        enable_ssh_tcp_forwarding: true
+        password: "!"
+      - username: kevin
+        name: kevin user
+        group: golang
+        uid: 1012
+        home: /home/kevin
+        profile: |
+          alias ll='ls -ahl'
+          export GOROOT=/usr/local/go
+          export PATH=$GOROOT/bin:$PATH
+          export GOPATH=/home/kevin/usr/local/go
+          export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
+        generate_ssh_key: true
+        #ssh_key:
+        #  - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+        enable_ssh_tcp_forwarding: true
+        password: "!"
+
+    groups_golang:
+      - name: golang
+        gid: 31000
+
+    golang_version: 1.22.2
+    source_url: "https://go.dev/dl/go1.22.2.linux-amd64.tar.gz"
+    download_dir: /tmp/downloads
+    golang_install_dir: /usr/local/
+
+  tasks:
+    # DELETE ALREADY INSTALLED GOLANG
+    - name: Delete Golang
+      shell:  "rm -rf /usr/local/go"
+
+    # DOWNLOAD AND INSTALL GOLANG
+    - name: Unarchive and install Golang 
+      ansible.builtin.unarchive:
+        src: "{{ source_url }}"
+        dest: "{{ golang_install_dir }}"
+        mode: 0755
+        validate_certs: false
+        remote_src: true
+
+    # CREATE USER
+    - name: Create golang users
+      ansible.builtin.include_role:
+        name: create-os-user
+      vars:
+        users: "{{ golang_users }}"
+        groups_to_create: "{{ groups_golang }}"
+
+    # WRITE EXPORTS TO BASHRC
+    - name: Write exports to user's .bashrc file
+      ansible.builtin.blockinfile:
+        block: |
+          export GOROOT=/usr/local/go
+          export PATH=$GOROOT/bin:$PATH
+          export GOPATH=$HOME/usr/local/go
+          export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
+        dest: "{{ item.home | default('/home/' + item.username) }}/.bashrc"
+        owner: "{{ item.username }}"
+        group: "{{ item.group }}"
+        mode: 0644
+        create: true
+      loop: "{{ golang_users }}"
