@@ -53,7 +53,6 @@ jobs:
       - name: Check Ansible Version
         run: |
           ansible --version
-          echo "${{ inputs.private-key }}"
         shell: bash
 
       - name: Get Private Key
@@ -61,7 +60,6 @@ jobs:
           mkdir ~/.ssh/
           machineShop get --path "${{ inputs.private-key }}" --b64 true | tail -n +8 > ~/.ssh/id_rsa
           chmod 0600 ~/.ssh/id_rsa 
-          cat ~/.ssh/id_rsa
         shell: bash
 
       - name: Create Inventory
