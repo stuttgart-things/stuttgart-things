@@ -42,6 +42,7 @@ jobs:
       VAULT_SECRET_ID: ${{ secrets.VAULT_SECRET_ID }}
       VAULT_ROLE_ID: ${{ secrets.VAULT_ROLE_ID }}
       VAULT_NAMESPACE: ${{ secrets.VAULT_NAMESPACE }}
+      ANSIBLE_HOST_KEY_CHECKING: False
     steps:
       - name: Checkout code
         uses: actions/checkout@v4.1.1
