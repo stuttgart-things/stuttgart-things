@@ -54,7 +54,7 @@ jobs:
     uses: stuttgart-things/stuttgart-things/.github/workflows/execute-terraform.yaml@main
     needs: Get-Packer-Config
     with:
-      folder: ${{ needs.Get-Packer-Config.outputs.folder }}
+      folder: packer/builds/ubuntu23-labul-vsphere-base-os/test-vm #${{ needs.Get-Packer-Config.outputs.folder }}
       branch: ${{ needs.Get-Packer-Config.outputs.branch }}
       operation: ${{ needs.Get-Packer-Config.outputs.operation }}
       working-image: ${{ needs.Get-Packer-Config.outputs.working-image }}
