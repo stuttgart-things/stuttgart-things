@@ -13,6 +13,10 @@ on:
         required: false
         type: string
         default: apply
+      variables:
+        required: false
+        type: string
+        default: 'vsphere_vm_template="/LabUL/vm/stuttgart-things/vm-templates/ubuntu23-2024-04-12"'
       runs-on:
         required: true
         type: string
@@ -62,6 +66,12 @@ jobs:
             --destination ${TFVARS_FILE}
 
           fi
+
+      - name: Add variables to terraform.tfvars
+        if: "${{ inputs.variables != '' }}"
+        run: |
+          vars=$(echo ${{ inputs.variables }} | tr ';' '\n')
+          printf "%s\n" "${vars[@]}" >> ${TFVARS_FILE}
 
       - name: Terraform init
         run: |
