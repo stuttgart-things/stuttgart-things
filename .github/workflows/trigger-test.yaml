@@ -37,30 +37,37 @@ jobs:
           issue-number: ${{ github.event.pull_request.number }}
           body-includes: test
 
-      - name: Show values for terraform execution
-        id: show
-        run: |
-          echo "FOLDER=$(echo ${{ steps.test.outputs.comment-body }} | sed 's/.*\://' | xargs)/"
-          echo "TEMPLATE_NAME=$(echo ${{ steps.fc.outputs.comment-body }} | sed 's/.*\://' | xargs)"
-          echo "BRANCH=${{ github.event.pull_request.head.ref }}"
-          echo "OPERATION=apply"
-          echo "WORKING_IMAGE=eu.gcr.io/stuttgart-things/sthings-terraform:1.8.1-2"
-          echo "RUNS_ON=ghr-stuttgart-things-sthings-cicd"
-          LAB=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'-' -f2)
-          CLOUD=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'-' -f3)
-          echo "ENVIRONMENT=$(echo ${LAB}-${CLOUD})"
-
       - name: Set values for terraform execution
         id: set
         run: |
-          echo "FOLDER=$(echo ${{ steps.test.outputs.comment-body }} | sed 's/.*\://')/ | xargs" >> "$GITHUB_OUTPUT"
-          echo "TEMPLATE_NAME=$(echo ${{ steps.fc.outputs.comment-body }} | sed 's/.*\://' | xargs)" >> "$GITHUB_OUTPUT"
-          echo "BRANCH=${{ github.event.pull_request.head.ref }}" >> "$GITHUB_OUTPUT"
-          echo "OPERATION=apply" >> "$GITHUB_OUTPUT"
-          echo "WORKING_IMAGE=eu.gcr.io/stuttgart-things/sthings-terraform:1.8.1-2" >> "$GITHUB_OUTPUT"
-          echo "RUNS_ON=ghr-stuttgart-things-sthings-cicd" >> "$GITHUB_OUTPUT"
-          LAB=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'-' -f2)
-          echo "ENVIRONMENT=$(echo ${LAB})" >> "$GITHUB_OUTPUT"
+          echo "FOLDER=$(echo ${{ steps.test.outputs.comment-body }} | sed 's/.*\://' | xargs)/" >> $GITHUB_ENV
+          echo "TEMPLATE_NAME=$(echo ${{ steps.fc.outputs.comment-body }} | sed 's/.*\://' | xargs)" >> $GITHUB_ENV
+          echo "BRANCH=${{ github.event.pull_request.head.ref }}" >> $GITHUB_ENV
+          echo "OPERATION=apply" >> $GITHUB_ENV
+          echo "WORKING_IMAGE=eu.gcr.io/stuttgart-things/sthings-terraform:1.8.1-2" >> $GITHUB_ENV
+          echo "RUNS_ON=ghr-stuttgart-things-sthings-cicd" >> $GITHUB_ENV
+          LAB=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'-' -f2) >> $GITHUB_ENV
+          CLOUD=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'-' -f3) >> $GITHUB_ENV
+          echo "ENVIRONMENT=$(echo ${LAB}-${CLOUD})" >> $GITHUB_ENV
+          echo "VALUES=vsphere_vm_template=ubuntu23-2024-04-24-base-os;vsphere_vm_name=u23-base-test1" >> $GITHUB_ENV
+
+      - name: Show values for terraform execution
+        id: show
+        run: |
+          echo ${{ env.FOLDER }}
+          echo ${{ env.TEMPLATE_NAME }}
+          echo ${{ env.BRANCH }}
+          echo ${{ env.OPERATION }}
+          echo ${{ env.WORKING_IMAGE }}
+          echo ${{ env.RUNS_ON }}
+          echo ${{ env.ENVIRONMENT }}
+          echo ${{ env.VALUES }}
+  
+     # - name: Set values for terraform execution
+     #   id: set
+     #   run: |
+     #     echo "FOLDER=$(echo ${{ steps.test.outputs.comment-body }} | sed 's/.*\://')/ | xargs" >> "$GITHUB_OUTPUT"
+
 
 #  execute-terraform:
 #    name: Execute Terraform
