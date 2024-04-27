@@ -58,6 +58,6 @@ jobs:
       branch: ${{ needs.Get-Packer-Config.outputs.branch }}
       operation: ${{ needs.Get-Packer-Config.outputs.operation }}
       working-image: ${{ needs.Get-Packer-Config.outputs.working-image }}
-      environment-name: ${{ needs.Get-Packer-Config.outputs.environment }}
+      environment-name: labul-vsphere #${{ needs.Get-Packer-Config.outputs.environment }}
       runs-on: ${{ needs.Get-Packer-Config.outputs.runs-on }}
     secrets: inherit
