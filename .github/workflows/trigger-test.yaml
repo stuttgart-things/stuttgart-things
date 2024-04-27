@@ -38,6 +38,18 @@ jobs:
           body-includes: test
 
       - name: Set values for terraform execution
+        id: test1
+        run: |
+          echo "FOLDER=$(echo ${{ steps.test.outputs.comment-body }} | sed 's/.*\://')/"
+          echo "TEMPLATE_NAME=$(echo ${{ steps.fc.outputs.comment-body }} | sed 's/.*\://')"
+          echo "BRANCH=${{ github.event.pull_request.head.ref }}"
+          echo "OPERATION=apply"
+          echo "WORKING_IMAGE=eu.gcr.io/stuttgart-things/sthings-terraform:1.8.1-2"
+          echo "RUNS_ON=ghr-stuttgart-things-sthings-cicd"
+          LAB=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'-' -f2)
+          echo "ENVIRONMENT=$(echo ${LAB})"
+
+      - name: Set values for terraform execution
         id: set
         run: |
           echo "FOLDER=$(echo ${{ steps.test.outputs.comment-body }} | sed 's/.*\://')/" >> "$GITHUB_OUTPUT"
@@ -49,15 +61,16 @@ jobs:
           LAB=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'-' -f2)
           echo "ENVIRONMENT=$(echo ${LAB})" >> "$GITHUB_OUTPUT"
 
-  execute-terraform:
-    name: Execute Terraform
-    uses: stuttgart-things/stuttgart-things/.github/workflows/execute-terraform.yaml@main
-    needs: Get-Packer-Config
-    with:
-      folder: packer/builds/ubuntu23-labul-vsphere-base-os/test-vm #${{ needs.Get-Packer-Config.outputs.folder }}
-      branch: ${{ needs.Get-Packer-Config.outputs.branch }}
-      operation: ${{ needs.Get-Packer-Config.outputs.operation }}
-      working-image: ${{ needs.Get-Packer-Config.outputs.working-image }}
-      environment-name: labul-vsphere #${{ needs.Get-Packer-Config.outputs.environment }}
-      runs-on: ${{ needs.Get-Packer-Config.outputs.runs-on }}
-    secrets: inherit
+#  execute-terraform:
+#    name: Execute Terraform
+#    uses: stuttgart-things/stuttgart-things/.github/workflows/execute-terraform.yaml@main
+#    needs: Get-Packer-Config
+#    with:
+#      folder: packer/builds/ubuntu23-labul-vsphere-base-os/test-vm #${{ needs.Get-Packer-Config.outputs.folder }}
+#      branch: ${{ needs.Get-Packer-Config.outputs.branch }}
+#      values: tbd
+#      operation: ${{ needs.Get-Packer-Config.outputs.operation }}
+#      working-image: ${{ needs.Get-Packer-Config.outputs.working-image }}
+#      environment-name: labul-vsphere #${{ needs.Get-Packer-Config.outputs.environment }}
+#      runs-on: ${{ needs.Get-Packer-Config.outputs.runs-on }}
+#    secrets: inherit
