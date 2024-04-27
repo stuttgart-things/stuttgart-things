@@ -16,7 +16,7 @@ on:
       variables:
         required: false
         type: string
-        default: vsphere_vm_template=ubuntu23-2024-04-24-base-os
+        default: vsphere_vm_template=ubuntu23-2024-04-24-base-os;vsphere_vm_name=u23-base-test1
       runs-on:
         required: true
         type: string
