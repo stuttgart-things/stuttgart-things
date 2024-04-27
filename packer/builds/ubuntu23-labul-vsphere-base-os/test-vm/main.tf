@@ -1,7 +1,7 @@
 module ubuntu23-labul-vsphere-base-os {
   source                 = "github.com/stuttgart-things/vsphere-vm?ref=v1.7.5-2.7.0"
   vm_count               = 1
-  vsphere_vm_name        = "ubuntu23-labul-vsphere-testvm"
+  vsphere_vm_name        = var.vsphere_vm_name
   vm_memory              = 8192
   vsphere_vm_template    = var.vsphere_vm_template
   vm_disk_size           = "32"
@@ -19,6 +19,12 @@ module ubuntu23-labul-vsphere-base-os {
   vsphere_password       = var.vsphere_password
   vm_ssh_user            = var.vm_ssh_user
   vm_ssh_password        = var.vm_ssh_password
+}
+
+variable "vsphere_vm_name" {
+  default     = false
+  type        = string
+  description = "name of vsphere vm"
 }
 
 variable "vsphere_vm_template" {
