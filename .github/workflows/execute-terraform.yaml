@@ -16,7 +16,7 @@ on:
       variables:
         required: false
         type: string
-        default: 'vsphere_vm_template="/LabUL/vm/stuttgart-things/vm-templates/ubuntu23-2024-04-12"'
+        default: vsphere_vm_template="/LabUL/vm/stuttgart-things/vm-templates/ubuntu23-2024-04-12"
       runs-on:
         required: true
         type: string
