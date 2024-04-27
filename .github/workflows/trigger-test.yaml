@@ -40,7 +40,7 @@ jobs:
       - name: Show values for terraform execution
         id: show
         run: |
-          echo "FOLDER=$(echo ${{ steps.test.outputs.comment-body }} | sed 's/.*\://')/ | xargs"
+          echo "FOLDER=$(echo ${{ steps.test.outputs.comment-body }} | sed 's/.*\://')/ | xargs)"
           echo "TEMPLATE_NAME=$(echo ${{ steps.fc.outputs.comment-body }} | sed 's/.*\://' | xargs)"
           echo "BRANCH=${{ github.event.pull_request.head.ref }}"
           echo "OPERATION=apply"
@@ -48,7 +48,7 @@ jobs:
           echo "RUNS_ON=ghr-stuttgart-things-sthings-cicd"
           LAB=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'-' -f2)
           CLOUD=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'-' -f3)
-          echo "ENVIRONMENT=$(echo ${LAB}-echo ${CLOUD})"
+          echo "ENVIRONMENT=$(echo ${LAB}-${CLOUD})"
 
       - name: Set values for terraform execution
         id: set
