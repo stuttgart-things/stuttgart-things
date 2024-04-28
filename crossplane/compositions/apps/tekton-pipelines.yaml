@@ -1,0 +1,51 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: tekton-pipelines
+  labels:
+    crossplane.io/xrd: xtektons.resources.stuttgart-things.com
+spec:
+  writeConnectionSecretsToNamespace: crossplane-system
+  compositeTypeRef:
+    apiVersion: resources.stuttgart-things.com/v1alpha1
+    kind: XTekton
+  resources:
+    - base:
+        apiVersion: helm.crossplane.io/v1beta1
+        kind: Release
+        metadata:
+          name: tekton-pipelines
+          annotations:
+            crossplane.io/external-name: tekton-pipelines
+        spec:
+          providerConfigRef:
+            name: in-cluster
+          forProvider:
+            chart:
+              name: tekton-base
+              repository: oci://eu.gcr.io/stuttgart-things
+              version: v0.57.1
+              pullSecretRef:
+                name: ghcr
+                namespace: crossplane-system
+            namespace: tekton-pipelines
+            insecureSkipTLSVerify: true
+            skipCreateNamespace: false
+            wait: true
+            skipCRDs: false
+      patches:
+        - type: CombineFromComposite
+          combine:
+            variables:
+              - fromFieldPath: spec.clusterName
+            strategy: string
+            string:
+              fmt: "tekton-pipelines-%s"
+          toFieldPath: metadata.name
+        - fromFieldPath: spec.deploymentNamespace
+          toFieldPath: spec.forProvider.namespace
+        - fromFieldPath: spec.clusterName
+          toFieldPath: spec.providerConfigRef.name
+        - fromFieldPath: spec.version
+          toFieldPath: spec.forProvider.chart.version
