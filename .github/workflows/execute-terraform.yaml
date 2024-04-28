@@ -70,8 +70,8 @@ jobs:
       - name: Add variables to terraform.tfvars
         if: "${{ inputs.variables != '' }}"
         run: |
-          echo "${{ inputs.variables }}" | tr ';' '\n' | sed 's/\(=\)\([^ >]*\)/\1"\2"/g | | sed "s/'//g"' 
-          vars=$(echo "${{ inputs.variables }}" | tr ';' '\n' | sed 's/\(=\)\([^ >]*\)/\1"\2"/g' | | sed "s/'//g") 
+          echo "${{ inputs.variables }}" | tr ';' '\n' | sed 's/\(=\)\([^ >]*\)/\1"\2"/g | sed "s/'//g"' 
+          vars=$(echo "${{ inputs.variables }}" | tr ';' '\n' | sed 's/\(=\)\([^ >]*\)/\1"\2"/g' | sed "s/'//g") 
           printf "%s\n" "${vars[@]}" >> ${TFVARS_FILE}
           cat ${TFVARS_FILE}
         shell: bash
