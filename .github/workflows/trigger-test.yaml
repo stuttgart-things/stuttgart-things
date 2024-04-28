@@ -72,16 +72,16 @@ jobs:
 
 
 
-  execute-terraform:
-    name: Execute Terraform
-    uses: stuttgart-things/stuttgart-things/.github/workflows/execute-terraform.yaml@main
-    needs: Get-Packer-Config
-    with:
-      folder: packer/builds/ubuntu23-labul-vsphere-base-os/test-vm #${{ needs.Get-Packer-Config.outputs.folder }}
-      branch: ${{ needs.Get-Packer-Config.outputs.branch }}
-      values: tbd
-      operation: ${{ needs.Get-Packer-Config.outputs.operation }}
-      working-image: ${{ needs.Get-Packer-Config.outputs.working-image }}
-      environment-name: labul-vsphere #${{ needs.Get-Packer-Config.outputs.environment }}
-      runs-on: ${{ needs.Get-Packer-Config.outputs.runs-on }}
-    secrets: inherit
+#  execute-terraform:
+#    name: Execute Terraform
+#    uses: stuttgart-things/stuttgart-things/.github/workflows/execute-terraform.yaml@main
+#    needs: Get-Packer-Config
+#    with:
+#      folder: packer/builds/ubuntu23-labul-vsphere-base-os/test-vm #${{ needs.Get-Packer-Config.outputs.folder }}
+#      branch: ${{ needs.Get-Packer-Config.outputs.branch }}
+#      values: tbd
+#     operation: ${{ needs.Get-Packer-Config.outputs.operation }}
+#      working-image: ${{ needs.Get-Packer-Config.outputs.working-image }}
+#      environment-name: labul-vsphere #${{ needs.Get-Packer-Config.outputs.environment }}
+#      runs-on: ${{ needs.Get-Packer-Config.outputs.runs-on }}
+#    secrets: inherit
