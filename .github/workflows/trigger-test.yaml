@@ -15,7 +15,7 @@ jobs:
       operation: ${{ steps.set.outputs.OPERATION }}   
       environment: ${{ steps.set.outputs.ENVIRONMENT }}
       runs-on: ${{ steps.set.outputs.RUNS_ON }}
-      values: ${{ steps.set.outputs.VALUES }}
+      variables: ${{ steps.set.outputs.VARIABLES }}
       working-image: ${{ steps.set.outputs.WORKING_IMAGE }}
     container:
       image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2
@@ -50,7 +50,7 @@ jobs:
           LAB=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'-' -f2) >> $GITHUB_ENV
           CLOUD=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'-' -f3) >> $GITHUB_ENV
           echo "ENVIRONMENT=$(echo ${LAB}-${CLOUD})" >> $GITHUB_ENV
-          echo "VALUES='vsphere_vm_template=ubuntu23-2024-04-24-base-os;vsphere_vm_name=u23-base-test1'" >> $GITHUB_ENV
+          echo "VARIABLES='vsphere_vm_template=ubuntu23-2024-04-24-base-os;vsphere_vm_name=u23-base-test1'" >> $GITHUB_ENV
         shell: bash
 
       - name: Show values for terraform execution
@@ -63,7 +63,7 @@ jobs:
           echo WORKING_IMAGE=${{ env.WORKING_IMAGE }} | tee "$GITHUB_OUTPUT"
           echo RUNS_ON=${{ env.RUNS_ON }} | tee "$GITHUB_OUTPUT"
           echo ENVIRONMENT=${{ env.ENVIRONMENT }} | tee "$GITHUB_OUTPUT"
-          echo VALUES=${{ env.VALUES }} | tee "$GITHUB_OUTPUT"
+          echo VARIABLES=${{ env.VARIABLES }} | tee "$GITHUB_OUTPUT"
         shell: bash
 
   execute-terraform:
@@ -73,7 +73,7 @@ jobs:
     with:
       folder: ${{ needs.Get-Packer-Config.outputs.folder }}
       branch: ${{ needs.Get-Packer-Config.outputs.branch }}
-      values: ${{ needs.Get-Packer-Config.outputs.values }}
+      variables: ${{ needs.Get-Packer-Config.outputs.variables }}
       operation: ${{ needs.Get-Packer-Config.outputs.operation }}
       working-image: ${{ needs.Get-Packer-Config.outputs.working-image }}
       environment-name: labul-vsphere #${{ needs.Get-Packer-Config.outputs.environment }}
