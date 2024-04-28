@@ -98,4 +98,5 @@ jobs:
       working-image: ${{ needs.Get-Packer-Config.outputs.working-image }}
       environment-name: labul-vsphere #${{ needs.Get-Packer-Config.outputs.environment }}
       runs-on: ${{ needs.Get-Packer-Config.outputs.runs-on }}
+      delete-folder: false
     secrets: inherit
