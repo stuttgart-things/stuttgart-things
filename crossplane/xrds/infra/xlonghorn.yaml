@@ -27,8 +27,8 @@ spec:
               properties:
                 deploymentNamespace:
                   type: string
-                  default: longhorn
-                  description: namespace for open ebs
+                  default: longhorn-system
+                  description: namespace for longhorn
                 clusterName:
                   type: string
                   default: in-cluster
@@ -36,7 +36,30 @@ spec:
                 version:
                   type: string
                   default: 1.6.1
-                  description: helm chart version for cert-manager
+                  description: helm chart version for longhorn
+                persistence:
+                  type: object
+                  properties:
+                    defaultClass:
+                      type: boolean
+                      default: false
+                      description: set as default storage class
+                    defaultFsType:
+                      type: string
+                      default: ext4
+                      description: default Fs Type
+                    defaultMkfsParams:
+                      type: string
+                      description: default Mkfs Params
+                      default: ""
+                    defaultDataLocality:
+                      type: string
+                      default: disabled
+                      description: default data locality
+                    reclaimPolicy:
+                      type: string
+                      default: Delete
+                      description: reclaim policy
               required:
                 - clusterName
             status:

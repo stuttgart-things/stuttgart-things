@@ -1,0 +1,13 @@
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: Longhorn
+metadata:
+  name: labda-test
+  namespace: crossplane-system
+spec:
+  clusterName: labda-test
+  persistence:
+    defaultClass: false
+    defaultFsType: ext4
+    defaultDataLocality: disabled
+    reclaimPolicy: Delete
