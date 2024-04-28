@@ -49,7 +49,7 @@ jobs:
           LAB=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'-' -f2) >> $GITHUB_ENV
           CLOUD=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'-' -f3) >> $GITHUB_ENV
           echo "ENVIRONMENT=$(echo ${LAB}-${CLOUD})" >> $GITHUB_ENV
-          echo "VALUES=vsphere_vm_template=ubuntu23-2024-04-24-base-os;vsphere_vm_name=u23-base-test1" >> $GITHUB_ENV
+          echo "VALUES='vsphere_vm_template=ubuntu23-2024-04-24-base-os;vsphere_vm_name=u23-base-test1'" >> $GITHUB_ENV
         shell: bash
 
       - name: Show values for terraform execution
