@@ -10,7 +10,7 @@ jobs:
     if: contains(github.event.pull_request.labels.*.name, 'test-vm')
     outputs:
       folder: ${{ steps.set.outputs.FOLDER }}
-      branch: ${{ steps.set.outputs.BRANCH }}   
+      branch: ${{ steps.set.outputs.BRANCH }}
       environment: ${{ steps.set.outputs.ENVIRONMENT }}
       runs-on: ${{ steps.set.outputs.RUNS_ON }}
       variables: ${{ steps.set.outputs.VARIABLES }}
@@ -21,14 +21,14 @@ jobs:
       contents: read
       pull-requests: read
     runs-on: ghr-stuttgart-things-sthings-cicd
-    steps:          
+    steps:
       - name: Get VM-Template name
         uses: peter-evans/find-comment@v3
         id: fc
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body-includes: successful
-          
+
       - name: Get Test vm -path
         uses: peter-evans/find-comment@v3
         id: test
@@ -41,7 +41,7 @@ jobs:
         run: |
           # SET TMP VARS
           OS=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'-' -f1)
-          LAB=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'-' -f2) 
+          LAB=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'-' -f2)
           CLOUD=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'-' -f3)
           TEMPLATE_NAME=$(echo ${{ steps.fc.outputs.comment-body }} | sed 's/.*\://' | xargs)
           VM_NAME=test-$(echo ${OS})-$(echo $(date '+%Y-%m-%d'))
@@ -52,8 +52,8 @@ jobs:
           echo "BRANCH=${{ github.event.pull_request.head.ref }}" >> $GITHUB_ENV
           echo "WORKING_IMAGE=eu.gcr.io/stuttgart-things/sthings-terraform:1.8.1-2" >> $GITHUB_ENV
           echo "RUNS_ON=ghr-stuttgart-things-sthings-cicd" >> $GITHUB_ENV
-          echo "ENVIRONMENT=$(echo ${LAB}-${CLOUD})" >> $GITHUB_ENV   
-          echo "VARIABLES=$(echo ${VARS})" >> $GITHUB_ENV   
+          echo "ENVIRONMENT=$(echo ${LAB}-${CLOUD})" >> $GITHUB_ENV
+          echo "VARIABLES=$(echo ${VARS})" >> $GITHUB_ENV
         shell: bash
 
       - name: Show values for terraform execution
@@ -70,7 +70,7 @@ jobs:
 
   Create-Test-VM:
     name: Create test VM
-    uses: stuttgart-things/stuttgart-things/.github/workflows/execute-terraform.yaml@main
+    uses: stuttgart-things/stuttgart-things/.github/workflows/call-terraform-execution.yaml@main
     needs: Get-Packer-Config
     with:
       folder: ${{ needs.Get-Packer-Config.outputs.folder }}
@@ -86,8 +86,8 @@ jobs:
 
   Destroy-Test-VM:
     name: Destroy test VM
-    uses: stuttgart-things/stuttgart-things/.github/workflows/execute-terraform.yaml@main
-    needs: 
+    uses: stuttgart-things/stuttgart-things/.github/workflows/call-terraform-execution.yaml@main
+    needs:
       - Get-Packer-Config
       - Create-Test-VM
     with:

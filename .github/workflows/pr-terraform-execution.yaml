@@ -37,7 +37,7 @@ jobs:
   execute-terraform:
     name: Execute Terraform
     needs: Get-Terraform-Config
-    uses: stuttgart-things/stuttgart-things/.github/workflows/execute-terraform.yaml@main
+    uses: stuttgart-things/stuttgart-things/.github/workflows/call-terraform-execution.yaml@main
     with:
       folder: ${{ needs.Get-Terraform-Config.outputs.tf_working_dir }}
       branch: ${{ needs.Get-Terraform-Config.outputs.branch }}

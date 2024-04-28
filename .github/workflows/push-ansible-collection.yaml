@@ -15,7 +15,7 @@ env:
 jobs:
   Build-Collection:
     name: Build Ansible Collection
-    uses: stuttgart-things/stuttgart-things/.github/workflows/build-ansible-collection.yaml@main
+    uses: stuttgart-things/stuttgart-things/.github/workflows/call-ansible-collection.yaml@main
     with:
       runs-on: ghr-stuttgart-things-sthings-cicd
       environment-name: k8s

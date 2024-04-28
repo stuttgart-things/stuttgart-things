@@ -38,7 +38,7 @@ on:
 jobs:
   execute-terraform:
     name: Execute Ansible
-    uses: stuttgart-things/stuttgart-things/.github/workflows/execute-ansible.yaml@main
+    uses: stuttgart-things/stuttgart-things/.github/workflows/call-ansible-execution.yaml@main
     with:
       playbook: ${{ inputs.playbook }}
       branch: ${{ inputs.branch-name }}
