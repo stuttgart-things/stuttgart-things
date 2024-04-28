@@ -13,6 +13,10 @@ on:
         required: false
         type: string
         default: apply
+      delete-folder:
+        required: false
+        type: boolean
+        default: true
       variables:
         required: false
         type: string
@@ -94,7 +98,7 @@ jobs:
         shell: bash
 
   delete-terraform-config:
-    if: ${{ inputs.operation == 'destroy' }}
+    if: ${{ (inputs.operation == 'destroy') && (inputs.delete-folder == true || inputs.delete-folder  == 'true') }}
     needs: execute-terraform
     runs-on: ${{ inputs.runs-on }}
     environment: ${{ inputs.environment-name }}
@@ -106,20 +110,14 @@ jobs:
         with:
           fetch-depth: '0'
           ref: ${{ inputs.branch-name }}
-          
-      - name: Check folder before deletion
+                  
+      - name: Delete terraform folder
         run: |
-          ls -lta terraform/builds
-        shell: bash
-        
-      - name: Delete folder
-        run: |
+          echo 'Check folderstructure before deletion'
+          ls -lta ${{ inputs.folder }}
           rm -rf ${{ inputs.folder }}
-        shell: bash
-        
-      - name: Check folder after deletion
-        run: |
-          ls -lta terraform/builds
+          echo 'Check folderstructure after deletion'
+          ls -lta $(dirname ${{ inputs.folder }})
         shell: bash
         
       - name: Get token for creating pull request
