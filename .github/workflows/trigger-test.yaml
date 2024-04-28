@@ -46,7 +46,7 @@ jobs:
           CLOUD=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'-' -f3)
           TEMPLATE_NAME=$(echo ${{ steps.fc.outputs.comment-body }} | sed 's/.*\://' | xargs)
           VM_NAME=test-$(echo ${OS})
-          VARS=$(echo vsphere_vm_template=${TEMPLATE_NAME};vsphere_vm_name=${VM_NAME})
+          VARS=$(echo 'vsphere_vm_template=${TEMPLATE_NAME};vsphere_vm_name=${VM_NAME}')
 
           # SET ENV VARS
           echo "FOLDER=$(echo ${{ steps.test.outputs.comment-body }} | sed 's/.*\://' | xargs)/" >> $GITHUB_ENV
@@ -55,7 +55,7 @@ jobs:
           echo "WORKING_IMAGE=eu.gcr.io/stuttgart-things/sthings-terraform:1.8.1-2" >> $GITHUB_ENV
           echo "RUNS_ON=ghr-stuttgart-things-sthings-cicd" >> $GITHUB_ENV
           echo "ENVIRONMENT=$(echo ${LAB}-${CLOUD})" >> $GITHUB_ENV   
-          echo "VARIABLES='$(echo ${VARS})'" >> $GITHUB_ENV   
+          echo "VARIABLES=$(echo ${VARS})" >> $GITHUB_ENV   
 
           #echo "VARIABLES='vsphere_vm_template=ubuntu23-2024-04-24-base-os;vsphere_vm_name=u23-base-test1'" >> $GITHUB_ENV
 
