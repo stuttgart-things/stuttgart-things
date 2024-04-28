@@ -54,19 +54,20 @@ jobs:
       - name: Show values for terraform execution
         id: show
         run: |
-          echo ${{ env.FOLDER }}
-          echo ${{ env.TEMPLATE_NAME }}
-          echo ${{ env.BRANCH }}
-          echo ${{ env.OPERATION }}
-          echo ${{ env.WORKING_IMAGE }}
-          echo ${{ env.RUNS_ON }}
-          echo ${{ env.ENVIRONMENT }}
-          echo ${{ env.VALUES }}
+          echo FOLDER=${{ env.FOLDER }} | tee "$GITHUB_OUTPUT"
+          echo TEMPLATE_NAME=${{ env.TEMPLATE_NAME }} | tee "$GITHUB_OUTPUT"
+          echo BRANCH=${{ env.BRANCH }} | tee "$GITHUB_OUTPUT"
+          echo OPERATION=${{ env.OPERATION }} | tee "$GITHUB_OUTPUT"
+          echo WORKING_IMAGE=${{ env.WORKING_IMAGE }} | tee "$GITHUB_OUTPUT"
+          echo RUNS_ON=${{ env.RUNS_ON }} | tee "$GITHUB_OUTPUT"
+          echo ENVIRONMENT=${{ env.ENVIRONMENT }} | tee "$GITHUB_OUTPUT"
+          echo VALUES=${{ env.VALUES }} | tee "$GITHUB_OUTPUT"
   
-     # - name: Set values for terraform execution
-     #   id: set
-     #   run: |
-     #     echo "FOLDER=$(echo ${{ steps.test.outputs.comment-body }} | sed 's/.*\://')/ | xargs" >> "$GITHUB_OUTPUT"
+  #    - name: Set values for terraform execution
+  #      id: tf
+  #      run: |
+  #        echo "FOLDER=${{ env.FOLDER }}" >> "$GITHUB_OUTPUT"
+
 
 
 #  execute-terraform:
