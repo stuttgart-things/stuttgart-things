@@ -55,7 +55,7 @@ jobs:
           echo "WORKING_IMAGE=eu.gcr.io/stuttgart-things/sthings-terraform:1.8.1-2" >> $GITHUB_ENV
           echo "RUNS_ON=ghr-stuttgart-things-sthings-cicd" >> $GITHUB_ENV
           echo "ENVIRONMENT=$(echo ${LAB}-${CLOUD})" >> $GITHUB_ENV   
-          echo "VARIABLES=$(echo ${VARS})" >> $GITHUB_ENV   
+          echo "VARIABLES='$(echo ${VARS})'" >> $GITHUB_ENV   
 
           #echo "VARIABLES='vsphere_vm_template=ubuntu23-2024-04-24-base-os;vsphere_vm_name=u23-base-test1'" >> $GITHUB_ENV
 
