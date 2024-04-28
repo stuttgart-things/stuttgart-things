@@ -56,14 +56,14 @@ jobs:
       - name: Show values for terraform execution
         id: set
         run: |
-          echo FOLDER=${{ env.FOLDER }} | tee "$GITHUB_OUTPUT"
-          echo TEMPLATE_NAME=${{ env.TEMPLATE_NAME }} | tee "$GITHUB_OUTPUT"
-          echo BRANCH=${{ env.BRANCH }} | tee "$GITHUB_OUTPUT"
-          echo OPERATION=${{ env.OPERATION }} | tee "$GITHUB_OUTPUT"
-          echo WORKING_IMAGE=${{ env.WORKING_IMAGE }} | tee "$GITHUB_OUTPUT"
-          echo RUNS_ON=${{ env.RUNS_ON }} | tee "$GITHUB_OUTPUT"
-          echo ENVIRONMENT=${{ env.ENVIRONMENT }} | tee "$GITHUB_OUTPUT"
-          echo VARIABLES=${{ env.VARIABLES }} | tee "$GITHUB_OUTPUT"
+          echo FOLDER: ${{ env.FOLDER }}; echo "FOLDER=${{ env.FOLDER }}" >> "$GITHUB_OUTPUT
+          echo TEMPLATE_NAME: ${{ env.TEMPLATE_NAME }}; echo "TEMPLATE_NAME=${{ env.TEMPLATE_NAME }}" >> "$GITHUB_OUTPUT
+          echo BRANCH: ${{ env.BRANCH }}; echo "BRANCH=${{ env.BRANCH }}" >> "$GITHUB_OUTPUT
+          echo OPERATION: ${{ env.OPERATION }}; echo "OPERATION=${{ env.OPERATION }}" >> "$GITHUB_OUTPUT
+          echo WORKING_IMAGE: ${{ env.WORKING_IMAGE }}; echo "WORKING_IMAGE=${{ env.WORKING_IMAGE }}" >> "$GITHUB_OUTPUT
+          echo RUNS_ON: ${{ env.RUNS_ON }}; echo "RUNS_ON=${{ env.RUNS_ON }}" >> "$GITHUB_OUTPUT
+          echo ENVIRONMENT: ${{ env.ENVIRONMENT }}; echo "ENVIRONMENT=${{ env.ENVIRONMENT }}" >> "$GITHUB_OUTPUT
+          echo VARIABLES: ${{ env.VARIABLES }}; echo "VARIABLES=${{ env.VARIABLES }}" >> "$GITHUB_OUTPUT
         shell: bash
 
   execute-terraform:
