@@ -1,0 +1,41 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: xtektons.resources.stuttgart-things.com
+spec:
+  connectionSecretKeys:
+    - kubeconfig
+  group: resources.stuttgart-things.com
+  names:
+    kind: XTekton
+    plural: xtektons
+  claimNames:
+    kind: Tekton
+    plural: tektons
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          description: A Tekton is a composite resource that represents a helm release for a tekton deployment
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                deploymentNamespace:
+                  type: string
+                  default: tekton-pipelines
+                  description: namespace for tekton
+                clusterName:
+                  type: string
+                  default: in-cluster
+                  description: cluster name/helm provider name
+                version:
+                  type: string
+                  default: v0.57.1
+                  description: helm chart version for tekton
+              required:
+                - clusterName
