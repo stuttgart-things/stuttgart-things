@@ -30,7 +30,7 @@ spec:
                 name: ghcr
                 namespace: crossplane-system
             namespace: arc-systems
-            insecureSkipTLSVerify: true
+            insecureSkipTLSVerify: false
             skipCreateNamespace: false
             wait: true
             skipCRDs: false
