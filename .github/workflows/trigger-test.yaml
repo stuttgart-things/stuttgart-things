@@ -1,4 +1,4 @@
-name: Rollout GitHub Runner
+name: Create Test VM
 on:
   pull_request:
     types:
@@ -15,6 +15,7 @@ jobs:
       operation: ${{ steps.set.outputs.OPERATION }}   
       environment: ${{ steps.set.outputs.ENVIRONMENT }}
       runs-on: ${{ steps.set.outputs.RUNS_ON }}
+      values: ${{ steps.set.outputs.VALUES }}
       working-image: ${{ steps.set.outputs.WORKING_IMAGE }}
     container:
       image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2
@@ -38,7 +39,7 @@ jobs:
           body-includes: test
 
       - name: Set values for terraform execution
-        id: set
+        id: values
         run: |
           echo "FOLDER=$(echo ${{ steps.test.outputs.comment-body }} | sed 's/.*\://' | xargs)/" >> $GITHUB_ENV
           echo "TEMPLATE_NAME=$(echo ${{ steps.fc.outputs.comment-body }} | sed 's/.*\://' | xargs)" >> $GITHUB_ENV
@@ -53,7 +54,7 @@ jobs:
         shell: bash
 
       - name: Show values for terraform execution
-        id: show
+        id: set
         run: |
           echo FOLDER=${{ env.FOLDER }} | tee "$GITHUB_OUTPUT"
           echo TEMPLATE_NAME=${{ env.TEMPLATE_NAME }} | tee "$GITHUB_OUTPUT"
@@ -65,23 +66,16 @@ jobs:
           echo VALUES=${{ env.VALUES }} | tee "$GITHUB_OUTPUT"
         shell: bash
 
-  #    - name: Set values for terraform execution
-  #      id: tf
-  #      run: |
-  #        echo "FOLDER=${{ env.FOLDER }}" >> "$GITHUB_OUTPUT"
-
-
-
-#  execute-terraform:
-#    name: Execute Terraform
-#    uses: stuttgart-things/stuttgart-things/.github/workflows/execute-terraform.yaml@main
-#    needs: Get-Packer-Config
-#    with:
-#      folder: packer/builds/ubuntu23-labul-vsphere-base-os/test-vm #${{ needs.Get-Packer-Config.outputs.folder }}
-#      branch: ${{ needs.Get-Packer-Config.outputs.branch }}
-#      values: tbd
-#     operation: ${{ needs.Get-Packer-Config.outputs.operation }}
-#      working-image: ${{ needs.Get-Packer-Config.outputs.working-image }}
-#      environment-name: labul-vsphere #${{ needs.Get-Packer-Config.outputs.environment }}
-#      runs-on: ${{ needs.Get-Packer-Config.outputs.runs-on }}
-#    secrets: inherit
+  execute-terraform:
+    name: Execute Terraform
+    uses: stuttgart-things/stuttgart-things/.github/workflows/execute-terraform.yaml@main
+    needs: Get-Packer-Config
+    with:
+      folder: ${{ needs.Get-Packer-Config.outputs.folder }}
+      branch: ${{ needs.Get-Packer-Config.outputs.branch }}
+      values: ${{ needs.Get-Packer-Config.outputs.values }}
+      operation: ${{ needs.Get-Packer-Config.outputs.operation }}
+      working-image: ${{ needs.Get-Packer-Config.outputs.working-image }}
+      environment-name: labul-vsphere #${{ needs.Get-Packer-Config.outputs.environment }}
+      runs-on: ${{ needs.Get-Packer-Config.outputs.runs-on }}
+    secrets: inherit
