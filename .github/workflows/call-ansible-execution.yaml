@@ -68,7 +68,7 @@ jobs:
 
       - name: Create Inventory
         run: |
-          echo ${{ inputs.inventory }} | tr ',' '\n' > inventory
+          echo ${{ inputs.inventory }} ansible_user=sthings | tr ',' '\n' > inventory
           cat inventory
         shell: bash
 
