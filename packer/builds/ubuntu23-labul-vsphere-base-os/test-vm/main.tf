@@ -1,30 +1,24 @@
 module ubuntu23-labul-vsphere-base-os {
   source                 = "github.com/stuttgart-things/vsphere-vm?ref=v1.7.5-2.7.0"
   vm_count               = 1
-  vsphere_vm_name        = var.vsphere_vm_name
+  vsphere_vm_name        = "ubuntu23-labul-vsphere-testvm"
   vm_memory              = 8192
   vsphere_vm_template    = var.vsphere_vm_template
   vm_disk_size           = "32"
   vm_num_cpus            = 8
   firmware               = "bios"
-  vsphere_vm_folder_path = "stuttgart-things/infra"
+  vsphere_vm_folder_path = "stuttgart-things/testing"
   vsphere_datacenter     = "/LabUL/"
   vsphere_datastore      = "/LabUL/host/Cluster-V6.5/10.31.101.41/UL-ESX-SAS-01"
   vsphere_resource_pool  = "/LabUL/host/Cluster-V6.5/Resources"
   vsphere_network        = "/LabUL/host/Cluster-V6.5/10.31.101.41/MGMT-10.31.101"
   bootstrap              = ["echo STUTTGART-THINGS"]
-  annotation             = "VSPHERE-VM BUILD w/ TERRAFORM FOR STUTTGART-THINGS"
+  annotation             = "PACKER VSPHERE TEST-VM BUILD w/ TERRAFORM FOR STUTTGART-THINGS"
   vsphere_server         = "10.31.101.51"
   vsphere_user           = var.vsphere_user
   vsphere_password       = var.vsphere_password
   vm_ssh_user            = var.vm_ssh_user
   vm_ssh_password        = var.vm_ssh_password
-}
-
-variable "vsphere_vm_name" {
-  default     = false
-  type        = string
-  description = "name of vsphere vm"
 }
 
 variable "vsphere_vm_template" {

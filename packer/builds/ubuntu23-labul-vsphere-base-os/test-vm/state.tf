@@ -7,13 +7,13 @@ terraform {
 
     skip_requesting_account_id = true
     skip_s3_checksum = true
-    key = "test-packer.tfstate"
+    key = "packer-ubuntu23.tfstate"
     bucket = "vspherevm-labul"
     region = "main"
     skip_credentials_validation = true
     skip_metadata_api_check = true
     skip_region_validation = true
     force_path_style = true
-    workspace_key_prefix = "test"
+    workspace_key_prefix = "packer-ubuntu23"
   }
 }
