@@ -1,5 +1,5 @@
 ---
-name: Execute Ansible
+name: Call Ansible Execution
 on:
   workflow_call:
     inputs:
