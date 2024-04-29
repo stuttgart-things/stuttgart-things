@@ -77,6 +77,7 @@ jobs:
       branch: ${{ needs.Get-Packer-Config.outputs.branch }}
       variables: ${{ needs.Get-Packer-Config.outputs.variables }} #"VARIABLES='vsphere_vm_template=ubuntu23-2024-04-24-base-os;vsphere_vm_name=u23-base-test1'" >> $GITHUB_ENV
       operation: apply
+      output: true
       working-image: ${{ needs.Get-Packer-Config.outputs.working-image }}
       environment-name: labul-vsphere #${{ needs.Get-Packer-Config.outputs.environment }}
       runs-on: ${{ needs.Get-Packer-Config.outputs.runs-on }}
