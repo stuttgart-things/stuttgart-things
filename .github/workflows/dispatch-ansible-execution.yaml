@@ -36,7 +36,7 @@ on:
         default: ansible/requirements.yaml
 
 jobs:
-  execute-terraform:
+  execute-ansible:
     name: Execute Ansible
     uses: stuttgart-things/stuttgart-things/.github/workflows/call-ansible-execution.yaml@main
     with:
