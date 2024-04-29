@@ -1,5 +1,5 @@
 ---
-name: Create Packer Config
+name: Dispatch Packer Template
 on:
   workflow_dispatch:
     inputs:
