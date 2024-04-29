@@ -7,6 +7,7 @@ ansibleProvisionerMinVersion: 1.1.1
 # S3
 s3Endpoint: https://artifacts.app1.sthings-vsphere.labul.sva.de
 s3Bucket: vspherevm-labul
+s3Region: main
 
 ipWaitTimeout: 40m
 vmWareProvider: github.com/hashicorp/vsphere
