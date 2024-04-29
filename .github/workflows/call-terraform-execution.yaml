@@ -105,7 +105,10 @@ jobs:
         if: ${{ (inputs.output == true || inputs.output == 'true') }}
         run: |
           terraform -chdir=${{ inputs.folder }} output > output
-          cat output
+          filecontent=$(cat output)
+          filecontent=${filecontent#*'"'} 
+          extraction=${filecontent%'"'*}
+          echo $extraction
         shell: bash
 
   delete-terraform-config:
