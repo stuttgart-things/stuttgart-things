@@ -20,7 +20,7 @@ on:
         type: string
         default: ansible/playbooks/base-os.yaml
       inventory:
-        description: INVENTORY NAME
+        description: INVENTORY
         type: string
       environment-name:
         type: string
