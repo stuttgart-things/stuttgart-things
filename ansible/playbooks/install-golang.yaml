@@ -46,10 +46,19 @@
     golang_install_dir: /usr/local/
 
   tasks:
+    # MAYBE WE ADD A (PRIOR) CHECK FOR THE SHA OF THE EXTRACTED FOLDER - IF SAME VERSION SHOULD BE INSTALLED AGAIN
+    # https://github.com/krahul084/python_scripts/blob/master/get_checksum.py
+    #- get_checksum: 
+    #    path: path/to/directory
+    #    checksum_type: sha1/md5/sha256/sha512
+    #  register: checksum
+
     # DELETE ALREADY INSTALLED GOLANG
+    # -> CHECK FILE MODULE FOR REMOVING A DIR
     - name: Delete Golang
       shell:  "rm -rf /usr/local/go"
-
+    # MAYBE LATER WE'RE COMAPRING TO A CHECKSUM IF NEEDS TO DELETE
+    
     # DOWNLOAD AND INSTALL GOLANG
     - name: Unarchive and install Golang 
       ansible.builtin.unarchive:
@@ -58,17 +67,21 @@
         mode: 0755
         validate_certs: false
         remote_src: true
+    # MAYBE LATER WE'RE COMAPRING TO A CHECKSUM IF NEEDS TO BE DOWNLOADED AND INSTALLED AGAIN
 
-    # CREATE USER
+    # CREATE USERS
     - name: Create golang users
       ansible.builtin.include_role:
         name: create-os-user
       vars:
         users: "{{ golang_users }}"
         groups_to_create: "{{ groups_golang }}"
-
+      # SHOULD ONLY RUN IF golang_users ARE DEFINED
+      
     # WRITE EXPORTS TO BASHRC
-    - name: Write exports to user's .bashrc file
+    # THIS SHOULD ONLY RUN IF NO USERS = DICT ARE DEFINED
+    # THE VARIABLE go_username & go_usergroup (and optional go_userhome) SHOULD BE DEFINED
+    - name: Add golang exports to bashrc
       ansible.builtin.blockinfile:
         block: |
           export GOROOT=/usr/local/go
@@ -80,4 +93,5 @@
         group: "{{ item.group }}"
         mode: 0644
         create: true
-      loop: "{{ golang_users }}"
+      #loop: "{{ golang_users }}"
+      # CHANGE VARIABLES INSIDE THIS TASK go_username -> NO ITEM.XY ...
