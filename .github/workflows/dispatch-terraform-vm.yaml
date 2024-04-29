@@ -1,5 +1,5 @@
 ---
-name: Create Virtual Machine
+name: Dispatch Terraform VM
 on:
   workflow_dispatch:
     inputs:
