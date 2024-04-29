@@ -1,5 +1,5 @@
 ---
-name: Trigger terraform run
+name: Dispatch Terraform Execution
 on:
   workflow_dispatch:
     inputs:
