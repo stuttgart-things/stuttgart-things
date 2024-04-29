@@ -1,5 +1,5 @@
 ---
-name: Delete Folder
+name: Dispatch Delete Folder
 on:
   workflow_dispatch:
     inputs:
