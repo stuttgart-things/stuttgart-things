@@ -143,6 +143,17 @@ jobs:
           --values osVersion="${{ inputs.os-version }}, lab=${{ inputs.lab }}, cloud=${{ inputs.cloud }}, ansibleOsProvisioning=${{ inputs.ansible-provisioning }}" \
           --destination ${{ env.WORKING_DIR }}/test-vm/main.tf
 
+      - name: Render Terraform provider config w/ machineShop
+        id: renderTerraformProviderConfig
+        run: |
+          machineShop render \
+          --source local \
+          --template terraform/state-provider.tf.tpl \
+          --output file \
+          --defaults packer/environments/${{ inputs.lab }}-${{ inputs.cloud }}.yaml \
+          --values stateKey="packer-${{ inputs.os-version }}" \
+          --destination ${{ env.WORKING_DIR }}/test-vm/state.tf
+
       - name: Render Readme template w/ machineShop
         id: renderReadMeTemplate
         run: |
