@@ -7,7 +7,7 @@ module [[ .osVersion ]]-[[ .lab ]]-[[ .cloud ]]-[[ .ansibleOsProvisioning ]] {
   vm_disk_size           = "[[ .testVmDiskSize ]]"
   vm_num_cpus            = [[ .testCpu ]]
   firmware               = "bios"
-  vsphere_vm_folder_path = "stuttgart-things/infra"
+  vsphere_vm_folder_path = "[[ .folderPath ]]"
   vsphere_datacenter     = "[[ .testDatacenter ]]"
   vsphere_datastore      = "[[ .testDatastore ]]"
   vsphere_resource_pool  = "[[ .cluster ]]/Resources"
