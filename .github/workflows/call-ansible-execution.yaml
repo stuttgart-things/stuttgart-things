@@ -50,9 +50,13 @@ jobs:
           fetch-depth: '0'
           ref: ${{ inputs.branch }}
 
-      - name: Check Ansible Version
+      - name: Check Parameters
         run: |
           ansible --version
+          echo PATH-TO-PRIVATEKEY: ${{ inputs.private-key }}
+          echo INVENTORY: ${{ inputs.inventory }}
+          echo PLAYBOOK ${{ inputs.playbook }}
+          echo PATH-TO-REQUIREMENTS_FILE: ${{ inputs.requirements-file }}
         shell: bash
 
       - name: Get Private Key
