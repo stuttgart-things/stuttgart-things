@@ -84,7 +84,7 @@ jobs:
     secrets: inherit
 
 # ADD ANSIBLE PROV HERE
-  execute-ansible:
+  Execute-Ansible-Provisioning:
     name: Execute Ansible
     uses: stuttgart-things/stuttgart-things/.github/workflows/call-ansible-execution.yaml@main
     needs: 
@@ -107,6 +107,7 @@ jobs:
     needs:
       - Get-Packer-Config
       - Create-Test-VM
+      - Execute-Ansible-Provisioning
     with:
       folder: ${{ needs.Get-Packer-Config.outputs.folder }}
       branch: ${{ needs.Get-Packer-Config.outputs.branch }}
