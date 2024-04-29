@@ -1,4 +1,4 @@
-name: Build Packer Template
+name: PR Packer build
 on:
   pull_request:
     types:
