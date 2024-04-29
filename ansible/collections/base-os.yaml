@@ -12,7 +12,7 @@ requirements: |
       version: 2024.04.25
     - src: https://github.com/stuttgart-things/install-configure-docker.git
       scm: git
-      version: 2024-04-29
+      version: 2024.04.29
       
 playbooks:
   - name: install_configure_golang
