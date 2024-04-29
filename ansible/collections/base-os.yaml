@@ -12,10 +12,17 @@ requirements: |
       version: 2024.04.25
       
 playbooks:
+  - name: install_configure_golang
+    play: |
+      ---
+      - hosts: "{{ target_host |default('all') }}"
+        become: true
+        # @andre tbd
+        
   - name: download_install_binaries
     play: |
       ---
-      - hosts: "{{ target_host }}"
+      - hosts: "{{ target_host |default('all') }}"
         become: true
         vars:
           download_dir: "/tmp/downloads"
@@ -28,7 +35,7 @@ playbooks:
   - name: create_users
     play: |
       ---
-      - hosts: "{{ target_host }}"
+      - hosts: "{{ target_host |default('all') }}"
         gather_facts: true
         become: true
         vars_files:
