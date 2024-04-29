@@ -1,5 +1,5 @@
 ---
-name: Execute Terraform
+name: Call Terraform Execution
 on:
   workflow_call:
     inputs:
