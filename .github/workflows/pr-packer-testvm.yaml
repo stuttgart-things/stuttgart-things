@@ -95,7 +95,7 @@ jobs:
       branch: main
       working-image: eu.gcr.io/stuttgart-things/sthings-ansible:9.5.1
       runs-on: ${{ needs.Get-Packer-Config.outputs.runs-on }}
-      inventory: ${{ needs.Create-Test-VM.outputs.output }}
+      inventory: ${{ needs.Create-Test-VM.outputs.tf-output }}
       environment-name: ${{ needs.Get-Packer-Config.outputs.environment }}
       private-key: "ssh/data/sthings:privateKey"
       requirements-file: ansible/requirements.yaml
