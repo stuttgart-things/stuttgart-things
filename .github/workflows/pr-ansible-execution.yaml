@@ -1,0 +1,51 @@
+name: PR Ansible Execution
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+
+jobs:
+  Get-Ansible-Config:
+    if: contains(github.event.pull_request.labels.*.name, 'ansible')
+    environment: k8s
+    container:
+      image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2-2
+    outputs:
+      tf_working_dir: ${{ steps.set.outputs.TF_WORKING_DIR }}
+      branch: ${{ steps.set.outputs.BRANCH }}
+      operation: ${{ steps.set.outputs.OPERATION }}
+      working_image: ${{ steps.set.outputs.WORKING_IMAGE }}
+      environment: ${{ steps.set.outputs.ENVIRONMENT }}
+      runs_on: ${{ steps.set.outputs.RUNS_ON }}
+    runs-on: ghr-stuttgart-things-sthings-cicd
+    steps:
+      - name: Set Execution Details
+        id: set
+        run: |
+          # HARDCODED (FOR NOW)
+          echo "OPERATION=apply" >> "$GITHUB_OUTPUT"
+          echo "WORKING_IMAGE=eu.gcr.io/stuttgart-things/sthings-terraform:1.8.1-2" >> "$GITHUB_OUTPUT"
+          echo "RUNS_ON=ghr-stuttgart-things-sthings-cicd" >> "$GITHUB_OUTPUT"
+
+          # PULL REQUEST/BRANCH RELATED
+          echo "TF_WORKING_DIR=${{ github.event.pull_request.head.ref }}/" >> "$GITHUB_OUTPUT"
+          echo "BRANCH=${{ github.event.pull_request.head.ref }}" >> "$GITHUB_OUTPUT"
+          SPLIT=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'/' -f3)
+          echo "ENVIRONMENT=$(echo ${SPLIT} | cut -d'-' -f1)-$(echo ${SPLIT} | cut -d'-' -f2)" >> "$GITHUB_OUTPUT"
+
+  Execute-Ansible-Provisioning:
+    name: Execute Ansible
+    uses: stuttgart-things/stuttgart-things/.github/workflows/call-ansible-execution.yaml@main
+    needs: 
+      - Get-Ansible-Config
+    with:
+      playbook: ansible/playbooks/base-os.yaml
+      branch: ${{ github.event.pull_request.head.ref }}
+      working-image: eu.gcr.io/stuttgart-things/sthings-ansible:9.5.1
+      runs-on: ${{ needs.Get-Ansible-Config.outputs.runs-on }}
+      inventory: ${{ needs.Create-Test-VM.outputs.tf-output }}
+      environment-name: ${{ needs.Get-Packer-Config.outputs.environment }}
+      private-key: "ssh/data/sthings:privateKey"
+      requirements-file: ansible/requirements.yaml
+    secrets: inherit  
