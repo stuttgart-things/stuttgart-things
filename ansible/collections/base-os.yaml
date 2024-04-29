@@ -1,6 +1,6 @@
 ---
 name: base_os
-version: 0.1.9
+version: 0.2.0
 namespace: sthings
 requirements: |
   roles:
@@ -12,7 +12,7 @@ requirements: |
       version: 2024.04.25
     - src: https://github.com/stuttgart-things/install-configure-docker.git
       scm: git
-      version: 2024.04.29
+      version: 2024.04.30
       
 playbooks:
   - name: install_configure_golang
