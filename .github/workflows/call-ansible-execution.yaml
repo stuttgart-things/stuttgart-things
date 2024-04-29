@@ -29,6 +29,10 @@ on:
       requirements-file:
         required: true
         type: string
+      ansible-user:
+        required: false
+        type: string
+        default: sthings
 
 jobs:
   execute-ansible:
@@ -68,7 +72,8 @@ jobs:
 
       - name: Create Inventory
         run: |
-          echo ${{ inputs.inventory }} ansible_user=sthings | tr ',' '\n' > inventory
+          echo ${{ inputs.inventory }} | tr ',' '\n' > inventory
+          printf "[all:vars]\nansible_user=${{ inputs.ansible-user }}\n" >> inventory
           cat inventory
         shell: bash
 
