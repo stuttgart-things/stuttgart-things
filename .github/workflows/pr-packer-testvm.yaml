@@ -1,4 +1,4 @@
-name: Create Test VM
+name: PR Packer Test-VM
 on:
   pull_request:
     types:
