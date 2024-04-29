@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: "{{ target_host | default('all') }}"
   become: true
   vars:
     golang_users:
@@ -44,6 +44,9 @@
     source_url: "https://go.dev/dl/go1.22.2.linux-amd64.tar.gz"
     download_dir: /tmp/downloads
     golang_install_dir: /usr/local/
+    go_username: otto
+    go_usergroup: golang
+    go_userhome: "/home/{{ go_username }}"
 
   tasks:
     # MAYBE WE ADD A (PRIOR) CHECK FOR THE SHA OF THE EXTRACTED FOLDER - IF SAME VERSION SHOULD BE INSTALLED AGAIN
@@ -54,9 +57,10 @@
     #  register: checksum
 
     # DELETE ALREADY INSTALLED GOLANG
-    # -> CHECK FILE MODULE FOR REMOVING A DIR
-    - name: Delete Golang
-      shell:  "rm -rf /usr/local/go"
+    - name: Remove file (delete file)
+      ansible.builtin.file:
+        path: "{{ golang_install_dir }}go"
+        state: absent
     # MAYBE LATER WE'RE COMAPRING TO A CHECKSUM IF NEEDS TO DELETE
     
     # DOWNLOAD AND INSTALL GOLANG
@@ -76,11 +80,10 @@
       vars:
         users: "{{ golang_users }}"
         groups_to_create: "{{ groups_golang }}"
-      # SHOULD ONLY RUN IF golang_users ARE DEFINED
-      
+      when: golang_users is defined
+
     # WRITE EXPORTS TO BASHRC
-    # THIS SHOULD ONLY RUN IF NO USERS = DICT ARE DEFINED
-    # THE VARIABLE go_username & go_usergroup (and optional go_userhome) SHOULD BE DEFINED
+    # Initialize go_* variables with an already created user (no dict)
     - name: Add golang exports to bashrc
       ansible.builtin.blockinfile:
         block: |
@@ -88,10 +91,9 @@
           export PATH=$GOROOT/bin:$PATH
           export GOPATH=$HOME/usr/local/go
           export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
-        dest: "{{ item.home | default('/home/' + item.username) }}/.bashrc"
-        owner: "{{ item.username }}"
-        group: "{{ item.group }}"
+        dest: "{{ go_userhome }}.bashrc"
+        owner: "{{ go_username }}"
+        group: "{{ go_usergroup }}"
         mode: 0644
         create: true
-      #loop: "{{ golang_users }}"
-      # CHANGE VARIABLES INSIDE THIS TASK go_username -> NO ITEM.XY ...
+      when: go_username is defined and go_usergroup is defined
