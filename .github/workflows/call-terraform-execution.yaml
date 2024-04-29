@@ -36,6 +36,10 @@ on:
         type: string
         default: eu.gcr.io/stuttgart-things/sthings-terraform:1.8.1-2
         required: false
+    outputs:
+      tf-output:
+        description: terraform output
+        value: ${{ jobs.execute-terraform.outputs.tf-output }}
 
 jobs:
   execute-terraform:
