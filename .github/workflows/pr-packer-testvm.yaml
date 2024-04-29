@@ -92,7 +92,7 @@ jobs:
       - Create-Test-VM
     with:
       playbook: ansible/playbooks/base-os.yaml
-      branch: ${{ needs.Get-Packer-Config.outputs.branch }}
+      branch: main
       working-image: eu.gcr.io/stuttgart-things/sthings-ansible:9.5.1
       runs-on: ${{ needs.Get-Packer-Config.outputs.runs-on }}
       inventory: ${{ needs.Create-Test-VM.outputs.output }}
