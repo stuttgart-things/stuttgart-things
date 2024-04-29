@@ -18,7 +18,7 @@ playbooks:
   - name: install_configure_golang
     play: |
       ---
-      - hosts: "{{ target_host |default('all') }}"
+      - hosts: "{{ target_host | default('all') }}"
         become: true
         # @andre tbd
 
@@ -39,7 +39,7 @@ playbooks:
   - name: download_install_binaries
     play: |
       ---
-      - hosts: "{{ target_host |default('all') }}"
+      - hosts: "{{ target_host | default('all') }}"
         become: true
         vars:
           download_dir: "/tmp/downloads"
@@ -52,7 +52,7 @@ playbooks:
   - name: create_users
     play: |
       ---
-      - hosts: "{{ target_host |default('all') }}"
+      - hosts: "{{ target_host | default('all') }}"
         gather_facts: true
         become: true
         vars_files:
