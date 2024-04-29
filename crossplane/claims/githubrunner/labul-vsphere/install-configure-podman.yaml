@@ -1,0 +1,9 @@
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: GithubRunner
+metadata:
+  name: install-configure-podman
+  namespace: crossplane-system
+spec:
+  repository: install-configure-podman
+  clusterConfig: cicd
