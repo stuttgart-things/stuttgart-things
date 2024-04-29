@@ -21,6 +21,10 @@ on:
         required: false
         type: string
         #default: var1=value1;var2=value2
+      output:
+        required: false
+        type: boolean
+        default: false
       runs-on:
         required: true
         type: string
@@ -90,6 +94,13 @@ jobs:
       - name: Terraform plan
         run: |
           terraform -chdir=${{ inputs.folder }} plan
+        shell: bash
+
+      - name: Terraform output
+        if: ${{ (inputs.output == true || inputs.output == 'true') }}
+        run: |
+          terraform -chdir=${{ inputs.folder }} output > output
+          cat output
         shell: bash
 
       - name: Terraform execution
