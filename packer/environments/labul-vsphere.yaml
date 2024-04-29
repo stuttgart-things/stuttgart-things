@@ -78,3 +78,4 @@ testDatastore: /LabUL/host/Cluster-V6.5/10.31.101.41/UL-ESX-SAS-01
 testNetwork: /LabUL/host/Cluster-V6.5/10.31.101.41/MGMT-10.31.101
 testDatacenter: /LabUL/
 testAnnotation: PACKER VSPHERE TEST-VM
+folderPath: stuttgart-things/testing
