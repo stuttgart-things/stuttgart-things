@@ -149,7 +149,7 @@ jobs:
       - name: Adding vars
         id: vars
         run: |
-          vars_dir=${{ env.COLLECTION_DIR }}/vars
+          vars_dir=${{ env.COLLECTION_DIR }}/playbooks/vars
           mkdir -p ${vars_dir}
 
           # GET COUNT OF ALL KEYS OF SUBKEY PLAYBOOKS
