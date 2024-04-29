@@ -54,6 +54,8 @@ jobs:
           echo "RUNS_ON=ghr-stuttgart-things-sthings-cicd" >> $GITHUB_ENV
           echo "ENVIRONMENT=$(echo ${LAB}-${CLOUD})" >> $GITHUB_ENV
           echo "VARIABLES=$(echo ${VARS})" >> $GITHUB_ENV
+
+          # READ DEFAULTS FROM PR
         shell: bash
 
       - name: Show values for terraform execution
@@ -83,7 +85,6 @@ jobs:
       runs-on: ${{ needs.Get-Packer-Config.outputs.runs-on }}
     secrets: inherit
 
-# ADD ANSIBLE PROV HERE
   Execute-Ansible-Provisioning:
     name: Execute Ansible
     uses: stuttgart-things/stuttgart-things/.github/workflows/call-ansible-execution.yaml@main
@@ -92,7 +93,7 @@ jobs:
       - Create-Test-VM
     with:
       playbook: ansible/playbooks/base-os.yaml
-      branch: main
+      branch: main #${{ needs.Get-Packer-Config.outputs.branch }}
       working-image: eu.gcr.io/stuttgart-things/sthings-ansible:9.5.1
       runs-on: ${{ needs.Get-Packer-Config.outputs.runs-on }}
       inventory: ${{ needs.Create-Test-VM.outputs.tf-output }}
