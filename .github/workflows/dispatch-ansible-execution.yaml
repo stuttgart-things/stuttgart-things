@@ -1,5 +1,5 @@
 ---
-name: Trigger Ansible
+name: Dispatch Ansible Execution
 on:
   workflow_dispatch:
     inputs:
