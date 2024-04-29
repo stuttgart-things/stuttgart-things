@@ -15,7 +15,7 @@ playbooks:
   - name: download_install_binaries
     play: |
       ---
-      - hosts: "{{ target_host }}"
+      - hosts: "{{ target_host | default('all') }}"
         become: true
         vars:
           download_dir: "/tmp/downloads"
@@ -25,10 +25,27 @@ playbooks:
         roles:
           - role: sthings.base_os.download_install_binary
 
+  - name: install-configure-docker
+    play: |
+      ---
+      - hosts: "{{ target_host | default('all') }}"
+        become: true
+
+      vars:
+        docker_install_compose: true 
+        docker_version: '' # leave empty for latest version or set e.g. '=5:23.0.6-1~ubuntu.23.04~lunar'
+
+        install_kind: true
+        kind_version: 0.22.0
+        kubectl_version: 1.30.0
+
+        roles:
+          - role: sthings.base_os.install_configure_docker
+
   - name: create_users
     play: |
       ---
-      - hosts: "{{ target_host }}"
+      - hosts: "{{ target_host | default('all') }}"
         gather_facts: true
         become: true
         vars_files:
