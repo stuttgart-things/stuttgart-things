@@ -1,4 +1,4 @@
-name: Trigger Terraform Execution
+name: PR Terraform Execution
 on:
   pull_request:
     types:
