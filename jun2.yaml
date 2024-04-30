@@ -1,0 +1,37 @@
+vmCount: '1'
+vmName: jun2
+vmMemory: 8192
+vmCpu: 6
+vmTemplate: sthings-u23
+vmDisk: 96
+vmDatastore: /LabUL/datastore/UL-ESX-SAS-01
+vmNetwork: /LabUL/network/LAB-10.31.102
+hosts: '[jun2.labul.sva.de]'
+lab: labul
+cloud: vsphere
+vmFolder: stuttgart-things/testing
+namespace: crossplane-system
+vmFirmware: bios
+datacenter: /LabUL
+resourcePool: /LabUL/host/Cluster-V6.5/Resources
+templatePath: /LabUL/vm/stuttgart-things/vm-templates
+tfvars: vsphere-tfvars
+secretKey: terraform.tfvars
+crossplaneProvider: -jun2
+s3Region: main
+s3Bucket: vspherevm-labul
+s3Endpoint: https://artifacts.app1.sthings-vsphere.labul.sva.de
+stateKey: jun2
+workingImage: eu.gcr.io/stuttgart-things/sthings-ansible:9.3.0
+tektonProviderRef: kubernetes-incluster
+playbooks:
+- ansible/playbooks/prepare-env.yaml
+- ansible/playbooks/base-os.yaml
+roles:
+- https://github.com/stuttgart-things/install-requirements.git
+- https://github.com/stuttgart-things/manage-filesystem.git
+- https://github.com/stuttgart-things/install-configure-vault.git
+tfversion: 1.7.5
+date: 2024-04-30, 08:16
+vaultSecretPaths: password=cloud/data/vsphere:password, user=cloud/data/vsphere:username,
+  server=cloud/data/vsphere:ip, sshUser=cloud/data/vsphere:vm_ssh_user, sshPassword=cloud/data/vsphere:vm_ssh_password
