@@ -158,3 +158,4 @@ jobs:
           title: Deleted Terraform Config Files ${{ inputs.lab }}-${{ inputs.cloud }} ${{ inputs.vm-name }}
           delete-branch: true
           token: ${{ steps.generate-token.outputs.token }}
+          branch: ${{ inputs.lab }}-${{ inputs.cloud }} ${{ inputs.vm-name }}
