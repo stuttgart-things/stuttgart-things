@@ -34,7 +34,7 @@ jobs:
           echo "BRANCH=${{ github.event.pull_request.head.ref }}" >> "$GITHUB_OUTPUT"
           SPLIT=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'/' -f3)
           echo "ENVIRONMENT=$(echo ${SPLIT} | cut -d'-' -f1)-$(echo ${SPLIT} | cut -d'-' -f2)" >> "$GITHUB_OUTPUT"
-          echo "POST_ACTION_LABELS="" >> "$GITHUB_OUTPUT" # e.g. ANSIBLE
+          echo "POST_ACTION_LABELS=NONE" >> "$GITHUB_OUTPUT" # e.g. ANSIBLE
 
   Execute-Terraform-Operation:
     name: Execute Terraform ${{ needs.Get-Terraform-Config.outputs.operation }}-Operation
@@ -63,4 +63,4 @@ jobs:
         id: merge
         run: |
           gh pr merge ${{ github.event.pull_request.number }} --auto --rebase --delete-branch
-        if: ${{ needs.Get-Terraform-Config.outputs.post-labels == '' }}
+        if: ${{ needs.Get-Terraform-Config.outputs.post-labels == 'NONE' }}
