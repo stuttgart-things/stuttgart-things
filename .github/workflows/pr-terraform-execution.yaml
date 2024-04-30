@@ -71,7 +71,6 @@ jobs:
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
         run: |
-          git config --global --add safe.directory /__w/stuttgart-things/stuttgart-things
           gh pr list        
           gh pr merge ${{ github.event.pull_request.number }} --auto --rebase --delete-branch
         if: ${{ needs.Get-Terraform-Config.outputs.post-labels == 'NONE' }}
