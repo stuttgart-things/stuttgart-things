@@ -72,12 +72,20 @@ jobs:
         with:
           app_id: ${{ secrets.PULLREQUESTER_APP_ID }}
           private_key: ${{ secrets.PULLREQUESTER_APP_KEY }}
-    
+          
+      - name: Get Post Label
+        uses: peter-evans/find-comment@v3
+        id: postLabel
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body-includes: post
+          
       - name: Merge PR
         id: merge
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
         run: |
+          echo ${{ steps.postLabel.outputs.comment-body }}
           git config --global --add safe.directory /__w/stuttgart-things/stuttgart-things
           gh pr list        
           gh pr merge ${{ github.event.pull_request.number }} --auto --rebase --delete-branch
