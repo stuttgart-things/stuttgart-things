@@ -59,8 +59,19 @@ jobs:
       image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2-2
     runs-on: ghr-stuttgart-things-sthings-cicd
     steps:
+      - name: Get token for creating pull request
+        uses: tibdex/github-app-token@v1
+        id: generate-token
+        with:
+          app_id: ${{ secrets.PULLREQUESTER_APP_ID }}
+          private_key: ${{ secrets.PULLREQUESTER_APP_KEY }}
+    
       - name: Merge PR
         id: merge
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
         run: |
+          git config --global --add safe.directory /__w/stuttgart-things/stuttgart-things
+          gh pr list        
           gh pr merge ${{ github.event.pull_request.number }} --auto --rebase --delete-branch
         if: ${{ needs.Get-Terraform-Config.outputs.post-labels == 'NONE' }}
