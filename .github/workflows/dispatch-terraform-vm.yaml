@@ -3,6 +3,12 @@ name: Dispatch Terraform VM
 on:
   workflow_dispatch:
     inputs:
+      build-engine:
+        type: choice
+        description: build engine
+        options:
+          - crossplane
+          - terraform
       count-vm:
         type: choice
         description: COUNT OF VMS
@@ -50,12 +56,12 @@ on:
         required: false
         type: string
         default: ""
-      build-engine:
+      ansible-provisioning:
         type: choice
-        description: build engine
+        description: ansible provisioning
         options:
-          - crossplane
-          - terraform
+          - base-os
+          - none
       runner:
         description: RUNNER NAME
         required: true
