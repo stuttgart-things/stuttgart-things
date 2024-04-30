@@ -401,7 +401,7 @@ jobs:
         uses: thollander/actions-comment-pull-request@v2
         with:
           message: |
-            :wave: provisioning: ${{ inputs.ansible-provisioning }}
+            :wave: post: ${{ inputs.ansible-provisioning }}
 
       - name: Create Pull Request for VM config
         id: pr
