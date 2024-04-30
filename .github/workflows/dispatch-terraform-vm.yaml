@@ -397,7 +397,7 @@ jobs:
           app_id: ${{ secrets.PULLREQUESTER_APP_ID }}
           private_key: ${{ secrets.PULLREQUESTER_APP_KEY }}
 
-      - name: Comment ansible provisioning to PR
+      - name: Comment ansible provisioning to PR as post-label
         uses: thollander/actions-comment-pull-request@v2
         with:
           message: |
