@@ -43,7 +43,7 @@ jobs:
       - name: Checkout code/branch
         id: checkout
         uses: actions/checkout@v4
-    
+
       - name: Show app versions
         id: versions
         run: |
@@ -59,8 +59,8 @@ jobs:
           packer init $(ls *.hcl)
 
           packer build -force \
-          -var "username=${{ secrets.USERNAME }}" \
-          -var "password=${{ secrets.PASSWORD }}" \
+          -var "username=$(machineShop get --path cloud/data/vsphere:username | tail -n +8)" \
+          -var "password=$(machineShop get --path cloud/data/vsphere:password | tail -n +8)" \
           -var "name=${{ needs.Get-Packer-Config.outputs.os-version }}-${{ needs.Get-Packer-Config.outputs.build-date }}-${{ needs.Get-Packer-Config.outputs.provisioning}}" \
           $(ls *.hcl)
 
@@ -83,7 +83,7 @@ jobs:
       - name: Checkout code/branch
         id: checkout
         uses: actions/checkout@v4
-        
+
       - name: Get token for creating pull request
         uses: tibdex/github-app-token@v1
         id: generate-token
