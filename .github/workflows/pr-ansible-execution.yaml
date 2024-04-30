@@ -58,6 +58,8 @@ jobs:
   Merge-Ansible-PR:
     name: Merge Ansible PR
     environment: k8s
+    container:
+      image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2-2
     needs: 
       - Get-Ansible-Config
       - Execute-Ansible-Provisioning
