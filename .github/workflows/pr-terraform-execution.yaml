@@ -18,7 +18,6 @@ jobs:
       working_image: ${{ steps.set.outputs.WORKING_IMAGE }}
       environment: ${{ steps.set.outputs.ENVIRONMENT }}
       runs_on: ${{ steps.set.outputs.RUNS_ON }}
-      post-labels: ${{ steps.set.outputs.POST_ACTION_LABELS }}
     runs-on: ghr-stuttgart-things-sthings-cicd
     steps:
       - name: Set Execution Details
@@ -34,7 +33,6 @@ jobs:
           echo "BRANCH=${{ github.event.pull_request.head.ref }}" >> "$GITHUB_OUTPUT"
           SPLIT=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'/' -f3)
           echo "ENVIRONMENT=$(echo ${SPLIT} | cut -d'-' -f1)-$(echo ${SPLIT} | cut -d'-' -f2)" >> "$GITHUB_OUTPUT"
-          echo "POST_ACTION_LABELS=NONE" >> "$GITHUB_OUTPUT" # e.g. ANSIBLE
 
   Execute-Terraform-Operation:
     name: Execute Terraform ${{ needs.Get-Terraform-Config.outputs.operation }}-Operation
@@ -73,22 +71,26 @@ jobs:
           app_id: ${{ secrets.PULLREQUESTER_APP_ID }}
           private_key: ${{ secrets.PULLREQUESTER_APP_KEY }}
           
-      - name: Get Post Label
+      - name: Get Post Label/Comment From PR
         uses: peter-evans/find-comment@v3
         id: postLabel
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body-includes: post
           
-      - name: Merge PR
-        if: ${{ needs.Get-Terraform-Config.outputs.post-labels == 'NONE' }}
+      - name: Get Post Action by label
+        id: getPost
+        run: |
+          POST_LABEL=$(echo ${{ steps.postLabel.outputs.comment-body }} | sed 's/.*\://' | xargs)
+          echo ${POST_LABEL}
+          echo "POST_LABEL=${POST_LABEL}" >> $GITHUB_ENV
+
+      - name: Merge PR 
+        if: ${{ env.POST_LABEL == 'none' }}
         id: merge
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
-        run: |
-          POST=$(echo ${{ steps.postLabel.outputs.comment-body }} | sed 's/.*\://' | xargs)
-          echo ${POST}
-          
+        run: |      
           git config --global --add safe.directory /__w/stuttgart-things/stuttgart-things
           gh pr list        
-          #gh pr merge ${{ github.event.pull_request.number }} --auto --rebase --delete-branch
+          gh pr merge ${{ github.event.pull_request.number }} --auto --rebase --delete-branch
