@@ -1,7 +1,7 @@
 module [[ .osVersion ]]-[[ .lab ]]-[[ .cloud ]]-[[ .ansibleOsProvisioning ]] {
   source                 = "[[ .testVmModuleSource ]]"
   vm_count               = [[ .testVmCount ]]
-  vsphere_vm_name        = "[[ .osVersion ]]-[[ .lab ]]-[[ .cloud ]]-testvm"
+  vsphere_vm_name        = var.vsphere_vm_name
   vm_memory              = [[ .testVmRam ]]
   vsphere_vm_template    = var.vsphere_vm_template
   vm_disk_size           = "[[ .testVmDiskSize ]]"
@@ -14,11 +14,21 @@ module [[ .osVersion ]]-[[ .lab ]]-[[ .cloud ]]-[[ .ansibleOsProvisioning ]] {
   vsphere_network        = "[[ .testNetwork ]]"
   bootstrap              = ["echo STUTTGART-THINGS"]
   annotation             = "[[ .testAnnotation ]] BUILD w/ TERRAFORM FOR STUTTGART-THINGS"
-  vsphere_server         = "[[ .vcenterServer ]]"
+  vsphere_server         = var.vsphere_server
   vsphere_user           = var.vsphere_user
   vsphere_password       = var.vsphere_password
   vm_ssh_user            = var.vm_ssh_user
   vm_ssh_password        = var.vm_ssh_password
+}
+
+variable "vsphere_vm_name" {
+  type        = string
+  description = "name of vsphere vm template"
+}
+
+variable "vsphere_server" {
+  type        = string
+  description = "name of vsphere vm template"
 }
 
 variable "vsphere_vm_template" {
