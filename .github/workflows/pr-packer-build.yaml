@@ -58,9 +58,12 @@ jobs:
 
           packer init $(ls *.hcl)
 
+          USERNAME=$(echo $(machineShop get --path cloud/data/vsphere:username | tail -n +8))
+          PASSWORD=$(echo $(machineShop get --path cloud/data/vsphere:password | tail -n +8))
+
           packer build -force \
-          -var "username=echo $(machineShop get --path cloud/data/vsphere:username | tail -n +8)" \
-          -var "password=echo $(machineShop get --path cloud/data/vsphere:password | tail -n +8)" \
+          -var "username=${USERNAME}" \
+          -var "password=${PASSWORD}" \
           -var "name=${{ needs.Get-Packer-Config.outputs.os-version }}-${{ needs.Get-Packer-Config.outputs.build-date }}-${{ needs.Get-Packer-Config.outputs.provisioning}}" \
           $(ls *.hcl)
 
