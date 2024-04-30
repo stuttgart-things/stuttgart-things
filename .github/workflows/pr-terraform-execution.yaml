@@ -86,7 +86,7 @@ jobs:
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
         run: |
-          POST=$(echo ${{ steps.postLabel.outputs.comment-body | cut -d\   -f3 }})
+          POST=$(echo ${{ steps.postLabel.outputs.comment-body }} | sed 's/.*\://' | xargs)
           echo ${POST}
           
           git config --global --add safe.directory /__w/stuttgart-things/stuttgart-things
