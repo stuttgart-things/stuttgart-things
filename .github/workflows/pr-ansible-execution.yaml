@@ -48,7 +48,7 @@ jobs:
       branch: ${{ github.event.pull_request.head.ref }}
       working-image: eu.gcr.io/stuttgart-things/sthings-ansible:9.5.1
       runs-on: ghr-stuttgart-things-sthings-cicd
-      inventory: ${{ needs.Create-Test-VM.outputs.tf-output }}
+      inventory: ${{ needs.Get-Ansible-Config.outputs.inventory }}
       environment-name: ${{ needs.Get-Ansible-Config.outputs.environment }}
       private-key: "ssh/data/sthings:privateKey"
       requirements-file: ansible/requirements.yaml
