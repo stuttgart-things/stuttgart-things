@@ -54,7 +54,6 @@ jobs:
       requirements-file: ansible/requirements.yaml
     secrets: inherit  
 
-
   Merge-Ansible-PR:
     name: Merge Ansible PR
     environment: k8s
@@ -71,12 +70,14 @@ jobs:
         with:
           fetch-depth: '0'
           ref: ${{ github.event.pull_request.head.ref }}
+          
       - name: Get token for merge request
         uses: tibdex/github-app-token@v1
         id: generate-token
         with:
           app_id: ${{ secrets.PULLREQUESTER_APP_ID }}
           private_key: ${{ secrets.PULLREQUESTER_APP_KEY }}
+          
       - name: Merge PR 
         id: merge
         env:
