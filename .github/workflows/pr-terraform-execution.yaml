@@ -44,6 +44,7 @@ jobs:
       operation: ${{ needs.Get-Terraform-Config.outputs.operation }}
       working-image: ${{ needs.Get-Terraform-Config.outputs.working_image }}
       environment-name: ${{ needs.Get-Terraform-Config.outputs.environment }}
+      output: true
       runs-on: ${{ needs.Get-Terraform-Config.outputs.runs_on }}
     secrets: inherit
 
