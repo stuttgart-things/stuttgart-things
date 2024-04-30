@@ -94,3 +94,40 @@ jobs:
           git config --global --add safe.directory /__w/stuttgart-things/stuttgart-things
           gh pr list        
           gh pr merge ${{ github.event.pull_request.number }} --auto --rebase --delete-branch
+
+      - name: Remove packer label from PR
+        if: ${{ env.POST_LABEL != 'none' }}
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+        with:
+          github-token: ${{ steps.generate-token.outputs.token }}
+          script: |
+            await github.rest.issues.removeLabel({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: ["terraform"]
+            })
+
+      - name: Add build test-vm label to PR
+        if: ${{ env.POST_LABEL != 'none' }}
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+        with:
+          github-token: ${{ steps.generate-token.outputs.token }}
+          script: |
+            await github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ["tf-ansible"]
+            })
+
+      - name: Repoen PR for triggering next step
+        if: ${{ env.POST_LABEL != 'none' }}
+        id: reopen
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+        run: |
+          git config --global --add safe.directory /__w/stuttgart-things/stuttgart-things
+          gh pr list
+          gh pr close ${{ github.event.pull_request.number }}
+          gh pr reopen ${{ github.event.pull_request.number }}
