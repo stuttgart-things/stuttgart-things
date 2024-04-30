@@ -39,6 +39,11 @@ jobs:
     env:
       PACKER_LOG_PATH: packer.log
       PACKER_LOG: 1
+      VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
+      VAULT_AUTH_METHOD: ${{ secrets.VAULT_AUTH_METHOD }}
+      VAULT_NAMESPACE: ${{ secrets.VAULT_NAMESPACE }}
+      VAULT_ROLE_ID: ${{ secrets.VAULT_ROLE_ID }}
+      VAULT_SECRET_ID: ${{ secrets.VAULT_SECRET_ID }}
     steps:
       - name: Checkout code/branch
         id: checkout
@@ -58,12 +63,9 @@ jobs:
 
           packer init $(ls *.hcl)
 
-          USERNAME=$(echo $(machineShop get --path cloud/data/vsphere:username | tail -n +8))
-          PASSWORD=$(echo $(machineShop get --path cloud/data/vsphere:password | tail -n +8))
-
           packer build -force \
-          -var "username=${USERNAME}" \
-          -var "password=${PASSWORD}" \
+          -var "username=$(machineShop get --path cloud/data/vsphere:username | tail -n +8)" \
+          -var "password=$(machineShop get --path cloud/data/vsphere:password | tail -n +8)" \
           -var "name=${{ needs.Get-Packer-Config.outputs.os-version }}-${{ needs.Get-Packer-Config.outputs.build-date }}-${{ needs.Get-Packer-Config.outputs.provisioning}}" \
           $(ls *.hcl)
 
