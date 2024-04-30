@@ -90,6 +90,7 @@ jobs:
           POST_LABEL=$(echo ${{ steps.postLabel.outputs.comment-body }} | sed 's/.*\://' | xargs)
           echo ${POST_LABEL}
           echo "POST_LABEL=${POST_LABEL}" >> $GITHUB_ENV
+          echo ${{ needs.Execute-Terraform-Operation.outputs.tf-output }}
 
       - name: Merge PR 
         if: ${{ env.POST_LABEL == 'none' }}
