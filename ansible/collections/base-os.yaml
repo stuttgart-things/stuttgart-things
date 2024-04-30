@@ -12,6 +12,83 @@ requirements: |
       version: 2024.04.25
       
 playbooks:
+  - name: install_configure_golang
+    play: |
+      ---
+      - hosts: "{{ target_host | default('all') }}"
+        become: true
+          vars:
+            golang_users:
+              - username: otto
+                name: otto user
+                group: golang
+                uid: 1011
+                home: /home/otto
+                profile: |
+                  alias ll='ls -ahl'
+                  export GOROOT=/usr/local/go
+                  export PATH=$GOROOT/bin:$PATH
+                  export GOPATH=/home/otto/usr/local/go
+                  export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
+                generate_ssh_key: true
+                #ssh_key:
+                #  - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+                enable_ssh_tcp_forwarding: true
+                password: "!"
+
+          groups_golang:
+            - name: golang
+              gid: 31000
+
+          golang_version: 1.22.2
+          source_url: "https://go.dev/dl/go1.22.2.linux-amd64.tar.gz"
+          download_dir: /tmp/downloads
+          golang_install_dir: /usr/local/
+          go_username: otto
+          go_usergroup: golang
+          go_userhome: "/home/{{ go_username }}"
+
+        tasks:
+            # DELETE ALREADY INSTALLED GOLANG
+            - name: Remove file (delete file)
+              ansible.builtin.file:
+                path: "{{ golang_install_dir }}go"
+                state: absent
+            
+            # DOWNLOAD AND INSTALL GOLANG
+            - name: Unarchive and install Golang 
+              ansible.builtin.unarchive:
+                src: "{{ source_url }}"
+                dest: "{{ golang_install_dir }}"
+                mode: 0755
+                validate_certs: false
+                remote_src: true
+        
+            # CREATE USERS
+            - name: Create golang users
+              ansible.builtin.include_role:
+                name: create-os-user
+              vars:
+                users: "{{ golang_users }}"
+                groups_to_create: "{{ groups_golang }}"
+              when: golang_users is defined
+        
+            # WRITE EXPORTS TO BASHRC
+            - name: Add golang exports to bashrc
+              ansible.builtin.blockinfile:
+                block: |
+                  export GOROOT=/usr/local/go
+                  export PATH=$GOROOT/bin:$PATH
+                  export GOPATH=$HOME/usr/local/go
+                  export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
+                dest: "{{ go_userhome }}.bashrc"
+                owner: "{{ go_username }}"
+                group: "{{ go_usergroup }}"
+                mode: 0644
+                create: true
+              when: go_username is defined and go_usergroup is defined
+
+
   - name: download_install_binaries
     play: |
       ---
