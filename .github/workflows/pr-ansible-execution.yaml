@@ -53,3 +53,27 @@ jobs:
       private-key: "ssh/data/sthings:privateKey"
       requirements-file: ansible/requirements.yaml
     secrets: inherit  
+
+
+  Merge-Ansible-PR:
+    name: Merge Ansible PR
+    environment: k8s
+    needs: 
+      - Get-Ansible-Config
+      - Execute-Ansible-Provisioning
+    runs-on: ghr-stuttgart-things-sthings-cicd
+    steps:
+      - name: Get token for merge request
+        uses: tibdex/github-app-token@v1
+        id: generate-token
+        with:
+          app_id: ${{ secrets.PULLREQUESTER_APP_ID }}
+          private_key: ${{ secrets.PULLREQUESTER_APP_KEY }}
+      - name: Merge PR 
+        id: merge
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+        run: |      
+          git config --global --add safe.directory /__w/stuttgart-things/stuttgart-things
+          gh pr list        
+          gh pr merge ${{ github.event.pull_request.number }} --auto --rebase --delete-branch
