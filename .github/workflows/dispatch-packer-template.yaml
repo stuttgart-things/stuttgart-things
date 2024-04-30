@@ -63,6 +63,7 @@ jobs:
         id: createFolder
         run: |
           echo "WORKING_DIR=packer/builds/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}-${{ inputs.ansible-provisioning }}" >> $GITHUB_ENV
+          rm -rf packer/builds/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}-${{ inputs.ansible-provisioning }}/* || true # DELETE FOLDER CONTENTS IF EXISTS
           mkdir -p packer/builds/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}-${{ inputs.ansible-provisioning }}
           mkdir -p packer/builds/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}-${{ inputs.ansible-provisioning }}/test-vm
 
