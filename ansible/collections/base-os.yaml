@@ -1,6 +1,6 @@
 ---
 name: base_os
-version: 0.2.0
+version: 0.2.1
 namespace: sthings
 requirements: |
   roles:
@@ -13,7 +13,7 @@ requirements: |
     - src: https://github.com/stuttgart-things/install-configure-docker.git
       scm: git
       version: 2024.04.30
-      
+
 playbooks:
   - name: install_configure_golang
     play: |
@@ -28,14 +28,14 @@ playbooks:
       - hosts: "{{ target_host | default('all') }}"
         become: true
         vars:
-          docker_install_compose: true       
+          docker_install_compose: true
           install_kind: true
           kind_version: 0.22.0
           kubectl_version: 1.30.0
-        
+
         roles:
           - install-configure-docker
-        
+
   - name: download_install_binaries
     play: |
       ---
@@ -44,8 +44,8 @@ playbooks:
         vars:
           download_dir: "/tmp/downloads"
         vars_files:
-          - "{{ profile }}.yaml"
-      
+          - "{{ profile | default('dev') }}.yaml"
+
         roles:
           - role: sthings.base_os.download_install_binary
 
@@ -56,12 +56,12 @@ playbooks:
         gather_facts: true
         become: true
         vars_files:
-          - "{{ profile }}.yaml"
-      
+          - "{{ profile | default('sthings-users') }}.yaml"
+
         roles:
           - role: sthings.base_os.create_os_user
 
-vars: 
+vars:
   - name: sthings-users
     file: |
       ---
