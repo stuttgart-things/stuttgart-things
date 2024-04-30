@@ -397,12 +397,6 @@ jobs:
           app_id: ${{ secrets.PULLREQUESTER_APP_ID }}
           private_key: ${{ secrets.PULLREQUESTER_APP_KEY }}
 
-      - name: Comment ansible provisioning to PR as post-label
-        uses: thollander/actions-comment-pull-request@v2
-        with:
-          message: |
-            :wave: post: ${{ inputs.ansible-provisioning }}
-
       - name: Create Pull Request for VM config
         id: pr
         uses: peter-evans/create-pull-request@v6.0.2
@@ -414,3 +408,10 @@ jobs:
           token: ${{ steps.generate-token.outputs.token }}
           labels: |
             ${{ inputs.build-engine }}
+
+      - name: Comment ansible provisioning to PR as post-label
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          pr_number: ${{ steps.pr.outputs.pull-request-number }}"
+          message: |
+            :wave: post: ${{ inputs.ansible-provisioning }}
