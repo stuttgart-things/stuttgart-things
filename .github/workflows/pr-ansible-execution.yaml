@@ -47,7 +47,7 @@ jobs:
       playbook: ansible/playbooks/base-os.yaml
       branch: ${{ github.event.pull_request.head.ref }}
       working-image: eu.gcr.io/stuttgart-things/sthings-ansible:9.5.1
-      runs-on: ${{ needs.Get-Ansible-Config.outputs.runs-on }}
+      runs-on: ghr-stuttgart-things-sthings-cicd
       inventory: ${{ needs.Create-Test-VM.outputs.tf-output }}
       environment-name: ${{ needs.Get-Ansible-Config.outputs.environment }}
       private-key: "ssh/data/sthings:privateKey"
