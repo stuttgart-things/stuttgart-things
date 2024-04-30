@@ -38,18 +38,18 @@ jobs:
           echo ${INVENTORY}
           echo "INVENTORY=${INVENTORY}" >> $GITHUB_OUTPUT
 
-  #Execute-Ansible-Provisioning:
-  #  name: Execute Ansible
-  #  uses: stuttgart-things/stuttgart-things/.github/workflows/call-ansible-execution.yaml@main
-  #  needs: 
-  #    - Get-Ansible-Config
-  #  with:
-  #    playbook: ansible/playbooks/base-os.yaml
-  #    branch: ${{ github.event.pull_request.head.ref }}
-  #    working-image: eu.gcr.io/stuttgart-things/sthings-ansible:9.5.1
-  #    runs-on: ${{ needs.Get-Ansible-Config.outputs.runs-on }}
-  #    inventory: ${{ needs.Create-Test-VM.outputs.tf-output }}
-  #    environment-name: ${{ needs.Get-Ansible-Config.outputs.environment }}
-  #    private-key: "ssh/data/sthings:privateKey"
-  #    requirements-file: ansible/requirements.yaml
-  #  secrets: inherit  
+  Execute-Ansible-Provisioning:
+    name: Execute Ansible
+    uses: stuttgart-things/stuttgart-things/.github/workflows/call-ansible-execution.yaml@main
+    needs: 
+      - Get-Ansible-Config
+    with:
+      playbook: ansible/playbooks/base-os.yaml
+      branch: ${{ github.event.pull_request.head.ref }}
+      working-image: eu.gcr.io/stuttgart-things/sthings-ansible:9.5.1
+      runs-on: ${{ needs.Get-Ansible-Config.outputs.runs-on }}
+      inventory: ${{ needs.Create-Test-VM.outputs.tf-output }}
+      environment-name: ${{ needs.Get-Ansible-Config.outputs.environment }}
+      private-key: "ssh/data/sthings:privateKey"
+      requirements-file: ansible/requirements.yaml
+    secrets: inherit  
