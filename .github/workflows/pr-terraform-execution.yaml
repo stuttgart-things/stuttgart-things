@@ -95,7 +95,7 @@ jobs:
           gh pr list        
           gh pr merge ${{ github.event.pull_request.number }} --auto --rebase --delete-branch
 
-      - name: Remove packer label from PR
+      - name: Remove terraform label from PR
         if: ${{ env.POST_LABEL != 'none' }}
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
         with:
@@ -108,7 +108,7 @@ jobs:
               name: ["terraform"]
             })
 
-      - name: Add build test-vm label to PR
+      - name: Add tf-ansible label to PR
         if: ${{ env.POST_LABEL != 'none' }}
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
         with:
@@ -121,7 +121,7 @@ jobs:
               labels: ["tf-ansible"]
             })
 
-      - name: Repoen PR for triggering next step
+      - name: Repoen PR for triggering next workflow
         if: ${{ env.POST_LABEL != 'none' }}
         id: reopen
         env:
