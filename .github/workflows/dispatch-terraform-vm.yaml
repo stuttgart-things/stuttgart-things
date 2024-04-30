@@ -397,6 +397,12 @@ jobs:
           app_id: ${{ secrets.PULLREQUESTER_APP_ID }}
           private_key: ${{ secrets.PULLREQUESTER_APP_KEY }}
 
+      - name: Comment ansible provisioning to PR
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            :wave: provisioning: ${{ inputs.ansible-provisioning }}
+
       - name: Create Pull Request for VM config
         id: pr
         uses: peter-evans/create-pull-request@v6.0.2
