@@ -1,6 +1,6 @@
 # stuttgart-things/packer
 
-this file was created at: 2024-04-15 06:31
+this file was created at: 2024-04-30 03:40
 
 ## INSTALL OS-REQUIREMENTS
 
@@ -52,4 +52,41 @@ packer build -force \
 -var "password=<PASSWORD>" \
 -var "password=<PASSWORD>" \
 packer/builds/ubuntu23-labul-vsphere-rke2-node//ubuntu23-rke2-node.pkr.hcl
+```
+
+## TERRAFORM
+
+```bash
+TERRAFORM_VERSION=1.7.5
+wget -O terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+sudo unzip terraform.zip -d /usr/bin/
+rm terraform.zip
+terraform --version
+```
+
+```bash
+# CHANGE TO TERRAFORM DIR
+cd ubuntu23-labul-vsphere-rke2-node/test-vm/
+
+# INITIALIZE TERRAFORM
+terraform init
+
+# CREATE vars file
+touch terraform.tfvars
+
+# EXPORT SECRETS AND VM TEMPLATE NAME
+export TF_VAR_vsphere_user=<CLOUD_USERNAME>
+export TF_VAR_vsphere_password=<CLOUD_PASSWORD>
+export TF_VAR_vm_ssh_user=<SSH_USERNAME>
+export TF_VAR_vm_ssh_password=<SSH_PASSWORD>
+export TF_VAR_vsphere_vm_template=<CLOUD_VM_TEMPLATE>
+
+# DEPLOY INFRASTRUCTURE
+terraform apply -auto-approve
+
+# AFTER THE APPLY PROCESS CHECK THE IP-ADDRESS AND CONNECT TO THE VM
+ssh <SSH_USERNAME>@<IP>
+
+# DESTROY THE PROJECT
+terraform destroy -auto-approve
 ```
