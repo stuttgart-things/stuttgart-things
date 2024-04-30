@@ -65,6 +65,12 @@ jobs:
       - Execute-Ansible-Provisioning
     runs-on: ghr-stuttgart-things-sthings-cicd
     steps:
+      - name: Checkout code/branch
+        id: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: '0'
+          ref: ${{ github.event.pull_request.head.ref }}
       - name: Get token for merge request
         uses: tibdex/github-app-token@v1
         id: generate-token
