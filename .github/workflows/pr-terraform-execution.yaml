@@ -81,14 +81,14 @@ jobs:
           body-includes: post
           
       - name: Merge PR
+        if: ${{ needs.Get-Terraform-Config.outputs.post-labels == 'NONE' }}
         id: merge
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
         run: |
-          POST= $(echo ${{ steps.postLabel.outputs.comment-body | cut -d\   -f3 }})
+          POST=$(echo ${{ steps.postLabel.outputs.comment-body | cut -d\   -f3 }})
           echo ${POST}
           
           git config --global --add safe.directory /__w/stuttgart-things/stuttgart-things
           gh pr list        
-          gh pr merge ${{ github.event.pull_request.number }} --auto --rebase --delete-branch
-        if: ${{ needs.Get-Terraform-Config.outputs.post-labels == 'NONE' }}
+          #gh pr merge ${{ github.event.pull_request.number }} --auto --rebase --delete-branch
