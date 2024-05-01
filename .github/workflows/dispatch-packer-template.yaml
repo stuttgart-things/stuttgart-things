@@ -87,8 +87,8 @@ jobs:
         id: renderKickstart
         shell: bash
         run: |
-          KICKSTART_TEMPLATE=$(yq -r ".kickstart.${{ os-version }}.template" packer/environments/${{ inputs.lab }}-${{ inputs.cloud }}.yaml)
-          KICKSTART_FILENAME=$(yq -r ".kickstart.${{ os-version }}.filename" packer/environments/${{ inputs.lab }}-${{ inputs.cloud }}.yaml)
+          KICKSTART_TEMPLATE=$(yq -r ".kickstart.${{ inputs.os-version }}.template" packer/environments/${{ inputs.lab }}-${{ inputs.cloud }}.yaml)
+          KICKSTART_FILENAME=$(yq -r ".kickstart.${{ inputs.os-version }}.filename" packer/environments/${{ inputs.lab }}-${{ inputs.cloud }}.yaml)
 
           machineShop render \
           --source local \
