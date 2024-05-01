@@ -88,7 +88,7 @@ jobs:
         run: |
           machineShop render \
           --source local \
-          --template packer/kickstart/ubuntu-${{ inputs.cloud }}.yaml \
+          --template packer/kickstart/${{ os-version }}.yaml \
           --defaults packer/environments/${{ inputs.lab }}-${{ inputs.cloud }}.yaml \
           --output file \
           --destination ${{ env.WORKING_DIR }}/user-data
