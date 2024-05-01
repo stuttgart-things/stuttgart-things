@@ -1,0 +1,43 @@
+name: PR Move Packer Template
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+
+jobs:
+  Get-Packer-Config:
+    if: contains(github.event.pull_request.labels.*.name, 'move-packer-template')
+    outputs:
+      folder: ${{ steps.set.outputs.FOLDER }}
+      branch: ${{ steps.set.outputs.BRANCH }}
+      environment: ${{ steps.set.outputs.ENVIRONMENT }}
+      runs-on: ${{ steps.set.outputs.RUNS_ON }}
+      variables: ${{ steps.set.outputs.VARIABLES }}
+      working-image: ${{ steps.set.outputs.WORKING_IMAGE }}
+    container:
+      image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2
+    permissions:
+      contents: read
+      pull-requests: read
+    runs-on: ghr-stuttgart-things-sthings-cicd
+    steps:
+      - name: Get VM-Template name
+        uses: peter-evans/find-comment@v3
+        id: fc
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body-includes: successful
+
+      - name: Set values for govc operation
+        id: values
+        run: |
+          # SET TMP VARS
+          OS=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'-' -f1)
+          LAB=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'-' -f2)
+          CLOUD=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'-' -f3)
+          TEMPLATE_NAME=$(echo ${{ steps.fc.outputs.comment-body }} | sed 's/.*\://' | xargs)
+          VM_NAME=test-$(echo ${OS})-$(echo $(date '+%Y-%m-%d'))
+          VARS=$(echo vsphere_vm_template=${TEMPLATE_NAME}";"vsphere_vm_name=${VM_NAME})
+
+          # govc object.rename /LabUL/vm/stuttgart-things/packer/ubuntu23-2024-04-30-base-os ubuntu23
