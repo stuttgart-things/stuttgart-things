@@ -4,6 +4,18 @@ packerVersion: 1.10.0
 vmWwarePluginMinVersion: 1.2.7
 ansibleProvisionerMinVersion: 1.1.1
 
+# KICKSTART
+kickstart:
+  ubuntu22:
+    template: ubuntu.yaml
+    filename: user-data
+  ubuntu23:
+    template: ubuntu.yaml
+    filename: user-data
+  rocky9:
+    template: rocky9.cfg
+    filename: user-data
+
 # S3
 s3Endpoint: https://artifacts.app1.sthings-vsphere.labul.sva.de
 s3Bucket: vspherevm-labul
