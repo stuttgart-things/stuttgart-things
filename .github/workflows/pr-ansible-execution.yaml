@@ -86,5 +86,4 @@ jobs:
         run: |      
           git config --global --add safe.directory /__w/stuttgart-things/stuttgart-things
           gh pr list  
-          gh pr edit ${{ github.event.pull_request.number }} --auto
           gh pr merge ${{ github.event.pull_request.number }} --auto --rebase --delete-branch
