@@ -43,7 +43,7 @@ jobs:
 
   Move-Vsphere-Template:
     needs: Get-Packer-Config
-    runs-on: ${{ needs.Get-Packer-Config.outputs.runs_on }}
+    runs-on: ${{ needs.Get-Packer-Config.outputs.runs-on }}
     environment: ${{ needs.Get-Packer-Config.outputs.lab }}-${{ needs.Get-Packer-Config.outputs.cloud }}
     container:
       image: ${{ needs.Get-Packer-Config.outputs.working-image }}
