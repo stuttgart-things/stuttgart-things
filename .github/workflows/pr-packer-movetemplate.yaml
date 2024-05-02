@@ -33,14 +33,20 @@ jobs:
           OS=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'-' -f1)
           LAB=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'-' -f2)
           CLOUD=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'-' -f3)
+
+          echo "CLOUD=${CLOUD}" >> $GITHUB_OUTPUT
+          echo "LAB=${LAB}" >> $GITHUB_OUTPUT
+          echo "OS=${OS}" >> $GITHUB_OUTPUT
+          echo "RUNS_ON=ghr-stuttgart-things-sthings-cicd" >> $GITHUB_OUTPUT
+          echo "WORKING_IMAGE=eu.gcr.io/stuttgart-things/sthings-packer:1.10.2-9.4.0-2" >> $GITHUB_OUTPUT
         shell: bash
 
   Move-Vsphere-Template:
     needs: Get-Packer-Config
-    runs-on: ${{ needs.Get-Packer-Config.outputs.runs-on }}
+    runs-on: ${{ needs.Get-Packer-Config.outputs.runs_on }}
     environment: ${{ needs.Get-Packer-Config.outputs.lab }}-${{ needs.Get-Packer-Config.outputs.cloud }}
     container:
-      image: eu.gcr.io/stuttgart-things/sthings-packer:1.10.2-9.4.0-2
+      image: ${{ needs.Get-Packer-Config.outputs.working-image }}
     env:
       GOVC_INSECURE: TRUE
       VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
