@@ -1,3 +1,4 @@
+---
 name: PR Move Packer Template
 on:
   pull_request:
@@ -14,6 +15,9 @@ jobs:
       lab: ${{ steps.set.outputs.LAB }}
       working-image: ${{ steps.set.outputs.WORKING_IMAGE }}
       template-name: ${{ steps.set.outputs.TEMPLATE_NAME }}
+      template-build-folder: ${{ steps.set.outputs.TEMPLATE_BUILD_FOLDER }}
+      golden-image-folder: ${{ steps.set.outputs.GOLDEN_IMAGE_FOLDER }}
+      target-template-name: ${{ steps.set.outputs.TARGET_NAME }}
     container:
       image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2
     permissions:
@@ -42,6 +46,9 @@ jobs:
           echo "TEMPLATE_NAME=${TEMPLATE_NAME}" >> $GITHUB_OUTPUT
           echo "RUNS_ON=ghr-stuttgart-things-sthings-cicd" >> $GITHUB_OUTPUT
           echo "WORKING_IMAGE=eu.gcr.io/stuttgart-things/sthings-packer:1.10.2-9.4.0-2" >> $GITHUB_OUTPUT
+          echo "TEMPLATE_BUILD_FOLDER=/LabUL/vm/stuttgart-things/packer" >> $GITHUB_OUTPUT
+          echo "GOLDEN_IMAGE_FOLDER=/LabUL/vm/stuttgart-things/vm-templates" >> $GITHUB_OUTPUT
+          echo "TARGET_NAME=sthings-r9" >> $GITHUB_OUTPUT
         shell: bash
 
   Move-Vsphere-Template:
@@ -57,16 +64,17 @@ jobs:
       VAULT_NAMESPACE: ${{ secrets.VAULT_NAMESPACE }}
       VAULT_ROLE_ID: ${{ secrets.VAULT_ROLE_ID }}
       VAULT_SECRET_ID: ${{ secrets.VAULT_SECRET_ID }}
-      TEMPLATE_BUILD_FOLDER: /LabUL/vm/stuttgart-things/packer
-      GOLDEN_IMAGE_FOLDER: /LabUL/vm/stuttgart-things/vm-templates
-      TARGET_NAME: sthings-r9
+      TEMPLATE_BUILD_FOLDER: ${{ needs.Get-Packer-Config.outputs.template-build-folder }}
+      GOLDEN_IMAGE_FOLDER: ${{ needs.Get-Packer-Config.outputs.golden-image-folder }}
+      TARGET_NAME: ${{ needs.Get-Packer-Config.outputs.target-template-name }}
     steps:
       - name: Set govc crendentials to env
         id: set
         run: |
           USER=$(machineShop get --path cloud/data/vsphere:username | tail -n +8)
           PW=$(machineShop get --path cloud/data/vsphere:password | tail -n +8)
-          echo "GOVC_URL=https://${USER}:${PW}@10.31.101.51/sdk" >> $GITHUB_ENV
+          FQDN=$(machineShop get --path cloud/data/vsphere:ip | tail -n +8)
+          echo "GOVC_URL=https://${USER}:${PW}@${FQDN}/sdk" >> $GITHUB_ENV
     
       - name: Check template paths
         id: check
