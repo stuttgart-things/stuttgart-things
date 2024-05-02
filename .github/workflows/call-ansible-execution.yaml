@@ -33,7 +33,10 @@ on:
         required: false
         type: string
         default: sthings
-
+      wait-for-ssh:
+        required: false
+        type: boolean
+        default: false
 jobs:
   execute-ansible:
     runs-on: ${{ inputs.runs-on }}
@@ -54,7 +57,7 @@ jobs:
           fetch-depth: '0'
           ref: ${{ inputs.branch }}
 
-      - name: Check Parameters
+      - name: Output Parameters
         run: |
           ansible --version
           echo PATH-TO-PRIVATEKEY: ${{ inputs.private-key }}
@@ -77,10 +80,26 @@ jobs:
           cat inventory
         shell: bash
 
+      - name: Wait for ssh
+        if: ${{ (inputs.wait-for-ssh == true || inputs.wait-for-ssh == 'true') }}
+        run: |
+          cat << EoF > ./wait-for.ssh.yaml
+
+          
+            - name: "Wait for SSH (delay: {{ delay_time | default(1) }})"
+              ansible.builtin.wait_for:
+                host: "{{ item }}"
+                port: 22
+                delay: "{{ delay_time | default(1) }}"
+                timeout: 1200
+                sleep: 10
+              with_items:
+                - "{{ groups['all'] }}"
+          EoF
+        shell: bash
+
       - name: Execute Ansible
         run: |
           ansible-galaxy install -r ${{ inputs.requirements-file }} 
           ansible-playbook ${{ inputs.playbook }} -i inventory -e target_host=all -vv -e reboot_all=false
         shell: bash
-
-
