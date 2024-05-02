@@ -83,7 +83,7 @@ jobs:
       - name: Wait for ssh
         if: ${{ (inputs.wait-for-ssh == true || inputs.wait-for-ssh == 'true') }}
         run: |
-          cat << EOF > ./wait-for.ssh.yaml
+          cat << EOF > ./wait-for-ssh.yaml
           ---
           - hosts: all
             gather_facts: true
@@ -101,7 +101,7 @@ jobs:
                 with_items:
                   - "{{ groups['all'] }}"
           EOF
-          ansible-playbook -i inventory ./wait-for.ssh.yaml -vv
+          ansible-playbook -i inventory ./wait-for-ssh.yaml -vv
         shell: bash
 
       - name: Execute Ansible
