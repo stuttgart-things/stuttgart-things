@@ -36,9 +36,9 @@ jobs:
           TEMPLATE_NAME=$(echo ${{ steps.fc.outputs.comment-body }} | sed 's/.*\://' | xargs)
           VM_NAME=test-$(echo ${OS})-$(echo $(date '+%Y-%m-%d'))
 
-          echo "RUNS_ON=ghr-stuttgart-things-sthings-cicd" >> $GITHUB_OUTPUT
-          echo "LAB=${LAB}" >> $GITHUB_OUTPUT
-          echo "CLOUD=${CLOUD}"" >> $GITHUB_OUTPUT
+          echo "RUNS_ON=ghr-stuttgart-things-sthings-cicd" >> "$GITHUB_OUTPUT"
+          echo "LAB=${LAB}" >> "$GITHUB_OUTPUT"
+          echo "CLOUD=${CLOUD}"" >> "$GITHUB_OUTPUT"
         shell: bash
 
   Move-Vsphere-Template:
