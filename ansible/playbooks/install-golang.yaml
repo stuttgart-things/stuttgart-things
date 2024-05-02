@@ -19,6 +19,22 @@
         #  - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
         enable_ssh_tcp_forwarding: true
         password: "!"
+      - username: bob
+        name: bob user
+        group: golang
+        uid: 1013
+        home: /home/bob
+        profile: |
+          alias ll='ls -ahl'
+          export GOROOT=/usr/local/go
+          export PATH=$GOROOT/bin:$PATH
+          export GOPATH=$HOME/go
+          export PATH=$PATH:$GOPATH/bin
+        generate_ssh_key: true
+        #ssh_key:
+        #  - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+        enable_ssh_tcp_forwarding: true
+        password: "!"
 
     groups_golang:
       - name: golang
@@ -28,13 +44,12 @@
     source_url: "https://go.dev/dl/go1.22.2.linux-amd64.tar.gz"
     download_dir: /tmp/downloads
     golang_install_dir: /usr/local/
-    go_username: otto
-    go_usergroup: golang
-    go_userhome: "/home/otto/"
-
-    # Replace with checksum of new Golang version
-    go_checksum: "x5901c52b7a78002aeff14a21f93e0f064f74ce1360fce51c6ee68cd471216a17"
     go_checksum_type: "sha256"
+
+    # Fill in go_* variables if golang_users is not defined and you want .bashrc exports for old users
+    #go_username: otto
+    #go_usergroup: golang
+    #go_userhome: "/home/otto"
 
   pre_tasks:
     - name: Check if Golang already exists
@@ -48,19 +63,21 @@
       register: checksum_old
       when: check_golang.stat.exists
 
-  tasks:
-    # MAYBE WE ADD A (PRIOR) CHECK FOR THE SHA OF THE EXTRACTED FOLDER - IF SAME VERSION SHOULD BE INSTALLED AGAIN
-    # https://github.com/krahul084/python_scripts/blob/master/get_checksum.py
-    #- get_checksum: 
-    #    path: path/to/directory
-    #    checksum_type: "{{ go_checksum_type }}"
-    #  register: checksum
-    #- get_checksum:
-    #    path: "{{ download_dir }}/{{ source_url | regex_replace('^https://go.dev/dl/', '') }}"
-    #    checksum_type: "{{ go_checksum_type }}"
-    #  register: checksum
-    #  ignore_errors: true
+    - name: Add golang exports for old users to bashrc
+      ansible.builtin.blockinfile:
+        block: |
+          export GOROOT=/usr/local/go
+          export PATH=$GOROOT/bin:$PATH
+          export GOPATH=$HOME/usr/local/go
+          export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
+        dest: "{{ go_userhome }}/.bashrc"
+        owner: "{{ go_username }}"
+        group: "{{ go_usergroup }}"
+        mode: 0644
+        create: true
+      when: golang_users is not defined
 
+  tasks:
     - name: Create temporary download directory (if it does not exist)
       ansible.builtin.file:
         path: "{{ download_dir }}"
@@ -105,26 +122,6 @@
         path: "{{ download_dir }}/"
         state: absent
 
-#    - name: Skip when tar.gz not available
-#      block:
-#        # DELETE ALREADY INSTALLED GOLANG
-#        - name: Remove Golang if version is not equal
-#          ansible.builtin.file:
-#            path: "{{ golang_install_dir }}go"
-#            state: absent
-#          when: checksum.stat.checksum != go_checksum
-#
-#        # Unarchive AND INSTALL GOLANG
-#        - name: Unarchive and install Golang 
-#          ansible.builtin.unarchive:
-#            src: "{{ download_dir }}/{{ source_url | regex_replace('^https://go.dev/dl/', '') }}"
-#            dest: "{{ golang_install_dir }}"
-#            mode: 0755
-#            validate_certs: false
-#            remote_src: true
-#          when: checksum.stat.checksum != go_checksum
-#      when: checksum.stat.exists
-#
     # CREATE USERS
     - name: Create golang users
       ansible.builtin.include_role:
@@ -135,17 +132,17 @@
       when: golang_users is defined
 
     # WRITE EXPORTS TO BASHRC
-    # Initialize go_* variables with an already created user (no dict)
-    - name: Add golang exports to bashrc
+    - name: Add golang exports for new users to bashrc
       ansible.builtin.blockinfile:
         block: |
           export GOROOT=/usr/local/go
           export PATH=$GOROOT/bin:$PATH
           export GOPATH=$HOME/usr/local/go
           export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
-        dest: "{{ go_userhome }}.bashrc"
-        owner: "{{ go_username }}"
-        group: "{{ go_usergroup }}"
+        dest: "{{ item.home }}/.bashrc"
+        owner: "{{ item.username }}"
+        group: "{{ item.group }}"
         mode: 0644
         create: true
-      when: go_username is defined and go_usergroup is defined
+      loop: "{{ golang_users | default([]) }}"
+      when: ansible_os_family != 'Debian' and golang_users is defined
