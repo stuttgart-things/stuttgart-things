@@ -90,5 +90,5 @@ jobs:
       - name: Move newly build image to target folder
         id: moveNew
         run: |
-         govc object.mv ${TEMPLATE_BUILD_FOLDER}/${TARGET_NAME} ${GOLDEN_IMAGE_FOLDER}/${TARGET_NAME}
+         govc object.mv ${TEMPLATE_BUILD_FOLDER}/${TARGET_NAME} ${GOLDEN_IMAGE_FOLDER}
          govc ls ${GOLDEN_IMAGE_FOLDER}
