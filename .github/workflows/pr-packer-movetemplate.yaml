@@ -58,6 +58,6 @@ jobs:
       - name: Move vsphere template
         id: move
         run: |
-          export GOVC_URL=https://${USERNAME}:${PASSWORD}@10.31.101.51/sdk
+          export GOVC_URL="https://$(machineShop get --path cloud/data/vsphere:username | tail -n +8):$(machineShop get --path cloud/data/vsphere:username | tail -n +8)@10.31.101.51/sdk"
           govc ls
           # govc object.rename /LabUL/vm/stuttgart-things/packer/ubuntu23-2024-04-30-base-os ubuntu23
