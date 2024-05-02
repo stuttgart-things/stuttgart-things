@@ -13,6 +13,7 @@ jobs:
       cloud: ${{ steps.set.outputs.CLOUD }}
       lab: ${{ steps.set.outputs.LAB }}
       working-image: ${{ steps.set.outputs.WORKING_IMAGE }}
+      template-name: ${{ steps.set.outputs.TEMPLATE_NAME }}
     container:
       image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2
     permissions:
@@ -33,10 +34,12 @@ jobs:
           OS=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'-' -f1)
           LAB=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'-' -f2)
           CLOUD=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'-' -f3)
+          TEMPLATE_NAME=$(echo ${{ steps.fc.outputs.comment-body }} | sed 's/.*\://' | xargs)
 
           echo "CLOUD=${CLOUD}" >> $GITHUB_OUTPUT
           echo "LAB=${LAB}" >> $GITHUB_OUTPUT
           echo "OS=${OS}" >> $GITHUB_OUTPUT
+          echo "TEMPLATE_NAME=${TEMPLATE_NAME}" >> $GITHUB_OUTPUT
           echo "RUNS_ON=ghr-stuttgart-things-sthings-cicd" >> $GITHUB_OUTPUT
           echo "WORKING_IMAGE=eu.gcr.io/stuttgart-things/sthings-packer:1.10.2-9.4.0-2" >> $GITHUB_OUTPUT
         shell: bash
@@ -55,15 +58,16 @@ jobs:
       VAULT_ROLE_ID: ${{ secrets.VAULT_ROLE_ID }}
       VAULT_SECRET_ID: ${{ secrets.VAULT_SECRET_ID }}
     steps:
-      - name: Set GOVC_URL to env
+      - name: Set govc crendentials to env
         id: set
         run: |
           USER=$(machineShop get --path cloud/data/vsphere:username | tail -n +8)
           PW=$(machineShop get --path cloud/data/vsphere:password | tail -n +8)
           echo "GOVC_URL=https://${USER}:${PW}@10.31.101.51/sdk" >> $GITHUB_ENV
     
-      - name: Move vsphere template
+      - name: Check template path
         id: move
         run: |
-          govc ls
+          echo ${{ needs.Get-Packer-Config.outputs.template-name }}
+          govc ls 
           # govc object.rename /LabUL/vm/stuttgart-things/packer/ubuntu23-2024-04-30-base-os ubuntu23
