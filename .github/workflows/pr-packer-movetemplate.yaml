@@ -57,8 +57,9 @@ jobs:
       VAULT_NAMESPACE: ${{ secrets.VAULT_NAMESPACE }}
       VAULT_ROLE_ID: ${{ secrets.VAULT_ROLE_ID }}
       VAULT_SECRET_ID: ${{ secrets.VAULT_SECRET_ID }}
-      TEMPLATE_FOLDER: /LabUL/vm/stuttgart-things/packer
+      TEMPLATE_BUILD_FOLDER: /LabUL/vm/stuttgart-things/packer
       GOLDEN_IMAGE_FOLDER: /LabUL/vm/stuttgart-things/vm-templates
+      TARGET_NAME: sthings-r9
     steps:
       - name: Set govc crendentials to env
         id: set
@@ -67,12 +68,15 @@ jobs:
           PW=$(machineShop get --path cloud/data/vsphere:password | tail -n +8)
           echo "GOVC_URL=https://${USER}:${PW}@10.31.101.51/sdk" >> $GITHUB_ENV
     
-      - name: Check template path
-        id: move
+      - name: Check template paths
+        id: check
         run: |
-          govc ls 
-          echo ${{ needs.Get-Packer-Config.outputs.template-name }}
-          govc ls ${FOLDER}
+          echo 'Check Build Folder' 
+          govc ls ${TEMPLATE_BUILD_FOLDER}
+          echo 'Check Golden Image Folder' 
           govc ls ${GOLDEN_IMAGE_FOLDER}
 
-          # govc object.rename /LabUL/vm/stuttgart-things/packer/ubuntu23-2024-04-30-base-os ubuntu23
+      - name: Rename newly build image in build folder to golden image name
+        id: rename
+        run: |
+         govc object.rename ${TEMPLATE_BUILD_FOLDER}/${{ needs.Get-Packer-Config.outputs.template-name }} ${TARGET_NAME}
