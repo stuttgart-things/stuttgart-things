@@ -77,6 +77,16 @@ jobs:
           govc ls ${GOLDEN_IMAGE_FOLDER}
 
       - name: Rename newly build image in build folder to golden image name
-        id: rename
+        id: renameNew
         run: |
          govc object.rename ${TEMPLATE_BUILD_FOLDER}/${{ needs.Get-Packer-Config.outputs.template-name }} ${TARGET_NAME}
+
+      - name: Delete existing golden image 
+        id: deleteExisting
+        run: |
+         govc object.destroy ${GOLDEN_IMAGE_FOLDER}/${TARGET_NAME} || true # delete if exists or not
+
+      - name: Move newly build image to target folder
+        id: moveNew
+        run: |
+         govc object.mv ${TEMPLATE_BUILD_FOLDER}/${TARGET_NAME} ${GOLDEN_IMAGE_FOLDER}/${TARGET_NAME}
