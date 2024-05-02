@@ -80,6 +80,7 @@ jobs:
         id: renameNew
         run: |
          govc object.rename ${TEMPLATE_BUILD_FOLDER}/${{ needs.Get-Packer-Config.outputs.template-name }} ${TARGET_NAME}
+         govc ls ${TEMPLATE_BUILD_FOLDER}
 
       - name: Delete existing golden image 
         id: deleteExisting
@@ -90,3 +91,4 @@ jobs:
         id: moveNew
         run: |
          govc object.mv ${TEMPLATE_BUILD_FOLDER}/${TARGET_NAME} ${GOLDEN_IMAGE_FOLDER}/${TARGET_NAME}
+         govc ls ${GOLDEN_IMAGE_FOLDER}
