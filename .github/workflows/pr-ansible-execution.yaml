@@ -52,6 +52,7 @@ jobs:
       environment-name: ${{ needs.Get-Ansible-Config.outputs.environment }}
       private-key: "ssh/data/sthings:privateKey"
       requirements-file: ansible/requirements.yaml
+      wait-for-ssh: true
     secrets: inherit  
 
   Merge-Ansible-PR:
@@ -84,5 +85,5 @@ jobs:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
         run: |      
           git config --global --add safe.directory /__w/stuttgart-things/stuttgart-things
-          gh pr list        
+          gh pr list  
           gh pr merge ${{ github.event.pull_request.number }} --auto --rebase --delete-branch

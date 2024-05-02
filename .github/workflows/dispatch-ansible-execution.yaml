@@ -48,4 +48,5 @@ jobs:
       environment-name: ${{ inputs.environment-name }}
       private-key: ${{ inputs.private-key }}
       requirements-file: ${{ inputs.requirements-file }}
+      wait-for-ssh: true
     secrets: inherit

@@ -39,6 +39,7 @@ jobs:
           echo "RUNS_ON=ghr-stuttgart-things-sthings-cicd" >> $GITHUB_OUTPUT
           echo "LAB=${LAB}" >> $GITHUB_OUTPUT
           echo "CLOUD=${CLOUD}"" >> $GITHUB_OUTPUT
+        shell: bash
 
   Move-Vsphere-Template:
     needs: Get-Packer-Config

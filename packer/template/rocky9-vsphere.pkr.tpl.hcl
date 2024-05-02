@@ -64,6 +64,8 @@ build {
     keep_inventory_file    = "true"
     playbook_file          = "[[ .ansiblePlayMountPath ]]/[[ .ansibleOsProvisioning ]].yaml"
     user                   = "[[ .rocky9tmpSSHUser ]]"
+    galaxy_file            = "[[ .ansiblePlayMountPath ]]/requirements.yaml"
+    galaxy_force_install   = "true"
   }
 }
 
