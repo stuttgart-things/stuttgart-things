@@ -57,6 +57,8 @@ jobs:
       VAULT_NAMESPACE: ${{ secrets.VAULT_NAMESPACE }}
       VAULT_ROLE_ID: ${{ secrets.VAULT_ROLE_ID }}
       VAULT_SECRET_ID: ${{ secrets.VAULT_SECRET_ID }}
+      TEMPLATE_FOLDER: /LabUL/vm/stuttgart-things/packer
+      GOLDEN_IMAGE_FOLDER: /LabUL/vm/stuttgart-things/vm-templates
     steps:
       - name: Set govc crendentials to env
         id: set
@@ -68,6 +70,9 @@ jobs:
       - name: Check template path
         id: move
         run: |
-          echo ${{ needs.Get-Packer-Config.outputs.template-name }}
           govc ls 
+          echo ${{ needs.Get-Packer-Config.outputs.template-name }}
+          govc ls ${FOLDER}
+          govc ls ${GOLDEN_IMAGE_FOLDER}
+
           # govc object.rename /LabUL/vm/stuttgart-things/packer/ubuntu23-2024-04-30-base-os ubuntu23
