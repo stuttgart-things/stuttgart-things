@@ -1,0 +1,17 @@
+---
+- hosts: all
+  gather_facts: true
+  become: true
+  vars:
+    delay_time: 10
+
+  tasks:
+    - name: "Wait for SSH (delay: {{ delay_time }})"
+      ansible.builtin.wait_for:
+        host: "{{ item }}"
+        port: 22
+        delay: "{{ delay_time }}"
+        timeout: 1200
+        sleep: 10
+      with_items:
+        - "{{ groups['all'] }}"

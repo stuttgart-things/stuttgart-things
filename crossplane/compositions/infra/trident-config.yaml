@@ -1,0 +1,165 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: tridentconfig
+  labels:
+    crossplane.io/xrd: xcertmanagerconfigs.resources.stuttgart-things.com
+spec:
+  patchSets:
+    - name: provider
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.clusterName
+          toFieldPath: spec.providerConfigRef.name
+    - name: namespace
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.deploymentNamespace
+          toFieldPath: spec.forProvider.manifest.metadata.namespace
+  writeConnectionSecretsToNamespace: crossplane-system
+  compositeTypeRef:
+    apiVersion: resources.stuttgart-things.com/v1alpha1
+    kind: XTridentConfig
+  resources:
+    - name: trident-release
+      base:
+        apiVersion: resources.stuttgart-things.com/v1alpha1
+        kind: XTrident
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: metadata.name
+          toFieldPath: metadata.name
+        - type: FromCompositeFieldPath
+          fromFieldPath: metadata.namespace
+          toFieldPath: metadata.namespace
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.clusterName
+          toFieldPath: spec.clusterName
+    - name: trident-secret
+      base:
+        apiVersion: kubernetes.crossplane.io/v1alpha2
+        kind: Object
+        metadata:
+          name: trident-secret
+        spec:
+          providerConfigRef:
+            name: kubernetes-clustername
+          references:
+            - patchesFrom:
+                apiVersion: v1
+                kind: Secret
+                name: trident
+                namespace: crossplane-system
+                fieldPath: data.username
+              toFieldPath: data.username
+            - patchesFrom:
+                apiVersion: v1
+                kind: Secret
+                name: trident
+                namespace: crossplane-system
+                fieldPath: data.password
+              toFieldPath: data.password
+          forProvider:
+            manifest:
+              apiVersion: v1
+              kind: Secret
+              metadata:
+                namespace: trident
+              data: {}
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.backendConfig.secretName
+          toFieldPath: spec.references[0].patchesFrom.name
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.backendConfig.credentialsName
+          toFieldPath: spec.forProvider.manifest.metadata.name
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.backendConfig.secretNamespace
+          toFieldPath: spec.references[0].patchesFrom.namespace
+        - type: PatchSet
+          patchSetName: namespace
+        - type: PatchSet
+          patchSetName: provider
+    - name: trident-backend-config
+      base:
+        apiVersion: kubernetes.crossplane.io/v1alpha2
+        kind: Object
+        metadata:
+          name: backend
+        spec:
+          providerConfigRef:
+            name: kubernetes-clustername
+          forProvider:
+            manifest:
+              apiVersion: trident.netapp.io/v1
+              kind: TridentBackendConfig
+              metadata:
+                namespace: trident
+              spec:
+                version: 1
+                defaults:
+                  spaceReserve: "none"
+                  exportPolicy: ""
+                  snapshotPolicy: default
+                  snapshotReserve: "5"
+                credentials:
+                  name: ontap-nas
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.backendConfig.backendName
+          toFieldPath: spec.forProvider.manifest.metadata.name
+        - type: PatchSet
+          patchSetName: namespace
+        - type: PatchSet
+          patchSetName: provider
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.backendConfig.credentialsName
+          toFieldPath: spec.forProvider.manifest.spec.credentials.name
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.backendConfig.managementLIF
+          toFieldPath: spec.forProvider.manifest.spec.managementLIF
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.backendConfig.dataLIF
+          toFieldPath: spec.forProvider.manifest.spec.dataLIF
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.backendConfig.backendName
+          toFieldPath: spec.forProvider.manifest.spec.backendName
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.backendConfig.storageDriverName
+          toFieldPath: spec.forProvider.manifest.spec.storageDriverName
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.backendConfig.svm
+          toFieldPath: spec.forProvider.manifest.spec.svm
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.backendConfig.nfsMountOptions
+          toFieldPath: spec.forProvider.manifest.spec.nfsMountOptions
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.backendConfig.nfsMountOptions
+          toFieldPath: spec.forProvider.manifest.spec.nfsMountOptions
+    - name: trident-storageclass
+      base:
+        apiVersion: kubernetes.crossplane.io/v1alpha2
+        kind: Object
+        metadata:
+          name: trident-secret
+        spec:
+          providerConfigRef:
+            name: kubernetes-clustername
+          forProvider:
+            manifest:
+              apiVersion: storage.k8s.io/v1
+              kind: StorageClass
+              metadata:
+                namespace: trident
+              provisioner: csi.trident.netapp.io
+              allowVolumeExpansion: true
+              volumeBindingMode: Immediate
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.backendConfig.storageClassName
+          toFieldPath: spec.forProvider.manifest.metadata.name
+        - type: PatchSet
+          patchSetName: provider
+        - type: PatchSet
+          patchSetName: namespace

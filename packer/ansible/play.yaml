@@ -25,6 +25,10 @@
       - https://vault-vsphere.labul.sva.de:8200
       - https://vault-vsphere.tiab.labda.sva.de:8200
       - https://vault-vsphere.tiab.labda.sva.de:8200
+    vault_approle_id: "{{ lookup('env', 'VAULT_ROLE_ID') }}"
+    vault_approle_secret: "{{ lookup('env', 'VAULT_SECRET_ID') }}"
+    vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
+
     ubuntu_network_config: |
       # This is the network config written by 'subiquity'
       network:
@@ -49,7 +53,7 @@
         home: /home/sthings
         enable_ssh_tcp_forwarding: false
         groups: ["{{ admin_group }}", "sthings"]
-        password: "$6$rounds=656000$7ala77Ra$8/cD2EL.AIGNZhXyjB/MJS2Uru0k37I3yWZ.7jFKwQiG1VvMZtKb.B.z5nX2jb.bsLGlZejM4JwGgVrQHyONO."
+        password: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=ssh/data/sthings:password validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
         ssh_key:
           - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCslDwiVO/EvWLVVY1Twpc7Lhr9laLPgu+iiOuvMEg8E4hnEDHRPZpdD6YnnJYsLnVHbi8Y3EPDQ2UDbHnfgeYPa94XHdhGSCsIX+tA5+PLFSFgoyCtA5oWc3vrm58RX6DQXf7fPytwxIESPjIgEDv2BTOEc+pk0S09e3jttmFsrKzB7tOutB3FktcLnxGD75JgBa9/i0zmfcchF2VNZcgZRXJ5JiMGKhaKB7qZ6AoMQlDmCvllLSdCxGIxu/quiBcGhaJBMmpkSTeRouU1YWg05wEjyg47DwJyyEMzvYe6LIHxN3zBXMTBzUKJC1thGNC9yaFeywrz+iaIk66RGcjL sthings"
           - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCsHiyet7tO+qXYKEy6XBiHNICRfGsBZYIo/JBQ2i16WgkC7rq6bkGwBYtni2j0X2pp0JVtcMO+hthqj37LcGH02hKa24eAoj2UdnFU+bhYxA6Mau1B/5MCkvs8VvBjxtM3FVJE7mY5bZ19YrKJ9ZIosAQaVHiGUu1kk49rzQqMrwT/1PNbUYW19P8J2LsfnaYJIl4Ljbxr0k52MGdbKwgxdph3UKciQz2DhutrmO0gf3Ncn4zpdClldaBtDB0EMMqD3BAtEVsucttzqdeYQwixMTtyuGpAKAJNUqhpleeVhShPZLke0vXxlA6/fyfkSM78gN2FQcRGVPN6hOMkns/b patrick@TPPHERMANN"

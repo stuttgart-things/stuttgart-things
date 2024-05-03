@@ -1,16 +1,19 @@
 ---
 name: base_os
-version: 0.1.8
+version: 0.2.2
 namespace: sthings
 requirements: |
   roles:
     - src: https://github.com/stuttgart-things/download-install-binary.git
       scm: git
-      version: 2024.07.04
+      version: 2024.04.19
     - src: https://github.com/stuttgart-things/create-os-user.git
       scm: git
-      version: 2024.04.25
-      
+      version: 2024.05.03
+    - src: https://github.com/stuttgart-things/install-configure-docker.git
+      scm: git
+      version: 2024.04.30
+
 playbooks:
   - name: install_configure_golang
     play: |
@@ -104,8 +107,8 @@ playbooks:
         vars:
           download_dir: "/tmp/downloads"
         vars_files:
-          - "{{ profile }}.yaml"
-      
+          - "{{ profile | default('dev') }}.yaml"
+
         roles:
           - role: sthings.base_os.download_install_binary
 
@@ -133,12 +136,12 @@ playbooks:
         gather_facts: true
         become: true
         vars_files:
-          - "{{ profile }}.yaml"
-      
+          - "{{ profile | default('sthings-users') }}.yaml"
+
         roles:
           - role: sthings.base_os.create_os_user
 
-vars: 
+vars:
   - name: sthings-users
     file: |
       ---

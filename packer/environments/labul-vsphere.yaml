@@ -4,6 +4,23 @@ packerVersion: 1.10.0
 vmWwarePluginMinVersion: 1.2.7
 ansibleProvisionerMinVersion: 1.1.1
 
+# KICKSTART
+kickstart:
+  ubuntu22:
+    template: ubuntu.yaml
+    filename: user-data
+  ubuntu23:
+    template: ubuntu.yaml
+    filename: user-data
+  rocky9:
+    template: rocky9.cfg
+    filename: user-data
+
+# S3
+s3Endpoint: https://artifacts.app1.sthings-vsphere.labul.sva.de
+s3Bucket: vspherevm-labul
+s3Region: main
+
 ipWaitTimeout: 40m
 vmWareProvider: github.com/hashicorp/vsphere
 ansibleProvisioner: github.com/hashicorp/ansible
@@ -63,7 +80,6 @@ folder: /stuttgart-things/packer
 host: /LabUL/host/Cluster-V6.5/10.31.101.41
 network: /LabUL/network/LAB-10.31.102
 
-
 # TEST VM
 testVmModuleSource: github.com/stuttgart-things/vsphere-vm?ref=v1.7.5-2.7.0
 testVmCount: 1
@@ -73,4 +89,5 @@ testVmRam: 8192
 testDatastore: /LabUL/host/Cluster-V6.5/10.31.101.41/UL-ESX-SAS-01
 testNetwork: /LabUL/host/Cluster-V6.5/10.31.101.41/MGMT-10.31.101
 testDatacenter: /LabUL/
-testAnnotation: VSPHERE-VM
+testAnnotation: PACKER VSPHERE TEST-VM
+folderPath: stuttgart-things/testing

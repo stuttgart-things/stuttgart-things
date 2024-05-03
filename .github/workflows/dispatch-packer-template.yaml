@@ -1,0 +1,204 @@
+---
+name: Dispatch Packer Template
+on:
+  workflow_dispatch:
+    inputs:
+      os-version:
+        type: choice
+        description: os version
+        options:
+          - ubuntu23
+          - rocky9
+      cloud:
+        type: choice
+        description: cloud
+        options:
+          - vsphere
+          - proxmox
+      lab:
+        type: choice
+        description: lab
+        options:
+          - labda
+          - labul
+      ansible-provisioning:
+        type: choice
+        description: provisioning
+        options:
+          - base-os
+          - rke2-node
+      packer-version:
+        type: string
+        description: packer version
+        default: 1.10.2
+      build-engine:
+        type: choice
+        description: build engine
+        options:
+          - gh-workflows
+          - tekton-pipelines
+          - render-only
+      runner:
+        description: RUNNER NAME
+        required: true
+        type: string
+        default: ghr-stuttgart-things-sthings-cicd
+
+jobs:
+  Create-Packer-Config:
+    runs-on: ${{ inputs.runner }}
+    environment: k8s
+    container:
+      image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2-2
+    continue-on-error: false
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout code
+        id: checkout
+        uses: actions/checkout@v4.1.1
+
+      - name: Create workingdir
+        id: createFolder
+        run: |
+          echo "WORKING_DIR=packer/builds/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}-${{ inputs.ansible-provisioning }}" >> $GITHUB_ENV
+          rm -rf packer/builds/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}-${{ inputs.ansible-provisioning }}/* || true # DELETE FOLDER CONTENTS IF EXISTS
+          mkdir -p packer/builds/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}-${{ inputs.ansible-provisioning }}
+          mkdir -p packer/builds/${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}-${{ inputs.ansible-provisioning }}/test-vm
+
+      - name: Create metadata
+        id: createMetadata
+        run: touch ${{ env.WORKING_DIR }}/meta-data
+
+      - name: Render OS template w/ machineShop
+        id: renderOsTemplate
+        run: |
+          machineShop render \
+          --source local \
+          --template packer/template/${{ inputs.os-version }}-${{ inputs.cloud }}.pkr.tpl.hcl \
+          --defaults packer/environments/${{ inputs.lab }}-${{ inputs.cloud }}.yaml \
+          --brackets square \
+          --values "packerVersion=${{ inputs.packer-version }}, packerConfigMountPath=., ansiblePlayMountPath=., ansibleOsProvisioning=${{ inputs.ansible-provisioning }}, osVersion=${{ inputs.os-version }}" \
+          --destination ${{ env.WORKING_DIR }}//${{ inputs.os-version }}-${{ inputs.ansible-provisioning }}.pkr.hcl \
+          --output file
+
+      - name: Render Kickstart w/ machineShop
+        id: renderKickstart
+        shell: bash
+        run: |
+          KICKSTART_TEMPLATE=$(yq -r ".kickstart.${{ inputs.os-version }}.template" packer/environments/${{ inputs.lab }}-${{ inputs.cloud }}.yaml)
+          KICKSTART_FILENAME=$(yq -r ".kickstart.${{ inputs.os-version }}.filename" packer/environments/${{ inputs.lab }}-${{ inputs.cloud }}.yaml)
+
+          machineShop render \
+          --source local \
+          --template packer/kickstart/${KICKSTART_TEMPLATE} \
+          --defaults packer/environments/${{ inputs.lab }}-${{ inputs.cloud }}.yaml \
+          --output file \
+          --destination ${{ env.WORKING_DIR }}/${KICKSTART_FILENAME}
+
+      - name: Render Playbook w/ machineShop
+        id: renderBase-os
+        run: |
+          machineShop render \
+          --source local \
+          --template packer/ansible/play.yaml \
+          --defaults packer/ansible/${{ inputs.ansible-provisioning }}.yaml \
+          --output file \
+          --brackets square \
+          --destination ${{ env.WORKING_DIR }}/${{ inputs.ansible-provisioning }}.yaml
+
+      - name: Render ansible requirements w/ machineShop requirements
+        id: renderRequirements
+        run: |
+          machineShop render \
+          --source local \
+          --template packer/ansible/requirements.yaml \
+          --defaults packer/ansible/${{ inputs.ansible-provisioning }}.yaml \
+          --output file \
+          --brackets square \
+          --destination ${{ env.WORKING_DIR }}/requirements.yaml
+
+      - name: Render secrets template
+        id: secrets
+        run: |
+          # WORKAROUND FOR NOW
+          cat <<EOF > secret-defaults.yaml
+          vaultSecretPaths: password=cloud/data/vsphere:password, user=cloud/data/vsphere:username, server=cloud/data/vsphere:ip, sshUser=cloud/data/vsphere:vm_ssh_user, sshPassword=cloud/data/vsphere:vm_ssh_password
+          EOF
+
+          machineShop render \
+          --source local \
+          --template terraform/vsphere-vm-tfvars.tpl \
+          --defaults secret-defaults.yaml \
+          --brackets square \
+          --source local \
+          --output file \
+          --destination ${{ env.WORKING_DIR }}/test-vm/terraform.tfvars
+
+      - name: Render Terraform template w/ machineShop
+        id: renderTerraformTemplate
+        run: |
+          machineShop render \
+          --source local \
+          --template packer/template/${{ inputs.cloud }}-vm.tf.tpl.hcl \
+          --output file \
+          --brackets square \
+          --defaults packer/environments/${{ inputs.lab }}-${{ inputs.cloud }}.yaml \
+          --values osVersion="${{ inputs.os-version }}, lab=${{ inputs.lab }}, cloud=${{ inputs.cloud }}, ansibleOsProvisioning=${{ inputs.ansible-provisioning }}" \
+          --destination ${{ env.WORKING_DIR }}/test-vm/main.tf
+
+      - name: Render Terraform provider config w/ machineShop
+        id: renderTerraformProviderConfig
+        run: |
+          machineShop render \
+          --source local \
+          --template terraform/state-provider.tf.tpl \
+          --output file \
+          --defaults packer/environments/${{ inputs.lab }}-${{ inputs.cloud }}.yaml \
+          --values stateKey="packer-${{ inputs.os-version }}" \
+          --destination ${{ env.WORKING_DIR }}/test-vm/state.tf
+
+      - name: Render Readme template w/ machineShop
+        id: renderReadMeTemplate
+        run: |
+          DATE=$(echo `date "+%Y-%m-%d %H:%M"`)
+          machineShop render \
+          --source local \
+          --template packer/README.md.tpl \
+          --output file \
+          --brackets square \
+          --values "packerVersion=${{ inputs.packer-version }}, osVersion=${{ inputs.os-version }}, lab=${{ inputs.lab }}, cloud=${{ inputs.cloud }}, ansibleOsProvisioning=${{ inputs.ansible-provisioning }}, hclConfig=${{ env.WORKING_DIR }}//${{ inputs.os-version }}-${{ inputs.ansible-provisioning }}, date=${DATE}" \
+          --destination ${{ env.WORKING_DIR }}/README.md
+
+      - name: Get token for creating pull request
+        uses: tibdex/github-app-token@v1
+        id: generate-token
+        with:
+          app_id: ${{ secrets.PULLREQUESTER_APP_ID }}
+          private_key: ${{ secrets.PULLREQUESTER_APP_KEY }}
+
+      - name: Set labels for pull request
+        id: set-build-label
+        run: |
+          if [[ "${{ inputs.build-engine }}" == "gh-workflows" ]]; then
+             echo "LABEL=packer" >> $GITHUB_ENV
+          fi
+          if [[ "${{ inputs.build-engine }}" == "tekton-pipelines" ]]; then
+             echo "LABEL=tekton-packer" >> $GITHUB_ENV
+          fi
+          if [[ "${{ inputs.build-engine }}" == "render-only" ]]; then
+             echo "LABEL=packer-config" >> $GITHUB_ENV
+          fi
+
+      - name: Create Pull Request for packer config
+        id: pr
+        uses: peter-evans/create-pull-request@v6.0.2
+        with:
+          commit-message: '[CI][PACKER] - Created template config for vm ${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}'
+          title: Created Packer Config ${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }} ${{ inputs.build-engine }}
+          branch: ${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}-${{ inputs.ansible-provisioning }}
+          delete-branch: true
+          token: ${{ steps.generate-token.outputs.token }}
+          labels: |
+            ${{ env.LABEL }}

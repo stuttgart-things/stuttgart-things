@@ -36,7 +36,7 @@ spec:
                 version:
                   type: string
                   default: 3.10.0
-                  description: helm chart version for cert-manager
+                  description: helm chart version for open ebs
               required:
                 - clusterName
             status:

@@ -1,0 +1,188 @@
+name: PR Packer Test-VM
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+
+jobs:
+  Get-Packer-Config:
+    if: contains(github.event.pull_request.labels.*.name, 'test-vm')
+    outputs:
+      folder: ${{ steps.set.outputs.FOLDER }}
+      branch: ${{ steps.set.outputs.BRANCH }}
+      environment: ${{ steps.set.outputs.ENVIRONMENT }}
+      runs-on: ${{ steps.set.outputs.RUNS_ON }}
+      variables: ${{ steps.set.outputs.VARIABLES }}
+      working-image: ${{ steps.set.outputs.WORKING_IMAGE }}
+    container:
+      image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2
+    permissions:
+      contents: read
+      pull-requests: read
+    runs-on: ghr-stuttgart-things-sthings-cicd
+    steps:
+      - name: Get VM-Template name
+        uses: peter-evans/find-comment@v3
+        id: fc
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body-includes: successful
+
+      - name: Get Test vm -path
+        uses: peter-evans/find-comment@v3
+        id: test
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body-includes: test
+
+      - name: Set values for terraform execution
+        id: values
+        run: |
+          # SET TMP VARS
+          OS=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'-' -f1)
+          LAB=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'-' -f2)
+          CLOUD=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'-' -f3)
+          TEMPLATE_NAME=$(echo ${{ steps.fc.outputs.comment-body }} | sed 's/.*\://' | xargs)
+          VM_NAME=test-$(echo ${OS})-$(echo $(date '+%Y-%m-%d'))
+          VARS=$(echo vsphere_vm_template=${TEMPLATE_NAME}";"vsphere_vm_name=${VM_NAME})
+
+          # SET ENV VARS
+          echo "FOLDER=$(echo ${{ steps.test.outputs.comment-body }} | sed 's/.*\://' | xargs)/" >> $GITHUB_ENV
+          echo "BRANCH=${{ github.event.pull_request.head.ref }}" >> $GITHUB_ENV
+          echo "WORKING_IMAGE=eu.gcr.io/stuttgart-things/sthings-terraform:1.8.1-2" >> $GITHUB_ENV
+          echo "RUNS_ON=ghr-stuttgart-things-sthings-cicd" >> $GITHUB_ENV
+          echo "ENVIRONMENT=$(echo ${LAB}-${CLOUD})" >> $GITHUB_ENV
+          echo "VARIABLES=$(echo ${VARS})" >> $GITHUB_ENV
+
+          # READ DEFAULTS FROM PR
+        shell: bash
+
+      - name: Show values for terraform execution
+        id: set
+        run: |
+          # SET JOB OUTPUTS
+          echo FOLDER: ${{ env.FOLDER }}; echo "FOLDER=${{ env.FOLDER }}" >> "$GITHUB_OUTPUT"
+          echo BRANCH: ${{ env.BRANCH }}; echo "BRANCH=${{ env.BRANCH }}" >> "$GITHUB_OUTPUT"
+          echo WORKING_IMAGE: ${{ env.WORKING_IMAGE }}; echo "WORKING_IMAGE=${{ env.WORKING_IMAGE }}" >> "$GITHUB_OUTPUT"
+          echo RUNS_ON: ${{ env.RUNS_ON }}; echo "RUNS_ON=${{ env.RUNS_ON }}" >> "$GITHUB_OUTPUT"
+          echo ENVIRONMENT: ${{ env.ENVIRONMENT }}; echo "ENVIRONMENT=${{ env.ENVIRONMENT }}" >> "$GITHUB_OUTPUT"
+          echo VARIABLES: ${{ env.VARIABLES }}; echo "VARIABLES='${{ env.VARIABLES }}'" >> "$GITHUB_OUTPUT"
+        shell: bash
+
+  Create-Test-VM:
+    name: Create test VM
+    uses: stuttgart-things/stuttgart-things/.github/workflows/call-terraform-execution.yaml@main
+    needs: Get-Packer-Config
+    with:
+      folder: ${{ needs.Get-Packer-Config.outputs.folder }}
+      branch: ${{ needs.Get-Packer-Config.outputs.branch }}
+      variables: ${{ needs.Get-Packer-Config.outputs.variables }} #"VARIABLES='vsphere_vm_template=ubuntu23-2024-04-24-base-os;vsphere_vm_name=u23-base-test1'" >> $GITHUB_ENV
+      operation: apply
+      output: true
+      working-image: ${{ needs.Get-Packer-Config.outputs.working-image }}
+      environment-name: labul-vsphere #${{ needs.Get-Packer-Config.outputs.environment }}
+      runs-on: ${{ needs.Get-Packer-Config.outputs.runs-on }}
+    secrets: inherit
+
+  Execute-Ansible-Provisioning:
+    name: Execute Ansible
+    uses: stuttgart-things/stuttgart-things/.github/workflows/call-ansible-execution.yaml@main
+    needs: 
+      - Get-Packer-Config
+      - Create-Test-VM
+    with:
+      playbook: ansible/playbooks/base-os.yaml
+      branch: main #${{ needs.Get-Packer-Config.outputs.branch }}
+      working-image: eu.gcr.io/stuttgart-things/sthings-ansible:9.5.1
+      runs-on: ${{ needs.Get-Packer-Config.outputs.runs-on }}
+      inventory: ${{ needs.Create-Test-VM.outputs.tf-output }}
+      environment-name: ${{ needs.Get-Packer-Config.outputs.environment }}
+      private-key: "ssh/data/sthings:privateKey"
+      requirements-file: ansible/requirements.yaml
+    secrets: inherit
+
+  Destroy-Test-VM:
+    name: Destroy test VM
+    uses: stuttgart-things/stuttgart-things/.github/workflows/call-terraform-execution.yaml@main
+    needs:
+      - Get-Packer-Config
+      - Create-Test-VM
+      - Execute-Ansible-Provisioning
+    with:
+      folder: ${{ needs.Get-Packer-Config.outputs.folder }}
+      branch: ${{ needs.Get-Packer-Config.outputs.branch }}
+      variables: ${{ needs.Get-Packer-Config.outputs.variables }} #"VARIABLES='vsphere_vm_template=ubuntu23-2024-04-24-base-os;vsphere_vm_name=u23-base-test1'" >> $GITHUB_ENV
+      operation: destroy
+      working-image: ${{ needs.Get-Packer-Config.outputs.working-image }}
+      environment-name: ${{ needs.Get-Packer-Config.outputs.environment }}
+      runs-on: ${{ needs.Get-Packer-Config.outputs.runs-on }}
+      delete-folder: false
+    secrets: inherit
+
+  Set-Packer-Status:
+    name: Set Packer Status
+    environment: k8s
+    needs:
+      - Get-Packer-Config
+      - Create-Test-VM
+      - Execute-Ansible-Provisioning
+      - Destroy-Test-VM
+    container:
+      image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2-2
+    runs-on: ghr-stuttgart-things-sthings-cicd
+    steps:
+      - name: Checkout code/branch
+        id: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: '0'
+          ref: ${{ needs.Get-Terraform-Config.outputs.branch }}
+          
+      - name: Get token for creating pull request
+        uses: tibdex/github-app-token@v1
+        id: generate-token
+        with:
+          app_id: ${{ secrets.PULLREQUESTER_APP_ID }}
+          private_key: ${{ secrets.PULLREQUESTER_APP_KEY }}
+          
+      - name: Comment status to PR
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            Test VM created, provisioned and destroyed
+            ${{ needs.Get-Packer-Config.outputs.variables }}
+
+      - name: Remove test-vm label from PR
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+        with:
+          github-token: ${{ steps.generate-token.outputs.token }}
+          script: |
+            await github.rest.issues.removeLabel({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: ["test-vm"]
+            })
+
+      - name: Add move-packer-template label to PR
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+        with:
+          github-token: ${{ steps.generate-token.outputs.token }}
+          script: |
+            await github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ["move-packer-template"]
+            })
+
+      - name: Repoen PR for triggering next workflow
+        id: reopen
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+        run: |
+          git config --global --add safe.directory /__w/stuttgart-things/stuttgart-things
+          gh pr list
+          gh pr close ${{ github.event.pull_request.number }}
+          gh pr reopen ${{ github.event.pull_request.number }}

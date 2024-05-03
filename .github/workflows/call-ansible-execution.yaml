@@ -1,0 +1,111 @@
+---
+name: Call Ansible Execution
+on:
+  workflow_call:
+    inputs:
+      branch:
+        required: true
+        type: string
+      inventory:
+        required: true
+        type: string
+      playbook:
+        required: false
+        type: string
+      runs-on:
+        required: true
+        type: string
+      environment-name:
+        default: k8s
+        required: false
+        type: string
+      working-image:
+        type: string
+        default: eu.gcr.io/stuttgart-things/sthings-ansible:9.5.1
+        required: false
+      private-key:
+        required: true
+        type: string
+      requirements-file:
+        required: true
+        type: string
+      ansible-user:
+        required: false
+        type: string
+        default: sthings
+      wait-for-ssh:
+        required: false
+        type: boolean
+        default: false
+jobs:
+  execute-ansible:
+    runs-on: ${{ inputs.runs-on }}
+    environment: ${{ inputs.environment-name }}
+    container:
+      image: ${{ inputs.working-image }}
+    env:
+      VAULT_AUTH_METHOD: ${{ secrets.VAULT_AUTH_METHOD }}
+      VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
+      VAULT_SECRET_ID: ${{ secrets.VAULT_SECRET_ID }}
+      VAULT_ROLE_ID: ${{ secrets.VAULT_ROLE_ID }}
+      VAULT_NAMESPACE: ${{ secrets.VAULT_NAMESPACE }}
+      ANSIBLE_HOST_KEY_CHECKING: False
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.1.1
+        with:
+          fetch-depth: '0'
+          ref: ${{ inputs.branch }}
+
+      - name: Output Parameters
+        run: |
+          ansible --version
+          echo PATH-TO-PRIVATEKEY: ${{ inputs.private-key }}
+          echo INVENTORY: ${{ inputs.inventory }}
+          echo PLAYBOOK ${{ inputs.playbook }}
+          echo PATH-TO-REQUIREMENTS_FILE: ${{ inputs.requirements-file }}
+        shell: bash
+
+      - name: Get Private Key
+        run: |
+          mkdir ~/.ssh/
+          machineShop get --path "${{ inputs.private-key }}" --b64 true | tail -n +8 > ~/.ssh/id_rsa
+          chmod 0600 ~/.ssh/id_rsa 
+        shell: bash
+
+      - name: Create Inventory
+        run: |
+          echo ${{ inputs.inventory }} | tr ',' '\n' > inventory
+          printf "[all:vars]\nansible_user=${{ inputs.ansible-user }}\n" >> inventory
+          cat inventory
+        shell: bash
+
+      - name: Wait for ssh
+        if: ${{ (inputs.wait-for-ssh == true || inputs.wait-for-ssh == 'true') }}
+        run: |
+          cat << EOF > ./wait-for-ssh.yaml
+          ---
+          - hosts: all
+            gather_facts: true
+            become: true
+            vars:
+              delay_time: 10
+            tasks:
+              - name: "Wait for SSH (delay: {{ delay_time }})"
+                ansible.builtin.wait_for:
+                  host: "{{ item }}"
+                  port: 22
+                  delay: "{{ delay_time }}"
+                  timeout: 1200
+                  sleep: 10
+                with_items:
+                  - "{{ groups['all'] }}"
+          EOF
+          ansible-playbook -i inventory ./wait-for-ssh.yaml -vv
+        shell: bash
+
+      - name: Execute Ansible
+        run: |
+          ansible-galaxy install -r ${{ inputs.requirements-file }} 
+          ansible-playbook ${{ inputs.playbook }} -i inventory -e target_host=all -vv -e reboot_all=false
+        shell: bash

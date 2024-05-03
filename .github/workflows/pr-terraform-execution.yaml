@@ -1,0 +1,141 @@
+name: PR Terraform Execution
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+
+jobs:
+  Get-Terraform-Config:
+    if: contains(github.event.pull_request.labels.*.name, 'terraform')
+    environment: k8s
+    container:
+      image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2-2
+    outputs:
+      tf_working_dir: ${{ steps.set.outputs.TF_WORKING_DIR }}
+      branch: ${{ steps.set.outputs.BRANCH }}
+      operation: ${{ steps.set.outputs.OPERATION }}
+      working_image: ${{ steps.set.outputs.WORKING_IMAGE }}
+      environment: ${{ steps.set.outputs.ENVIRONMENT }}
+      runs_on: ${{ steps.set.outputs.RUNS_ON }}
+    runs-on: ghr-stuttgart-things-sthings-cicd
+    steps:
+      - name: Set Execution Details
+        id: set
+        run: |
+          # HARDCODED (FOR NOW)
+          echo "OPERATION=apply" >> "$GITHUB_OUTPUT"
+          echo "WORKING_IMAGE=eu.gcr.io/stuttgart-things/sthings-terraform:1.8.1-2" >> "$GITHUB_OUTPUT"
+          echo "RUNS_ON=ghr-stuttgart-things-sthings-cicd" >> "$GITHUB_OUTPUT"
+
+          # PULL REQUEST/BRANCH RELATED
+          echo "TF_WORKING_DIR=${{ github.event.pull_request.head.ref }}/" >> "$GITHUB_OUTPUT"
+          echo "BRANCH=${{ github.event.pull_request.head.ref }}" >> "$GITHUB_OUTPUT"
+          SPLIT=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'/' -f3)
+          echo "ENVIRONMENT=$(echo ${SPLIT} | cut -d'-' -f1)-$(echo ${SPLIT} | cut -d'-' -f2)" >> "$GITHUB_OUTPUT"
+
+  Execute-Terraform-Operation:
+    name: Execute Terraform ${{ needs.Get-Terraform-Config.outputs.operation }}-Operation
+    needs: Get-Terraform-Config
+    uses: stuttgart-things/stuttgart-things/.github/workflows/call-terraform-execution.yaml@main
+    with:
+      folder: ${{ needs.Get-Terraform-Config.outputs.tf_working_dir }}
+      branch: ${{ needs.Get-Terraform-Config.outputs.branch }}
+      operation: ${{ needs.Get-Terraform-Config.outputs.operation }}
+      working-image: ${{ needs.Get-Terraform-Config.outputs.working_image }}
+      environment-name: ${{ needs.Get-Terraform-Config.outputs.environment }}
+      output: true
+      runs-on: ${{ needs.Get-Terraform-Config.outputs.runs_on }}
+    secrets: inherit
+
+  Set-Terraform-Status:
+    name: Set Terraform Status
+    environment: k8s
+    needs: 
+      - Get-Terraform-Config
+      - Execute-Terraform-Operation
+    container:
+      image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2-2
+    runs-on: ghr-stuttgart-things-sthings-cicd
+    steps:
+      - name: Checkout code/branch
+        id: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: '0'
+          ref: ${{ needs.Get-Terraform-Config.outputs.branch }}
+          
+      - name: Get token for creating pull request
+        uses: tibdex/github-app-token@v1
+        id: generate-token
+        with:
+          app_id: ${{ secrets.PULLREQUESTER_APP_ID }}
+          private_key: ${{ secrets.PULLREQUESTER_APP_KEY }}
+          
+      - name: Get Post Label/Comment From PR
+        uses: peter-evans/find-comment@v3
+        id: postLabel
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body-includes: post
+
+      - name: Comment inventory to PR
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            inventory: ${{ needs.Execute-Terraform-Operation.outputs.tf-output }}
+
+      - name: Get Post Action by label
+        id: getPost
+        run: |
+          POST_LABEL=$(echo ${{ steps.postLabel.outputs.comment-body }} | sed 's/.*\://' | xargs)
+          echo ${POST_LABEL}
+          echo "POST_LABEL=${POST_LABEL}" >> $GITHUB_ENV
+          echo INVENTORY=${{ needs.Execute-Terraform-Operation.outputs.tf-output }}
+
+      - name: Merge PR 
+        if: ${{ env.POST_LABEL == 'none' }}
+        id: merge
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+        run: |      
+          git config --global --add safe.directory /__w/stuttgart-things/stuttgart-things
+          gh pr list        
+          gh pr merge ${{ github.event.pull_request.number }} --auto --rebase --delete-branch
+
+      - name: Remove terraform label from PR
+        if: ${{ env.POST_LABEL != 'none' }}
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+        with:
+          github-token: ${{ steps.generate-token.outputs.token }}
+          script: |
+            await github.rest.issues.removeLabel({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: ["terraform"]
+            })
+
+      - name: Add tf-ansible label to PR
+        if: ${{ env.POST_LABEL != 'none' }}
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+        with:
+          github-token: ${{ steps.generate-token.outputs.token }}
+          script: |
+            await github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ["ansible"]
+            })
+
+      - name: Repoen PR for triggering next workflow
+        if: ${{ env.POST_LABEL != 'none' }}
+        id: reopen
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+        run: |
+          git config --global --add safe.directory /__w/stuttgart-things/stuttgart-things
+          gh pr list
+          gh pr close ${{ github.event.pull_request.number }}
+          gh pr reopen ${{ github.event.pull_request.number }}
