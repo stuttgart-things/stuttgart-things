@@ -5,16 +5,28 @@
     bin:
       nerdctl:
         bin_name: "nerdctl"
-        bin_version: "1.7.5"
+        bin_version: "1.7.6"
         check_bin_version_before_installing: true
-        source_url: "https://github.com/containerd/nerdctl/releases/download/v1.7.5/nerdctl-full-1.7.5-linux-amd64.tar.gz"
+        source_url: "https://github.com/containerd/nerdctl/releases/download/v1.7.6/nerdctl-full-1.7.6-linux-amd64.tar.gz"
         bin_to_copy: "."
-        bin_dir: "/usr/local/"
+        bin_dir: "/usr/local"
         to_remove: "*"
         version_cmd: " version"
-        target_version: v1.7.5
+        target_version: v1.7.6
 
-  tasks:
-    - name: Call download-install-binary role
-      ansible.builtin.include_role:
-        name: download-install-binary
+    systemd_services:
+      - containerd
+      - buildkit
+
+  roles:
+    - download-install-binary
+
+  post_tasks:
+    - name: Enable systemd services
+      ansible.builtin.systemd_service:
+        name: "{{ item }}"
+        enabled: true
+        daemon_reload: true
+        state: started
+      with_items:
+        - "{{ systemd_services }}"
