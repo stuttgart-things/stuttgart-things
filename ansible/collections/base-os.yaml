@@ -1,6 +1,6 @@
 ---
 name: base_os
-version: 0.2.1
+version: 0.2.2
 namespace: sthings
 requirements: |
   roles:
@@ -20,21 +20,84 @@ playbooks:
       ---
       - hosts: "{{ target_host | default('all') }}"
         become: true
-        # @andre tbd
-
-  - name: install_configure_docker
-    play: |
-      ---
-      - hosts: "{{ target_host | default('all') }}"
-        become: true
         vars:
-          docker_install_compose: true
-          install_kind: true
-          kind_version: 0.22.0
-          kubectl_version: 1.30.0
+          golang_version: 1.22.2
+          golang_checksum: 8672f483bfbd37e4b9f7655522e3739bfe66d3308d76a152a6d8c3a569e5362e
+          source_url: "https://go.dev/dl/go1.22.2.linux-amd64.tar.gz"
+          golang_install_dir: /usr/local
+          go_checksum_type: "sha256"
 
-        roles:
-          - install-configure-docker
+          # USE WITH EXISTING USER
+          go_username: sthings
+          go_usergroup: sthings
+          go_userhome: /home/sthings
+
+          # CREATE USER(S) FOR GOLANG INSTALL AND SET EXPORTS
+          golang_users:
+            - username: horst
+              name: horst user
+              group: golang
+              uid: 1020
+              home: /home/horst
+              profile: |
+                alias ll='ls -ahl'
+                export GOROOT=/usr/local/go
+                export PATH=$GOROOT/bin:$PATH
+                export GOPATH=/home/horst/usr/local/go
+                export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
+              enable_ssh_tcp_forwarding: true
+              password: "!"
+
+          groups_golang:
+            - name: golang
+              gid: 31000
+
+        pre_tasks:
+          - name: Check if Golang is already installed
+            ansible.builtin.stat:
+              path: "{{ golang_install_dir }}/go"
+            register: check_golang
+
+          - name: Get checksum of golang dir
+            get_checksum:
+              path: "{{ golang_install_dir }}/go"
+              checksum_type: "{{ go_checksum_type }}"
+            register: checksum_existing
+            when: check_golang.stat.exists
+
+        tasks:
+          - name: Create golang users
+            ansible.builtin.include_role:
+              name: create-os-user
+            vars:
+              users: "{{ golang_users }}"
+              groups_to_create: "{{ groups_golang }}"
+            when: golang_users is defined
+
+          - name: Unarchive Golang
+            ansible.builtin.unarchive:
+              src: "{{ source_url }}"
+              dest: "{{ golang_install_dir }}/"
+              mode: 0755
+              validate_certs: false
+              remote_src: true
+            when: golang_checksum != checksum_existing.checksum_value
+
+          - name: Add golang exports for existing users to bashrc
+            ansible.builtin.blockinfile:
+              block: |
+                export GOROOT=/usr/local/go
+                export PATH=$GOROOT/bin:$PATH
+                export GOPATH=$HOME/usr/local/go
+                export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
+              dest: "{{ go_userhome }}/.bashrc"
+              owner: "{{ go_username }}"
+              group: "{{ go_usergroup }}"
+              marker_begin: "<!-- BEGIN GOLANG SETUP -->"
+              marker_end: "<!-- END GOLANG SETUP -->"
+              mode: 0644
+              create: true
+            when: go_username is defined and go_usergroup is defined and go_userhome is defined
 
   - name: download_install_binaries
     play: |
@@ -48,6 +111,23 @@ playbooks:
 
         roles:
           - role: sthings.base_os.download_install_binary
+
+  - name: install-configure-docker
+    play: |
+      ---
+      - hosts: "{{ target_host | default('all') }}"
+        become: true
+
+      vars:
+        docker_install_compose: true 
+        docker_version: '' # leave empty for latest version or set e.g. '=5:23.0.6-1~ubuntu.23.04~lunar'
+
+        install_kind: true
+        kind_version: 0.22.0
+        kubectl_version: 1.30.0
+
+        roles:
+          - role: sthings.base_os.install_configure_docker
 
   - name: create_users
     play: |
