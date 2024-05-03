@@ -390,6 +390,11 @@ jobs:
           --output file \
           --destination ${{ env.destination }}/README.md
 
+      - name: Remove data yaml
+        id: remove
+        run: |
+          rm -rf ${{ inputs.vm-name }}.yaml
+
       - name: Get token for creating pull request
         uses: tibdex/github-app-token@v1
         id: generate-token
