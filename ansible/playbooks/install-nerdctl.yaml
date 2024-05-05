@@ -1,4 +1,16 @@
 ---
+# TASK1:
+#https://github.com/containerd/nerdctl/issues/341
+# ADD CODE AS ANSIBLE TASKS
+# mkdir -p $HOME/bin
+#chmod 700 $HOME/bin
+#cp /usr/local/bin/nerdctl $HOME/bin
+#sudo chown root $HOME/bin/nerdctl
+#sudo chmod +s $HOME/bin/nerdctl
+#export PATH=$HOME/bin:$PATH
+
+# TASK2:
+# ADD TARGET VERSION
 - hosts: "{{ target_host | default('all') }}"
   become: true
   vars:
