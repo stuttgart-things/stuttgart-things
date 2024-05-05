@@ -45,7 +45,7 @@ jobs:
           echo "OS=${OS}" >> $GITHUB_OUTPUT
           echo "TEMPLATE_NAME=${TEMPLATE_NAME}" >> $GITHUB_OUTPUT
           echo "RUNS_ON=ghr-stuttgart-things-sthings-cicd" >> $GITHUB_OUTPUT
-          echo "WORKING_IMAGE=eu.gcr.io/stuttgart-things/sthings-packer:1.10.2-9.4.0-2" >> $GITHUB_OUTPUT
+          echo "WORKING_IMAGE=eu.gcr.io/stuttgart-things/sthings-packer:1.10.3-9.5.1" >> $GITHUB_OUTPUT
           echo "TEMPLATE_BUILD_FOLDER=/LabUL/vm/stuttgart-things/packer" >> $GITHUB_OUTPUT
           echo "GOLDEN_IMAGE_FOLDER=/LabUL/vm/stuttgart-things/vm-templates" >> $GITHUB_OUTPUT
           echo "TARGET_NAME=sthings-r9" >> $GITHUB_OUTPUT
@@ -75,13 +75,13 @@ jobs:
           PW=$(machineShop get --path cloud/data/vsphere:password | tail -n +8)
           FQDN=$(machineShop get --path cloud/data/vsphere:ip | tail -n +8)
           echo "GOVC_URL=https://${USER}:${PW}@${FQDN}/sdk" >> $GITHUB_ENV
-    
+
       - name: Check template paths
         id: check
         run: |
-          echo 'Check Build Folder' 
+          echo 'Check Build Folder'
           govc ls ${TEMPLATE_BUILD_FOLDER}
-          echo 'Check Golden Image Folder' 
+          echo 'Check Golden Image Folder'
           govc ls ${GOLDEN_IMAGE_FOLDER}
 
       - name: Rename newly build image in build folder to golden image name
@@ -90,7 +90,7 @@ jobs:
          govc object.rename ${TEMPLATE_BUILD_FOLDER}/${{ needs.Get-Packer-Config.outputs.template-name }} ${TARGET_NAME}
          govc ls ${TEMPLATE_BUILD_FOLDER}
 
-      - name: Delete existing golden image 
+      - name: Delete existing golden image
         id: deleteExisting
         run: |
          govc object.destroy ${GOLDEN_IMAGE_FOLDER}/${TARGET_NAME} || true # delete if exists or not

@@ -35,7 +35,7 @@ jobs:
     runs-on: ${{ needs.Get-Packer-Config.outputs.runs-on }}
     environment: ${{ needs.Get-Packer-Config.outputs.lab }}-${{ needs.Get-Packer-Config.outputs.cloud }}
     container:
-      image: eu.gcr.io/stuttgart-things/sthings-packer:1.10.2-9.4.0-2
+      image: eu.gcr.io/stuttgart-things/sthings-packer:1.10.3-9.5.1
     env:
       PACKER_LOG_PATH: packer.log
       PACKER_LOG: 1

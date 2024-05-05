@@ -35,6 +35,7 @@ on:
         options:
           - ubuntu22
           - ubuntu23
+          - ubuntu24
           - rocky9
       lab-cloud:
         type: choice
