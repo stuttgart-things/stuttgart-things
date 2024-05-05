@@ -86,7 +86,7 @@ jobs:
           cat << EOF > ./wait-for-ssh.yaml
           ---
           - hosts: all
-            gather_facts: true
+            gather_facts: false
             become: true
             vars:
               delay_time: 90
