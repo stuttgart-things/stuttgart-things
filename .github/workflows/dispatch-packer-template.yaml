@@ -159,13 +159,15 @@ jobs:
       - name: Render Readme template w/ machineShop
         id: renderReadMeTemplate
         run: |
+          PACKER_VERSION=$(yq -r ".packerVersion" packer/environments/${{ inputs.lab }}-${{ inputs.cloud }}.yaml)
           DATE=$(echo `date "+%Y-%m-%d %H:%M"`)
+
           machineShop render \
           --source local \
           --template packer/README.md.tpl \
           --output file \
           --brackets square \
-          --values "osVersion=${{ inputs.os-version }}, lab=${{ inputs.lab }}, cloud=${{ inputs.cloud }}, ansibleOsProvisioning=${{ inputs.ansible-provisioning }}, hclConfig=${{ env.WORKING_DIR }}/${{ inputs.os-version }}-${{ inputs.ansible-provisioning }}, date=${DATE}" \
+          --values "packerVersion=${PACKER_VERSION}, osVersion=${{ inputs.os-version }}, lab=${{ inputs.lab }}, cloud=${{ inputs.cloud }}, ansibleOsProvisioning=${{ inputs.ansible-provisioning }}, hclConfig=${{ env.WORKING_DIR }}/${{ inputs.os-version }}-${{ inputs.ansible-provisioning }}, date=${DATE}" \
           --destination ${{ env.WORKING_DIR }}/README.md
 
       - name: Get token for creating pull request
