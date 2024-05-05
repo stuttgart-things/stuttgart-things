@@ -1,0 +1,68 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: ingresscertificate
+  labels:
+    crossplane.io/xrd: xingresscertificates.resources.stuttgart-things.com
+spec:
+  patchSets:
+    - name: provider
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.clusterName
+          toFieldPath: spec.providerConfigRef.name
+    - name: namespace
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.namespace
+          toFieldPath: spec.forProvider.manifest.metadata.namespace
+  writeConnectionSecretsToNamespace: crossplane-system
+  compositeTypeRef:
+    apiVersion: resources.stuttgart-things.com/v1alpha1
+    kind: XIngressCertificate
+  resources:
+    - name: ingress-certificate
+      base:
+        apiVersion: kubernetes.crossplane.io/v1alpha2
+        kind: Object
+        metadata:
+          name: ingress-certificate
+        spec:
+          providerConfigRef:
+            name: kubernetes-clustername
+          forProvider:
+            manifest:
+              apiVersion: cert-manager.io/v1
+              kind: Certificate
+      patches:
+        - type: PatchSet
+          patchSetName: provider
+        - type: PatchSet
+          patchSetName: namespace
+        - type: CombineFromComposite
+          combine:
+            variables:
+              - fromFieldPath: spec.hostName
+              - fromFieldPath: spec.domainName
+            strategy: string
+            string:
+              fmt: "%s.%s"
+          toFieldPath: spec.forProvider.manifest.spec.commonName
+        - type: CombineFromComposite
+          combine:
+            variables:
+              - fromFieldPath: spec.hostName
+              - fromFieldPath: spec.domainName
+            strategy: string
+            string:
+              fmt: "%s.%s"
+          toFieldPath: spec.forProvider.manifest.spec.dnsNames[0]
+        - fromFieldPath: spec.issuerName
+          toFieldPath: spec.forProvider.manifest.spec.issuerRef.name
+        - fromFieldPath: spec.issuerKind
+          toFieldPath: spec.forProvider.manifest.spec.issuerRef.kind
+        - fromFieldPath: spec.certSecretName
+          toFieldPath: spec.forProvider.manifest.spec.secretName
+        - fromFieldPath: spec.hostName
+          toFieldPath: metadata.name
