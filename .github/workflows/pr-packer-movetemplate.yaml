@@ -112,12 +112,12 @@ jobs:
   Merge-Pull-Request:
     name: Merge Pull Request
     uses: stuttgart-things/stuttgart-things/.github/workflows/call-pullrequest-merge.yaml@main
-    needs: 
+    needs:
       - Get-Packer-Config
       - Move-Vsphere-Template
     with:
       runs-on: ${{ needs.Get-Packer-Config.outputs.runs-on }}
-      environment: ${{ needs.Get-Packer-Config.outputs.lab }}-${{ needs.Get-Packer-Config.outputs.cloud }}
+      environment-name: ${{ needs.Get-Packer-Config.outputs.lab }}-${{ needs.Get-Packer-Config.outputs.cloud }}
       branch-name: ${{ github.event.pull_request.head.ref }}
       pr-id: ${{ github.event.pull_request.number }}
     secrets: inherit
