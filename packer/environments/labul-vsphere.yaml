@@ -21,13 +21,17 @@ kickstart:
 
 output:
   ubuntu22:
-    name: sthings-u22
+    base-os: sthings-u22
+    rke2-node: sthings-u22-k8s
   ubuntu23:
-    name: sthings-u23
+    base-os: sthings-u23
+    rke2-node: sthings-u23-k8s
   ubuntu24:
-    name: sthings-u24
+    base-os: sthings-u24
+    rke2-node: sthings-u24-k8s
   rocky9:
-    name: sthings-r9
+    base-os: sthings-r9
+    rke2-node: sthings-r9-k8s
 
 # S3
 s3Endpoint: https://artifacts.app1.sthings-vsphere.labul.sva.de
