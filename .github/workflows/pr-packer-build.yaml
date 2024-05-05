@@ -36,6 +36,8 @@ jobs:
     environment: ${{ needs.Get-Packer-Config.outputs.lab }}-${{ needs.Get-Packer-Config.outputs.cloud }}
     container:
       image: eu.gcr.io/stuttgart-things/sthings-packer:1.10.3-9.5.1
+    outputs:
+      output-name: ${{ steps.getTemplateTargetName.outputs.OUTPUT_NAME }}
     env:
       PACKER_LOG_PATH: packer.log
       PACKER_LOG: 1
@@ -68,6 +70,13 @@ jobs:
           -var "password=$(machineShop get --path cloud/data/vsphere:password | tail -n +8)" \
           -var "name=${{ needs.Get-Packer-Config.outputs.os-version }}-${{ needs.Get-Packer-Config.outputs.build-date }}-${{ needs.Get-Packer-Config.outputs.provisioning}}" \
           $(ls *.hcl)
+
+      - name: Get template target name
+        id: getTemplateTargetName
+        shell: bash
+        run: |
+          OUTPUT_NAME=$(yq -r ".output.${{ needs.Get-Packer-Config.outputs.os-version }}.name" packer/environments/${{ needs.Get-Packer-Config.outputs.lab }}-${{ needs.Get-Packer-Config.outputs.cloud }}.yaml)
+          echo "OUTPUT_NAME=$(echo ${OUTPUT_NAME})" >> $GITHUB_OUTPUT
 
       - name: Upload Packer logfile
         id: upload
@@ -107,6 +116,12 @@ jobs:
         with:
           message: |
             :wave: test vm path: ${{ needs.Get-Packer-Config.outputs.build-path }}/${{ github.event.pull_request.head.ref }}/test-vm
+
+      - name: Comment output name to pr
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            :wave: output name: ${{ needs.Build-Packer-Template.outputs.output-name }}
 
       - name: Remove packer label from PR
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea

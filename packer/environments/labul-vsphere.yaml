@@ -19,6 +19,16 @@ kickstart:
     template: rocky9.cfg
     filename: user-data
 
+output:
+  ubuntu22:
+    name: sthings-u22
+  ubuntu23:
+    name: sthings-u23
+  ubuntu24:
+    name: sthings-u24
+  rocky9:
+    name: sthings-r9
+
 # S3
 s3Endpoint: https://artifacts.app1.sthings-vsphere.labul.sva.de
 s3Bucket: vspherevm-labul

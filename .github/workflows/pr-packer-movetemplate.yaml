@@ -27,10 +27,17 @@ jobs:
     steps:
       - name: Get VM-Template name
         uses: peter-evans/find-comment@v3
-        id: fc
+        id: templateName
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body-includes: successful
+
+      - name: Get Output name name
+        uses: peter-evans/find-comment@v3
+        id: outputName
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body-includes: output
 
       - name: Set values for govc operation
         id: set
@@ -38,7 +45,8 @@ jobs:
           OS=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'-' -f1)
           LAB=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'-' -f2)
           CLOUD=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'-' -f3)
-          TEMPLATE_NAME=$(echo ${{ steps.fc.outputs.comment-body }} | sed 's/.*\://' | xargs)
+          TEMPLATE_NAME=$(echo ${{ steps.templateName.outputs.comment-body }} | sed 's/.*\://' | xargs)
+          OUTPUT_NAME=$(echo ${{ steps.outputName.outputs.comment-body }} | sed 's/.*\://' | xargs)
 
           echo "CLOUD=${CLOUD}" >> $GITHUB_OUTPUT
           echo "LAB=${LAB}" >> $GITHUB_OUTPUT
@@ -48,7 +56,8 @@ jobs:
           echo "WORKING_IMAGE=eu.gcr.io/stuttgart-things/sthings-packer:1.10.3-9.5.1" >> $GITHUB_OUTPUT
           echo "TEMPLATE_BUILD_FOLDER=/LabUL/vm/stuttgart-things/packer" >> $GITHUB_OUTPUT
           echo "GOLDEN_IMAGE_FOLDER=/LabUL/vm/stuttgart-things/vm-templates" >> $GITHUB_OUTPUT
-          echo "TARGET_NAME=sthings-r9" >> $GITHUB_OUTPUT
+          #echo "TARGET_NAME=sthings-r9" >> $GITHUB_OUTPUT
+          echo "TARGET_NAME=$(echo ${OUTPUT_NAME})" >> $GITHUB_OUTPUT
         shell: bash
 
   Move-Vsphere-Template:
