@@ -25,3 +25,49 @@ spec:
 #   name: cert-manager
 #   namespace: crossplane-system
 # type: Opaquesaa
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: NetworkStackMNPC
+metadata:
+  name: labul-apptest
+  namespace: crossplane-system
+spec:
+  clusterName: labul-apptest
+  ipPoolName: pool1
+  ipRanges:
+    - 10.31.103.19-10.31.103.20
+  issuerName: vault-approle
+  approle:
+    secretName: cert-manager
+    secretNamespace: crossplane-system
+    pkiPath: pki/sign/sthings-vsphere.labul.sva.de
+    vaultAddr: https://vault-vsphere.labul.sva.de:8200
+    approleID: 1d42d7e7-8c14-e5f9-801d-b3ecef416616
+---
+# # PDNS
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: AnsibleRun
+metadata:
+  name: pdns-entry-vsphere-apptest
+  namespace: crossplane-system
+spec:
+  pipelineRunName: pdns-entry-vsphere-apptest-1
+  inventory:
+    - "all+[\"localhost\"]"
+  playbooks:
+    - "ansible/playbooks/pdns-ingress-entry.yaml"
+  ansibleVarsFile:
+    - "pdns_url+-https://pdns-vsphere.labul.sva.de:8443"
+    - "entry_zone+-sthings-vsphere.labul.sva.de."
+    - "ip_address+-10.31.103.19"
+    - "hostname+-apptest"
+  gitRepoUrl: https://github.com/stuttgart-things/stuttgart-things.git
+  gitRevision: main
+  providerRef:
+    name: kubernetes-incluster
+  vaultSecretName: vault
+  pipelineNamespace: tektoncd
+  workingImage: eu.gcr.io/stuttgart-things/sthings-ansible:9.2.0
+  roles:
+    - "https://github.com/stuttgart-things/install-configure-powerdns.git"
+---

@@ -1,6 +1,6 @@
 ---
 # GLOBAL
-packerVersion: 1.10.0
+packerVersion: 1.10.3
 vmWwarePluginMinVersion: 1.2.7
 ansibleProvisionerMinVersion: 1.1.1
 
@@ -33,6 +33,15 @@ sshTimeout: 30m
 sshHandshakeAttempts: 900
 createUser: true
 rebootBeforeAnsible: false
+
+# UBUNTU24=LATEST RELEASE
+ubuntuIsoUrl: https://releases.ubuntu.com/noble/ubuntu-24.04-live-server-amd64.iso
+ubuntuIsoChecksum: 8762f7e74e4d64d72fceb5f70682e6b069932deedb4949c6975d0f0fe0a91be3
+ubuntuPassword: ubuntu
+ubuntuUser: ubuntu
+ubuntuDiskSize: 15360
+ubuntuShellProvisioner: "sudo apt-get -y update; sudo apt-get -y upgrade; sudo apt-get -y install python3; sudo apt-get autoremove --purge -y && sudo apt-get autoclean -y && sudo apt-get clean -y; sudo truncate -s 0 /etc/machine-id && echo 'machine-id was reset successfully'; sudo systemctl stop systemd-resolved; sudo sed -i 's/#DNSStubListener=yes/DNSStubListener=no/g' /etc/systemd/resolved.conf; sudo rm /etc/resolv.conf; sudo ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf; sudo systemctl start systemd-resolved"
+ubuntuNetworkCard: vmxnet3
 
 # UBUNTU22
 ubuntu22IsoUrl: https://releases.ubuntu.com/jammy/ubuntu-22.04.3-live-server-amd64.iso

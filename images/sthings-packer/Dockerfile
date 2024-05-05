@@ -1,17 +1,17 @@
 ARG REGISTRY=eu.gcr.io
 ARG REPOSITORY=stuttgart-things
 ARG IMAGE=sthings-ansible
-ARG TAG=9.4.0
+ARG TAG=9.5.1
 
 FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
-LABEL version=1.10.2-9.4.0-2
+LABEL version=1.10.3-9.5.1
 
 USER root
 
-ARG PACKER_VERSION=1.10.2
+ARG PACKER_VERSION=1.10.3
 ARG MACHINE_SHOP_VERSION=v1.7.0
-ARG GOVC_VERSION=0.36.3
+ARG GOVC_VERSION=0.37.1
 
 RUN apk add --no-cache alpine-sdk build-base apk-tools alpine-conf busybox fakeroot syslinux xorriso squashfs-tools sudo mtools dosfstools grub-efi
 
