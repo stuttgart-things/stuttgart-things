@@ -6,6 +6,9 @@ ansibleProvisionerMinVersion: 1.1.1
 
 # KICKSTART
 kickstart:
+  ubuntu24:
+    template: ubuntu24.yaml
+    filename: user-data
   ubuntu22:
     template: ubuntu.yaml
     filename: user-data
