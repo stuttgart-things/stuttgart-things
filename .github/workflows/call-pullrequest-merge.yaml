@@ -1,0 +1,48 @@
+---
+name: Merge GitHub Pull Request
+on:
+  workflow_call:
+    inputs:
+      runs-on:
+        required: true
+        type: string
+      environment-name:
+        default: k8s
+        required: false
+        type: string
+      branch-name:
+        required: false
+        type: string
+      pr-id:
+        required: false
+        type: string
+
+jobs:
+  Merge-Pull-Request:
+    name: Merge Pull Request
+    runs-on: ${{ inputs.runs-on }}
+    environment: ${{ inputs.environment-name }}
+    container:
+      image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2-2
+    steps:
+      - name: Checkout code/branch
+        id: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: '0'
+          ref: ${{ inputs.branch-name }}
+
+      - name: Get token for creating pull request
+        uses: tibdex/github-app-token@v1
+        id: generate-token
+        with:
+          app_id: ${{ secrets.PULLREQUESTER_APP_ID }}
+          private_key: ${{ secrets.PULLREQUESTER_APP_KEY }}
+
+      - name: Merge PR
+        id: merge
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+        run: |
+          gh pr list
+          gh pr merge ${{ inputs.pr-id }} --auto --rebase --delete-branch
