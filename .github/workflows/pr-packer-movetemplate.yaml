@@ -57,7 +57,7 @@ jobs:
           echo "TEMPLATE_BUILD_FOLDER=/LabUL/vm/stuttgart-things/packer" >> $GITHUB_OUTPUT
           echo "GOLDEN_IMAGE_FOLDER=/LabUL/vm/stuttgart-things/vm-templates" >> $GITHUB_OUTPUT
           #echo "TARGET_NAME=sthings-r9" >> $GITHUB_OUTPUT
-          echo "TARGET_NAME=$(echo ${OUTPUT_NAME})" >> $GITHUB_OUTPUT
+          echo "TARGET_NAME=${OUTPUT_NAME}" >> $GITHUB_OUTPUT
         shell: bash
 
   Move-Vsphere-Template:
