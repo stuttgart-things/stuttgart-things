@@ -89,14 +89,14 @@ jobs:
             gather_facts: true
             become: true
             vars:
-              delay_time: 10
+              delay_time: 90
             tasks:
               - name: "Wait for SSH (delay: {{ delay_time }})"
                 ansible.builtin.wait_for:
                   host: "{{ item }}"
                   port: 22
                   delay: "{{ delay_time }}"
-                  timeout: 1200
+                  timeout: 2400
                   sleep: 10
                 with_items:
                   - "{{ groups['all'] }}"
