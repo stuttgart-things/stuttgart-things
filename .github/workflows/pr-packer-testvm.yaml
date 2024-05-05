@@ -100,6 +100,7 @@ jobs:
       environment-name: ${{ needs.Get-Packer-Config.outputs.environment }}
       private-key: "ssh/data/sthings:privateKey"
       requirements-file: ansible/requirements.yaml
+      wait-for-ssh: true
     secrets: inherit
 
   Destroy-Test-VM:
