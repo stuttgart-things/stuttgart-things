@@ -1,0 +1,47 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: xranchers.resources.stuttgart-things.com
+spec:
+  connectionSecretKeys:
+    - kubeconfig
+  group: resources.stuttgart-things.com
+  names:
+    kind: XRancher
+    plural: xranchers
+  claimNames:
+    kind: Rancher
+    plural: ranchers
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          description: A Rancher is a composite resource that represents a helm release for a rancher deployment
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                deploymentNamespace:
+                  type: string
+                  default: cattle-system
+                  description: namespace for tekton
+                clusterName:
+                  type: string
+                  description: cluster name/helm provider name
+                version:
+                  type: string
+                  default: 2.8.3
+                  description: helm chart version for rancher
+                hostname:
+                  type: string
+                  default: rancher-things
+                  description: hostname for rancher
+                domain:
+                  type: string
+                  description: domain for hostname for rancher
+              required:
+                - clusterName
