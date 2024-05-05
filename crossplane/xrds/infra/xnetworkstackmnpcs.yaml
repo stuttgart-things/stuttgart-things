@@ -1,0 +1,83 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: xnetworkstackmnpcs.resources.stuttgart-things.com
+spec:
+  connectionSecretKeys:
+    - kubeconfig
+  group: resources.stuttgart-things.com
+  names:
+    kind: XNetworkStackMNPC
+    plural: xnetworkstackmnpcs
+  claimNames:
+    kind: NetworkStackMNPC
+    plural: networkstackmnpcs
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          description: A NetworkStackMNPC is a composite resource that represents deployment of MetalLB, ingress-nginx, cert-manager, configuration and powerDns configuration
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                issuerName:
+                  type: string
+                  default: cert-manager-vault-approle
+                  description: name of cluster issuer
+                deploymentNamespace:
+                  type: string
+                  default: metallb-system
+                  description: namespace for metallb
+                clusterName:
+                  type: string
+                  default: in-cluster
+                  description: cluster name/helm provider name
+                ipPoolName:
+                  type: string
+                  default: ip-pool
+                  description: name of ip pool
+                version:
+                  type: string
+                  default: 5.0.3
+                  description: helm chart version for metallb
+                ipRanges:
+                  type: array
+                  description: IP-Ranges
+                  items:
+                    type: string
+                approle:
+                  type: object
+                  properties:
+                    vaultAddr:
+                      type: string
+                      description: vault addr
+                    approleID:
+                      type: string
+                      description: vault approle ID
+                    pkiPath:
+                      type: string
+                      description: pki path
+                    secretName:
+                      type: string
+                      default: cert-manager
+                      description: name of secret
+                    secretNamespace:
+                      type: string
+                      default: crossplane-system
+                      description: namespace of secret
+              required:
+                - clusterName
+                - ipRanges
+            status:
+              description: A Status represents the observed state
+              properties:
+                share:
+                  description: Freeform field containing status information
+                  type: object
+                  x-kubernetes-preserve-unknown-fields: true
+              type: object
