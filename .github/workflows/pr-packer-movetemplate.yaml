@@ -56,7 +56,6 @@ jobs:
           echo "WORKING_IMAGE=eu.gcr.io/stuttgart-things/sthings-packer:1.10.3-9.5.1" >> $GITHUB_OUTPUT
           echo "TEMPLATE_BUILD_FOLDER=/LabUL/vm/stuttgart-things/packer" >> $GITHUB_OUTPUT
           echo "GOLDEN_IMAGE_FOLDER=/LabUL/vm/stuttgart-things/vm-templates" >> $GITHUB_OUTPUT
-          #echo "TARGET_NAME=sthings-r9" >> $GITHUB_OUTPUT
           echo "TARGET_NAME=${OUTPUT_NAME}" >> $GITHUB_OUTPUT
         shell: bash
 
@@ -109,3 +108,16 @@ jobs:
         run: |
          govc object.mv ${TEMPLATE_BUILD_FOLDER}/${TARGET_NAME} ${GOLDEN_IMAGE_FOLDER}
          govc ls ${GOLDEN_IMAGE_FOLDER}
+
+  Merge-Pull-Request:
+    name: Merge Pull Request
+    uses: stuttgart-things/stuttgart-things/.github/workflows/call-pullrequest-merge.yaml@main
+    needs: 
+      - Get-Packer-Config
+      - Move-Vsphere-Template
+    with:
+      runs-on: ${{ needs.Get-Packer-Config.outputs.runs-on }}
+      environment: ${{ needs.Get-Packer-Config.outputs.lab }}-${{ needs.Get-Packer-Config.outputs.cloud }}
+      branch-name: ${{ github.event.pull_request.head.ref }}
+      pr-id: ${{ github.event.pull_request.number }}
+    secrets: inherit
