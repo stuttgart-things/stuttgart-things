@@ -1,6 +1,6 @@
 ---
 name: base_os
-version: 0.2.3
+version: 0.2.4
 namespace: sthings
 requirements: |
   roles:
@@ -31,26 +31,6 @@ playbooks:
           go_username: sthings
           go_usergroup: sthings
           go_userhome: /home/sthings
-
-          # CREATE USER(S) FOR GOLANG INSTALL AND SET EXPORTS
-          golang_users:
-            - username: horst
-              name: horst user
-              group: golang
-              uid: 1020
-              home: /home/horst
-              profile: |
-                alias ll='ls -ahl'
-                export GOROOT=/usr/local/go
-                export PATH=$GOROOT/bin:$PATH
-                export GOPATH=/home/horst/usr/local/go
-                export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
-              enable_ssh_tcp_forwarding: true
-              password: "!"
-
-          groups_golang:
-            - name: golang
-              gid: 31000
 
         pre_tasks:
           - name: Check if Golang is already installed
@@ -112,7 +92,7 @@ playbooks:
         roles:
           - role: sthings.base_os.download_install_binary
 
-  - name: install-configure-docker
+  - name: install_configure_docker
     play: |
       ---
       - hosts: "{{ target_host | default('all') }}"
@@ -142,6 +122,30 @@ playbooks:
           - role: sthings.base_os.create_os_user
 
 vars:
+
+  - name: golang-users
+    file: |
+      ---
+      # CREATE USER(S) FOR GOLANG INSTALL AND SET EXPORTS
+      golang_users:
+        - username: bill
+          name: bill user
+          group: golang
+          uid: 1020
+          home: /home/bill
+          profile: |
+            alias ll='ls -ahl'
+            export GOROOT=/usr/local/go
+            export PATH=$GOROOT/bin:$PATH
+            export GOPATH=/home/bill/usr/local/go
+            export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
+          enable_ssh_tcp_forwarding: true
+          password: "!"
+
+      groups_golang:
+        - name: golang
+          gid: 31000
+
   - name: sthings-users
     file: |
       ---
