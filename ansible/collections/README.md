@@ -10,7 +10,7 @@ https://github.com/stuttgart-things/stuttgart-things/releases/download/${VERSION
 
 ## PLAYBOOKS
 
-<details><summary>INSTALL CONFIGURE GOLANG</summary>
+<details><summary>INSTALL-CONFIGURE-GOLANG</summary>
 
 installs golang on target system(s)
 
@@ -29,9 +29,29 @@ ansible-playbook sthings.base_os.install_configure_golang \
 
 </details>
 
-<details><summary>INSTALL CONFIGURE DOCKER</summary>
+<details><summary>INSTALL-CONFIGURE-DOCKER</summary>
 
-<ADD DESCRIPTION>
+###ADD DESCRIPTION
+
+```bash
+
+```
+
+</details>
+
+<details><summary>DOWNLOAD-INSTALL-BINARY</summary>
+
+###ADD DESCRIPTION
+
+```bash
+
+```
+
+</details>
+
+<details><summary>CREATE-USERS</summary>
+
+###ADD DESCRIPTION
 
 ```bash
 
