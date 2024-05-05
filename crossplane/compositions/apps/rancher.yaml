@@ -1,0 +1,63 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: rancher
+  labels:
+    crossplane.io/xrd: xranchers.resources.stuttgart-things.com
+spec:
+  writeConnectionSecretsToNamespace: crossplane-system
+  compositeTypeRef:
+    apiVersion: resources.stuttgart-things.com/v1alpha1
+    kind: XRancher
+  resources:
+    - base:
+        apiVersion: helm.crossplane.io/v1beta1
+        kind: Release
+        metadata:
+          name: rancher
+          annotations:
+            crossplane.io/external-name: rancher
+        spec:
+          providerConfigRef:
+            name: in-cluster
+          forProvider:
+            chart:
+              name: rancher
+              repository: https://releases.rancher.com/server-charts/stable
+              version: 2.8.3
+            namespace: cattle-system
+            insecureSkipTLSVerify: false
+            skipCreateNamespace: false
+            wait: true
+            skipCRDs: false
+            values:
+              global:
+                cattle:
+                  psp:
+                    enabled: false
+              bootstrapPassword: Atlan7is2024
+              hostname: rancher-things.apptest.sthings-vsphere.labul.sva.de
+              privateCA: true
+              ingress:
+                enabled: true
+                ingressClassName: nginx
+                servicePort: 80
+                tls:
+                  source: secret
+                  secretName: rancher-things-tls
+      patches:
+        - type: CombineFromComposite
+          combine:
+            variables:
+              - fromFieldPath: spec.clusterName
+            strategy: string
+            string:
+              fmt: "rancher-%s"
+          toFieldPath: metadata.name
+        - fromFieldPath: spec.deploymentNamespace
+          toFieldPath: spec.forProvider.namespace
+        - fromFieldPath: spec.clusterName
+          toFieldPath: spec.providerConfigRef.name
+        - fromFieldPath: spec.version
+          toFieldPath: spec.forProvider.chart.version
