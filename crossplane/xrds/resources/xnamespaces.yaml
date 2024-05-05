@@ -25,6 +25,10 @@ spec:
             spec:
               type: object
               properties:
+                clusterName:
+                  type: string
+                  default: in-cluster
+                  description: cluster name/helm provider name
                 name:
                   type: string
                   description: namespace name
