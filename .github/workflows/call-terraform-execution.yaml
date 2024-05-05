@@ -154,8 +154,8 @@ jobs:
         id: pr
         uses: peter-evans/create-pull-request@v6.0.2
         with:
-          commit-message: '[CI][TERRAFORM] - Deleted terraform config files ${{ inputs.lab }}-${{ inputs.cloud }}-${{ inputs.vm-name }}'
-          title: Deleted Terraform Config Files ${{ inputs.lab }}-${{ inputs.cloud }} ${{ inputs.vm-name }}
+          commit-message: '[CI][TERRAFORM] - Deleted terraform config file - ${{ inputs.folder }}'
+          title: Deleted Terraform Config Files - ${{ inputs.folder }}
           delete-branch: true
           token: ${{ steps.generate-token.outputs.token }}
-          branch: ${{ inputs.lab }}-${{ inputs.cloud }} ${{ inputs.vm-name }}
+          branch: ${{ inputs.folder }}
