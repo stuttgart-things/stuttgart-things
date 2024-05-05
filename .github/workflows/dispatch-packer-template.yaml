@@ -77,7 +77,7 @@ jobs:
           --defaults packer/environments/${{ inputs.lab }}-${{ inputs.cloud }}.yaml \
           --brackets square \
           --values "packerConfigMountPath=., ansiblePlayMountPath=., ansibleOsProvisioning=${{ inputs.ansible-provisioning }}, osVersion=${{ inputs.os-version }}" \
-          --destination ${{ env.WORKING_DIR }}//${{ inputs.os-version }}-${{ inputs.ansible-provisioning }}.pkr.hcl \
+          --destination ${{ env.WORKING_DIR }}/${{ inputs.os-version }}-${{ inputs.ansible-provisioning }}.pkr.hcl \
           --output file
 
       - name: Render Kickstart w/ machineShop
@@ -165,7 +165,7 @@ jobs:
           --template packer/README.md.tpl \
           --output file \
           --brackets square \
-          --values "osVersion=${{ inputs.os-version }}, lab=${{ inputs.lab }}, cloud=${{ inputs.cloud }}, ansibleOsProvisioning=${{ inputs.ansible-provisioning }}, hclConfig=${{ env.WORKING_DIR }}//${{ inputs.os-version }}-${{ inputs.ansible-provisioning }}, date=${DATE}" \
+          --values "osVersion=${{ inputs.os-version }}, lab=${{ inputs.lab }}, cloud=${{ inputs.cloud }}, ansibleOsProvisioning=${{ inputs.ansible-provisioning }}, hclConfig=${{ env.WORKING_DIR }}/${{ inputs.os-version }}-${{ inputs.ansible-provisioning }}, date=${DATE}" \
           --destination ${{ env.WORKING_DIR }}/README.md
 
       - name: Get token for creating pull request
