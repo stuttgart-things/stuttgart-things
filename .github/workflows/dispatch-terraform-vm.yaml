@@ -156,11 +156,13 @@ jobs:
                 'labul-vsphere': {
                     'ubuntu22': 'sthings-u22',
                     'ubuntu23': 'sthings-u23',
+                    'ubuntu24': 'sthings-u24',
                     'rocky9': 'sthings-r9'
                 },
                 'labda-vsphere': {
                     'ubuntu22': 'ubuntu22',
                     'ubuntu23': 'ubuntu23',
+                    'ubuntu24': 'sthings-u24',
                     'rocky9': 'rocky9'
                 }
             }
