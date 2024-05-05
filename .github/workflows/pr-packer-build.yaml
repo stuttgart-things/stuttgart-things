@@ -75,7 +75,7 @@ jobs:
         id: getTemplateTargetName
         shell: bash
         run: |
-          OUTPUT_NAME=$(yq -r ".output.${{ needs.Get-Packer-Config.outputs.os-version }}.name" packer/environments/${{ needs.Get-Packer-Config.outputs.lab }}-${{ needs.Get-Packer-Config.outputs.cloud }}.yaml)
+          OUTPUT_NAME=$(yq -r ".output.${{ needs.Get-Packer-Config.outputs.os-version }}.${{ needs.Get-Packer-Config.outputs.provisioning }}" packer/environments/${{ needs.Get-Packer-Config.outputs.lab }}-${{ needs.Get-Packer-Config.outputs.cloud }}.yaml)
           echo "OUTPUT_NAME=$(echo ${OUTPUT_NAME})" >> $GITHUB_OUTPUT
 
       - name: Upload Packer logfile
