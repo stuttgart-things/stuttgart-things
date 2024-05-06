@@ -1,6 +1,6 @@
 ---
 name: base_os
-version: 0.2.4
+version: 0.2.5
 namespace: sthings
 requirements: |
   roles:
@@ -99,12 +99,10 @@ playbooks:
       - hosts: "{{ target_host | default('all') }}"
         become: true
         vars:
-          docker_install_compose: true 
-          docker_version: '' # leave empty for latest version or set e.g. '=5:23.0.6-1~ubuntu.23.04~lunar'
-  
-          install_kind: true
-          kind_version: 0.22.0
-          kubectl_version: 1.30.0
+          docker_install_compose: true  
+          install_kind: false
+          #kind_version: 0.22.0
+          #kubectl_version: 1.30.0
 
         roles:
           - role: sthings.base_os.install_configure_docker
