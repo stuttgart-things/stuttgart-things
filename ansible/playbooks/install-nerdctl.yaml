@@ -43,6 +43,12 @@
         chmod +s /usr/local/bin/nerdctl
         export PATH=/usr/local/bin:$PATH
 
+    - name: Put SELinux in permissive mode
+      ansible.posix.selinux:
+        policy: targeted
+        state: permissive
+      when: ansible_os_family == 'RedHat'
+
     - name: Enable systemd services
       ansible.builtin.systemd_service:
         name: "{{ item }}"
@@ -52,4 +58,9 @@
       become: true
       with_items:
         - "{{ systemd_services }}"
-      when: ansible_os_family == 'Debian'
+
+    - name: Put SELinux in enforcing mode
+      ansible.posix.selinux:
+        policy: targeted
+        state: enforcing
+      when: ansible_os_family == 'RedHat'
