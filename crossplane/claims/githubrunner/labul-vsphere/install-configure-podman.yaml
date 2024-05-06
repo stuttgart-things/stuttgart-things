@@ -6,4 +6,4 @@ metadata:
   namespace: crossplane-system
 spec:
   repository: install-configure-podman
-  clusterConfig: cicd
+  clusterConfig: labda-test

@@ -11,58 +11,97 @@ spec:
     apiVersion: resources.stuttgart-things.com/v1alpha1
     kind: XVault
   resources:
-    - base:
-        apiVersion: helm.crossplane.io/v1beta1
-        kind: Release
-        metadata:
-          name: vault
-          annotations:
-            crossplane.io/external-name: vault
-        spec:
-          providerConfigRef:
-            name: in-cluster
-          forProvider:
-            chart:
-              name: vault
-              repository: https://helm.releases.hashicorp.com
-              version: 0.28.0
-            namespace: vault
-            insecureSkipTLSVerify: false
-            skipCreateNamespace: false
-            wait: true
-            skipCRDs: false
-            values:
-              injector:
-                enabled: false
-              server:
-                enabled: true
-                dataStorage:
-                  enabled: true
-                  storageClass: trident
-                  size: 1Gi
-                ingress:
-                  enabled: true
-                  hosts:
-                    - host: vault.apptest.sthings-vsphere.labul.sva.de
-                  tls:
-                    - hosts:
-                        - vault.apptest.sthings-vsphere.labul.sva.de
-                      secretName: vault-ingress-tls
-                  ingressClassName: nginx
-              csi:
-                enabled: true
+    - name: vault-namespace
+      base:
+        apiVersion: resources.stuttgart-things.com/v1alpha1
+        kind: XNamespace
       patches:
-        - type: CombineFromComposite
-          combine:
-            variables:
-              - fromFieldPath: spec.clusterName
-            strategy: string
-            string:
-              fmt: "vault-%s"
-          toFieldPath: metadata.name
-        - fromFieldPath: spec.deploymentNamespace
-          toFieldPath: spec.forProvider.namespace
-        - fromFieldPath: spec.clusterName
-          toFieldPath: spec.providerConfigRef.name
-        - fromFieldPath: spec.version
-          toFieldPath: spec.forProvider.chart.version
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.deploymentNamespace
+          toFieldPath: spec.name
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.clusterName
+          toFieldPath: spec.clusterName
+    - name: vault-ingresscert
+      base:
+        apiVersion: resources.stuttgart-things.com/v1alpha1
+        kind: XIngressCertificate
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.deploymentNamespace
+          toFieldPath: spec.namespace
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.clusterName
+          toFieldPath: spec.clusterName
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.cert.issuerName
+          toFieldPath: spec.issuerName
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.cert.issuerKind
+          toFieldPath: spec.issuerKind
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.cert.SecretName
+          toFieldPath: spec.SecretName
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.cert.clusterName
+          toFieldPath: spec.hostName
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.cert.clusterName
+          toFieldPath: spec.domainName
+
+
+    # - base:
+    #     apiVersion: helm.crossplane.io/v1beta1
+    #     kind: Release
+    #     metadata:
+    #       name: vault
+    #       annotations:
+    #         crossplane.io/external-name: vault
+    #     spec:
+    #       providerConfigRef:
+    #         name: in-cluster
+    #       forProvider:
+    #         chart:
+    #           name: vault
+    #           repository: https://helm.releases.hashicorp.com
+    #           version: 0.28.0
+    #         namespace: vault
+    #         insecureSkipTLSVerify: false
+    #         skipCreateNamespace: false
+    #         wait: true
+    #         skipCRDs: false
+    #         values:
+    #           injector:
+    #             enabled: false
+    #           server:
+    #             enabled: true
+    #             dataStorage:
+    #               enabled: true
+    #               storageClass: trident
+    #               size: 1Gi
+    #             ingress:
+    #               enabled: true
+    #               hosts:
+    #                 - host: vault.apptest.sthings-vsphere.labul.sva.de
+    #               tls:
+    #                 - hosts:
+    #                     - vault.apptest.sthings-vsphere.labul.sva.de
+    #                   secretName: vault-ingress-tls
+    #               ingressClassName: nginx
+    #           csi:
+    #             enabled: true
+    #   patches:
+    #     - type: CombineFromComposite
+    #       combine:
+    #         variables:
+    #           - fromFieldPath: spec.clusterName
+    #         strategy: string
+    #         string:
+    #           fmt: "vault-%s"
+    #       toFieldPath: metadata.name
+    #     - fromFieldPath: spec.deploymentNamespace
+    #       toFieldPath: spec.forProvider.namespace
+    #     - fromFieldPath: spec.clusterName
+    #       toFieldPath: spec.providerConfigRef.name
+    #     - fromFieldPath: spec.version
+    #       toFieldPath: spec.forProvider.chart.version

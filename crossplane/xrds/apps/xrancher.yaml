@@ -28,7 +28,7 @@ spec:
                 deploymentNamespace:
                   type: string
                   default: cattle-system
-                  description: namespace for tekton
+                  description: namespace for rancher
                 clusterName:
                   type: string
                   description: cluster name/helm provider name
