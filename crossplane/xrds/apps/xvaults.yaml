@@ -1,0 +1,47 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: xvaults.resources.stuttgart-things.com
+spec:
+  connectionSecretKeys:
+    - kubeconfig
+  group: resources.stuttgart-things.com
+  names:
+    kind: XVault
+    plural: xvaults
+  claimNames:
+    kind: Vault
+    plural: vaults
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          description: A Vault is a composite resource that represents a helm release for a vault deployment
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                deploymentNamespace:
+                  type: string
+                  default: vault
+                  description: namespace for vault
+                clusterName:
+                  type: string
+                  description: cluster name/helm provider name
+                # version:
+                #   type: string
+                #   default: 0.28.0
+                #   description: helm chart version for vault
+                # hostname:
+                #   type: string
+                #   default: vault
+                #   description: hostname for vault
+                # domain:
+                #   type: string
+                #   description: domain for hostname for vault
+              required:
+                - clusterName
