@@ -11,9 +11,17 @@ on:
         required: false
         type: string
       branch-name:
-        required: false
+        required: true
         type: string
       pr-id:
+        required: true
+        type: string
+      github-group:
+        default: stuttgart-things
+        required: false
+        type: string
+      github-repo:
+        default: stuttgart-things
         required: false
         type: string
 
@@ -44,5 +52,6 @@ jobs:
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
         run: |
+          git config --global --add safe.directory /__w/${{ inputs.github-group }}/${{ inputs.github-repo }}
           gh pr list
           gh pr merge ${{ inputs.pr-id }} --auto --rebase --delete-branch
