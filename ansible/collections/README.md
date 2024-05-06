@@ -15,17 +15,23 @@ https://github.com/stuttgart-things/stuttgart-things/releases/download/${VERSION
 installs golang on target system(s)
 
 ```bash
-# DEPLOYMENT WITH DEFAULT OPTIONS
+# DEPLOYMENT WITH DEFAULT OPTIONS (STHINGS USER EXPORTS)
 ansible-playbook sthings.base_os.install_configure_golang -vv -i inventory
 
-# DEPLOYMENT WITH OVERWRITES
+# DEPLOYMENT WITH OVERWRITES (DIFFRENT USER AND SPECIFY GOLANG VERSION)
 ansible-playbook sthings.base_os.install_configure_golang \
 -e golang_version=1.22.2 \
 -e go_username=elon \
 -e go_usergroup=dev \
 -e go_userhome=/home/elon \
--vv -i inventory 
+-vv -i inventory
+
+# ADD TO PLAY AND README FOR USERS DICT
 ```
+
+</details>
+
+<details><summary>INSTALL-CONFIGURE-NERDCTL</summary>
 
 </details>
 
@@ -34,7 +40,12 @@ ansible-playbook sthings.base_os.install_configure_golang \
 ###ADD DESCRIPTION
 
 ```bash
+# DEPLOYMENT OF LATEST RUNTIME, CLI + COMPOSE
+ansible-playbook sthings.base_os.install_configure_docker -vv -i inventory
 
+# DEPLOYMENT OF LATEST RUNTIME, CLI, COMPOSE + KIND CLUSTER
+ansible-playbook sthings.base_os.install_configure_docker \
+-vv -i inventory install_kind=true
 ```
 
 </details>
