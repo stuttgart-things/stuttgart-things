@@ -1,6 +1,6 @@
 ---
 name: base_os
-version: 0.2.6
+version: 0.2.7
 namespace: sthings
 requirements: |
   roles:
