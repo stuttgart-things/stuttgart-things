@@ -89,7 +89,7 @@ jobs:
             gather_facts: false
             become: true
             vars:
-              delay_time: 90
+              delay_time: 15
             tasks:
               - name: "Wait for SSH (delay: {{ delay_time }})"
                 delegate_to: localhost
