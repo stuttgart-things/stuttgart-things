@@ -164,7 +164,7 @@ jobs:
                     'ubuntu23': 'ubuntu23',
                     'ubuntu24': 'sthings-u24',
                     'rocky9': 'rocky9'
-                }
+                },
                 'labda-pve': {
                     'ubuntu22': 'ubuntu22',
                     'ubuntu23': 'ubuntu23',
