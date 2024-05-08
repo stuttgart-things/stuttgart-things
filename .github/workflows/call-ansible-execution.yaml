@@ -79,6 +79,14 @@ jobs:
           echo ${{ inputs.inventory }} | tr ',' '\n' > inventory
           printf "[all:vars]\nansible_user=${{ inputs.ansible-user }}\n" >> inventory
           cat inventory
+
+          STR='GNU/Linux is an operating system'
+          SUB='Linux'
+
+          if [[ "$STR" =~ .*"$SUB".* ]]; then
+            echo "It's there."
+          fi
+
         shell: bash
 
       - name: Wait for ssh
