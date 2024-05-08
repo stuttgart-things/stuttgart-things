@@ -82,7 +82,7 @@ jobs:
             echo ${{ inputs.inventory }} | tr ',' '\n' > inventory
           fi
 
-          [all:vars]\nansible_user=${{ inputs.ansible-user }}\n" >> inventory
+          printf "[all:vars]\nansible_user=${{ inputs.ansible-user }}\n" >> inventory
           cat inventory
         shell: bash
 
