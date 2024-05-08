@@ -92,6 +92,7 @@ jobs:
               delay_time: 90
             tasks:
               - name: "Wait for SSH (delay: {{ delay_time }})"
+                delegate_to: localhost
                 ansible.builtin.wait_for:
                   host: "{{ item }}"
                   port: 22
