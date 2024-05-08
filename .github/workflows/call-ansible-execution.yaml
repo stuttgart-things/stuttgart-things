@@ -77,12 +77,12 @@ jobs:
       - name: Create Inventory
         run: |
           if [[ $string == *'['* ]] || [[ $string == *']'* ]]; then
-            echo -e ${{ inputs.inventory }} > inventory
+            printf "${{ inputs.inventory }}" > inventory
           else
             echo ${{ inputs.inventory }} | tr ',' '\n' > inventory
           fi
 
-          printf "[all:vars]\nansible_user=${{ inputs.ansible-user }}\n" >> inventory
+          [all:vars]\nansible_user=${{ inputs.ansible-user }}\n" >> inventory
           cat inventory
         shell: bash
 
