@@ -3,29 +3,21 @@ name: Dispatch Ansible Execution
 on:
   workflow_dispatch:
     inputs:
-      runner:
-        description: RUNNER NAME
+      inventory:
+        description: INVENTORY
         type: string
-        default: ghr-stuttgart-things-labda-test
-      branch-name:
-        type: string
-        description: BRANCH NAME
-        default: main
-      working-image:
-        description: WORKING IMAGE
-        type: string
-        default: eu.gcr.io/stuttgart-things/sthings-ansible:9.5.1
       playbook:
         description: PLAYBOOK NAME
         type: string
         default: ansible/playbooks/base-os.yaml
-      inventory:
-        description: INVENTORY
+      extra-vars:
         type: string
-      environment-name:
+        description: EXTRA VARS
+        default: "-e target_host=all -e reboot_all=false"
+      branch-name:
         type: string
-        description: ENVIRONMENT NAME
-        default: labul-vsphere
+        description: BRANCH NAME
+        default: main
       private-key:
         type: string
         description: Private Key
@@ -34,10 +26,18 @@ on:
         type: string
         description: Requirements File
         default: ansible/requirements.yaml
-      extra-vars:
+      environment-name:
         type: string
-        description: extra vars
-        default: "-e target_host=all -e reboot_all=false"
+        description: ENVIRONMENT NAME
+        default: labul-vsphere
+      runner:
+        description: RUNNER NAME
+        type: string
+        default: ghr-stuttgart-things-labda-test
+      working-image:
+        description: WORKING IMAGE
+        type: string
+        default: eu.gcr.io/stuttgart-things/sthings-ansible:9.5.1
 
 jobs:
   execute-ansible:
