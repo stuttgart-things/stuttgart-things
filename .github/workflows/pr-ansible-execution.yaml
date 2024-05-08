@@ -57,33 +57,13 @@ jobs:
 
   Merge-Ansible-PR:
     name: Merge Ansible PR
-    environment: k8s
-    container:
-      image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2-2
+    uses: stuttgart-things/stuttgart-things/.github/workflows/call-pullrequest-merge.yaml@main
     needs:
       - Get-Ansible-Config
       - Execute-Ansible-Provisioning
-    runs-on: ghr-stuttgart-things-labda-test
-    steps:
-      - name: Checkout code/branch
-        id: checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: '0'
-          ref: ${{ github.event.pull_request.head.ref }}
-
-      - name: Get token for merge request
-        uses: tibdex/github-app-token@v1
-        id: generate-token
-        with:
-          app_id: ${{ secrets.PULLREQUESTER_APP_ID }}
-          private_key: ${{ secrets.PULLREQUESTER_APP_KEY }}
-
-      - name: Merge PR
-        id: merge
-        env:
-          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
-        run: |
-          git config --global --add safe.directory /__w/stuttgart-things/stuttgart-things
-          gh pr list
-          gh pr merge ${{ github.event.pull_request.number }} --auto --rebase --delete-branch
+    with:
+      runs-on: ghr-stuttgart-things-labda-test
+      environment-name: k8s
+      branch-name: ${{ github.event.pull_request.head.ref }}
+      pr-id: ${{ github.event.pull_request.number }}
+    secrets: inherit
