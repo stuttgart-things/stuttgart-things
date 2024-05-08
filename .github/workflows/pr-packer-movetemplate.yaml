@@ -59,62 +59,62 @@ jobs:
           echo "TARGET_NAME=${OUTPUT_NAME}" >> $GITHUB_OUTPUT
         shell: bash
 
-  Move-Vsphere-Template:
-    needs: Get-Packer-Config
-    runs-on: ${{ needs.Get-Packer-Config.outputs.runs-on }}
-    environment: ${{ needs.Get-Packer-Config.outputs.lab }}-${{ needs.Get-Packer-Config.outputs.cloud }}
-    container:
-      image: ${{ needs.Get-Packer-Config.outputs.working-image }}
-    env:
-      GOVC_INSECURE: TRUE
-      VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
-      VAULT_AUTH_METHOD: ${{ secrets.VAULT_AUTH_METHOD }}
-      VAULT_NAMESPACE: ${{ secrets.VAULT_NAMESPACE }}
-      VAULT_ROLE_ID: ${{ secrets.VAULT_ROLE_ID }}
-      VAULT_SECRET_ID: ${{ secrets.VAULT_SECRET_ID }}
-      TEMPLATE_BUILD_FOLDER: ${{ needs.Get-Packer-Config.outputs.template-build-folder }}
-      GOLDEN_IMAGE_FOLDER: ${{ needs.Get-Packer-Config.outputs.golden-image-folder }}
-      TARGET_NAME: ${{ needs.Get-Packer-Config.outputs.target-template-name }}
-    steps:
-      - name: Set govc crendentials to env
-        id: set
-        run: |
-          USER=$(machineShop get --path cloud/data/vsphere:username | tail -n +8)
-          PW=$(machineShop get --path cloud/data/vsphere:password | tail -n +8)
-          FQDN=$(machineShop get --path cloud/data/vsphere:ip | tail -n +8)
-          echo "GOVC_URL=https://${USER}:${PW}@${FQDN}/sdk" >> $GITHUB_ENV
+  # Move-Vsphere-Template:
+  #   needs: Get-Packer-Config
+  #   runs-on: ${{ needs.Get-Packer-Config.outputs.runs-on }}
+  #   environment: ${{ needs.Get-Packer-Config.outputs.lab }}-${{ needs.Get-Packer-Config.outputs.cloud }}
+  #   container:
+  #     image: ${{ needs.Get-Packer-Config.outputs.working-image }}
+  #   env:
+  #     GOVC_INSECURE: TRUE
+  #     VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
+  #     VAULT_AUTH_METHOD: ${{ secrets.VAULT_AUTH_METHOD }}
+  #     VAULT_NAMESPACE: ${{ secrets.VAULT_NAMESPACE }}
+  #     VAULT_ROLE_ID: ${{ secrets.VAULT_ROLE_ID }}
+  #     VAULT_SECRET_ID: ${{ secrets.VAULT_SECRET_ID }}
+  #     TEMPLATE_BUILD_FOLDER: ${{ needs.Get-Packer-Config.outputs.template-build-folder }}
+  #     GOLDEN_IMAGE_FOLDER: ${{ needs.Get-Packer-Config.outputs.golden-image-folder }}
+  #     TARGET_NAME: ${{ needs.Get-Packer-Config.outputs.target-template-name }}
+  #   steps:
+  #     - name: Set govc crendentials to env
+  #       id: set
+  #       run: |
+  #         USER=$(machineShop get --path cloud/data/vsphere:username | tail -n +8)
+  #         PW=$(machineShop get --path cloud/data/vsphere:password | tail -n +8)
+  #         FQDN=$(machineShop get --path cloud/data/vsphere:ip | tail -n +8)
+  #         echo "GOVC_URL=https://${USER}:${PW}@${FQDN}/sdk" >> $GITHUB_ENV
 
-      - name: Check template paths
-        id: check
-        run: |
-          echo 'Check Build Folder'
-          govc ls ${TEMPLATE_BUILD_FOLDER}
-          echo 'Check Golden Image Folder'
-          govc ls ${GOLDEN_IMAGE_FOLDER}
+  #     - name: Check template paths
+  #       id: check
+  #       run: |
+  #         echo 'Check Build Folder'
+  #         govc ls ${TEMPLATE_BUILD_FOLDER}
+  #         echo 'Check Golden Image Folder'
+  #         govc ls ${GOLDEN_IMAGE_FOLDER}
 
-      - name: Rename newly build image in build folder to golden image name
-        id: renameNew
-        run: |
-         govc object.rename ${TEMPLATE_BUILD_FOLDER}/${{ needs.Get-Packer-Config.outputs.template-name }} ${TARGET_NAME}
-         govc ls ${TEMPLATE_BUILD_FOLDER}
+  #     - name: Rename newly build image in build folder to golden image name
+  #       id: renameNew
+  #       run: |
+  #        govc object.rename ${TEMPLATE_BUILD_FOLDER}/${{ needs.Get-Packer-Config.outputs.template-name }} ${TARGET_NAME}
+  #        govc ls ${TEMPLATE_BUILD_FOLDER}
 
-      - name: Delete existing golden image
-        id: deleteExisting
-        run: |
-         govc object.destroy ${GOLDEN_IMAGE_FOLDER}/${TARGET_NAME} || true # delete if exists or not
+  #     - name: Delete existing golden image
+  #       id: deleteExisting
+  #       run: |
+  #        govc object.destroy ${GOLDEN_IMAGE_FOLDER}/${TARGET_NAME} || true # delete if exists or not
 
-      - name: Move newly build image to target folder
-        id: moveNew
-        run: |
-         govc object.mv ${TEMPLATE_BUILD_FOLDER}/${TARGET_NAME} ${GOLDEN_IMAGE_FOLDER}
-         govc ls ${GOLDEN_IMAGE_FOLDER}
+  #     - name: Move newly build image to target folder
+  #       id: moveNew
+  #       run: |
+  #        govc object.mv ${TEMPLATE_BUILD_FOLDER}/${TARGET_NAME} ${GOLDEN_IMAGE_FOLDER}
+  #        govc ls ${GOLDEN_IMAGE_FOLDER}
 
   Merge-Pull-Request:
     name: Merge Pull Request
     uses: stuttgart-things/stuttgart-things/.github/workflows/call-pullrequest-merge.yaml@main
     needs:
       - Get-Packer-Config
-      - Move-Vsphere-Template
+      # - Move-Vsphere-Template
     with:
       runs-on: ${{ needs.Get-Packer-Config.outputs.runs-on }}
       environment-name: ${{ needs.Get-Packer-Config.outputs.lab }}-${{ needs.Get-Packer-Config.outputs.cloud }}
