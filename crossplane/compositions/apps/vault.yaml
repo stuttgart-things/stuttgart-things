@@ -26,6 +26,9 @@ spec:
       base:
         apiVersion: resources.stuttgart-things.com/v1alpha1
         kind: XIngressCertificate
+        references:
+          - dependsOn:
+              name: vault-namespace
       patches:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.deploymentNamespace
@@ -40,13 +43,13 @@ spec:
           fromFieldPath: spec.cert.issuerKind
           toFieldPath: spec.issuerKind
         - type: FromCompositeFieldPath
-          fromFieldPath: spec.cert.SecretName
-          toFieldPath: spec.SecretName
+          fromFieldPath: spec.cert.secretName
+          toFieldPath: spec.certSecretName
         - type: FromCompositeFieldPath
-          fromFieldPath: spec.cert.clusterName
+          fromFieldPath: spec.hostName
           toFieldPath: spec.hostName
         - type: FromCompositeFieldPath
-          fromFieldPath: spec.cert.clusterName
+          fromFieldPath: spec.domainName
           toFieldPath: spec.domainName
 
 

@@ -6,7 +6,7 @@ on:
       runner:
         description: RUNNER NAME
         type: string
-        default: ghr-stuttgart-things-sthings-cicd
+        default: ghr-stuttgart-things-labda-test
       branch-name:
         type: string
         description: BRANCH NAME

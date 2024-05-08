@@ -16,7 +16,7 @@ jobs:
       pull-requests: write
       repository-projects: write
       id-token: write
-    runs-on: ghr-stuttgart-things-sthings-cicd
+    runs-on: ghr-stuttgart-things-labda-test
     steps:
       - name: Checkout code/branch
         id: checkout

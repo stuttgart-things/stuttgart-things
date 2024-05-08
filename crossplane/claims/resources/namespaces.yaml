@@ -6,4 +6,4 @@ metadata:
   namespace: crossplane-system
 spec:
   clusterName: labda-test
-  name: test
+  name: vault

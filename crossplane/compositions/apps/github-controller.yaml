@@ -25,7 +25,7 @@ spec:
             chart:
               name: gha-runner-scale-set-controller
               repository: oci://ghcr.io/actions/actions-runner-controller-charts
-              version: 0.8.0
+              version: 0.9.1
               pullSecretRef:
                 name: ghcr
                 namespace: crossplane-system
