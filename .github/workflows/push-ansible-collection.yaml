@@ -17,7 +17,7 @@ jobs:
     name: Build Ansible Collection
     uses: stuttgart-things/stuttgart-things/.github/workflows/call-ansible-collection.yaml@main
     with:
-      runs-on: ghr-stuttgart-things-sthings-cicd
+      runs-on: ghr-stuttgart-things-labda-test
       environment-name: k8s
       continue-error: false
       collection-file: ansible/collections/base-os.yaml
