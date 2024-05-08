@@ -13,8 +13,22 @@ requirements: |
     - src: https://github.com/stuttgart-things/install-configure-docker.git
       scm: git
       version: 2024.04.30
-
+    - src: https://github.com/stuttgart-things/install-configure-docker.git
+      scm: git
+      version: 2024.04.30
+    - src: https://github.com/stuttgart-things/install-configure-podman.git
+      scm: git
+      version: 2024.05.08
+      
 playbooks:
+  - name: install_configure_podman.yaml
+    play: |
+      ---
+      - hosts: "{{ target_host | default('all') }}"
+        become: true
+
+        roles:
+          - role: sthings.base_os.install_configure_podman
   - name: install_configure_golang
     play: |
       ---
