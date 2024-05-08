@@ -33,10 +33,11 @@ on:
         required: false
         type: string
         default: sthings
-      wait-for-ssh:
+      extra-vars:
         required: false
-        type: boolean
-        default: false
+        type: string
+        default: target_host=all
+
 jobs:
   execute-ansible:
     runs-on: ${{ inputs.runs-on }}
@@ -70,7 +71,7 @@ jobs:
         run: |
           mkdir ~/.ssh/
           machineShop get --path "${{ inputs.private-key }}" --b64 true | tail -n +8 > ~/.ssh/id_rsa
-          chmod 0600 ~/.ssh/id_rsa 
+          chmod 0600 ~/.ssh/id_rsa
         shell: bash
 
       - name: Create Inventory
@@ -81,7 +82,6 @@ jobs:
         shell: bash
 
       - name: Wait for ssh
-        if: ${{ (inputs.wait-for-ssh == true || inputs.wait-for-ssh == 'true') }}
         run: |
           cat << EOF > ./wait-for-ssh.yaml
           ---
@@ -107,6 +107,6 @@ jobs:
 
       - name: Execute Ansible
         run: |
-          ansible-galaxy install -r ${{ inputs.requirements-file }} 
-          ansible-playbook ${{ inputs.playbook }} -i inventory -e target_host=all -vv -e reboot_all=false
+          ansible-galaxy install -r ${{ inputs.requirements-file }}
+          ansible-playbook ${{ inputs.playbook }} -i inventory ${{ inputs.extra-vars }} -vv
         shell: bash

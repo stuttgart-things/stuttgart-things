@@ -34,6 +34,10 @@ on:
         type: string
         description: Requirements File
         default: ansible/requirements.yaml
+      extra-vars:
+        type: string
+        description: extra vars
+        default: "-e target_host=all -e reboot_all=false"
 
 jobs:
   execute-ansible:
@@ -48,5 +52,5 @@ jobs:
       environment-name: ${{ inputs.environment-name }}
       private-key: ${{ inputs.private-key }}
       requirements-file: ${{ inputs.requirements-file }}
-      wait-for-ssh: true
+      extra-vars: ${{ inputs.extra-vars }}
     secrets: inherit
