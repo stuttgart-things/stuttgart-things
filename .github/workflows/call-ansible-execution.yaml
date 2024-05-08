@@ -77,7 +77,7 @@ jobs:
       - name: Create Inventory
         run: |
           if [[ $string == *'['* ]] || [[ $string == *']'* ]]; then
-            echo -e '${{ inputs.inventory }}' > inventory
+            echo ${{ inputs.inventory }} | tr '+' '\n' > inventory
           else
             echo ${{ inputs.inventory }} | tr ',' '\n' > inventory
           fi
