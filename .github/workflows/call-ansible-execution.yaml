@@ -76,17 +76,14 @@ jobs:
 
       - name: Create Inventory
         run: |
-          echo ${{ inputs.inventory }} | tr ',' '\n' > inventory
-          printf "[all:vars]\nansible_user=${{ inputs.ansible-user }}\n" >> inventory
-          cat inventory
-
-          STR='GNU/Linux is an operating system'
-          SUB='Linux'
-
-          if [[ "$STR" =~ .*"$SUB".* ]]; then
-            echo "It's there."
+          if [[ $string == *'['* ]] || [[ $string == *']'* ]]; then
+            printf ${{ inputs.inventory }} > inventory
+          else
+            echo ${{ inputs.inventory }} | tr ',' '\n' > inventory
           fi
 
+          printf "[all:vars]\nansible_user=${{ inputs.ansible-user }}\n" >> inventory
+          cat inventory
         shell: bash
 
       - name: Wait for ssh
