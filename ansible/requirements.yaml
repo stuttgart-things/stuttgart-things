@@ -36,3 +36,5 @@ collections:
     version: 4.3.0
   - name: community.hashi_vault
     version: 6.2.0
+  - name: https://github.com/stuttgart-things/stuttgart-things/releases/download/0.2.7/sthings-base_os-0.2.7.tar.gz
+  - name: https://github.com/stuttgart-things/deploy-configure-rke/releases/download/1.29.2-4/sthings-deploy_rke-1.29.2-4.tar.gz
