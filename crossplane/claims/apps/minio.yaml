@@ -1,0 +1,13 @@
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: Minio
+metadata:
+  name: labda-test
+  namespace: crossplane-system
+spec:
+  clusterName: labda-test
+  deploymentNamespace: artifacts
+  domainName: apptest.sthings-vsphere.labul.sva.de
+  cert:
+    secretName: minio-ingress-tls
+    issuerName: vault-approle

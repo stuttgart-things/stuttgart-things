@@ -1,0 +1,12 @@
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: RancherConfig
+metadata:
+  name: labda-test
+  namespace: crossplane-system
+spec:
+  clusterName: labda-test
+  deploymentNamespace: cattle-system
+  certs:
+    secretName: cert-manager # SHOULD BE CHANGED
+    secretNamespace: crossplane-system
