@@ -1,0 +1,19 @@
+---
+releases:
+  - name: metallb
+    installed: true
+    namespace: metallb-system
+    chart: bitnami/metallb
+    version: 5.0.3
+
+repositories:
+  - name: bitnami
+    url: https://charts.bitnami.com/bitnami
+    oci: false
+
+helmDefaults:
+  verify: false
+  wait: false
+  timeout: 600
+  recreatePods: false
+  force: true
