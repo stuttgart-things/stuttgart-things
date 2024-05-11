@@ -12,8 +12,8 @@ repositories:
     oci: false
 
 helmDefaults:
-  verify: false
-  wait: false
+  verify: true
+  wait: true
   timeout: 600
   recreatePods: false
   force: true
