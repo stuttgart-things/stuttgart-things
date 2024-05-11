@@ -19,7 +19,10 @@ requirements: |
     - src: https://github.com/stuttgart-things/install-configure-podman.git
       scm: git
       version: 2024.05.08
-      
+    - src: https://github.com/stuttgart-things/install-requirements.git
+      scm: git
+      version: 2024.05.11
+
 playbooks:
   - name: install_configure_podman.yaml
     play: |
