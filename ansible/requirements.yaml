@@ -2,8 +2,6 @@
 roles:
   - src: https://github.com/stuttgart-things/deploy-configure-rke.git
     scm: git
-  - src: https://github.com/stuttgart-things/download-install-binary.git
-    scm: git
   - src: https://github.com/stuttgart-things/install-configure-powerdns.git
     scm: git
   - src: https://github.com/stuttgart-things/configure-rke-node.git
@@ -12,16 +10,27 @@ roles:
     scm: git
   - src: https://github.com/stuttgart-things/create-send-webhook.git
     scm: git
-  - src: https://github.com/stuttgart-things/create-os-user.git
-    scm: git
   - src: https://github.com/stuttgart-things/install-configure-vault.git
     scm: git
   - src: https://github.com/stuttgart-things/install-configure-nfs.git
     scm: git
-  - src: https://github.com/stuttgart-things/install-configure-docker.git
-    scm: git
   - src: https://github.com/stuttgart-things/manage-filesystem.git
     scm: git
+  - src: https://github.com/stuttgart-things/download-install-binary.git
+    scm: git
+    version: 2024.04.19
+  - src: https://github.com/stuttgart-things/create-os-user.git
+    scm: git
+    version: 2024.05.03
+  - src: https://github.com/stuttgart-things/install-configure-docker.git
+    scm: git
+    version: 2024.04.30
+  - src: https://github.com/stuttgart-things/install-configure-docker.git
+    scm: git
+    version: 2024.04.30
+  - src: https://github.com/stuttgart-things/install-configure-podman.git
+    scm: git
+    version: 2024.05.08
 
 collections:
   - name: community.crypto
