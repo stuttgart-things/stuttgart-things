@@ -8,7 +8,7 @@ releases:
 
 repositories:
   - name: stuttgart-things
-    url: oci://eu.gcr.io/stuttgart-things
+    url: eu.gcr.io/stuttgart-things
     oci: true
 
 helmDefaults:
