@@ -6,6 +6,8 @@ releases:
     chart: bitnami/metallb
     version: 5.0.3
   - name: sthings-cluster
+    needs:
+      - metallb
     installed: true
     namespace: default
     chart: stuttgart-things/sthings-cluster
