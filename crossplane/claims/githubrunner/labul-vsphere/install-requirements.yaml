@@ -6,4 +6,5 @@ metadata:
   namespace: crossplane-system
 spec:
   repository: install-requirements
-  clusterConfig: cicd
+  clusterConfig: labda-test
+  version: 0.9.0
