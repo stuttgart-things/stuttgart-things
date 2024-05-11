@@ -1,0 +1,19 @@
+---
+releases:
+  - name: sthings-cluster
+    installed: true
+    namespace: default
+    chart: stuttgart-things/sthings-cluster
+    version: 0.3.10
+
+repositories:
+  - name: stuttgart-things
+    url: eu.gcr.io/stuttgart-things
+    oci: true
+
+helmDefaults:
+  verify: true
+  wait: true
+  timeout: 600
+  recreatePods: false
+  force: true
