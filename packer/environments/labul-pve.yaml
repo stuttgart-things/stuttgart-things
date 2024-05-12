@@ -1,16 +1,23 @@
 ---
+# GENERAL
 packerVersion: 1.10.3
+pveProvider: github.com/hashicorp/proxmox
+pveProviderVersion: 1.1.7
+ansibleProvisioner: github.com/hashicorp/ansible
+ansibleProvisionerMinVersion: 1.1.1
+
+# KICKSTART
+kickstart:
+  ubuntu22:
+    template: ubuntu22-pve.yaml
+    filename: user-data
 
 ubuntu23PackerMinVersion: 1.10.3
 rocky9PackerMinVersion: 1.10.3
-pveProvider: github.com/hashicorp/proxmox
-pveProviderVersion: 1.1.7
 
-ansibleProvisioner: github.com/hashicorp/ansible
-ansibleProvisionerMinVersion: 1.1.1
 copyNetworkConfig: false
 
-
+# UBUNTU22
 ubuntu22IsoUrl: https://releases.ubuntu.com/jammy/ubuntu-22.04.4-live-server-amd64.iso
 ubuntu22IsoChecksum: 45f873de9f8cb637345d6e66a583762730bbea30277ef7b32c9c3bd6700a32b2
 
