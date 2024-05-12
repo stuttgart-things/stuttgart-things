@@ -1,0 +1,56 @@
+---
+name: Dispatch Ansible Execution
+on:
+  workflow_dispatch:
+    inputs:
+      inventory:
+        description: INVENTORY
+        type: string
+      playbook:
+        description: PLAYBOOK NAME
+        type: string
+        default: ansible/playbooks/base-os.yaml
+      extra-vars:
+        type: string
+        description: EXTRA VARS
+        default: "-e target_host=all -e reboot_all=false"
+      environment-name:
+        type: string
+        description: ENVIRONMENT NAME
+        default: labul-vsphere
+      private-key:
+        type: string
+        description: Private Key
+        default: "ssh/data/sthings:privateKey"
+      requirements-file:
+        type: string
+        description: Requirements File
+        default: ansible/requirements.yaml
+      branch-name:
+        type: string
+        description: BRANCH NAME
+        default: main
+      runner:
+        description: RUNNER NAME
+        type: string
+        default: ghr-stuttgart-things-labda-test
+      working-image:
+        description: WORKING IMAGE
+        type: string
+        default: eu.gcr.io/stuttgart-things/sthings-ansible:9.5.1
+
+jobs:
+  execute-ansible:
+    name: Execute Ansible
+    uses: stuttgart-things/stuttgart-things/.github/workflows/call-ansible-execution.yaml@main
+    with:
+      playbook: ${{ inputs.playbook }}
+      branch: ${{ inputs.branch-name }}
+      working-image: ${{ inputs.working-image}}
+      runs-on: ${{ inputs.runner }}
+      inventory: ${{ inputs.inventory }}
+      environment-name: ${{ inputs.environment-name }}
+      private-key: ${{ inputs.private-key }}
+      requirements-file: ${{ inputs.requirements-file }}
+      extra-vars: ${{ inputs.extra-vars }}
+    secrets: inherit

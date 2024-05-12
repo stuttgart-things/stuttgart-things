@@ -1,0 +1,164 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: rancherconfig
+  labels:
+    crossplane.io/xrd: xrancherconfigs.resources.stuttgart-things.com
+spec:
+  patchSets:
+    - name: provider
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.clusterName
+          toFieldPath: spec.providerConfigRef.name
+    # - name: name
+    #   patches:
+    #     - type: FromCompositeFieldPath
+    #       fromFieldPath: spec.ipPoolName
+    #       toFieldPath: spec.forProvider.manifest.metadata.name
+    - name: namespace
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.deploymentNamespace
+          toFieldPath: spec.forProvider.manifest.metadata.namespace
+  writeConnectionSecretsToNamespace: crossplane-system
+  compositeTypeRef:
+    apiVersion: resources.stuttgart-things.com/v1alpha1
+    kind: XRancherConfig
+  resources:
+    - name: namespace
+      base:
+        apiVersion: kubernetes.crossplane.io/v1alpha2
+        kind: Object
+        metadata:
+          name: namespace
+        spec:
+          providerConfigRef:
+            name: kubernetes-clustername
+          forProvider:
+            manifest:
+              apiVersion: v1
+              kind: Namespace
+              metadata:
+                name: cattle-system
+                labels:
+                  app: rancher
+      patches:
+        - type: PatchSet
+          patchSetName: provider
+    - name: ingress-certificate
+      base:
+        apiVersion: kubernetes.crossplane.io/v1alpha2
+        kind: Object
+        metadata:
+          name: ingress-certificate
+        spec:
+          providerConfigRef:
+            name: kubernetes-clustername
+          forProvider:
+            manifest:
+              apiVersion: cert-manager.io/v1
+              kind: Certificate
+              metadata:
+                name: rancher-things-ingress
+                namespace: cattle-system
+              spec:
+                commonName: rancher-things.apptest.sthings-vsphere.labul.sva.de
+                dnsNames:
+                  - rancher-things.apptest.sthings-vsphere.labul.sva.de
+                issuerRef:
+                  kind: ClusterIssuer
+                  name: vault-approle
+                secretName: rancher-things-tls
+      patches:
+        - type: PatchSet
+          patchSetName: provider
+    - name: pub-cacerts
+      base:
+        apiVersion: kubernetes.crossplane.io/v1alpha2
+        kind: Object
+        metadata:
+          name: pub-cacerts
+        spec:
+          providerConfigRef:
+            name: kubernetes-clustername
+          references:
+            - patchesFrom:
+                apiVersion: v1
+                kind: Secret
+                name: cert-manager
+                namespace: crossplane-system
+                fieldPath: data.caBundle
+              toFieldPath: data["cacerts.pem"]
+          forProvider:
+            manifest:
+              apiVersion: v1
+              kind: Secret
+              metadata:
+                name: cacerts
+                namespace: cattle-system
+              data: {}
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.certs.secretName
+          toFieldPath: spec.references[0].patchesFrom.name
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.certs.secretNamespace
+          toFieldPath: spec.references[0].patchesFrom.namespace
+        - type: PatchSet
+          patchSetName: provider
+        - type: PatchSet
+          patchSetName: namespace
+
+
+
+
+
+
+    # customresources:
+    #   rancher-application-certificate:
+    #     apiVersion: cert-manager.io/v1
+    #     kind: Certificate
+    #     metadata:
+    #       name: ${INGRESS_HOSTNAME}-ingress
+    #       namespace: cattle-system
+    #     spec:
+    #       commonName: ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}
+    #       dnsNames:
+    #         - ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}
+    #       issuerRef:
+    #         name: ${CLUSTER_ISSUER}
+    #         kind: ClusterIssuer
+    #       secretName: ${INGRESS_HOSTNAME}-tls
+
+        # - type: PatchSet
+        #   patchSetName: name
+
+
+    # - name: l2-advertisement
+    #   base:
+    #     apiVersion: kubernetes.crossplane.io/v1alpha2
+    #     kind: Object
+    #     metadata:
+    #       name: pool-advertisement
+    #     spec:
+    #       providerConfigRef:
+    #         name: kubernetes-clustername
+    #       forProvider:
+    #         manifest:
+    #           apiVersion: metallb.io/v1beta1
+    #           kind: L2Advertisement
+    #           spec:
+    #             ipAddressPools:
+    #               - ip-pool
+    #   patches:
+    #     - type: FromCompositeFieldPath
+    #       fromFieldPath: spec.ipPoolName
+    #       toFieldPath: spec.forProvider.manifest.spec.ipAddressPools
+    #     - type: PatchSet
+    #       patchSetName: provider
+    #     - type: PatchSet
+    #       patchSetName: name
+    #     - type: PatchSet
+    #       patchSetName: namespace

@@ -1,0 +1,49 @@
+---
+roles:
+  - src: https://github.com/stuttgart-things/deploy-configure-rke.git
+    scm: git
+  - src: https://github.com/stuttgart-things/install-configure-powerdns.git
+    scm: git
+  - src: https://github.com/stuttgart-things/configure-rke-node.git
+    scm: git
+  - src: https://github.com/stuttgart-things/install-requirements.git
+    scm: git
+  - src: https://github.com/stuttgart-things/create-send-webhook.git
+    scm: git
+  - src: https://github.com/stuttgart-things/install-configure-vault.git
+    scm: git
+  - src: https://github.com/stuttgart-things/install-configure-nfs.git
+    scm: git
+  - src: https://github.com/stuttgart-things/manage-filesystem.git
+    scm: git
+  - src: https://github.com/stuttgart-things/download-install-binary.git
+    scm: git
+    version: 2024.04.19
+  - src: https://github.com/stuttgart-things/create-os-user.git
+    scm: git
+    version: 2024.05.03
+  - src: https://github.com/stuttgart-things/install-configure-docker.git
+    scm: git
+    version: 2024.04.30
+  - src: https://github.com/stuttgart-things/install-configure-docker.git
+    scm: git
+    version: 2024.04.30
+  - src: https://github.com/stuttgart-things/install-configure-podman.git
+    scm: git
+    version: 2024.05.08
+
+collections:
+  - name: community.crypto
+    version: 2.19.0
+  - name: community.general
+    version: 8.6.0
+  - name: ansible.posix
+    version: 1.5.2
+  - name: kubernetes.core
+    version: 3.0.1
+  - name: community.vmware
+    version: 4.3.0
+  - name: community.hashi_vault
+    version: 6.2.0
+  - name: https://github.com/stuttgart-things/stuttgart-things/releases/download/0.2.7/sthings-base_os-0.2.7.tar.gz
+  - name: https://github.com/stuttgart-things/deploy-configure-rke/releases/download/1.29.4/sthings-deploy_rke-1.29.4.tar.gz

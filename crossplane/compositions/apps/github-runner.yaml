@@ -25,7 +25,7 @@ spec:
             chart:
               name: gha-runner-scale-set
               repository: oci://ghcr.io/actions/actions-runner-controller-charts
-              version: 0.8.0
+              version: 0.9.1
               pullSecretRef:
                 name: ghcr
                 namespace: crossplane-system
@@ -55,7 +55,7 @@ spec:
                 spec:
                   containers:
                   - name: runner
-                    image: ghcr.io/actions/actions-runner:2.314.1
+                    image: ghcr.io/actions/actions-runner:2.316.1
                     command: ["/home/runner/run.sh"]
                     env:
                       - name: ACTIONS_RUNNER_REQUIRE_JOB_CONTAINER
@@ -66,7 +66,7 @@ spec:
                             fieldPath: metadata.name
                   initContainers:
                     - name: kube-init
-                      image: ghcr.io/actions/actions-runner:2.314.1
+                      image: ghcr.io/actions/actions-runner:2.316.1
                       command: ["/bin/sh", "-c"]
                       args:
                         - |
@@ -106,3 +106,5 @@ spec:
           toFieldPath: spec.providerConfigRef.name
         - fromFieldPath: spec.deploymentNamespace
           toFieldPath: spec.forProvider.namespace
+        - fromFieldPath: spec.version
+          toFieldPath: spec.forProvider.chart.version

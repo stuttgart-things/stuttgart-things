@@ -1,0 +1,49 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: xopenebses.resources.stuttgart-things.com
+spec:
+  connectionSecretKeys:
+    - kubeconfig
+  group: resources.stuttgart-things.com
+  names:
+    kind: XOpenEbs
+    plural: xopenebses
+  claimNames:
+    kind: OpenEbs
+    plural: openebses
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          description: A OpenEbs is a composite resource that represents a helm release for a openebs deployment
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                deploymentNamespace:
+                  type: string
+                  default: openebs
+                  description: namespace for openebs
+                clusterName:
+                  type: string
+                  default: in-cluster
+                  description: cluster name/helm provider name
+                version:
+                  type: string
+                  default: 3.10.0
+                  description: helm chart version for open ebs
+              required:
+                - clusterName
+            status:
+              description: A Status represents the observed state
+              properties:
+                share:
+                  description: Freeform field containing status information
+                  type: object
+                  x-kubernetes-preserve-unknown-fields: true
+              type: object

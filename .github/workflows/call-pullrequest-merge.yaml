@@ -1,0 +1,50 @@
+---
+name: Merge GitHub Pull Request
+on:
+  workflow_call:
+    inputs:
+      runs-on:
+        required: true
+        type: string
+      environment-name:
+        default: k8s
+        required: false
+        type: string
+      branch-name:
+        required: true
+        type: string
+      pr-id:
+        required: true
+        type: string
+      github-group:
+        default: stuttgart-things
+        required: false
+        type: string
+      github-repo:
+        default: stuttgart-things
+        required: false
+        type: string
+
+jobs:
+  Merge-Pull-Request:
+    name: Merge Pull Request
+    runs-on: ${{ inputs.runs-on }}
+    environment: ${{ inputs.environment-name }}
+    container:
+      image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2-2
+    steps:
+      - name: Checkout code/branch
+        id: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: '0'
+          ref: ${{ inputs.branch-name }}
+
+      - name: Merge PR
+        id: merge
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          git config --global --add safe.directory /__w/${{ inputs.github-group }}/${{ inputs.github-repo }}
+          gh pr list
+          gh pr merge ${{ inputs.pr-id }} --auto --rebase --delete-branch

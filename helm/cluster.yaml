@@ -1,0 +1,16 @@
+---
+releases:
+
+    values:
+    - values.yaml.gotmpl
+
+
+repositories:
+
+
+# helmDefaults:
+#   verify: true
+#   wait: true
+#   timeout: 600
+#   recreatePods: false
+#   force: true

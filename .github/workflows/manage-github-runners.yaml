@@ -10,7 +10,7 @@ on:
       runner:
         description: NAME OF RUNNER FOR THIS WORKFLOW
         type: string
-        default: ghr-stuttgart-things-sthings-cicd
+        default: ghr-stuttgart-things-labda-test
 
 jobs:
   Render-Runner-Config:

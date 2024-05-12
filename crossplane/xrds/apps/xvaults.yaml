@@ -1,0 +1,60 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: xvaults.resources.stuttgart-things.com
+spec:
+  connectionSecretKeys:
+    - kubeconfig
+  group: resources.stuttgart-things.com
+  names:
+    kind: XVault
+    plural: xvaults
+  claimNames:
+    kind: Vault
+    plural: vaults
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          description: A Vault is a composite resource that represents a helm release for a vault deployment
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                deploymentNamespace:
+                  type: string
+                  default: vault
+                  description: namespace for vault
+                clusterName:
+                  type: string
+                  description: cluster name/helm provider name
+                hostName:
+                  type: string
+                  default: vault
+                  description: hostname of ingress resource
+                domainName:
+                  type: string
+                  description: domain (name) of ingress resource
+                cert:
+                  type: object
+                  properties:
+                    issuerName:
+                      type: string
+                      default: vault-approle
+                      description: name of cert-manager issuer
+                    issuerKind:
+                      type: string
+                      default: ClusterIssuer
+                      description: kind of cert-manager issuer
+                    secretName:
+                      type: string
+                      description: name of to be created secret
+                      default: vault-ingress-tls
+              required:
+                - cert
+                - clusterName
+                - domainName

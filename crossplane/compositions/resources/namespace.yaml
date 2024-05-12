@@ -1,0 +1,37 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: namespace
+  labels:
+    crossplane.io/xrd: xnamespaces.resources.stuttgart-things.com
+spec:
+  patchSets:
+    - name: provider
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.clusterName
+          toFieldPath: spec.providerConfigRef.name
+  writeConnectionSecretsToNamespace: crossplane-system
+  compositeTypeRef:
+    apiVersion: resources.stuttgart-things.com/v1alpha1
+    kind: XNamespace
+  resources:
+    - name: namespace
+      base:
+        apiVersion: kubernetes.crossplane.io/v1alpha2
+        kind: Object
+        metadata:
+          name: namespace
+        spec:
+          providerConfigRef:
+            name: kubernetes-clustername
+          forProvider:
+            manifest:
+              apiVersion: v1
+              kind: Namespace
+      patches:
+        - type: PatchSet
+          patchSetName: provider
+        - fromFieldPath: spec.name
+          toFieldPath: metadata.name

@@ -1,0 +1,30 @@
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: TridentConfig
+metadata:
+  name: labda-test
+  namespace: crossplane-system
+spec:
+  clusterName: labda-test
+  backendConfig:
+    managementLIF: 10.100.112.160
+    dataLIF: 10.100.112.160
+    backendName: ontap-nas-backend
+    storageDriverName: ontap-nas
+    storageClassName: onptap
+    svm: ""
+    nfsMountOptions: nfsvers=3
+    credentialsName: trident-backend
+    secretName: trident
+    secretNamespace: crossplane-system
+
+
+# apiVersion: v1
+# kind: Secret
+# metadata:
+#   name: trident-backend
+#   namespace: crossplane-system
+# type: Opaque
+# stringData:
+#   username: svc-trident
+#   password:

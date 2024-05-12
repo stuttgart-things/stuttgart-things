@@ -1,8 +1,42 @@
 ---
 # GLOBAL
-packerVersion: 1.10.0
+packerVersion: 1.10.3
 vmWwarePluginMinVersion: 1.2.7
 ansibleProvisionerMinVersion: 1.1.1
+
+# KICKSTART
+kickstart:
+  ubuntu24:
+    template: ubuntu24.yaml
+    filename: user-data
+  ubuntu22:
+    template: ubuntu.yaml
+    filename: user-data
+  ubuntu23:
+    template: ubuntu.yaml
+    filename: user-data
+  rocky9:
+    template: rocky9.cfg
+    filename: user-data
+
+output:
+  ubuntu22:
+    base-os: sthings-u22
+    rke2-node: sthings-u22-k8s
+  ubuntu23:
+    base-os: sthings-u23
+    rke2-node: sthings-u23-k8s
+  ubuntu24:
+    base-os: sthings-u24
+    rke2-node: sthings-u24-k8s
+  rocky9:
+    base-os: sthings-r9
+    rke2-node: sthings-r9-k8s
+
+# S3
+s3Endpoint: https://artifacts.app1.sthings-vsphere.labul.sva.de
+s3Bucket: vspherevm-labul
+s3Region: main
 
 ipWaitTimeout: 40m
 vmWareProvider: github.com/hashicorp/vsphere
@@ -16,6 +50,15 @@ sshTimeout: 30m
 sshHandshakeAttempts: 900
 createUser: true
 rebootBeforeAnsible: false
+
+# UBUNTU24=LATEST RELEASE
+ubuntuIsoUrl: https://releases.ubuntu.com/noble/ubuntu-24.04-live-server-amd64.iso
+ubuntuIsoChecksum: 8762f7e74e4d64d72fceb5f70682e6b069932deedb4949c6975d0f0fe0a91be3
+ubuntuPassword: ubuntu
+ubuntuUser: ubuntu
+ubuntuDiskSize: 15360
+ubuntuShellProvisioner: "sudo apt-get -y update; sudo apt-get -y upgrade; sudo apt-get -y install python3; sudo apt-get autoremove --purge -y && sudo apt-get autoclean -y && sudo apt-get clean -y; sudo truncate -s 0 /etc/machine-id && echo 'machine-id was reset successfully'; sudo systemctl stop systemd-resolved; sudo sed -i 's/#DNSStubListener=yes/DNSStubListener=no/g' /etc/systemd/resolved.conf; sudo rm /etc/resolv.conf; sudo ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf; sudo systemctl start systemd-resolved"
+ubuntuNetworkCard: vmxnet3
 
 # UBUNTU22
 ubuntu22IsoUrl: https://releases.ubuntu.com/jammy/ubuntu-22.04.3-live-server-amd64.iso
@@ -63,7 +106,6 @@ folder: /stuttgart-things/packer
 host: /LabUL/host/Cluster-V6.5/10.31.101.41
 network: /LabUL/network/LAB-10.31.102
 
-
 # TEST VM
 testVmModuleSource: github.com/stuttgart-things/vsphere-vm?ref=v1.7.5-2.7.0
 testVmCount: 1
@@ -73,4 +115,5 @@ testVmRam: 8192
 testDatastore: /LabUL/host/Cluster-V6.5/10.31.101.41/UL-ESX-SAS-01
 testNetwork: /LabUL/host/Cluster-V6.5/10.31.101.41/MGMT-10.31.101
 testDatacenter: /LabUL/
-testAnnotation: VSPHERE-VM
+testAnnotation: PACKER VSPHERE TEST-VM
+folderPath: stuttgart-things/testing

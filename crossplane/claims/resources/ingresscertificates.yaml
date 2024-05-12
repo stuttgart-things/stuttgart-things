@@ -1,0 +1,12 @@
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: IngressCertificate
+metadata:
+  name: labda-test
+  namespace: crossplane-system
+spec:
+  clusterName: labda-test
+  namespace: default
+  hostName: rancher-test
+  domainName: apptest.sthings-vsphere.labul.sva.de
+  certSecretName: rancher-test

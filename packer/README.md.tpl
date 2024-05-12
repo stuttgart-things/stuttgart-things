@@ -57,7 +57,7 @@ packer build -force \
 ## TERRAFORM
 
 ```bash
-TERRAFORM_VERSION=1.7.5
+TERRAFORM_VERSION=1.8.2
 wget -O terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
 sudo unzip terraform.zip -d /usr/bin/
 rm terraform.zip
@@ -69,6 +69,9 @@ terraform --version
 cd [[ .osVersion ]]-[[ .lab ]]-[[ .cloud ]]-[[ .ansibleOsProvisioning ]]/test-vm/
 
 # INITIALIZE TERRAFORM
+export AWS_ACCESS_KEY_ID=<S3_USERNAME>
+export AWS_SECRET_ACCESS_KEY=<S3_PASSWORD>
+
 terraform init
 
 # CREATE vars file

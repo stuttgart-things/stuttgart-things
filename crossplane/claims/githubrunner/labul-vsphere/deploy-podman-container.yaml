@@ -1,0 +1,10 @@
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: GithubRunner
+metadata:
+  name: deploy-podman-container
+  namespace: crossplane-system
+spec:
+  repository: deploy-podman-container
+  version: 0.9.0
+  clusterConfig: labda-test

@@ -8,6 +8,7 @@
     update_packages: true
     install_requirements: true
     install_motd: true
+    reboot_all: false
     username: sthings
     lvm_home_sizing: "15%"
     lvm_root_sizing: "35%"

@@ -1,0 +1,80 @@
+---
+# GENERAL
+packerVersion: 1.10.3
+pveProvider: github.com/hashicorp/proxmox
+pveProviderVersion: 1.1.7
+ansibleProvisioner: github.com/hashicorp/ansible
+ansibleProvisionerMinVersion: 1.1.1
+
+# KICKSTART
+kickstart:
+  ubuntu22:
+    template: ubuntu22-pve.yaml
+    filename: user-data
+
+# TEST VM
+testVmModuleSource: github.com/stuttgart-things/proxmox-vm.git?ref=v2.9.14-1.5.5
+testVmCount: 1
+testVmDiskSize: 32G
+testCpu: 8
+testVmRam: 8192
+testDatastore: /LabUL/host/Cluster-V6.5/10.31.101.41/UL-ESX-SAS-01
+testNetwork: /LabUL/host/Cluster-V6.5/10.31.101.41/MGMT-10.31.101
+testDatacenter: /LabUL/
+testAnnotation: PACKER VSPHERE TEST-VM
+folderPath: stuttgart-things/testing
+
+
+
+
+
+ubuntu23PackerMinVersion: 1.10.3
+rocky9PackerMinVersion: 1.10.3
+
+copyNetworkConfig: false
+
+# UBUNTU22
+ubuntu22IsoUrl: https://releases.ubuntu.com/jammy/ubuntu-22.04.4-live-server-amd64.iso
+ubuntu22IsoChecksum: 45f873de9f8cb637345d6e66a583762730bbea30277ef7b32c9c3bd6700a32b2
+
+# RKE NODE CONFIG
+configureClusterNode: false
+installCloudInit: false
+createRkeUser: false
+updateOs: true
+installDocker: false
+installDockerCompose: false
+setDockerProxy: false
+templateCreationSetup: false
+
+updatePackages: true
+installRequirements: true
+cpu: 8
+ram: 8192
+diskSize: 16
+storagePool: v3700
+networkAdapdater: vmbr103
+node: sthings-pve1
+pool: packer
+sshTimeout: 20m
+proxmoxUrl: https://sthings-pve1.labul.sva.de:8006/api2/json
+isoStoragePool: datastore
+fedora39IsoUrl: https://download.fedoraproject.org/pub/fedora/linux/releases/39/Server/x86_64/iso/Fedora-Server-netinst-x86_64-39-1.5.iso
+fedora39IsoChecksum: 61576ae7170e35210f03aae3102048f0a9e0df7868ac726908669b4ef9cc22e9
+rocky9IsoUrl: https://download.rockylinux.org/pub/rocky/9/isos/x86_64/Rocky-9.3-x86_64-minimal.iso
+rocky9IsoChecksum: eef8d26018f4fcc0dc101c468f65cbf588f2184900c556f243802e9698e56729
+rocky9User: root
+rocky9Password: ch0coLate
+rocky9NetworkInstall: https://download.rockylinux.org/pub/rocky/9/BaseOS/x86_64/os/
+rocky9appStreamRepoUrl: https://download.rockylinux.org/pub/rocky/9/AppStream/x86_64/os/
+ubuntu23User: ubuntu
+ubuntu23Password: ubuntu
+ubuntu23IsoUrl: https://releases.ubuntu.com/lunar/ubuntu-23.04-live-server-amd64.iso
+ubuntu23IsoChecksum: c7cda48494a6d7d9665964388a3fc9c824b3bef0c9ea3818a1be982bc80d346b
+ubuntu22User: ubuntu
+ubuntu22Password: ubuntu
+
+createUser: true
+rebootBeforeAnsible: false
+msTeamsWebHookUrl: https://365sva.webhook.office.com/webhookb2/2f14a9f8-4736-46dd-9c8c-31547ec37180@0a65cb1e-37d5-41ff-980a-647d9d0e4f0b/IncomingWebhook/37a805a0a2624dc2ac1aedd7dec6ad49/dc3a27ed-396c-40b7-a9b2-f1a2b6b44efe
+sendToMSteams: true

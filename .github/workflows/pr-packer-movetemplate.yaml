@@ -1,0 +1,123 @@
+---
+name: PR Move Packer Template
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+
+jobs:
+  Get-Packer-Config:
+    if: contains(github.event.pull_request.labels.*.name, 'move-packer-template')
+    outputs:
+      runs-on: ${{ steps.set.outputs.RUNS_ON }}
+      cloud: ${{ steps.set.outputs.CLOUD }}
+      lab: ${{ steps.set.outputs.LAB }}
+      working-image: ${{ steps.set.outputs.WORKING_IMAGE }}
+      template-name: ${{ steps.set.outputs.TEMPLATE_NAME }}
+      template-build-folder: ${{ steps.set.outputs.TEMPLATE_BUILD_FOLDER }}
+      golden-image-folder: ${{ steps.set.outputs.GOLDEN_IMAGE_FOLDER }}
+      target-template-name: ${{ steps.set.outputs.TARGET_NAME }}
+    container:
+      image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2
+    permissions:
+      contents: read
+      pull-requests: read
+    runs-on: ghr-stuttgart-things-labda-test
+    steps:
+      - name: Get VM-Template name
+        uses: peter-evans/find-comment@v3
+        id: templateName
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body-includes: successful
+
+      - name: Get Output name name
+        uses: peter-evans/find-comment@v3
+        id: outputName
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body-includes: output
+
+      - name: Set values for govc operation
+        id: set
+        run: |
+          OS=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'-' -f1)
+          LAB=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'-' -f2)
+          CLOUD=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'-' -f3)
+          TEMPLATE_NAME=$(echo ${{ steps.templateName.outputs.comment-body }} | sed 's/.*\://' | xargs)
+          OUTPUT_NAME=$(echo ${{ steps.outputName.outputs.comment-body }} | sed 's/.*\://' | xargs)
+
+          echo "CLOUD=${CLOUD}" >> $GITHUB_OUTPUT
+          echo "LAB=${LAB}" >> $GITHUB_OUTPUT
+          echo "OS=${OS}" >> $GITHUB_OUTPUT
+          echo "TEMPLATE_NAME=${TEMPLATE_NAME}" >> $GITHUB_OUTPUT
+          echo "RUNS_ON=ghr-stuttgart-things-labda-test" >> $GITHUB_OUTPUT
+          echo "WORKING_IMAGE=eu.gcr.io/stuttgart-things/sthings-packer:1.10.3-9.5.1" >> $GITHUB_OUTPUT
+          echo "TEMPLATE_BUILD_FOLDER=/LabUL/vm/stuttgart-things/packer" >> $GITHUB_OUTPUT
+          echo "GOLDEN_IMAGE_FOLDER=/LabUL/vm/stuttgart-things/vm-templates" >> $GITHUB_OUTPUT
+          echo "TARGET_NAME=${OUTPUT_NAME}" >> $GITHUB_OUTPUT
+        shell: bash
+
+  Move-Vsphere-Template:
+    needs: Get-Packer-Config
+    runs-on: ${{ needs.Get-Packer-Config.outputs.runs-on }}
+    environment: ${{ needs.Get-Packer-Config.outputs.lab }}-${{ needs.Get-Packer-Config.outputs.cloud }}
+    container:
+      image: ${{ needs.Get-Packer-Config.outputs.working-image }}
+    env:
+      GOVC_INSECURE: TRUE
+      VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
+      VAULT_AUTH_METHOD: ${{ secrets.VAULT_AUTH_METHOD }}
+      VAULT_NAMESPACE: ${{ secrets.VAULT_NAMESPACE }}
+      VAULT_ROLE_ID: ${{ secrets.VAULT_ROLE_ID }}
+      VAULT_SECRET_ID: ${{ secrets.VAULT_SECRET_ID }}
+      TEMPLATE_BUILD_FOLDER: ${{ needs.Get-Packer-Config.outputs.template-build-folder }}
+      GOLDEN_IMAGE_FOLDER: ${{ needs.Get-Packer-Config.outputs.golden-image-folder }}
+      TARGET_NAME: ${{ needs.Get-Packer-Config.outputs.target-template-name }}
+    steps:
+      - name: Set govc crendentials to env
+        id: set
+        run: |
+          USER=$(machineShop get --path cloud/data/vsphere:username | tail -n +8)
+          PW=$(machineShop get --path cloud/data/vsphere:password | tail -n +8)
+          FQDN=$(machineShop get --path cloud/data/vsphere:ip | tail -n +8)
+          echo "GOVC_URL=https://${USER}:${PW}@${FQDN}/sdk" >> $GITHUB_ENV
+
+      - name: Check template paths
+        id: check
+        run: |
+          echo 'Check Build Folder'
+          govc ls ${TEMPLATE_BUILD_FOLDER}
+          echo 'Check Golden Image Folder'
+          govc ls ${GOLDEN_IMAGE_FOLDER}
+
+      - name: Rename newly build image in build folder to golden image name
+        id: renameNew
+        run: |
+         govc object.rename ${TEMPLATE_BUILD_FOLDER}/${{ needs.Get-Packer-Config.outputs.template-name }} ${TARGET_NAME}
+         govc ls ${TEMPLATE_BUILD_FOLDER}
+
+      - name: Delete existing golden image
+        id: deleteExisting
+        run: |
+         govc object.destroy ${GOLDEN_IMAGE_FOLDER}/${TARGET_NAME} || true # delete if exists or not
+
+      - name: Move newly build image to target folder
+        id: moveNew
+        run: |
+         govc object.mv ${TEMPLATE_BUILD_FOLDER}/${TARGET_NAME} ${GOLDEN_IMAGE_FOLDER}
+         govc ls ${GOLDEN_IMAGE_FOLDER}
+
+  Merge-Pull-Request:
+    name: Merge Pull Request
+    uses: stuttgart-things/stuttgart-things/.github/workflows/call-pullrequest-merge.yaml@main
+    needs:
+      - Get-Packer-Config
+      - Move-Vsphere-Template
+    with:
+      runs-on: ${{ needs.Get-Packer-Config.outputs.runs-on }}
+      environment-name: ${{ needs.Get-Packer-Config.outputs.lab }}-${{ needs.Get-Packer-Config.outputs.cloud }}
+      branch-name: ${{ github.event.pull_request.head.ref }}
+      pr-id: ${{ github.event.pull_request.number }}
+    secrets: inherit

@@ -1,0 +1,60 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: xminios.resources.stuttgart-things.com
+spec:
+  connectionSecretKeys:
+    - kubeconfig
+  group: resources.stuttgart-things.com
+  names:
+    kind: XMinio
+    plural: xminios
+  claimNames:
+    kind: Minio
+    plural: minios
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          description: A Minio is a composite resource that represents a helm release for a minio deployment
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                deploymentNamespace:
+                  type: string
+                  default: minio
+                  description: namespace for minio
+                clusterName:
+                  type: string
+                  description: cluster name/helm provider name
+                hostName:
+                  type: string
+                  default: minio
+                  description: hostname of ingress resource
+                domainName:
+                  type: string
+                  description: domain (name) of ingress resource
+                cert:
+                  type: object
+                  properties:
+                    issuerName:
+                      type: string
+                      default: vault-approle
+                      description: name of cert-manager issuer
+                    issuerKind:
+                      type: string
+                      default: ClusterIssuer
+                      description: kind of cert-manager issuer
+                    secretName:
+                      type: string
+                      description: name of to be created secret
+                      default: minio-ingress-tls
+              required:
+                - cert
+                - clusterName
+                - domainName

@@ -1,0 +1,49 @@
+---
+releases:
+  - name: metallb
+    installed: true
+    namespace: metallb-system
+    chart: bitnami/metallb
+    version: 5.0.3
+  - name: sthings-cluster
+    needs:
+      - metallb
+    installed: true
+    namespace: default
+    chart: stuttgart-things/sthings-cluster
+    version: 0.3.10
+    values:
+      - customresources:
+          addressPool:
+            apiVersion: metallb.io/v1beta1
+            kind: IPAddressPool
+            metadata:
+              name: ip-pool
+              namespace: metallb-system
+            spec:
+              addresses:
+              - test
+          poolAdvertisement:
+            apiVersion: metallb.io/v1beta1
+            kind: L2Advertisement
+            metadata:
+              name: pool-advertisement
+              namespace: metallb-system
+            spec:
+              ipAddressPools:
+              - ip-pool
+
+repositories:
+  - name: bitnami
+    url: https://charts.bitnami.com/bitnami
+    oci: false
+  - name: stuttgart-things
+    url: eu.gcr.io/stuttgart-things
+    oci: true
+
+helmDefaults:
+  verify: true
+  wait: true
+  timeout: 600
+  recreatePods: false
+  force: true

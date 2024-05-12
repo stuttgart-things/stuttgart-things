@@ -1,0 +1,9 @@
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: Rancher
+metadata:
+  name: labda-test
+  namespace: crossplane-system
+spec:
+  clusterName: labda-test
+  deploymentNamespace: cattle-system

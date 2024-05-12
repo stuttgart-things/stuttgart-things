@@ -1,0 +1,69 @@
+name: PR Ansible Execution
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+
+jobs:
+  Get-Ansible-Config:
+    if: contains(github.event.pull_request.labels.*.name, 'ansible')
+    environment: k8s
+    container:
+      image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2-2
+    outputs:
+      tf_working_dir: ${{ steps.set.outputs.TF_WORKING_DIR }}
+      environment: ${{ steps.set.outputs.ENVIRONMENT }}
+      inventory: ${{ steps.getInventory.outputs.INVENTORY }}
+    runs-on: ghr-stuttgart-things-labda-test
+    steps:
+      - name: Set Execution Details
+        id: set
+        run: |
+          # PULL REQUEST/BRANCH RELATED
+          SPLIT=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'/' -f3)
+          echo "ENVIRONMENT=$(echo ${SPLIT} | cut -d'-' -f1)-$(echo ${SPLIT} | cut -d'-' -f2)" >> "$GITHUB_OUTPUT"
+
+      - name: Get Inventory/Comment From PR
+        uses: peter-evans/find-comment@v3
+        id: inventory
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body-includes: inventory
+
+      - name: Get Inventory
+        id: getInventory
+        run: |
+          INVENTORY=$(echo ${{ steps.inventory.outputs.comment-body }} | sed 's/.*\://' | xargs)
+          echo ${INVENTORY}
+          echo "INVENTORY=${INVENTORY}" >> $GITHUB_OUTPUT
+
+  Execute-Ansible-Provisioning:
+    name: Execute Ansible
+    uses: stuttgart-things/stuttgart-things/.github/workflows/call-ansible-execution.yaml@main
+    needs:
+      - Get-Ansible-Config
+    with:
+      playbook: ansible/playbooks/base-os.yaml
+      branch: ${{ github.event.pull_request.head.ref }}
+      working-image: eu.gcr.io/stuttgart-things/sthings-ansible:9.5.1
+      runs-on: ghr-stuttgart-things-labda-test
+      inventory: ${{ needs.Get-Ansible-Config.outputs.inventory }}
+      environment-name: ${{ needs.Get-Ansible-Config.outputs.environment }}
+      private-key: "ssh/data/sthings:privateKey"
+      requirements-file: ansible/requirements.yaml
+      extra-vars: "-e reboot_all=false"
+    secrets: inherit
+
+  Merge-Ansible-PR:
+    name: Merge Ansible PR
+    uses: stuttgart-things/stuttgart-things/.github/workflows/call-pullrequest-merge.yaml@main
+    needs:
+      - Get-Ansible-Config
+      - Execute-Ansible-Provisioning
+    with:
+      runs-on: ghr-stuttgart-things-labda-test
+      environment-name: k8s
+      branch-name: ${{ github.event.pull_request.head.ref }}
+      pr-id: ${{ github.event.pull_request.number }}
+    secrets: inherit

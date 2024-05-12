@@ -1,0 +1,10 @@
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: GithubRunner
+metadata:
+  name: stuttgart-things
+  namespace: crossplane-system
+spec:
+  repository: stuttgart-things
+  clusterConfig: labda-test
+  version: 0.9.0

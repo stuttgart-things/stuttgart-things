@@ -1,0 +1,10 @@
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: GithubRunner
+metadata:
+  name: create-send-webhook
+  namespace: crossplane-system
+spec:
+  repository: create-send-webhook
+  clusterConfig: labda-test
+  version: 0.9.0
