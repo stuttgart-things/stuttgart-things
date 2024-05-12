@@ -9,29 +9,29 @@ on:
         options:
           - apply
           - destroy
-      runner:
-        description: RUNNER NAME
+      folder:
+        description: FOLDER NAME
         type: string
-        default: ghr-stuttgart-things-labda-test
+        default: terraform/builds/
       branch-name:
         type: string
         description: BRANCH NAME
-        default: terraform-ubuntu23-labul-vsphere-losangeles1
+        default: main
       environment-name:
         type: choice
         description: ENVIRONMENT NAME
         options:
-          - labda-vsphere
           - labul-vsphere
+          - labda-vsphere
+          - labul-proxmox
       working-image:
         description: WORKING IMAGE
         type: string
         default: eu.gcr.io/stuttgart-things/sthings-terraform:1.8.1-2
-      folder:
-        description: FOLDER NAME
+      runner:
+        description: RUNNER NAME
         type: string
-        default: terraform/builds/vspherevm/labul/losangeles1
-
+        default: ghr-stuttgart-things-labda-test
 jobs:
   execute-terraform:
     name: Execute Terraform
