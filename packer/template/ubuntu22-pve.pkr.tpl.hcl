@@ -1,5 +1,5 @@
 packer {
-  required_version = ">= [[ .ubuntu23PackerMinVersion ]]"
+  required_version = ">= [[ .packerVersion ]]"
   required_plugins {
     proxmox = {
       source  = "[[ .pveProvider ]]"
