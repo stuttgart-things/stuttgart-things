@@ -52,7 +52,7 @@ jobs:
       environment-name: ${{ needs.Get-Ansible-Config.outputs.environment }}
       private-key: "ssh/data/sthings:privateKey"
       requirements-file: ansible/requirements.yaml
-      extra-vars: ""
+      extra-vars: "-e reboot_all=false"
     secrets: inherit
 
   Merge-Ansible-PR:
