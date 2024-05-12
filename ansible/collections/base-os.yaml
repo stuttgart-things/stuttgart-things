@@ -1,6 +1,6 @@
 ---
 name: base_os
-version: 0.2.7
+version: 0.2.8
 namespace: sthings
 requirements: |
   roles:
@@ -22,7 +22,16 @@ requirements: |
     - src: https://github.com/stuttgart-things/install-requirements.git
       scm: git
       version: 2024.05.11
-
+    - src: https://github.com/stuttgart-things/manage-filesystem.git
+      scm: git
+      version: 2022.01.01
+    - src: https://github.com/stuttgart-things/install-configure-vault.git
+      scm: git
+      version: 2022.01.01
+    - src: https://github.com/stuttgart-things/create-send-webhook.git
+      scm: git
+      version: 2022.01.01
+      
 playbooks:
   - name: install_configure_podman.yaml
     play: |
