@@ -2,9 +2,9 @@
 apiVersion: resources.stuttgart-things.com/v1alpha1
 kind: GithubRunner
 metadata:
-  name: manage-filesystem
+  name: install-configure-vault
   namespace: crossplane-system
 spec:
-  repository: manage-filesystem
+  repository: install-configure-vault
   clusterConfig: labda-test
   version: 0.9.0
