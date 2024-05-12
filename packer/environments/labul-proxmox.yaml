@@ -12,6 +12,22 @@ kickstart:
     template: ubuntu22-pve.yaml
     filename: user-data
 
+# TEST VM
+testVmModuleSource: github.com/stuttgart-things/proxmox-vm.git?ref=v2.9.14-1.5.5
+testVmCount: 1
+testVmDiskSize: 32G
+testCpu: 8
+testVmRam: 8192
+testDatastore: /LabUL/host/Cluster-V6.5/10.31.101.41/UL-ESX-SAS-01
+testNetwork: /LabUL/host/Cluster-V6.5/10.31.101.41/MGMT-10.31.101
+testDatacenter: /LabUL/
+testAnnotation: PACKER VSPHERE TEST-VM
+folderPath: stuttgart-things/testing
+
+
+
+
+
 ubuntu23PackerMinVersion: 1.10.3
 rocky9PackerMinVersion: 1.10.3
 
