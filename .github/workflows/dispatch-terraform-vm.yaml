@@ -7,8 +7,8 @@ on:
         type: choice
         description: build engine
         options:
-          - crossplane
           - terraform
+          - crossplane
       count-vm:
         type: choice
         description: COUNT OF VMS
