@@ -34,7 +34,7 @@ requirements: |
       
 playbooks:
 
-  - name: base_os_setup
+  - name: setup
     play: |
       ---
       - hosts: "{{ target_host | default('all') }}"
