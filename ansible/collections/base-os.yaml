@@ -1,17 +1,182 @@
 ---
 name: base_os
-version: 0.1.8
+version: 0.2.9
 namespace: sthings
 requirements: |
   roles:
     - src: https://github.com/stuttgart-things/download-install-binary.git
       scm: git
-      version: 2024.07.04
+      version: 2024.04.19
     - src: https://github.com/stuttgart-things/create-os-user.git
       scm: git
-      version: 2024.04.25
+      version: 2024.05.03
+    - src: https://github.com/stuttgart-things/install-configure-docker.git
+      scm: git
+      version: 2024.04.30
+    - src: https://github.com/stuttgart-things/install-configure-docker.git
+      scm: git
+      version: 2024.04.30
+    - src: https://github.com/stuttgart-things/install-configure-podman.git
+      scm: git
+      version: 2024.05.08
+    - src: https://github.com/stuttgart-things/install-requirements.git
+      scm: git
+      version: 2024.05.11
+    - src: https://github.com/stuttgart-things/manage-filesystem.git
+      scm: git
+      version: 2022.01.01
+    - src: https://github.com/stuttgart-things/install-configure-vault.git
+      scm: git
+      version: 2022.01.01
+    - src: https://github.com/stuttgart-things/create-send-webhook.git
+      scm: git
+      version: 2022.01.01
       
 playbooks:
+
+  - name: base_os_setup.yaml
+    play: |
+      ---
+      - hosts: "{{ target_host | default('all') }}"
+        become: true
+        gather_facts: true
+      
+        vars:
+          manage_filesystem: true
+          update_packages: true
+          install_requirements: true
+          install_motd: true
+          reboot_all: false
+          username: sthings
+          lvm_home_sizing: "15%"
+          lvm_root_sizing: "35%"
+          lvm_var_sizing: "50%"
+          send_to_msteams: true
+          msteams_webhook_url: "https://365sva.webhook.office.com/webhookb2/2f14a9f8-4736-46dd-9c8c-31547ec37180@0a65cb1e-37d5-41ff-980a-647d9d0e4f0b/IncomingWebhook/37a805a0a2624dc2ac1aedd7dec6ad49/dc3a27ed-396c-40b7-a9b2-f1a2b6b44efe"
+          reboot_all: false
+          vault_instances:
+            - https://vault.tiab.labda.sva.de:8200
+            - https://vault.labul.sva.de:8200
+            - https://vault-vsphere.labul.sva.de:8200
+            - https://vault-pve.labul.sva.de:8200
+            - https://vault-vsphere.tiab.labda.sva.de:8200
+      
+        roles:
+          - role: sthings.base_os.manage_filesystem
+            when: manage_filesystem|bool
+      
+          - role: sthings.base_os.install_requirements
+            when: install_requirements|bool
+      
+        pre_tasks:
+          - name: Include vars
+            ansible.builtin.include_vars: "{{ path_to_vars_file }}.yaml"
+            when: path_to_vars_file is defined
+      
+          - ansible.builtin.reboot:
+            when: reboot_all|bool
+      
+        tasks:
+          - name: Install vault ca certificate to local system from multiple instances
+            ansible.builtin.include_role:
+              name: sthings.base_os.install_configure_vault
+              tasks_from: install-ca-auth
+            vars:
+              vault_url: "{{ vault_instance }}"
+            loop: "{{ vault_instances }}"
+            loop_control:
+              loop_var: vault_instance
+            when: vault_instances is defined
+      
+          - name: Send webhook to msteams
+            ansible.builtin.include_role:
+              name: sthings.base_os.create_send_webhook
+            vars:
+              summary_text: base-os-setup was executed
+              msteams_url: "https://365sva.webhook.office.com/webhookb2/2f14a9f8-4736-46dd-9c8c-31547ec37180@0a65cb1e-37d5-41ff-980a-647d9d0e4f0b/IncomingWebhook/37a805a0a2624dc2ac1aedd7dec6ad49/dc3a27ed-396c-40b7-a9b2-f1a2b6b44efe"
+              card_title: base-os-setup was executed
+              act_image: "{{ logo_pic }}"
+              act_title: "{{ quotes | random }}"
+              act_text: "{{ quotes | random }}"
+              os_facts: |
+                base-os-setup was executed on "{{ ansible_fqdn }}"
+              ms_teams_notification_type: "simple"
+            tags: notify
+            ignore_errors: true
+            when: send_to_msteams|bool
+
+  - name: install_configure_podman.yaml
+    play: |
+      ---
+      - hosts: "{{ target_host | default('all') }}"
+        become: true
+
+        roles:
+          - role: sthings.base_os.install_configure_podman
+  - name: install_configure_golang
+    play: |
+      ---
+      - hosts: "{{ target_host | default('all') }}"
+        become: true
+        vars:
+          golang_version: 1.22.2
+          golang_checksum: 8672f483bfbd37e4b9f7655522e3739bfe66d3308d76a152a6d8c3a569e5362e
+          source_url: "https://go.dev/dl/go1.22.2.linux-amd64.tar.gz"
+          golang_install_dir: /usr/local
+          go_checksum_type: "sha256"
+
+          # USE WITH EXISTING USER
+          go_username: sthings
+          go_usergroup: sthings
+          go_userhome: /home/sthings
+
+        pre_tasks:
+          - name: Check if Golang is already installed
+            ansible.builtin.stat:
+              path: "{{ golang_install_dir }}/go"
+            register: check_golang
+
+          - name: Get checksum of golang dir
+            get_checksum:
+              path: "{{ golang_install_dir }}/go"
+              checksum_type: "{{ go_checksum_type }}"
+            register: checksum_existing
+            when: check_golang.stat.exists
+
+        tasks:
+          - name: Create golang users
+            ansible.builtin.include_role:
+              name: create-os-user
+            vars:
+              users: "{{ golang_users }}"
+              groups_to_create: "{{ groups_golang }}"
+            when: golang_users is defined
+
+          - name: Unarchive Golang
+            ansible.builtin.unarchive:
+              src: "{{ source_url }}"
+              dest: "{{ golang_install_dir }}/"
+              mode: 0755
+              validate_certs: false
+              remote_src: true
+            when: checksum_existing.checksum_value is not defined or golang_checksum != checksum_existing.checksum_value
+            
+          - name: Add golang exports for existing users to bashrc
+            ansible.builtin.blockinfile:
+              block: |
+                export GOROOT=/usr/local/go
+                export PATH=$GOROOT/bin:$PATH
+                export GOPATH=$HOME/usr/local/go
+                export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
+              dest: "{{ go_userhome }}/.bashrc"
+              owner: "{{ go_username }}"
+              group: "{{ go_usergroup }}"
+              marker_begin: "<!-- BEGIN GOLANG SETUP -->"
+              marker_end: "<!-- END GOLANG SETUP -->"
+              mode: 0644
+              create: true
+            when: go_username is defined and go_usergroup is defined and go_userhome is defined
+
   - name: download_install_binaries
     play: |
       ---
@@ -19,25 +184,23 @@ playbooks:
         become: true
         vars:
           download_dir: "/tmp/downloads"
+          
         vars_files:
-          - "{{ profile }}.yaml"
-      
+          - "{{ profile | default('dev') }}.yaml"
+
         roles:
           - role: sthings.base_os.download_install_binary
 
-  - name: install-configure-docker
+  - name: install_configure_docker
     play: |
       ---
       - hosts: "{{ target_host | default('all') }}"
         become: true
-
-      vars:
-        docker_install_compose: true 
-        docker_version: '' # leave empty for latest version or set e.g. '=5:23.0.6-1~ubuntu.23.04~lunar'
-
-        install_kind: true
-        kind_version: 0.22.0
-        kubectl_version: 1.30.0
+        vars:
+          docker_install_compose: true  
+          install_kind: false
+          #kind_version: 0.22.0
+          #kubectl_version: 1.30.0
 
         roles:
           - role: sthings.base_os.install_configure_docker
@@ -49,12 +212,35 @@ playbooks:
         gather_facts: true
         become: true
         vars_files:
-          - "{{ profile }}.yaml"
-      
+          - "{{ profile | default('sthings-users') }}.yaml"
+
         roles:
           - role: sthings.base_os.create_os_user
 
-vars: 
+vars:
+  - name: golang-users
+    file: |
+      ---
+      # CREATE USER(S) FOR GOLANG INSTALL AND SET EXPORTS
+      golang_users:
+        - username: bill
+          name: bill user
+          group: golang
+          uid: 1020
+          home: /home/bill
+          profile: |
+            alias ll='ls -ahl'
+            export GOROOT=/usr/local/go
+            export PATH=$GOROOT/bin:$PATH
+            export GOPATH=/home/bill/usr/local/go
+            export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
+          enable_ssh_tcp_forwarding: true
+          password: "!"
+
+      groups_golang:
+        - name: golang
+          gid: 31000
+
   - name: sthings-users
     file: |
       ---
