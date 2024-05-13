@@ -34,7 +34,7 @@ requirements: |
       
 playbooks:
 
-  - name: base_os_setup.yaml
+  - name: base_os_setup
     play: |
       ---
       - hosts: "{{ target_host | default('all') }}"
@@ -105,7 +105,7 @@ playbooks:
             ignore_errors: true
             when: send_to_msteams|bool
 
-  - name: install_configure_podman.yaml
+  - name: install_configure_podman
     play: |
       ---
       - hosts: "{{ target_host | default('all') }}"
