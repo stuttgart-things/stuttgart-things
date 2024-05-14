@@ -7,7 +7,7 @@ module "{{ .vmName }}" {
   vm_disk_size           = "{{ .vmDisk }}"
   vm_num_cpus            = {{ .vmCpu }}
   firmware               = "{{ .vmFirmware }}"
-  vsphere_vm_folder_path = "{{ .vmFolder }}"
+  vsphere_vm_folder_path = "{{ .rootFolder }}/{{ .vmFolder }}"
   vsphere_datacenter     = "{{ .datacenter }}"
   vsphere_datastore      = "{{ .vmDatastore }}"
   vsphere_resource_pool  = "{{ .resourcePool }}"
