@@ -203,7 +203,18 @@ jobs:
                     'resourcePool': 'Resources',
                     'templatePath': '/NetApp-HCI-Datacenter/vm/stuttgart-things/vm-templates',
                     'cloud': 'vsphere',
-                }
+                },
+                'labda-vsphere': {
+                  'lab': 'labda',
+                  'rootFolder': 'stuttgart-things',
+                  'vmFirmware': 'bios',
+                  'datacenter': '/NetApp-HCI-Datacenter',
+                  'resourcePool': 'Resources',
+                  'templatePath': '/NetApp-HCI-Datacenter/vm/stuttgart-things/vm-templates',
+                  'cloud': 'vsphere',
+              }
+
+
             }
 
             crossplane = {
@@ -215,14 +226,23 @@ jobs:
                     's3_bucket' : 'vspherevm-labul',
                     's3_endpoint' : 'https://artifacts.app1.sthings-vsphere.labul.sva.de',
                 },
-                'labda-vsphere' : {
+                'labul-proxmox' : {
                     'namespace' : 'crossplane-system',
-                    'tfvars' : 'vsphere-labda-tfvars',
+                    'tfvars' : 'proxmox-labda-tfvars',
                     'secretKey' : 'terraform.tfvars',
                     's3_region' : 'main',
-                    's3_bucket' : 'vspherevm-labda',
+                    's3_bucket' : 'proxmox-labul',
                     's3_endpoint' : 'https://artifacts.app1.sthings-vsphere.labul.sva.de',
-                }
+                },
+                'labda-vsphere' : {
+                  'namespace' : 'crossplane-system',
+                  'tfvars' : 'vsphere-labda-tfvars',
+                  'secretKey' : 'terraform.tfvars',
+                  's3_region' : 'main',
+                  's3_bucket' : 'vspherevm-labda',
+                  's3_endpoint' : 'https://artifacts.app1.sthings-vsphere.labul.sva.de',
+              }
+
             }
 
             tekton = {
