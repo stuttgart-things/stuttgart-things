@@ -43,7 +43,7 @@ on:
         options:
           - labul-vsphere
           - labda-vsphere
-          - labul-pve
+          - labul-proxmox
       vm-folder:
         type: choice
         description: VM FOLDER
