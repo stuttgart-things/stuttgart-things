@@ -194,6 +194,7 @@ jobs:
                     'resourcePool': '/LabUL/host/Cluster-V6.5/Resources',
                     'templatePath': '/LabUL/vm/stuttgart-things/vm-templates',
                     'cloud': 'vsphere',
+                    'vaultSecretPaths' : 'password=cloud/data/vsphere:password, user=cloud/data/vsphere:username, server=cloud/data/vsphere:ip, sshUser=cloud/data/vsphere:vm_ssh_user, sshPassword=cloud/data/vsphere:vm_ssh_password',
                 },
                 'labda-vsphere': {
                     'lab': 'labda',
@@ -203,18 +204,18 @@ jobs:
                     'resourcePool': 'Resources',
                     'templatePath': '/NetApp-HCI-Datacenter/vm/stuttgart-things/vm-templates',
                     'cloud': 'vsphere',
+                    'vaultSecretPaths' : 'password=cloud/data/vsphere:password, user=cloud/data/vsphere:username, server=cloud/data/vsphere:ip, sshUser=cloud/data/vsphere:vm_ssh_user, sshPassword=cloud/data/vsphere:vm_ssh_password',
                 },
-                'labda-vsphere': {
-                  'lab': 'labda',
-                  'rootFolder': 'stuttgart-things',
-                  'vmFirmware': 'bios',
-                  'datacenter': '/NetApp-HCI-Datacenter',
-                  'resourcePool': 'Resources',
-                  'templatePath': '/NetApp-HCI-Datacenter/vm/stuttgart-things/vm-templates',
-                  'cloud': 'vsphere',
+                'labul-proxmox': {
+                    'lab': 'labul',
+                    'rootFolder': 'stuttgart-things',
+                    'vmFirmware': 'bios', #notused
+                    'datacenter': 'sthings-pve1', #name not 100% correct
+                    'resourcePool': 'Resources', #notused
+                    'templatePath': 'stuttgart-things',
+                    'cloud': 'proxmox',
+                    'vaultSecretPaths' : 'pve_api_password=cloud/data/pve:api_password, vm_ssh_user=cloud/data/pve:ssh_user, vm_ssh_password=cloud/data/pve:ssh_password, pve_api_url=cloud/data/pve:api_url, pve_api_user=cloud/data/pve:api_user',
               }
-
-
             }
 
             crossplane = {
@@ -283,7 +284,7 @@ jobs:
               "roles" : tekton['roles'],
               "tfversion" : '1.7.5',
               "date" : datetime.now().strftime("%Y-%m-%d, %H:%M"),
-              "vaultSecretPaths" : 'password=cloud/data/vsphere:password, user=cloud/data/vsphere:username, server=cloud/data/vsphere:ip, sshUser=cloud/data/vsphere:vm_ssh_user, sshPassword=cloud/data/vsphere:vm_ssh_password',
+              "vaultSecretPaths" : env['${{ inputs.lab-cloud }}']['vaultSecretPaths'],
             }
 
             def main():
