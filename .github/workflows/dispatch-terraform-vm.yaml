@@ -236,14 +236,13 @@ jobs:
                     's3_endpoint' : 'https://artifacts.app1.sthings-vsphere.labul.sva.de',
                 },
                 'labda-vsphere' : {
-                  'namespace' : 'crossplane-system',
-                  'tfvars' : 'vsphere-labda-tfvars',
-                  'secretKey' : 'terraform.tfvars',
-                  's3_region' : 'main',
-                  's3_bucket' : 'vspherevm-labda',
-                  's3_endpoint' : 'https://artifacts.app1.sthings-vsphere.labul.sva.de',
+                    'namespace' : 'crossplane-system',
+                    'tfvars' : 'vsphere-labda-tfvars',
+                    'secretKey' : 'terraform.tfvars',
+                    's3_region' : 'main',
+                    's3_bucket' : 'vspherevm-labda',
+                    's3_endpoint' : 'https://artifacts.app1.sthings-vsphere.labul.sva.de',
               }
-
             }
 
             tekton = {
@@ -370,7 +369,7 @@ jobs:
               echo "provider_template=terraform/state-provider.tf.tpl" >> $GITHUB_ENV
               echo "provider_name=backend" >> $GITHUB_ENV
               echo "readme_template=terraform/README.md.tpl" >> $GITHUB_ENV
-              echo "secrets_template=terraform/$(echo "${{ inputs.lab-cloud }}-vm-tfvars.tpl" >> $GITHUB_ENV
+              echo "secrets_template=terraform/${CLOUD}-vm-tfvars.tpl" >> $GITHUB_ENV
           fi
 
           echo "LAB=$(echo "${{ inputs.lab-cloud }}" | cut -d'-' -f1)" >> $GITHUB_ENV
