@@ -6,7 +6,7 @@ module "{{ .vmName }}" {
   vm_num_cpus             = "{{ .vmCpu }}"
   vm_disk_size            = "{{ .vmDisk }}G"
   vm_template             = "{{ .vmTemplate }}"
-  pve_cluster_node        = "{{ .pveClusterNode }}"
+  pve_cluster_node        = "{{ .datacenter }}"
   pve_datastore           = "{{ .vmDatastore }}"
   pve_folder_path         = "{{ .vmFolder }}"
   pve_network             = "{{ .vmNetwork }}"
