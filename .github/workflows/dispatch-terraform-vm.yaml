@@ -214,7 +214,7 @@ jobs:
                     'resourcePool': 'Resources', #notused
                     'templatePath': 'stuttgart-things',
                     'cloud': 'proxmox',
-                    'vaultSecretPaths' : 'pve_api_password=cloud/data/pve:api_password, vm_ssh_user=cloud/data/pve:ssh_user, vm_ssh_password=cloud/data/pve:ssh_password, pve_api_url=cloud/data/pve:api_url, pve_api_user=cloud/data/pve:api_user',
+                    'vaultSecretPaths' : 'password=cloud/data/pve:api_password, sshUser=cloud/data/pve:ssh_user, sshPassword=cloud/data/pve:ssh_password, server=cloud/data/pve:api_url, user=cloud/data/pve:api_user',
               }
             }
 
