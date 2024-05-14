@@ -5,7 +5,7 @@ module "losangeles" {
   vm_memory               = "8192"
   vm_num_cpus             = "6"
   vm_disk_size            = "96G"
-  vm_template             = "ubuntu24"
+  vm_template             = "ubuntu24-eva"
   pve_cluster_node        = "sthings-pve1"
   pve_datastore           = "datastore"
   pve_folder_path         = "testing"
