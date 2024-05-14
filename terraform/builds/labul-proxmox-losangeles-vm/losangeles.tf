@@ -5,10 +5,10 @@ module "losangeles" {
   vm_memory               = "8192"
   vm_num_cpus             = "6"
   vm_disk_size            = "96G"
-  vm_template             = "ubuntu24-eva"
+  vm_template             = "ubuntu24-eva" #change
   pve_cluster_node        = "sthings-pve1"
   pve_datastore           = "datastore"
-  pve_folder_path         = "testing"
+  pve_folder_path         = "stuttgart-things" #change
   pve_network             = "vmbr101"
   vm_notes                = "VSPHERE-VM losangeles ubuntu24 BUILD w/ TERRAFORM FOR STUTTGART-THINGS"
   pve_api_url             = var.pve_api_url
@@ -17,7 +17,7 @@ module "losangeles" {
   vm_ssh_user             = var.vm_ssh_user
   vm_ssh_password         = var.vm_ssh_password
 }
-
+#change at api user secret
 output "ip" {
   value     = module.losangeles.ip
 }
