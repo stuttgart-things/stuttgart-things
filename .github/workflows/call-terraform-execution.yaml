@@ -39,10 +39,10 @@ on:
     outputs:
       tf-output:
         description: terraform output
-        value: ${{ jobs.execute-terraform.outputs.tf-output }}
+        value: ${{ jobs.Execute-Terraform.outputs.tf-output }}
 
 jobs:
-  execute-terraform:
+  Execute-Terraform:
     outputs:
       tf-output: ${{ steps.tf_output.outputs.TF_OUTPUT }}
     runs-on: ${{ inputs.runs-on }}
@@ -84,8 +84,8 @@ jobs:
       - name: Add variables to terraform.tfvars
         if: "${{ inputs.variables != '' }}"
         run: |
-          echo "${{ inputs.variables }}" | tr ';' '\n' | sed 's/\(=\)\([^ >]*\)/\1"\2"/g' | sed "s/'//g" 
-          vars=$(echo "${{ inputs.variables }}" | tr ';' '\n' | sed 's/\(=\)\([^ >]*\)/\1"\2"/g' | sed "s/'//g") 
+          echo "${{ inputs.variables }}" | tr ';' '\n' | sed 's/\(=\)\([^ >]*\)/\1"\2"/g' | sed "s/'//g"
+          vars=$(echo "${{ inputs.variables }}" | tr ';' '\n' | sed 's/\(=\)\([^ >]*\)/\1"\2"/g' | sed "s/'//g")
           printf "%s\n" "${vars[@]}" >> ${TFVARS_FILE}
           cat ${TFVARS_FILE}
         shell: bash
@@ -113,18 +113,20 @@ jobs:
         run: |
           terraform -chdir=${{ inputs.folder }} output > output
           filecontent=$(cat output)
-          filecontent=${filecontent#*'"'} 
+          filecontent=${filecontent#*'"'}
           extraction=${filecontent%'"'*}
           echo $extraction
 
           # SET ENV VARS
           echo "TF_OUTPUT=$(echo ${extraction})" >> "$GITHUB_OUTPUT"
 
-  delete-terraform-config:
+  Delete-Terraform-Config:
     if: ${{ (inputs.operation == 'destroy') && (inputs.delete-folder == true || inputs.delete-folder  == 'true') }}
-    needs: execute-terraform
+    needs: Execute-Terraform
     runs-on: ${{ inputs.runs-on }}
     environment: ${{ inputs.environment-name }}
+    outputs:
+      pullrequest-id: ${{ steps.pr.outputs.pull-request-number }}
     container:
       image: ${{ inputs.working-image }}
     steps:
@@ -133,7 +135,7 @@ jobs:
         with:
           fetch-depth: '0'
           ref: ${{ inputs.branch-name }}
-                  
+
       - name: Delete terraform folder
         run: |
           echo 'Check folderstructure before deletion'
@@ -142,20 +144,34 @@ jobs:
           echo 'Check folderstructure after deletion'
           ls -lta $(dirname ${{ inputs.folder }})
         shell: bash
-        
+
       - name: Get token for creating pull request
         uses: tibdex/github-app-token@v1
         id: generate-token
         with:
           app_id: ${{ secrets.PULLREQUESTER_APP_ID }}
           private_key: ${{ secrets.PULLREQUESTER_APP_KEY }}
-          
+
       - name: Create Pull Request for terraform config file deletion
         id: pr
-        uses: peter-evans/create-pull-request@v6.0.2
+        uses: peter-evans/create-pull-request@v6.0.5
         with:
           commit-message: '[CI][TERRAFORM] - Deleted terraform config file - ${{ inputs.folder }}'
           title: Deleted Terraform Config Files - ${{ inputs.folder }}
           delete-branch: true
           token: ${{ steps.generate-token.outputs.token }}
           branch: ${{ inputs.folder }}
+
+  Merge-Ansible-PR:
+    name: Merge Ansible PR
+    if: ${{ (inputs.operation == 'destroy') && (inputs.delete-folder == true || inputs.delete-folder  == 'true') }}
+    uses: stuttgart-things/stuttgart-things/.github/workflows/call-pullrequest-merge.yaml@main
+    needs:
+      - Execute-Terraform
+      - Delete-Terraform-Config
+    with:
+      runs-on: ghr-stuttgart-things-labda-test
+      environment-name: k8s
+      branch-name: ${{ inputs.folder }}
+      pr-id: ${{ needs.Delete-Terraform-Config.outputs.pullrequest-id }}
+    secrets: inherit
