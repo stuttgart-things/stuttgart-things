@@ -69,12 +69,12 @@ proxmoxUrl: https://sthings-pve1.labul.sva.de:8006/api2/json
 isoStoragePool: datastore
 fedora39IsoUrl: https://download.fedoraproject.org/pub/fedora/linux/releases/39/Server/x86_64/iso/Fedora-Server-netinst-x86_64-39-1.5.iso
 fedora39IsoChecksum: 61576ae7170e35210f03aae3102048f0a9e0df7868ac726908669b4ef9cc22e9
-rocky9IsoUrl: https://download.rockylinux.org/pub/rocky/9/isos/x86_64/Rocky-9.3-x86_64-minimal.iso
-rocky9IsoChecksum: eef8d26018f4fcc0dc101c468f65cbf588f2184900c556f243802e9698e56729
+rocky9IsoUrl: https://dl.rockylinux.org/vault/rocky/9.4/isos/x86_64/Rocky-9.4-x86_64-minimal.iso
+rocky9IsoChecksum: ee3ac97fdffab58652421941599902012179c37535aece76824673105169c4a2
 rocky9User: root
 rocky9Password: ch0coLate
-rocky9NetworkInstall: https://download.rockylinux.org/pub/rocky/9/BaseOS/x86_64/os/
-rocky9appStreamRepoUrl: https://download.rockylinux.org/pub/rocky/9/AppStream/x86_64/os/
+rocky9NetworkInstall: https://dl.rockylinux.org/vault/rocky/9.4/BaseOS/x86_64/os/
+rocky9appStreamRepoUrl: https://dl.rockylinux.org/vault/rocky/9.4/AppStream/x86_64/os/
 ubuntu23User: ubuntu
 ubuntu23Password: ubuntu
 ubuntu23IsoUrl: https://releases.ubuntu.com/lunar/ubuntu-23.04-live-server-amd64.iso
