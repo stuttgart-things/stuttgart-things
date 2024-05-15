@@ -51,6 +51,10 @@ installDockerCompose: false
 setDockerProxy: false
 templateCreationSetup: false
 
+# CLOUD
+userSecretPath: cloud/data/pve:api_user
+passwordSecretPath: cloud/data/pve:api_password
+
 updatePackages: true
 installRequirements: true
 cpu: 8

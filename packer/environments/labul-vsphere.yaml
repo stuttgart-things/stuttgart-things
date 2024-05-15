@@ -105,6 +105,8 @@ datastore: /LabUL/datastore/UL-ESX-SAS-01
 folder: /stuttgart-things/packer
 host: /LabUL/host/Cluster-V6.5/10.31.101.41
 network: /LabUL/network/LAB-10.31.102
+userSecretPath: cloud/data/vsphere:username
+passwordSecretPath: cloud/data/vsphere:password
 
 # TEST VM
 testVmModuleSource: github.com/stuttgart-things/vsphere-vm?ref=v1.7.5-2.7.0

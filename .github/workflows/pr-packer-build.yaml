@@ -63,11 +63,14 @@ jobs:
           cd ${{ needs.Get-Packer-Config.outputs.build-path }}/${{ github.event.pull_request.head.ref }}/
           ls -lta
 
+          PACKER_USER_PATH=$(yq -r ".passwordSecretPath" packer/environments/${{ needs.Get-Packer-Config.outputs.lab }}-${{ needs.Get-Packer-Config.outputs.cloud }}.yaml)
+          PACKER_PASSWORD_PATH=$(yq -r ".userSecretPath" packer/environments/${{ needs.Get-Packer-Config.outputs.lab }}-${{ needs.Get-Packer-Config.outputs.cloud }}.yaml)
+
           packer init $(ls *.hcl)
 
           packer build -force \
-          -var "username=$(machineShop get --path cloud/data/vsphere:username | tail -n +8)" \
-          -var "password=$(machineShop get --path cloud/data/vsphere:password | tail -n +8)" \
+          -var "username=$(machineShop get --path ${PACKER_USER_PATH} | tail -n +8)" \
+          -var "password=$(machineShop get --path ${PACKER_PASSWORD_PATH} | tail -n +8)" \
           -var "name=${{ needs.Get-Packer-Config.outputs.os-version }}-${{ needs.Get-Packer-Config.outputs.build-date }}-${{ needs.Get-Packer-Config.outputs.provisioning}}" \
           $(ls *.hcl)
 
