@@ -10,7 +10,7 @@ on:
 jobs:
   build-hugo:
     name: Build Hugo
-    runs-on: ghr-docs-labda-test
+    runs-on: ghr-stuttgart-things-labda-test
     container:
       image: klakegg/hugo:0.107.0-ext-alpine
     environment: k8s
