@@ -32,7 +32,6 @@ variable "vsphere_server" {
 }
 
 variable "vsphere_vm_template" {
-  default     = false
   type        = string
   description = "name of vsphere vm template"
 }

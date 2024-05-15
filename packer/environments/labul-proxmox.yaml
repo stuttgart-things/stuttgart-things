@@ -8,8 +8,17 @@ ansibleProvisionerMinVersion: 1.1.1
 
 # KICKSTART
 kickstart:
+  ubuntu24:
+    template: ubuntu22-proxmox.yaml
+    filename: user-data
   ubuntu22:
-    template: ubuntu22-pve.yaml
+    template: ubuntu.yaml
+    filename: user-data
+  ubuntu23:
+    template: ubuntu.yaml
+    filename: user-data
+  rocky9:
+    template: rocky9.cfg
     filename: user-data
 
 # TEST VM
@@ -18,15 +27,10 @@ testVmCount: 1
 testVmDiskSize: 32G
 testCpu: 8
 testVmRam: 8192
-testDatastore: /LabUL/host/Cluster-V6.5/10.31.101.41/UL-ESX-SAS-01
-testNetwork: /LabUL/host/Cluster-V6.5/10.31.101.41/MGMT-10.31.101
-testDatacenter: /LabUL/
-testAnnotation: PACKER VSPHERE TEST-VM
-folderPath: stuttgart-things/testing
-
-
-
-
+testVmDatacenter: sthings-pve1
+testVmDatastore: sthings-pve1
+testVmFolder: stuttgart-things
+testVmNetwork: vmbr102
 
 ubuntu23PackerMinVersion: 1.10.3
 rocky9PackerMinVersion: 1.10.3
