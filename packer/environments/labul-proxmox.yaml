@@ -9,10 +9,10 @@ ansibleProvisionerMinVersion: 1.1.1
 # KICKSTART
 kickstart:
   ubuntu24:
-    template: ubuntu22-proxmox.yaml
+    template: ubuntu24.yaml
     filename: user-data
   ubuntu22:
-    template: ubuntu.yaml
+    template: ubuntu22-proxmox.yaml
     filename: user-data
   ubuntu23:
     template: ubuntu.yaml
