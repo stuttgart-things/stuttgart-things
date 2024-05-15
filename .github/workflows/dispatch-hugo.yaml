@@ -61,6 +61,8 @@ jobs:
 
       - name: Upload to s3 Bucket
         run: |
+          rclone
+          
           cat <<EOF > ${HOME}/.config/rclone/rclone.conf
           [labul-app1]
           type = s3
