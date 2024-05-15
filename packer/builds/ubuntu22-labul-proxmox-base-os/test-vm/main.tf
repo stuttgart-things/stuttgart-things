@@ -19,7 +19,7 @@ module ubuntu22-labul-proxmox-base-os {
 }
 
 output "ip" {
-  value     = module.{{ .vmName }}.ip
+  value     = module.ubuntu22-labul-proxmox-base-os.ip
 }
 
 variable "proxmox_vm_name" {
