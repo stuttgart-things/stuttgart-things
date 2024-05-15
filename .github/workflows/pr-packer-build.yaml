@@ -60,8 +60,8 @@ jobs:
       - name: Packer build
         id: build
         run: |
-          SECRET_PATH_USERNAME=$(echo echo $(yq -r ".userSecretPath" packer/environments/${{ needs.Get-Packer-Config.outputs.lab }}-${{ needs.Get-Packer-Config.outputs.cloud }}.yaml)
-          SECRET_PATH_PASSWORD=$(echo $(yq -r ".passwordSecretPath" packer/environments/${{ needs.Get-Packer-Config.outputs.lab }}-${{ needs.Get-Packer-Config.outputs.cloud }}.yaml))
+          SECRET_PATH_USERNAME=$(echo $(yq -r ".userSecretPath" packer/environments/${{ needs.Get-Packer-Config.outputs.lab }}-${{ needs.Get-Packer-Config.outputs.cloud }}.yaml)
+          SECRET_PATH_PASSWORD=$(echo $(yq -r ".passwordSecretPath" packer/environments/${{ needs.Get-Packer-Config.outputs.lab }}-${{ needs.Get-Packer-Config.outputs.cloud }}.yaml)
 
           echo ${SECRET_PATH_USERNAME}
           echo ${SECRET_PATH_PASSWORD}
