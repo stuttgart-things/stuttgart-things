@@ -1,0 +1,29 @@
+languageCode: en-us
+title: sthings
+theme: github-style
+author: phermann
+pygmentsCodeFences: true
+pygmentsUseClasses: true
+params:
+  author: Patrick Hermann
+  description: using modularity to speed up parallel builds
+  github: stuttgart-things
+  email: patrick.hermann@sva.de
+  url: https://github.com/stuttgart-things
+  keywords: sthings, golang, ansible, kubernetes, linux, machineShop
+  rss: true
+  lastmod: true
+  favicon: /images/sthings-logo.png
+  avatar: /images/sthings-city.png
+  headerIcon: /images/github-mark-white.png
+  location: Stuttgart
+  userStatusEmoji: 😀
+  enableGitalk: false
+frontmatter:
+  lastmod:
+    - lastmod
+    - :fileModTime
+    - :default
+services:
+  googleAnalytics:
+    ID: UA-123456-789

@@ -1,0 +1,56 @@
+---
+name: Dispatch Hugo
+on:
+  workflow_dispatch:
+    inputs:
+      runs-on:
+        required: true
+        type: string
+        default: ghr-docs-labda-test
+      base-url:
+        required: true
+        type: string
+        default: https://stuttgart-things.github.io/stuttgart-things/
+jobs:
+  build-hugo:
+    name: Build Hugo
+    runs-on: ${{ inputs.runs-on }}
+    container:
+      image: klakegg/hugo:0.107.0-ext-alpine
+    environment: k8s
+    continue-on-error: false
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - run: |
+          echo "Creating hugo site"
+          hugo new site sthings -f "yaml"
+          git clone https://github.com/MeiK2333/github-style ./sthings/themes/github-style
+          mkdir -p ./sthings/content/post
+
+          ls -lta
+          ls -lta hugo
+        
+          bash hugo/create-sthings.sh
+
+          ls -lta sthings/content/post
+
+          # Add hugo toml
+          cat <<EOF | cat - hugo/hugo.yaml > temp && mv temp hugo/hugo.yaml
+          baseURL: '${{ inputs.base-url }}'
+          EOF
+
+          cp -f hugo/hugo.yaml ./sthings
+          cat ./sthings/hugo.yaml
+
+      - uses: actions/upload-artifact@v4.3.3
+        with:
+          name: hugo-dev
+          path: sthings
+
+      - run: cd sthings && hugo --verbose --destination ../public
+
+      - uses: actions/upload-artifact@v4.3.3
+        with:
+          name: hugo-public
+          path: public
