@@ -67,7 +67,7 @@ jobs:
 
           packer build -force \
           -var "username=$(machineShop get --path $(yq -r ".passwordSecretPath" packer/environments/${{ needs.Get-Packer-Config.outputs.lab }}-${{ needs.Get-Packer-Config.outputs.cloud }}.yaml) | tail -n +8)" \
-          -var "password=$(machineShop get --path $(yq -r ".userSecretPath" packer/environments/${{ needs.Get-Packer-Config.outputs.lab }}-${{ needs.Get-Packer-Config.outputs.cloud }}.yaml | tail -n +8)" \
+          -var "password=$(machineShop get --path $(yq -r ".userSecretPath" packer/environments/${{ needs.Get-Packer-Config.outputs.lab }}-${{ needs.Get-Packer-Config.outputs.cloud }}.yaml) | tail -n +8)" \
           -var "name=${{ needs.Get-Packer-Config.outputs.os-version }}-${{ needs.Get-Packer-Config.outputs.build-date }}-${{ needs.Get-Packer-Config.outputs.provisioning}}" \
           $(ls *.hcl)
 
