@@ -60,11 +60,11 @@ jobs:
       - name: Packer build
         id: build
         run: |
-          cd ${{ needs.Get-Packer-Config.outputs.build-path }}/${{ github.event.pull_request.head.ref }}/
-          ls -lta
-
           PACKER_USER_PATH=$(yq -r ".passwordSecretPath" packer/environments/${{ needs.Get-Packer-Config.outputs.lab }}-${{ needs.Get-Packer-Config.outputs.cloud }}.yaml)
           PACKER_PASSWORD_PATH=$(yq -r ".userSecretPath" packer/environments/${{ needs.Get-Packer-Config.outputs.lab }}-${{ needs.Get-Packer-Config.outputs.cloud }}.yaml)
+
+          cd ${{ needs.Get-Packer-Config.outputs.build-path }}/${{ github.event.pull_request.head.ref }}/
+          ls -lta
 
           packer init $(ls *.hcl)
 
