@@ -44,7 +44,7 @@ jobs:
           path: public
 
   upload-hugo-dev-to-s3:
-    runs-on: ghr-docs-sthings-cicd
+    runs-on: ghr-stuttgart-things-labda-test
     needs: build-hugo
     container:
       image: eu.gcr.io/stuttgart-things/sthings-mc-rclone:2024-05-14
@@ -77,7 +77,7 @@ jobs:
           rclone ls labul-app1:hugo
 
   upload-hugo-public-to-s3:
-    runs-on: ghr-docs-sthings-cicd
+    runs-on: ghr-stuttgart-things-labda-test
     needs: build-hugo
     container:
       image: eu.gcr.io/stuttgart-things/sthings-mc-rclone:2024-05-14
