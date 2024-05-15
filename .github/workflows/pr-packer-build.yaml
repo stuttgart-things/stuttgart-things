@@ -60,14 +60,20 @@ jobs:
       - name: Packer build
         id: build
         run: |
+          SECRET_PATH_USERNAME=$(echo echo $(yq -r ".userSecretPath" packer/environments/${{ needs.Get-Packer-Config.outputs.lab }}-${{ needs.Get-Packer-Config.outputs.cloud }}.yaml)
+          SECRET_PATH_PASSWORD=$(echo $(yq -r ".passwordSecretPath" packer/environments/${{ needs.Get-Packer-Config.outputs.lab }}-${{ needs.Get-Packer-Config.outputs.cloud }}.yaml))
+
+          echo ${SECRET_PATH_USERNAME}
+          echo ${SECRET_PATH_PASSWORD}
+
           cd ${{ needs.Get-Packer-Config.outputs.build-path }}/${{ github.event.pull_request.head.ref }}/
           ls -lta
 
           packer init $(ls *.hcl)
 
           packer build -force \
-          -var "username=$(machineShop get --path $(yq -r ".passwordSecretPath" packer/environments/${{ needs.Get-Packer-Config.outputs.lab }}-${{ needs.Get-Packer-Config.outputs.cloud }}.yaml) | tail -n +8)" \
-          -var "password=$(machineShop get --path $(yq -r ".userSecretPath" packer/environments/${{ needs.Get-Packer-Config.outputs.lab }}-${{ needs.Get-Packer-Config.outputs.cloud }}.yaml) | tail -n +8)" \
+          -var "username=$(machineShop get --path ${SECRET_PATH_USERNAME} | tail -n +8)" \
+          -var "password=$(machineShop get --path ${SECRET_PATH_PASSWORD} | tail -n +8)" \
           -var "name=${{ needs.Get-Packer-Config.outputs.os-version }}-${{ needs.Get-Packer-Config.outputs.build-date }}-${{ needs.Get-Packer-Config.outputs.provisioning}}" \
           $(ls *.hcl)
 
