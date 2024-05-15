@@ -64,20 +64,22 @@ jobs:
           S3_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID }}
           S3_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_ACCESS_KEY }}
         run: |
+          export AWS_ACCESS_KEY_ID="$S3_ACCESS_KEY_ID"
+          export AWS_SECRET_ACCESS_KEY="$S3_SECRET_ACCESS_KEY"
+
           rclone
 
           cat <<EOF > ${HOME}/.config/rclone/rclone.conf
           [labul-app1]
           type = s3
           provider = Minio
-          access_key_id = "$S3_ACCESS_KEY_ID"
-          secret_access_key = "$S3_SECRET_ACCESS_KEY"
+          env_auth = true
           endpoint = https://artifacts.app1.sthings-vsphere.labul.sva.de:443
           acl = private
           region = us-central-1
           EOF
 
-          rclone --size-only copy hugo-dev labul-app1:hugo
+          rclone --size-only copy . labul-app1:hugo
 
           rclone ls labul-app1:hugo
 
@@ -102,19 +104,21 @@ jobs:
           S3_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID }}
           S3_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_ACCESS_KEY }}
         run: |
+          export AWS_ACCESS_KEY_ID="$S3_ACCESS_KEY_ID"
+          export AWS_SECRET_ACCESS_KEY="$S3_SECRET_ACCESS_KEY"
+
           rclone
-          
+
           cat <<EOF > ${HOME}/.config/rclone/rclone.conf
           [labul-app1]
           type = s3
           provider = Minio
-          access_key_id = "$S3_ACCESS_KEY_ID"
-          secret_access_key = "$S3_SECRET_ACCESS_KEY"
+          env_auth = true
           endpoint = https://artifacts.app1.sthings-vsphere.labul.sva.de:443
           acl = private
           region = us-central-1
           EOF
 
-          rclone --size-only copy hugo-public labul-app1:hugo
+          rclone --size-only copy . labul-app1:hugo
 
           rclone ls labul-app1:hugo
