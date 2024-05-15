@@ -8,7 +8,7 @@ module "{{ .vmName }}" {
   vm_template             = "{{ .vmTemplate }}"
   pve_cluster_node        = "{{ .datacenter }}"
   pve_datastore           = "{{ .vmDatastore }}"
-  pve_folder_path         = "{{ .vmFolder }}"
+  pve_folder_path         = "{{ .rootFolder }}"
   pve_network             = "{{ .vmNetwork }}"
   vm_notes                = "VSPHERE-VM {{ .vmName }} {{ .vmTemplate }} BUILD w/ TERRAFORM FOR STUTTGART-THINGS"
   pve_api_url             = var.pve_api_url
