@@ -2,19 +2,15 @@
 name: Dispatch Hugo
 on:
   workflow_dispatch:
-    inputs:
-      runs-on:
-        required: true
-        type: string
-        default: ghr-docs-labda-test
-      base-url:
-        required: true
-        type: string
-        default: https://stuttgart-things.github.io/stuttgart-things/
+  push:
+    branches:
+      - main
+    paths:
+      - 'hugo/*'
 jobs:
   build-hugo:
     name: Build Hugo
-    runs-on: ${{ inputs.runs-on }}
+    runs-on: ghr-docs-labda-test
     container:
       image: klakegg/hugo:0.107.0-ext-alpine
     environment: k8s
@@ -34,14 +30,6 @@ jobs:
           bash hugo/create-sthings.sh
 
           ls -lta sthings/content/post
-
-          # Add hugo toml
-          cat <<EOF | cat - hugo/hugo.yaml > temp && mv temp hugo/hugo.yaml
-          baseURL: '${{ inputs.base-url }}'
-          EOF
-
-          cp -f hugo/hugo.yaml ./sthings
-          cat ./sthings/hugo.yaml
 
       - uses: actions/upload-artifact@v4.3.3
         with:

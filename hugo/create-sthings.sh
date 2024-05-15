@@ -36,4 +36,11 @@ cp sthings-city.png sthings/themes/github-style/images/sthings-city.png
 sed 's/container-lg/container-xl/g' sthings/themes/github-style/layouts/partials/post.html
 # <div class="Box-body px-5 pb-5" style="z-index: 1" width=400%>
 
+# Add hugo toml
+cat <<EOF | cat - hugo/hugo.yaml > temp && mv temp hugo/hugo.yaml
+baseURL: 'https://stuttgart-things.github.io/stuttgart-things/'
+EOF
+
+cp -f hugo/hugo.yaml ./sthings
+cat ./sthings/hugo.yaml
 
