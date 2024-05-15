@@ -119,6 +119,8 @@ jobs:
           region = us-central-1
           EOF
 
+          cat ${HOME}/.config/rclone/rclone.conf
+
           rclone --size-only copy . labul-app1:hugo
 
           rclone ls labul-app1:hugo
