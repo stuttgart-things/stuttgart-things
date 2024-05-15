@@ -42,3 +42,68 @@ jobs:
         with:
           name: hugo-public
           path: public
+ upload-hugo-dev-to-s3:
+    runs-on: ghr-docs-sthings-cicd
+    needs: build-hugo
+    container:
+      image: eu.gcr.io/stuttgart-things/sthings-mc-rclone:2024-05-14
+    environment: labul-vsphere
+    continue-on-error: false
+    steps:
+      - uses: actions/download-artifact@v4.1.7
+        with:
+          name: hugo-dev
+
+      - name: Checkout code
+        run: |
+          ls -lta
+
+      - name: Upload to s3 Bucket
+        run: |
+          cat <<EOF > ${HOME}/.config/rclone/rclone.conf
+          [labul-app1]
+          type = s3
+          provider = Minio
+          access_key_id = ${{ secrets.S3_ACCESS_KEY_ID }}
+          secret_access_key = ${{ secrets.S3_SECRET_ACCESS_KEY }}
+          endpoint = https://artifacts.app1.sthings-vsphere.labul.sva.de:443
+          acl = private
+          region = us-central-1
+          EOF
+
+          rclone --size-only copy hugo-dev labul-app1:hugo
+
+          rclone ls labul-app1:hugo
+
+  upload-hugo-public-to-s3:
+    runs-on: ghr-docs-sthings-cicd
+    needs: build-hugo
+    container:
+      image: eu.gcr.io/stuttgart-things/sthings-mc-rclone:2024-05-14
+    environment: labul-vsphere
+    continue-on-error: false
+    steps:
+      - uses: actions/download-artifact@v4.1.7
+        with:
+          name: hugo-public
+
+      - name: Checkout code
+        run: |
+          ls -lta
+
+      - name: Upload to s3 Bucket
+        run: |
+          cat <<EOF > ${HOME}/.config/rclone/rclone.conf
+          [labul-app1]
+          type = s3
+          provider = Minio
+          access_key_id = ${{ secrets.S3_ACCESS_KEY_ID }}
+          secret_access_key = ${{ secrets.S3_SECRET_ACCESS_KEY }}
+          endpoint = https://artifacts.app1.sthings-vsphere.labul.sva.de:443
+          acl = private
+          region = us-central-1
+          EOF
+
+          rclone --size-only copy hugo-public labul-app1:hugo
+
+          rclone ls labul-app1:hugo
