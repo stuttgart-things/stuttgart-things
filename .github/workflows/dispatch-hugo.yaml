@@ -42,7 +42,8 @@ jobs:
         with:
           name: hugo-public
           path: public
- upload-hugo-dev-to-s3:
+
+  upload-hugo-dev-to-s3:
     runs-on: ghr-docs-sthings-cicd
     needs: build-hugo
     container:
