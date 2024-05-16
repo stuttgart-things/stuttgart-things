@@ -1,0 +1,10 @@
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: GithubRunner
+metadata:
+  name: machineshop
+  namespace: crossplane-system
+spec:
+  repository: machineshop
+  clusterConfig: labda-test
+  version: 0.9.0
