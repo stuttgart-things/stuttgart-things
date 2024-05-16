@@ -1,6 +1,6 @@
 ---
 name: base_os
-version: 0.2.9
+version: 0.3.0
 namespace: sthings
 requirements: |
   roles:
@@ -104,6 +104,75 @@ playbooks:
             tags: notify
             ignore_errors: true
             when: send_to_msteams|bool
+
+  - name: setup
+    play: |
+      ---
+      - hosts: "{{ target_host | default('all') }}"
+        become: true
+        vars:
+          bin:
+            nerdctl:
+              bin_name: "nerdctl"
+              bin_version: "1.7.6"
+              check_bin_version_before_installing: true
+              source_url: "https://github.com/containerd/nerdctl/releases/download/v1.7.6/nerdctl-full-1.7.6-linux-amd64.tar.gz"
+              bin_to_copy: "."
+              bin_dir: "/usr/local"
+              to_remove: "*"
+              version_cmd: " version"
+              target_version: v1.7.6
+              md5_checksum: "044b60cec5341a3cde7a091cc2f12aa7"
+      
+          systemd_services:
+            - containerd
+            - buildkit
+      
+        roles:
+          - download-install-binary
+      
+        post_tasks:
+          - name: Create a directory if it does not exist
+            ansible.builtin.file:
+              path: $HOME/bin
+              state: directory
+              mode: 0700
+      
+          - name: Copy nerdctl
+            ansible.builtin.copy:
+              src: "/usr/local/bin/nerdctl"
+              dest: "/usr/local/bin"
+              mode: 0755
+              remote_src: true
+              owner: root
+            become: true
+      
+          - name: give root permissions to nerdctl + export path
+            ansible.builtin.shell: |
+              chmod +s /usr/local/bin/nerdctl
+              export PATH=/usr/local/bin:$PATH
+      
+          - name: Put SELinux in permissive mode
+            ansible.posix.selinux:
+              policy: targeted
+              state: permissive
+            when: ansible_os_family == 'RedHat'
+      
+          - name: Enable systemd services
+            ansible.builtin.systemd_service:
+              name: "{{ item }}"
+              enabled: true
+              daemon_reload: true
+              state: started
+            become: true
+            with_items:
+              - "{{ systemd_services }}"
+      
+          - name: Put SELinux in enforcing mode
+            ansible.posix.selinux:
+              policy: targeted
+              state: enforcing
+            when: ansible_os_family == 'RedHat'
 
   - name: install_configure_podman
     play: |
