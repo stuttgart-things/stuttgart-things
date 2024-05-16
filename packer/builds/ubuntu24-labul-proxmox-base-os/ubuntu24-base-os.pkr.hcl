@@ -68,9 +68,12 @@ build {
 
   provisioner "ansible" {
     ansible_env_vars       = ["ANSIBLE_REMOTE_TEMP=/tmp", "ANSIBLE_HOST_KEY_CHECKING=False", "ANSIBLE_SSH_ARGS=-oForwardAgent=yes -oControlMaster=auto -oControlPersist=60s -oHostKeyAlgorithms=+ssh-rsa   -oPubkeyAcceptedKeyTypes=+ssh-rsa", "ANSIBLE_NOCOLOR=True"]
-    extra_arguments        = ["--scp-extra-args", "'-O'"]
+    extra_arguments        = ["-e ansible_ssh_pass=ubuntu -vv"]
     keep_inventory_file    = "true"
     playbook_file          = "./base-os.yaml"
+    galaxy_file            = "./requirements.yaml"
+    galaxy_force_install   = "true"
+    use_proxy              = "false"
     user                   = "ubuntu"
   }
 
