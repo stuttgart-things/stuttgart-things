@@ -64,7 +64,6 @@ jobs:
 
       - name: Upload to s3 Bucket
         run: |
-
-          rclone
+          mc
 
         shell: bash
