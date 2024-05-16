@@ -65,5 +65,3 @@ jobs:
       - name: Upload to s3 Bucket
         run: |
           mc
-
-      - shell: bash
