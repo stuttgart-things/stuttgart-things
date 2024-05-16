@@ -44,6 +44,7 @@ jobs:
           path: public
 
   upload-hugo-dev-to-s3:
+    name: Upload hugo-dev to s3
     runs-on: ghr-stuttgart-things-labda-test
     needs: build-hugo
     container:
@@ -85,6 +86,6 @@ jobs:
 
           cat ${HOME}/.config/rclone/rclone.conf
 
-          rclone -P -vv copy hugo-dev labul-app1:hugo
+          rclone -P -vv copy hugo-dev labul-app1:hugo/hugo-dev
 
           rclone ls labul-app1:hugo/hugo-dev
