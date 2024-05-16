@@ -67,6 +67,8 @@ jobs:
 
           rclone
 
+          echo ${HOME}
+
           #load rclone file
           cat <<EOF > ${HOME}/.config/rclone/rclone.conf
           [labul-app1]
@@ -77,42 +79,6 @@ jobs:
           acl = private
           region = us-central-1
           EOF
-
-          cat ${HOME}/.config/rclone/rclone.conf
-
-          rclone --size-only copy . labul-app1:hugo
-
-          rclone ls labul-app1:hugo
-
-        shell: bash
-
-  upload-hugo-public-to-s3:
-    runs-on: ghr-stuttgart-things-labda-test
-    needs: build-hugo
-    container:
-      image: eu.gcr.io/stuttgart-things/sthings-mc-rclone:2024-05-14
-    environment: labul-vsphere
-    continue-on-error: false
-    steps:
-      - uses: actions/download-artifact@v4.1.7
-        with:
-          name: hugo-public
-
-      - name: Checkout code
-        run: |
-          ls -lta
-
-      - name: Upload to s3 Bucket
-        env:
-          S3_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID }}
-          S3_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_ACCESS_KEY }}
-        run: |
-          export AWS_ACCESS_KEY_ID="$S3_ACCESS_KEY_ID"
-          export AWS_SECRET_ACCESS_KEY="$S3_SECRET_ACCESS_KEY"
-
-          rclone
-
-          #load rclone file
 
           cat ${HOME}/.config/rclone/rclone.conf
 
