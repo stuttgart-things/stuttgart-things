@@ -64,4 +64,21 @@ jobs:
 
       - name: Upload to s3 Bucket
         run: |
-          mc
+          mkdir -p ${HOME}/.config/rclone/
+          touch ${HOME}/.config/rclone/rclone.conf
+
+          cat ${HOME}/.config/rclone/rclone.conf
+
+          cat <<EOF > ${HOME}/.config/rclone/rclone.conf
+          [labul-app1]
+          type = s3
+          provider = Minio
+          env_auth = true
+          endpoint = https://artifacts.app1.sthings-vsphere.labul.sva.de:443
+          acl = private
+          region = us-central-1
+          EOF
+
+          cat ${HOME}/.config/rclone/rclone.conf
+
+          rclone ls labul-app1:
