@@ -86,6 +86,6 @@ jobs:
 
           cat ${HOME}/.config/rclone/rclone.conf
 
-          rclone --size-only copy . labul-app1:hugo
+          rclone --size-only copy hugo-dev labul-app1:hugo
 
           rclone ls labul-app1:hugo
