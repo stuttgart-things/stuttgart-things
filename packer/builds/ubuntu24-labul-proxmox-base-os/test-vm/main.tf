@@ -1,9 +1,9 @@
 module ubuntu24-labul-proxmox-base-os {
   source           = "github.com/stuttgart-things/proxmox-vm.git?ref=v2.9.14-1.5.5"
   vm_count         = 1
-  vm_name          = var.proxmox_vm_name
+  vm_name          = var.vsphere_vm_name
   vm_memory        = "8192"
-  vm_template      = var.proxmox_vm_template
+  vm_template      = var.vsphere_vm_template
   vm_disk_size     = "32G"
   vm_num_cpus      = "8"
   pve_cluster_node = "sthings-pve1"
@@ -22,12 +22,12 @@ output "ip" {
   value     = module.ubuntu24-labul-proxmox-base-os.ip
 }
 
-variable "proxmox_vm_name" {
+variable "vsphere_vm_name" {
   type        = string
   description = "name of vsphere vm template"
 }
 
-variable "proxmox_vm_template" {
+variable "vsphere_vm_template" {
   type        = string
   description = "name of proxmox vm template"
 }
