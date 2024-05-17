@@ -12,7 +12,7 @@ jobs:
     name: Build Hugo
     runs-on: ghr-stuttgart-things-labda-test
     container:
-      image: dcjulian29/hugo:0.125.5
+      image: klakegg/hugo:0.107.0-ext-alpine
     environment: k8s
     continue-on-error: false
     steps:
