@@ -7,7 +7,7 @@ module rocky9-labul-proxmox-base-os {
   vm_disk_size     = "32G"
   vm_num_cpus      = "8"
   pve_cluster_node = "sthings-pve1"
-  pve_datastore    = "sthings-pve1"
+  pve_datastore    = "datastore"
   pve_folder_path  = "stuttgart-things"
   pve_network      = "vmbr102"
   vm_notes         = "PROXMOX-VM PACKER TEST VM BUILD w/ TERRAFORM FOR STUTTGART-THINGS"
