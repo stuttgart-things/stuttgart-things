@@ -91,6 +91,10 @@ jobs:
 
           cat ${HOME}/.config/rclone/rclone.conf
 
+          # clean folder
+          rclone delete labul-app1:hugo/hugo-dev
+
+          # copy content to s3 bucket
           rclone -P copy hugo-dev labul-app1:hugo/hugo-dev
 
           rclone ls labul-app1:hugo/hugo-dev
@@ -137,7 +141,11 @@ jobs:
           EOF
 
           cat ${HOME}/.config/rclone/rclone.conf
+          
+          # clean folder
+          rclone delete labul-app1:hugo/hugo-public
 
+          # copy content to s3
           rclone -P copy hugo-public labul-app1:hugo/hugo-public
 
           rclone ls labul-app1:hugo/hugo-public
