@@ -28,7 +28,7 @@ testVmDiskSize: 32G
 testCpu: 8
 testVmRam: 8192
 testVmDatacenter: sthings-pve1
-testVmDatastore: sthings-pve1
+testVmDatastore: v3700
 testVmFolder: stuttgart-things
 testVmNetwork: vmbr102
 
