@@ -28,7 +28,7 @@ wget https://raw.githubusercontent.com/stuttgart-things/docs/main/hugo/sthings-c
 
 # Copy hugo content
 cp -R hugo/*.html sthings/content/post
-cp sthings-logo.png sthings/themes/github-style/static/images/avatar.png
+#cp sthings-logo.png sthings/themes/github-style/static/images/avatar.png
 cp sthings-logo.png sthings/themes/github-style/images/sthings-logo.png
 cp sthings-city.png sthings/themes/github-style/images/sthings-city.png
 cp sthings-logo.png sthings/themes/github-style/static/images/sthings-logo.png
