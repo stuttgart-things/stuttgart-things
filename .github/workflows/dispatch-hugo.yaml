@@ -50,6 +50,7 @@ jobs:
     with:
       folder: hugo-dev
       endpoint: ${{ inputs.endpoint }}
+    secrets: inherit
 
   Sync-Hugo-Public-Minio:
     name: Sync Minio
@@ -58,6 +59,7 @@ jobs:
     with:
       folder: hugo-public
       endpoint: ${{ inputs.endpoint }}
+    secrets: inherit
 
   Deploy-Hugo-Site:
     runs-on: ghr-stuttgart-things-labda-test
