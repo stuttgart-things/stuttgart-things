@@ -45,7 +45,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          echo 'pull-request id to close: ${{ inputs.pr-id }}'
           git config --global --add safe.directory /__w/${{ inputs.github-group }}/${{ inputs.github-repo }}
           gh pr list
+          echo 'pull-request id to merge: ${{ inputs.pr-id }}'
           gh pr merge ${{ inputs.pr-id }} --auto --rebase --delete-branch
