@@ -1,9 +1,9 @@
 module [[ .osVersion ]]-[[ .lab ]]-[[ .cloud ]]-[[ .ansibleOsProvisioning ]] {
   source           = "[[ .testVmModuleSource ]]"
   vm_count         = [[ .testVmCount ]]
-  vm_name          = var.proxmox_vm_name
+  vm_name          = var.vm_name
+  vm_template      = var.vm_template
   vm_memory        = "[[ .testVmRam ]]"
-  vm_template      = var.proxmox_vm_template
   vm_disk_size     = "[[ .testVmDiskSize ]]"
   vm_num_cpus      = "[[ .testCpu ]]"
   pve_cluster_node = "[[ .testVmDatacenter ]]"
@@ -22,12 +22,12 @@ output "ip" {
   value     = module.{{ .vmName }}.ip
 }
 
-variable "proxmox_vm_name" {
+variable "vm_name" {
   type        = string
   description = "name of vsphere vm template"
 }
 
-variable "proxmox_vm_template" {
+variable "vm_template" {
   type        = string
   description = "name of proxmox vm template"
 }
