@@ -19,7 +19,7 @@ module [[ .osVersion ]]-[[ .lab ]]-[[ .cloud ]]-[[ .ansibleOsProvisioning ]] {
 }
 
 output "ip" {
-  value     = module.{{ .vmName }}.ip
+  value     = module.[[ .osVersion ]]-[[ .lab ]]-[[ .cloud ]]-[[ .ansibleOsProvisioning ]].ip
 }
 
 variable "vm_name" {
