@@ -67,7 +67,6 @@ jobs:
     with:
       folder: hugo-dev
       endpoint: ${{ inputs.endpoint }}
-      folder: ${{ inputs.folder }}
       image: ${{ inputs.image }}
       environment: ${{ inputs.environment }}
       bucket: ${{ inputs.bucket }}
