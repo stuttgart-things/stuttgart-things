@@ -1,0 +1,73 @@
+---
+releases:
+  - name: metallb-deployment
+    installed: true
+    namespace: metallb-system
+    chart: bitnami/metallb
+    version: 6.1.4
+
+  - name: metallb-configuration
+    disableValidationOnInstall: true
+    needs:
+      - metallb-system/metallb-deployment
+    installed: true
+    namespace: metallb-system
+    chart: stuttgart-things/sthings-cluster
+    version: 0.3.10
+    values:
+      - "values/metallb.values.yaml.gotmpl"
+
+  - name: ingress-nginx
+    installed: true
+    namespace: ingress-nginx
+    chart: ingress-nginx/ingress-nginx
+    version: 4.10.0
+    needs:
+      - metallb-system/metallb-deployment
+      - metallb-system/metallb-configuration
+
+  - name: cert-manager-deployment
+    installed: true
+    namespace: cert-manager
+    chart: cert-manager/cert-manager
+    version: v1.14.4
+    values:
+      - installCRDs: true
+
+  - name: cert-manager-configration
+    disableValidationOnInstall: true
+    installed: true
+    namespace: cert-manager
+    chart: stuttgart-things/sthings-cluster
+    version: 0.3.10
+    values:
+      - "values/cert-manager.values.yaml.gotmpl"
+    needs:
+      - cert-manager/cert-manager-deployment
+
+repositories:
+  - name: bitnami
+    url: https://charts.bitnami.com/bitnami
+    oci: false
+  - name: stuttgart-things
+    url: eu.gcr.io/stuttgart-things
+    oci: true
+  - name: ingress-nginx
+    url: https://kubernetes.github.io/ingress-nginx
+    oci: false
+  - name: cert-manager
+    url:  https://charts.jetstack.io
+    oci: false
+
+helmDefaults:
+  verify: false
+  wait: true
+  timeout: 600
+  recreatePods: false
+  force: true
+
+environments:
+  labul-vsphere:
+    values:
+      - env/default.yaml
+      - env/{{ .Environment.Name }}.yaml

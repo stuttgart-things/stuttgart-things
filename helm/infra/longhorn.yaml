@@ -1,0 +1,27 @@
+---
+releases:
+  - name: longhorn
+    installed: true
+    namespace: longhorn-system
+    chart: longhorn/longhorn
+    version: 1.6.1
+    values:
+      - "values/longhorn.values.yaml.gotmpl"
+
+repositories:
+  - name: longhorn
+    url: https://charts.longhorn.io
+    oci: false
+
+helmDefaults:
+  verify: false
+  wait: true
+  timeout: 600
+  recreatePods: false
+  force: true
+
+environments:
+  labul-vsphere:
+    values:
+      - env/default.yaml
+      - env/{{ .Environment.Name }}.yaml

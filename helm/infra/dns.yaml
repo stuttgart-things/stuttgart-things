@@ -1,0 +1,26 @@
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: AnsibleRun
+metadata:
+  name: pdns-entry-labul-vsphere-itnovative
+  namespace: default
+spec:
+  pipelineRunName: pdns-entry-labul-vsphere-itnovative
+  inventory:
+    - "all+[\"localhost\"]"
+  playbooks:
+    - "ansible/playbooks/pdns-ingress-entry.yaml"
+  ansibleVarsFile:
+    - pdns_url+-https://pdns-vsphere.labul.sva.de:8443
+    - entry_zone+-sthings-vsphere.labul.sva.de.
+    - ip_address+-10.31.103.20
+    - hostname+-itnovative
+  gitRepoUrl: https://github.com/stuttgart-things/stuttgart-things.git
+  gitRevision: main
+  providerRef:
+    name: kubernetes-incluster
+  vaultSecretName: vault
+  pipelineNamespace: tektoncd
+  workingImage: eu.gcr.io/stuttgart-things/sthings-ansible:9.2.0
+  roles:
+    - "https://github.com/stuttgart-things/install-configure-powerdns.git"
