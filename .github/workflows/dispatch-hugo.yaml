@@ -38,9 +38,7 @@ jobs:
           name: hugo-dev
           path: sthings
 
-      - run: |
-          cd sthings && hugo --verbose --destination ../public
-          ls -lta public
+      - run: cd sthings && hugo --verbose --destination ../public
 
       - uses: actions/upload-artifact@v4.3.3
         with:
