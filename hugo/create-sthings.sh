@@ -1,5 +1,11 @@
 #!/bin/bash
 
+echo "Creating hugo site"
+hugo new site sthings -f "yaml"
+rm sthings/hugo.toml
+git clone https://github.com/MeiK2333/github-style ./sthings/themes/github-style
+mkdir -p ./sthings/content/post
+
 # Define vars
 file="*.html"
 dir="hugo"
