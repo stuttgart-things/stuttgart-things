@@ -45,7 +45,7 @@ jobs:
           CLOUD=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'-' -f3)
           TEMPLATE_NAME=$(echo ${{ steps.fc.outputs.comment-body }} | sed 's/.*\://' | xargs)
           VM_NAME=test-$(echo ${OS})-$(echo $(date '+%Y-%m-%d'))
-          VARS=$(echo vsphere_vm_template=${TEMPLATE_NAME}";"vsphere_vm_name=${VM_NAME})
+          VARS=$(echo vm_template=${TEMPLATE_NAME}";"vm_name=${VM_NAME})
 
           # SET ENV VARS
           echo "FOLDER=$(echo ${{ steps.test.outputs.comment-body }} | sed 's/.*\://' | xargs)/" >> $GITHUB_ENV
@@ -77,7 +77,7 @@ jobs:
     with:
       folder: ${{ needs.Get-Packer-Config.outputs.folder }}
       branch: ${{ needs.Get-Packer-Config.outputs.branch }}
-      variables: ${{ needs.Get-Packer-Config.outputs.variables }} #"VARIABLES='vsphere_vm_template=ubuntu23-2024-04-24-base-os;vsphere_vm_name=u23-base-test1'" >> $GITHUB_ENV
+      variables: ${{ needs.Get-Packer-Config.outputs.variables }} #"VARIABLES='vm_template=ubuntu23-2024-04-24-base-os;vm_name=u23-base-test1'" >> $GITHUB_ENV
       operation: apply
       output: true
       working-image: ${{ needs.Get-Packer-Config.outputs.working-image }}
@@ -113,7 +113,7 @@ jobs:
     with:
       folder: ${{ needs.Get-Packer-Config.outputs.folder }}
       branch: ${{ needs.Get-Packer-Config.outputs.branch }}
-      variables: ${{ needs.Get-Packer-Config.outputs.variables }} #"VARIABLES='vsphere_vm_template=ubuntu23-2024-04-24-base-os;vsphere_vm_name=u23-base-test1'" >> $GITHUB_ENV
+      variables: ${{ needs.Get-Packer-Config.outputs.variables }} #"VARIABLES='vm_template=ubuntu23-2024-04-24-base-os;vm_name=u23-base-test1'" >> $GITHUB_ENV
       operation: destroy
       working-image: ${{ needs.Get-Packer-Config.outputs.working-image }}
       environment-name: ${{ needs.Get-Packer-Config.outputs.environment }}
