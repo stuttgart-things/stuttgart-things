@@ -6,6 +6,7 @@ on:
       endpoint:
         description: MINIO ENDPOINT
         type: string
+        default: https://artifacts.app1.sthings-vsphere.labul.sva.de:443
 
   push:
     branches:

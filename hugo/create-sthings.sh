@@ -42,7 +42,8 @@ cp sthings-city.png sthings/themes/github-style/static/images/sthings-city.png
 
 # Modify theme files
 sed 's/container-lg/container-xl/g' sthings/themes/github-style/layouts/partials/post.html
-# <div class="Box-body px-5 pb-5" style="z-index: 1" width=400%>
+sed 's/<div class="Box-body px-5 pb-5" style="z-index: 1">/<div class="Box-body px-5 pb-5" style="z-index: 1" width=400%>/g' sthings/themes/github-style/layouts/partials/post.html
+
 
 # Modify and add hugo toml
 cat <<EOF | cat - hugo/hugo.yaml > temp && mv temp hugo/hugo.yaml
