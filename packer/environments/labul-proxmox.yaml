@@ -56,6 +56,11 @@ templateCreationSetup: false
 userSecretPath: cloud/data/pve:api_user
 passwordSecretPath: cloud/data/pve:api_password
 
+# S3
+s3Endpoint: https://artifacts.app1.sthings-vsphere.labul.sva.de
+s3Bucket: proxmox-labul
+s3Region: main
+
 updatePackages: true
 installRequirements: true
 cpu: 8
@@ -86,6 +91,8 @@ ubuntu23IsoUrl: https://releases.ubuntu.com/lunar/ubuntu-23.04-live-server-amd64
 ubuntu23IsoChecksum: c7cda48494a6d7d9665964388a3fc9c824b3bef0c9ea3818a1be982bc80d346b
 ubuntu22User: ubuntu
 ubuntu22Password: ubuntu
+
+
 
 createUser: true
 rebootBeforeAnsible: false
