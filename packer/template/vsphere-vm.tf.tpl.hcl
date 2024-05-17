@@ -1,9 +1,9 @@
 module [[ .osVersion ]]-[[ .lab ]]-[[ .cloud ]]-[[ .ansibleOsProvisioning ]] {
   source                 = "[[ .testVmModuleSource ]]"
   vm_count               = [[ .testVmCount ]]
-  vsphere_vm_name        = var.vsphere_vm_name
+  vsphere_vm_name        = var.vm_name
+  vsphere_vm_template    = var.vm_template
   vm_memory              = [[ .testVmRam ]]
-  vsphere_vm_template    = var.vsphere_vm_template
   vm_disk_size           = "[[ .testVmDiskSize ]]"
   vm_num_cpus            = [[ .testCpu ]]
   firmware               = "bios"
@@ -21,7 +21,7 @@ module [[ .osVersion ]]-[[ .lab ]]-[[ .cloud ]]-[[ .ansibleOsProvisioning ]] {
   vm_ssh_password        = var.vm_ssh_password
 }
 
-variable "vsphere_vm_name" {
+variable "vm_name" {
   type        = string
   description = "name of vsphere vm template"
 }
@@ -31,7 +31,7 @@ variable "vsphere_server" {
   description = "name of vsphere vm template"
 }
 
-variable "vsphere_vm_template" {
+variable "vm_template" {
   type        = string
   description = "name of vsphere vm template"
 }
