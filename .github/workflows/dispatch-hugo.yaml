@@ -7,12 +7,29 @@ on:
         description: MINIO ENDPOINT
         type: string
         default: https://artifacts.app1.sthings-vsphere.labul.sva.de:443
+      image:
+        required: true
+        type: string
+        default: eu.gcr.io/stuttgart-things/sthings-mc-rclone:2024-05-14
+      environment:
+        required: true
+        type: string
+        default: labul-vsphere
+      bucket:
+        required: true
+        type: string
+        default: hugo
+      s3_alias:
+        required: true
+        type: string
+        default: labul-app1  
 
   push:
     branches:
       - main
     paths:
       - 'hugo/*'
+
 jobs:
   build-hugo:
     name: Build Hugo
