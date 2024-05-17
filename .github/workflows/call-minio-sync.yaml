@@ -25,6 +25,7 @@ jobs:
         with:
           name: ${{ inputs.folder }}
           path: ${{ inputs.folder }}
+          
       - name: Checkout code
         run: |
           ls -lta
@@ -52,7 +53,7 @@ jobs:
           cat ${HOME}/.config/rclone/rclone.conf
           
           # clean folder
-          rclone delete labul-app1:hugo/${{ inputs.folder }}
+          #rclone delete labul-app1:hugo/${{ inputs.folder }}
 
           # copy content to s3
           rclone -P copy ${{ inputs.folder }} labul-app1:hugo/${{ inputs.folder }}
