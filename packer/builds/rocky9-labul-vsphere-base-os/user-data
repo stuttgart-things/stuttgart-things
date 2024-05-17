@@ -3,7 +3,7 @@
 #version=RHEL9
 # Use graphical install
 # graphical
-repo --name="AppStream" --baseurl=https://download.rockylinux.org/pub/rocky/9/AppStream/x86_64/os/
+repo --name="AppStream" --baseurl=[[ .rocky9appStreamRepoUrl ]]
 
 %addon com_redhat_kdump --disable
 
@@ -18,7 +18,7 @@ lang en_US.UTF-8
 network  --bootproto=dhcp --ipv6=auto --activate
 
 # Use network installation
-url --url=https://download.rockylinux.org/pub/rocky/9/BaseOS/x86_64/os/
+url --url=[[ .rocky9NetworkInstall ]]
 
 %packages
 @^minimal-environment
