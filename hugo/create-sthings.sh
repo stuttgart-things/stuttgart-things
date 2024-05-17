@@ -42,5 +42,5 @@ baseURL: 'https://stuttgart-things.github.io/stuttgart-things/'
 EOF
 
 cp -f hugo/hugo.yaml ./sthings
-cat ./sthings/hugo.yaml
+#cat ./sthings/hugo.yaml
 

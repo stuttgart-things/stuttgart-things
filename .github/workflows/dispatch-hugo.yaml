@@ -12,7 +12,7 @@ jobs:
     name: Build Hugo
     runs-on: ghr-stuttgart-things-labda-test
     container:
-      image: klakegg/hugo:0.107.0-ext-alpine
+      image: dcjulian29/hugo:0.125.5
     environment: k8s
     continue-on-error: false
     steps:
@@ -25,18 +25,22 @@ jobs:
           mkdir -p ./sthings/content/post
 
           ls -lta
-          ls -lta hugo
+          #ls -lta hugo
         
           bash hugo/create-sthings.sh
 
-          ls -lta sthings/content/post
+          #ls -lta sthings/content/post
+
+          ls -lta sthings
 
       - uses: actions/upload-artifact@v4.3.3
         with:
           name: hugo-dev
           path: sthings
 
-      - run: cd sthings && hugo --verbose --destination ../public
+      - run: |
+          cd sthings && hugo --verbose --destination ../public
+          ls -lta public
 
       - uses: actions/upload-artifact@v4.3.3
         with:
@@ -66,6 +70,8 @@ jobs:
 
       - name: Upload to s3 Bucket
         run: |
+          ls -lta hugo-dev
+
           export AWS_ACCESS_KEY_ID=$S3_ACCESS_KEY_ID
           export AWS_SECRET_ACCESS_KEY=$S3_SECRET_ACCESS_KEY
 
