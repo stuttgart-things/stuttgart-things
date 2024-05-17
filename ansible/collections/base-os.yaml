@@ -1,6 +1,6 @@
 ---
 name: base_os
-version: 0.3.0
+version: 0.3.1
 namespace: sthings
 requirements: |
   roles:
@@ -31,7 +31,7 @@ requirements: |
     - src: https://github.com/stuttgart-things/create-send-webhook.git
       scm: git
       version: 2022.01.01
-      
+
 playbooks:
 
   - name: setup
@@ -40,7 +40,7 @@ playbooks:
       - hosts: "{{ target_host | default('all') }}"
         become: true
         gather_facts: true
-      
+
         vars:
           manage_filesystem: true
           update_packages: true
@@ -60,22 +60,22 @@ playbooks:
             - https://vault-vsphere.labul.sva.de:8200
             - https://vault-pve.labul.sva.de:8200
             - https://vault-vsphere.tiab.labda.sva.de:8200
-      
+
         roles:
           - role: sthings.base_os.manage_filesystem
             when: manage_filesystem|bool
-      
+
           - role: sthings.base_os.install_requirements
             when: install_requirements|bool
-      
+
         pre_tasks:
           - name: Include vars
             ansible.builtin.include_vars: "{{ path_to_vars_file }}.yaml"
             when: path_to_vars_file is defined
-      
+
           - ansible.builtin.reboot:
             when: reboot_all|bool
-      
+
         tasks:
           - name: Install vault ca certificate to local system from multiple instances
             ansible.builtin.include_role:
@@ -87,7 +87,7 @@ playbooks:
             loop_control:
               loop_var: vault_instance
             when: vault_instances is defined
-      
+
           - name: Send webhook to msteams
             ansible.builtin.include_role:
               name: sthings.base_os.create_send_webhook
@@ -105,7 +105,7 @@ playbooks:
             ignore_errors: true
             when: send_to_msteams|bool
 
-  - name: setup
+  - name: install_configure_nerdctl
     play: |
       ---
       - hosts: "{{ target_host | default('all') }}"
@@ -123,21 +123,20 @@ playbooks:
               version_cmd: " version"
               target_version: v1.7.6
               md5_checksum: "044b60cec5341a3cde7a091cc2f12aa7"
-      
+
           systemd_services:
             - containerd
             - buildkit
-      
         roles:
-          - download-install-binary
-      
+          - role: sthings.base_os.download_install_binary
+
         post_tasks:
           - name: Create a directory if it does not exist
             ansible.builtin.file:
               path: $HOME/bin
               state: directory
               mode: 0700
-      
+
           - name: Copy nerdctl
             ansible.builtin.copy:
               src: "/usr/local/bin/nerdctl"
@@ -146,18 +145,18 @@ playbooks:
               remote_src: true
               owner: root
             become: true
-      
+
           - name: give root permissions to nerdctl + export path
             ansible.builtin.shell: |
               chmod +s /usr/local/bin/nerdctl
               export PATH=/usr/local/bin:$PATH
-      
+
           - name: Put SELinux in permissive mode
             ansible.posix.selinux:
               policy: targeted
               state: permissive
             when: ansible_os_family == 'RedHat'
-      
+
           - name: Enable systemd services
             ansible.builtin.systemd_service:
               name: "{{ item }}"
@@ -167,7 +166,7 @@ playbooks:
             become: true
             with_items:
               - "{{ systemd_services }}"
-      
+
           - name: Put SELinux in enforcing mode
             ansible.posix.selinux:
               policy: targeted
@@ -182,6 +181,7 @@ playbooks:
 
         roles:
           - role: sthings.base_os.install_configure_podman
+
   - name: install_configure_golang
     play: |
       ---
@@ -229,7 +229,7 @@ playbooks:
               validate_certs: false
               remote_src: true
             when: checksum_existing.checksum_value is not defined or golang_checksum != checksum_existing.checksum_value
-            
+
           - name: Add golang exports for existing users to bashrc
             ansible.builtin.blockinfile:
               block: |
@@ -253,7 +253,7 @@ playbooks:
         become: true
         vars:
           download_dir: "/tmp/downloads"
-          
+
         vars_files:
           - "{{ profile | default('dev') }}.yaml"
 
@@ -266,7 +266,7 @@ playbooks:
       - hosts: "{{ target_host | default('all') }}"
         become: true
         vars:
-          docker_install_compose: true  
+          docker_install_compose: true
           install_kind: false
           #kind_version: 0.22.0
           #kubectl_version: 1.30.0
@@ -287,28 +287,28 @@ playbooks:
           - role: sthings.base_os.create_os_user
 
 vars:
-  - name: golang-users
-    file: |
-      ---
-      # CREATE USER(S) FOR GOLANG INSTALL AND SET EXPORTS
-      golang_users:
-        - username: bill
-          name: bill user
-          group: golang
-          uid: 1020
-          home: /home/bill
-          profile: |
-            alias ll='ls -ahl'
-            export GOROOT=/usr/local/go
-            export PATH=$GOROOT/bin:$PATH
-            export GOPATH=/home/bill/usr/local/go
-            export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
-          enable_ssh_tcp_forwarding: true
-          password: "!"
+  # - name: golang-users
+  #   file: |
+  #     ---
+  #     # CREATE USER(S) FOR GOLANG INSTALL AND SET EXPORTS
+  #     golang_users:
+  #       - username: bill
+  #         name: bill user
+  #         group: golang
+  #         uid: 1020
+  #         home: /home/bill
+  #         profile: |
+  #           alias ll='ls -ahl'
+  #           export GOROOT=/usr/local/go
+  #           export PATH=$GOROOT/bin:$PATH
+  #           export GOPATH=/home/bill/usr/local/go
+  #           export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
+  #         enable_ssh_tcp_forwarding: true
+  #         password: "!"
 
-      groups_golang:
-        - name: golang
-          gid: 31000
+  #     groups_golang:
+  #       - name: golang
+  #         gid: 31000
 
   - name: sthings-users
     file: |
@@ -330,59 +330,59 @@ vars:
       bin:
         velero:
           bin_name: "velero"
-          bin_version: "1.13.1"
+          bin_version: "1.13.2"
           check_bin_version_before_installing: true
-          source_url: "https://github.com/vmware-tanzu/velero/releases/download/v1.13.1/velero-v1.13.1-linux-amd64.tar.gz"
-          bin_to_copy: "velero-v1.13.1-linux-amd64/velero"
-          to_remove: "velero-v1.13.1-linux-amd64"
+          source_url: "https://github.com/vmware-tanzu/velero/releases/download/v1.13.2/velero-v1.13.2-linux-amd64.tar.gz"
+          bin_to_copy: "velero-v1.13.2-linux-amd64/velero"
+          to_remove: "velero-v1.13.2-linux-amd64"
           bin_dir: "/usr/local/bin"
           version_cmd: " version --client-only"
-          target_version: v1.13.1
-          md5_checksum: "30ab57f9520ae2318ab28eefbc81728c"
+          target_version: v1.13.2
+          #md5_checksum: "30ab57f9520ae2318ab28eefbc81728c"
         terraform:
           bin_name: "terraform"
-          bin_version: "1.8.0"
+          bin_version: "1.8.3"
           check_bin_version_before_installing: true
-          source_url: "https://releases.hashicorp.com/terraform/1.8.0/terraform_1.8.0_linux_amd64.zip"
+          source_url: "https://releases.hashicorp.com/terraform/1.8.0/terraform_1.8.3_linux_amd64.zip"
           bin_to_copy: "terraform"
           to_remove: "terraform"
           bin_dir: "/usr/local/bin"
           version_cmd: " --version"
-          target_version: v1.8.0
-          md5_checksum: "2c6638e53cf5474c4d1363c17e8653ef"
+          target_version: v1.8.3
+          #md5_checksum: "2c6638e53cf5474c4d1363c17e8653ef"
         helm:
           bin_name: "helm"
-          bin_version: "3.14.3"
+          bin_version: "3.15.0"
           check_bin_version_before_installing: true
-          source_url: "https://get.helm.sh/helm-v3.14.3-linux-amd64.tar.gz"
+          source_url: "https://get.helm.sh/helm-v3.15.0-linux-amd64.tar.gz"
           bin_to_copy: "linux-amd64/helm"
           to_remove: "linux-amd64"
           bin_dir: "/usr/local/bin"
           version_cmd: " version"
-          target_version: v3.14.3
-          md5_checksum: "8dd2ecdbb70ef4e3a55083e8d5ebf352"
+          target_version: v3.15.0
+          #md5_checksum: "8dd2ecdbb70ef4e3a55083e8d5ebf352"
         kubectl:
           bin_name: "kubectl"
-          bin_version: "1.29.3"
+          bin_version: "1.30.1"
           check_bin_version_before_installing: true
-          source_url: "https://dl.k8s.io/v1.29.3/bin/linux/amd64/kubectl"
+          source_url: "https://dl.k8s.io/v1.30.1/bin/linux/amd64/kubectl"
           bin_to_copy: "kubectl"
           to_remove: "kubectl"
           bin_dir: "/usr/local/bin"
           version_cmd: " version --client"
-          target_version: v1.29.3
-          md5_checksum: "07b43208389cbc779941b94a05cf89bc"
+          target_version: v1.30.1
+          #md5_checksum: "07b43208389cbc779941b94a05cf89bc"
         packer:
           bin_name: "packer"
-          bin_version: "1.10.2"
+          bin_version: "1.10.3"
           check_bin_version_before_installing: true
-          source_url: "https://releases.hashicorp.com/packer/1.10.2/packer_1.10.2_linux_amd64.zip"
+          source_url: "https://releases.hashicorp.com/packer/1.10.3/packer_1.10.3_linux_amd64.zip"
           bin_to_copy: "packer"
           to_remove: "packer"
           bin_dir: "/usr/local/bin"
           version_cmd: " --version"
           target_version: v1.10.2
-          md5_checksum: "374f22185f1f8cb25bc53187a2154ef0"
+          #md5_checksum: "374f22185f1f8cb25bc53187a2154ef0"
         k9s:
           bin_name: "k9s"
           bin_version: "0.32.4"
