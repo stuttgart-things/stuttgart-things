@@ -78,8 +78,12 @@ jobs:
     needs: build-hugo
     uses: stuttgart-things/stuttgart-things/.github/workflows/call-minio-sync.yaml@main
     with:
-      folder: hugo-public
+      folder: hugo-dev
       endpoint: ${{ inputs.endpoint }}
+      image: ${{ inputs.image }}
+      environment: ${{ inputs.environment }}
+      bucket: ${{ inputs.bucket }}
+      s3_alias: ${{ inputs.s3_alias }}
     secrets: inherit
 
   Deploy-Hugo-Site:
