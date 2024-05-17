@@ -67,7 +67,7 @@ node: sthings-pve1
 pool: packer
 sshTimeout: 20m
 proxmoxUrl: https://sthings-pve1.labul.sva.de:8006/api2/json
-isoStoragePool: datastore
+isoStoragePool: v3700
 fedora39IsoUrl: https://download.fedoraproject.org/pub/fedora/linux/releases/39/Server/x86_64/iso/Fedora-Server-netinst-x86_64-39-1.5.iso
 fedora39IsoChecksum: 61576ae7170e35210f03aae3102048f0a9e0df7868ac726908669b4ef9cc22e9
 rocky9IsoUrl: https://dl.rockylinux.org/pub/rocky/9.4/isos/x86_64/Rocky-9.4-x86_64-minimal.iso
