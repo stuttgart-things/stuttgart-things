@@ -46,6 +46,12 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           git config --global --add safe.directory /__w/${{ inputs.github-group }}/${{ inputs.github-repo }}
-          gh pr list
           echo 'pull-request id to merge: ${{ inputs.pr-id }}'
-          gh pr merge ${{ inputs.pr-id }} --auto --rebase --delete-branch
+          gh pr list
+
+          TRY=6
+          until [ $TRY -eq 0 ] || gh pr merge ${{ inputs.pr-id }} --auto --rebase --delete-branch
+          do echo $TRY
+            TRY=$(expr $TRY - 1)
+            sleep 15
+          done
