@@ -1,0 +1,26 @@
+# Exclude URLs and mail addresses from checking (supports regex).
+exclude = [
+    '.+\.sva\.de',
+    '.+\.default\.svc',                  # exclude k8s services
+    '.+\.svc\.cluster\.local',           # exclude k8s services
+    'https://365sva.webhook.office.com', # exclude MSTeams webhook
+    '\d+\.\d+\.\d+\.\d+',                # exclude IP addresses
+    '.+\.tekton-pipelines',              # exclude tekton pipelines
+    '%s',                                # exclude templating %s
+    '\$%7B.+%7D',                        # exclude templating ${...}
+    'https://kes/',
+]
+
+# Remap URI matching pattern to different URI.
+remap = [
+    'https://charts.bitnami.com/bitnami https://charts.bitnami.com/',
+    '(.+)/download/v$ $1/',
+    '(.+)/release/v$ $1/',
+    '(.+).iso/n.+ $1.iso',
+    '(.+),.+ $1',
+]
+
+# Exclude all private IPs from checking.
+# Equivalent to setting `exclude_private`, `exclude_link_local`, and
+# `exclude_loopback` to true.
+exclude_all_private = true
