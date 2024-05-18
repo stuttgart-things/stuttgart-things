@@ -120,21 +120,22 @@ tasks:
         git commit -am "${COMMIT_MESSAGE}"
       - git push origin -u {{ .BRANCH }}
 
-  branch:
-    desc: Create branch from main
-    cmds:
-      - git checkout main
-      - git branch
-      - git pull
-      - |
-        echo "Enter to be created (remote) branch:"
-        read BRANCH_NAME;
-        git checkout -b ${BRANCH_NAME}
-        git push origin ${BRANCH_NAME}
-      - git branch
-
   pull-request:
     desc: Create pull request into main
     cmds:
       - task: git-push
       - gh pr create -t "pr" -b "created pr for ${BRANCH_NAME} branch into main"
+
+  lychee:
+    desc: Check links with lychee
+    cmds:
+      - |
+        LYCHEE=$(command -v lychee 2>/dev/null) || true
+        if [ -z "$LYCHEE" ]; then
+          LYCHEE_VERSION='v0.15.1'	# current stable version
+          LYCHEE_TMP='/tmp/'
+          LYCHEE_FILE="${LYCHEE_TMP}lychee-${LYCHEE_VERSION}-x86_64-unknown-linux-gnu.tar.gz"
+          wget "https://github.com/lycheeverse/lychee/releases/download/${LYCHEE_VERSION}/lychee-${LYCHEE_VERSION}-x86_64-unknown-linux-gnu.tar.gz" -O "$LYCHEE_FILE"
+          tar -C /usr/local/bin -xzvf "$LYCHEE_FILE"
+        fi
+      - git ls-files | grep -E -v '.tgz$' | xargs lychee
