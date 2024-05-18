@@ -1,9 +1,9 @@
 module rocky9-labul-vsphere-base-os {
   source                 = "github.com/stuttgart-things/vsphere-vm?ref=v1.7.5-2.7.0"
   vm_count               = 1
-  vsphere_vm_name        = var.vsphere_vm_name
+  vsphere_vm_name        = var.vm_name
+  vsphere_vm_template    = var.vm_template
   vm_memory              = 8192
-  vsphere_vm_template    = var.vsphere_vm_template
   vm_disk_size           = "32"
   vm_num_cpus            = 8
   firmware               = "bios"
@@ -21,7 +21,7 @@ module rocky9-labul-vsphere-base-os {
   vm_ssh_password        = var.vm_ssh_password
 }
 
-variable "vsphere_vm_name" {
+variable "vm_name" {
   type        = string
   description = "name of vsphere vm template"
 }
@@ -31,8 +31,7 @@ variable "vsphere_server" {
   description = "name of vsphere vm template"
 }
 
-variable "vsphere_vm_template" {
-  default     = false
+variable "vm_template" {
   type        = string
   description = "name of vsphere vm template"
 }

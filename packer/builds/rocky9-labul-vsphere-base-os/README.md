@@ -1,6 +1,6 @@
 # stuttgart-things/packer
 
-this file was created at: 2024-05-01 06:55
+this file was created at: 2024-05-18 06:06
 
 ## INSTALL OS-REQUIREMENTS
 
@@ -13,11 +13,11 @@ pip install ansible --upgrade
 ## INSTALL PACKER
 
 ```bash
-wget https://releases.hashicorp.com/packer/1.10.2/packer_1.10.2_linux_amd64.zip
-unzip packer_1.10.2_linux_amd64.zip
+wget https://releases.hashicorp.com/packer/1.10.3/packer_1.10.3_linux_amd64.zip
+unzip packer_1.10.3_linux_amd64.zip
 sudo mv packer /usr/bin/packer
 sudo chmod +x /usr/bin/packer
-rm -rf packer_1.10.2_linux_amd64.zip
+rm -rf packer_1.10.3_linux_amd64.zip
 ```
 
 ## CLONE/CHANGE TO CONFIG DIR
@@ -43,7 +43,7 @@ export PACKER_LOG=1
 # IF BUILD WITH FIXED IP IN CONFIG MAYBE NEEDED OR EDIT KNOWN HOSTS FILE
 rm -rf ~/.ssh/known_hosts
 
-packer init packer/builds/rocky9-labul-vsphere-base-os//rocky9-base-os.pkr.hcl
+packer init packer/builds/rocky9-labul-vsphere-base-os/rocky9-base-os.pkr.hcl
 
 DATE=$(echo $(date +'%Y-%m-%d'))
 
@@ -51,13 +51,13 @@ packer build -force \
 -var "name=${DATE}-rocky9-labul-vsphere" \
 -var "password=<PASSWORD>" \
 -var "password=<PASSWORD>" \
-packer/builds/rocky9-labul-vsphere-base-os//rocky9-base-os.pkr.hcl
+packer/builds/rocky9-labul-vsphere-base-os/rocky9-base-os.pkr.hcl
 ```
 
 ## TERRAFORM
 
 ```bash
-TERRAFORM_VERSION=1.7.5
+TERRAFORM_VERSION=1.8.2
 wget -O terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
 sudo unzip terraform.zip -d /usr/bin/
 rm terraform.zip
@@ -69,6 +69,9 @@ terraform --version
 cd rocky9-labul-vsphere-base-os/test-vm/
 
 # INITIALIZE TERRAFORM
+export AWS_ACCESS_KEY_ID=<S3_USERNAME>
+export AWS_SECRET_ACCESS_KEY=<S3_PASSWORD>
+
 terraform init
 
 # CREATE vars file
