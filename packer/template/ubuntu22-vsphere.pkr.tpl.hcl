@@ -1,9 +1,9 @@
 packer {
-  required_version = ">= [[ .ubuntu22PackerMinVersion ]]"
+  required_version = ">= [[ .packerVersion ]]"
   required_plugins {
     vmware = {
       source  = "[[ .vmWareProvider ]]"
-      version = ">= [[ .ubuntu22PackerVMwarePluginMinVersion ]]"
+      version = ">= [[ .vmWwarePluginMinVersion ]]"
     }
     ansible = {
       source  = "[[ .ansibleProvisioner ]]"
