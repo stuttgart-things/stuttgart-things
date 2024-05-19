@@ -188,9 +188,9 @@ playbooks:
       - hosts: "{{ target_host | default('all') }}"
         become: true
         vars:
-          golang_version: 1.22.2
-          golang_checksum: 8672f483bfbd37e4b9f7655522e3739bfe66d3308d76a152a6d8c3a569e5362e
-          source_url: "https://go.dev/dl/go1.22.2.linux-amd64.tar.gz"
+          golang_version: 1.22.3
+          golang_checksum: 5fb8b3ed4a78a8eab444dfcb472b8c07a06980dcaee62ce3645edd6d130004c6
+          source_url: "https://go.dev/dl/go1.22.3.linux-amd64.tar.gz"
           golang_install_dir: /usr/local
           go_checksum_type: "sha256"
 
