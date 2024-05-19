@@ -3,3 +3,25 @@ name: container
 version: 0.0.1
 namespace: sthings
 requirements: |
+  roles:
+    - src: https://github.com/stuttgart-things/download-install-binary.git
+      scm: git
+      version: 2024.04.19
+    - src: https://github.com/stuttgart-things/create-os-user.git
+      scm: git
+      version: 2024.05.03
+    - src: https://github.com/stuttgart-things/install-configure-docker.git
+      scm: git
+      version: 2024.04.30
+    - src: https://github.com/stuttgart-things/install-configure-podman.git
+      scm: git
+      version: 2024.05.08
+    - src: https://github.com/stuttgart-things/install-requirements.git
+      scm: git
+      version: 2024.05.11
+    - src: https://github.com/stuttgart-things/install-configure-vault.git
+      scm: git
+      version: 2022.01.01
+    - src: https://github.com/stuttgart-things/create-send-webhook.git
+      scm: git
+      version: 2022.01.01
