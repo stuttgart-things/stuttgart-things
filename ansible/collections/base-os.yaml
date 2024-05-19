@@ -328,6 +328,26 @@ vars:
     file: |
       ---
       bin:
+        gh:
+          bin_name: gh
+          bin_version: "2.49.2"
+          check_bin_version_before_installing: true
+          source_url: "https://github.com/cli/cli/releases/download/v2.49.2/gh_2.49.2_linux_amd64.tar.gz"
+          bin_to_copy: gh_2.49.2_linux_amd64/bin/gh
+          to_remove: gh_2.49.2_linux_amd64.tar.gz
+          bin_dir: "/usr/local/bin"
+          version_cmd: "-- version"
+          target_version: 2.49.2
+        task:
+          bin_name: task
+          bin_version: "v3.37.2"
+          check_bin_version_before_installing: true
+          source_url: "https://github.com/go-task/task/releases/download/v3.37.2/task_linux_amd64.tar.gz"
+          bin_to_copy: task
+          to_remove: task_linux_amd64.tar.gz
+          bin_dir: "/usr/local/bin"
+          version_cmd: "-- version"
+          target_version: v3.37.2
         velero:
           bin_name: "velero"
           bin_version: "1.13.2"
@@ -343,13 +363,12 @@ vars:
           bin_name: "terraform"
           bin_version: "1.8.3"
           check_bin_version_before_installing: true
-          source_url: "https://releases.hashicorp.com/terraform/1.8.0/terraform_1.8.3_linux_amd64.zip"
+          source_url: "https://releases.hashicorp.com/terraform/1.8.3/terraform_1.8.3_linux_amd64.zip"
           bin_to_copy: "terraform"
           to_remove: "terraform"
           bin_dir: "/usr/local/bin"
           version_cmd: " --version"
           target_version: v1.8.3
-          #md5_checksum: "2c6638e53cf5474c4d1363c17e8653ef"
         helm:
           bin_name: "helm"
           bin_version: "3.15.0"
