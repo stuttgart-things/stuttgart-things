@@ -257,6 +257,13 @@ playbooks:
               create: true
             when: go_username is defined and go_usergroup is defined and go_userhome is defined
 
+        post_tasks:
+          - name: Install addons
+            ansible.builtin.shell: |
+              go install github.com/spf13/cobra-cli@v1.3.0
+            args:
+              chdir: "{{ golang_install_dir }}"
+              
         roles:
           - role: sthings.base_os.download_install_binary
   - name: download_install_binaries
