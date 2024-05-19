@@ -199,6 +199,18 @@ playbooks:
           go_usergroup: sthings
           go_userhome: /home/sthings
 
+          bin:
+            golangci-lint:
+              bin_name: golangci-lint
+              bin_version: 1.58.1
+              check_bin_version_before_installing: true
+              source_url: "https://github.com/golangci/golangci-lint/releases/download/v1.58.1/golangci-lint-1.58.1-linux-amd64.tar.gz"
+              bin_to_copy: golangci-lint-1.58.1-linux-amd64/golangci-lint
+              to_remove: golangci-lint-1.58.1-linux-amd64.tar.gz
+              bin_dir: "/usr/local/bin"
+              version_cmd: "-- version"
+              target_version: 1.58.1
+
         pre_tasks:
           - name: Check if Golang is already installed
             ansible.builtin.stat:
@@ -211,8 +223,7 @@ playbooks:
               checksum_type: "{{ go_checksum_type }}"
             register: checksum_existing
             when: check_golang.stat.exists
-
-        tasks:
+            
           - name: Create golang users
             ansible.builtin.include_role:
               name: create-os-user
@@ -246,6 +257,8 @@ playbooks:
               create: true
             when: go_username is defined and go_usergroup is defined and go_userhome is defined
 
+        roles:
+          - role: sthings.base_os.download_install_binary
   - name: download_install_binaries
     play: |
       ---
@@ -287,28 +300,6 @@ playbooks:
           - role: sthings.base_os.create_os_user
 
 vars:
-  # - name: golang-users
-  #   file: |
-  #     ---
-  #     # CREATE USER(S) FOR GOLANG INSTALL AND SET EXPORTS
-  #     golang_users:
-  #       - username: bill
-  #         name: bill user
-  #         group: golang
-  #         uid: 1020
-  #         home: /home/bill
-  #         profile: |
-  #           alias ll='ls -ahl'
-  #           export GOROOT=/usr/local/go
-  #           export PATH=$GOROOT/bin:$PATH
-  #           export GOPATH=/home/bill/usr/local/go
-  #           export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
-  #         enable_ssh_tcp_forwarding: true
-  #         password: "!"
-
-  #     groups_golang:
-  #       - name: golang
-  #         gid: 31000
 
   - name: sthings-users
     file: |
