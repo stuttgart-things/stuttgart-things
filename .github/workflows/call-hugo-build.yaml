@@ -20,6 +20,12 @@ on:
       runs-on:
         required: true
         type: string
+      s3-bucket:
+        required: true
+        type: string
+      s3-endpoint:
+        required: true
+        type: string
 
 jobs:
   Create-Hugo-Content:
@@ -48,11 +54,11 @@ jobs:
     uses: stuttgart-things/stuttgart-things/.github/workflows/call-minio-sync.yaml@main
     with:
       folder: hugo-dev
-      endpoint: ${{ inputs.endpoint }}
+      endpoint: ${{ inputs.s3-endpoint }}
       image: ${{ inputs.image }}
       environment: ${{ inputs.environment-name }}
-      bucket: ${{ inputs.bucket }}
-      s3_alias: ${{ inputs.s3_alias }}
+      bucket: ${{ inputs.s3-bucket }}
+      s3_alias: ${{ inputs.s3_alias }} # COULD BE LOADED FROM ENV
       runs-on: ${{ inputs.runs-on }}
     secrets: inherit
 
