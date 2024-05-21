@@ -1,0 +1,49 @@
+---
+name: Lint yaml files
+on:
+  workflow_call:
+    inputs:
+      runs-on:
+        required: true
+        type: string
+      environment-name:
+        default: k8s
+        required: true
+        type: string
+      continue-error:
+        default: false
+        required: true
+        type: boolean
+      lintprofile-path:
+        default: .yamllint
+        type: string
+      yamllint-version:
+        default: 1
+        type: string
+      artifact-name:
+        default: yaml-lint
+        type: string
+
+jobs:
+  Yaml-Lint:
+    runs-on: ${{ inputs.runs-on }}
+    container:
+      image: cytopia/yamllint:${{ inputs.yamllint-version }}
+    environment: ${{ inputs.environment-name }}
+    continue-on-error: ${{ inputs.continue-error }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.1.1
+        with:
+          fetch-depth: '0'
+
+      - name: Run yaml lint
+        run: |
+          ls -lta
+          yamllint . --format github -c ${{ inputs.lintprofile-path }} | tee ./${{ inputs.artifact-name }}.txt
+
+      - name: Upload linting results
+        uses: actions/upload-artifact@v4.1.0
+        with:
+          name: ${{ inputs.artifact-name }}
+          path: ${{ inputs.artifact-name }}.txt
