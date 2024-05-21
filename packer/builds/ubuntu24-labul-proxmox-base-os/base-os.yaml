@@ -57,7 +57,54 @@
         ssh_key:
           - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCslDwiVO/EvWLVVY1Twpc7Lhr9laLPgu+iiOuvMEg8E4hnEDHRPZpdD6YnnJYsLnVHbi8Y3EPDQ2UDbHnfgeYPa94XHdhGSCsIX+tA5+PLFSFgoyCtA5oWc3vrm58RX6DQXf7fPytwxIESPjIgEDv2BTOEc+pk0S09e3jttmFsrKzB7tOutB3FktcLnxGD75JgBa9/i0zmfcchF2VNZcgZRXJ5JiMGKhaKB7qZ6AoMQlDmCvllLSdCxGIxu/quiBcGhaJBMmpkSTeRouU1YWg05wEjyg47DwJyyEMzvYe6LIHxN3zBXMTBzUKJC1thGNC9yaFeywrz+iaIk66RGcjL sthings"
           - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCsHiyet7tO+qXYKEy6XBiHNICRfGsBZYIo/JBQ2i16WgkC7rq6bkGwBYtni2j0X2pp0JVtcMO+hthqj37LcGH02hKa24eAoj2UdnFU+bhYxA6Mau1B/5MCkvs8VvBjxtM3FVJE7mY5bZ19YrKJ9ZIosAQaVHiGUu1kk49rzQqMrwT/1PNbUYW19P8J2LsfnaYJIl4Ljbxr0k52MGdbKwgxdph3UKciQz2DhutrmO0gf3Ncn4zpdClldaBtDB0EMMqD3BAtEVsucttzqdeYQwixMTtyuGpAKAJNUqhpleeVhShPZLke0vXxlA6/fyfkSM78gN2FQcRGVPN6hOMkns/b patrick@TPPHERMANN"
-          - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDvaTdixTdzySc6qQZavxvrBk1KNy4g30pIu9SbxVe6GuPyJzEWUYHvJt6d4YqdpavT21IQkmuex7n4qxg8ZgrmXUTpELLM2y2Uu7va/OUol4t2Q0O7hFr9nsE4CybXBxxutFCfekv4NedJ5WW0zUdrXdM6SWvN4f9kdn7FaECjAdWfz5I4nAz4nztwDh/obWqkNSe0ASPqnTqpxCbsIxLB6dxUnw43v8qBgWVUbIldhos/xtsVQyGRKHNOvGTg+7rCbhhgsy3vpiiCaTBdMtfBEjWrKR9SsHTlS7ftisJXCIBJMbhmc0mjnZ834m9qHXYe1+IoyL3d9dourDTerhBAe3DRLavcUynV6yrMIZor6FWgGrvxf/ZlKPYaFllL7WrAKMGiZLNhwoMvTYmdhXAfZjx2vab+pTvXzDlELKf3kxJcGuasWxV8BdN2x3uzMYvmf+Fp+nfTVk0z9ecEDTwK1wyghGudc4zAo61mHII+GdNMADDDnrg4HLB+9NHPKjNKCmETKymFdQnaoraQ7sj+sSYyWncPZVaYCCA6tMJxEOnu2AnK0G9CG4mF7xmR3LFoVPnHuF4maroPolMInSsCbSNU6IehWujHKGmyVyO09rcEbRaYo0cI9l4X8OBEXbLFeUp7PNnOocU1sjK6zAFxXR9DUOQyKi722vhdporoFQ== odittus"
+          - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCPTf13fX2gMjlAhXPyJzuf6SJNX4fKiYjplxlJy4MU1V9+hFBqHtVAOwIzA60Z9UP1SAcCD0tUWODS4VVDTVJV3cuX7j7BzKtKyLqD/1Mbs2kPfBPF4cUDqUGCBHO7QLwBD84ib0/muRfYwtTRe++JA246xXDJBHTlcP8MQ6rhs0ku4R94g8WihQxaBZJIJwSDWZIhAD8om3+ai9olBDxdXgFSGFmmSxijSAhW3CKRbOK0nY5IklY6sYH1Y5+Pe7kOEOuO5H5kxYXWxfaPsGNZfRRLZHGEJJli79fCUlR8cg6q71QJYz4jiGDZD+ebgpEYOt2dIkZUyBEv6HpjIb69z7sxDqUAJXdNIR+qW55gsH0ryaeF5MTuigssOOZdMX80CLNygCIVFX3uGZMxDVLImTgkSQmeHJF5nuwKC3tvt59T7H6QP1rQpR4vR/slZsVBS56+1YRdNFqEpRHw8lLhBBdkh/Mndv9Ppbw34/DO/i9o5Hb5B7HOBzxCaGyReOc= andre@TPAEBERT-1"
+          - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCdQeEYWggnQG2mbPiaGLuutasiE7FJYQu0T4+pobvX7XfG/GcFd79a4vzaP7WOC7lSgHPLiiVnngwi0S0RIJlGQQeL/qrVZZRNkhPzuZ4xMNx5PZovOxe4KV8ocUkLrZ1ja0LML3wShhmqZSDXNQfqslod3eZs7WAQ+gKMo08xJCOVN7AIYbuvaCE1ET8Ta6V0Pp+TJ+Cm5ourxZsMT6Id4BNWoAG4B0VDBqxPJGnYb7KmV0afG4usTdsBKnXEuTEKqkSSRLYN38zZhWUGakVj85HAAb0VIB+iZteGLxt9YxVsMkoTAaBSZf6up/iEC7zzbnBY5MmRHRnPScuCvUYBA+092iFpQzdbzC1KecA9VzwrBr+7xgwf45SmvsA41igaFZXc7qJjDOUr5CYVpFSIGAGWkcYZN5af0hAW6mv2gMNRvXOTlZqxx7kXmeK3eL1bNHNME+v9hHEeRm6aHBn0rdL9Fdg9YwlITokrDWnFN+pQWNFcJ7wf5LUka5ElhNs= sthings@sina"
+          - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCi1cfJLAFgQr3Y5QakXDIEBgsZyW3C/h006MCGlbPrQml8JHS/9UVekWThaSZmeF88PPGzHlBBYLfVXWqXpn1clor1gPU44P5EWCxplEiXePOKJgeYcrMCUY68jb4rrCsXfsKMXBvCJdoNuK+pWG3NVVXNgsznA2RX76pULP4+tTzSGIk+wFVllvjIbnNjKDKmLQskwAPaTssSnis7Rnb0YD9tKoJJfuFUS1PJt1tFNRHJecn8cXNbrlY1bWaxJurACjPGpZtTCda8B2h6HqH6UYe3fKj9Sjmy3Co2zCumzHO7OtAfCxQFN8mLeCBhBbf6xKaphnXBCy8kGue4KNBB"
+          - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCv17/cfbIKB8JBeDY/SoWz55tYu7e64BarYpj3UeYrbG/UjbyWh3EnsLyG9cL/Sg4C9by2rsyW2ppJSDCO7R3u+b46RufDVebznHqq1KV1vLwR+eEDANCDnkZswFNG1CZd9VU0zwLuEw8e/gy//qDO2DU4pALe/4BtnHkrNodY+Y6szMP4zkouag+myK4Hzn/vz+95sZ0w+/WUc726uiak8CI1IEBofTnFZCSSKYLRxY779D1+j+rOqE6IW4IOwojGBj0c6UDRQVAhSreLiOvVltyAASZWUGJjoa8zzeC4wH4mtOR/86mHI/zaovHuA6hzoBfP/gYWw74TO+WXQwqMBPvW1n8l3WIthvny2y53OTmdGG4GGI0UcLxehsxRp/ZiAlrwSGA9R735Qnq/IH6jt5NQ/qIxs5S+Ww5oQq90J/5MGAqSv8od1fNqTDRoNDvQRo/wSH0Dt11GNCqk4weqFBpij3h3oykhsRXniuYbsM2n/RRmJ4Q9dL2xdYKfBA0= acalva@TPACALVA-1"
+      - username: sina
+        name: sina user
+        uid: 1120
+        home: /home/sina
+        enable_ssh_tcp_forwarding: false
+        groups: ["{{ admin_group }}", "sthings"]
+        password: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=ssh/data/sthings:password validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+        ssh_key:
+          - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCdQeEYWggnQG2mbPiaGLuutasiE7FJYQu0T4+pobvX7XfG/GcFd79a4vzaP7WOC7lSgHPLiiVnngwi0S0RIJlGQQeL/qrVZZRNkhPzuZ4xMNx5PZovOxe4KV8ocUkLrZ1ja0LML3wShhmqZSDXNQfqslod3eZs7WAQ+gKMo08xJCOVN7AIYbuvaCE1ET8Ta6V0Pp+TJ+Cm5ourxZsMT6Id4BNWoAG4B0VDBqxPJGnYb7KmV0afG4usTdsBKnXEuTEKqkSSRLYN38zZhWUGakVj85HAAb0VIB+iZteGLxt9YxVsMkoTAaBSZf6up/iEC7zzbnBY5MmRHRnPScuCvUYBA+092iFpQzdbzC1KecA9VzwrBr+7xgwf45SmvsA41igaFZXc7qJjDOUr5CYVpFSIGAGWkcYZN5af0hAW6mv2gMNRvXOTlZqxx7kXmeK3eL1bNHNME+v9hHEeRm6aHBn0rdL9Fdg9YwlITokrDWnFN+pQWNFcJ7wf5LUka5ElhNs= sthings@sina"
+      - username: andre
+        name: andre user
+        uid: 1121
+        home: /home/andre
+        enable_ssh_tcp_forwarding: false
+        groups: ["{{ admin_group }}", "sthings"]
+        password: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=ssh/data/sthings:password validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+        ssh_key:
+          - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCPTf13fX2gMjlAhXPyJzuf6SJNX4fKiYjplxlJy4MU1V9+hFBqHtVAOwIzA60Z9UP1SAcCD0tUWODS4VVDTVJV3cuX7j7BzKtKyLqD/1Mbs2kPfBPF4cUDqUGCBHO7QLwBD84ib0/muRfYwtTRe++JA246xXDJBHTlcP8MQ6rhs0ku4R94g8WihQxaBZJIJwSDWZIhAD8om3+ai9olBDxdXgFSGFmmSxijSAhW3CKRbOK0nY5IklY6sYH1Y5+Pe7kOEOuO5H5kxYXWxfaPsGNZfRRLZHGEJJli79fCUlR8cg6q71QJYz4jiGDZD+ebgpEYOt2dIkZUyBEv6HpjIb69z7sxDqUAJXdNIR+qW55gsH0ryaeF5MTuigssOOZdMX80CLNygCIVFX3uGZMxDVLImTgkSQmeHJF5nuwKC3tvt59T7H6QP1rQpR4vR/slZsVBS56+1YRdNFqEpRHw8lLhBBdkh/Mndv9Ppbw34/DO/i9o5Hb5B7HOBzxCaGyReOc= andre@TPAEBERT-1"
+      - username: patrick
+        name: patrick user
+        uid: 1122
+        home: /home/patrick
+        enable_ssh_tcp_forwarding: false
+        groups: ["{{ admin_group }}", "sthings"]
+        password: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=ssh/data/sthings:password validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+        ssh_key:
+          - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCsHiyet7tO+qXYKEy6XBiHNICRfGsBZYIo/JBQ2i16WgkC7rq6bkGwBYtni2j0X2pp0JVtcMO+hthqj37LcGH02hKa24eAoj2UdnFU+bhYxA6Mau1B/5MCkvs8VvBjxtM3FVJE7mY5bZ19YrKJ9ZIosAQaVHiGUu1kk49rzQqMrwT/1PNbUYW19P8J2LsfnaYJIl4Ljbxr0k52MGdbKwgxdph3UKciQz2DhutrmO0gf3Ncn4zpdClldaBtDB0EMMqD3BAtEVsucttzqdeYQwixMTtyuGpAKAJNUqhpleeVhShPZLke0vXxlA6/fyfkSM78gN2FQcRGVPN6hOMkns/b patrick@TPPHERMANN"
+      - username: gude
+        name: gude user
+        uid: 1123
+        home: /home/gude
+        enable_ssh_tcp_forwarding: false
+        groups: ["{{ admin_group }}", "sthings"]
+        password: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=ssh/data/sthings:password validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+        ssh_key:
+          - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCi1cfJLAFgQr3Y5QakXDIEBgsZyW3C/h006MCGlbPrQml8JHS/9UVekWThaSZmeF88PPGzHlBBYLfVXWqXpn1clor1gPU44P5EWCxplEiXePOKJgeYcrMCUY68jb4rrCsXfsKMXBvCJdoNuK+pWG3NVVXNgsznA2RX76pULP4+tTzSGIk+wFVllvjIbnNjKDKmLQskwAPaTssSnis7Rnb0YD9tKoJJfuFUS1PJt1tFNRHJecn8cXNbrlY1bWaxJurACjPGpZtTCda8B2h6HqH6UYe3fKj9Sjmy3Co2zCumzHO7OtAfCxQFN8mLeCBhBbf6xKaphnXBCy8kGue4KNBB"
+      - username: ana
+        name: ana user
+        uid: 1124
+        home: /home/ana
+        enable_ssh_tcp_forwarding: false
+        groups: ["{{ admin_group }}", "sthings"]
+        password: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=ssh/data/sthings:password validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+        ssh_key:
           - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCv17/cfbIKB8JBeDY/SoWz55tYu7e64BarYpj3UeYrbG/UjbyWh3EnsLyG9cL/Sg4C9by2rsyW2ppJSDCO7R3u+b46RufDVebznHqq1KV1vLwR+eEDANCDnkZswFNG1CZd9VU0zwLuEw8e/gy//qDO2DU4pALe/4BtnHkrNodY+Y6szMP4zkouag+myK4Hzn/vz+95sZ0w+/WUc726uiak8CI1IEBofTnFZCSSKYLRxY779D1+j+rOqE6IW4IOwojGBj0c6UDRQVAhSreLiOvVltyAASZWUGJjoa8zzeC4wH4mtOR/86mHI/zaovHuA6hzoBfP/gYWw74TO+WXQwqMBPvW1n8l3WIthvny2y53OTmdGG4GGI0UcLxehsxRp/ZiAlrwSGA9R735Qnq/IH6jt5NQ/qIxs5S+Ww5oQq90J/5MGAqSv8od1fNqTDRoNDvQRo/wSH0Dt11GNCqk4weqFBpij3h3oykhsRXniuYbsM2n/RRmJ4Q9dL2xdYKfBA0= acalva@TPACALVA-1"
 
   pre_tasks:
