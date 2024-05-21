@@ -20,7 +20,7 @@ on:
 
 jobs:
   Create-Hugo-Content:
-    runs-on: ${{ inputs.runner }}
+    runs-on: ${{ inputs.runs-on }}
     container:
       image: ${{ inputs.image }}
     environment: ${{ inputs.environment-name }}
@@ -53,7 +53,7 @@ jobs:
     secrets: inherit
 
   Build-Hugo-Site:
-    runs-on: ${{ inputs.runner }}
+    runs-on: ${{ inputs.runs-on }}
     container:
       image: ${{ inputs.image }}
     environment: ${{ inputs.environment-name }}
@@ -76,7 +76,7 @@ jobs:
           path: public
 
   Deploy-Hugo-Site:
-    runs-on: ${{ inputs.runner }}
+    runs-on: ${{ inputs.runs-on }}
     needs: Build-Hugo-Site
     permissions:
       pages: write      
