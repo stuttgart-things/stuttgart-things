@@ -21,6 +21,8 @@ kickstart:
     template: rocky9.cfg
     filename: user-data
 
+paravirtualizatedDiskDriver: vda
+
 # TEST VM
 testVmModuleSource: github.com/stuttgart-things/proxmox-vm.git?ref=v2.9.14-1.5.5
 testVmCount: 1
