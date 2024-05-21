@@ -19,9 +19,10 @@ on:
       bucket:
         required: true
         type: string
-      s3_alias:
-        required: true
+      s3-alias:
+        required: false
         type: string
+        default: s3
       runs-on:
         description: RUNNER NAME
         required: true
@@ -59,7 +60,7 @@ jobs:
           cat ${HOME}/.config/rclone/rclone.conf
 
           cat <<EOF > ${HOME}/.config/rclone/rclone.conf
-          [${{ inputs.s3_alias }}]
+          [${{ inputs.s3-alias }}]
           type = s3
           provider = Minio
           env_auth = true
@@ -71,9 +72,9 @@ jobs:
           cat ${HOME}/.config/rclone/rclone.conf
           
           # clean folder
-          rclone delete ${{ inputs.s3_alias }}:${{ inputs.bucket }}/${{ inputs.folder }}
+          rclone delete ${{ inputs.s3-alias }}:${{ inputs.bucket }}/${{ inputs.folder }}
 
           # copy content to s3
-          rclone -P copy ${{ inputs.folder }} ${{ inputs.s3_alias }}:${{ inputs.bucket }}/${{ inputs.folder }}
+          rclone -P copy ${{ inputs.folder }} ${{ inputs.s3-alias }}:${{ inputs.bucket }}/${{ inputs.folder }}
 
-          rclone ls ${{ inputs.s3_alias }}:${{ inputs.bucket }}/${{ inputs.folder }}
+          rclone ls ${{ inputs.s3-alias }}:${{ inputs.bucket }}/${{ inputs.folder }}
