@@ -21,11 +21,16 @@ on:
       s3_alias:
         required: true
         type: string
+      runner:
+        description: RUNNER NAME
+        required: true
+        type: string
+        default: ghr-stuttgart-things-labda-test
 
 jobs:
   Upload-Content-To-S3:
     name: Upload content to s3
-    runs-on: ghr-stuttgart-things-labda-test
+    runs-on: ${{ inputs.runner }}
     container:
       image: ${{ inputs.image }}
     environment: ${{ inputs.environment }}

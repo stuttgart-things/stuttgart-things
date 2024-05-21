@@ -10,7 +10,7 @@ on:
       image:
         required: true
         type: string
-        default: eu.gcr.io/stuttgart-things/sthings-mc-rclone:2024-05-14
+        default: dcjulian29/hugo:0.125.5
       environment:
         required: true
         type: string
@@ -35,7 +35,7 @@ jobs:
     name: Build Hugo
     runs-on: ghr-stuttgart-things-labda-test
     container:
-      image: dcjulian29/hugo:0.125.5
+      image: ${{ inputs.image }}
     environment: k8s
     continue-on-error: false
     steps:

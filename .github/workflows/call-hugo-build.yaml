@@ -6,22 +6,107 @@ on:
       image:
         required: true
         type: string
+        default: dcjulian29/hugo:0.125.5
       environment:
         required: true
         type: string
-      script-path:
+        default: k8s
+      creation-script-path:
         required: true
         type: string
+      runner:
+        description: RUNNER NAME
+        required: true
+        type: string
+        default: ghr-stuttgart-things-labda-test
 
 jobs:
   Create-Hugo-Content:
-    runs-on: ghr-docs-labda-test
+    runs-on: ${{ inputs.runner }}
     container:
-      image: ghcr.io/hostwithquantum/hugo-docker:v0.126.1
-    environment: k8s
+      image: ${{ inputs.image }}
+    environment: ${{ inputs.environment }}
     continue-on-error: false
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
       - name: Execute blog creation script  
+      - run: |
+          ls -lta
+          sh ${{ inputs.creation-script-path }}
+
+      - uses: actions/upload-artifact@v4.3.3
+        with:
+          name: hugo-dev
+          path: sthings
+
+  Sync-Hugo-Dev-Minio:
+    name: Sync Minio
+    needs: Create-Hugo-Content
+    uses: stuttgart-things/stuttgart-things/.github/workflows/call-minio-sync.yaml@main
+    with:
+      folder: hugo-dev
+      endpoint: ${{ inputs.endpoint }}
+      image: ${{ inputs.image }}
+      environment: ${{ inputs.environment }}
+      bucket: ${{ inputs.bucket }}
+      s3_alias: ${{ inputs.s3_alias }}
+    secrets: inherit
+
+  Build-Hugo-Site:
+    runs-on: ${{ inputs.runner }}
+    container:
+      image: ${{ inputs.image }}
+    environment: ${{ inputs.environment }}
+    continue-on-error: false
+    needs: Create-Hugo-Content
+    steps:
+      - uses: actions/download-artifact@v4.1.7
+        with:
+          name: hugo-dev
+          path: site
+
+      - name: Execute blog creation script  
+      - run: |
+          ls -lta site
+          cd site && hugo --logLevel info --destination ../public
+
+      - uses: actions/upload-artifact@v4.3.3
+        with:
+          name: hugo-public
+          path: public
+
+
+  Deploy-Hugo-Site:
+    runs-on: ${{ inputs.runner }}
+    needs: Build-Hugo-Site
+    permissions:
+      pages: write      
+      id-token: write  
+    container:
+      image: locietta/loia-dev-base:node
+    environment: k8s
+    continue-on-error: false
+    steps:
+      - uses: actions/download-artifact@v4.1.7
+        with:
+          name: hugo-public
+
+      - name: Checkout code
         run: |
+          ls -lta
+
+      - uses: actions/upload-pages-artifact@v3.0.1
+        with:
+          path: .
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4.0.5 # or the latest "vX.X.X" version tag for this action
+
+      - name: Microsoft Teams Notification
+        uses: skitionek/notify-microsoft-teams@master
+        if: always()
+        with:
+          webhook_url: ${{ secrets.MS_TEAMS_URL }}
