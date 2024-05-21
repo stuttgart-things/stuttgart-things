@@ -56,7 +56,7 @@ jobs:
     with:
       folder: hugo-dev
       endpoint: ${{ inputs.s3-endpoint }}
-      image: ${{ inputs.image }}
+      image: eu.gcr.io/stuttgart-things/sthings-mc-rclone:2024-05-14
       environment: ${{ inputs.environment-name }}
       bucket: ${{ inputs.s3-bucket }}
       s3_alias: ${{ inputs.s3_alias }} # COULD BE LOADED FROM ENV
