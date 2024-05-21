@@ -10,8 +10,9 @@ on:
         required: true
         type: string
       image:
-        required: true
+        required: false
         type: string
+        default: eu.gcr.io/stuttgart-things/sthings-mc-rclone:2024-05-14
       environment:
         required: true
         type: string
