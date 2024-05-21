@@ -33,6 +33,8 @@ output:
     base-os: sthings-r9
     rke2-node: sthings-r9-k8s
 
+paravirtualizatedDiskDriver: sda
+
 # S3
 s3Endpoint: https://artifacts.app1.sthings-vsphere.labul.sva.de
 s3Bucket: vspherevm-labul

@@ -1,4 +1,7 @@
 ---
+
+paravirtualizatedDiskDriver: sda
+
 # GLOBAL
 packerVersion: 1.10.0
 vmWwarePluginMinVersion: 1.2.7
