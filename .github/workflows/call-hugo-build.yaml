@@ -26,7 +26,7 @@ on:
       s3-endpoint:
         required: true
         type: string
-      s3_alias:
+      s3-alias:
         required: true
         type: string
 
@@ -62,7 +62,7 @@ jobs:
       image: eu.gcr.io/stuttgart-things/sthings-mc-rclone:2024-05-14
       environment: ${{ inputs.environment-name }}
       bucket: ${{ inputs.s3-bucket }}
-      s3_alias: ${{ inputs.s3_alias }} # COULD BE LOADED FROM ENV
+      s3-alias: ${{ inputs.s3-alias }} # COULD BE LOADED FROM ENV
       runs-on: ${{ inputs.runs-on }}
     secrets: inherit
 
