@@ -1,0 +1,27 @@
+---
+name: Build Hugo Blog
+on:
+  workflow_call:
+    inputs:
+      image:
+        required: true
+        type: string
+      environment:
+        required: true
+        type: string
+      script-path:
+        required: true
+        type: string
+
+jobs:
+  Create-Hugo-Content:
+    runs-on: ghr-docs-labda-test
+    container:
+      image: ghcr.io/hostwithquantum/hugo-docker:v0.126.1
+    environment: k8s
+    continue-on-error: false
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Execute blog creation script  
+        run: |
