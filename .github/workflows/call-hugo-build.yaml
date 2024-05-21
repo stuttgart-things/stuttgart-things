@@ -4,21 +4,19 @@ on:
   workflow_call:
     inputs:
       image:
-        required: true
+        required: false
         type: string
         default: dcjulian29/hugo:0.125.5
       environment:
-        required: true
+        required: false
         type: string
         default: k8s
       creation-script-path:
         required: true
         type: string
-      runner:
-        description: RUNNER NAME
+      runs-on:
         required: true
         type: string
-        default: ghr-stuttgart-things-labda-test
 
 jobs:
   Create-Hugo-Content:
