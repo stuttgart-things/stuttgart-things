@@ -46,7 +46,8 @@ jobs:
       - uses: actions/upload-artifact@v4.3.3
         with:
           name: hugo-dev
-          path: "{{ inputs.site-name }}"
+          path: |
+            ${{ inputs.site-name }}
 
   Sync-Hugo-Dev-Minio:
     name: Sync Minio
