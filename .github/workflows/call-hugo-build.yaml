@@ -7,7 +7,7 @@ on:
         required: false
         type: string
         default: dcjulian29/hugo:0.125.5
-      environment:
+      environment-name:
         required: false
         type: string
         default: k8s
@@ -23,7 +23,7 @@ jobs:
     runs-on: ${{ inputs.runner }}
     container:
       image: ${{ inputs.image }}
-    environment: ${{ inputs.environment }}
+    environment: ${{ inputs.environment-name }}
     continue-on-error: false
     steps:
       - name: Checkout code
@@ -47,7 +47,7 @@ jobs:
       folder: hugo-dev
       endpoint: ${{ inputs.endpoint }}
       image: ${{ inputs.image }}
-      environment: ${{ inputs.environment }}
+      environment: ${{ inputs.environment-name }}
       bucket: ${{ inputs.bucket }}
       s3_alias: ${{ inputs.s3_alias }}
     secrets: inherit
@@ -56,7 +56,7 @@ jobs:
     runs-on: ${{ inputs.runner }}
     container:
       image: ${{ inputs.image }}
-    environment: ${{ inputs.environment }}
+    environment: ${{ inputs.environment-name }}
     continue-on-error: false
     needs: Create-Hugo-Content
     steps:
@@ -83,7 +83,7 @@ jobs:
       id-token: write  
     container:
       image: locietta/loia-dev-base:node
-    environment: k8s
+    environment: ${{ inputs.environment-name }}
     continue-on-error: false
     steps:
       - uses: actions/download-artifact@v4.1.7
