@@ -123,7 +123,7 @@ jobs:
 
           machineShop render \
           --source local \
-          --template terraform/vsphere-vm-tfvars.tpl \
+          --template terraform/${{ inputs.cloud }}-vm-tfvars.tpl \
           --defaults ./secret-defaults.yaml \
           --brackets square \
           --source local \
