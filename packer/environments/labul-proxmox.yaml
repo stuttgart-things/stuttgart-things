@@ -68,7 +68,7 @@ installRequirements: true
 cpu: 8
 ram: 8192
 diskSize: 16
-storagePool: v3700
+storagePool: datastore
 networkAdapdater: vmbr103
 node: sthings-pve1
 pool: packer
