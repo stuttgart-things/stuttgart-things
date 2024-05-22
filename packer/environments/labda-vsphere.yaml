@@ -66,4 +66,5 @@ testVmRam: 8192
 testDatastore: /NetApp-HCI-Datacenter/host/NetApp-HCI-Cluster-01/10.100.135.44//nfs06
 testNetwork: /NetApp-HCI-Datacenter/host/NetApp-HCI-Cluster-01/10.100.135.44/tiab-prod
 testDatacenter: /NetApp-HCI-Datacenter/
-testAnnotation: VSPHERE-VM
+testAnnotation: VSPHERE-VM#
+testVmSecrets: "vaultSecretPaths: password=cloud/data/vsphere:password, user=cloud/data/vsphere:username, server=cloud/data/vsphere:ip, sshUser=cloud/data/vsphere:vm_ssh_user, sshPassword=cloud/data/vsphere:vm_ssh_password"

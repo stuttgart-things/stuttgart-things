@@ -119,3 +119,4 @@ testNetwork: /LabUL/host/Cluster-V6.5/10.31.101.41/MGMT-10.31.101
 testDatacenter: /LabUL/
 testAnnotation: PACKER VSPHERE TEST-VM
 folderPath: stuttgart-things/testing
+testVmSecrets: "vaultSecretPaths: password=cloud/data/vsphere:password, user=cloud/data/vsphere:username, server=cloud/data/vsphere:ip, sshUser=cloud/data/vsphere:vm_ssh_user, sshPassword=cloud/data/vsphere:vm_ssh_password"

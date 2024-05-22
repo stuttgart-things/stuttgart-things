@@ -33,6 +33,7 @@ testVmDatacenter: sthings-pve1
 testVmDatastore: v3700
 testVmFolder: stuttgart-things
 testVmNetwork: vmbr102
+testVmSecrets: "vaultSecretPaths: password=cloud/data/pve:api_password, sshUser=cloud/data/pve:ssh_user, sshPassword=cloud/data/pve:ssh_password, server=cloud/data/pve:api_url, user=cloud/data/pve:api_user"
 
 ubuntu23PackerMinVersion: 1.10.3
 ubuntu24PackerMinVersion: 1.10.3

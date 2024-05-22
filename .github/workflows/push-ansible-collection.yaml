@@ -21,8 +21,6 @@ jobs:
   #     environment-name: k8s
   #     continue-error: false
   #     collection-file: ansible/collections/base-os.yaml
-
-
   Build-Collections:
     strategy:
       matrix:
