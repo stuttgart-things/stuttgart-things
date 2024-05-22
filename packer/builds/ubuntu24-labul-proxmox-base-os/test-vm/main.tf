@@ -1,13 +1,13 @@
 module ubuntu24-labul-proxmox-base-os {
   source           = "github.com/stuttgart-things/proxmox-vm.git?ref=v2.9.14-1.5.5"
   vm_count         = 1
-  vm_name          = var.vsphere_vm_name
+  vm_name          = var.vm_name
+  vm_template      = var.vm_template
   vm_memory        = "8192"
-  vm_template      = var.vsphere_vm_template
   vm_disk_size     = "32G"
   vm_num_cpus      = "8"
   pve_cluster_node = "sthings-pve1"
-  pve_datastore    = "datastore"
+  pve_datastore    = "v3700"
   pve_folder_path  = "stuttgart-things"
   pve_network      = "vmbr102"
   vm_notes         = "PROXMOX-VM PACKER TEST VM BUILD w/ TERRAFORM FOR STUTTGART-THINGS"
@@ -22,12 +22,12 @@ output "ip" {
   value     = module.ubuntu24-labul-proxmox-base-os.ip
 }
 
-variable "vsphere_vm_name" {
+variable "vm_name" {
   type        = string
   description = "name of vsphere vm template"
 }
 
-variable "vsphere_vm_template" {
+variable "vm_template" {
   type        = string
   description = "name of proxmox vm template"
 }
