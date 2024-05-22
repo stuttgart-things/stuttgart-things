@@ -72,6 +72,8 @@ build {
     keep_inventory_file    = "true"
     playbook_file          = "./base-os.yaml"
     user                   = "ubuntu"
+    galaxy_file            = "./requirements.yaml"
+    galaxy_force_install   = "true"
   }
 
 }
