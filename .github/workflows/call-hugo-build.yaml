@@ -64,6 +64,7 @@ jobs:
       bucket: ${{ inputs.s3-bucket }}
       s3-alias: ${{ inputs.s3-alias }} # COULD BE LOADED FROM ENV
       runs-on: ${{ inputs.runs-on }}
+      site-name: ${{ inputs.site-name }}
     secrets: inherit
 
   Build-Hugo-Site:
@@ -102,6 +103,7 @@ jobs:
       bucket: ${{ inputs.s3-bucket }}
       s3-alias: ${{ inputs.s3-alias }} # COULD BE LOADED FROM ENV
       runs-on: ${{ inputs.runs-on }}
+      site-name: ${{ inputs.site-name }}
     secrets: inherit
 
   Deploy-Hugo-Site:
