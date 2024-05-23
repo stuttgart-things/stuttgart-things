@@ -27,6 +27,9 @@ on:
         description: RUNNER NAME
         required: true
         type: string
+      site-name:
+        required: true
+        type: string
 
 jobs:
   Upload-Content-To-S3:
@@ -73,9 +76,9 @@ jobs:
           cat ${HOME}/.config/rclone/rclone.conf
           
           # clean folder
-          rclone delete ${{ inputs.s3-alias }}:${{ inputs.bucket }}/${{ inputs.folder }}
+          rclone delete ${{ inputs.s3-alias }}:${{ inputs.bucket }}/${{ inputs.folder }}/${{ inputs.site-name }}
 
           # copy content to s3
-          rclone -P copy ${{ inputs.folder }} ${{ inputs.s3-alias }}:${{ inputs.bucket }}/${{ inputs.folder }}
+          rclone -P copy ${{ inputs.folder }} ${{ inputs.s3-alias }}:${{ inputs.bucket }}/${{ inputs.folder }}/${{ inputs.site-name }}
 
-          rclone ls ${{ inputs.s3-alias }}:${{ inputs.bucket }}/${{ inputs.folder }}
+          rclone ls ${{ inputs.s3-alias }}:${{ inputs.bucket }}/${{ inputs.folder }}/${{ inputs.site-name }}
