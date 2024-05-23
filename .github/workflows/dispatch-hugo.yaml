@@ -32,89 +32,13 @@ on:
 
 jobs:
   build-hugo:
-    name: Build Hugo
-    runs-on: ghr-stuttgart-things-labda-test
-    container:
-      image: ${{ inputs.image }}
-    environment: k8s
-    continue-on-error: false
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - run: |
-          ls -lta
-        
-          sh hugo/create-sthings.sh
-
-          ls -lta sthings
-
-      - uses: actions/upload-artifact@v4.3.3
-        with:
-          name: hugo-dev
-          path: sthings
-
-      - run: cd sthings && hugo --verbose --destination ../public
-
-      - uses: actions/upload-artifact@v4.3.3
-        with:
-          name: hugo-public
-          path: public
-
-  Sync-Hugo-Dev-Minio:
-    name: Sync Minio
-    needs: build-hugo
-    uses: stuttgart-things/stuttgart-things/.github/workflows/call-minio-sync.yaml@main
+    name: Build hugo
+    uses: stuttgart-things/stuttgart-things/.github/workflows/call-hugo-build.yaml@main
     with:
-      folder: hugo-dev
-      endpoint: ${{ inputs.endpoint }}
-      image: ${{ inputs.image }}
-      environment: ${{ inputs.environment }}
-      bucket: ${{ inputs.bucket }}
-      s3_alias: ${{ inputs.s3_alias }}
-    secrets: inherit
-
-  Sync-Hugo-Public-Minio:
-    name: Sync Minio
-    needs: build-hugo
-    uses: stuttgart-things/stuttgart-things/.github/workflows/call-minio-sync.yaml@main
-    with:
-      folder: hugo-dev
-      endpoint: ${{ inputs.endpoint }}
-      image: ${{ inputs.image }}
-      environment: ${{ inputs.environment }}
-      bucket: ${{ inputs.bucket }}
-      s3_alias: ${{ inputs.s3_alias }}
-    secrets: inherit
-
-  Deploy-Hugo-Site:
-    runs-on: ghr-stuttgart-things-labda-test
-    needs: Build-Hugo
-    permissions:
-      pages: write      # to deploy to Pages
-      id-token: write   # to verify the deployment originates from an appropriate source
-    container:
-      image: locietta/loia-dev-base:node
-    environment: k8s
-    continue-on-error: false
-    steps:
-      - uses: actions/download-artifact@v4.1.7
-        with:
-          name: hugo-public
-
-      - name: Checkout code
-        run: |
-          ls -lta
-
-      - uses: actions/upload-pages-artifact@v3.0.1
-        with:
-          path: .
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4.0.5 # or the latest "vX.X.X" version tag for this action
-
-      - name: Microsoft Teams Notification
-        uses: skitionek/notify-microsoft-teams@master
-        if: always()
-        with:
-          webhook_url: ${{ secrets.MS_TEAMS_URL }}
+      environment-name: k8s
+      runs-on: ghr-stuttgart-things-labda-test
+      image: dcjulian29/hugo:0.125.5
+      creation-script-path: hugo/create-sthings.sh
+      site-name: sthings
+      s3-bucket: hugo
+      s3-endpoint: https://artifacts.app1.sthings-vsphere.labul.sva.de:443
