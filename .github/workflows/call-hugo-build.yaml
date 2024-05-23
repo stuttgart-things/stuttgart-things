@@ -53,7 +53,7 @@ jobs:
             ${{ inputs.site-name }}
 
   Sync-Hugo-Dev-Minio:
-    name: Sync Minio
+    name: Sync Minio Dev
     needs: Create-Hugo-Content
     uses: stuttgart-things/stuttgart-things/.github/workflows/call-minio-sync.yaml@main
     with:
@@ -89,6 +89,20 @@ jobs:
         with:
           name: hugo-public
           path: public
+
+  Sync-Hugo-Public-Minio:
+    name: Sync Minio Public
+    needs: Build-Hugo-Site
+    uses: stuttgart-things/stuttgart-things/.github/workflows/call-minio-sync.yaml@main
+    with:
+      folder: hugo-public
+      endpoint: ${{ inputs.s3-endpoint }}
+      image: eu.gcr.io/stuttgart-things/sthings-mc-rclone:2024-05-14
+      environment: ${{ inputs.environment-name }}
+      bucket: ${{ inputs.s3-bucket }}
+      s3-alias: ${{ inputs.s3-alias }} # COULD BE LOADED FROM ENV
+      runs-on: ${{ inputs.runs-on }}
+    secrets: inherit
 
   Deploy-Hugo-Site:
     runs-on: ${{ inputs.runs-on }}
