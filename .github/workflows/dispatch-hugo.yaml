@@ -11,7 +11,7 @@ on:
         required: true
         type: string
         default: dcjulian29/hugo:0.125.5
-      environment:
+      environment-name:
         required: true
         type: string
         default: labul-vsphere
@@ -22,7 +22,11 @@ on:
       s3_alias:
         required: true
         type: string
-        default: labul-app1  
+        default: labul-app1
+      runs-on:
+        required: true
+        type: string
+        default: ghr-stuttgart-things-labda-test
 
   push:
     branches:
@@ -35,9 +39,9 @@ jobs:
     name: Build hugo
     uses: stuttgart-things/stuttgart-things/.github/workflows/call-hugo-build.yaml@main
     with:
-      environment-name: k8s
-      runs-on: ghr-stuttgart-things-labda-test
-      image: dcjulian29/hugo:0.125.5
+      environment-name: ${{ inputs.environment-name }}
+      runs-on: ${{ inputs.runs-on }}
+      image: ${{ inputs.image }}
       creation-script-path: hugo/create-sthings.sh
       site-name: sthings
       s3-bucket: hugo
