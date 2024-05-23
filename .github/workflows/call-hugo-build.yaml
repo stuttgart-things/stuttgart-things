@@ -99,6 +99,8 @@ jobs:
     container:
       image: locietta/loia-dev-base:node
     environment: ${{ inputs.environment-name }}
+    env:
+      MS_TEAMS_URL: ${{ secrets.MS_TEAMS_URL }}
     continue-on-error: false
     steps:
       - uses: actions/download-artifact@v4.1.7
