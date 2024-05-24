@@ -24,6 +24,7 @@ on:
       branch-name:
         default: main
         type: string
+        
 jobs:
   Go-Release:
     runs-on: ${{ inputs.runs-on }}
