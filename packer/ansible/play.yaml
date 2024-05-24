@@ -29,6 +29,15 @@
     vault_approle_secret: "{{ lookup('env', 'VAULT_SECRET_ID') }}"
     vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
 
+    os_packages:
+      - python3-pip
+      - vim
+      - curl
+      - git
+      - unzip
+      - zip
+      - tmux
+
     ubuntu_network_config: |
       # This is the network config written by 'subiquity'
       network:
