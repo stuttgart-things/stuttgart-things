@@ -6,13 +6,10 @@ requirements: |
   roles:
     - src: https://github.com/stuttgart-things/download-install-binary.git
       scm: git
-      version: 2024.04.19
+      version: 2024.05.24
     - src: https://github.com/stuttgart-things/create-os-user.git
       scm: git
       version: 2024.05.03
-    - src: https://github.com/stuttgart-things/install-configure-docker.git
-      scm: git
-      version: 2024.04.30
     - src: https://github.com/stuttgart-things/install-configure-docker.git
       scm: git
       version: 2024.04.30
