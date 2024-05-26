@@ -312,8 +312,8 @@ vars:
           target_version: v0.32.4
           #md5_checksum: "04ba6f524a433f8ceb9095c4c8292240"
         velero:
-          bin_name: "velero"
-          bin_version: "1.13.2"
+          bin_name: velero
+          bin_version: 1.13.2
           check_bin_version_before_installing: true
           source_url: "https://github.com/vmware-tanzu/velero/releases/download/v1.13.2/velero-v1.13.2-linux-amd64.tar.gz"
           bin_to_copy: "velero-v1.13.2-linux-amd64/velero"
@@ -322,3 +322,23 @@ vars:
           version_cmd: " version --client-only"
           target_version: v1.13.2
           #md5_checksum: "30ab57f9520ae2318ab28eefbc81728c"
+        yq:
+          bin_name: yq
+          bin_version: 4.43.1
+          check_bin_version_before_installing: true
+          source_url: "https://github.com/mikefarah/yq/releases/download/v4.43.1/yq_linux_amd64.tar.gz"
+          bin_to_copy: yq
+          to_remove: ""
+          bin_dir: "/usr/bin"
+          version_cmd: " version"
+          target_version: 4.43.1
+        machineshop:
+          bin_name: machineshop
+          bin_version: 1.9.9
+          check_bin_version_before_installing: true
+          source_url: https://github.com/stuttgart-things/machineshop/releases/download/1.9.9/machineshop_Linux_x86_64.tar.gz
+          bin_to_copy: machineshop
+          to_remove: ""
+          bin_dir: "/usr/bin"
+          version_cmd: " version"
+          target_version: 1.9.9

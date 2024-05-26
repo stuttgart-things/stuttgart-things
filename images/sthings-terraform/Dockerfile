@@ -1,19 +1,22 @@
 FROM docker.io/library/ubuntu:22.04@sha256:0bced47fffa3361afa981854fcabcd4577cd43cebbb808cea2b1f33a3dd7f508
 
-LABEL version=1.8.1-2
+LABEL version=1.8.4
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 
 # SWITCH TO ROOT FOR THE ABILITY TO PERFORM INSTALL
 USER root
 
 ARG DEBIAN_FRONTEND=noninteractive
-ARG TERRAFORM_VERSION=1.8.1
+ARG TERRAFORM_VERSION=1.8.4
+ARG YQ_VERSION=4.43.1
+ARG MACHINE_SHOP_VERSION=1.9.9
 
 # INSTALL TOOLS NEEDED FOR YOUR REPO-SERVER TO RETRIEVE & DECRYPT SECRETS, RENDER MANIFESTS
 RUN apt-get update && \
     apt-get install -y \
         curl \
         wget \
+        jq \
         git \
         gawk \
         unzip \
@@ -32,7 +35,6 @@ ARG VAULT_URL_LABUL_VSPHERE=https://vault-vsphere.labul.sva.de:8200
 ARG VAULT_URL_LABUL_PVE=https://vault-pve.labul.sva.de:8200
 ARG VAULT_URL_LABDA_VSPHERE=https://vault-vsphere.tiab.labda.sva.de:8200
 
-ARG MACHINE_SHOP_VERSION=v1.7.0
 
 # INSTALL VAULT CERTS
 RUN rm -rf /usr/local/share/ca-certificates/* \
@@ -49,6 +51,13 @@ RUN wget -O terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_V
        && rm terraform.zip
 
 # MACHINE-SHOP
-RUN wget -q https://github.com/stuttgart-things/machineShop/releases/download/${MACHINE_SHOP_VERSION}/machineShop_Linux_x86_64.tar.gz \
-    && tar -xvf machineShop_Linux_x86_64.tar.gz -C /usr/bin/ machineShop \
-    && rm -rf machineShop_Linux_x86_64.tar.gz
+RUN wget -q https://github.com/stuttgart-things/machineshop/releases/download/${MACHINE_SHOP_VERSION}/machineshop_Linux_x86_64.tar.gz \
+    && tar -xvf machineshop_Linux_x86_64.tar.gz -C /usr/bin/ machineshop \
+    && rm -rf machineshop_Linux_x86_64.tar.gz
+
+# INSTALL YQ
+RUN wget -q https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_linux_amd64.tar.gz \
+    && tar xvfz yq_linux_amd64.tar.gz -C /usr/bin \
+    && mv /usr/bin/yq_linux_amd64 /usr/bin/yq \
+    && chmod +x /usr/bin/yq \
+    && rm -rf yq_linux_amd64.tar.gz

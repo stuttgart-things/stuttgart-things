@@ -58,6 +58,7 @@ jobs:
       VAULT_ROLE_ID: ${{ secrets.VAULT_ROLE_ID }}
       VAULT_SECRET_ID: ${{ secrets.VAULT_SECRET_ID }}
       TFVARS_FILE: ${{ inputs.folder }}/terraform.tfvars
+      FILE_SECRETS_FILE: ${{ inputs.folder }}/file-secrets.yaml
     steps:
       - name: Checkout code
         uses: actions/checkout@v4.1.1
@@ -66,6 +67,7 @@ jobs:
           ref: ${{ inputs.branch }}
 
       - name: Render terraform.tfvars (if exists)
+        id: tfvars-render
         run: |
           if test -f "${TFVARS_FILE}"; then
 
@@ -78,6 +80,21 @@ jobs:
             --output file \
             --values "$values" \
             --destination ${TFVARS_FILE}
+
+          fi
+
+      - name: Get secret files (if paths are existing)
+        id: secret-files
+        run: |
+          if test -f "${FILE_SECRETS_FILE}"; then
+
+            for secret in $(yq eval -o=j ${FILE_SECRETS_FILE} | jq -cr '.secrets[]'); do
+              PATH=$(echo $secret | jq -r '.path' -)
+              TARGET=$(echo $secret | jq -r '.target' -)
+              B64=$(echo $secret | jq -r '.b64' -)
+              echo $PATH $target $b64
+              machineshop get --path ${PATH} --output file --destination ${TARGET} --b64 ${B64}
+            done
 
           fi
 
