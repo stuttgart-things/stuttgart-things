@@ -10,6 +10,16 @@ https://github.com/stuttgart-things/stuttgart-things/releases/download/${VERSION
 
 ## PLAYBOOKS
 
+<details><summary>SETUP</summary>
+
+base setup for linux machine: updates, packages, ca, banner + filesystem.
+
+```bash
+ansible-playbook sthings.base_os.setup -vv -i /tmp/inv
+```
+
+</details>
+
 <details><summary>INSTALL-CONFIGURE-GOLANG</summary>
 
 installs golang on target system(s)
