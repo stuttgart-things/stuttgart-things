@@ -60,7 +60,7 @@ on:
         type: choice
         description: ansible provisioning
         options:
-          - base-os
+          - sthings.base_os.setup
           - none
       runner:
         description: RUNNER NAME
