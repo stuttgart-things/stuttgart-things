@@ -15,6 +15,7 @@ jobs:
       tf_working_dir: ${{ steps.set.outputs.TF_WORKING_DIR }}
       environment: ${{ steps.set.outputs.ENVIRONMENT }}
       inventory: ${{ steps.getInventory.outputs.INVENTORY }}
+      playbook: ${{ steps.getPlaybook.outputs.PLAYBOOK }}
     runs-on: ghr-stuttgart-things-labda-test
     steps:
       - name: Set Execution Details
@@ -38,13 +39,27 @@ jobs:
           echo ${INVENTORY}
           echo "INVENTORY=${INVENTORY}" >> $GITHUB_OUTPUT
 
+      - name: Get Inventory/Comment From PR
+        uses: peter-evans/find-comment@v3
+        id: post
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body-includes: post
+
+      - name: Get Playbook
+        id: getPlaybook
+        run: |
+          PLAYBOOK=$(echo ${{ steps.post.outputs.comment-body }} | sed 's/.*\://' | xargs)
+          echo ${PLAYBOOK}
+          echo "PLAYBOOK=${PLAYBOOK}" >> $GITHUB_OUTPUT
+          
   Execute-Ansible-Provisioning:
     name: Execute Ansible
     uses: stuttgart-things/stuttgart-things/.github/workflows/call-ansible-execution.yaml@main
     needs:
       - Get-Ansible-Config
     with:
-      playbook: ansible/playbooks/base-os.yaml
+      playbook: ${{ needs.Get-Ansible-Config.outputs.playbook }}
       branch: ${{ github.event.pull_request.head.ref }}
       working-image: eu.gcr.io/stuttgart-things/sthings-ansible:9.5.1
       runs-on: ghr-stuttgart-things-labda-test
