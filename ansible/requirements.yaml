@@ -33,7 +33,7 @@ collections:
   - name: community.crypto
     version: 2.20.0
   - name: community.general
-    version: 8.6.1
+    version: 9.0.0
   - name: ansible.posix
     version: 1.5.4
   - name: kubernetes.core
@@ -42,5 +42,6 @@ collections:
     version: 4.4.0
   - name: community.hashi_vault
     version: 6.2.0
-  - name: https://github.com/stuttgart-things/stuttgart-things/releases/download/0.2.7/sthings-base_os-0.2.7.tar.gz
+  - name: https://github.com/stuttgart-things/stuttgart-things/releases/download/0.3.3/sthings-base_os-0.3.3.tar.gz
+  - name: https://github.com/stuttgart-things/stuttgart-things/releases/download/0.0.10/sthings-container-0.0.10.tar.gz
   - name: https://github.com/stuttgart-things/deploy-configure-rke/releases/download/1.29.4/sthings-deploy_rke-1.29.4.tar.gz
