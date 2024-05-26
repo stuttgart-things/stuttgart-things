@@ -50,7 +50,7 @@ jobs:
           # SET ENV VARS
           echo "FOLDER=$(echo ${{ steps.test.outputs.comment-body }} | sed 's/.*\://' | xargs)/" >> $GITHUB_ENV
           echo "BRANCH=${{ github.event.pull_request.head.ref }}" >> $GITHUB_ENV
-          echo "WORKING_IMAGE=eu.gcr.io/stuttgart-things/sthings-terraform:1.8.1-2" >> $GITHUB_ENV
+          echo "WORKING_IMAGE=eu.gcr.io/stuttgart-things/sthings-terraform:1.8.4" >> $GITHUB_ENV
           echo "RUNS_ON=ghr-stuttgart-things-labda-test" >> $GITHUB_ENV
           echo "ENVIRONMENT=$(echo ${LAB}-${CLOUD})" >> $GITHUB_ENV
           echo "VARIABLES=$(echo ${VARS})" >> $GITHUB_ENV

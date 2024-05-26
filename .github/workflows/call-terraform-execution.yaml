@@ -34,7 +34,7 @@ on:
         type: string
       working-image:
         type: string
-        default: eu.gcr.io/stuttgart-things/sthings-terraform:1.8.1-2
+        default: eu.gcr.io/stuttgart-things/sthings-terraform:1.8.4
         required: false
     outputs:
       tf-output:
