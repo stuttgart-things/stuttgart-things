@@ -1,15 +1,9 @@
 ---
 name: container
-version: 0.0.10
+version: 0.0.20
 namespace: sthings
 requirements: |
   roles:
-    - src: https://github.com/stuttgart-things/download-install-binary.git
-      scm: git
-      version: 2024.04.19
-    - src: https://github.com/stuttgart-things/create-os-user.git
-      scm: git
-      version: 2024.05.03
     - src: https://github.com/stuttgart-things/install-configure-docker.git
       scm: git
       version: 2024.04.30
@@ -25,9 +19,12 @@ requirements: |
     - src: https://github.com/stuttgart-things/create-send-webhook.git
       scm: git
       version: 2022.01.01
+    - src: https://github.com/stuttgart-things/download-install-binary.git
+      scm: git
+      version: 2024.04.24
 
 playbooks:
-  - name: install_configure_podman
+  - name: podman
     play: |
       ---
       - hosts: "{{ target_host | default('all') }}"
@@ -142,8 +139,8 @@ vars:
           bin_version: "v0.15.2"
           check_bin_version_before_installing: true
           source_url: "https://github.com/ko-build/ko/releases/download/v0.15.2/ko_Linux_x86_64.tar.gz"
-          bin_to_copy: ko_Linux_x86_64
-          to_remove: ko_Linux_x86_64
-          bin_dir: "/usr/local/ko"
+          bin_to_copy: ko
+          to_remove: ""
+          bin_dir: "/usr/bin/ko"
           version_cmd: "version"
           target_version: v0.15.2

@@ -5,7 +5,7 @@
 ### INSTALLATION
 
 ```bash
-VERSION=0.2.3
+VERSION=0.3.3
 ansible-galaxy collection install -f \
 https://github.com/stuttgart-things/stuttgart-things/releases/download/${VERSION}/sthings-base_os-${VERSION}.tar.gz
 ```
@@ -72,32 +72,52 @@ ansible-playbook sthings.base_os.users -vv -i /tmp/inv
 ### INSTALLATION
 
 ```bash
-VERSION=0.2.3
+VERSION=0.0.20
 ansible-galaxy collection install -f \
-https://github.com/stuttgart-things/stuttgart-things/releases/download/${VERSION}/sthings-base_os-${VERSION}.tar.gz
+https://github.com/stuttgart-things/stuttgart-things/releases/download/${VERSION}/sthings-container-${VERSION}.tar.gz
 ```
 
 ### PLAYBOOKS
 
-<details><summary>INSTALL-CONFIGURE-NERDCTL</summary>
-
-</details>
-
-<details><summary>INSTALL-CONFIGURE-DOCKER</summary>
+<details><summary>DOCKER</summary>
 
 ###ADD DESCRIPTION
 
 ```bash
 # DEPLOYMENT OF LATEST RUNTIME, CLI + COMPOSE
-ansible-playbook sthings.base_os.install_configure_docker -vv -i inventory
+ansible-playbook sthings.container.docker -vv -i inventory
 
 # DEPLOYMENT OF LATEST RUNTIME, CLI, COMPOSE + KIND CLUSTER
-ansible-playbook sthings.base_os.install_configure_docker \
--vv -i inventory install_kind=true
+ansible-playbook sthings.container.docker \
+-e install_kind=true \
+-vv -i inventory
 ```
 
 </details>
 
+<details><summary>NERDCTL</summary>
+
+```bash
+ansible-playbook sthings.container.nerdctl -i /tmp/inv -vv
+```
+
+</details>
+
+<details><summary>PODMAN</summary>
+
+```bash
+ansible-playbook sthings.container.podman -i /tmp/inv -vv
+```
+
+</details>
+
+<details><summary>TOOLS</summary>
+
+```bash
+ansible-playbook sthings.container.tools -i /tmp/inv -vv
+```
+
+</details>
 
 Author Information
 ------------------
