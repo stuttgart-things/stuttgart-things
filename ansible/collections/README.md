@@ -1,6 +1,8 @@
-# stuttgart-things/ansbile/base-os
+# stuttgart-things/ansbile/collections
 
-## INSTALLATION
+## BASE-OS
+
+### INSTALLATION
 
 ```bash
 VERSION=0.2.3
@@ -8,7 +10,7 @@ ansible-galaxy collection install -f \
 https://github.com/stuttgart-things/stuttgart-things/releases/download/${VERSION}/sthings-base_os-${VERSION}.tar.gz
 ```
 
-## PLAYBOOKS
+### PLAYBOOKS
 
 <details><summary>SETUP</summary>
 
@@ -20,7 +22,7 @@ ansible-playbook sthings.base_os.setup -vv -i /tmp/inv
 
 </details>
 
-<details><summary>INSTALL-CONFIGURE-GOLANG</summary>
+<details><summary>GOLANG</summary>
 
 installs golang on target system(s)
 
@@ -41,6 +43,42 @@ ansible-playbook sthings.base_os.install_configure_golang \
 
 </details>
 
+<details><summary>BINARIES</summary>
+
+```bash
+ansible-playbook sthings.base_os.binaries -vv -i /tmp/inv
+```
+
+</details>
+
+
+<details><summary>USERS</summary>
+
+```bash
+ansible-playbook sthings.base_os.users -vv -i /tmp/inv
+```
+
+</details>
+
+### COLLECTION HISTORY
+
+----------------
+| DATE  | WHO | CHANGELOG |
+|---|---|---|
+
+
+## CONTAINER
+
+### INSTALLATION
+
+```bash
+VERSION=0.2.3
+ansible-galaxy collection install -f \
+https://github.com/stuttgart-things/stuttgart-things/releases/download/${VERSION}/sthings-base_os-${VERSION}.tar.gz
+```
+
+### PLAYBOOKS
+
 <details><summary>INSTALL-CONFIGURE-NERDCTL</summary>
 
 </details>
@@ -59,32 +97,6 @@ ansible-playbook sthings.base_os.install_configure_docker \
 ```
 
 </details>
-
-<details><summary>DOWNLOAD-INSTALL-BINARY</summary>
-
-###ADD DESCRIPTION
-
-```bash
-
-```
-
-</details>
-
-<details><summary>CREATE-USERS</summary>
-
-###ADD DESCRIPTION
-
-```bash
-
-```
-
-</details>
-
-
-COLLECTION HISTORY
-----------------
-| DATE  | WHO | CHANGELOG |
-|---|---|---|
 
 
 Author Information
