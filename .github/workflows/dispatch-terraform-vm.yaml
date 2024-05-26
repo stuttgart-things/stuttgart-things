@@ -154,20 +154,17 @@ jobs:
             os = {
                 'labul-vsphere': {
                     'ubuntu22': 'sthings-u22',
-                    'ubuntu23': 'sthings-u23',
                     'ubuntu24': 'sthings-u24',
                     'rocky9': 'sthings-r9'
                 },
                 'labda-vsphere': {
                     'ubuntu22': 'ubuntu22',
-                    'ubuntu23': 'ubuntu23',
                     'ubuntu24': 'sthings-u24',
                     'rocky9': 'rocky9'
                 },
                 'labul-proxmox': {
-                    'ubuntu22': 'ubuntu22',
-                    'ubuntu23': 'ubuntu23',
-                    'ubuntu24': 'ubuntu24-eva',
+                    'ubuntu22': 'ubuntu22-2024-05-22-base-os',
+                    'ubuntu24': 'ubuntu24-2024-05-24-base-os',
                     'rocky9': 'rocky9'
                 }
             }
