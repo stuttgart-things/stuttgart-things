@@ -89,10 +89,10 @@ jobs:
         run: |
           if test -f "${FILE_SECRETS_FILE}"; then
 
-            for secret in $(yq eval -o=j ${FILE_SECRETS_FILE} | jq -cr '.secrets[]'); do
-              PATH=$(echo $secret | jq -r '.path' -)
-              TARGET=$(echo $secret | jq -r '.target' -)
-              B64=$(echo $secret | jq -r '.b64' -)
+            for secret in $(yq eval -o=j ${FILE_SECRETS_FILE} | /usr/bin/jq -cr '.secrets[]'); do
+              PATH=$(echo $secret | /usr/bin/jq -r '.path' -)
+              TARGET=$(echo $secret | /usr/bin/jq -r '.target' -)
+              B64=$(echo $secret | /usr/bin/jq -r '.b64' -)
               echo $PATH $target $b64
               machineshop get --path ${PATH} --output file --destination ${TARGET} --b64 ${B64}
             done
