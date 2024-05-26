@@ -25,7 +25,7 @@ jobs:
         run: |
           # HARDCODED (FOR NOW)
           echo "OPERATION=apply" >> "$GITHUB_OUTPUT"
-          echo "WORKING_IMAGE=eu.gcr.io/stuttgart-things/sthings-terraform:1.8.4" >> "$GITHUB_OUTPUT"
+          echo "WORKING_IMAGE=eu.gcr.io/stuttgart-things/sthings-terraform:1.8.4-1" >> "$GITHUB_OUTPUT"
           echo "RUNS_ON=ghr-stuttgart-things-labda-test" >> "$GITHUB_OUTPUT"
 
           # PULL REQUEST/BRANCH RELATED
