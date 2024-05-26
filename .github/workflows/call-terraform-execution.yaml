@@ -85,6 +85,7 @@ jobs:
 
       - name: Get secret files (if paths are existing)
         id: secret-files
+        shell: bash
         run: |
           if test -f "${FILE_SECRETS_FILE}"; then
 
