@@ -1,6 +1,6 @@
 FROM docker.io/library/ubuntu:22.04@sha256:0bced47fffa3361afa981854fcabcd4577cd43cebbb808cea2b1f33a3dd7f508
 
-LABEL version=1.8.4
+LABEL version=1.8.4-1
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 
 # SWITCH TO ROOT FOR THE ABILITY TO PERFORM INSTALL
