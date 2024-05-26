@@ -102,7 +102,7 @@ playbooks:
             ignore_errors: true
             when: send_to_msteams|bool
 
-  - name: install_configure_golang
+  - name: golang
     play: |
       ---
       - hosts: "{{ target_host | default('all') }}"
@@ -131,7 +131,7 @@ playbooks:
               version_cmd: "-- version"
               target_version: 1.58.1
             goreleaser:
-              bin_name:goreleaser
+              bin_name: goreleaser
               bin_version: v1.26.1
               check_bin_version_before_installing: true
               source_url: "https://github.com/goreleaser/goreleaser/releases/download/v1.26.1/goreleaser_Linux_x86_64.tar.gz"
@@ -190,13 +190,14 @@ playbooks:
         post_tasks:
           - name: Install addons
             ansible.builtin.shell: |
-              go install github.com/spf13/cobra-cli@v1.3.0
+              ./go install github.com/spf13/cobra-cli@v1.3.0
             args:
-              chdir: "{{ golang_install_dir }}"
+              chdir: "{{ golang_install_dir }}/go/bin/"
 
         roles:
           - role: sthings.base_os.download_install_binary
-  - name: download_install_binaries
+
+  - name: binaries
     play: |
       ---
       - hosts: "{{ target_host | default('all') }}"
@@ -224,7 +225,7 @@ playbooks:
 
 vars:
 
-  - name: sthings-users
+  - name: users
     file: |
       ---
       users:
@@ -262,27 +263,16 @@ vars:
           bin_dir: "/usr/local/bin"
           version_cmd: "-- version"
           target_version: v3.37.2
-        velero:
-          bin_name: "velero"
-          bin_version: "1.13.2"
-          check_bin_version_before_installing: true
-          source_url: "https://github.com/vmware-tanzu/velero/releases/download/v1.13.2/velero-v1.13.2-linux-amd64.tar.gz"
-          bin_to_copy: "velero-v1.13.2-linux-amd64/velero"
-          to_remove: "velero-v1.13.2-linux-amd64"
-          bin_dir: "/usr/local/bin"
-          version_cmd: " version --client-only"
-          target_version: v1.13.2
-          #md5_checksum: "30ab57f9520ae2318ab28eefbc81728c"
         terraform:
           bin_name: "terraform"
           bin_version: "1.8.4"
           check_bin_version_before_installing: true
-          source_url: "https://releases.hashicorp.com/terraform/1.8.3/terraform_1.8.3_linux_amd64.zip"
+          source_url: "https://releases.hashicorp.com/terraform/1.8.3/terraform_1.8.4_linux_amd64.zip"
           bin_to_copy: "terraform"
           to_remove: "terraform"
           bin_dir: "/usr/local/bin"
           version_cmd: " --version"
-          target_version: v1.8.3
+          target_version: v1.8.4
         helm:
           bin_name: "helm"
           bin_version: "3.15.1"
@@ -327,3 +317,14 @@ vars:
           version_cmd: " version --short"
           target_version: v0.32.4
           #md5_checksum: "04ba6f524a433f8ceb9095c4c8292240"
+        velero:
+          bin_name: "velero"
+          bin_version: "1.13.2"
+          check_bin_version_before_installing: true
+          source_url: "https://github.com/vmware-tanzu/velero/releases/download/v1.13.2/velero-v1.13.2-linux-amd64.tar.gz"
+          bin_to_copy: "velero-v1.13.2-linux-amd64/velero"
+          to_remove: "velero-v1.13.2-linux-amd64"
+          bin_dir: "/usr/local/bin"
+          version_cmd: " version --client-only"
+          target_version: v1.13.2
+          #md5_checksum: "30ab57f9520ae2318ab28eefbc81728c"
