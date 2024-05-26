@@ -5,7 +5,7 @@ module "manager-proxmox-dev" {
   vm_memory               = "12288"
   vm_num_cpus             = "8"
   vm_disk_size            = "128G"
-  vm_template             = "ubuntu24-eva"
+  vm_template             = "ubuntu24-2024-05-24-base-os"
   pve_cluster_node        = "sthings-pve1"
   pve_datastore           = "v3700"
   pve_folder_path         = "stuttgart-things"
