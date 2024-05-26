@@ -61,3 +61,8 @@ RUN wget -q https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_
     && mv /usr/bin/yq_linux_amd64 /usr/bin/yq \
     && chmod +x /usr/bin/yq \
     && rm -rf yq_linux_amd64.tar.gz
+
+# INSTALL JQ
+RUN wget -q https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-linux-amd64 \
+    && mv jq-linux-amd64 /usr/bin/jq \
+    && chmod +x /usr/bin/jq
