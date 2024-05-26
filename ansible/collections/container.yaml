@@ -36,7 +36,7 @@ playbooks:
         roles:
           - role: sthings.container.install_configure_podman
 
-  - name: install_configure_docker
+  - name: docker
     play: |
       ---
       - hosts: "{{ target_host | default('all') }}"
@@ -50,7 +50,7 @@ playbooks:
         roles:
           - role: sthings.container.install_configure_docker
 
-  - name: install_configure_nerdctl
+  - name: nerdctl
     play: |
       ---
       - hosts: "{{ target_host | default('all') }}"
@@ -118,7 +118,7 @@ playbooks:
               state: enforcing
             when: ansible_os_family == 'RedHat'
 
-  - name: download_install_binaries
+  - name: tools
     play: |
       ---
       - hosts: "{{ target_host | default('all') }}"
