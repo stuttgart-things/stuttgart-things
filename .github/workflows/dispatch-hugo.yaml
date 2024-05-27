@@ -2,31 +2,6 @@
 name: Dispatch Hugo
 on:
   workflow_dispatch:
-    inputs:
-      endpoint:
-        description: MINIO ENDPOINT
-        type: string
-        default: https://artifacts.app1.sthings-vsphere.labul.sva.de:443
-      image:
-        required: true
-        type: string
-        default: floryn90/hugo:0.126.1-ext-ubuntu-ci
-      environment-name:
-        required: true
-        type: string
-        default: labul-vsphere
-      bucket:
-        required: true
-        type: string
-        default: hugo
-      s3_alias:
-        required: true
-        type: string
-        default: labul-app1
-      runs-on:
-        required: true
-        type: string
-        default: ghr-stuttgart-things-labda-test
 
   push:
     branches:
@@ -39,11 +14,12 @@ jobs:
     name: Build hugo
     uses: stuttgart-things/stuttgart-things/.github/workflows/call-hugo-build.yaml@main
     with:
-      environment-name: ${{ inputs.environment-name }}
-      runs-on: ${{ inputs.runs-on }}
-      image: ${{ inputs.image }}
+      environment-name: labul-vsphere
+      runs-on: ghr-stuttgart-things-labda-test
+      image: floryn90/hugo:0.126.1-ext-ubuntu-ci
       creation-script-path: hugo/create-sthings.sh
       site-name: sthings
       s3-bucket: hugo
       s3-endpoint: https://artifacts.app1.sthings-vsphere.labul.sva.de:443
+      s3-alias: s3
     secrets: inherit
