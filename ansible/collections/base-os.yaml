@@ -240,7 +240,7 @@ playbooks:
               node: "{{ pve_node }}"
 
         roles:
-          - role: manage_proxmox_resources
+          - role: sthings.base_os.manage_proxmox_resources
 
   - name: delete-proxmox
     play: |
@@ -261,7 +261,7 @@ playbooks:
               node: "{{ pve_node }}"
 
         roles:
-          - role: manage_proxmox_resources
+          - role: sthings.base_os.manage_proxmox_resources
 
 vars:
   - name: users
