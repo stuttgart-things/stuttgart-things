@@ -21,5 +21,5 @@ jobs:
       site-name: sthings
       s3-bucket: hugo
       s3-endpoint: https://artifacts.app1.sthings-vsphere.labul.sva.de:443
-      s3_alias: s3
+      s3-alias: s3
     secrets: inherit
