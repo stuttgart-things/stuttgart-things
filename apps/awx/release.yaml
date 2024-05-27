@@ -35,10 +35,3 @@ spec:
             storage: ${STORAGE_SIZE:-1Gi}
           limits:
             storage: ${STORAGE_SIZE:-8Gi}
-        # web_extra_volume_mounts: |
-        #   - name: static-data
-        #     mountPath: /var/lib/awx/public
-        # extra_volumes: |
-        #   - name: static-data
-        #     persistentVolumeClaim:
-        #       claimName: local-storage-pvc

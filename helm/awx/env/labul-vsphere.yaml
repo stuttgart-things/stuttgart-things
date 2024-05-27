@@ -1,0 +1,10 @@
+---
+admin_user: admin
+ingress_class_name: nginx
+ingress_secret: awx-tls
+project_storage_class: nfs4-csi
+postgres_storage_class: nfs4-csi
+postgres_storage_request: 1Gi
+postgres_storage_limits: 8Gi
+hostname: awx
+domain: itnovative.sthings-vsphere.labul.sva.de
