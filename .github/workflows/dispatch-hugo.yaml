@@ -5,11 +5,33 @@ on:
 
   push:
     branches:
-      - main
+      - '**'
     paths:
       - 'hugo/*'
 
 jobs:
+  markdown-lint:
+    name: Lint markdown files
+    uses: stuttgart-things/stuttgart-things/.github/workflows/call-markdown-lint.yaml@main
+    with:
+      environment-name: k8s
+      runs-on: ghr-stuttgart-things-labda-test
+      continue-error: true
+      alpine-version: 3.19.0
+      lintprofile-path: .markdownlint.rb
+      artifact-name: md-lint
+      
+  yaml-lint:
+    name: Lint yaml files
+    uses: stuttgart-things/stuttgart-things/.github/workflows/call-yaml-lint.yaml@main
+    with:
+      environment-name: k8s
+      runs-on: ghr-stuttgart-things-labda-test
+      continue-error: true
+      yamllint-version: 1
+      lintprofile-path: .yamllint
+      artifact-name: yaml-lint
+
   build-hugo:
     name: Build hugo
     uses: stuttgart-things/stuttgart-things/.github/workflows/call-hugo-build.yaml@main
