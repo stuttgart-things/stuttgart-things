@@ -35,6 +35,9 @@ jobs:
   build-hugo:
     name: Build hugo
     uses: stuttgart-things/stuttgart-things/.github/workflows/call-hugo-build.yaml@main
+    needs:
+      - markdown-lint
+      - yaml-lint
     with:
       environment-name: labul-vsphere
       runs-on: ghr-stuttgart-things-labda-test
