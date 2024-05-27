@@ -1,0 +1,16 @@
+---
+global:
+  cattle:
+    psp:
+      enabled: false
+
+bootstrapPassword: {{ .Values.bootstrapPassword }}
+hostname: {{ .Values.hostname }}.{{ .Values.domain }}
+privateCA: true
+ingress:
+  enabled: true
+  ingressClassName: nginx
+  servicePort: 80
+  tls:
+    source: secret
+    secretName: {{ .Values.hostname }}-tls

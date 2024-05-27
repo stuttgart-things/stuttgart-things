@@ -1,0 +1,15 @@
+serviceAccount:
+  create: true
+  controller: csi-nfs-controller-sa
+rbac:
+  create: true
+  name: nfs
+driver:
+  name: nfs.csi.k8s.io
+  mountPermissions: 0
+feature:
+  enableFSGroupPolicy: true
+  enableInlineVolume: false
+kubeletDir: /var/lib/kubelet
+externalSnapshotter:
+  enabled: false

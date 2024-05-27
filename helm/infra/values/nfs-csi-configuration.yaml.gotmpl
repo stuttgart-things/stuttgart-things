@@ -1,0 +1,31 @@
+scs:
+  nfs3-csi:
+    name: nfs3-csi
+    provisioner: nfs.csi.k8s.io
+    parameters:
+      server: {{ .Values.nfsServerFQDN }}
+      share: {{ .Values.nfsSharePath }}
+      subDir: {{ .Values.clusterName }}
+      mountPermissions: "0"
+      onDelete: "archive"
+    volumeBindingMode: Immediate
+    allowVolumeExpansion: true
+    reclaimPolicy: Delete
+    mountOptions:
+      - nfsvers=3
+      - rsize=1048576
+      - wsize=1048576
+      - tcp
+      - hard
+      - nolock
+  nfs4-csi:
+    name: nfs4-csi
+    provisioner: nfs.csi.k8s.io
+    parameters:
+      server: {{ .Values.nfsServerFQDN }}
+      share: {{ .Values.nfsSharePath }}
+      mountPermissions: "0777"
+    volumeBindingMode: Immediate
+    reclaimPolicy: Delete
+    mountOptions:
+      - nfsvers=4.1

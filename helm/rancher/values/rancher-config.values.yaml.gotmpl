@@ -1,0 +1,24 @@
+---
+customresources:
+  rancher-application-certificate:
+    apiVersion: cert-manager.io/v1
+    kind: Certificate
+    metadata:
+      name: {{ .Values.hostname }}-ingress
+      namespace: {{ .Release.Namespace }}
+    spec:
+      commonName: {{ .Values.hostname }}.{{ .Values.domain }}
+      dnsNames:
+        - {{ .Values.hostname }}.{{ .Values.domain }}
+      issuerRef:
+        name: cluster-issuer-approle
+        kind: ClusterIssuer
+      secretName: {{ .Values.hostname }}-tls
+
+secrets:
+  rancher-cacerts:
+    name: tls-ca
+    namespace: {{ .Release.Namespace }}
+    dataType: data
+    secretKVs:
+      cacerts.pem: {{ .Values.cacerts }}
