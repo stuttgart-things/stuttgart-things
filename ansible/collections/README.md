@@ -60,6 +60,20 @@ ansible-playbook sthings.base_os.users -vv -i /tmp/inv
 
 </details>
 
+<details><summary>MANAGE PROXMOX</summary>
+
+## Rename VM/Template
+```bash
+ansible-playbook sthings.base_os.rename_proxmox -vv -e vmname_old=myVM -e vmname_new=myNewVM -e target_host=localhost
+```
+
+## Delete VM/Template
+```bash
+ansible-playbook sthings.base_os.delete_proxmox -vv -e vmname_delete=example-name -e target_host=localhost
+```
+
+</details>
+
 ### COLLECTION HISTORY
 
 ----------------
