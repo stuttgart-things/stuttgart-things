@@ -24,7 +24,7 @@ jobs:
   Build-Collections:
     strategy:
       matrix:
-        collection-file: [base-os, container]
+        collection-file: [base-os, container, awx]
     uses: stuttgart-things/stuttgart-things/.github/workflows/call-ansible-collection.yaml@main
     with:
       runs-on: ghr-stuttgart-things-labda-test

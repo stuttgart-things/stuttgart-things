@@ -9,3 +9,37 @@ requirements: |
       version: 2024.05.24
 
 playbooks:
+  # ADD PLAYBOOK FOR DEPLOYING AWX CLI
+  - name: resources
+    play: |
+      ---
+      - hosts: localhost
+        vars:
+          controller_host: "{{ lookup('env', 'CONTROLLER_HOST') }}"
+          controller_username: "{{ lookup('env', 'CONTROLLER_USERNAME') }}"
+          controller_password: "{{ lookup('env', 'CONTROLLER_PASSWORD') }}"
+
+        vars_files:
+          - "{{ path | default('.')/{{ profile | default('base') }}.yaml"
+
+        tasks:
+          - name: Create organizations
+            awx.awx.organization:
+              name: "{{ item.value.name }}"
+              description: "{{ item.value.description }}"
+              state: "{{ item.value.state }}"
+              galaxy_credentials:
+                - Ansible Galaxy
+              validate_certs: no
+            loop: "{{ lookup('dict', organizations, wantlist=True) }}"
+            when: organizations is defined
+
+vars:
+  - name: base
+    file: |
+      ---
+      organizations:
+        stuttgartThings:
+          name: stuttgart-things
+          description: stuttgart-things organization
+          state: present
