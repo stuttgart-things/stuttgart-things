@@ -241,6 +241,28 @@ playbooks:
 
         roles:
           - role: manage_proxmox_resources
+
+  - name: delete-proxmox
+    play: |
+      ---
+      - hosts: "{{ target_host | default('all') }}"
+        vars:
+          vault_approle_id: "{{ lookup('env', 'VAULT_ROLE_ID') }}"
+          vault_approle_secret: "{{ lookup('env', 'VAULT_SECRET_ID') }}"
+          vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
+
+          pve_cluster_url: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/pve:cluster_url validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+          pve_api_user: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/pve:api_user validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+          pve_api_password: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/pve:api_password validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+          pve_node: sthings-pve1
+
+          pve_bulk_delete_vms:
+            - name: "{{ vmname_delete }}"
+              node: "{{ pve_node }}"
+
+        roles:
+          - role: manage_proxmox_resources
+
 vars:
   - name: users
     file: |
