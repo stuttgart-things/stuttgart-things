@@ -1,0 +1,39 @@
+---
+releases:
+  - name: nfs-csi
+    installed: true
+    namespace: kube-system
+    chart: stuttgart-things/csi-driver-nfs
+    version: v4.6.0
+    values:
+      - "values/nfs-csi.values.yaml.gotmpl"
+  - name: nfs-storageclass-configuration
+    needs:
+      - kube-system/nfs-csi
+    installed: true
+    namespace: kube-system
+    chart: stuttgart-things/sthings-cluster
+    version: 0.3.10
+    values:
+      - "values/nfs-csi-configuration.yaml.gotmpl"
+
+repositories:
+  - name: nfs-csi
+    url: oci://eu.gcr.io/stuttgart-things
+    oci: true
+  - name: stuttgart-things
+    url: eu.gcr.io/stuttgart-things
+    oci: true
+
+helmDefaults:
+  verify: false
+  wait: true
+  timeout: 600
+  recreatePods: false
+  force: true
+
+environments:
+  labul-vsphere:
+    values:
+      - env/default.yaml
+      - env/{{ .Environment.Name }}.yaml
