@@ -1,0 +1,41 @@
+---
+environments:
+  labul-vsphere:
+    values:
+      - env/{{ .Environment.Name }}.yaml
+
+releases:
+  - name: rancher-configuration
+    disableValidationOnInstall: true
+    installed: true
+    namespace: cattle-system
+    chart: stuttgart-things/sthings-cluster
+    version: 0.3.10
+    values:
+      - "values/rancher-config.values.yaml.gotmpl"
+
+  - name: rancher-things
+    disableValidationOnInstall: true
+    installed: true
+    namespace: cattle-system
+    chart: rancher-stable/rancher
+    version: 2.8.3
+    needs:
+      - cattle-system/rancher-configuration
+    values:
+      - "values/rancher-things.values.yaml.gotmpl"
+
+repositories:
+  - name: stuttgart-things
+    url: eu.gcr.io/stuttgart-things
+    oci: true
+  - name: rancher-stable
+    url: https://releases.rancher.com/server-charts/latest
+    oci: false
+
+helmDefaults:
+  verify: false
+  wait: true
+  timeout: 600
+  recreatePods: false
+  force: true
