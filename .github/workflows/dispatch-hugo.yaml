@@ -10,7 +10,7 @@ on:
       image:
         required: true
         type: string
-        default: dcjulian29/hugo:0.125.5
+        default: floryn90/hugo:0.126.1-ext-ubuntu-ci
       environment-name:
         required: true
         type: string
