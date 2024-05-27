@@ -1,0 +1,20 @@
+---
+installCRDs: true
+AWX:
+  enabled: true
+  name: awx
+  spec:
+    admin_user: {{ .Values.admin_user }}
+    ingress_type: ingress
+    ingress_class_name: {{ .Values.ingress_class_name }}
+    hostname: {{ .Values.hostname }}.{{ .Values.domain }}
+    ingress_tls_secret: {{ .Values.ingress_secret }}
+    projects_persistence: false
+    projects_storage_class: {{ .Values.project_storage_class }}
+    projects_storage_access_mode: ReadWriteMany
+    postgres_storage_class: {{ .Values.postgres_storage_class }}
+    postgres_storage_requirements:
+      requests:
+        storage: {{ .Values.postgres_storage_request }}
+      limits:
+        storage: {{ .Values.postgres_storage_limits }}

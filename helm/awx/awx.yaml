@@ -1,0 +1,41 @@
+---
+environments:
+  labul-vsphere:
+    values:
+      - env/{{ .Environment.Name }}.yaml
+
+releases:
+  - name: awx-configuration
+    disableValidationOnInstall: true
+    installed: true
+    namespace: awx
+    chart: stuttgart-things/sthings-cluster
+    version: 0.3.10
+    values:
+      - "values/awx-config.values.yaml.gotmpl"
+
+  - name: awx-operator
+    disableValidationOnInstall: true
+    installed: true
+    namespace: awx
+    chart: awx/awx-operator
+    version: 2.15.0
+    needs:
+      - awx/awx-configuration
+    values:
+      - "values/awx.values.yaml.gotmpl"
+
+repositories:
+  - name: stuttgart-things
+    url: eu.gcr.io/stuttgart-things
+    oci: true
+  - name: awx
+    url: https://ansible.github.io/awx-operator
+    oci: false
+
+helmDefaults:
+  verify: false
+  wait: true
+  timeout: 600
+  recreatePods: false
+  force: true
