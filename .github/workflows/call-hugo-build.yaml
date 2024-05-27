@@ -44,7 +44,7 @@ jobs:
       - name: Execute blog creation script  
         run: |
           ls -lta
-          sh ${{ inputs.creation-script-path }} ${{ inputs.site-name }}
+          bash ${{ inputs.creation-script-path }} ${{ inputs.site-name }}
 
       - uses: actions/upload-artifact@v4.3.3
         with:
