@@ -21,7 +21,7 @@ requirements: |
       version: 2022.01.01
     - src: https://github.com/stuttgart-things/download-install-binary.git
       scm: git
-      version: 2024.04.24
+      version: 2024.05.24
 
 playbooks:
   - name: podman
