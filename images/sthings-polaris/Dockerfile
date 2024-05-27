@@ -1,6 +1,6 @@
 ARG FROM_TAG=3.12.3-alpine3.19
 FROM python:${FROM_TAG}
-LABEL version=9.0.1-3.12.3
+LABEL version=9.0.1-3.12.3-1
 
 ARG POLARIS_VERSION=9.0.1
 
