@@ -28,6 +28,9 @@ roles:
   - src: https://github.com/stuttgart-things/install-configure-podman.git
     scm: git
     version: 2024.05.08
+  - src: https://github.com/stuttgart-things/manage-proxmox-resources.git
+    scm: git
+    version: 2024.05.27
 
 collections:
   - name: community.crypto
