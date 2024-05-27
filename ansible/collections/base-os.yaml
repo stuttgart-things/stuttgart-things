@@ -1,6 +1,6 @@
 ---
 name: base_os
-version: 0.3.5
+version: 0.3.6
 namespace: sthings
 requirements: |
   roles:
@@ -220,7 +220,7 @@ playbooks:
         roles:
           - role: sthings.base_os.create_os_user
 
-  - name: rename-proxmox
+  - name: rename_proxmox
     play: |
       ---
       - hosts: "{{ target_host | default('all') }}"
@@ -242,7 +242,7 @@ playbooks:
         roles:
           - role: sthings.base_os.manage_proxmox_resources
 
-  - name: delete-proxmox
+  - name: delete_proxmox
     play: |
       ---
       - hosts: "{{ target_host | default('all') }}"
