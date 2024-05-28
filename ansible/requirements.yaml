@@ -43,8 +43,11 @@ collections:
     version: 3.0.1
   - name: community.vmware
     version: 4.4.0
+  - name: awx.awx
+    version: 24.3.1
   - name: community.hashi_vault
     version: 6.2.0
   - name: https://github.com/stuttgart-things/stuttgart-things/releases/download/0.3.6/sthings-base_os-0.3.6.tar.gz
   - name: https://github.com/stuttgart-things/stuttgart-things/releases/download/0.0.10/sthings-container-0.0.10.tar.gz
   - name: https://github.com/stuttgart-things/deploy-configure-rke/releases/download/1.29.4/sthings-deploy_rke-1.29.4.tar.gz
+  - name: https://github.com/stuttgart-things/stuttgart-things/releases/download/0.0.20/sthings-awx-0.0.20.tar.gz
