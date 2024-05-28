@@ -1,6 +1,6 @@
 ---
 name: awx
-version: 0.0.31
+version: 0.0.32
 namespace: sthings
 requirements: |
   roles:
@@ -19,6 +19,21 @@ playbooks:
           controller_username: "{{ lookup('env', 'CONTROLLER_USERNAME') }}"
           controller_password: "{{ lookup('env', 'CONTROLLER_PASSWORD') }}"
 
+        inventories:
+          host_inv:
+            name: "{{ lookup('env', 'AWX_INVENTORY_NAME') }}"
+            description: "{{ lookup('env', 'AWX_INVENTORY_DESCRIPTION') }}"
+            organization: "{{ lookup('env', 'AWX_INVENTORY_ORGANIZATION') }}"
+            state: "{{ lookup('env', 'AWX_INVENTORY_STATE') }}"
+
+        hosts:
+          host_vm:
+            name: "{{ lookup('env', 'AWX_HOST_NAME') }}"
+            description: "{{ lookup('env', 'AWX_HOST_DESCRIPTION') }}"
+            inventory: "{{ lookup('env', 'AWX_HOST_INVENTORY') }}"
+            state: "{{ lookup('env', 'AWX_HOST_STATE') }}"
+            # vmVariables: "{{ lookup('env', 'AWX_HOST_VAR') }}"
+
         vars_files:
           - "{{ path | default('.') }}/{{ profile | default('base') }}.yaml"
 
@@ -30,7 +45,7 @@ playbooks:
               state: "{{ item.value.state }}"
               galaxy_credentials:
                 - Ansible Galaxy
-              validate_certs: no
+              validate_certs: false
             loop: "{{ lookup('dict', organizations, wantlist=True) }}"
             when: organizations is defined
 
@@ -44,7 +59,7 @@ playbooks:
               inputs:
                 username: "{{ item.value.user }}"
                 ssh_key_data: "{{ item.value.awx_ssh_key }}"
-              validate_certs: no
+              validate_certs: false
             loop: "{{ lookup('dict', machineCredentials, wantlist=True) }}"
             when: machineCredentials is defined
 
@@ -56,35 +71,28 @@ playbooks:
               credential_type: Source Control
               inputs:
                 ssh_key_data: "{{ item.value.awx_ssh_key }}"
-              validate_certs: no
+              validate_certs: false
             loop: "{{ lookup('dict', scmCredentials, wantlist=True) }}"
             when: scmCredentials is defined
 
-          - name: Create custom credential type
-            awx.awx.credential_type:
-              name: "{{ custom_credential_type.value.name }}"
-              kind: cloud
-              state: "{{ custom_credential_type.value.state }}"
-              inputs: "{{ custom_credential_type.value.inputs }}"
-              injectors: "{{ custom_credential_type.value.injectors }}"
+          - name: Add inventory
+            awx.awx.inventory:
+              name: "{{ item.value.name }}"
+              description: "{{ item.value.description | default (omit) }}"
+              organization: "{{ item.value.organization }}"
+              state: "{{ item.value.state }}"
               validate_certs: false
-            loop: "{{ lookup('dict', custom_credential_types, wantlist=True) }}"
-            loop_control:
-              loop_var: custom_credential_type
+            loop: "{{ lookup('dict', inventories, wantlist=True) }}"
 
-          - name: Create custom credential from custom credential type
-            awx.awx.credential:
-              name: "{{ custom_credential.value.name }}"
-              organization: "{{ custom_credential.value.organization }}"
-              credential_type: "{{ custom_credential.value.credential_type }}"
-              description: "{{ custom_credential.value.description }}"
-              state: "{{ custom_credential.value.state }}"
-              inputs: "{{ custom_credential.value.inputs }}"
+          - name: Add host
+            awx.awx.host:
+              name: "{{ item.value.name }}"
+              description: "{{ item.value.description | default (omit) }}"
+              inventory: "{{ item.value.inventory }}"
+              state: "{{ item.value.state }}"
+              variables: "{{ item.value.vmVariables | default (omit) }}"
               validate_certs: false
-            loop: "{{ lookup('dict', custom_credentials, wantlist=True) }}"
-            loop_control:
-              loop_var: custom_credential
-
+            loop: "{{ lookup('dict', hosts, wantlist=True) }}"
 
 vars:
   - name: base
@@ -111,21 +119,3 @@ vars:
           organization: stuttgart-things
           state: present
           awx_ssh_key: "{{ lookup('file', '~/.ssh/id_rsa') }}"
-
-      custom_credential_types:
-        vault:
-          name: vault
-          state: present
-          inputs: "{{ lookup('file', 'credential_types/vault-input.json') }}"
-          injectors: "{{ lookup('file', 'credential_types/vault-injector.json') }}"
-
-      custom_credentials:
-        vault_custom:
-          name: labul-vault
-          description: labul vault credentials
-          credential_type: vault
-          organization: stuttgart-things
-          state: present
-          inputs:
-            vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
-            vault_token: "{{ lookup('env', 'VAULT_TOKEN') }}"
