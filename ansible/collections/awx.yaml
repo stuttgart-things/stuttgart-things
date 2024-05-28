@@ -94,6 +94,20 @@ playbooks:
               validate_certs: false
             loop: "{{ lookup('dict', hosts, wantlist=True) }}"
 
+          - name: Create projects
+            awx.awx.project:
+              name: "{{ item.value.name }}"
+              description: "{{ item.value.description }}"
+              organization: "{{ item.value.organization }}"
+              scm_url: "{{ item.value.scm_url }}"
+              scm_type: "{{ item.value.scm_type }}"
+              credential: "{{ item.value.credential }}"
+              state: "{{ item.value.state }}"
+              scm_update_on_launch: "{{ item.value.scm_update_on_launch | default(omit) }}"
+              scm_update_cache_timeout: "{{ item.value.scm_update_cache_timeout | default(omit) }}"
+              validate_certs: no
+            loop: "{{ lookup('dict', projects, wantlist=True) }}"
+
 vars:
   - name: base
     file: |
@@ -119,3 +133,15 @@ vars:
           organization: stuttgart-things
           state: present
           awx_ssh_key: "{{ lookup('file', '~/.ssh/id_rsa') }}"
+
+      projects:
+        stuttgartThings:
+          name: stuttgart-things
+          description: 
+          organization: stuttgart-things
+          scm_url: git@codehub.sva.de:Lab/stuttgart-things/stuttgart-things.git
+          scm_type: git
+          credential: sthings-scm
+          state: present
+          scm_update_on_launch: true
+          scm_update_cache_timeout: 60
