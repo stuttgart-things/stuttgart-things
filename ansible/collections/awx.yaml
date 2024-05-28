@@ -1,6 +1,6 @@
 ---
 name: awx
-version: 0.0.34
+version: 0.0.35
 namespace: sthings
 requirements: |
   roles:
@@ -108,6 +108,13 @@ playbooks:
               validate_certs: no
             loop: "{{ lookup('dict', projects, wantlist=True) }}"
 
+          - name: Add EE to the controller instance
+            awx.awx.execution_environment:
+              name: "{{ item.value.name }}"
+              image: "{{ item.value.image }}"
+              validate_certs: no
+            loop: "{{ lookup('dict', execution_environment, wantlist=True) }}"
+
 vars:
   - name: base
     file: |
@@ -156,3 +163,8 @@ vars:
           credentials: sthings-ssh
           executionenv: sthings-ee
           state: present
+
+      execution_environment:
+        sthings-ee:
+          name: sthings-ee
+          image: eu.gcr.io/stuttgart-things/sthings-awxee:23.6.0
