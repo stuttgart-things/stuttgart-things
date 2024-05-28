@@ -185,3 +185,8 @@ vars:
           credentials: sthings-ssh
           executionenv: sthings-ee
           state: present
+
+      execution_environment:
+        sthings-ee:
+          name: sthings-ee
+          image: eu.gcr.io/stuttgart-things/sthings-awxee:23.6.0
