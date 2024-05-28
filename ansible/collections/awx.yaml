@@ -105,14 +105,14 @@ playbooks:
               state: "{{ item.value.state }}"
               scm_update_on_launch: "{{ item.value.scm_update_on_launch | default(omit) }}"
               scm_update_cache_timeout: "{{ item.value.scm_update_cache_timeout | default(omit) }}"
-              validate_certs: no
+              validate_certs: false
             loop: "{{ lookup('dict', projects, wantlist=True) }}"
 
           - name: Add EE to the controller instance
             awx.awx.execution_environment:
               name: "{{ item.value.name }}"
               image: "{{ item.value.image }}"
-              validate_certs: no
+              validate_certs: false
             loop: "{{ lookup('dict', execution_environment, wantlist=True) }}"
 
           - name: Create job templates
