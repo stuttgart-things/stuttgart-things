@@ -1,6 +1,6 @@
 ---
 name: base_os
-version: 0.3.6
+version: 0.3.7
 namespace: sthings
 requirements: |
   roles:
@@ -208,19 +208,19 @@ playbooks:
         roles:
           - role: sthings.base_os.download_install_binary
 
-  - name: create_users
+  - name: users
     play: |
       ---
       - hosts: "{{ target_host | default('all') }}"
         gather_facts: true
         become: true
         vars_files:
-          - "{{ profile | default('sthings-users') }}.yaml"
+          - "{{ profile | default('users') }}.yaml"
 
         roles:
           - role: sthings.base_os.create_os_user
 
-  - name: rename_proxmox
+  - name: rename_proxmox_vm
     play: |
       ---
       - hosts: "{{ target_host | default('all') }}"
@@ -242,7 +242,7 @@ playbooks:
         roles:
           - role: sthings.base_os.manage_proxmox_resources
 
-  - name: delete_proxmox
+  - name: delete_proxmox_vm
     play: |
       ---
       - hosts: "{{ target_host | default('all') }}"
@@ -270,7 +270,7 @@ vars:
       users:
         - username: rke
           name: rke user
-          groups: ['{{ admin_group }}', 'k8s-admins']
+          groups: ['{{ admin_group }}']
           uid: 1005
           home: /home/rke
           profile: |
