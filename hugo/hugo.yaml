@@ -6,7 +6,7 @@ pygmentsCodeFences: true
 pygmentsUseClasses: true
 canonifyurls: true
 params:
-  author: Patrick Hermann
+  author: [sˈθɪŋz]
   description: using modularity to speed up parallel builds
   github: stuttgart-things
   email: patrick.hermann@sva.de
@@ -14,9 +14,9 @@ params:
   keywords: sthings, golang, ansible, kubernetes, linux, machineShop
   rss: true
   lastmod: true
-  favicon: images/sthings-logo.png
-  avatar: images/sthings-city.png
-  headerIcon: images/github-mark-white.png
+  favicon: /images/sthings-logo.png
+  avatar: /images/sthings-logo.png
+  headerIcon: /images/sthings-logo.png
   location: Stuttgart
   userStatusEmoji: 😀
   enableGitalk: false
