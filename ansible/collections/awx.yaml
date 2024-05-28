@@ -1,6 +1,6 @@
 ---
 name: awx
-version: 0.0.35
+version: 0.0.36
 namespace: sthings
 requirements: |
   roles:
@@ -115,6 +115,23 @@ playbooks:
               validate_certs: no
             loop: "{{ lookup('dict', execution_environment, wantlist=True) }}"
 
+          - name: Create job templates
+            awx.awx.job_template:
+              name: "{{ item.value.name }}"
+              job_type: "run"
+              organization: "{{ item.value.organization }}"
+              inventory: "{{ item.value.inventory }}"
+              project: "{{ item.value.project }}"
+              playbook: "{{ item.value.playbook }}"
+              credentials: "{{ item.value.credentials }}"
+              execution_environment: "{{ item.value.executionenv }}"
+              state: "{{ item.value.state }}"
+              validate_certs: true
+              survey_enabled: "{{ item.value.survey_enabled | default(omit) }}"
+              survey_spec: "{{ item.value.survey_spec | default(omit) }}"
+              extra_vars: "{{ item.value.extraVars | default(omit) }}"
+            loop: "{{ lookup('dict', templates, wantlist=True) }}"
+
 vars:
   - name: base
     file: |
@@ -153,6 +170,11 @@ vars:
           scm_update_on_launch: true
           scm_update_cache_timeout: 60
 
+      execution_environment:
+        sthings-ee:
+          name: sthings-ee
+          image: eu.gcr.io/stuttgart-things/sthings-awxee:23.6.0
+
       templates:
         stuttgartThings:
           name: hello AWX
@@ -163,8 +185,3 @@ vars:
           credentials: sthings-ssh
           executionenv: sthings-ee
           state: present
-
-      execution_environment:
-        sthings-ee:
-          name: sthings-ee
-          image: eu.gcr.io/stuttgart-things/sthings-awxee:23.6.0
