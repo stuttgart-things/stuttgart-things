@@ -133,6 +133,32 @@ ansible-playbook sthings.container.tools -i /tmp/inv -vv
 
 </details>
 
+## AWX
+
+### INSTALLATION
+
+```bash
+VERSION=0.0.20
+ansible-galaxy collection install -f \
+https://github.com/stuttgart-things/stuttgart-things/releases/download/${VERSION}/sthings-awx-${VERSION}.tar.gz
+```
+
+### PLAYBOOKS
+
+<details><summary>BASE</summary>
+
+base setup for awx: orga, projects + secrets
+
+```bash
+export CONTROLLER_HOST=https://awx.<DOMAIN>.sva.de #example!
+export CONTROLLER_USERNAME=admin #example!
+export CONTROLLER_PASSWORD=<PASSWORD>
+ansible-playbook sthings.awx.base -vv 
+```
+
+</details>
+
+
 Author Information
 ------------------
 
