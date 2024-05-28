@@ -10,7 +10,7 @@ requirements: |
 
 playbooks:
   # ADD PLAYBOOK FOR DEPLOYING AWX CLI
-  - name: resources
+  - name: base
     play: |
       ---
       - hosts: localhost
