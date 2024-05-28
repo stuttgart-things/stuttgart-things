@@ -1,6 +1,6 @@
 ---
 name: awx
-version: 0.0.33
+version: 0.0.34
 namespace: sthings
 requirements: |
   roles:
@@ -145,3 +145,14 @@ vars:
           state: present
           scm_update_on_launch: true
           scm_update_cache_timeout: 60
+
+      templates:
+        stuttgartThings:
+          name: hello AWX
+          organization: stuttgart-things
+          inventory: test-server
+          project: stuttgart-things
+          playbook: plays/hello-awx.yaml
+          credentials: sthings-ssh
+          executionenv: sthings-ee
+          state: present
