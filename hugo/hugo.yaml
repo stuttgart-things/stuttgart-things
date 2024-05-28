@@ -14,9 +14,9 @@ params:
   keywords: sthings, golang, ansible, kubernetes, linux, machineShop
   rss: true
   lastmod: true
-  favicon: images/sthings-logo.png
-  avatar: images/sthings-city.png
-  headerIcon: images/github-mark-white.png
+  favicon: /images/sthings-logo.png
+  avatar: /images/sthings-city.png
+  headerIcon: /images/github-mark-white.png
   location: Stuttgart
   userStatusEmoji: 😀
   enableGitalk: false
