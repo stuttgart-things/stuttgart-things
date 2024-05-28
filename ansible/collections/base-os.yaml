@@ -270,7 +270,7 @@ vars:
       users:
         - username: rke
           name: rke user
-          groups: ['{{ admin_group }}', 'k8s-admins']
+          groups: ['{{ admin_group }}']
           uid: 1005
           home: /home/rke
           profile: |
