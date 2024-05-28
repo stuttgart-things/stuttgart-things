@@ -1,6 +1,6 @@
 ---
 name: awx
-version: 0.0.30
+version: 0.0.31
 namespace: sthings
 requirements: |
   roles:
@@ -60,6 +60,32 @@ playbooks:
             loop: "{{ lookup('dict', scmCredentials, wantlist=True) }}"
             when: scmCredentials is defined
 
+          - name: Create custom credential type
+            awx.awx.credential_type:
+              name: "{{ custom_credential_type.value.name }}"
+              kind: cloud
+              state: "{{ custom_credential_type.value.state }}"
+              inputs: "{{ custom_credential_type.value.inputs }}"
+              injectors: "{{ custom_credential_type.value.injectors }}"
+              validate_certs: false
+            loop: "{{ lookup('dict', custom_credential_types, wantlist=True) }}"
+            loop_control:
+              loop_var: custom_credential_type
+
+          - name: Create custom credential from custom credential type
+            awx.awx.credential:
+              name: "{{ custom_credential.value.name }}"
+              organization: "{{ custom_credential.value.organization }}"
+              credential_type: "{{ custom_credential.value.credential_type }}"
+              description: "{{ custom_credential.value.description }}"
+              state: "{{ custom_credential.value.state }}"
+              inputs: "{{ custom_credential.value.inputs }}"
+              validate_certs: false
+            loop: "{{ lookup('dict', custom_credentials, wantlist=True) }}"
+            loop_control:
+              loop_var: custom_credential
+
+
 vars:
   - name: base
     file: |
@@ -85,3 +111,21 @@ vars:
           organization: stuttgart-things
           state: present
           awx_ssh_key: "{{ lookup('file', '~/.ssh/id_rsa') }}"
+
+      custom_credential_types:
+        vault:
+          name: vault
+          state: present
+          inputs: "{{ lookup('file', 'credential_types/vault-input.json') }}"
+          injectors: "{{ lookup('file', 'credential_types/vault-injector.json') }}"
+
+      custom_credentials:
+        vault_custom:
+          name: labul-vault
+          description: labul vault credentials
+          credential_type: vault
+          organization: stuttgart-things
+          state: present
+          inputs:
+            vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
+            vault_token: "{{ lookup('env', 'VAULT_TOKEN') }}"
