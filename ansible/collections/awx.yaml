@@ -1,6 +1,6 @@
 ---
 name: awx
-version: 0.0.20
+version: 0.0.30
 namespace: sthings
 requirements: |
   roles:
@@ -34,6 +34,32 @@ playbooks:
             loop: "{{ lookup('dict', organizations, wantlist=True) }}"
             when: organizations is defined
 
+          - name: Add machine credential
+            awx.awx.credential:
+              name: "{{ item.value.name }}"
+              description: "{{ item.value.description }}"
+              organization: "{{ item.value.organization }}"
+              credential_type: Machine
+              state: "{{ item.value.state }}"
+              inputs:
+                username: "{{ item.value.user }}"
+                ssh_key_data: "{{ item.value.awx_ssh_key }}"
+              validate_certs: no
+            loop: "{{ lookup('dict', machineCredentials, wantlist=True) }}"
+            when: machineCredentials is defined
+
+          - name: Create a valid SCM credential from a private_key file
+            awx.awx.credential:
+              name: "{{ item.value.name }}"
+              organization: "{{ item.value.organization }}"
+              state: "{{ item.value.state }}"
+              credential_type: Source Control
+              inputs:
+                ssh_key_data: "{{ item.value.awx_ssh_key }}"
+              validate_certs: no
+            loop: "{{ lookup('dict', scmCredentials, wantlist=True) }}"
+            when: scmCredentials is defined
+
 vars:
   - name: base
     file: |
@@ -43,3 +69,19 @@ vars:
           name: stuttgart-things
           description: stuttgart-things organization
           state: present
+
+      machineCredentials:
+        sthingsSSH:
+          name: sthings-ssh
+          description: stuttgart-things organization
+          organization: stuttgart-things
+          state: present
+          user: sthings
+          awx_ssh_key: "{{ lookup('file', '~/.ssh/id_rsa') }}"
+
+      scmCredentials:
+        sthingsSCM:
+          name: sthings-scm
+          organization: stuttgart-things
+          state: present
+          awx_ssh_key: "{{ lookup('file', '~/.ssh/id_rsa') }}"
