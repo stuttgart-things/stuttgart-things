@@ -4,6 +4,7 @@ theme: github-style
 author: phermann
 pygmentsCodeFences: true
 pygmentsUseClasses: true
+canonifyurls: true
 params:
   author: Patrick Hermann
   description: using modularity to speed up parallel builds
