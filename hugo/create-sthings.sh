@@ -32,12 +32,9 @@ done
 wget https://raw.githubusercontent.com/stuttgart-things/docs/main/hugo/sthings-logo.png
 wget https://raw.githubusercontent.com/stuttgart-things/docs/main/hugo/sthings-city.png
 
-# Get README
-wget https://github.com/stuttgart-things/stuttgart-things/blob/main/.github/workflows/README.md
-
 # Copy hugo content
 cp -R hugo/*.html sthings/content/post
-cp README.md sthings/content/
+cp ./.github/workflows/README.md sthings/content/
 
 cp sthings-logo.png sthings/themes/github-style/static/images/avatar.png
 cp sthings-logo.png sthings/themes/github-style/images/sthings-logo.png
