@@ -43,6 +43,19 @@ cp sthings-city.png sthings/themes/github-style/images/sthings-city.png
 cp sthings-logo.png sthings/themes/github-style/static/images/sthings-logo.png
 cp sthings-city.png sthings/themes/github-style/static/images/sthings-city.png
 
+
+# Modify Readme
+
+# Add new markdown lines at the beginning of the files
+cat <<EOF | cat - sthings/content/post/README.md > temp && mv temp sthings/content/post/README.md
++++
+date = $CURR_DATE
+draft = false
+title = 'README'
++++
+EOF
+    echo "New lines added to README."
+
 # Modify theme files
 sed -i 's/container-lg/container-xl/g' sthings/themes/github-style/layouts/partials/post.html
 sed -i 's/<div class="Box-body px-5 pb-5" style="z-index: 1">/<div class="Box-body px-5 pb-5" style="z-index: 1" width=400%>/g' sthings/themes/github-style/layouts/partials/post.html
