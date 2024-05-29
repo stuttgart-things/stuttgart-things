@@ -51,7 +51,8 @@ cat <<EOF | cat - sthings/content/post/README.md > temp && mv temp sthings/conte
 +++
 date = $CURR_DATE
 draft = false
-title = 'README'
+title = 'README.md'
+summary = "README.md"
 +++
 EOF
     echo "New lines added to README."
