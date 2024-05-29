@@ -1,6 +1,6 @@
 ---
 name: awx
-version: 0.0.37
+version: 0.0.38
 namespace: sthings
 requirements: |
   roles:
@@ -19,20 +19,9 @@ playbooks:
           controller_username: "{{ lookup('env', 'CONTROLLER_USERNAME') }}"
           controller_password: "{{ lookup('env', 'CONTROLLER_PASSWORD') }}"
 
-          inventories:
-            host_inv:
-              name: "{{ lookup('env', 'AWX_INVENTORY_NAME') }}"
-              description: "{{ lookup('env', 'AWX_INVENTORY_DESCRIPTION') }}"
-              organization: "{{ lookup('env', 'AWX_INVENTORY_ORGANIZATION') }}"
-              state: "{{ lookup('env', 'AWX_INVENTORY_STATE') }}"
-
-          hosts:
-            host_vm:
-              name: "{{ lookup('env', 'AWX_HOST_NAME') }}"
-              description: "{{ lookup('env', 'AWX_HOST_DESCRIPTION') }}"
-              inventory: "{{ lookup('env', 'AWX_HOST_INVENTORY') }}"
-              state: "{{ lookup('env', 'AWX_HOST_STATE') }}"
-              # vmVariables: "{{ lookup('env', 'AWX_HOST_VAR') }}"
+          vault_approle_id: "{{ lookup('env', 'VAULT_ROLE_ID') }}"
+          vault_approle_secret: "{{ lookup('env', 'VAULT_SECRET_ID') }}"
+          vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
 
         vars_files:
           - "{{ path | default('.') }}/{{ profile | default('base') }}.yaml"
@@ -134,25 +123,8 @@ playbooks:
               survey_enabled: "{{ item.value.survey_enabled | default(omit) }}"
               survey_spec: "{{ item.value.survey_spec | default(omit) }}"
               extra_vars: "{{ item.value.extraVars | default(omit) }}"
-            loop: "{{ lookup('dict', templates, wantlist=True) }}"
-            when: templates is defined
-
-          - name: Create job templates
-            awx.awx.job_template:
-              name: "{{ item.value.name }}"
-              job_type: "run"
-              organization: "{{ item.value.organization }}"
-              inventory: "{{ item.value.inventory }}"
-              project: "{{ item.value.project }}"
-              playbook: "{{ item.value.playbook }}"
-              credentials: "{{ item.value.credentials }}"
-              execution_environment: "{{ item.value.executionenv }}"
-              state: "{{ item.value.state }}"
-              validate_certs: true
-              survey_enabled: "{{ item.value.survey_enabled | default(omit) }}"
-              survey_spec: "{{ item.value.survey_spec | default(omit) }}"
-              extra_vars: "{{ item.value.extraVars | default(omit) }}"
-            loop: "{{ lookup('dict', templates, wantlist=True) }}"
+            loop: "{{ lookup('dict', job_templates, wantlist=True) }}"
+            when: job_templates is defined
 
 vars:
   - name: base
@@ -171,14 +143,14 @@ vars:
           organization: stuttgart-things
           state: present
           user: sthings
-          awx_ssh_key: "{{ lookup('file', '~/.ssh/id_rsa') }}"
+          awx_ssh_key: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=ssh/data/sthings:privateKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
 
       scmCredentials:
         sthingsSCM:
           name: sthings-scm
           organization: stuttgart-things
           state: present
-          awx_ssh_key: "{{ lookup('file', '~/.ssh/id_rsa') }}"
+          awx_ssh_key: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=ssh/data/sthings:privateKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
 
       projects:
         stuttgartThings:
@@ -197,7 +169,7 @@ vars:
           name: sthings-ee
           image: eu.gcr.io/stuttgart-things/sthings-awxee:23.6.0
 
-      templates:
+      job_templates:
         stuttgartThings:
           name: hello AWX
           organization: stuttgart-things
@@ -207,3 +179,18 @@ vars:
           credentials: sthings-ssh
           executionenv: sthings-ee
           state: present
+
+      inventories:
+        testServer:
+          name: test-server
+          description: stuttgart-things organization
+          organization: stuttgart-things
+          state: present
+
+      hosts:
+        localhost:
+          name: localhost
+          description: stuttgart-things organization
+          inventory: test-server
+          state: present
+          vmVariables: {ansible_connection: local}
