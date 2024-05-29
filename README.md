@@ -35,7 +35,8 @@ ansible-playbook sthings.base_os.download_install_binaries \
 
 Author Information
 ------------------
-```
+
+```bash
 Patrick Hermann, stuttgart-things 03/2023
 Christian Mueller, stuttgart-things 08/2023
 ```
