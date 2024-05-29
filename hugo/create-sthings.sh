@@ -34,13 +34,27 @@ wget https://raw.githubusercontent.com/stuttgart-things/docs/main/hugo/sthings-c
 
 # Copy hugo content
 cp -R hugo/*.html sthings/content/post
-cp ./.github/workflows/README.md sthings/content/
+cp ./.github/workflows/README.md sthings/content/post
+cp hugo/README.md sthings/content
 
 cp sthings-logo.png sthings/themes/github-style/static/images/avatar.png
 cp sthings-logo.png sthings/themes/github-style/images/sthings-logo.png
 cp sthings-city.png sthings/themes/github-style/images/sthings-city.png
 cp sthings-logo.png sthings/themes/github-style/static/images/sthings-logo.png
 cp sthings-city.png sthings/themes/github-style/static/images/sthings-city.png
+
+
+# Modify Readme
+
+# Add new markdown lines at the beginning of the files
+cat <<EOF | cat - sthings/content/post/README.md > temp && mv temp sthings/content/post/README.md
++++
+date = $CURR_DATE
+draft = false
+title = 'README'
++++
+EOF
+    echo "New lines added to README."
 
 # Modify theme files
 sed -i 's/container-lg/container-xl/g' sthings/themes/github-style/layouts/partials/post.html

@@ -137,6 +137,23 @@ playbooks:
             loop: "{{ lookup('dict', templates, wantlist=True) }}"
             when: templates is defined
 
+          - name: Create job templates
+            awx.awx.job_template:
+              name: "{{ item.value.name }}"
+              job_type: "run"
+              organization: "{{ item.value.organization }}"
+              inventory: "{{ item.value.inventory }}"
+              project: "{{ item.value.project }}"
+              playbook: "{{ item.value.playbook }}"
+              credentials: "{{ item.value.credentials }}"
+              execution_environment: "{{ item.value.executionenv }}"
+              state: "{{ item.value.state }}"
+              validate_certs: true
+              survey_enabled: "{{ item.value.survey_enabled | default(omit) }}"
+              survey_spec: "{{ item.value.survey_spec | default(omit) }}"
+              extra_vars: "{{ item.value.extraVars | default(omit) }}"
+            loop: "{{ lookup('dict', templates, wantlist=True) }}"
+
 vars:
   - name: base
     file: |

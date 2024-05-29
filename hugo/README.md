@@ -1,0 +1,1 @@
+`Welcome to our stuttgart-things blog! :)`
