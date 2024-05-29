@@ -3,6 +3,8 @@
 
 used for configuration code like gitops configuration, ansible playbooks, Dockerfiles or helm charts.
 
+<img src="https://github.com/stuttgart-things/docs/blob/main/hugo/sthings-boat.png" alt="GeeksforGeeks logo" align="right" width="200">
+
 ## INFRASTRUCTURE AS CODE
 
 ### ANSIBLE
