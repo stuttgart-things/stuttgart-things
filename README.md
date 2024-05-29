@@ -3,6 +3,8 @@
 
 used for configuration code like gitops configuration, ansible playbooks, Dockerfiles or helm charts.
 
+<img src="https://github.com/stuttgart-things/docs/blob/main/hugo/sthings-boat.png" alt="GeeksforGeeks logo" align="right" width="200">
+
 ## INFRASTRUCTURE AS CODE
 
 ### ANSIBLE
@@ -35,7 +37,8 @@ ansible-playbook sthings.base_os.download_install_binaries \
 
 Author Information
 ------------------
-```
+
+```bash
 Patrick Hermann, stuttgart-things 03/2023
 Christian Mueller, stuttgart-things 08/2023
 ```
