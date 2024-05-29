@@ -19,21 +19,6 @@ playbooks:
           controller_username: "{{ lookup('env', 'CONTROLLER_USERNAME') }}"
           controller_password: "{{ lookup('env', 'CONTROLLER_PASSWORD') }}"
 
-          inventories:
-            host_inv:
-              name: "{{ lookup('env', 'AWX_INVENTORY_NAME') }}"
-              description: "{{ lookup('env', 'AWX_INVENTORY_DESCRIPTION') }}"
-              organization: "{{ lookup('env', 'AWX_INVENTORY_ORGANIZATION') }}"
-              state: "{{ lookup('env', 'AWX_INVENTORY_STATE') }}"
-
-          hosts:
-            host_vm:
-              name: "{{ lookup('env', 'AWX_HOST_NAME') }}"
-              description: "{{ lookup('env', 'AWX_HOST_DESCRIPTION') }}"
-              inventory: "{{ lookup('env', 'AWX_HOST_INVENTORY') }}"
-              state: "{{ lookup('env', 'AWX_HOST_STATE') }}"
-              # vmVariables: "{{ lookup('env', 'AWX_HOST_VAR') }}"
-
         vars_files:
           - "{{ path | default('.') }}/{{ profile | default('base') }}.yaml"
 
@@ -189,4 +174,19 @@ vars:
           playbook: plays/hello-awx.yaml
           credentials: sthings-ssh
           executionenv: sthings-ee
+          state: present
+
+      inventories:
+        testServer:
+          name: test-server
+          description: stuttgart-things organization
+          organization: stuttgart-things
+          state: present
+
+
+      hosts:
+        localhost:
+          name: localhost
+          description: stuttgart-things organization
+          inventory: test-server
           state: present
