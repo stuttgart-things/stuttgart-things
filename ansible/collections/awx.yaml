@@ -1,6 +1,6 @@
 ---
 name: awx
-version: 0.0.37
+version: 0.0.38
 namespace: sthings
 requirements: |
   roles:
@@ -18,6 +18,10 @@ playbooks:
           controller_host: "{{ lookup('env', 'CONTROLLER_HOST') }}"
           controller_username: "{{ lookup('env', 'CONTROLLER_USERNAME') }}"
           controller_password: "{{ lookup('env', 'CONTROLLER_PASSWORD') }}"
+
+          vault_approle_id: "{{ lookup('env', 'VAULT_ROLE_ID') }}"
+          vault_approle_secret: "{{ lookup('env', 'VAULT_SECRET_ID') }}"
+          vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
 
         vars_files:
           - "{{ path | default('.') }}/{{ profile | default('base') }}.yaml"
@@ -119,8 +123,8 @@ playbooks:
               survey_enabled: "{{ item.value.survey_enabled | default(omit) }}"
               survey_spec: "{{ item.value.survey_spec | default(omit) }}"
               extra_vars: "{{ item.value.extraVars | default(omit) }}"
-            loop: "{{ lookup('dict', templates, wantlist=True) }}"
-            when: templates is defined
+            loop: "{{ lookup('dict', job_templates, wantlist=True) }}"
+            when: job_templates is defined
 
 vars:
   - name: base
@@ -139,14 +143,14 @@ vars:
           organization: stuttgart-things
           state: present
           user: sthings
-          awx_ssh_key: "{{ lookup('file', '~/.ssh/id_rsa') }}"
+          awx_ssh_key: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=ssh/data/sthings:privateKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
 
       scmCredentials:
         sthingsSCM:
           name: sthings-scm
           organization: stuttgart-things
           state: present
-          awx_ssh_key: "{{ lookup('file', '~/.ssh/id_rsa') }}"
+          awx_ssh_key: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=ssh/data/sthings:privateKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
 
       projects:
         stuttgartThings:
@@ -165,7 +169,7 @@ vars:
           name: sthings-ee
           image: eu.gcr.io/stuttgart-things/sthings-awxee:23.6.0
 
-      templates:
+      job_templates:
         stuttgartThings:
           name: hello AWX
           organization: stuttgart-things
@@ -183,10 +187,10 @@ vars:
           organization: stuttgart-things
           state: present
 
-
       hosts:
         localhost:
           name: localhost
           description: stuttgart-things organization
           inventory: test-server
           state: present
+          vmVariables: {ansible_connection: local}
