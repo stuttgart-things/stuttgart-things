@@ -10,3 +10,5 @@
 | Private Key       | vault secret path         | ssh/data/sthings:privateKey                                                         |
 | Requirements File | path to requirements file | ansible/requirements.yaml                                                           |
 |                   |                           |                                                                                     |
+
+## DISPATCH PACKER TEMPLATE
