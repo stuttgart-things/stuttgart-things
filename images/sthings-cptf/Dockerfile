@@ -1,10 +1,9 @@
-FROM xpkg.upbound.io/upbound/provider-terraform:v0.15.0
+FROM xpkg.upbound.io/upbound/provider-terraform:v0.16.0
 USER root
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 
-LABEL version=1.7.5
-
-ARG TERRAFORM_VERSION=1.7.5
+LABEL version=1.8.4
+ARG TERRAFORM_VERSION=1.8.4
 
 # VAULT LEGACY
 ARG VAULT_URL_LABUL=https://vault.labul.sva.de:8200

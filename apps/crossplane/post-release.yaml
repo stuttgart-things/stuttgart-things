@@ -45,15 +45,6 @@ spec:
                       - --poll=10m
                       - --max-reconcile-rate=10
                     resources: {}
-                    # volumeMounts:
-                    # - mountPath: /etc/ssl/certs/ca-certificates.crt
-                    #   name: cacerts
-                    #   subPath: ca-certificates.crt
-                    #   readOnly: false
-                  # volumes:
-                  # - configMap:
-                  #     name: cacerts
-                  #   name: cacerts
       provider:
         apiVersion: pkg.crossplane.io/v1
         kind: Provider
@@ -61,6 +52,6 @@ spec:
           name: provider-terraform
           namespace: crossplane-system
         spec:
-          package: xpkg.upbound.io/upbound/provider-terraform:v0.15.0
+          package: xpkg.upbound.io/upbound/provider-terraform:v0.16.0
           runtimeConfigRef:
             name: cacerts-labul-vsphere
