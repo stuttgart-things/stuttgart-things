@@ -5,7 +5,7 @@ module "ubuntu24-awx-test" {
   vm_memory               = "4096"
   vm_num_cpus             = "2"
   vm_disk_size            = "32G"
-  vm_template             = "ubuntu24-2024-05-24-base-os"
+  vm_template             = "ubuntu24"
   pve_cluster_node        = "sthings-pve1"
   pve_datastore           = "datastore"
   pve_folder_path         = "stuttgart-things"
