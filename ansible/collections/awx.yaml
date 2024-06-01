@@ -121,7 +121,7 @@ playbooks:
             when: job_templates is defined
 
 vars:
-  - name: base
+  - name: organizations
     file: |
       ---
       organizations:
@@ -130,6 +130,41 @@ vars:
           description: stuttgart-things organization
           state: present
 
+  - name: test_survey
+    file: |
+      {
+          "name": "",
+          "description": "",
+          "spec": [
+            {
+              "question_name": "OS",
+              "question_description": "os_version",
+              "required": true,
+              "type": "multiplechoice",
+              "variable": "os_version",
+              "min": null,
+              "max": null,
+              "default": "",
+              "choices": "ubuntu22\nubuntu23\nrocky9",
+              "new_question": true
+            },
+            {
+              "question_name": "Cloud",
+              "question_description": "cloud",
+              "required": true,
+              "type": "multiplechoice",
+              "variable": "cloud",
+              "min": null,
+              "max": null,
+              "default": "",
+              "choices": "pve\nvsphere",
+              "new_question": true
+            }
+          ]
+        }
+
+  - name: base
+    file: |
       machineCredentials:
         sthingsSSH:
           name: sthings-ssh
