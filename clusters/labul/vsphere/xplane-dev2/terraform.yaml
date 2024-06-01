@@ -24,7 +24,7 @@ metadata:
   namespace: flux-system
 spec:
   dependsOn:
-    - name: crossplane-xrds
+    - name: crossplane-terraform-xrds
   interval: 1h
   retryInterval: 2m
   timeout: 10m
