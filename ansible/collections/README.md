@@ -5,7 +5,7 @@
 ### INSTALLATION
 
 ```bash
-VERSION=0.3.3
+VERSION=0.4.1
 ansible-galaxy collection install -f \
 https://github.com/stuttgart-things/stuttgart-things/releases/download/${VERSION}/sthings-base_os-${VERSION}.tar.gz
 ```
