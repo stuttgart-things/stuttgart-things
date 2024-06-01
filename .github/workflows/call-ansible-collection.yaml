@@ -176,7 +176,7 @@ jobs:
       - name: Adding plugins modules
         id: modules
         run: |
-          modules_dir=${{ env.COLLECTION_DIR }}/playbooks/plugins/modules
+          modules_dir=${{ env.COLLECTION_DIR }}/plugins/modules
           mkdir -p ${modules_dir}
 
           # GET COUNT OF ALL KEYS OF SUBKEY MODULES
@@ -193,7 +193,7 @@ jobs:
               modules_file_content=$(yq ".modules[$COUNTER].file" ${{ env.COLLECTION_FILEPATH }})
 
               # CREATE MODULES FILE ON FS
-              echo "$modules_file_content" > "${modules_dir}/${filename}.yaml"
+              echo "$modules_file_content" > "${modules_dir}/${filename}.py"
               let COUNTER=COUNTER+1
           done
 
