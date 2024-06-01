@@ -1,6 +1,6 @@
 ---
 name: base_os
-version: 0.4.0
+version: 0.4.1
 namespace: sthings
 requirements: |
   roles:
@@ -98,6 +98,43 @@ playbooks:
             ignore_errors: true
             when: send_to_msteams|bool
 
+  - name: ansible
+    play: |
+      ---
+      - hosts: "{{ target_host | default('all') }}"
+        become: true
+        gather_facts: true
+
+        vars:
+          update_packages: true
+          ansible_username: sthings
+          python_modules:
+            - name: ansible
+              version: 9.6.0
+            - name: kubernetes
+              version: 29.0.0
+            - name: openshift
+              version: 0.13.2
+            - name: hvac[parser]
+              version: 2.2.0
+            - name: pyvmomi
+              version: 8.0.2.0.1
+
+        roles:
+          - install-requirements
+
+        post_tasks:
+          - name: Download requirements file from git
+            uri:
+              url: https://raw.githubusercontent.com/stuttgart-things/stuttgart-things/main/ansible/requirements.yaml
+              dest: /tmp/requirements.yaml
+
+          - name: Install requirements
+            ansible.builtin.shell: |
+              ansible --version
+              ansible-galaxy install -r /tmp/requirements.yaml -f
+            become_user: "{{ ansible_username }}"
+
   - name: golang
     play: |
       ---
@@ -144,7 +181,7 @@ playbooks:
             register: check_golang
 
           - name: Get checksum of golang dir
-            get_checksum:
+            sthings.base_os.get_checksum:
               path: "{{ golang_install_dir }}/go"
               checksum_type: "{{ go_checksum_type }}"
             register: checksum_existing
