@@ -1,12 +1,12 @@
 ---
 name: awx
-version: 0.0.38
+version: 0.0.39
 namespace: sthings
-requirements: |
-  roles:
-    - src: https://github.com/stuttgart-things/download-install-binary.git
-      scm: git
-      version: 2024.05.24
+# requirements: |
+#   roles:
+#     - src: https://github.com/stuttgart-things/download-install-binary.git
+#       scm: git
+#       version: 2024.05.24
 
 playbooks:
   # ADD PLAYBOOK FOR DEPLOYING AWX CLI
@@ -155,7 +155,7 @@ vars:
       projects:
         stuttgartThings:
           name: stuttgart-things
-          description: 
+          description:
           organization: stuttgart-things
           scm_url: git@codehub.sva.de:Lab/stuttgart-things/stuttgart-things.git
           scm_type: git
