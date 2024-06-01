@@ -87,10 +87,10 @@ jobs:
         run: |
           if ! [ -s "./roles.yaml" ]
           then
+            echo 'NO ROLES FOUND IN COLLECTION FILE'
+          else
             echo 'INSTALL ROLES INTO COLLECTION'
             ansible-galaxy install -r ./roles.yaml -p ${{ env.COLLECTION_ROLES_DIR }}
-          else
-            echo 'NO ROLES FOUND IN COLLECTION FILE'
           fi
         shell: bash
 
