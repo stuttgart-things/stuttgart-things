@@ -22,16 +22,26 @@ ansible-playbook sthings.base_os.setup -vv -i /tmp/inv
 
 </details>
 
+<details><summary>ANSIBLE</summary>
+
+deploys ansible + dependecies
+
+```bash
+ansible-playbook sthings.base_os.ansible -vv -i /tmp/inv
+```
+
+</details>
+
 <details><summary>GOLANG</summary>
 
 installs golang on target system(s)
 
 ```bash
 # DEPLOYMENT WITH DEFAULT OPTIONS (STHINGS USER EXPORTS)
-ansible-playbook sthings.base_os.install_configure_golang -vv -i inventory
+ansible-playbook sthings.base_os.golang -vv -i inventory
 
 # DEPLOYMENT WITH OVERWRITES (DIFFRENT USER AND SPECIFY GOLANG VERSION)
-ansible-playbook sthings.base_os.install_configure_golang \
+ansible-playbook sthings.base_os.golang \
 -e golang_version=1.22.2 \
 -e go_username=elon \
 -e go_usergroup=dev \
@@ -153,7 +163,7 @@ base setup for awx: orga, projects + secrets
 export CONTROLLER_HOST=https://awx.<DOMAIN>.sva.de #example!
 export CONTROLLER_USERNAME=admin #example!
 export CONTROLLER_PASSWORD=<PASSWORD>
-ansible-playbook sthings.awx.base -vv 
+ansible-playbook sthings.awx.base -vv
 ```
 
 </details>
