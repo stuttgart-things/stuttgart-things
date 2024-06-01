@@ -41,8 +41,8 @@ playbooks:
         vars:
           docker_install_compose: true
           install_kind: false
-          #kind_version: 0.22.0
-          #kubectl_version: 1.30.0
+          #kind_version: 0.23.0
+          #kubectl_version: 1.30.1
 
         roles:
           - role: sthings.container.install_configure_docker
@@ -154,3 +154,33 @@ vars:
           bin_dir: "/usr/bin/kind"
           version_cmd: "version"
           target_version: v0.23.0
+        skopeo:
+          bin_name: skopeo
+          bin_version: v1.14.4
+          check_bin_version_before_installing: true
+          source_url: "https://github.com/lework/skopeo-binary/releases/download/v1.14.4/skopeo-linux-amd64"
+          bin_to_copy: skopeo-linux-amd64
+          to_remove: ""
+          bin_dir: "/usr/bin/skopeo"
+          version_cmd: "version"
+          target_version: v1.14.4
+        helm:
+          bin_name: "helm"
+          bin_version: "3.15.1"
+          check_bin_version_before_installing: true
+          source_url: "https://get.helm.sh/helm-v3.15.0-linux-amd64.tar.gz"
+          bin_to_copy: "linux-amd64/helm"
+          to_remove: "linux-amd64"
+          bin_dir: "/usr/local/bin"
+          version_cmd: " version"
+          target_version: v3.15.0
+        kubectl:
+          bin_name: "kubectl"
+          bin_version: "1.30.1"
+          check_bin_version_before_installing: true
+          source_url: "https://dl.k8s.io/v1.30.1/bin/linux/amd64/kubectl"
+          bin_to_copy: "kubectl"
+          to_remove: "kubectl"
+          bin_dir: "/usr/local/bin"
+          version_cmd: " version --client"
+          target_version: v1.30.1
