@@ -85,7 +85,7 @@ jobs:
       - name: Install roles into collection
         id: roles
         run: |
-          if [ -s "./roles.yaml" ]
+          if ! [ -s "./roles.yaml" ]
           then
             echo 'NO ROLES FOUND IN COLLECTION FILE'
           else
