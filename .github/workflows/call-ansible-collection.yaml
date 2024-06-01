@@ -22,7 +22,7 @@ on:
         default: "./collection.yaml"
         required: false
         type: string
-        
+
 jobs:
   Ansible-Collection-Build:
     outputs:
@@ -40,7 +40,7 @@ jobs:
         with:
           path: source
           fetch-depth: '0'
-        
+
       - name: Init collection
         id: init
         run: |
@@ -152,7 +152,7 @@ jobs:
           vars_dir=${{ env.COLLECTION_DIR }}/playbooks/vars
           mkdir -p ${vars_dir}
 
-          # GET COUNT OF ALL KEYS OF SUBKEY PLAYBOOKS
+          # GET COUNT OF ALL KEYS OF SUBKEY VARS
           count_vars_files=$(yq '.vars | keys' ${{ env.COLLECTION_FILEPATH }} | wc -l)
           echo FOUND $count_vars_files VARS FILES FOR THIS COLLECTION
 
@@ -165,7 +165,7 @@ jobs:
              filename=$(yq ".vars[$COUNTER].name" ${{ env.COLLECTION_FILEPATH }})
              vars_file_content=$(yq ".vars[$COUNTER].file" ${{ env.COLLECTION_FILEPATH }})
 
-             # CREATE PLAYBOOK ON FS
+             # CREATE VARS FILE ON FS
              echo "$vars_file_content" > "${vars_dir}/${filename}.yaml"
              let COUNTER=COUNTER+1
           done
@@ -173,11 +173,38 @@ jobs:
           # LIST CREATED VARS FILES
           ls -lta ${vars_dir}
 
+      - name: Adding plugins modules
+        id: modules
+        run: |
+          modules_dir=${{ env.COLLECTION_DIR }}/playbooks/plugins/modules
+          mkdir -p ${modules_dir}
+
+          # GET COUNT OF ALL KEYS OF SUBKEY MODULES
+          count_module_files=$(yq '.vars | keys' ${{ env.COLLECTION_FILEPATH }} | wc -l)
+          echo FOUND $count_module_files MODULE FILES FOR THIS COLLECTION
+
+          COUNTER=0
+          while [ $COUNTER != $count_module_files ]; do
+              echo PROCESS MODULE FILE: $COUNTER
+
+              # GET MODULE FILE NAME AND CONTENT
+              yq ".modules[$COUNTER].name" ${{ env.COLLECTION_FILEPATH }}
+              filename=$(yq ".modules[$COUNTER].name" ${{ env.COLLECTION_FILEPATH }})
+              modules_file_content=$(yq ".modules[$COUNTER].file" ${{ env.COLLECTION_FILEPATH }})
+
+              # CREATE MODULES FILE ON FS
+              echo "$modules_file_content" > "${modules_dir}/${filename}.yaml"
+              let COUNTER=COUNTER+1
+          done
+
+          # LIST CREATED MODULE FILES
+          ls -lta ${vars_dir}
+
       - name: Update meta information
         id: meta
         run: |
           echo 'UPDATE META INFORMATION'
-          yq e -i '.version = "${{ env.COLLECTION_VERSION }}"' ${{ env.COLLECTION_DIR }}/galaxy.yml 
+          yq e -i '.version = "${{ env.COLLECTION_VERSION }}"' ${{ env.COLLECTION_DIR }}/galaxy.yml
 
       - name: Build collection
         id: build
