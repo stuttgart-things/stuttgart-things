@@ -362,28 +362,6 @@ vars:
           version_cmd: " --version"
           target_version: v1.10.2
           #md5_checksum: "374f22185f1f8cb25bc53187a2154ef0"
-        k9s:
-          bin_name: "k9s"
-          bin_version: "0.32.4"
-          check_bin_version_before_installing: true
-          source_url: "https://github.com/derailed/k9s/releases/download/v0.32.4/k9s_Linux_amd64.tar.gz"
-          bin_to_copy: "k9s"
-          to_remove: "k9s"
-          bin_dir: "/usr/local/bin"
-          version_cmd: " version --short"
-          target_version: v0.32.4
-          #md5_checksum: "04ba6f524a433f8ceb9095c4c8292240"
-        velero:
-          bin_name: velero
-          bin_version: 1.13.2
-          check_bin_version_before_installing: true
-          source_url: "https://github.com/vmware-tanzu/velero/releases/download/v1.13.2/velero-v1.13.2-linux-amd64.tar.gz"
-          bin_to_copy: "velero-v1.13.2-linux-amd64/velero"
-          to_remove: "velero-v1.13.2-linux-amd64"
-          bin_dir: "/usr/local/bin"
-          version_cmd: " version --client-only"
-          target_version: v1.13.2
-          #md5_checksum: "30ab57f9520ae2318ab28eefbc81728c"
         yq:
           bin_name: yq
           bin_version: 4.43.1
