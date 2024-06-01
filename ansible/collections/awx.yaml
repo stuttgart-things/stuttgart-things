@@ -130,7 +130,7 @@ vars:
           description: stuttgart-things organization
           state: present
 
-  - name: test_survey
+  - name: base_survey
     file: |
       {
           "name": "",
