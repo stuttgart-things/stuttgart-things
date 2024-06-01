@@ -180,7 +180,7 @@ jobs:
           mkdir -p ${modules_dir}
 
           # GET COUNT OF ALL KEYS OF SUBKEY MODULES
-          count_module_files=$(yq '.vars | keys' ${{ env.COLLECTION_FILEPATH }} | wc -l)
+          count_module_files=$(yq '.modules | keys' ${{ env.COLLECTION_FILEPATH }} | wc -l)
           echo FOUND $count_module_files MODULE FILES FOR THIS COLLECTION
 
           COUNTER=0
