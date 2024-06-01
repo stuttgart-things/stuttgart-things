@@ -54,12 +54,14 @@ jobs:
         env:
           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
         run: |
+          collections=()
           for file in ${ALL_CHANGED_FILES}; do
             echo "$file was changed"
+            collections+=("$file")
           done
 
           #repository='{ "repository": ["repo1","repo2","repo3","repo4"] }'
-          echo hello $(jq -c -n '$ARGS.positional' --args "${ALL_CHANGED_FILES[@]}" )
+          echo hello $(jq -c -n '$ARGS.positional' --args "${collections[@]}" )
         shell: bash
 
       - name: Init collection
@@ -83,8 +85,14 @@ jobs:
       - name: Install roles into collection
         id: roles
         run: |
-          echo 'INSTALL ROLES INTO COLLECTION'
-          ansible-galaxy install -r ./roles.yaml -p ${{ env.COLLECTION_ROLES_DIR }}
+          if ! [ -s "./roles.yaml" ]
+          then
+            echo 'INSTALL ROLES INTO COLLECTION'
+            ansible-galaxy install -r ./roles.yaml -p ${{ env.COLLECTION_ROLES_DIR }}
+          else
+            echo 'NO ROLES FOUND IN COLLECTION FILE'
+          fi
+        shell: bash
 
       - name: Change role references
         id: role-refs
