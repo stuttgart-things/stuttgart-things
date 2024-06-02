@@ -85,11 +85,11 @@ jobs:
       - name: Install roles into collection
         id: roles
         run: |
-          if ! [ -s "./roles.yaml" ]
-          then
+          if [ "$(yq -r ".requirements" source/${{ inputs.collection-file }})" = "null" ]; then
             echo 'NO ROLES FOUND IN COLLECTION FILE'
           else
             echo 'INSTALL ROLES INTO COLLECTION'
+            yq -r ".requirements" source/${{ inputs.collection-file }} > ./roles.yaml
             ansible-galaxy install -r ./roles.yaml -p ${{ env.COLLECTION_ROLES_DIR }}
           fi
         shell: bash

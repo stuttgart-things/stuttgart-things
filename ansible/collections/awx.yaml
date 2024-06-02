@@ -1,10 +1,10 @@
 ---
 name: awx
-version: 0.0.40
+version: 0.0.41
 namespace: sthings
 
 playbooks:
-  - name: base
+  - name: docker
     play: |
       ---
       - hosts: localhost
@@ -18,7 +18,9 @@ playbooks:
           vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
 
         vars_files:
-          - "{{ path | default('.') }}/{{ profile | default('base') }}.yaml"
+          - "{{ path | default('.') }}/organization-sthings.yaml"
+          - "{{ path | default('.') }}/scm-creds-sthings.yaml"
+          - "{{ path | default('.') }}/projects-sthings.yaml"
 
         tasks:
           - name: Create organizations
@@ -121,7 +123,7 @@ playbooks:
             when: job_templates is defined
 
 vars:
-  - name: organizations
+  - name: organization-sthings
     file: |
       ---
       organizations:
@@ -129,6 +131,31 @@ vars:
           name: stuttgart-things
           description: stuttgart-things organization
           state: present
+
+  - name: scm-creds-sthings
+    file: |
+      ---
+      scmCredentials:
+        sthingsSCM:
+          name: sthings-scm
+          organization: stuttgart-things
+          state: present
+          awx_ssh_key: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=ssh/data/sthings:privateKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+
+  - name: projects-sthings
+    file: |
+      ---
+      projects:
+        stuttgartThings:
+          name: stuttgart-things
+          description:
+          organization: stuttgart-things
+          scm_url: git@codehub.sva.de:Lab/stuttgart-things/stuttgart-things.git
+          scm_type: git
+          credential: sthings-scm
+          state: present
+          scm_update_on_launch: true
+          scm_update_cache_timeout: 60
 
   - name: base_survey
     file: |
@@ -174,24 +201,6 @@ vars:
           user: sthings
           awx_ssh_key: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=ssh/data/sthings:privateKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
 
-      scmCredentials:
-        sthingsSCM:
-          name: sthings-scm
-          organization: stuttgart-things
-          state: present
-          awx_ssh_key: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=ssh/data/sthings:privateKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
-
-      projects:
-        stuttgartThings:
-          name: stuttgart-things
-          description:
-          organization: stuttgart-things
-          scm_url: git@codehub.sva.de:Lab/stuttgart-things/stuttgart-things.git
-          scm_type: git
-          credential: sthings-scm
-          state: present
-          scm_update_on_launch: true
-          scm_update_cache_timeout: 60
 
       execution_environment:
         sthings-ee:
