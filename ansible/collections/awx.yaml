@@ -1,8 +1,7 @@
 ---
 name: awx
-version: 0.0.46
+version: 0.0.47
 namespace: sthings
-
 playbooks:
   - name: docker
     play: |
@@ -179,7 +178,7 @@ vars:
           executionenv: sthings-ee
           state: present
           survey_enabled: true
-          survey_spec: "{{ lookup('file', 'surveys/my_survey.json') }}"
+          survey_spec: "{{ lookup('file', 'vars/base_survey.yaml') }}"
 
   - name: job-awx
     file: |
@@ -233,7 +232,7 @@ vars:
           name: sthings-scm
           organization: stuttgart-things
           state: present
-          awx_ssh_key: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=ssh/data/sthings:privateKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+          awx_ssh_key: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=ssh/data/sthings:privateKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') | b64decode }}"
 
   - name: projects-sthings
     file: |
@@ -260,7 +259,7 @@ vars:
           organization: stuttgart-things
           state: present
           user: sthings
-          awx_ssh_key: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=ssh/data/sthings:privateKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+          awx_ssh_key: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=ssh/data/sthings:privateKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') | b64decode }}"
 
   - name: ee-sthings
     file: |
