@@ -101,7 +101,7 @@ jobs:
 
       - name: Change role references
         id: role-refs
-        if: ${{ env.ROLES_INCLUDED }} == 'TRUE'
+        if: ${{ env.ROLES_INCLUDED == 'TRUE' }}
         run: |
           for role in "${{ env.COLLECTION_ROLES_DIR }}"/*
           do
