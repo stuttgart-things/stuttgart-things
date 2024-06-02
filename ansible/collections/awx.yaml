@@ -22,6 +22,7 @@ playbooks:
           - "{{ path | default('.') }}/scm-creds-sthings.yaml"
           - "{{ path | default('.') }}/projects-sthings.yaml"
 
+        # ADD IMPORT FOR TASKS
         tasks:
           - name: Create organizations
             awx.awx.organization:
