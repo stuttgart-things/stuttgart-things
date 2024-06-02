@@ -1,6 +1,6 @@
 ---
 name: awx
-version: 0.0.42
+version: 0.0.43
 namespace: sthings
 
 playbooks:
@@ -22,106 +22,110 @@ playbooks:
           - "{{ path | default('.') }}/scm-creds-sthings.yaml"
           - "{{ path | default('.') }}/projects-sthings.yaml"
 
-        # ADD IMPORT FOR TASKS
         tasks:
-          - name: Create organizations
-            awx.awx.organization:
-              name: "{{ item.value.name }}"
-              description: "{{ item.value.description }}"
-              state: "{{ item.value.state }}"
-              galaxy_credentials:
-                - Ansible Galaxy
-              validate_certs: false
-            loop: "{{ lookup('dict', organizations, wantlist=True) }}"
-            when: organizations is defined
+          - ansible.builtin.import_tasks: awx-tasks.yaml
 
-          - name: Add machine credential
-            awx.awx.credential:
-              name: "{{ item.value.name }}"
-              description: "{{ item.value.description }}"
-              organization: "{{ item.value.organization }}"
-              credential_type: Machine
-              state: "{{ item.value.state }}"
-              inputs:
-                username: "{{ item.value.user }}"
-                ssh_key_data: "{{ item.value.awx_ssh_key }}"
-              validate_certs: false
-            loop: "{{ lookup('dict', machineCredentials, wantlist=True) }}"
-            when: machineCredentials is defined
+  - name: awx_creation_tasks
+    play: |
+      ---
+      - name: Create organizations
+        awx.awx.organization:
+          name: "{{ item.value.name }}"
+          description: "{{ item.value.description }}"
+          state: "{{ item.value.state }}"
+          galaxy_credentials:
+            - Ansible Galaxy
+          validate_certs: false
+        loop: "{{ lookup('dict', organizations, wantlist=True) }}"
+        when: organizations is defined
 
-          - name: Create a valid SCM credential from a private_key file
-            awx.awx.credential:
-              name: "{{ item.value.name }}"
-              organization: "{{ item.value.organization }}"
-              state: "{{ item.value.state }}"
-              credential_type: Source Control
-              inputs:
-                ssh_key_data: "{{ item.value.awx_ssh_key }}"
-              validate_certs: false
-            loop: "{{ lookup('dict', scmCredentials, wantlist=True) }}"
-            when: scmCredentials is defined
+      - name: Add machine credential
+        awx.awx.credential:
+          name: "{{ item.value.name }}"
+          description: "{{ item.value.description }}"
+          organization: "{{ item.value.organization }}"
+          credential_type: Machine
+          state: "{{ item.value.state }}"
+          inputs:
+            username: "{{ item.value.user }}"
+            ssh_key_data: "{{ item.value.awx_ssh_key }}"
+          validate_certs: false
+        loop: "{{ lookup('dict', machineCredentials, wantlist=True) }}"
+        when: machineCredentials is defined
 
-          - name: Add inventory
-            awx.awx.inventory:
-              name: "{{ item.value.name }}"
-              description: "{{ item.value.description | default (omit) }}"
-              organization: "{{ item.value.organization }}"
-              state: "{{ item.value.state }}"
-              validate_certs: false
-            loop: "{{ lookup('dict', inventories, wantlist=True) }}"
-            when: inventories is defined
+      - name: Create a valid SCM credential from a private_key file
+        awx.awx.credential:
+          name: "{{ item.value.name }}"
+          organization: "{{ item.value.organization }}"
+          state: "{{ item.value.state }}"
+          credential_type: Source Control
+          inputs:
+            ssh_key_data: "{{ item.value.awx_ssh_key }}"
+          validate_certs: false
+        loop: "{{ lookup('dict', scmCredentials, wantlist=True) }}"
+        when: scmCredentials is defined
 
-          - name: Add host
-            awx.awx.host:
-              name: "{{ item.value.name }}"
-              description: "{{ item.value.description | default (omit) }}"
-              inventory: "{{ item.value.inventory }}"
-              state: "{{ item.value.state }}"
-              variables: "{{ item.value.vmVariables | default (omit) }}"
-              validate_certs: false
-            loop: "{{ lookup('dict', hosts, wantlist=True) }}"
-            when: hosts is defined
+      - name: Add inventory
+        awx.awx.inventory:
+          name: "{{ item.value.name }}"
+          description: "{{ item.value.description | default (omit) }}"
+          organization: "{{ item.value.organization }}"
+          state: "{{ item.value.state }}"
+          validate_certs: false
+        loop: "{{ lookup('dict', inventories, wantlist=True) }}"
+        when: inventories is defined
 
-          - name: Create projects
-            awx.awx.project:
-              name: "{{ item.value.name }}"
-              description: "{{ item.value.description }}"
-              organization: "{{ item.value.organization }}"
-              scm_url: "{{ item.value.scm_url }}"
-              scm_type: "{{ item.value.scm_type }}"
-              credential: "{{ item.value.credential }}"
-              state: "{{ item.value.state }}"
-              scm_update_on_launch: "{{ item.value.scm_update_on_launch | default(omit) }}"
-              scm_update_cache_timeout: "{{ item.value.scm_update_cache_timeout | default(omit) }}"
-              validate_certs: false
-            loop: "{{ lookup('dict', projects, wantlist=True) }}"
-            when: projects is defined
+      - name: Add host
+        awx.awx.host:
+          name: "{{ item.value.name }}"
+          description: "{{ item.value.description | default (omit) }}"
+          inventory: "{{ item.value.inventory }}"
+          state: "{{ item.value.state }}"
+          variables: "{{ item.value.vmVariables | default (omit) }}"
+          validate_certs: false
+        loop: "{{ lookup('dict', hosts, wantlist=True) }}"
+        when: hosts is defined
 
-          - name: Add EE to the controller instance
-            awx.awx.execution_environment:
-              name: "{{ item.value.name }}"
-              image: "{{ item.value.image }}"
-              validate_certs: false
-            loop: "{{ lookup('dict', execution_environment, wantlist=True) }}"
-            when: execution_environment is defined
+      - name: Create projects
+        awx.awx.project:
+          name: "{{ item.value.name }}"
+          description: "{{ item.value.description }}"
+          organization: "{{ item.value.organization }}"
+          scm_url: "{{ item.value.scm_url }}"
+          scm_type: "{{ item.value.scm_type }}"
+          credential: "{{ item.value.credential }}"
+          state: "{{ item.value.state }}"
+          scm_update_on_launch: "{{ item.value.scm_update_on_launch | default(omit) }}"
+          scm_update_cache_timeout: "{{ item.value.scm_update_cache_timeout | default(omit) }}"
+          validate_certs: false
+        loop: "{{ lookup('dict', projects, wantlist=True) }}"
+        when: projects is defined
 
-          - name: Create job templates
-            awx.awx.job_template:
-              name: "{{ item.value.name }}"
-              job_type: "run"
-              organization: "{{ item.value.organization }}"
-              inventory: "{{ item.value.inventory }}"
-              project: "{{ item.value.project }}"
-              playbook: "{{ item.value.playbook }}"
-              credentials: "{{ item.value.credentials }}"
-              execution_environment: "{{ item.value.executionenv }}"
-              state: "{{ item.value.state }}"
-              validate_certs: true
-              survey_enabled: "{{ item.value.survey_enabled | default(omit) }}"
-              survey_spec: "{{ item.value.survey_spec | default(omit) }}"
-              extra_vars: "{{ item.value.extraVars | default(omit) }}"
-            loop: "{{ lookup('dict', job_templates, wantlist=True) }}"
-            when: job_templates is defined
+      - name: Add EE to the controller instance
+        awx.awx.execution_environment:
+          name: "{{ item.value.name }}"
+          image: "{{ item.value.image }}"
+          validate_certs: false
+        loop: "{{ lookup('dict', execution_environment, wantlist=True) }}"
+        when: execution_environment is defined
+
+      - name: Create job templates
+        awx.awx.job_template:
+          name: "{{ item.value.name }}"
+          job_type: "run"
+          organization: "{{ item.value.organization }}"
+          inventory: "{{ item.value.inventory }}"
+          project: "{{ item.value.project }}"
+          playbook: "{{ item.value.playbook }}"
+          credentials: "{{ item.value.credentials }}"
+          execution_environment: "{{ item.value.executionenv }}"
+          state: "{{ item.value.state }}"
+          validate_certs: true
+          survey_enabled: "{{ item.value.survey_enabled | default(omit) }}"
+          survey_spec: "{{ item.value.survey_spec | default(omit) }}"
+          extra_vars: "{{ item.value.extraVars | default(omit) }}"
+        loop: "{{ lookup('dict', job_templates, wantlist=True) }}"
+        when: job_templates is defined
 
 vars:
   - name: organization-sthings
