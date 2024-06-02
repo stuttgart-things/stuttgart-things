@@ -1,6 +1,6 @@
 ---
 name: awx
-version: 0.0.45
+version: 0.0.46
 namespace: sthings
 
 playbooks:
@@ -21,14 +21,16 @@ playbooks:
           - "{{ path | default('.') }}/organization-sthings.yaml"
           - "{{ path | default('.') }}/scm-creds-sthings.yaml"
           - "{{ path | default('.') }}/projects-sthings.yaml"
+          - "{{ path | default('.') }}/machine-creds-sthings.yaml"
+          - "{{ path | default('.') }}/inventory-test.yaml"
           - "{{ path | default('.') }}/hosts-test.yaml"
           - "{{ path | default('.') }}/ee-sthings.yaml"
-          - "{{ path | default('.') }}/machine-creds-sthings.yaml"
+          - "{{ path | default('.') }}/job-docker.yaml"
 
         tasks:
           - ansible.builtin.import_tasks: creation_tasks.yaml
 
-  - name: creation_tasks.yaml
+  - name: creation_tasks
     play: |
       ---
       - name: Create organizations
@@ -164,8 +166,24 @@ vars:
           ]
         }
 
-  - name: hello-awx
+  - name: job-docker
     file: |
+      job_templates:
+        stuttgartThings:
+          name: code-install-docker
+          organization: code-stuttgart-things
+          inventory: code-inv
+          project: code-stuttgart-things
+          playbook: plays/install-docker.yaml
+          credentials: code-sthings-ssh
+          executionenv: sthings-ee
+          state: present
+          survey_enabled: true
+          survey_spec: "{{ lookup('file', 'surveys/my_survey.json') }}"
+
+  - name: job-awx
+    file: |
+      ---
       job_templates:
         stuttgartThings:
           name: hello AWX
@@ -179,6 +197,7 @@ vars:
 
   - name: inventory-test
     file: |
+      ---
       inventories:
         testServer:
           name: test-server
@@ -188,6 +207,7 @@ vars:
 
   - name: hosts-test
     file: |
+      ---
       hosts:
         localhost:
           name: localhost
@@ -232,6 +252,7 @@ vars:
 
   - name: machine-creds-sthings
     file: |
+      ---
       machineCredentials:
         sthingsSSH:
           name: sthings-ssh
@@ -243,6 +264,7 @@ vars:
 
   - name: ee-sthings
     file: |
+      ---
       execution_environment:
         sthings-ee:
           name: sthings-ee
