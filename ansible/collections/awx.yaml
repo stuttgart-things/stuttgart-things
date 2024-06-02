@@ -1,6 +1,6 @@
 ---
 name: awx
-version: 0.0.43
+version: 0.0.45
 namespace: sthings
 
 playbooks:
@@ -21,11 +21,14 @@ playbooks:
           - "{{ path | default('.') }}/organization-sthings.yaml"
           - "{{ path | default('.') }}/scm-creds-sthings.yaml"
           - "{{ path | default('.') }}/projects-sthings.yaml"
+          - "{{ path | default('.') }}/hosts-test.yaml"
+          - "{{ path | default('.') }}/ee-sthings.yaml"
+          - "{{ path | default('.') }}/machine-creds-sthings.yaml"
 
         tasks:
-          - ansible.builtin.import_tasks: awx-tasks.yaml
+          - ansible.builtin.import_tasks: creation_tasks.yaml
 
-  - name: awx_creation_tasks
+  - name: creation_tasks.yaml
     play: |
       ---
       - name: Create organizations
@@ -128,6 +131,71 @@ playbooks:
         when: job_templates is defined
 
 vars:
+  - name: base_survey
+    file: |
+      {
+          "name": "",
+          "description": "",
+          "spec": [
+            {
+              "question_name": "OS",
+              "question_description": "os_version",
+              "required": true,
+              "type": "multiplechoice",
+              "variable": "os_version",
+              "min": null,
+              "max": null,
+              "default": "",
+              "choices": "ubuntu22\nubuntu23\nrocky9",
+              "new_question": true
+            },
+            {
+              "question_name": "Cloud",
+              "question_description": "cloud",
+              "required": true,
+              "type": "multiplechoice",
+              "variable": "cloud",
+              "min": null,
+              "max": null,
+              "default": "",
+              "choices": "pve\nvsphere",
+              "new_question": true
+            }
+          ]
+        }
+
+  - name: hello-awx
+    file: |
+      job_templates:
+        stuttgartThings:
+          name: hello AWX
+          organization: stuttgart-things
+          inventory: test-server
+          project: stuttgart-things
+          playbook: plays/hello-awx.yaml
+          credentials: sthings-ssh
+          executionenv: sthings-ee
+          state: present
+
+  - name: inventory-test
+    file: |
+      inventories:
+        testServer:
+          name: test-server
+          description: stuttgart-things organization
+          organization: stuttgart-things
+          state: present
+
+  - name: hosts-test
+    file: |
+      hosts:
+        localhost:
+          name: localhost
+          description: stuttgart-things organization
+          inventory: test-server
+          state: present
+          vmVariables: {ansible_connection: local}
+
   - name: organization-sthings
     file: |
       ---
@@ -162,40 +230,7 @@ vars:
           scm_update_on_launch: true
           scm_update_cache_timeout: 60
 
-  - name: base_survey
-    file: |
-      {
-          "name": "",
-          "description": "",
-          "spec": [
-            {
-              "question_name": "OS",
-              "question_description": "os_version",
-              "required": true,
-              "type": "multiplechoice",
-              "variable": "os_version",
-              "min": null,
-              "max": null,
-              "default": "",
-              "choices": "ubuntu22\nubuntu23\nrocky9",
-              "new_question": true
-            },
-            {
-              "question_name": "Cloud",
-              "question_description": "cloud",
-              "required": true,
-              "type": "multiplechoice",
-              "variable": "cloud",
-              "min": null,
-              "max": null,
-              "default": "",
-              "choices": "pve\nvsphere",
-              "new_question": true
-            }
-          ]
-        }
-
-  - name: base
+  - name: machine-creds-sthings
     file: |
       machineCredentials:
         sthingsSSH:
@@ -206,34 +241,9 @@ vars:
           user: sthings
           awx_ssh_key: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=ssh/data/sthings:privateKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
 
-
+  - name: ee-sthings
+    file: |
       execution_environment:
         sthings-ee:
           name: sthings-ee
           image: eu.gcr.io/stuttgart-things/sthings-awxee:23.6.0
-
-      job_templates:
-        stuttgartThings:
-          name: hello AWX
-          organization: stuttgart-things
-          inventory: test-server
-          project: stuttgart-things
-          playbook: plays/hello-awx.yaml
-          credentials: sthings-ssh
-          executionenv: sthings-ee
-          state: present
-
-      inventories:
-        testServer:
-          name: test-server
-          description: stuttgart-things organization
-          organization: stuttgart-things
-          state: present
-
-      hosts:
-        localhost:
-          name: localhost
-          description: stuttgart-things organization
-          inventory: test-server
-          state: present
-          vmVariables: {ansible_connection: local}
