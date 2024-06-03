@@ -1,6 +1,6 @@
 # stuttgart-things/terraform
 
-this file was created at: 2024-05-05, 10:43
+this file was created at: 2024-05-31, 08:35
 
 ## TERRAFORM
 
@@ -14,7 +14,7 @@ terraform --version
 
 ```bash
 # CHANGE TO DIR
-cd builds/vspherevm/labul/u24-rke2/
+cd builds/vspherevm/labul/andretest3/
 
 # INITIALIZE TERRAFORM
 terraform init

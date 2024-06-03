@@ -1,19 +1,19 @@
-module "u24-rke2" {
-  source   = "github.com/stuttgart-things/vsphere-vm?ref=v1.7.5-2.7.0"
-  vm_count = 1
-  vsphere_vm_name = "u24-rke2"
-  vm_memory = 8192
-  vsphere_vm_template = "sthings-u24"
-  vm_disk_size = "96"
-  vm_num_cpus = 6
-  firmware = "bios"
+module "andretest2" {
+  source                 = "github.com/stuttgart-things/vsphere-vm?ref=v1.7.5-2.7.0-1"
+  vm_count               = 1
+  vsphere_vm_name        = "andretest2"
+  vm_memory              = 4096
+  vsphere_vm_template    = "sthings-u24"
+  vm_disk_size           = "32"
+  vm_num_cpus            = 2
+  firmware               = "bios"
   vsphere_vm_folder_path = "stuttgart-things/testing"
-  vsphere_datacenter = "/LabUL"
-  vsphere_datastore = "/LabUL/datastore/UL-V5010-01-LUN1"
-  vsphere_resource_pool = "/LabUL/host/Cluster-V6.5/Resources"
-  vsphere_network = "/LabUL/network/LAB-10.31.103"
-  bootstrap = ["echo STUTTGART-THINGS"]
-  annotation = "VSPHERE-VM u24-rke2 sthings-u24 BUILD w/ TERRAFORM FOR STUTTGART-THINGS"
+  vsphere_datacenter     = "/LabUL"
+  vsphere_datastore      = "/LabUL/datastore/UL-V5010-01-LUN3"
+  vsphere_resource_pool  = "/LabUL/host/Cluster-V6.5/Resources"
+  vsphere_network        = "/LabUL/network/MGMT-10.31.101"
+  bootstrap              = ["echo STUTTGART-THINGS"]
+  annotation             = "VSPHERE-VM andretest2 sthings-u24 BUILD w/ TERRAFORM FOR STUTTGART-THINGS"
   vsphere_server         = var.vsphere_server
   vsphere_user           = var.vsphere_user
   vsphere_password       = var.vsphere_password
@@ -52,5 +52,5 @@ variable "vsphere_password" {
 }
 
 output "ip" {
-  value = [module.u24-rke2.ip]
+  value = [module.andretest2.ip]
 }

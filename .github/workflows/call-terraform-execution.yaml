@@ -110,9 +110,13 @@ jobs:
 
       - name: Terraform init
         run: |
-          ls -lta ${{ inputs.folder }}
-          terraform --version
-          terraform -chdir=${{ inputs.folder }} init
+          if test -d "${{ inputs.folder }}"; then
+          
+            ls -lta ${{ inputs.folder }}
+            terraform --version
+            terraform -chdir=${{ inputs.folder }} init
+            
+          fi
         shell: bash
 
       - name: Terraform plan

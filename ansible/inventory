@@ -1,1 +1,0 @@
-10.31.103.21 ansible_user=sthings ansible_password=Atlan7is ansible_ssh_common_args='-o StrictHostKeyChecking=no'
