@@ -6,3 +6,5 @@ elasticsearch>=8.13.1
 elastic-transport>=8.13.0
 certifi>=2024.2.2
 PyYAML>=5.4.1
+httplib2>=0.20.2
+requests>=2.31.0
