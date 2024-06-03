@@ -1,6 +1,6 @@
 ---
 name: container
-version: 0.0.21
+version: 0.0.22
 namespace: sthings
 requirements: |
   roles:
@@ -194,7 +194,6 @@ vars:
           bin_dir: "/usr/local/bin"
           version_cmd: " version --short"
           target_version: v0.32.4
-          #md5_checksum: "04ba6f524a433f8ceb9095c4c8292240"
         velero:
           bin_name: velero
           bin_version: 1.13.2
@@ -205,4 +204,23 @@ vars:
           bin_dir: "/usr/local/bin"
           version_cmd: " version --client-only"
           target_version: v1.13.2
-          #md5_checksum: "30ab57f9520ae2318ab28eefbc81728c"
+        kubectl_slice:
+          bin_name: kubectl-slice
+          bin_version: v1.2.9
+          check_bin_version_before_installing: true
+          source_url: "https://github.com/patrickdappollonio/kubectl-slice/releases/download/v1.2.9/kubectl-slice_linux_x86_64.tar.gz"
+          bin_to_copy: kubectl-slice
+          to_remove: kubectl-slice
+          bin_dir: "/usr/bin"
+          version_cmd: " --version"
+          target_version: v1.2.9
+        helmfile:
+          bin_name: helmfile
+          bin_version: v0.165.0
+          check_bin_version_before_installing: true
+          source_url: "https://github.com/helmfile/helmfile/releases/download/v0.165.0/helmfile_0.165.0_linux_amd64.tar.gz"
+          bin_to_copy: helmfile
+          to_remove: helmfile
+          bin_dir: "/usr/bin"
+          version_cmd: " --version"
+          target_version: v0.165.0
