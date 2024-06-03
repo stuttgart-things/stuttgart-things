@@ -43,6 +43,7 @@ on:
 
 jobs:
   Execute-Terraform:
+    if: test -d ${{ inputs.folder }}
     outputs:
       tf-output: ${{ steps.tf_output.outputs.TF_OUTPUT }}
     runs-on: ${{ inputs.runs-on }}
