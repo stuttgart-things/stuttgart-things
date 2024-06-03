@@ -149,12 +149,12 @@ vars:
       ---
       job_templates:
         stuttgartThings:
-          name: code-install-golang
-          organization: code-stuttgart-things
+          name: install-golang
+          organization: stuttgart-things
           inventory: test-collection
-          project: code-stuttgart-things
+          project: stuttgart-things
           playbook: plays/install-golang.yaml
-          credentials: code-sthings-ssh
+          credentials: sthings-ssh
           executionenv: sthings-ee
           state: present
           survey_enabled: true
@@ -234,12 +234,12 @@ vars:
       ---
       job_templates:
         stuttgartThings:
-          name: code-install-docker
-          organization: code-stuttgart-things
+          name: install-docker
+          organization: stuttgart-things
           inventory: test-collection
-          project: code-stuttgart-things
+          project: stuttgart-things
           playbook: plays/install-docker.yaml
-          credentials: code-sthings-ssh
+          credentials: sthings-ssh
           executionenv: sthings-ee
           state: present
           survey_enabled: true
