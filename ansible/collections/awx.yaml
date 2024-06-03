@@ -1,133 +1,404 @@
 ---
 name: awx
-version: 0.0.38
+version: 0.0.51
 namespace: sthings
-requirements: |
-  roles:
-    - src: https://github.com/stuttgart-things/download-install-binary.git
-      scm: git
-      version: 2024.05.24
-
 playbooks:
-  # ADD PLAYBOOK FOR DEPLOYING AWX CLI
-  - name: base
+  - name: creation_tasks
+    play: |
+      ---
+      - name: Create organizations
+        awx.awx.organization:
+          name: "{{ item.value.name }}"
+          description: "{{ item.value.description }}"
+          state: "{{ item.value.state }}"
+          galaxy_credentials:
+            - Ansible Galaxy
+          validate_certs: false
+        loop: "{{ lookup('dict', organizations, wantlist=True) }}"
+        when: organizations is defined
+
+      - name: Add machine credential
+        awx.awx.credential:
+          name: "{{ item.value.name }}"
+          description: "{{ item.value.description }}"
+          organization: "{{ item.value.organization }}"
+          credential_type: Machine
+          state: "{{ item.value.state }}"
+          inputs:
+            username: "{{ item.value.user }}"
+            ssh_key_data: "{{ item.value.awx_ssh_key }}"
+          validate_certs: false
+        loop: "{{ lookup('dict', machineCredentials, wantlist=True) }}"
+        when: machineCredentials is defined
+
+      - name: Create a valid SCM credential from a private_key file
+        awx.awx.credential:
+          name: "{{ item.value.name }}"
+          organization: "{{ item.value.organization }}"
+          state: "{{ item.value.state }}"
+          credential_type: Source Control
+          inputs:
+            ssh_key_data: "{{ item.value.awx_ssh_key }}"
+          validate_certs: false
+        loop: "{{ lookup('dict', scmCredentials, wantlist=True) }}"
+        when: scmCredentials is defined
+
+      - name: Add inventory
+        awx.awx.inventory:
+          name: "{{ item.value.name }}"
+          description: "{{ item.value.description | default (omit) }}"
+          organization: "{{ item.value.organization }}"
+          state: "{{ item.value.state }}"
+          validate_certs: false
+        loop: "{{ lookup('dict', inventories, wantlist=True) }}"
+        when: inventories is defined
+
+      - name: Add host
+        awx.awx.host:
+          name: "{{ item.value.name }}"
+          description: "{{ item.value.description | default (omit) }}"
+          inventory: "{{ item.value.inventory }}"
+          state: "{{ item.value.state }}"
+          variables: "{{ item.value.vmVariables | default (omit) }}"
+          validate_certs: false
+        loop: "{{ lookup('dict', hosts, wantlist=True) }}"
+        when: hosts is defined
+
+      - name: Create projects
+        awx.awx.project:
+          name: "{{ item.value.name }}"
+          description: "{{ item.value.description }}"
+          organization: "{{ item.value.organization }}"
+          scm_url: "{{ item.value.scm_url }}"
+          scm_type: "{{ item.value.scm_type }}"
+          credential: "{{ item.value.credential }}"
+          state: "{{ item.value.state }}"
+          scm_update_on_launch: "{{ item.value.scm_update_on_launch | default(omit) }}"
+          scm_update_cache_timeout: "{{ item.value.scm_update_cache_timeout | default(omit) }}"
+          validate_certs: false
+        loop: "{{ lookup('dict', projects, wantlist=True) }}"
+        when: projects is defined
+
+      - name: Add EE to the controller instance
+        awx.awx.execution_environment:
+          name: "{{ item.value.name }}"
+          image: "{{ item.value.image }}"
+          validate_certs: false
+        loop: "{{ lookup('dict', execution_environment, wantlist=True) }}"
+        when: execution_environment is defined
+
+      - name: Create job templates
+        awx.awx.job_template:
+          name: "{{ item.value.name }}"
+          job_type: "run"
+          organization: "{{ item.value.organization }}"
+          inventory: "{{ item.value.inventory }}"
+          project: "{{ item.value.project }}"
+          playbook: "{{ item.value.playbook }}"
+          credentials: "{{ item.value.credentials }}"
+          execution_environment: "{{ item.value.executionenv }}"
+          state: "{{ item.value.state }}"
+          validate_certs: true
+          survey_enabled: "{{ item.value.survey_enabled | default(omit) }}"
+          survey_spec: "{{ item.value.survey_spec | default(omit) }}"
+          extra_vars: "{{ item.value.extraVars | default(omit) }}"
+        loop: "{{ lookup('dict', job_templates, wantlist=True) }}"
+        when: job_templates is defined
+
+  - name: docker
     play: |
       ---
       - hosts: localhost
-        vars:
-          controller_host: "{{ lookup('env', 'CONTROLLER_HOST') }}"
-          controller_username: "{{ lookup('env', 'CONTROLLER_USERNAME') }}"
-          controller_password: "{{ lookup('env', 'CONTROLLER_PASSWORD') }}"
-
-          vault_approle_id: "{{ lookup('env', 'VAULT_ROLE_ID') }}"
-          vault_approle_secret: "{{ lookup('env', 'VAULT_SECRET_ID') }}"
-          vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
 
         vars_files:
-          - "{{ path | default('.') }}/{{ profile | default('base') }}.yaml"
+          - "{{ path | default('.') }}/awx-local-env.yaml"
+          - "{{ path | default('.') }}/organization-sthings.yaml"
+          - "{{ path | default('.') }}/scm-creds-sthings.yaml"
+          - "{{ path | default('.') }}/projects-sthings.yaml"
+          - "{{ path | default('.') }}/machine-creds-sthings.yaml"
+          - "{{ path | default('.') }}/inventory-test.yaml"
+          - "{{ path | default('.') }}/hosts-test.yaml"
+          - "{{ path | default('.') }}/ee-sthings.yaml"
+          - "{{ path | default('.') }}/job-docker.yaml"
 
         tasks:
-          - name: Create organizations
-            awx.awx.organization:
-              name: "{{ item.value.name }}"
-              description: "{{ item.value.description }}"
-              state: "{{ item.value.state }}"
-              galaxy_credentials:
-                - Ansible Galaxy
-              validate_certs: false
-            loop: "{{ lookup('dict', organizations, wantlist=True) }}"
-            when: organizations is defined
+          - ansible.builtin.import_tasks: creation_tasks.yaml
 
-          - name: Add machine credential
-            awx.awx.credential:
-              name: "{{ item.value.name }}"
-              description: "{{ item.value.description }}"
-              organization: "{{ item.value.organization }}"
-              credential_type: Machine
-              state: "{{ item.value.state }}"
-              inputs:
-                username: "{{ item.value.user }}"
-                ssh_key_data: "{{ item.value.awx_ssh_key }}"
-              validate_certs: false
-            loop: "{{ lookup('dict', machineCredentials, wantlist=True) }}"
-            when: machineCredentials is defined
+  - name: nerdctl
+    play: |
+      ---
+      - hosts: localhost
 
-          - name: Create a valid SCM credential from a private_key file
-            awx.awx.credential:
-              name: "{{ item.value.name }}"
-              organization: "{{ item.value.organization }}"
-              state: "{{ item.value.state }}"
-              credential_type: Source Control
-              inputs:
-                ssh_key_data: "{{ item.value.awx_ssh_key }}"
-              validate_certs: false
-            loop: "{{ lookup('dict', scmCredentials, wantlist=True) }}"
-            when: scmCredentials is defined
+        vars_files:
+          - "{{ path | default('.') }}/awx-local-env.yaml"
+          - "{{ path | default('.') }}/organization-sthings.yaml"
+          - "{{ path | default('.') }}/scm-creds-sthings.yaml"
+          - "{{ path | default('.') }}/projects-sthings.yaml"
+          - "{{ path | default('.') }}/machine-creds-sthings.yaml"
+          - "{{ path | default('.') }}/inventory-test.yaml"
+          - "{{ path | default('.') }}/hosts-test.yaml"
+          - "{{ path | default('.') }}/ee-sthings.yaml"
+          - "{{ path | default('.') }}/job-nerdctl.yaml"
 
-          - name: Add inventory
-            awx.awx.inventory:
-              name: "{{ item.value.name }}"
-              description: "{{ item.value.description | default (omit) }}"
-              organization: "{{ item.value.organization }}"
-              state: "{{ item.value.state }}"
-              validate_certs: false
-            loop: "{{ lookup('dict', inventories, wantlist=True) }}"
-            when: inventories is defined
+        tasks:
+          - ansible.builtin.import_tasks: creation_tasks.yaml
 
-          - name: Add host
-            awx.awx.host:
-              name: "{{ item.value.name }}"
-              description: "{{ item.value.description | default (omit) }}"
-              inventory: "{{ item.value.inventory }}"
-              state: "{{ item.value.state }}"
-              variables: "{{ item.value.vmVariables | default (omit) }}"
-              validate_certs: false
-            loop: "{{ lookup('dict', hosts, wantlist=True) }}"
-            when: hosts is defined
+  - name: golang
+    play: |
+      ---
+      - hosts: localhost
 
-          - name: Create projects
-            awx.awx.project:
-              name: "{{ item.value.name }}"
-              description: "{{ item.value.description }}"
-              organization: "{{ item.value.organization }}"
-              scm_url: "{{ item.value.scm_url }}"
-              scm_type: "{{ item.value.scm_type }}"
-              credential: "{{ item.value.credential }}"
-              state: "{{ item.value.state }}"
-              scm_update_on_launch: "{{ item.value.scm_update_on_launch | default(omit) }}"
-              scm_update_cache_timeout: "{{ item.value.scm_update_cache_timeout | default(omit) }}"
-              validate_certs: false
-            loop: "{{ lookup('dict', projects, wantlist=True) }}"
-            when: projects is defined
+        vars_files:
+          - "{{ path | default('.') }}/awx-local-env.yaml"
+          - "{{ path | default('.') }}/organization-sthings.yaml"
+          - "{{ path | default('.') }}/scm-creds-sthings.yaml"
+          - "{{ path | default('.') }}/projects-sthings.yaml"
+          - "{{ path | default('.') }}/machine-creds-sthings.yaml"
+          - "{{ path | default('.') }}/inventory-test.yaml"
+          - "{{ path | default('.') }}/hosts-test.yaml"
+          - "{{ path | default('.') }}/ee-sthings.yaml"
+          - "{{ path | default('.') }}/job-golang.yaml"
 
-          - name: Add EE to the controller instance
-            awx.awx.execution_environment:
-              name: "{{ item.value.name }}"
-              image: "{{ item.value.image }}"
-              validate_certs: false
-            loop: "{{ lookup('dict', execution_environment, wantlist=True) }}"
-            when: execution_environment is defined
-
-          - name: Create job templates
-            awx.awx.job_template:
-              name: "{{ item.value.name }}"
-              job_type: "run"
-              organization: "{{ item.value.organization }}"
-              inventory: "{{ item.value.inventory }}"
-              project: "{{ item.value.project }}"
-              playbook: "{{ item.value.playbook }}"
-              credentials: "{{ item.value.credentials }}"
-              execution_environment: "{{ item.value.executionenv }}"
-              state: "{{ item.value.state }}"
-              validate_certs: true
-              survey_enabled: "{{ item.value.survey_enabled | default(omit) }}"
-              survey_spec: "{{ item.value.survey_spec | default(omit) }}"
-              extra_vars: "{{ item.value.extraVars | default(omit) }}"
-            loop: "{{ lookup('dict', job_templates, wantlist=True) }}"
-            when: job_templates is defined
+        tasks:
+          - ansible.builtin.import_tasks: creation_tasks.yaml
 
 vars:
-  - name: base
+  - name: job-golang
+    file: |
+      ---
+      job_templates:
+        stuttgartThings:
+          name: install-golang
+          organization: stuttgart-things
+          inventory: test-collection
+          project: stuttgart-things
+          playbook: plays/install-golang.yaml
+          credentials: sthings-ssh
+          executionenv: sthings-ee
+          state: present
+          survey_enabled: true
+          survey_spec: "{{ lookup('file', 'vars/survey-golang.yaml') }}"
+
+  - name: survey-golang
+    file: |
+      {
+          "name": "",
+          "description": "",
+          "spec": [
+            {
+              "question_name": "Install which Golang version?",
+              "question_description": "Enter version",
+              "required": true,
+              "type": "text",
+              "variable": "golang_version",
+              "min": null,
+              "max": null,
+              "default": "1.22.3"
+            },
+            {
+              "question_name": "Which checksum belongs to your target version?",
+              "question_description": "Enter checksum",
+              "required": true,
+              "type": "text",
+              "variable": "golang_checksum",
+              "min": null,
+              "max": null,
+              "default": "5fb8b3ed4a78a8eab444dfcb472b8c07a06980dcaee62ce3645edd6d130004c6"
+            },
+            {
+              "question_name": "What is the source url of Golang?",
+              "question_description": "Enter URL",
+              "required": true,
+              "type": "text",
+              "variable": "source_url",
+              "min": null,
+              "max": null,
+              "default": "https://go.dev/dl/go1.22.3.linux-amd64.tar.gz"
+            },
+            {
+              "question_name": "Which user do you want to use?",
+              "question_description": "Enter user name",
+              "required": true,
+              "type": "text",
+              "variable": "go_username",
+              "min": null,
+              "max": null,
+              "default": "sthings"
+            },
+            {
+              "question_name": "To which group does the user belong to?",
+              "question_description": "Enter user group",
+              "required": true,
+              "type": "text",
+              "variable": "go_usergroup",
+              "min": null,
+              "max": null,
+              "default": "sthings"
+            },
+            {
+              "question_name": "Change user homedir?",
+              "question_description": "Enter user home directory",
+              "required": true,
+              "type": "text",
+              "variable": "go_userhome",
+              "min": null,
+              "max": null,
+              "default": "/home/sthings"
+            }
+          ]
+        }
+
+  - name: job-nerdctl
+    file: |
+      ---
+      job_templates:
+        stuttgartThings:
+          name: install-nerdctl
+          organization: stuttgart-things
+          inventory: test-collection
+          project: stuttgart-things
+          playbook: plays/install-nerdctl.yaml
+          credentials: sthings-ssh
+          executionenv: sthings-ee
+          state: present
+          survey_enabled: true
+          survey_spec: "{{ lookup('file', 'vars/survey-nerdctl.yaml') }}"
+
+  - name: survey-nerdctl
+    file: |
+      {
+          "name": "",
+          "description": "",
+          "spec": [
+            {
+              "question_name": "nerdctl version?",
+              "question_description": "choose nerdctl version",
+              "required": true,
+              "type": "multiplechoice",
+              "variable": "nerdctl_version",
+              "choices": ["1.7.5", "1.7.6", "2.0.0-beta.5"],
+              "min": null,
+              "max": null,
+              "default": "1.7.6"
+            }
+          ]
+        }
+
+  - name: job-docker
+    file: |
+      ---
+      job_templates:
+        stuttgartThings:
+          name: install-docker
+          organization: stuttgart-things
+          inventory: test-collection
+          project: stuttgart-things
+          playbook: plays/install-docker.yaml
+          credentials: sthings-ssh
+          executionenv: sthings-ee
+          state: present
+          survey_enabled: true
+          survey_spec: "{{ lookup('file', 'vars/survey-docker.yaml') }}"
+
+  - name: survey-docker
+    file: |
+      {
+          "name": "",
+          "description": "",
+          "spec": [
+            {
+              "question_name": "install docker compose?",
+              "question_description": "choose true or false",
+              "required": true,
+              "type": "multiplechoice",
+              "variable": "docker_install_compose",
+              "choices": ["true", "false"],
+              "min": null,
+              "max": null,
+              "default": "true"
+            },
+            {
+              "question_name": "install kind?",
+              "question_description": "choose true or false",
+              "required": true,
+              "type": "multiplechoice",
+              "variable": "install_kind",
+              "choices": ["true", "false"],
+              "min": null,
+              "max": null,
+              "default": "false"
+            },
+            {
+              "question_name": "kind version?",
+              "question_description": "choose kind version",
+              "required": true,
+              "type": "multiplechoice",
+              "variable": "kind_version",
+              "choices": ["0.23.0", "0.22.0", "0.21.0", "0.20.0"],
+              "min": null,
+              "max": null,
+              "default": "0.22.0"
+            },
+            {
+              "question_name": "kubectl version?",
+              "question_description": "choose kubectl version",
+              "required": true,
+              "type": "multiplechoice",
+              "variable": "kubectl_version",
+              "choices": ["1.30.0", "1.29.0", "1.28.0", "1.27.0"],
+              "min": null,
+              "max": null,
+              "default": "1.30.0"
+            }
+          ]
+        }
+
+  - name: job-awx
+    file: |
+      ---
+      job_templates:
+        stuttgartThings:
+          name: hello AWX
+          organization: stuttgart-things
+          inventory: test-collection
+          project: stuttgart-things
+          playbook: plays/hello-awx.yaml
+          credentials: sthings-ssh
+          executionenv: sthings-ee
+          state: present
+
+  - name: inventory-test
+    file: |
+      ---
+      inventories:
+        testServer:
+          name: test-server
+          description: stuttgart-things organization
+          organization: stuttgart-things
+          state: present
+        testCollection:
+          name: test-collection
+          description: stuttgart-things organization
+          organization: stuttgart-things
+          state: present
+
+  - name: hosts-test
+    file: |
+      ---
+      hosts:
+        localhost:
+          name: localhost
+          description: stuttgart-things organization
+          inventory: test-server
+          state: present
+          vmVariables: {ansible_connection: local}
+        proxmox:
+          name: ubuntu24-awx-test.labul.sva.de
+          description: stuttgart-things organization
+          inventory: test-collection
+          state: present
+
+  - name: organization-sthings
     file: |
       ---
       organizations:
@@ -136,26 +407,23 @@ vars:
           description: stuttgart-things organization
           state: present
 
-      machineCredentials:
-        sthingsSSH:
-          name: sthings-ssh
-          description: stuttgart-things organization
-          organization: stuttgart-things
-          state: present
-          user: sthings
-          awx_ssh_key: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=ssh/data/sthings:privateKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
-
+  - name: scm-creds-sthings
+    file: |
+      ---
       scmCredentials:
         sthingsSCM:
           name: sthings-scm
           organization: stuttgart-things
           state: present
-          awx_ssh_key: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=ssh/data/sthings:privateKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+          awx_ssh_key: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=ssh/data/sthings:privateKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') | b64decode }}"
 
+  - name: projects-sthings
+    file: |
+      ---
       projects:
         stuttgartThings:
           name: stuttgart-things
-          description: 
+          description:
           organization: stuttgart-things
           scm_url: git@codehub.sva.de:Lab/stuttgart-things/stuttgart-things.git
           scm_type: git
@@ -164,33 +432,32 @@ vars:
           scm_update_on_launch: true
           scm_update_cache_timeout: 60
 
+  - name: machine-creds-sthings
+    file: |
+      ---
+      machineCredentials:
+        sthingsSSH:
+          name: sthings-ssh
+          description: stuttgart-things organization
+          organization: stuttgart-things
+          state: present
+          user: sthings
+          awx_ssh_key: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=ssh/data/sthings:privateKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') | b64decode }}"
+
+  - name: ee-sthings
+    file: |
+      ---
       execution_environment:
         sthings-ee:
           name: sthings-ee
           image: eu.gcr.io/stuttgart-things/sthings-awxee:23.6.0
 
-      job_templates:
-        stuttgartThings:
-          name: hello AWX
-          organization: stuttgart-things
-          inventory: test-server
-          project: stuttgart-things
-          playbook: plays/hello-awx.yaml
-          credentials: sthings-ssh
-          executionenv: sthings-ee
-          state: present
-
-      inventories:
-        testServer:
-          name: test-server
-          description: stuttgart-things organization
-          organization: stuttgart-things
-          state: present
-
-      hosts:
-        localhost:
-          name: localhost
-          description: stuttgart-things organization
-          inventory: test-server
-          state: present
-          vmVariables: {ansible_connection: local}
+  - name: awx-local-env
+    file: |
+      ---
+      controller_host: "{{ lookup('env', 'CONTROLLER_HOST') }}"
+      controller_username: "{{ lookup('env', 'CONTROLLER_USERNAME') }}"
+      controller_password: "{{ lookup('env', 'CONTROLLER_PASSWORD') }}"
+      vault_approle_id: "{{ lookup('env', 'VAULT_ROLE_ID') }}"
+      vault_approle_secret: "{{ lookup('env', 'VAULT_SECRET_ID') }}"
+      vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
