@@ -151,14 +151,83 @@ vars:
         stuttgartThings:
           name: code-install-golang
           organization: code-stuttgart-things
-          inventory: code-inv
+          inventory: test-collection
           project: code-stuttgart-things
-          playbook: plays/install-docker.yaml
+          playbook: plays/install-golang.yaml
           credentials: code-sthings-ssh
           executionenv: sthings-ee
           state: present
           survey_enabled: true
-          survey_spec: "{{ lookup('file', 'vars/survey-docker.yaml') }}"
+          survey_spec: "{{ lookup('file', 'vars/survey-golang.yaml') }}"
+
+  - name: survey-golang
+    file: |
+      {
+          "name": "",
+          "description": "",
+          "spec": [
+            {
+              "question_name": "Install which Golang version?",
+              "question_description": "Enter version",
+              "required": true,
+              "type": "text",
+              "variable": "golang_version",
+              "min": null,
+              "max": null,
+              "default": "1.22.3"
+            },
+            {
+              "question_name": "Which checksum belongs to your target version?",
+              "question_description": "Enter checksum",
+              "required": true,
+              "type": "text",
+              "variable": "golang_checksum",
+              "min": null,
+              "max": null,
+              "default": "5fb8b3ed4a78a8eab444dfcb472b8c07a06980dcaee62ce3645edd6d130004c6"
+            },
+            {
+              "question_name": "What is the source url of Golang?",
+              "question_description": "Enter URL",
+              "required": true,
+              "type": "text",
+              "variable": "source_url",
+              "min": null,
+              "max": null,
+              "default": "https://go.dev/dl/go1.22.3.linux-amd64.tar.gz"
+            },
+            {
+              "question_name": "Which user do you want to use?",
+              "question_description": "Enter user name",
+              "required": true,
+              "type": "text",
+              "variable": "go_username",
+              "min": null,
+              "max": null,
+              "default": "sthings"
+            },
+            {
+              "question_name": "To which group does the user belong to?",
+              "question_description": "Enter user group",
+              "required": true,
+              "type": "text",
+              "variable": "go_usergroup",
+              "min": null,
+              "max": null,
+              "default": "sthings"
+            },
+            {
+              "question_name": "Change user homedir?",
+              "question_description": "Enter user home directory",
+              "required": true,
+              "type": "text",
+              "variable": "go_userhome",
+              "min": null,
+              "max": null,
+              "default": "/home/sthings"
+            }
+          ]
+        }
 
   - name: job-docker
     file: |
@@ -167,7 +236,7 @@ vars:
         stuttgartThings:
           name: code-install-docker
           organization: code-stuttgart-things
-          inventory: code-inv
+          inventory: test-collection
           project: code-stuttgart-things
           playbook: plays/install-docker.yaml
           credentials: code-sthings-ssh
@@ -236,7 +305,7 @@ vars:
         stuttgartThings:
           name: hello AWX
           organization: stuttgart-things
-          inventory: test-server
+          inventory: test-collection
           project: stuttgart-things
           playbook: plays/hello-awx.yaml
           credentials: sthings-ssh
@@ -252,6 +321,11 @@ vars:
           description: stuttgart-things organization
           organization: stuttgart-things
           state: present
+        testCollection:
+          name: test-collection
+          description: stuttgart-things organization
+          organization: stuttgart-things
+          state: present
 
   - name: hosts-test
     file: |
@@ -263,6 +337,11 @@ vars:
           inventory: test-server
           state: present
           vmVariables: {ansible_connection: local}
+        proxmox:
+          name: ubuntu24-awx-test.labul.sva.de
+          description: stuttgart-things organization
+          inventory: test-collection
+          state: present
 
   - name: organization-sthings
     file: |
