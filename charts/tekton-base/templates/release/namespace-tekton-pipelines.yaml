@@ -1,10 +1,10 @@
-# Copyright 2021 The Tekton Authors
+# Copyright 2019 The Tekton Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#     https://www.apache.org/licenses/LICENSE-2.0
+#     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,17 +13,10 @@
 # limitations under the License.
 
 apiVersion: v1
-kind: ConfigMap
+kind: Namespace
 metadata:
-  name: pipelines-info
-  namespace: {{ .Values.pipelinesNamespace }}
+  name: tekton-pipelines
   labels:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
-data:
-  # Contains pipelines version which can be queried by external
-  # tools such as CLI. Elevated permissions are already given to
-  # this ConfigMap such that even if we don't have access to
-  # other resources in the namespace we still can have access to
-  # this ConfigMap.
-  version: "v0.60.1"
+    pod-security.kubernetes.io/enforce: restricted

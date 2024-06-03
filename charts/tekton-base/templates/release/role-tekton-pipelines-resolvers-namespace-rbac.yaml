@@ -1,4 +1,4 @@
-# Copyright 2021 The Tekton Authors
+# Copyright 2022 The Tekton Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,18 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: v1
-kind: ConfigMap
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: pipelines-info
-  namespace: {{ .Values.pipelinesNamespace }}
+  name: tekton-pipelines-resolvers-namespace-rbac
+  namespace: tekton-pipelines-resolvers
   labels:
+    app.kubernetes.io/component: resolvers
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
-data:
-  # Contains pipelines version which can be queried by external
-  # tools such as CLI. Elevated permissions are already given to
-  # this ConfigMap such that even if we don't have access to
-  # other resources in the namespace we still can have access to
-  # this ConfigMap.
-  version: "v0.60.1"
+rules:
+  # Needed to watch and load configuration and secret data.
+  - apiGroups: [""]
+    resources: ["configmaps", "secrets"]
+    verbs: ["get", "list", "update", "watch"]
+  # This is needed by leader election to run the controller in HA.
+  - apiGroups: ["coordination.k8s.io"]
+    resources: ["leases"]
+    verbs: ["get", "list", "create", "update", "delete", "patch", "watch"]
