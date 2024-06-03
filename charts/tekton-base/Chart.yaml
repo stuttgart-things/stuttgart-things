@@ -2,8 +2,8 @@ apiVersion: v2
 name: tekton-base
 description: helm chart for deploying tekton-pipelines
 type: application
-version: v0.57.2
-appVersion: v0.57.2
+version: v0.60.2
+appVersion: v0.60.2
 dependencies:
   - name: sthings-helm-toolkit
     version: 2.4.58
