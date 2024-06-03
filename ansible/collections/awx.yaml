@@ -1,6 +1,6 @@
 ---
 name: awx
-version: 0.0.48
+version: 0.0.49
 namespace: sthings
 playbooks:
   - name: creation_tasks
@@ -109,16 +109,9 @@ playbooks:
     play: |
       ---
       - hosts: localhost
-        vars:
-          controller_host: "{{ lookup('env', 'CONTROLLER_HOST') }}"
-          controller_username: "{{ lookup('env', 'CONTROLLER_USERNAME') }}"
-          controller_password: "{{ lookup('env', 'CONTROLLER_PASSWORD') }}"
-
-          vault_approle_id: "{{ lookup('env', 'VAULT_ROLE_ID') }}"
-          vault_approle_secret: "{{ lookup('env', 'VAULT_SECRET_ID') }}"
-          vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
 
         vars_files:
+          - "{{ path | default('.') }}/awx-local-env.yaml"
           - "{{ path | default('.') }}/organization-sthings.yaml"
           - "{{ path | default('.') }}/scm-creds-sthings.yaml"
           - "{{ path | default('.') }}/projects-sthings.yaml"
@@ -131,9 +124,45 @@ playbooks:
         tasks:
           - ansible.builtin.import_tasks: creation_tasks.yaml
 
+  - name: golang
+    play: |
+      ---
+      - hosts: localhost
+
+        vars_files:
+          - "{{ path | default('.') }}/awx-local-env.yaml"
+          - "{{ path | default('.') }}/organization-sthings.yaml"
+          - "{{ path | default('.') }}/scm-creds-sthings.yaml"
+          - "{{ path | default('.') }}/projects-sthings.yaml"
+          - "{{ path | default('.') }}/machine-creds-sthings.yaml"
+          - "{{ path | default('.') }}/inventory-test.yaml"
+          - "{{ path | default('.') }}/hosts-test.yaml"
+          - "{{ path | default('.') }}/ee-sthings.yaml"
+          - "{{ path | default('.') }}/job-golang.yaml"
+
+        tasks:
+          - ansible.builtin.import_tasks: creation_tasks.yaml
+
 vars:
+  - name: job-golang
+    file: |
+      ---
+      job_templates:
+        stuttgartThings:
+          name: code-install-golang
+          organization: code-stuttgart-things
+          inventory: code-inv
+          project: code-stuttgart-things
+          playbook: plays/install-docker.yaml
+          credentials: code-sthings-ssh
+          executionenv: sthings-ee
+          state: present
+          survey_enabled: true
+          survey_spec: "{{ lookup('file', 'vars/survey-docker.yaml') }}"
+
   - name: job-docker
     file: |
+      ---
       job_templates:
         stuttgartThings:
           name: code-install-docker
@@ -288,3 +317,13 @@ vars:
         sthings-ee:
           name: sthings-ee
           image: eu.gcr.io/stuttgart-things/sthings-awxee:23.6.0
+
+  - name: awx-local-env
+    file: |
+      ---
+      controller_host: "{{ lookup('env', 'CONTROLLER_HOST') }}"
+      controller_username: "{{ lookup('env', 'CONTROLLER_USERNAME') }}"
+      controller_password: "{{ lookup('env', 'CONTROLLER_PASSWORD') }}"
+      vault_approle_id: "{{ lookup('env', 'VAULT_ROLE_ID') }}"
+      vault_approle_secret: "{{ lookup('env', 'VAULT_SECRET_ID') }}"
+      vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
