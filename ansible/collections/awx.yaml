@@ -130,7 +130,6 @@ playbooks:
           - "{{ path | default('.') }}/inventory-test.yaml"
           - "{{ path | default('.') }}/hosts-test.yaml"
           - "{{ path | default('.') }}/ee-sthings.yaml"
-          - "{{ path | default('.') }}/schedule-baseos.yaml"
           - "{{ path | default('.') }}/job-docker.yaml"
 
         tasks:
@@ -150,7 +149,6 @@ playbooks:
           - "{{ path | default('.') }}/inventory-test.yaml"
           - "{{ path | default('.') }}/hosts-test.yaml"
           - "{{ path | default('.') }}/ee-sthings.yaml"
-          - "{{ path | default('.') }}/schedule-baseos.yaml"
           - "{{ path | default('.') }}/job-nerdctl.yaml"
 
         tasks:
@@ -170,7 +168,6 @@ playbooks:
           - "{{ path | default('.') }}/inventory-test.yaml"
           - "{{ path | default('.') }}/hosts-test.yaml"
           - "{{ path | default('.') }}/ee-sthings.yaml"
-          - "{{ path | default('.') }}/schedule-baseos.yaml"
           - "{{ path | default('.') }}/job-golang.yaml"
 
         tasks:
