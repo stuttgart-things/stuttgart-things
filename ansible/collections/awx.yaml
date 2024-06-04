@@ -193,7 +193,7 @@ playbooks:
         tasks:
           - ansible.builtin.import_tasks: creation_tasks.yaml
 
-  - name: schedule_baseos
+  - name: schedule-baseos
     play: |
       ---
       - hosts: localhost
