@@ -2,11 +2,11 @@
 apiVersion: tf.upbound.io/v1beta1
 kind: ProviderConfig
 metadata:
-  name: terraform-gcp
+  name: terraform-gcp1
   namespace: crossplane-system
 spec:
   credentials:
-    - filename: terraform.tfvars.json
+    - filename: gcp-credentials.json
       source: Secret
       secretRef:
         namespace: crossplane-system
@@ -17,18 +17,19 @@ spec:
       backend "gcs" {
         bucket  = "sthings-bucket-f0b3f1ee5"
         prefix  = "terraform/state"
+        credentials = "gcp-credentials.json"
       }
     }
 ---
 apiVersion: tf.upbound.io/v1beta1
 kind: Workspace
 metadata:
-  name: tf-gcp
+  name: tf-gcp1
   annotations:
-    crossplane.io/external-name: tf-gcp
+    crossplane.io/external-name: tf-gcp1
 spec:
   providerConfigRef:
-    name: terraform-gcp
+    name: terraform-gcp1
   forProvider:
     source: Inline
     module: |
@@ -37,4 +38,4 @@ spec:
       }
   writeConnectionSecretToRef:
     namespace: default
-    name: terraform-workspace-tf-gcp
+    name: terraform-workspace-tf-gcp1
