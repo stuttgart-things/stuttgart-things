@@ -130,6 +130,7 @@ playbooks:
           - "{{ path | default('.') }}/inventory-test.yaml"
           - "{{ path | default('.') }}/hosts-test.yaml"
           - "{{ path | default('.') }}/ee-sthings.yaml"
+          - "{{ path | default('.') }}/schedule-baseos.yaml"
           - "{{ path | default('.') }}/job-docker.yaml"
 
         tasks:
@@ -149,6 +150,7 @@ playbooks:
           - "{{ path | default('.') }}/inventory-test.yaml"
           - "{{ path | default('.') }}/hosts-test.yaml"
           - "{{ path | default('.') }}/ee-sthings.yaml"
+          - "{{ path | default('.') }}/schedule-baseos.yaml"
           - "{{ path | default('.') }}/job-nerdctl.yaml"
 
         tasks:
@@ -168,6 +170,7 @@ playbooks:
           - "{{ path | default('.') }}/inventory-test.yaml"
           - "{{ path | default('.') }}/hosts-test.yaml"
           - "{{ path | default('.') }}/ee-sthings.yaml"
+          - "{{ path | default('.') }}/schedule-baseos.yaml"
           - "{{ path | default('.') }}/job-golang.yaml"
 
         tasks:
@@ -187,12 +190,13 @@ playbooks:
           - "{{ path | default('.') }}/inventory-test.yaml"
           - "{{ path | default('.') }}/hosts-test.yaml"
           - "{{ path | default('.') }}/ee-sthings.yaml"
+          - "{{ path | default('.') }}/schedule-baseos.yaml"
           - "{{ path | default('.') }}/job-baseos.yaml"
 
         tasks:
           - ansible.builtin.import_tasks: creation_tasks.yaml
 
-  - name: schedule-baseos
+  - name: schedule_baseos
     play: |
       ---
       - hosts: localhost
@@ -206,6 +210,7 @@ playbooks:
           - "{{ path | default('.') }}/inventory-test.yaml"
           - "{{ path | default('.') }}/hosts-test.yaml"
           - "{{ path | default('.') }}/ee-sthings.yaml"
+          - "{{ path | default('.') }}/schedule-baseos.yaml"
           - "{{ path | default('.') }}/job-schedule.yaml"
 
         tasks:
