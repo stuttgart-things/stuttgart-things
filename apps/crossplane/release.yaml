@@ -16,6 +16,10 @@ spec:
         namespace: crossplane-system
       interval: 12h
   values:
+    args:
+      - '--debug'
+      - '--enable-usages'
+      - '--enable-external-secret-stores'
     provider:
       packages:
         - xpkg.upbound.io/crossplane-contrib/provider-helm:v0.17.0
