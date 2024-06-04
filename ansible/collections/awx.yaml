@@ -105,6 +105,17 @@ playbooks:
         loop: "{{ lookup('dict', job_templates, wantlist=True) }}"
         when: job_templates is defined
 
+      - name: Build a schedule for every day except saturday and sunday using the rruleset plugin
+        awx.awx.schedule:
+          name: "{{ item.value.name }}"
+          state: "{{ item.value.state }}"
+          job_type: "{{ item.value.job_type }}"
+          extra_data: "{{ item.value.extra_data }}"
+          unified_job_template: "{{ item.value.unified_job_template }}"
+          rrule: "{{ query('awx.awx.schedule_rruleset',  '{{ start_date }} {{ cron_time }}', rules=rrules, timezone='Europe/Berlin') }}"
+        loop: "{{ lookup('dict', scheduler, wantlist=True) }}"
+        when: scheduler is defined
+
   - name: docker
     play: |
       ---
@@ -177,6 +188,25 @@ playbooks:
           - "{{ path | default('.') }}/hosts-test.yaml"
           - "{{ path | default('.') }}/ee-sthings.yaml"
           - "{{ path | default('.') }}/job-baseos.yaml"
+
+        tasks:
+          - ansible.builtin.import_tasks: creation_tasks.yaml
+
+  - name: schedule-baseos
+    play: |
+      ---
+      - hosts: localhost
+
+        vars_files:
+          - "{{ path | default('.') }}/awx-local-env.yaml"
+          - "{{ path | default('.') }}/organization-sthings.yaml"
+          - "{{ path | default('.') }}/scm-creds-sthings.yaml"
+          - "{{ path | default('.') }}/projects-sthings.yaml"
+          - "{{ path | default('.') }}/machine-creds-sthings.yaml"
+          - "{{ path | default('.') }}/inventory-test.yaml"
+          - "{{ path | default('.') }}/hosts-test.yaml"
+          - "{{ path | default('.') }}/ee-sthings.yaml"
+          - "{{ path | default('.') }}/job-schedule.yaml"
 
         tasks:
           - ansible.builtin.import_tasks: creation_tasks.yaml
@@ -516,6 +546,103 @@ vars:
           ]
         }
 
+  - name: job-schedule
+    file: |
+      ---
+      job_templates:
+        stuttgartThings:
+          name: schedule-baseos
+          organization: stuttgart-things
+          inventory: test-collection
+          project: stuttgart-things
+          playbook: plays/schedule-baseos.yaml
+          credentials: sthings-ssh
+          executionenv: sthings-ee
+          state: present
+          survey_enabled: true
+          survey_spec: "{{ lookup('file', 'vars/survey-schedule.yaml') }}"
+
+  - name: survey-schedule
+    file: |
+      {
+         "name": "",
+         "description": "",
+         "spec": [
+         {
+             "question_name": "What job to run?",
+             "question_description": "Enter job template name",
+             "required": true,
+             "type": "text",
+             "variable": "target_job",
+             "min": null,
+             "max": null,
+             "default": "baseos"
+           },
+           {
+             "question_name": "On which date should this job run? (Format: 2024-06-30)",
+             "question_description": "Enter first day to schedule",
+             "required": true,
+             "type": "text",
+             "variable": "start_date",
+             "min": null,
+             "max": null,
+             "default": ""
+           },
+           {
+             "question_name": "At which time do you want the job to run? (Format: 05:00:00)",
+             "question_description": "Enter cron time",
+             "required": true,
+             "type": "text",
+             "variable": "cron_time",
+             "min": null,
+             "max": null,
+             "default": ""
+           },
+           {
+             "question_name": "With what frequency do you want your job to run?",
+             "question_description": "Choose frequency",
+             "required": true,
+             "type": "multiplechoice",
+             "variable": "frequency_rule",
+             "choices": ["none", "minute", "hour", "day", "week", "month"],
+             "min": null,
+             "max": null,
+             "default": "day"
+           },
+           {
+             "question_name": "With what interval do you want your job to run? (example in description)",
+             "question_description": "frequency=day + interval=1 == daily scheduled run",
+             "required": true,
+             "type": "text",
+             "variable": "interval_rule",
+             "min": null,
+             "max": null,
+             "default": "sthings"
+           },
+           {
+             "question_name": "What name for the schedule?",
+             "question_description": "Enter name",
+             "required": true,
+             "type": "text",
+             "variable": "schedule_name",
+             "min": null,
+             "max": null,
+             "default": "schedule-base-os"
+           },
+           {
+             "question_name": "Do you want the ressource to be created or deleted?",
+             "question_description": "create=present or delete=absent",
+             "required": true,
+             "type": "multiplechoice",
+             "variable": "schedule_state",
+             "choices": ["present", "absent"],
+             "min": null,
+             "max": null,
+             "default": "present"
+           }
+         ]
+       }
+
   - name: job-awx
     file: |
       ---
@@ -555,8 +682,8 @@ vars:
           inventory: test-server
           state: present
           vmVariables: {ansible_connection: local}
-        proxmox:
-          name: ubuntu24-awx-test.labul.sva.de
+        vsphere:
+          name: andretest.labul.sva.de
           description: stuttgart-things organization
           inventory: test-collection
           state: present
@@ -614,6 +741,42 @@ vars:
         sthings-ee:
           name: sthings-ee
           image: eu.gcr.io/stuttgart-things/sthings-awxee:23.6.0
+
+  - name: schedule-baseos
+    file: |
+      ---
+      start_date: "2024-06-30"
+      cron_time: "05:00:00"
+      frequency_rule: "day"
+      interval_rule: 1
+
+      scheduler:
+        schedule_base_os:
+          name: schedule-base-os
+          state: present
+          unified_job_template: "baseos"
+          job_type: "run"
+          extra_data:
+            manage_filesystem: "true"
+            update_packages: "true"
+            install_requirements: "true"
+            install_motd: "true"
+            reboot_all: "false"
+            username: "sthings"
+            lvm_home_sizing: "15%"
+            lvm_root_sizing: "35%"
+            lvm_var_sizing: "50%"
+            send_to_msteams: "true"
+            msteams_webhook_url: "https://365sva.webhook.office.com/webhookb2/2f14a9f8-4736-46dd-9c8c-31547ec37180@0a65cb1e-37d5-41ff-980a-647d9d0e4f0b/IncomingWebhook/37a805a0a2624dc2ac1aedd7dec6ad49/dc3a27ed-396c-40b7-a9b2-f1a2b6b44efe"
+
+      rrules:
+        - frequency: '{{ frequency_rule }}'
+          interval: "{{ interval_rule }}"
+        - frequency: 'day'
+          interval: 1
+          byweekday: [ 'saturday', 'sunday' ]
+          include: False
+
 
   - name: awx-local-env
     file: |
