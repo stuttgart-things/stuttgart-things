@@ -2,29 +2,36 @@
 apiVersion: tf.upbound.io/v1beta1
 kind: ProviderConfig
 metadata:
-  name: inlcluster-sunday-test
+  name: gcp-tuesday-test1
   namespace: crossplane-system
 spec:
+  credentials:
+    - filename: gcp-credentials.json
+      source: Secret
+      secretRef:
+        namespace: crossplane-system
+        name: gcp-secret
+        key: creds
   configuration: |
     terraform {
-      backend "kubernetes" {
-        secret_suffix     = "sunday-test"
-        namespace         = "crossplane-system"
-        in_cluster_config = true
+      backend "gcs" {
+        bucket  = "sthings-bucket-f0b3f1ee7"
+        prefix  = "terraform/state"
+        credentials = "gcp-credentials.json"
       }
     }
 ---
 apiVersion: resources.stuttgart-things.com/v1alpha1
 kind: VsphereVM
 metadata:
-  name: sunday-test
+  name: tuesday-test1
   namespace: crossplane-system
 spec:
   providerRef:
-    name: inlcluster-sunday-test
+    name: gcp-tuesday-test1
   vm:
     count: "1"
-    name: sunday-test
+    name: tuesday-test1
     cpu: "8"
     ram: "4096"
     disk: "64"
@@ -43,7 +50,7 @@ spec:
     secretNamespace: crossplane-system
     secretKey: terraform.tfvars
   connectionSecret:
-    name: sunday-test
+    name: tuesday-test1
     namespace: crossplane-system
   compositionRef:
     name: vsphere-vm

@@ -16,11 +16,12 @@ spec:
         kind: Bucket
         metadata:
           annotations:
-            crossplane.io/external-name: sthings-bucket-f0b3f1ee6
+            crossplane.io/external-name: sthings-bucket-f0b3f1ee7
         spec:
           forProvider:
             location: US
             storageClass: MULTI_REGIONAL
+            forceDestroy: true
           providerConfigRef:
             name: default
           deletionPolicy: Delete
