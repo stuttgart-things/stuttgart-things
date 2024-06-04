@@ -1,6 +1,6 @@
 ---
 name: awx
-version: 0.0.53
+version: 0.0.54
 namespace: sthings
 playbooks:
   - name: creation_tasks
@@ -187,6 +187,7 @@ playbooks:
           - "{{ path | default('.') }}/inventory-test.yaml"
           - "{{ path | default('.') }}/hosts-test.yaml"
           - "{{ path | default('.') }}/ee-sthings.yaml"
+          - "{{ path | default('.') }}/schedule-baseos.yaml"
           - "{{ path | default('.') }}/job-baseos.yaml"
 
         tasks:
@@ -206,6 +207,7 @@ playbooks:
           - "{{ path | default('.') }}/inventory-test.yaml"
           - "{{ path | default('.') }}/hosts-test.yaml"
           - "{{ path | default('.') }}/ee-sthings.yaml"
+          - "{{ path | default('.') }}/schedule-baseos.yaml"
           - "{{ path | default('.') }}/job-schedule.yaml"
 
         tasks:
@@ -617,7 +619,7 @@ vars:
              "variable": "interval_rule",
              "min": null,
              "max": null,
-             "default": "sthings"
+             "default": "1"
            },
            {
              "question_name": "What name for the schedule?",
