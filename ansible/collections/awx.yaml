@@ -622,7 +622,7 @@ vars:
              "variable": "interval_rule",
              "min": null,
              "max": null,
-             "default": "sthings"
+             "default": "1"
            },
            {
              "question_name": "What name for the schedule?",
