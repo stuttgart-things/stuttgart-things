@@ -10,7 +10,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: tekton-events-controller
-    namespace: tekton-pipelines
+    namespace: {{ .Values.pipelinesNamespace }}
 roleRef:
   kind: Role
   name: tekton-pipelines-leader-election
