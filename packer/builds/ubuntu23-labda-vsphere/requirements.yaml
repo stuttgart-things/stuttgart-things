@@ -11,7 +11,7 @@ collections:
   - name: community.vmware
     version: 4.0.1
   - name: community.hashi_vault
-    version: 6.0.0
+    version: 6.2.0
 
 roles:
   - src: https://github.com/stuttgart-things/deploy-configure-rke.git
