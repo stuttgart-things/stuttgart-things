@@ -48,7 +48,7 @@ jobs:
       dir_exists: ${{ steps.check.outputs.dir_exists }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Check if directory exists
         id: check
@@ -80,7 +80,7 @@ jobs:
       FILE_SECRETS_FILE: ${{ inputs.folder }}/file-secrets.yaml
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v4.1.6
         with:
           fetch-depth: '0'
           ref: ${{ inputs.branch }}
@@ -172,7 +172,7 @@ jobs:
       image: ${{ inputs.working-image }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v4.1.6
         with:
           fetch-depth: '0'
           ref: ${{ inputs.branch-name }}
