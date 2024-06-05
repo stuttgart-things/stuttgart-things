@@ -48,7 +48,6 @@ ansible-playbook sthings.base_os.terraform \
 -e object_name=example-object -vv
 ```
 
-
 </details>
 
 <details><summary>ANSIBLE</summary>
