@@ -28,9 +28,15 @@ deploys ansible + dependecies
 
 ```bash
 # VSPHERE-TF-VARS PROFILE
-asible-playbook sthings.base_os.terraform \
+ansible-playbook sthings.base_os.terraform \
 -e tf_project_path=/home/andre/Projects/ansible/awx/base-codehub/terraform/vsphere-andre-vm \
 -e tf_vars_profile=vsphere-terraform -vv
+```
+```bash
+# PROXMOX-TF-VARS PROFILE
+ansible-playbook sthings.base_os.terraform \
+-e tf_project_path=/home/andre/Projects/ansible/awx/base-codehub/terraform/proxmox-andre-vm \
+-e tf_vars_profile=proxmox-terraform -vv
 ```
 
 </details>
