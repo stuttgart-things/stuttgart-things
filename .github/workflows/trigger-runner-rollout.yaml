@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Get token for creating pull request
-        uses: tibdex/github-app-token@v1
+        uses: tibdex/github-app-token@v2
         id: generate-token
         with:
           app_id: ${{ secrets.PULLREQUESTER_APP_ID }}
