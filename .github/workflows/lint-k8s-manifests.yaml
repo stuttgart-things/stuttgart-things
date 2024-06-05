@@ -29,7 +29,7 @@ jobs:
     runs-on: ${{ inputs.runs-on }}
     if: ${{ inputs.helm-chart }}
     container:
-      image: ghcr.io/dtzar/helm-kubectl:3.14.1
+      image: ghcr.io/dtzar/helm-kubectl:3.15.0
     environment: ${{ inputs.environment-name }}
     continue-on-error: ${{ inputs.continue-error }}
     steps:
