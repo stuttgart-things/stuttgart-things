@@ -22,6 +22,19 @@ ansible-playbook sthings.base_os.setup -vv -i /tmp/inv
 
 </details>
 
+<details><summary>TERRAFORM</summary>
+
+deploys ansible + dependecies
+
+```bash
+# VSPHERE-TF-VARS PROFILE
+asible-playbook sthings.base_os.terraform \
+-e tf_project_path=/home/andre/Projects/ansible/awx/base-codehub/terraform/vsphere-andre-vm \
+-e tf_vars_profile=vsphere-terraform -vv
+```
+
+</details>
+
 <details><summary>ANSIBLE</summary>
 
 deploys ansible + dependecies
