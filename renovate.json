@@ -9,7 +9,7 @@
             "fileMatch": [
                 "\\.yaml$"
             ],
-            "datasourceTemplate": "github-releases",
+            "datasourceTemplate": "{{#if datasource}}{{{datasource}}}{{else}}github-releases{{/if}}",
             "matchStrings": [
                 "bin_version:\\s*[\"']?(?<currentValue>[\\w\\.-]*)[\"']?(\\s*.*){0,3}\\s*source_url:\\s*[\"']?https:\/\/github.com\/(?<depName>[^\/]+\/[^\/]+)\/releases\/download",
                 "-\\ssrc:\\s[\"']?https:\/\/github.com\/(?<depName>[^\/]+\/[^\/]+)\\.git[\"']?(\\s*.*)scm:\\sgit\\s*version:\\s[\"']?(?<currentValue>[\\w\\.-]*)[\"']?"
