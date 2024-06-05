@@ -129,14 +129,14 @@ playbooks:
                   state: directory
                   mode: '0755'
 
-              - name: Simple GET operation
+              - name: Download Terraform config from S3 Bucket
                 amazon.aws.s3_object:
                   bucket: "{{ bucket_name }}"
                   object: "{{ object_name }}"
                   dest: "{{ tf_project_path }}/{{ object_name }}"
                   mode: get
-                  access_key: "{{ AWS_ACCESS_KEY_ID }}"
-                  secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+                  access_key: "{{ tf_vars.AWS_ACCESS_KEY_ID }}"
+                  secret_key: "{{ tf_vars.AWS_SECRET_ACCESS_KEY }}"
                   validate_certs: false
                   encrypt: false
                   rgw: false
