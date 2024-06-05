@@ -333,7 +333,7 @@ vars:
           to_remove: gh_{{ gh_version }}_linux_amd64.tar.gz
           bin_dir: "/usr/local/bin"
           version_cmd: "-- version"
-          target_version: {{ gh_version }}
+          target_version: "{{ gh_version }}"
         task:
           bin_name: task
           bin_version: "{{ task_version }}"
@@ -343,7 +343,7 @@ vars:
           to_remove: task_linux_amd64.tar.gz
           bin_dir: "/usr/local/bin"
           version_cmd: "-- version"
-          target_version: {{ task_version }}
+          target_version: "{{ task_version }}"
         hugo:
           bin_name: "hugo"
           bin_version: "0.126.3"
@@ -356,14 +356,14 @@ vars:
           target_version: 0.126.3
         terraform:
           bin_name: "terraform"
-          bin_version: "1.8.4"
+          bin_version: "{{ terraform_version }}"
           check_bin_version_before_installing: true
-          source_url: "https://releases.hashicorp.com/terraform/1.8.3/terraform_1.8.4_linux_amd64.zip"
+          source_url: "https://releases.hashicorp.com/terraform/{{ terraform_version }}/terraform_{{ terraform_version }}_linux_amd64.zip"
           bin_to_copy: "terraform"
           to_remove: "terraform"
           bin_dir: "/usr/local/bin"
           version_cmd: " --version"
-          target_version: v1.8.4
+          target_version: "{{ terraform_version }}"
         packer:
           bin_name: "packer"
           bin_version: "1.10.3"
