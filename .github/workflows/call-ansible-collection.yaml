@@ -252,7 +252,7 @@ jobs:
 
       - name: Upload collection
         id: upload
-        uses: actions/upload-artifact@v4.1.0
+        uses: actions/upload-artifact@v4.3.3
         with:
           name: ${{ env.COLLECTION_PACKAGE }}
           path: ${{ env.COLLECTION_PACKAGE_PATH }}
