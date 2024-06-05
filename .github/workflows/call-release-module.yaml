@@ -62,7 +62,7 @@ jobs:
 
       - name: Release module
         id: release
-        uses: ncipollo/release-action@v1.13.0
+        uses: ncipollo/release-action@v1.14.0
         with:
           name: ${{ inputs.tag-name }}
           artifacts: ${{ env.artifact }}
