@@ -1,4 +1,4 @@
-FROM docker.io/library/ubuntu:22.04@sha256:19478ce7fc2ffbce89df29fea5725a8d12e57de52eb9ea570890dc5852aac1ac
+FROM docker.io/library/ubuntu:24.04@sha256:e3f92abc0967a6c19d0dfa2d55838833e947b9d74edbcb0113e48535ad4be12a
 
 LABEL version=1.8.4-2
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
