@@ -1,6 +1,6 @@
 ---
 name: base_os
-version: 0.4.6
+version: 0.4.7
 namespace: sthings
 requirements: |
   roles:
@@ -96,6 +96,35 @@ playbooks:
             tags: notify
             ignore_errors: true
             when: send_to_msteams|bool
+
+  - name: terraform
+    play: |
+      ---
+      - hosts: localhost
+        vars:
+          vault_approle_id: "{{ lookup('env', 'VAULT_ROLE_ID') }}"
+          vault_approle_secret: "{{ lookup('env', 'VAULT_SECRET_ID') }}"
+          vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
+          state: present
+          force_init: true
+          var_check_mode: true
+
+          #to be defined q/ extra vars
+          #tf_project_path: ""
+          #tf_vars_profile: ##
+
+        vars_files:
+          - "{{ path | default('.') }}/{{ tf_vars_profile }}.yaml"
+
+        tasks:
+          - name: Execute terraform {{ state }}
+            community.general.terraform:
+              project_path: "{{ tf_project_path }}"
+              force_init: "{{ force_init }}"
+              state: "{{ state }}"
+              init_reconfigure: true
+            check_mode: "{{ var_check_mode }}"
+            environment: "{{ tf_vars }}"
 
   - name: ansible
     play: |
@@ -302,6 +331,17 @@ playbooks:
           - role: sthings.base_os.manage_proxmox_resources
 
 vars:
+  - name: vsphere-terraform
+    file: |
+      tf_vars:
+        TF_VAR_vsphere_user: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/vsphere:username validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+        TF_VAR_vsphere_password: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/vsphere:password validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+        TF_VAR_vsphere_server: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/vsphere:ip validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+        TF_VAR_vm_ssh_user: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/vsphere:vm_ssh_user validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+        TF_VAR_vm_ssh_password: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/vsphere:vm_ssh_password validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+        AWS_ACCESS_KEY_ID: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:accessKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+        AWS_SECRET_ACCESS_KEY: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:secretKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+
   - name: users
     file: |
       ---
