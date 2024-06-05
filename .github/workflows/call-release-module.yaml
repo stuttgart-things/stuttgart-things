@@ -32,7 +32,7 @@ jobs:
   Package-Relase-Module:
     runs-on: ${{ inputs.runs-on }}
     container:
-      image: joshkeegan/zip:3.19.0
+      image: joshkeegan/zip:3.20.0
     environment: ${{ inputs.environment-name }}
     permissions:
       contents: write
