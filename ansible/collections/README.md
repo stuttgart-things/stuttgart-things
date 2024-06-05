@@ -38,6 +38,16 @@ ansible-playbook sthings.base_os.terraform \
 -e tf_project_path=/home/andre/Projects/ansible/awx/base-codehub/terraform/proxmox-andre-vm \
 -e tf_vars_profile=proxmox-terraform -vv
 ```
+```bash
+# EXAMPLE GET TERRAFORM CONFIG FROM S3 BUCKET
+ansible-playbook sthings.base_os.terraform \
+-e tf_project_path=/home/andre/Projects/ansible/awx/base-codehub/terraform/vsphere-andre-vm \
+-e tf_vars_profile=vsphere-terraform \
+-e download_config_s3=true \
+-e bucket_name=example-bucket \
+-e object_name=example-object -vv
+```
+
 
 </details>
 
