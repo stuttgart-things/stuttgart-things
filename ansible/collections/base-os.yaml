@@ -1,6 +1,6 @@
 ---
 name: base_os
-version: 0.4.9
+version: 0.5.0
 namespace: sthings
 requirements: |
   roles:
@@ -360,6 +360,7 @@ playbooks:
 vars:
   - name: vsphere-terraform
     file: |
+      s3_endpoint: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:console validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
       tf_vars:
         TF_VAR_vsphere_user: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/vsphere:username validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
         TF_VAR_vsphere_password: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/vsphere:password validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
@@ -371,6 +372,7 @@ vars:
 
   - name: proxmox-terraform
     file: |
+      s3_endpoint: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:console validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
       tf_vars:
         TF_VAR_pve_api_user: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/pve:api_user validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
         TF_VAR_pve_api_password: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/pve:api_password validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
