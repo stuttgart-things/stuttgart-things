@@ -7,7 +7,7 @@ collections:
   - name: ansible.posix
     version: 1.5.4
   - name: kubernetes.core
-    version: 3.0.1
+    version: 3.1.0
   - name: community.vmware
     version: 4.4.0
   - name: community.hashi_vault
