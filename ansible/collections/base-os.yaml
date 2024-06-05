@@ -108,6 +108,9 @@ playbooks:
           state: present
           force_init: true
           check_mode: false
+          object_name: ""
+          bucket_name: ""
+          download_config_s3: false
 
           #to be defined q/ extra vars
           #tf_project_path: ""
@@ -117,6 +120,29 @@ playbooks:
           - "{{ path | default('.') }}/{{ tf_vars_profile }}.yaml"
 
         tasks:
+          - name: block
+            block:
+              - name: Create tf project path {{ tf_vars_profile }}
+                ansible.builtin.file:
+                  path: "{{ tf_project_path }}"
+                  state: directory
+                  mode: '0755'
+
+              - name: Simple GET operation
+                amazon.aws.s3_object:
+                  bucket: "{{ bucket_name }}"
+                  object: "{{ object_name }}"
+                  dest: "{{ tf_project_path }}/{{ object_name }}"
+                  mode: get
+                  access_key: "{{ AWS_ACCESS_KEY_ID }}"
+                  secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+                  validate_certs: false
+                  encrypt: false
+                  rgw: false
+                  permission: [private]
+                  endpoint_url: "{{ s3_endpoint }}"
+            when: download_config_s3 | bool
+
           - name: Execute terraform {{ state }}
             community.general.terraform:
               project_path: "{{ tf_project_path }}"
