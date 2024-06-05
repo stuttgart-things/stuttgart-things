@@ -1,6 +1,21 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended"
-  ]
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": [
+        "config:recommended"
+    ],
+    "customManagers": [
+        {
+            "customType": "regex",
+            "fileMatch": [
+                "\\.yaml$"
+            ],
+            "datasourceTemplate": "github-releases",
+            "matchStrings": [
+                "bin_version:\\s*[\"']?(?<currentValue>[\\w\\.-]*)[\"']?(\\s*.*){0,3}\\s*source_url:\\s*[\"']?https:\/\/github.com\/(?<depName>[^\/]+\/[^\/]+)\/releases\/download",
+                "-\\ssrc:\\s[\"']?https:\/\/github.com\/(?<depName>[^\/]+\/[^\/]+)\\.git[\"']?(\\s*.*)scm:\\sgit\\s*version:\\s[\"']?(?<currentValue>[\\w\\.-]*)[\"']?"
+            ],
+            "versioningTemplate": "loose",
+            "extractVersionTemplate": "^v?(?<version>.*)$"
+        }
+    ]
 }
