@@ -32,7 +32,7 @@ jobs:
   Package-Relase-Module:
     runs-on: ${{ inputs.runs-on }}
     container:
-      image: joshkeegan/zip:3.19.0
+      image: joshkeegan/zip:3.20.0
     environment: ${{ inputs.environment-name }}
     permissions:
       contents: write
@@ -40,7 +40,7 @@ jobs:
     steps:
       - name: Checkout code
         id: checkout
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v4.1.6
         with:
           fetch-depth: '0'
 
@@ -62,7 +62,7 @@ jobs:
 
       - name: Release module
         id: release
-        uses: ncipollo/release-action@v1.13.0
+        uses: ncipollo/release-action@v1.14.0
         with:
           name: ${{ inputs.tag-name }}
           artifacts: ${{ env.artifact }}

@@ -112,6 +112,7 @@ playbooks:
           bucket_name: ""
           download_config_s3: false
 
+
           #to be defined q/ extra vars
           #tf_project_path: ""
           #tf_vars_profile: ##
