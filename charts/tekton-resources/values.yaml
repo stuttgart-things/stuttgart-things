@@ -533,7 +533,7 @@ tasks:
           - --digest-file=$(results.IMAGE_DIGEST.path)
           - --insecure
       write-url:
-        image: docker.io/library/bash:5.1.4@sha256:d6fbca4fa8195c4b6a23f8599b022d3d4287b52622b6ebae3291f0f074edd1c2
+        image: docker.io/library/bash:5.2.26@sha256:b0644a10c7961325e6d1540e3b0350cda3cb8a82d39019374f8bef5dec32d7ac
         script: |
           set -e
           image="$(params.IMAGE)"
