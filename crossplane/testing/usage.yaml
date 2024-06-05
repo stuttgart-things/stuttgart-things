@@ -13,3 +13,22 @@ spec:
     kind: Workspace
     resourceRef:
       name: tuesday-test1-kx7fb-vc7kn
+# ---
+# apiVersion: apiextensions.crossplane.io/v1alpha1
+# kind: Usage
+# metadata:
+#   name: release-uses-cluster
+# spec:
+#   of:
+#     apiVersion: eks.upbound.io/v1beta1
+#     kind: Cluster
+#     resourceSelector:
+#       matchControllerRef: false # default, and could be omitted
+#       matchLabels:
+#         foo: bar
+#   by:
+#     apiVersion: helm.crossplane.io/v1beta1
+#     kind: Release
+#     resourceSelector:
+#        matchLabels:
+#           baz: qux
