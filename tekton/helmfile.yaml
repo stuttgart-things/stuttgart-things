@@ -4,7 +4,7 @@ releases:
     installed: false
     namespace: packer
     chart: stuttgart-things/tekton-resources
-    version: v0.47.15
+    version: v0.47.36
     values:
       - "workspaces/tekton-packer.yaml.gotmpl"
       - "secrets/git-ssh-credentials.yaml.gotmpl"
@@ -18,7 +18,7 @@ releases:
     installed: false
     namespace: ansible
     chart: stuttgart-things/tekton-resources
-    version: v0.47.15
+    version: v0.47.36
     values:
       - "workspaces/tekton-ansible.yaml.gotmpl"
       # - "secrets/git-ssh-credentials.yaml.gotmpl"
@@ -32,7 +32,7 @@ releases:
     installed: false
     namespace: kaniko
     chart: stuttgart-things/tekton-resources
-    version: v0.47.15
+    version: v0.47.36
     values:
       # - "workspaces/tekton-kaniko.yaml.gotmpl"
       # - "secrets/scr-registry-credentials.yaml.gotmpl"
@@ -48,7 +48,7 @@ releases:
     installed: true
     namespace: tekton-cd
     chart: stuttgart-things/tekton-resources
-    version: v0.47.15
+    version: v0.47.36
     values:
       # - "workspaces/tekton-helm.yaml.gotmpl"
       # - "secrets/scr-registry-credentials.yaml.gotmpl"
@@ -64,7 +64,7 @@ releases:
     installed: false
     namespace: buildah2
     chart: stuttgart-things/tekton-resources
-    version: v0.47.15
+    version: v0.47.36
     values:
       - "workspaces/tekton-kaniko.yaml.gotmpl"
       - "secrets/scr-registry-credentials.yaml.gotmpl"
