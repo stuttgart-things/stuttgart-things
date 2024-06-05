@@ -339,7 +339,7 @@ jobs:
 
       - name: Upload VM variables
         id: upload
-        uses: actions/upload-artifact@v4.1.0
+        uses: actions/upload-artifact@v4.3.3
         with:
           name: ${{ inputs.vm-name }}-variables
           path: ${{ inputs.vm-name }}.yaml

@@ -64,7 +64,7 @@ jobs:
           fi
 
       - name: Upload scan results as artifacts
-        uses: actions/upload-artifact@v4.3.0
+        uses: actions/upload-artifact@v4.3.3
         with:
           name: polaris-results
           path: /tmp/polaris-results.json

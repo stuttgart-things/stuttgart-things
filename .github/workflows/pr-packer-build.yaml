@@ -86,7 +86,7 @@ jobs:
 
       - name: Upload Packer logfile
         id: upload
-        uses: actions/upload-artifact@v4.1.0
+        uses: actions/upload-artifact@v4.3.3
         with:
           name: ${{ needs.Get-Packer-Config.outputs.lab }}-${{ needs.Get-Packer-Config.outputs.cloud }}-${{ needs.Get-Packer-Config.outputs.os-version }}-${{ needs.Get-Packer-Config.outputs.build-date }}
           path: packer/builds/${{ github.event.pull_request.head.ref }}/packer.log
