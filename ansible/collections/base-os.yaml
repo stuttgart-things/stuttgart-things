@@ -1,6 +1,6 @@
 ---
 name: base_os
-version: 0.4.5
+version: 0.4.6
 namespace: sthings
 requirements: |
   roles:
@@ -321,6 +321,7 @@ vars:
       ---
       terraform_version: 1.8.3 # datasource=github-tags depName=hashicorp/terraform
       gh_version: 2.49.2 # datasource=github-tags depName=cli/cli
+      task_version: v3.37.2 # datasource=github-tags depName=go-task/task
 
       bin:
         gh:
@@ -335,14 +336,14 @@ vars:
           target_version: {{ gh_version }}
         task:
           bin_name: task
-          bin_version: "v3.37.2"
+          bin_version: "{{ task_version }}"
           check_bin_version_before_installing: true
-          source_url: "https://github.com/go-task/task/releases/download/v3.37.2/task_linux_amd64.tar.gz"
+          source_url: "https://github.com/go-task/task/releases/download/{{ task_version }}/task_linux_amd64.tar.gz"
           bin_to_copy: task
           to_remove: task_linux_amd64.tar.gz
           bin_dir: "/usr/local/bin"
           version_cmd: "-- version"
-          target_version: v3.37.2
+          target_version: {{ task_version }}
         hugo:
           bin_name: "hugo"
           bin_version: "0.126.3"
