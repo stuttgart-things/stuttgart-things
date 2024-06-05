@@ -560,7 +560,7 @@ tasks:
         description: message to notify about
     steps:
       post:
-        image: curlimages/curl:7.84.0
+        image: curlimages/curl:7.88.1
         env:
           MESSAGE:
             value: $(params.message)
