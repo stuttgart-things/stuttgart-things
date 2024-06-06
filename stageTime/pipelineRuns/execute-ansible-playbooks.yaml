@@ -1,3 +1,82 @@
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  labels:
+    tekton.dev/pipeline: execute-ansible-playbooks
+  name: baseos-dev17-9
+  namespace: tektoncd
+spec:
+  params:
+  - name: ansibleWorkingImage
+    value: eu.gcr.io/stuttgart-things/sthings-ansible:10.0.1
+  - name: createInventory
+    value: "true"
+  - name: gitRepoUrl
+    value: https://github.com/stuttgart-things/stuttgart-things.git
+  - name: gitRevision
+    value: main
+  - name: gitWorkspaceSubdirectory
+    value: /ansible/workdir/
+  - name: vaultSecretName
+    value: vault
+  - name: installExtraRoles
+    value: "true"
+  - name: ansibleExtraRoles
+    value:
+    - https://github.com/stuttgart-things/install-requirements.git,2024.05.11
+    - https://github.com/stuttgart-things/manage-filesystem.git,2024.05.15
+    - https://github.com/stuttgart-things/install-configure-vault.git
+    - https://github.com/stuttgart-things/create-send-webhook.git,2024-06-06
+  - name: ansiblePlaybooks
+    value:
+    - ansible/playbooks/prepare-env.yaml
+    - ansible/playbooks/base-os.yaml
+  - name: ansibleVarsFile
+    value:
+    - manage_filesystem+-true
+    - update_packages+-true
+    - install_requirements+-true
+    - install_motd+-true
+    - username+-sthings
+    - lvm_home_sizing+-'15%'
+    - lvm_root_sizing+-'35%'
+    - lvm_var_sizing+-'50%'
+    - send_to_msteams+-true
+    - reboot_all+-false
+  - name: ansibleVarsInventory
+    value:
+    - all+["dev17.labul.sva.de"]
+  - name: ansibleExtraCollections
+    value:
+    - https://github.com/stuttgart-things/stuttgart-things/releases/download/0.5.0/sthings-base_os-0.5.0.tar.gz
+    - community.crypto:2.10.0
+  - name: installExtraCollections
+    value: "true"
+  pipelineRef:
+    params:
+    - name: url
+      value: https://github.com/stuttgart-things/stuttgart-things.git
+    - name: revision
+      value: main
+    - name: pathInRepo
+      value: stageTime/pipelines/execute-ansible-playbooks.yaml
+    resolver: git
+  taskRunTemplate:
+    serviceAccountName: default
+  timeouts:
+    pipeline: 1h0m0s
+  workspaces:
+  - name: shared-workspace
+    volumeClaimTemplate:
+      metadata:
+        creationTimestamp: null
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 20Mi
+        storageClassName: openebs-hostpath
 ---
 apiVersion: tekton.dev/v1
 kind: PipelineRun
