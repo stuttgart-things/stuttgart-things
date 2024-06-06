@@ -5,7 +5,7 @@ metadata:
   name: baseos-dev17
   namespace: crossplane-system
 spec:
-  pipelineRunName: baseos-dev17-6
+  pipelineRunName: baseos-dev17-7
   inventory:
     - "all+[\"dev17.labul.sva.de\"]"
   playbooks:
@@ -30,12 +30,13 @@ spec:
   pipelineNamespace: tektoncd
   workingImage: eu.gcr.io/stuttgart-things/sthings-ansible:10.0.1
   roles:
-    - "https://github.com/stuttgart-things/install-requirements.git"
-    - "https://github.com/stuttgart-things/manage-filesystem.git"
+    - "https://github.com/stuttgart-things/install-requirements.git,2024.05.1"
+    - "https://github.com/stuttgart-things/manage-filesystem.git,2024.05.15"
     - "https://github.com/stuttgart-things/install-configure-vault.git"
-    - "https://github.com/stuttgart-things/create-send-webhook.git"
+    - "https://github.com/stuttgart-things/create-send-webhook.git,2024-06-06"
   collections:
     - https://github.com/stuttgart-things/stuttgart-things/releases/download/0.5.0/sthings-base_os-0.5.0.tar.gz
+    - community.crypto:2.10.0
 ---
 # # PDNS
 # apiVersion: resources.stuttgart-things.com/v1alpha1
