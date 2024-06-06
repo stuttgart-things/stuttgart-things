@@ -172,7 +172,7 @@ spec:
 
           for param in "$@"
           do
-            ansible-galaxy collection install git+${param} -f -p ./collections
+            ansible-galaxy collection install ${param} -f -p ./collections
             ls -lta ./collections/ansible_collections
           done
 
