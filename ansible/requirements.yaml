@@ -9,7 +9,7 @@ roles:
   - src: https://github.com/stuttgart-things/install-requirements.git
     scm: git
   - src: https://github.com/stuttgart-things/create-send-webhook.git
-    version: 2024-06-06
+    #version: 2024-06-06
     scm: git
   - src: https://github.com/stuttgart-things/install-configure-vault.git
     scm: git
