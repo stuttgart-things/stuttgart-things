@@ -52,4 +52,4 @@ collections:
   - name: https://github.com/stuttgart-things/stuttgart-things/releases/download/0.5.0/sthings-base_os-0.5.0.tar.gz
   - name: https://github.com/stuttgart-things/stuttgart-things/releases/download/0.0.22/sthings-container-0.0.22.tar.gz
   - name: https://github.com/stuttgart-things/deploy-configure-rke/releases/download/1.29.4/sthings-deploy_rke-1.29.4.tar.gz
-  - name: https://github.com/stuttgart-things/stuttgart-things/releases/download/0.0.55/sthings-awx-0.0.55.tar.gz
+  - name: https://github.com/stuttgart-things/stuttgart-things/releases/download/0.0.56/sthings-awx-0.0.56.tar.gz
