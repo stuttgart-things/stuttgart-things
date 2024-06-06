@@ -46,13 +46,10 @@ spec:
                             storage: 20Mi
                 params:
                   - name: ansibleWorkingImage
-                    value: "eu.gcr.io/stuttgart-things/sthings-ansible:10.0.1"
                   - name: createInventory
                     value: "true"
                   - name: gitRepoUrl
-                    value: https://github.com/stuttgart-things/stuttgart-things.git
                   - name: gitRevision
-                    value: "rancher-280"
                   - name: gitWorkspaceSubdirectory
                     value: "/ansible/workdir/"
                   - name: vaultSecretName
@@ -60,41 +57,12 @@ spec:
                   - name: installExtraRoles
                     value: "true"
                   - name: ansibleExtraRoles
-                    value:
-                      - "https://github.com/stuttgart-things/install-requirements.git"
-                      - "https://github.com/stuttgart-things/manage-filesystem.git"
-                      - "https://github.com/stuttgart-things/install-configure-vault.git"
-                      - "https://github.com/stuttgart-things/deploy-configure-rke"
                   - name: ansiblePlaybooks
-                    # value:
-                    #   - "ansible/playbooks/prepare-env.yaml"
-                    #   - "ansible/playbooks/base-os.yaml"
-                    #   - "ansible/playbooks/deploy-rke2.yaml"
-                    #   - "ansible/playbooks/upload-kubeconfig-vault.yaml"
                   - name: ansibleVarsFile
-                    # value:
-                    #   - "manage_filesystem+-true"
-                    #   - "update_packages+-true"
-                    #   - "install_requirements+-true"
-                    #   - "install_motd+-true"
-                    #   - "username+-sthings"
-                    #   - "lvm_home_sizing+-'15%'"
-                    #   - "lvm_root_sizing+-'35%'"
-                    #   - "lvm_var_sizing+-'50%'"
-                    #   - "send_to_msteams+-true"
-                    #   - "reboot_all+-false"
-                    #   - "cluster_name+-sandiego"
-                    #   - "rke2_k8s_version+-1.27.7"
-                    #   - "rke2_release_kind+-rke2r2"
-                    #   - "cluster_setup+-singleode"
-                    #   - "target_host+-sandiego.labul.sva.de"
-                    #   - "kubeconfig_path+-/etc/rancher/rke2/rke2.yaml"
-                    #   - "secret_path_kubeconfig+-kubeconfigs"
-                    #   # - "pause_time+-10"
                   - name: ansibleVarsInventory
-                    # value:
-                    #   - "initial_master_node+[\"sandiego.labul.sva.de\"]"
-                    #   - "additional_master_nodes+[\"\"]"
+                  - name: ansibleExtraCollections
+                  - name: installExtraCollections
+                    value: "true"
       patches:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.pipelineRunName
@@ -126,6 +94,9 @@ spec:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.inventory
           toFieldPath: spec.forProvider.manifest.spec.params[10].value
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.collections
+          toFieldPath: spec.forProvider.manifest.spec.params[11].value
         - type: FromCompositeFieldPath
           fromFieldPath: spec.providerRef.name
           toFieldPath: spec.providerConfigRef.name

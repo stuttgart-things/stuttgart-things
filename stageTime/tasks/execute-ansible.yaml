@@ -221,6 +221,10 @@ spec:
         if [ -d "roles" ]; then cp -R roles/* ${HOME}/.ansible/roles/ ; fi
         ansible-galaxy role list
 
+        echo "list installed collections"
+        if [ -d "roles" ]; then cp -R collections/* ${HOME}/.ansible/collections/ ; fi
+        ansible-galaxy collection list
+
         echo "you know.. for running a playbook or 2"
         touch inventory
         for playbook in "$@"

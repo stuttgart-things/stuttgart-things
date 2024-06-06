@@ -63,6 +63,11 @@ spec:
                   description: Ansible roles
                   items:
                     type: string
+                collections:
+                  type: array
+                  description: Ansible collections
+                  items:
+                    type: string
                 playbooks:
                   type: array
                   description: Ansible playbooks

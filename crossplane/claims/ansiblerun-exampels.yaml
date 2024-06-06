@@ -2,10 +2,10 @@
 apiVersion: resources.stuttgart-things.com/v1alpha1
 kind: AnsibleRun
 metadata:
-  name: baseos-dev17-2
+  name: baseos-dev17
   namespace: crossplane-system
 spec:
-  pipelineRunName: baseos-dev17-2
+  pipelineRunName: baseos-dev17-6
   inventory:
     - "all+[\"dev17.labul.sva.de\"]"
   playbooks:
@@ -34,6 +34,8 @@ spec:
     - "https://github.com/stuttgart-things/manage-filesystem.git"
     - "https://github.com/stuttgart-things/install-configure-vault.git"
     - "https://github.com/stuttgart-things/create-send-webhook.git"
+  collections:
+    - https://github.com/stuttgart-things/stuttgart-things/releases/download/0.5.0/sthings-base_os-0.5.0.tar.gz
 ---
 # # PDNS
 # apiVersion: resources.stuttgart-things.com/v1alpha1
