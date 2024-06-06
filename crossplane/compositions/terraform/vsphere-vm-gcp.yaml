@@ -10,21 +10,38 @@ spec:
     apiVersion: resources.stuttgart-things.com/v1alpha1
     kind: XVsphereVMGCP
   resources:
-    - name: gcp-bucket
+    # - name: gcp-bucket
+    #   base:
+    #     apiVersion: storage.gcp.upbound.io/v1beta1
+    #     kind: Bucket
+    #     metadata:
+    #       annotations:
+    #         crossplane.io/external-name: sthings-gcp-bucket
+    #     spec:
+    #       forProvider:
+    #         location: US
+    #         storageClass: MULTI_REGIONAL
+    #         forceDestroy: true
+    #       deletionPolicy: Delete
+    #       providerConfigRef:
+    #         name: default
+    #   patches:
+    #     - type: CombineFromComposite
+    #       combine:
+    #         variables:
+    #           - fromFieldPath: spec.vm.name
+    #           - fromFieldPath: spec.bucket.suffix
+    #         strategy: string
+    #         string:
+    #           fmt: "sthings-vspherevm-%s-%s"
+    #       toFieldPath: "metadata.annotations[crossplane.io/external-name]"
+    - name: vsphere-vm
       base:
-        apiVersion: storage.gcp.upbound.io/v1beta1
-        kind: Bucket
+        apiVersion: resources.stuttgart-things.com/v1alpha1
+        kind: XVsphereVM
         metadata:
           annotations:
-            crossplane.io/external-name: sthings-gcp-bucket
-        spec:
-          forProvider:
-            location: US
-            storageClass: MULTI_REGIONAL
-            forceDestroy: true
-          deletionPolicy: Delete
-          providerConfigRef:
-            name: default
+            crossplane.io/external-name: vsphere-vm
       patches:
         - type: CombineFromComposite
           combine:
@@ -33,13 +50,8 @@ spec:
               - fromFieldPath: spec.bucket.suffix
             strategy: string
             string:
-              fmt: "sthings-vspherevm-%s-%s"
+              fmt: "vspherevm-%s-gcp-%s"
           toFieldPath: "metadata.annotations[crossplane.io/external-name]"
-    - name: vsphere-vm
-      base:
-        apiVersion: resources.stuttgart-things.com/v1alpha1
-        kind: XVsphereVM
-      patches:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.vm.count
           toFieldPath: spec.vm.count
@@ -103,3 +115,6 @@ spec:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.compositionRef.name
           toFieldPath: spec.compositionRef.name
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.providerRef.name
+          toFieldPath: spec.providerRef.name

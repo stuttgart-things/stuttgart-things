@@ -16,7 +16,7 @@ spec:
         apiVersion: tf.upbound.io/v1beta1
         metadata:
           annotations:
-            crossplane.io/external-name: vsphere-vm
+            crossplane.io/external-name: vspherevm
         spec:
           providerConfigRef:
             name: terraform-default
