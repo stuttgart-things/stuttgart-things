@@ -5,7 +5,7 @@
 ### INSTALLATION
 
 ```bash
-VERSION=0.5.0
+VERSION=0.4.1
 ansible-galaxy collection install -f \
 https://github.com/stuttgart-things/stuttgart-things/releases/download/${VERSION}/sthings-base_os-${VERSION}.tar.gz
 ```
@@ -124,7 +124,7 @@ ansible-playbook sthings.base_os.delete_proxmox -vv -e vmname_delete=example-nam
 ### INSTALLATION
 
 ```bash
-VERSION=0.0.22
+VERSION=0.0.20
 ansible-galaxy collection install -f \
 https://github.com/stuttgart-things/stuttgart-things/releases/download/${VERSION}/sthings-container-${VERSION}.tar.gz
 ```
@@ -176,21 +176,10 @@ ansible-playbook sthings.container.tools -i /tmp/inv -vv
 ### INSTALLATION
 
 ```bash
-VERSION=0.0.57
+VERSION=0.0.48
 ansible-galaxy collection install -f \
 https://github.com/stuttgart-things/stuttgart-things/releases/download/${VERSION}/sthings-awx-${VERSION}.tar.gz
 ```
-
-### VARIABLES
-
-<details><summary>VARIABLES</summary>
-
-* name:         Name of the job-template
-* inventory:    Name of the inventory to use
-* project:      Name of the Project the job-template should belong to
-* state:        'present' to create job-template, 'absent' to delete job-template
-
-</details>
 
 ### PLAYBOOKS
 
@@ -203,53 +192,6 @@ export CONTROLLER_HOST=https://awx.<DOMAIN>.sva.de #EXAMPLE!
 export CONTROLLER_USERNAME=admin #EXAMPLE!
 export CONTROLLER_PASSWORD=<PASSWORD>
 ansible-playbook sthings.awx.docker -vv
-```
-
-</details>
-
-<details><summary>NERDCTL</summary>
-
-nerdctl deployment awx job template w/ survey
-
-```bash
-export CONTROLLER_HOST=https://awx.<DOMAIN>.sva.de #EXAMPLE!
-export CONTROLLER_USERNAME=admin #EXAMPLE!
-export CONTROLLER_PASSWORD=<PASSWORD>
-ansible-playbook sthings.awx.nerdctl -vv
-```
-
-</details>
-
-<details><summary>GOLANG</summary>
-
-golang deployment awx job template w/ survey
-
-```bash
-export CONTROLLER_HOST=https://awx.<DOMAIN>.sva.de #EXAMPLE!
-export CONTROLLER_USERNAME=admin #EXAMPLE!
-export CONTROLLER_PASSWORD=<PASSWORD>
-ansible-playbook sthings.awx.golang -vv
-```
-
-</details>
-
-<details><summary>BASE-OS</summary>
-
-base-os deployment awx job template w/ survey
-
-```bash
-export CONTROLLER_HOST=https://awx.<DOMAIN>.sva.de #EXAMPLE!
-export CONTROLLER_USERNAME=admin #EXAMPLE!
-export CONTROLLER_PASSWORD=<PASSWORD>
-ansible-playbook sthings.awx.baseos -vv
-```
-
-base-os deployment awx job template w/ survey AND scheduler
-```bash
-export CONTROLLER_HOST=https://awx.<DOMAIN>.sva.de #EXAMPLE!
-export CONTROLLER_USERNAME=admin #EXAMPLE!
-export CONTROLLER_PASSWORD=<PASSWORD>
-ansible-playbook sthings.awx.baseos -vv -e target_host=example.labul.sva.de
 ```
 
 </details>
