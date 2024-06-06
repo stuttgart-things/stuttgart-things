@@ -25,12 +25,20 @@ spec:
       description: ansible extra roles
       type: array
       default: []
+    - name: EXTRA_COLLECTIONS
+      description: ansible extra collections
+      type: array
+      default: []
     - name: EXTRA_VARS
       description: ansible extra vars
       type: array
       default: []
     - name: INSTALL_EXTRA_ROLES
-      description: install roles and collections
+      description: install roles
+      type: string
+      default: "false"
+    - name: INSTALL_EXTRA_COLLECTIONS
+      description: install collections
       type: string
       default: "false"
     - name: INVENTORY_VARS
@@ -135,7 +143,8 @@ spec:
         set -eu
 
         if [ "$(params.INSTALL_EXTRA_ROLES)" = "true" ] ; then
-          echo "you know.. for install"
+          echo "you know.. for installing additional roles"
+
           for param in "$@"
           do
             ansible-galaxy install git+${param} -f --roles-path ./roles
@@ -144,6 +153,31 @@ spec:
 
         else
           echo "skipped installing additional roles"
+        fi
+    - name: install-collections
+      workingDir: $(workspaces.source.path)/$(params.SUB_DIRECTORY)
+      args:
+        - $(params.EXTRA_COLLECTIONS[*])
+      image: "$(params.WORKING_IMAGE)"
+      securityContext:
+        privileged: false
+        runAsNonRoot: true
+        runAsUser: 65532
+      script: |
+        #!/usr/bin/env sh
+        set -eu
+
+        if [ "$(params.INSTALL_EXTRA_COLLECTIONS)" = "true" ] ; then
+          echo "you know.. for installing additional collections"
+
+          for param in "$@"
+          do
+            ansible-galaxy collection install git+${param} -f -p ./collections
+            ls -lta ./collections/ansible_collections
+          done
+
+        else
+          echo "skipped installing additional collections"
         fi
     - name: run-ansible-playbook
       workingDir: $(workspaces.source.path)/$(params.SUB_DIRECTORY)

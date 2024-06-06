@@ -1,39 +1,40 @@
-# # BASE-OS
-# apiVersion: resources.stuttgart-things.com/v1alpha1
-# kind: AnsibleRun
-# metadata:
-#   name: baseos-sandiego-1
-#   namespace: default
-# spec:
-#   pipelineRunName: baseos-sandiego5
-#   inventory:
-#     - "all+[\"sandiego.labul.sva.de\"]"
-#   playbooks:
-#     - "ansible/playbooks/prepare-env.yaml"
-#     - "ansible/playbooks/base-os.yaml"
-#   ansibleVarsFile:
-#     - "manage_filesystem+-true"
-#     - "update_packages+-true"
-#     - "install_requirements+-true"
-#     - "install_motd+-true"
-#     - "username+-sthings"
-#     - "lvm_home_sizing+-'15%'"
-#     - "lvm_root_sizing+-'35%'"
-#     - "lvm_var_sizing+-'50%'"
-#     - "send_to_msteams+-true"
-#     - "reboot_all+-false"
-#   gitRepoUrl: https://github.com/stuttgart-things/stuttgart-things.git
-#   gitRevision: main
-#   providerRef:
-#     name: kubernetes-incluster
-#   vaultSecretName: vault
-#   pipelineNamespace: tektoncd
-#   workingImage: eu.gcr.io/stuttgart-things/sthings-ansible:9.21.0
-#   roles:
-#     - "https://github.com/stuttgart-things/install-requirements.git"
-#     - "https://github.com/stuttgart-things/manage-filesystem.git"
-#     - "https://github.com/stuttgart-things/install-configure-vault.git"
-# ---
+# BASE-OS
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: AnsibleRun
+metadata:
+  name: baseos-dev17-2
+  namespace: crossplane-system
+spec:
+  pipelineRunName: baseos-dev17-2
+  inventory:
+    - "all+[\"dev17.labul.sva.de\"]"
+  playbooks:
+    - "ansible/playbooks/prepare-env.yaml"
+    - "ansible/playbooks/base-os.yaml"
+  ansibleVarsFile:
+    - "manage_filesystem+-true"
+    - "update_packages+-true"
+    - "install_requirements+-true"
+    - "install_motd+-true"
+    - "username+-sthings"
+    - "lvm_home_sizing+-'15%'"
+    - "lvm_root_sizing+-'35%'"
+    - "lvm_var_sizing+-'50%'"
+    - "send_to_msteams+-true"
+    - "reboot_all+-false"
+  gitRepoUrl: https://github.com/stuttgart-things/stuttgart-things.git
+  gitRevision: main
+  providerRef:
+    name: kubernetes-incluster
+  vaultSecretName: vault
+  pipelineNamespace: tektoncd
+  workingImage: eu.gcr.io/stuttgart-things/sthings-ansible:10.0.1
+  roles:
+    - "https://github.com/stuttgart-things/install-requirements.git"
+    - "https://github.com/stuttgart-things/manage-filesystem.git"
+    - "https://github.com/stuttgart-things/install-configure-vault.git"
+    - "https://github.com/stuttgart-things/create-send-webhook.git"
+---
 # # PDNS
 # apiVersion: resources.stuttgart-things.com/v1alpha1
 # kind: AnsibleRun
