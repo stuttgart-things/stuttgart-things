@@ -1,4 +1,4 @@
-FROM docker.io/bitnami/minio:2024.6.4-debian-12-r0
+FROM docker.io/bitnami/minio:2024.6.6-debian-12-r0
 
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 LABEL version=13.3.3
