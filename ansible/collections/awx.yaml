@@ -1,6 +1,6 @@
 ---
 name: awx
-version: 0.0.55
+version: 0.0.57
 namespace: sthings
 playbooks:
   - name: creation_tasks
@@ -114,6 +114,7 @@ playbooks:
           credentials: "{{ item.value.credentials }}"
           execution_environment: "{{ item.value.executionenv }}"
           state: "{{ item.value.state }}"
+          ask_verbosity_on_launch: "{{ item.value.ask_verbosity_on_launch }}"
           validate_certs: true
           survey_enabled: "{{ item.value.survey_enabled | default(omit) }}"
           survey_spec: "{{ item.value.survey_spec | default(omit) }}"
@@ -130,7 +131,7 @@ playbooks:
           unified_job_template: "{{ item.value.unified_job_template }}"
           rrule: "{{ query('awx.awx.schedule_rruleset',  '{{ start_date }} {{ cron_time }}', rules=rrules, timezone='Europe/Berlin') }}"
         loop: "{{ lookup('dict', scheduler, wantlist=True) }}"
-        when: scheduler is defined
+        when: scheduler is defined and target_host != 'localhost'
 
   - name: docker
     play: |
@@ -213,7 +214,7 @@ playbooks:
         tasks:
           - ansible.builtin.import_tasks: creation_tasks.yaml
 
-  - name: schedule-baseos
+  - name: schedule_baseos
     play: |
       ---
       - hosts: localhost
@@ -234,6 +235,27 @@ playbooks:
         tasks:
           - ansible.builtin.import_tasks: creation_tasks.yaml
 
+  - name: hello_awx
+    play: |
+      ---
+      - hosts: localhost
+
+        vars_files:
+          - "{{ path | default('.') }}/awx-local-env.yaml"
+          - "{{ path | default('.') }}/organization-sthings.yaml"
+          - "{{ path | default('.') }}/scm-creds-sthings.yaml"
+          - "{{ path | default('.') }}/projects-sthings.yaml"
+          - "{{ path | default('.') }}/machine-creds-sthings.yaml"
+          - "{{ path | default('.') }}/dynamic-inventory-vsphere.yaml"
+          - "{{ path | default('.') }}/inventory-source.yaml"
+          - "{{ path | default('.') }}/hosts-test.yaml"
+          - "{{ path | default('.') }}/ee-sthings.yaml"
+          - "{{ path | default('.') }}/schedule-baseos.yaml"
+          - "{{ path | default('.') }}/job-awx.yaml"
+
+        tasks:
+          - ansible.builtin.import_tasks: creation_tasks.yaml
+
 vars:
   - name: job-golang
     file: |
@@ -248,6 +270,7 @@ vars:
           credentials: sthings-ssh
           executionenv: sthings-ee
           state: present
+          ask_verbosity_on_launch: true
           survey_enabled: true
           survey_spec: "{{ lookup('file', 'vars/survey-golang.yaml') }}"
 
@@ -257,6 +280,16 @@ vars:
           "name": "",
           "description": "",
           "spec": [
+            {
+              "question_name": "Execute against which host?",
+              "question_description": "Enter host name",
+              "required": true,
+              "type": "text",
+              "variable": "target_host",
+              "min": null,
+              "max": null,
+              "default": ""
+            },
             {
               "question_name": "Install which Golang version?",
               "question_description": "Enter version",
@@ -333,6 +366,7 @@ vars:
           credentials: sthings-ssh
           executionenv: sthings-ee
           state: present
+          ask_verbosity_on_launch: true
           survey_enabled: true
           survey_spec: "{{ lookup('file', 'vars/survey-nerdctl.yaml') }}"
 
@@ -342,6 +376,16 @@ vars:
           "name": "",
           "description": "",
           "spec": [
+            {
+              "question_name": "Execute against which host?",
+              "question_description": "Enter host name",
+              "required": true,
+              "type": "text",
+              "variable": "target_host",
+              "min": null,
+              "max": null,
+              "default": ""
+            },
             {
               "question_name": "nerdctl version?",
               "question_description": "choose nerdctl version",
@@ -369,6 +413,7 @@ vars:
           credentials: sthings-ssh
           executionenv: sthings-ee
           state: present
+          ask_verbosity_on_launch: true
           survey_enabled: true
           survey_spec: "{{ lookup('file', 'vars/survey-docker.yaml') }}"
 
@@ -378,6 +423,16 @@ vars:
           "name": "",
           "description": "",
           "spec": [
+            {
+              "question_name": "Execute against which host?",
+              "question_description": "Enter host name",
+              "required": true,
+              "type": "text",
+              "variable": "target_host",
+              "min": null,
+              "max": null,
+              "default": ""
+            },
             {
               "question_name": "install docker compose?",
               "question_description": "choose true or false",
@@ -438,6 +493,7 @@ vars:
           credentials: sthings-ssh
           executionenv: sthings-ee
           state: present
+          ask_verbosity_on_launch: true
           survey_enabled: true
           survey_spec: "{{ lookup('file', 'vars/survey-baseos.yaml') }}"
 
@@ -447,6 +503,16 @@ vars:
           "name": "",
           "description": "",
           "spec": [
+            {
+              "question_name": "Execute against which host?",
+              "question_description": "Enter host name",
+              "required": true,
+              "type": "text",
+              "variable": "target_host",
+              "min": null,
+              "max": null,
+              "default": ""
+            },
             {
               "question_name": "Run manage filesystem role?",
               "question_description": "choose true or false",
@@ -582,6 +648,7 @@ vars:
           credentials: sthings-ssh
           executionenv: sthings-ee
           state: present
+          ask_verbosity_on_launch: true
           survey_enabled: true
           survey_spec: "{{ lookup('file', 'vars/survey-schedule.yaml') }}"
 
@@ -591,87 +658,97 @@ vars:
          "name": "",
          "description": "",
          "spec": [
-         {
-             "question_name": "What job to run?",
-             "question_description": "Enter job template name",
-             "required": true,
-             "type": "text",
-             "variable": "target_job",
-             "min": null,
-             "max": null,
-             "default": "baseos"
-           },
-           {
-             "question_name": "On which date should this job run? (Format: 2024-06-30)",
-             "question_description": "Enter first day to schedule",
-             "required": true,
-             "type": "text",
-             "variable": "start_date",
-             "min": null,
-             "max": null,
-             "default": ""
-           },
-           {
-             "question_name": "At which time do you want the job to run? (Format: 05:00:00)",
-             "question_description": "Enter cron time",
-             "required": true,
-             "type": "text",
-             "variable": "cron_time",
-             "min": null,
-             "max": null,
-             "default": ""
-           },
-           {
-             "question_name": "With what frequency do you want your job to run?",
-             "question_description": "Choose frequency",
-             "required": true,
-             "type": "multiplechoice",
-             "variable": "frequency_rule",
-             "choices": ["none", "minute", "hour", "day", "week", "month"],
-             "min": null,
-             "max": null,
-             "default": "day"
-           },
-           {
-             "question_name": "With what interval do you want your job to run? (example in description)",
-             "question_description": "frequency=day + interval=1 == daily scheduled run",
-             "required": true,
-             "type": "text",
-             "variable": "interval_rule",
-             "min": null,
-             "max": null,
-             "default": "1"
-           },
-           {
-             "question_name": "What name for the schedule?",
-             "question_description": "Enter name",
-             "required": true,
-             "type": "text",
-             "variable": "schedule_name",
-             "min": null,
-             "max": null,
-             "default": "schedule-base-os"
-           },
-           {
-             "question_name": "Do you want the ressource to be created or deleted?",
-             "question_description": "create=present or delete=absent",
-             "required": true,
-             "type": "multiplechoice",
-             "variable": "schedule_state",
-             "choices": ["present", "absent"],
-             "min": null,
-             "max": null,
-             "default": "present"
-           }
-         ]
-       }
+            {
+              "question_name": "Execute against which host?",
+              "question_description": "Enter host name",
+              "required": true,
+              "type": "text",
+              "variable": "target_host",
+              "min": null,
+              "max": null,
+              "default": ""
+            },
+            {
+              "question_name": "What job to run?",
+              "question_description": "Enter job template name",
+              "required": true,
+              "type": "text",
+              "variable": "target_job",
+              "min": null,
+              "max": null,
+              "default": "baseos"
+            },
+            {
+              "question_name": "On which date should this job run? (Format: 2024-06-30)",
+              "question_description": "Enter first day to schedule",
+              "required": true,
+              "type": "text",
+              "variable": "start_date",
+              "min": null,
+              "max": null,
+              "default": ""
+            },
+            {
+              "question_name": "At which time do you want the job to run? (Format: 05:00:00)",
+              "question_description": "Enter cron time",
+              "required": true,
+              "type": "text",
+              "variable": "cron_time",
+              "min": null,
+              "max": null,
+              "default": ""
+            },
+            {
+              "question_name": "With what frequency do you want your job to run?",
+              "question_description": "Choose frequency",
+              "required": true,
+              "type": "multiplechoice",
+              "variable": "frequency_rule",
+              "choices": ["none", "minute", "hour", "day", "week", "month"],
+              "min": null,
+              "max": null,
+              "default": "day"
+            },
+            {
+              "question_name": "With what interval do you want your job to run? (example in description)",
+              "question_description": "frequency=day + interval=1 == daily scheduled run",
+              "required": true,
+              "type": "text",
+              "variable": "interval_rule",
+              "min": null,
+              "max": null,
+              "default": "1"
+            },
+            {
+              "question_name": "What name for the schedule?",
+              "question_description": "Enter name",
+              "required": true,
+              "type": "text",
+              "variable": "schedule_name",
+              "min": null,
+              "max": null,
+              "default": "schedule-base-os"
+            },
+            {
+              "question_name": "Do you want the ressource to be created or deleted?",
+              "question_description": "create=present or delete=absent",
+              "required": true,
+              "type": "multiplechoice",
+              "variable": "schedule_state",
+              "choices": ["present", "absent"],
+              "min": null,
+              "max": null,
+              "default": "present"
+            }
+          ]
+        }
 
   - name: job-awx
     file: |
       ---
       job_templates:
         stuttgartThings:
-          name: hello AWX
+          name: hello-awx
           organization: stuttgart-things
           inventory: dynamic-inventory-vsphere
           project: stuttgart-things
@@ -679,6 +756,38 @@ vars:
           credentials: sthings-ssh
           executionenv: sthings-ee
           state: present
+          ask_verbosity_on_launch: true
+          survey_enabled: true
+          survey_spec: "{{ lookup('file', 'vars/survey-job-awx.yaml') }}"
+
+  - name: survey-job-awx
+    file: |
+      {
+          "name": "",
+          "description": "",
+          "spec": [
+            {
+              "question_name": "Execute against which host?",
+              "question_description": "Enter host name",
+              "required": true,
+              "type": "text",
+              "variable": "target_host",
+              "min": null,
+              "max": null,
+              "default": ""
+            },
+            {
+              "question_name": "Which homepage to curl?",
+              "question_description": "Enter homepage",
+              "required": true,
+              "type": "text",
+              "variable": "page",
+              "min": null,
+              "max": null,
+              "default": "https://www.google.com"
+            }
+          ]
+        }
 
   - name: dynamic-inventory-vsphere
     file: |
@@ -810,6 +919,7 @@ vars:
       cron_time: "05:00:00"
       frequency_rule: "day"
       interval_rule: 1
+      target_host: localhost
 
       scheduler:
         schedule_base_os:
@@ -818,6 +928,7 @@ vars:
           unified_job_template: "baseos"
           job_type: "run"
           extra_data:
+            target_host: "{{ target_host }}"
             manage_filesystem: "true"
             update_packages: "true"
             install_requirements: "true"
