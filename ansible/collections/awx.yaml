@@ -1,6 +1,6 @@
 ---
 name: awx
-version: 0.0.56
+version: 0.0.57
 namespace: sthings
 playbooks:
   - name: creation_tasks
@@ -114,7 +114,7 @@ playbooks:
           credentials: "{{ item.value.credentials }}"
           execution_environment: "{{ item.value.executionenv }}"
           state: "{{ item.value.state }}"
-          ask_verbosity_on_launch: "{{ ask_verbosity_on_launch }}"
+          ask_verbosity_on_launch: "{{ item.value.ask_verbosity_on_launch }}"
           validate_certs: true
           survey_enabled: "{{ item.value.survey_enabled | default(omit) }}"
           survey_spec: "{{ item.value.survey_spec | default(omit) }}"
@@ -214,7 +214,7 @@ playbooks:
         tasks:
           - ansible.builtin.import_tasks: creation_tasks.yaml
 
-  - name: schedule-baseos
+  - name: schedule_baseos
     play: |
       ---
       - hosts: localhost
@@ -231,6 +231,27 @@ playbooks:
           - "{{ path | default('.') }}/ee-sthings.yaml"
           - "{{ path | default('.') }}/schedule-baseos.yaml"
           - "{{ path | default('.') }}/job-schedule.yaml"
+
+        tasks:
+          - ansible.builtin.import_tasks: creation_tasks.yaml
+
+  - name: hello_awx
+    play: |
+      ---
+      - hosts: localhost
+
+        vars_files:
+          - "{{ path | default('.') }}/awx-local-env.yaml"
+          - "{{ path | default('.') }}/organization-sthings.yaml"
+          - "{{ path | default('.') }}/scm-creds-sthings.yaml"
+          - "{{ path | default('.') }}/projects-sthings.yaml"
+          - "{{ path | default('.') }}/machine-creds-sthings.yaml"
+          - "{{ path | default('.') }}/dynamic-inventory-vsphere.yaml"
+          - "{{ path | default('.') }}/inventory-source.yaml"
+          - "{{ path | default('.') }}/hosts-test.yaml"
+          - "{{ path | default('.') }}/ee-sthings.yaml"
+          - "{{ path | default('.') }}/schedule-baseos.yaml"
+          - "{{ path | default('.') }}/job-awx.yaml"
 
         tasks:
           - ansible.builtin.import_tasks: creation_tasks.yaml
