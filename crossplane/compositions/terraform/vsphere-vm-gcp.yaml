@@ -2,13 +2,13 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: Composition
 metadata:
-  name: vsphere-vm
+  name: vsphere-vm-gcp
   labels:
-    crossplane.io/xrd: xvspherevms.resources.stuttgart-things.com
+    crossplane.io/xrd: xvspherevmgcps.resources.stuttgart-things.com
 spec:
   compositeTypeRef:
     apiVersion: resources.stuttgart-things.com/v1alpha1
-    kind: XVsphereVM
+    kind: XVsphereVMGCP
   resources:
     - name: gcp-bucket
       base:
@@ -16,137 +16,90 @@ spec:
         kind: Bucket
         metadata:
           annotations:
-            crossplane.io/external-name: sthings-bucket-f0b3f1ee7
+            crossplane.io/external-name: sthings-gcp-bucket
         spec:
           forProvider:
             location: US
             storageClass: MULTI_REGIONAL
             forceDestroy: true
+          deletionPolicy: Delete
           providerConfigRef:
             name: default
-          deletionPolicy: Delete
+      patches:
+        - type: CombineFromComposite
+          combine:
+            variables:
+              - fromFieldPath: spec.vm.name
+              - fromFieldPath: spec.bucket.suffix
+            strategy: string
+            string:
+              fmt: "sthings-vspherevm-%s-%s"
+          toFieldPath: "metadata.annotations[crossplane.io/external-name]"
     - name: vsphere-vm
       base:
-        kind: Workspace
-        apiVersion: tf.upbound.io/v1beta1
-        metadata:
-          annotations:
-            crossplane.io/external-name: vsphere-vm
-        spec:
-          providerConfigRef:
-            name: terraform-default
-          writeConnectionSecretToRef:
-            name: vsphere-vm-test
-            namespace: crossplane-system
-          forProvider:
-            source: Remote
-            module: git::https://github.com/stuttgart-things/vsphere-vm.git?ref=v1.7.5-2.7.0
-            vars:
-              - key: vm_count
-                type: integer
-                value: "1"
-              - key: vsphere_vm_name
-                type: string
-              - key: vm_memory
-                type: integer
-                value: "4096"
-              - key: vm_disk_size
-                type: integer
-                value: "64"
-              - key: vm_num_cpus
-                type: integer
-                value: "4"
-              - key: firmware
-                type: string
-                value: bios
-              - key: vsphere_vm_folder_path
-                type: string
-              - key: vsphere_datacenter
-                type: string
-              - key: vsphere_datastore
-                type: string
-              - key: vsphere_resource_pool
-                type: string
-              - key: vsphere_network
-                type: string
-              - key: vsphere_vm_template
-                type: string
-              - key: bootstrap
-                type: string
-                value: '["echo STUTTGART-THINGS"]'
-              - key: annotation
-                type: string
-                value: VSPHERE-VM BUILD w/ CROSSPLANE FOR STUTTGART-THINGS
-              - key: unverified_ssl
-                type: string
-                value: "true"
-            varFiles:
-              - source: SecretKey
-                secretKeyRef:
-                  namespace: default
-                  name: vsphere-tfvars
-                  key: terraform.tfvars
+        apiVersion: resources.stuttgart-things.com/v1alpha1
+        kind: XVsphereVM
       patches:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.vm.count
-          toFieldPath: spec.forProvider.vars[0].value
+          toFieldPath: spec.vm.count
         - type: FromCompositeFieldPath
           fromFieldPath: spec.vm.name
-          toFieldPath: spec.forProvider.vars[1].value
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.vm.ram
-          toFieldPath: spec.forProvider.vars[2].value
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.vm.disk
-          toFieldPath: spec.forProvider.vars[3].value
+          toFieldPath: spec.vm.name
         - type: FromCompositeFieldPath
           fromFieldPath: spec.vm.cpu
-          toFieldPath: spec.forProvider.vars[4].value
+          toFieldPath: spec.vm.cpu
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.vm.ram
+          toFieldPath: spec.vm.ram
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.vm.disk
+          toFieldPath: spec.vm.disk
         - type: FromCompositeFieldPath
           fromFieldPath: spec.vm.firmware
-          toFieldPath: spec.forProvider.vars[5].value
+          toFieldPath: spec.vm.firmware
         - type: FromCompositeFieldPath
           fromFieldPath: spec.vm.folderPath
-          toFieldPath: spec.forProvider.vars[6].value
+          toFieldPath: spec.vm.folderPath
         - type: FromCompositeFieldPath
           fromFieldPath: spec.vm.datacenter
-          toFieldPath: spec.forProvider.vars[7].value
+          toFieldPath: spec.vm.datacenter
         - type: FromCompositeFieldPath
           fromFieldPath: spec.vm.datastore
-          toFieldPath: spec.forProvider.vars[8].value
+          toFieldPath: spec.vm.datastore
         - type: FromCompositeFieldPath
           fromFieldPath: spec.vm.resourcePool
-          toFieldPath: spec.forProvider.vars[9].value
+          toFieldPath: spec.vm.resourcePool
         - type: FromCompositeFieldPath
           fromFieldPath: spec.vm.network
-          toFieldPath: spec.forProvider.vars[10].value
+          toFieldPath: spec.vm.network
         - type: FromCompositeFieldPath
           fromFieldPath: spec.vm.template
-          toFieldPath: spec.forProvider.vars[11].value
+          toFieldPath: spec.vm.template
         - type: FromCompositeFieldPath
           fromFieldPath: spec.vm.bootstrap
-          toFieldPath: spec.forProvider.vars[12].value
+          toFieldPath: spec.vm.bootstrap
         - type: FromCompositeFieldPath
           fromFieldPath: spec.vm.annotation
-          toFieldPath: spec.forProvider.vars[13].value
+          toFieldPath: spec.vm.annotation
         - type: FromCompositeFieldPath
           fromFieldPath: spec.vm.unverifiedSsl
-          toFieldPath: spec.forProvider.vars[14].value
+          toFieldPath: spec.vm.unverifiedSsl
         - type: FromCompositeFieldPath
           fromFieldPath: spec.tfvars.secretName
-          toFieldPath: spec.forProvider.varFiles[0].secretKeyRef.name
+          toFieldPath: spec.tfvars.secretName
         - type: FromCompositeFieldPath
           fromFieldPath: spec.tfvars.secretNamespace
-          toFieldPath: spec.forProvider.varFiles[0].secretKeyRef.namespace
+          toFieldPath: spec.tfvars.secretNamespace
         - type: FromCompositeFieldPath
           fromFieldPath: spec.tfvars.secretKey
-          toFieldPath: spec.forProvider.varFiles[0].secretKeyRef.key
+          toFieldPath: spec.tfvars.secretKey
         - type: FromCompositeFieldPath
           fromFieldPath: spec.connectionSecret.name
-          toFieldPath: spec.writeConnectionSecretToRef.name
+          toFieldPath: spec.connectionSecret.name
         - type: FromCompositeFieldPath
           fromFieldPath: spec.connectionSecret.namespace
-          toFieldPath: spec.writeConnectionSecretToRef.namespace
+          toFieldPath: spec.connectionSecret.namespace
         - type: FromCompositeFieldPath
-          fromFieldPath: spec.providerRef.name
-          toFieldPath: spec.providerConfigRef.name
+          fromFieldPath: spec.compositionRef.name
+          toFieldPath: spec.compositionRef.name
