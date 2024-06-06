@@ -162,8 +162,10 @@ jobs:
           echo "TF_OUTPUT=$(echo ${extraction})" >> "$GITHUB_OUTPUT"
 
   Delete-Terraform-Config:
-    if: ${{ (inputs.operation == 'destroy') && (inputs.delete-folder == true || inputs.delete-folder  == 'true') }} && needs.check_directory.outputs.dir_exists == 'true'
-    needs: [Execute-Terraform, Check_Directory]
+    if: ${{ (inputs.operation == 'destroy') && (inputs.delete-folder == true || inputs.delete-folder  == 'true') }} 
+    #&& needs.check_directory.outputs.dir_exists == 'true'
+    needs: [Execute-Terraform]
+    #, Check_Directory]
     runs-on: ${{ inputs.runs-on }}
     environment: ${{ inputs.environment-name }}
     outputs:
