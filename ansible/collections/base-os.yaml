@@ -1,6 +1,6 @@
 ---
 name: base_os
-version: 0.5.0
+version: 0.5.1
 namespace: sthings
 requirements: |
   roles:
@@ -21,7 +21,6 @@ requirements: |
       version: 2022.01.01
     - src: https://github.com/stuttgart-things/create-send-webhook.git
       scm: git
-      version: 2022.01.01
     - src: https://github.com/stuttgart-things/manage-proxmox-resources.git
       scm: git
       version: 2024.05.27
