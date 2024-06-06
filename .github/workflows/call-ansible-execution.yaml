@@ -112,6 +112,6 @@ jobs:
 
       - name: Execute Ansible
         run: |
-          ansible-galaxy install -r ${{ inputs.requirements-file }}
+          ansible-galaxy install -r ${{ inputs.requirements-file }} -f
           ansible-playbook ${{ inputs.playbook }} -i inventory ${{ inputs.extra-vars }} -vv
         shell: bash
