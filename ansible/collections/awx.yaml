@@ -1,6 +1,6 @@
 ---
 name: awx
-version: 0.0.54
+version: 0.0.55
 namespace: sthings
 playbooks:
   - name: creation_tasks
@@ -22,11 +22,13 @@ playbooks:
           name: "{{ item.value.name }}"
           description: "{{ item.value.description }}"
           organization: "{{ item.value.organization }}"
-          credential_type: Machine
+          credential_type: "{{ item.value.credential_type }}"
           state: "{{ item.value.state }}"
           inputs:
-            username: "{{ item.value.user }}"
-            ssh_key_data: "{{ item.value.awx_ssh_key }}"
+            username: "{{ item.value.username | default (omit) }}"
+            password: "{{ item.value.password | default (omit) }}"
+            ssh_key_data: "{{ item.value.awx_ssh_key | default (omit) }}"
+            host: "{{ item.value.host | default (omit) }}"
           validate_certs: false
         loop: "{{ lookup('dict', machineCredentials, wantlist=True) }}"
         when: machineCredentials is defined
@@ -52,6 +54,20 @@ playbooks:
           validate_certs: false
         loop: "{{ lookup('dict', inventories, wantlist=True) }}"
         when: inventories is defined
+
+      - name: Add an inventory source
+        awx.awx.inventory_source:
+          name: "{{ item.value.name }}"
+          description: "{{ item.value.description }}"
+          inventory: "{{ item.value.inventory }}"
+          credential: "{{ item.value.credential }}"
+          overwrite: true
+          update_on_launch: true
+          source: "{{ item.value.source }}"
+          organization: "{{ item.value.organization }}"
+          source_vars: "{{ item.value.source_vars }}"
+        loop: "{{ lookup('dict', inventorySource, wantlist=True) }}"
+        when: inventorySource is defined
 
       - name: Add host
         awx.awx.host:
@@ -127,7 +143,8 @@ playbooks:
           - "{{ path | default('.') }}/scm-creds-sthings.yaml"
           - "{{ path | default('.') }}/projects-sthings.yaml"
           - "{{ path | default('.') }}/machine-creds-sthings.yaml"
-          - "{{ path | default('.') }}/inventory-test.yaml"
+          - "{{ path | default('.') }}/dynamic-inventory-vsphere.yaml"
+          - "{{ path | default('.') }}/inventory-source.yaml"
           - "{{ path | default('.') }}/hosts-test.yaml"
           - "{{ path | default('.') }}/ee-sthings.yaml"
           - "{{ path | default('.') }}/job-docker.yaml"
@@ -146,7 +163,8 @@ playbooks:
           - "{{ path | default('.') }}/scm-creds-sthings.yaml"
           - "{{ path | default('.') }}/projects-sthings.yaml"
           - "{{ path | default('.') }}/machine-creds-sthings.yaml"
-          - "{{ path | default('.') }}/inventory-test.yaml"
+          - "{{ path | default('.') }}/dynamic-inventory-vsphere.yaml"
+          - "{{ path | default('.') }}/inventory-source.yaml"
           - "{{ path | default('.') }}/hosts-test.yaml"
           - "{{ path | default('.') }}/ee-sthings.yaml"
           - "{{ path | default('.') }}/job-nerdctl.yaml"
@@ -165,7 +183,8 @@ playbooks:
           - "{{ path | default('.') }}/scm-creds-sthings.yaml"
           - "{{ path | default('.') }}/projects-sthings.yaml"
           - "{{ path | default('.') }}/machine-creds-sthings.yaml"
-          - "{{ path | default('.') }}/inventory-test.yaml"
+          - "{{ path | default('.') }}/dynamic-inventory-vsphere.yaml"
+          - "{{ path | default('.') }}/inventory-source.yaml"
           - "{{ path | default('.') }}/hosts-test.yaml"
           - "{{ path | default('.') }}/ee-sthings.yaml"
           - "{{ path | default('.') }}/job-golang.yaml"
@@ -184,7 +203,8 @@ playbooks:
           - "{{ path | default('.') }}/scm-creds-sthings.yaml"
           - "{{ path | default('.') }}/projects-sthings.yaml"
           - "{{ path | default('.') }}/machine-creds-sthings.yaml"
-          - "{{ path | default('.') }}/inventory-test.yaml"
+          - "{{ path | default('.') }}/dynamic-inventory-vsphere.yaml"
+          - "{{ path | default('.') }}/inventory-source.yaml"
           - "{{ path | default('.') }}/hosts-test.yaml"
           - "{{ path | default('.') }}/ee-sthings.yaml"
           - "{{ path | default('.') }}/schedule-baseos.yaml"
@@ -204,7 +224,8 @@ playbooks:
           - "{{ path | default('.') }}/scm-creds-sthings.yaml"
           - "{{ path | default('.') }}/projects-sthings.yaml"
           - "{{ path | default('.') }}/machine-creds-sthings.yaml"
-          - "{{ path | default('.') }}/inventory-test.yaml"
+          - "{{ path | default('.') }}/dynamic-inventory-vsphere.yaml"
+          - "{{ path | default('.') }}/inventory-source.yaml"
           - "{{ path | default('.') }}/hosts-test.yaml"
           - "{{ path | default('.') }}/ee-sthings.yaml"
           - "{{ path | default('.') }}/schedule-baseos.yaml"
@@ -221,7 +242,7 @@ vars:
         stuttgartThings:
           name: install-golang
           organization: stuttgart-things
-          inventory: test-collection
+          inventory: dynamic-inventory-vsphere
           project: stuttgart-things
           playbook: plays/install-golang.yaml
           credentials: sthings-ssh
@@ -306,7 +327,7 @@ vars:
         stuttgartThings:
           name: install-nerdctl
           organization: stuttgart-things
-          inventory: test-collection
+          inventory: dynamic-inventory-vsphere
           project: stuttgart-things
           playbook: plays/install-nerdctl.yaml
           credentials: sthings-ssh
@@ -342,7 +363,7 @@ vars:
         stuttgartThings:
           name: install-docker
           organization: stuttgart-things
-          inventory: test-collection
+          inventory: dynamic-inventory-vsphere
           project: stuttgart-things
           playbook: plays/install-docker.yaml
           credentials: sthings-ssh
@@ -411,7 +432,7 @@ vars:
         stuttgartThings:
           name: baseos
           organization: stuttgart-things
-          inventory: test-collection
+          inventory: dynamic-inventory-vsphere
           project: stuttgart-things
           playbook: plays/import-base-os-play.yaml
           credentials: sthings-ssh
@@ -555,7 +576,7 @@ vars:
         stuttgartThings:
           name: schedule-baseos
           organization: stuttgart-things
-          inventory: test-collection
+          inventory: dynamic-inventory-vsphere
           project: stuttgart-things
           playbook: plays/schedule-baseos.yaml
           credentials: sthings-ssh
@@ -652,27 +673,55 @@ vars:
         stuttgartThings:
           name: hello AWX
           organization: stuttgart-things
-          inventory: test-collection
+          inventory: dynamic-inventory-vsphere
           project: stuttgart-things
           playbook: plays/hello-awx.yaml
           credentials: sthings-ssh
           executionenv: sthings-ee
           state: present
 
-  - name: inventory-test
+  - name: dynamic-inventory-vsphere
     file: |
       ---
       inventories:
-        testServer:
-          name: test-server
+        dynamicInventory:
+          name: dynamic-inventory-vsphere
           description: stuttgart-things organization
           organization: stuttgart-things
           state: present
-        testCollection:
-          name: test-collection
-          description: stuttgart-things organization
+
+  - name: inventory-source
+    file: |
+      ---
+      inventorySource:
+        dynamicInventory:
+          name: source-dynamic-inventory
+          description: Source for inventory dynamic-inventory-vsphere
           organization: stuttgart-things
-          state: present
+          inventory: dynamic-inventory-vsphere
+          credential: sthings-labul
+          source: vmware
+          source_vars:
+            hostnames: 
+              - config.name
+            properties:
+              - name
+              - network
+              - overallStatus
+              - value
+              - capability
+              - config
+              - guest
+              - runtime
+              - summary
+            with_nested_properties: true
+            with_tags: true
+            resources:
+              - datacenter:
+                  - LabUL
+                resources:
+                  - folder:
+                    - stuttgart-things
 
   - name: hosts-test
     file: |
@@ -681,13 +730,13 @@ vars:
         localhost:
           name: localhost
           description: stuttgart-things organization
-          inventory: test-server
+          inventory: dynamic-inventory-vsphere
           state: present
           vmVariables: {ansible_connection: local}
         vsphere:
           name: andretest.labul.sva.de
           description: stuttgart-things organization
-          inventory: test-collection
+          inventory: dynamic-inventory-vsphere
           state: present
 
   - name: organization-sthings
@@ -732,9 +781,19 @@ vars:
           name: sthings-ssh
           description: stuttgart-things organization
           organization: stuttgart-things
+          credential_type: Machine
           state: present
-          user: sthings
+          username: sthings
           awx_ssh_key: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=ssh/data/sthings:privateKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') | b64decode }}"
+        vcenterCredentials:
+          name: sthings-labul
+          description: stuttgart-things organization
+          organization: stuttgart-things
+          credential_type: VMware vCenter
+          state: present
+          host: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/vsphere:ip validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+          username: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/vsphere:username validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+          password: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/vsphere:password validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
 
   - name: ee-sthings
     file: |
@@ -778,7 +837,6 @@ vars:
           interval: 1
           byweekday: [ 'saturday', 'sunday' ]
           include: False
-
 
   - name: awx-local-env
     file: |
