@@ -14,6 +14,10 @@ spec:
       type: array
       default: []
       description: extra roles to install
+    - name: ansibleExtraCollections
+      type: array
+      default: []
+      description: extra collections to install
     - name: ansibleInventoryFile
       type: array
       default: []
@@ -32,7 +36,7 @@ spec:
       description: values for ansible inventory
     - name: ansibleWorkingImage
       type: string
-      default: "eu.gcr.io/stuttgart-things/sthings-ansible:8.2.0-3"
+      default: "eu.gcr.io/stuttgart-things/sthings-ansible:10.0.1"
       description: the image on which ansible will run
     - name: createInventory
       type: string
@@ -57,7 +61,11 @@ spec:
     - name: installExtraRoles
       type: string
       default: "false"
-      description: install roles and collections
+      description: install additional roles
+    - name: installExtraCollections
+      type: string
+      default: "false"
+      description: install additional collections
     - name: userHome
       type: string
       default: "/home/nonroot"
@@ -83,9 +91,13 @@ spec:
           value: $(params.createInventory)
         - name: EXTRA_ROLES
           value: $(params.ansibleExtraRoles[*])
+        - name: EXTRA_COLLECTIONS
+          value: $(params.ansibleExtraCollections[*])
         - name: EXTRA_VARS
           value: $(params.ansibleVarsFile[*])
         - name: INSTALL_EXTRA_ROLES
+          value: $(params.installExtraRoles)
+        - name: INSTALL_EXTRA_COLLECTIONS
           value: $(params.installExtraRoles)
         - name: INVENTORY_VARS
           value: $(params.ansibleVarsInventory[*])
