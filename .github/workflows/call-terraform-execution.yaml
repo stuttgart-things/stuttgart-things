@@ -45,7 +45,7 @@ jobs:
   Check-Directory:
     runs-on: ${{ inputs.runs-on }}
     outputs:
-      dir_exists: ${{ steps.check-directory.outputs.dir_exists }}
+      dir_exists: ${{ steps.check-directory.outputs.DIR_EXISTS }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -63,7 +63,7 @@ jobs:
           
   Execute-Terraform:
     needs: Check-Directory
-    if: needs.check_directory.outputs.dir_exists == 'true'
+    if: needs.Check-Directory.outputs.dir_exists == 'true'
     outputs:
       tf-output: ${{ steps.tf_output.outputs.TF_OUTPUT }}
     runs-on: ${{ inputs.runs-on }}
@@ -164,7 +164,7 @@ jobs:
           echo "TF_OUTPUT=$(echo ${extraction})" >> "$GITHUB_OUTPUT"
 
   Delete-Terraform-Config:
-    if: ${{ (inputs.operation == 'destroy') && (inputs.delete-folder == true || inputs.delete-folder  == 'true') }} && needs.check_directory.outputs.dir_exists == 'true'
+    if: ${{ (inputs.operation == 'destroy') && (inputs.delete-folder == true || inputs.delete-folder  == 'true') }} && needs.Check-Directory.outputs.dir_exists == 'true'
     needs: [Execute-Terraform, Check-Directory]
     runs-on: ${{ inputs.runs-on }}
     environment: ${{ inputs.environment-name }}
