@@ -211,7 +211,6 @@ jobs:
     if: ${{ (inputs.operation == 'destroy') && (inputs.delete-folder == true || inputs.delete-folder  == 'true') }}
     uses: stuttgart-things/stuttgart-things/.github/workflows/call-pullrequest-merge.yaml@main
     needs:
-      - Execute-Terraform
       - Delete-Terraform-Config
     with:
       runs-on: ghr-stuttgart-things-labda-test
