@@ -54,12 +54,12 @@ jobs:
         id: check_directory
         run: |
           if [ -d "${{ inputs.folder }}" ]; then
-            echo "dir_exists=true"  >> $GITHUB_OUTPUT
+            echo "DIR_EXISTS=true"  >> $GITHUB_OUTPUT
           else
-            echo "dir_exists=false" >> "$GITHUB_OUTPUT"
+            echo "DIR_EXISTS=false" >> "$GITHUB_OUTPUT"
           fi
           
-          echo ${dir_exists}
+          echo ${DIR_EXISTS}
           
   Execute-Terraform:
     needs: Check-Directory
