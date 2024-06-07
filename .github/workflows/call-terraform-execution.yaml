@@ -51,7 +51,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Check if directory exists
-        id: check_directory
+        id: check-directory
         run: |
           if [ -d "${{ inputs.folder }}" ]; then
             echo "DIR_EXISTS=true"  >> "$GITHUB_ENV"
