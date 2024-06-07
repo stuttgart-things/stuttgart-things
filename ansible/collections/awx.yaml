@@ -910,7 +910,7 @@ vars:
       execution_environment:
         sthings-ee:
           name: sthings-ee
-          image: eu.gcr.io/stuttgart-things/sthings-awxee:24.5.0
+          image: scr.cd43.sthings-pve.labul.sva.de/ansible-ee/ee:v4
 
   - name: schedule-baseos
     file: |
