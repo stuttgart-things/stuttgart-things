@@ -55,10 +55,10 @@ jobs:
         run: |
           if [ -d "${{ inputs.folder }}" ]; then
             echo "dir_exists=true"  >> $GITHUB_OUTPUT
-            echo $dir_exists
+            echo ${dir_exists}
           else
             echo "dir_exists=false" >> "$GITHUB_OUTPUT"
-            echo $dir_exists
+            echo ${dir_exists}
           fi
           
   Execute-Terraform:
