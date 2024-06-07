@@ -54,7 +54,7 @@ jobs:
         id: check_directory
         run: |
           if [ -d "${{ inputs.folder }}" ]; then
-            echo "DIR_EXISTS=true"  >> $GITHUB_OUTPUT
+            echo "DIR_EXISTS=true"  >> "$GITHUB_OUTPUT"
           else
             echo "DIR_EXISTS=false" >> "$GITHUB_OUTPUT"
           fi
