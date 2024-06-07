@@ -53,11 +53,11 @@ jobs:
       - name: Check if directory exists
         id: check-directory
         run: |
-          ls -l
-          
           if [ -d "${{ inputs.folder }}" ]; then
+            echo "${{ inputs.folder }} exists."
             echo "DIR_EXISTS=true"  >> "$GITHUB_ENV"
           else
+            echo "${{ inputs.folder }} does not exist."
             echo "DIR_EXISTS=false" >> "$GITHUB_ENV"
           fi
         shell: bash
