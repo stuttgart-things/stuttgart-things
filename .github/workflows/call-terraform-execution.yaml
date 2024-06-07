@@ -40,6 +40,9 @@ on:
       tf-output:
         description: terraform output
         value: ${{ jobs.Execute-Terraform.outputs.tf-output }}
+      dir-exists:
+        description: dir exists
+        value: ${{ jobs.Check-Directory.outputs.dir_exists }}
 
 jobs:
   Check-Directory:
@@ -54,9 +57,9 @@ jobs:
         id: check-directory
         run: |
           if test -d "${{ inputs.folder }}"; then
-            echo "DIR_EXISTS=true"  >> "$GITHUB_ENV"
+            echo "DIR_EXISTS=true"  >> "$GITHUB_OUTPUT"
           else
-            echo "DIR_EXISTS=false" >> "$GITHUB_ENV"
+            echo "DIR_EXISTS=false" >> "$GITHUB_OUTPUT"
           fi
         shell: bash
           
