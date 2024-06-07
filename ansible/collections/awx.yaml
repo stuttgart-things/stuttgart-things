@@ -99,6 +99,8 @@ playbooks:
         awx.awx.execution_environment:
           name: "{{ item.value.name }}"
           image: "{{ item.value.image }}"
+          pull: "{{ item.value.pull }}"
+          credential: "{{ item.value.credential }}"
           validate_certs: false
         loop: "{{ lookup('dict', execution_environment, wantlist=True) }}"
         when: execution_environment is defined
@@ -903,6 +905,14 @@ vars:
           host: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/vsphere:ip validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
           username: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/vsphere:username validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
           password: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/vsphere:password validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+        containerRegistryCredentials:
+          name: sthings-registry
+          description: stuttgart-things organization
+          organization: stuttgart-things
+          credential_type: Machine
+          state: present
+          username: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps/data/harbor:user validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+          password: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps/data/harbor:password validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
 
   - name: ee-sthings
     file: |
@@ -911,6 +921,8 @@ vars:
         sthings-ee:
           name: sthings-ee
           image: scr.cd43.sthings-pve.labul.sva.de/ansible-ee/ee:v4
+          pull: always
+          credential: sthings-registry
 
   - name: schedule-baseos
     file: |
