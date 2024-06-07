@@ -910,7 +910,7 @@ vars:
       execution_environment:
         sthings-ee:
           name: sthings-ee
-          image: eu.gcr.io/stuttgart-things/sthings-awxee:23.6.0
+          image: eu.gcr.io/stuttgart-things/sthings-awxee:24.5.0
 
   - name: schedule-baseos
     file: |
