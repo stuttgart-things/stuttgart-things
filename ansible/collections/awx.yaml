@@ -909,7 +909,7 @@ vars:
           name: sthings-registry
           description: stuttgart-things organization
           organization: stuttgart-things
-          credential_type: Machine
+          credential_type: Container Registry
           state: present
           username: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps/data/harbor:user validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
           password: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps/data/harbor:password validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
