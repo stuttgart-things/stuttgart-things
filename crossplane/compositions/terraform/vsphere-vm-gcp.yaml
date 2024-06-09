@@ -39,22 +39,19 @@ spec:
       base:
         apiVersion: resources.stuttgart-things.com/v1alpha1
         kind: XVsphereVM
-        metadata:
-          annotations:
-            crossplane.io/external-name: vsphere-vm
       patches:
-        - type: CombineFromComposite
-          combine:
-            variables:
-              - fromFieldPath: spec.vm.name
-              - fromFieldPath: spec.bucket.suffix
-            strategy: string
-            string:
-              fmt: "vspherevm-%s-gcp-%s"
-          toFieldPath: "metadata.annotations[crossplane.io/external-name]"
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.vm.count
-          toFieldPath: spec.vm.count
+        # - type: CombineFromComposite
+        #   combine:
+        #     variables:
+        #       - fromFieldPath: spec.vm.name
+        #       - fromFieldPath: spec.bucket.suffix
+        #     strategy: string
+        #     string:
+        #       fmt: "vspherevm-%s-gcp-%s"
+        #   toFieldPath: "metadata.annotations[crossplane.io/external-name]"
+        # - type: FromCompositeFieldPath
+        #   fromFieldPath: spec.vm.count
+        #   toFieldPath: spec.vm.count
         - type: FromCompositeFieldPath
           fromFieldPath: spec.vm.name
           toFieldPath: spec.vm.name
