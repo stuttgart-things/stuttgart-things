@@ -10,13 +10,9 @@ on:
         default: k8s
         required: false
         type: string
-      dockerfile:
-        required: false
-        default: "./Dockerfile"
-        type: string
       registry:
         required: false
-        default:  ghcr.io
+        default: ghcr.io
         type: string
       repository:
         required: false
@@ -28,26 +24,26 @@ on:
       tag:
         required: true
         type: string
-      kaniko-image:
+      ko-image:
         required: false
         type: string
-        default: gcr.io/kaniko-project/executor
-      kaniko-tag:
+        default: ghcr.io/ko-build/ko
+      ko-tag:
         required: false
         type: string
-        default: debug
+        default: b256278cc0edcf32bf33904f067eba2d99204d2b
       push-retrys:
         required: false
         type: string
         default: "5"
 jobs:
-  kaniko-build:
+  ko-build:
     runs-on: ${{ inputs.runs-on }}
     environment: ${{ inputs.environment-name }}
     env:
       IMAGE_TAG: ${{ inputs.tag }}
     container:
-      image: ${{ inputs.kaniko-image }}:${{ inputs.kaniko-tag }}
+      image: ${{ inputs.ko-image }}:${{ inputs.ko-tag }}
     steps:
-      - name: Build and push image w/ kaniko
+      - name: Build and push image w/ ko
         run: |
