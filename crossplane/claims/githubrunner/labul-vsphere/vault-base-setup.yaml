@@ -1,0 +1,10 @@
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: GithubRunner
+metadata:
+  name: vault-base-setup
+  namespace: crossplane-system
+spec:
+  repository: vault-base-setup
+  clusterConfig: labda-test
+  version: 0.9.0
