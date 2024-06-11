@@ -222,7 +222,7 @@ spec:
         ansible-galaxy role list
 
         echo "list installed collections"
-        if [ -d "roles" ]; then cp -R collections/* ${HOME}/.ansible/collections/ ; fi
+        if [ -d "collections" ]; then cp -R collections/* ${HOME}/.ansible/collections/ ; fi
         ansible-galaxy collection list
 
         echo "you know.. for running a playbook or 2"

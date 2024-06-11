@@ -67,7 +67,8 @@ helmDefaults:
   force: true
 
 environments:
-  labul-vsphere:
+  labul-proxmox-rancher:
     values:
       - env/default.yaml
+      - env/labul-proxmox.yaml
       - env/{{ .Environment.Name }}.yaml
