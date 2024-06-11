@@ -1,0 +1,4 @@
+---
+ipRange: 10.31.101.5-10.31.101.5 # CLUSTER 1
+ipPoolName: ip-pool
+clusterName: rancher-mgmt
