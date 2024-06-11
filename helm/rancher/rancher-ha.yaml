@@ -1,5 +1,8 @@
 ---
 environments:
+  labul-proxmox-rancher:
+    values:
+      - env/{{ .Environment.Name }}.yaml
   labul-vsphere:
     values:
       - env/{{ .Environment.Name }}.yaml

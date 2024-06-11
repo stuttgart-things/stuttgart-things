@@ -1,0 +1,625 @@
+---
+apiVersion: rke-machine-config.cattle.io/v1
+boot2dockerUrl: null
+cfgparam:
+- disk.enableUUID=TRUE
+cloneFrom: /LabUL/vm/stuttgart-things/vm-templates/sthings-u24-k8s
+cloudConfig: |
+    #cloud-config
+    package_update: true
+    package_upgrade: true
+    packages:
+      - git
+      - curl
+      - wget
+      - git
+    resize_rootfs: true
+    growpart:
+      mode: auto
+      devices: ['/']
+      ignore_growroot_disabled: false
+    ansible:
+      package_name: ansible-core
+      install_method: distro
+      pull:
+        url: "https://github.com/stuttgart-things/stuttgart-things.git"
+        playbook_name: ansible/playbooks/base-os-cloudinit.yaml
+      run_ansible:
+        timeout: 5
+      galaxy:
+        actions:
+          - ["ansible-galaxy", "collection", "install", "community.crypto"]
+          - ["ansible-galaxy", "collection", "install", "community.general"]
+          - ["ansible-galaxy", "collection", "install", "ansible.posix"]
+          - ["ansible-galaxy", "install", "git+https://github.com/stuttgart-things/manage-filesystem.git"]
+          - ["ansible-galaxy", "install", "git+https://github.com/stuttgart-things/install-configure-vault.git"]
+          - ["ansible-galaxy", "install", "git+https://github.com/stuttgart-things/install-requirements.git"]
+          - ["ansible-galaxy", "install", "git+https://github.com/stuttgart-things/download-install-binary.git"]
+          - ["ansible-galaxy", "install", " git+https://github.com/stuttgart-things/create-os-user.git"]
+          - ["ansible-galaxy", "install", " git+https://github.com/stuttgart-things/create-send-webhook.git"]
+    runcmd:
+      - wget -O /usr/local/share/ca-certificates/labda-vsphere-ca.crt https://vault-vsphere.tiab.labda.sva.de:8200/v1/pki/ca/pem --no-check-certificate
+      - wget -O /usr/local/share/ca-certificates/labul-vsphere-ca.crt https://vault-vsphere.labul.sva.de:8200/v1/pki/ca/pem --no-check-certificate
+      - wget -O /usr/local/share/ca-certificates/labul-ca.crt https://vault.labul.sva.de:8200/v1/pki/ca/pem --no-check-certificate
+      - wget -O /usr/local/share/ca-certificates/labda-ca.crt https://vault.tiab.labda.sva.de:8200/v1/pki/ca/pem --no-check-certificate
+      - update-ca-certificates
+cloudinit: null
+common:
+  labels: null
+  taints: []
+contentLibrary: null
+cpuCount: "8"
+creationType: template
+customAttribute: []
+datacenter: /LabUL
+datastore: /LabUL/datastore/ESX05-Local
+datastoreCluster: null
+diskSize: "40000"
+folder: /LabUL/vm/stuttgart-things/rancher-things
+gracefulShutdownTimeout: "0"
+hostsystem: null
+kind: VmwarevsphereConfig
+memorySize: "8192"
+metadata:
+  name: itnovative-pool1
+  namespace: fleet-default
+network:
+- /LabUL/network/LAB-10.31.103
+os: linux
+password: null
+pool: /LabUL/host/Cluster-V6.7/Resources
+sshPassword: tcuser
+sshPort: "22"
+sshUser: docker
+sshUserGroup: staff
+tag: []
+username: null
+vappIpallocationpolicy: null
+vappIpprotocol: null
+vappProperty: []
+vappTransport: null
+vcenter: null
+vcenterPort: "443"
+---
+apiVersion: rke-machine-config.cattle.io/v1
+boot2dockerUrl: null
+cfgparam:
+- disk.enableUUID=TRUE
+cloneFrom: /LabUL/vm/stuttgart-things/vm-templates/sthings-u24-k8s
+cloudConfig: |
+    #cloud-config
+    package_update: true
+    package_upgrade: true
+    packages:
+      - git
+      - curl
+      - wget
+      - git
+    resize_rootfs: true
+    growpart:
+      mode: auto
+      devices: ['/']
+      ignore_growroot_disabled: false
+    ansible:
+      package_name: ansible-core
+      install_method: distro
+      pull:
+        url: "https://github.com/stuttgart-things/stuttgart-things.git"
+        playbook_name: ansible/playbooks/base-os-cloudinit.yaml
+      run_ansible:
+        timeout: 5
+      galaxy:
+        actions:
+          - ["ansible-galaxy", "collection", "install", "community.crypto"]
+          - ["ansible-galaxy", "collection", "install", "community.general"]
+          - ["ansible-galaxy", "collection", "install", "ansible.posix"]
+          - ["ansible-galaxy", "install", "git+https://github.com/stuttgart-things/manage-filesystem.git"]
+          - ["ansible-galaxy", "install", "git+https://github.com/stuttgart-things/install-configure-vault.git"]
+          - ["ansible-galaxy", "install", "git+https://github.com/stuttgart-things/install-requirements.git"]
+          - ["ansible-galaxy", "install", "git+https://github.com/stuttgart-things/download-install-binary.git"]
+          - ["ansible-galaxy", "install", " git+https://github.com/stuttgart-things/create-os-user.git"]
+          - ["ansible-galaxy", "install", " git+https://github.com/stuttgart-things/create-send-webhook.git"]
+    runcmd:
+      - wget -O /usr/local/share/ca-certificates/labda-vsphere-ca.crt https://vault-vsphere.tiab.labda.sva.de:8200/v1/pki/ca/pem --no-check-certificate
+      - wget -O /usr/local/share/ca-certificates/labul-vsphere-ca.crt https://vault-vsphere.labul.sva.de:8200/v1/pki/ca/pem --no-check-certificate
+      - wget -O /usr/local/share/ca-certificates/labul-ca.crt https://vault.labul.sva.de:8200/v1/pki/ca/pem --no-check-certificate
+      - wget -O /usr/local/share/ca-certificates/labda-ca.crt https://vault.tiab.labda.sva.de:8200/v1/pki/ca/pem --no-check-certificate
+      - update-ca-certificates
+cloudinit: null
+common:
+  labels: null
+  taints: []
+contentLibrary: null
+cpuCount: "6"
+creationType: template
+customAttribute: []
+datacenter: /LabUL
+datastore: /LabUL/datastore/ESX05-Local
+datastoreCluster: null
+diskSize: "40000"
+folder: /LabUL/vm/stuttgart-things/rancher-things
+gracefulShutdownTimeout: "0"
+hostsystem: null
+kind: VmwarevsphereConfig
+memorySize: "6144"
+metadata:
+  name: worker
+  namespace: fleet-default
+network:
+- /LabUL/network/LAB-10.31.103
+os: linux
+password: null
+pool: /LabUL/host/Cluster-V6.7/Resources
+sshPassword: tcuser
+sshPort: "22"
+sshUser: docker
+sshUserGroup: staff
+tag: []
+username: null
+vappIpallocationpolicy: null
+vappIpprotocol: null
+vappProperty: []
+vappTransport: null
+vcenter: null
+vcenterPort: "443"
+---
+apiVersion: provisioning.cattle.io/v1
+kind: Cluster
+metadata:
+  name: itnovative
+  annotations:
+    field.cattle.io/description: itnovative
+    #  key: string
+  labels:
+    {}
+    #  key: string
+  namespace: fleet-default
+spec:
+  cloudCredentialSecretName: cattle-global-data:labul-vsphere
+  clusterAgentDeploymentCustomization:
+    appendTolerations:
+#      - effect: string
+#        key: string
+#        operator: string
+#        tolerationSeconds: int
+#        value: string
+    overrideAffinity:
+#      nodeAffinity:
+#        preferredDuringSchedulingIgnoredDuringExecution:
+#          - preference:
+#              matchExpressions:
+#                - key: string
+#                  operator: string
+#                  values:
+#                    - string
+#              matchFields:
+#                - key: string
+#                  operator: string
+#                  values:
+#                    - string
+#            weight: int
+#        requiredDuringSchedulingIgnoredDuringExecution:
+#          nodeSelectorTerms:
+#            - matchExpressions:
+#                - key: string
+#                  operator: string
+#                  values:
+#                    - string
+#              matchFields:
+#                - key: string
+#                  operator: string
+#                  values:
+#                    - string
+#      podAffinity:
+#        preferredDuringSchedulingIgnoredDuringExecution:
+#          - podAffinityTerm:
+#              labelSelector:
+#                matchExpressions:
+#                  - key: string
+#                    operator: string
+#                    values:
+#                      - string
+#                matchLabels:  key: string
+#              namespaceSelector:
+#                matchExpressions:
+#                  - key: string
+#                    operator: string
+#                    values:
+#                      - string
+#                matchLabels:  key: string
+#              namespaces:
+#                - string
+#              topologyKey: string
+#            weight: int
+#        requiredDuringSchedulingIgnoredDuringExecution:
+#          - labelSelector:
+#              matchExpressions:
+#                - key: string
+#                  operator: string
+#                  values:
+#                    - string
+#              matchLabels:  key: string
+#            namespaceSelector:
+#              matchExpressions:
+#                - key: string
+#                  operator: string
+#                  values:
+#                    - string
+#              matchLabels:  key: string
+#            namespaces:
+#              - string
+#            topologyKey: string
+#      podAntiAffinity:
+#        preferredDuringSchedulingIgnoredDuringExecution:
+#          - podAffinityTerm:
+#              labelSelector:
+#                matchExpressions:
+#                  - key: string
+#                    operator: string
+#                    values:
+#                      - string
+#                matchLabels:  key: string
+#              namespaceSelector:
+#                matchExpressions:
+#                  - key: string
+#                    operator: string
+#                    values:
+#                      - string
+#                matchLabels:  key: string
+#              namespaces:
+#                - string
+#              topologyKey: string
+#            weight: int
+#        requiredDuringSchedulingIgnoredDuringExecution:
+#          - labelSelector:
+#              matchExpressions:
+#                - key: string
+#                  operator: string
+#                  values:
+#                    - string
+#              matchLabels:  key: string
+#            namespaceSelector:
+#              matchExpressions:
+#                - key: string
+#                  operator: string
+#                  values:
+#                    - string
+#              matchLabels:  key: string
+#            namespaces:
+#              - string
+#            topologyKey: string
+    overrideResourceRequirements:
+#      claims:
+#        - name: string
+#      limits:  key: string
+#      requests:  key: string
+  defaultPodSecurityAdmissionConfigurationTemplateName: ''
+  defaultPodSecurityPolicyTemplateName: ''
+  fleetAgentDeploymentCustomization:
+    appendTolerations:
+#      - effect: string
+#        key: string
+#        operator: string
+#        tolerationSeconds: int
+#        value: string
+    overrideAffinity:
+#      nodeAffinity:
+#        preferredDuringSchedulingIgnoredDuringExecution:
+#          - preference:
+#              matchExpressions:
+#                - key: string
+#                  operator: string
+#                  values:
+#                    - string
+#              matchFields:
+#                - key: string
+#                  operator: string
+#                  values:
+#                    - string
+#            weight: int
+#        requiredDuringSchedulingIgnoredDuringExecution:
+#          nodeSelectorTerms:
+#            - matchExpressions:
+#                - key: string
+#                  operator: string
+#                  values:
+#                    - string
+#              matchFields:
+#                - key: string
+#                  operator: string
+#                  values:
+#                    - string
+#      podAffinity:
+#        preferredDuringSchedulingIgnoredDuringExecution:
+#          - podAffinityTerm:
+#              labelSelector:
+#                matchExpressions:
+#                  - key: string
+#                    operator: string
+#                    values:
+#                      - string
+#                matchLabels:  key: string
+#              namespaceSelector:
+#                matchExpressions:
+#                  - key: string
+#                    operator: string
+#                    values:
+#                      - string
+#                matchLabels:  key: string
+#              namespaces:
+#                - string
+#              topologyKey: string
+#            weight: int
+#        requiredDuringSchedulingIgnoredDuringExecution:
+#          - labelSelector:
+#              matchExpressions:
+#                - key: string
+#                  operator: string
+#                  values:
+#                    - string
+#              matchLabels:  key: string
+#            namespaceSelector:
+#              matchExpressions:
+#                - key: string
+#                  operator: string
+#                  values:
+#                    - string
+#              matchLabels:  key: string
+#            namespaces:
+#              - string
+#            topologyKey: string
+#      podAntiAffinity:
+#        preferredDuringSchedulingIgnoredDuringExecution:
+#          - podAffinityTerm:
+#              labelSelector:
+#                matchExpressions:
+#                  - key: string
+#                    operator: string
+#                    values:
+#                      - string
+#                matchLabels:  key: string
+#              namespaceSelector:
+#                matchExpressions:
+#                  - key: string
+#                    operator: string
+#                    values:
+#                      - string
+#                matchLabels:  key: string
+#              namespaces:
+#                - string
+#              topologyKey: string
+#            weight: int
+#        requiredDuringSchedulingIgnoredDuringExecution:
+#          - labelSelector:
+#              matchExpressions:
+#                - key: string
+#                  operator: string
+#                  values:
+#                    - string
+#              matchLabels:  key: string
+#            namespaceSelector:
+#              matchExpressions:
+#                - key: string
+#                  operator: string
+#                  values:
+#                    - string
+#              matchLabels:  key: string
+#            namespaces:
+#              - string
+#            topologyKey: string
+    overrideResourceRequirements:
+#      claims:
+#        - name: string
+#      limits:  key: string
+#      requests:  key: string
+  kubernetesVersion: v1.28.8+rke2r1
+  localClusterAuthEndpoint:
+    caCerts: ''
+    enabled: false
+    fqdn: ''
+  rkeConfig:
+    chartValues:
+      rke2-calico: {}
+    etcd:
+      disableSnapshots: false
+      s3:
+#        bucket: string
+#        cloudCredentialName: string
+#        endpoint: string
+#        endpointCA: string
+#        folder: string
+#        region: string
+#        skipSSLVerify: boolean
+      snapshotRetention: 5
+      snapshotScheduleCron: 0 */5 * * *
+    machineGlobalConfig:
+      cni: calico
+      disable:
+        - rke2-ingress-nginx
+      disable-kube-proxy: false
+      etcd-expose-metrics: false
+      profile: null
+    machinePools:
+      - name: pool1
+        etcdRole: true
+        controlPlaneRole: true
+        workerRole: true
+        # hostnamePrefix: 'aio'
+        quantity: 3
+        unhealthyNodeTimeout: 0m
+        machineConfigRef:
+          kind: VmwarevsphereConfig
+          name: itnovative-pool1
+        drainBeforeDelete: true
+        machineOS: linux
+        labels: {}
+      - name: worker
+        etcdRole: false
+        controlPlaneRole: false
+        workerRole: true
+        # hostnamePrefix: 'aio'
+        quantity: 2
+        unhealthyNodeTimeout: 0m
+        machineConfigRef:
+          kind: VmwarevsphereConfig
+          name: worker
+        drainBeforeDelete: true
+        machineOS: linux
+        labels: {}
+
+#      - cloudCredentialSecretName: string
+#        controlPlaneRole: boolean
+#        displayName: string
+#        drainBeforeDelete: boolean
+#        drainBeforeDeleteTimeout: string
+#        dynamicSchemaSpec: string
+#        etcdRole: boolean
+#        hostnameLengthLimit: int
+#        labels:  key: string
+#        machineConfigRef:
+#          apiVersion: string
+#          fieldPath: string
+#          kind: string
+#          name: string
+#          namespace: string
+#          resourceVersion: string
+#          uid: string
+#        machineDeploymentAnnotations:  key: string
+#        machineDeploymentLabels:  key: string
+#        machineOS: string
+#        maxUnhealthy: string
+#        name: string
+#        nodeStartupTimeout: string
+#        paused: boolean
+#        quantity: int
+#        rollingUpdate:
+#          maxSurge: json
+#          maxUnavailable: json
+#        taints:
+#          - effect: string
+#            key: string
+#            timeAdded: string
+#            value: string
+#        unhealthyNodeTimeout: string
+#        unhealthyRange: string
+#        workerRole: boolean
+    machineSelectorConfig:
+      - config:
+          cloud-provider-name: ''
+          protect-kernel-defaults: false
+#      - config:
+#
+#        machineLabelSelector:
+#          matchExpressions:
+#            - key: string
+#              operator: string
+#              values:
+#                - string
+#          matchLabels:  key: string
+    registries:
+      configs:
+        {}
+        #  authConfigSecretName: string
+#        caBundle: string
+#        insecureSkipVerify: boolean
+#        tlsSecretName: string
+      mirrors:
+        {}
+        #  endpoint:
+#          - string
+#        rewrite:  key: string
+    upgradeStrategy:
+      controlPlaneConcurrency: '1'
+      controlPlaneDrainOptions:
+        deleteEmptyDirData: true
+        disableEviction: false
+        enabled: false
+        force: false
+        gracePeriod: -1
+        ignoreDaemonSets: true
+        skipWaitForDeleteTimeoutSeconds: 0
+        timeout: 120
+#        ignoreErrors: boolean
+#        postDrainHooks:
+#          - annotation: string
+#        preDrainHooks:
+#          - annotation: string
+      workerConcurrency: '1'
+      workerDrainOptions:
+        deleteEmptyDirData: true
+        disableEviction: false
+        enabled: false
+        force: false
+        gracePeriod: -1
+        ignoreDaemonSets: true
+        skipWaitForDeleteTimeoutSeconds: 0
+        timeout: 120
+#        ignoreErrors: boolean
+#        postDrainHooks:
+#          - annotation: string
+#        preDrainHooks:
+#          - annotation: string
+#    additionalManifest: string
+#    etcdSnapshotCreate:
+#      generation: int
+#    etcdSnapshotRestore:
+#      generation: int
+#      name: string
+#      restoreRKEConfig: string
+#    infrastructureRef:
+#      apiVersion: string
+#      fieldPath: string
+#      kind: string
+#      name: string
+#      namespace: string
+#      resourceVersion: string
+#      uid: string
+#    machinePoolDefaults:
+#      hostnameLengthLimit: int
+#    machineSelectorFiles:
+#      - fileSources:
+#          - configMap:
+#              defaultPermissions: string
+#              items:
+#                - dynamic: boolean
+#                  hash: string
+#                  key: string
+#                  path: string
+#                  permissions: string
+#              name: string
+#            secret:
+#              defaultPermissions: string
+#              items:
+#                - dynamic: boolean
+#                  hash: string
+#                  key: string
+#                  path: string
+#                  permissions: string
+#              name: string
+#        machineLabelSelector:
+#          matchExpressions:
+#            - key: string
+#              operator: string
+#              values:
+#                - string
+#          matchLabels:  key: string
+#    networking:
+#      stackPreference: string
+#    provisionGeneration: int
+#    rotateCertificates:
+#      generation: int
+#      services:
+#        - string
+#    rotateEncryptionKeys:
+#      generation: int
+#   machineSelectorConfig:
+#     - config: {}
+# #  agentEnvVars:
+# #    - name: string
+# #      value: string
+# #  clusterAPIConfig:
+# #    clusterName: string
+# #  defaultClusterRoleForProjectMembers: string
+# #  enableNetworkPolicy: boolean
+# #  redeploySystemAgentGeneration: int
+# __clone: true

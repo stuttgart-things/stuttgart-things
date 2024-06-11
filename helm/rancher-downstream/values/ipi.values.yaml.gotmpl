@@ -1,0 +1,14 @@
+---
+secrets:
+  labul-vsphere-vcenter:
+    name: labul-vsphere
+    namespace: cattle-global-data
+    dataType: stringData
+    annotations:
+      field.cattle.io/description: labul-vsphere
+      field.cattle.io/name: labul-vsphere
+    secretKVs:
+      vmwarevspherecredentialConfig-username: {{ .Values.vsphereUsername }}
+      vmwarevspherecredentialConfig-password: {{ .Values.vspherePassword }}
+      vmwarevspherecredentialConfig-vcenter: {{ .Values.vsphereServer }}
+      vmwarevspherecredentialConfig-vcenterPort: "{{ .Values.vspherePort }}"

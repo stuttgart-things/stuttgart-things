@@ -1,0 +1,5 @@
+---
+vspherePassword: ref+vault://cloud/vsphere/password
+vsphereUsername: ref+vault://cloud/vsphere/username
+vsphereServer: ref+vault://cloud/vsphere/ip
+vspherePort: 443

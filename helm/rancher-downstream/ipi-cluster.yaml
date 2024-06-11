@@ -1,0 +1,28 @@
+---
+environments:
+  labul-vsphere:
+    values:
+      - env/defaults.yaml
+      - env/{{ .Environment.Name }}.yaml
+
+releases:
+  - name: vsphere-secrets
+    disableValidationOnInstall: true
+    installed: true
+    namespace: cattle-global-data
+    chart: stuttgart-things/sthings-cluster
+    version: 0.3.10
+    values:
+      - "values/ipi.values.yaml.gotmpl"
+
+repositories:
+  - name: stuttgart-things
+    url: eu.gcr.io/stuttgart-things
+    oci: true
+
+helmDefaults:
+  verify: false
+  wait: true
+  timeout: 600
+  recreatePods: false
+  force: true

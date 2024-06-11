@@ -24,10 +24,11 @@ works only for stuttgart-things project
 
 ```yaml
 LAB=labul
-CLOUD=vsphere
+CLOUD=pve
 CLUSTER_NAME=rancher-mgmt
 ZONE=sthings-pve.labul.sva.de.
 IP=10.31.101.5
+PR=$(echo $((1 + SRANDOM % 1000)))
 
 kubectl apply -f - <<EOF
 apiVersion: resources.stuttgart-things.com/v1alpha1
@@ -36,13 +37,13 @@ metadata:
   name: pdns-${LAB}-${CLOUD}-${CLUSTER_NAME}
   namespace: default
 spec:
-  pipelineRunName: pdns-${LAB}-${CLOUD}-${CLUSTER_NAME}
+  pipelineRunName: pdns-${LAB}-${CLOUD}-${CLUSTER_NAME}-${PR}
   inventory:
     - "all+[\"localhost\"]"
   playbooks:
     - "ansible/playbooks/pdns-ingress-entry.yaml"
   ansibleVarsFile:
-    - pdns_url+-https://pdns-${CLOUD}.${CLOUD}.sva.de:8443
+    - pdns_url+-https://pdns-${CLOUD}.${LAB}.sva.de:8443
     - entry_zone+-${ZONE}
     - ip_address+-${IP}
     - hostname+-${CLUSTER_NAME}
