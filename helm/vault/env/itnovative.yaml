@@ -1,0 +1,5 @@
+---
+domain: itnovative.sthings-pve.labul.sva.de
+storageClass: longhorn
+issuer: cluster-issuer-approle
+storageSize: 4

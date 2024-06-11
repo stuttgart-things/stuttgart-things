@@ -4,7 +4,7 @@ releases:
     installed: true
     namespace: longhorn-system
     chart: longhorn/longhorn
-    version: 1.6.1
+    version: 1.6.2
     values:
       - "values/longhorn.values.yaml.gotmpl"
 
@@ -23,5 +23,9 @@ helmDefaults:
 environments:
   labul-vsphere:
     values:
-      - env/default.yaml
+      - env/defaults.yaml
+      - env/{{ .Environment.Name }}.yaml
+  itnovative:
+    values:
+      - env/defaults.yaml
       - env/{{ .Environment.Name }}.yaml

@@ -69,6 +69,12 @@ helmDefaults:
 environments:
   labul-proxmox-rancher:
     values:
-      - env/default.yaml
+      - env/defaults.yaml
+      - env/labul-proxmox.yaml
+      - env/{{ .Environment.Name }}.yaml
+
+  itnovative:
+    values:
+      - env/defaults.yaml
       - env/labul-proxmox.yaml
       - env/{{ .Environment.Name }}.yaml

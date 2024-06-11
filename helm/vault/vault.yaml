@@ -1,0 +1,41 @@
+---
+releases:
+  - name: vault-configuration
+    disableValidationOnInstall: true
+    installed: true
+    namespace: vault
+    chart: stuttgart-things/sthings-cluster
+    version: 0.3.10
+    values:
+      - "values/vault-certs.values.yaml.gotmpl"
+
+  - name: vault-deployment
+    installed: true
+    namespace: vault
+    chart: hashicorp/vault
+    needs:
+      - vault/vault-configuration
+    version: 0.28
+    values:
+      - "values/vault.values.yaml.gotmpl"
+
+repositories:
+  - name: hashicorp
+    url: https://helm.releases.hashicorp.com
+    oci: false
+  - name: stuttgart-things
+    url: eu.gcr.io/stuttgart-things
+    oci: true
+
+environments:
+  itnovative:
+    values:
+      - env/defaults.yaml
+      - env/{{ .Environment.Name }}.yaml
+
+helmDefaults:
+  verify: false
+  wait: true
+  timeout: 600
+  recreatePods: false
+  force: true

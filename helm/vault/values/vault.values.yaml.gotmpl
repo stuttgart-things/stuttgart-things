@@ -1,0 +1,20 @@
+---
+injector:
+  enabled: false
+server:
+  enabled: true
+  dataStorage:
+    enabled: true
+    storageClass: {{ .Values.storageClass }}
+    size: {{ .Values.storageSize }}Gi
+  ingress:
+    enabled: true
+    hosts:
+      - host: {{ .Values.hostname }}.{{ .Values.domain }}
+    tls:
+      - hosts:
+          - {{ .Values.hostname }}.{{ .Values.domain }}
+        secretName: {{ .Values.hostname }}-tls
+    ingressClassName: nginx
+csi:
+  enabled: true

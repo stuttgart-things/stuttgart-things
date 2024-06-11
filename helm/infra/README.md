@@ -25,9 +25,9 @@ works only for stuttgart-things project
 ```yaml
 LAB=labul
 CLOUD=pve
-CLUSTER_NAME=rancher-mgmt
+CLUSTER_NAME=itnovative
 ZONE=sthings-pve.labul.sva.de.
-IP=10.31.101.5
+IP=10.31.103.6
 PR=$(echo $((1 + SRANDOM % 1000)))
 
 kubectl apply -f - <<EOF
