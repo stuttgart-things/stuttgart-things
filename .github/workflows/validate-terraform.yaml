@@ -32,7 +32,7 @@ jobs:
     continue-on-error: ${{ inputs.continue-error }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.1.6
+        uses: actions/checkout@v4.1.7
       - run: |
           terraform init
           terraform fmt
@@ -46,7 +46,7 @@ jobs:
     continue-on-error: ${{ inputs.continue-error }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.1.6
+        uses: actions/checkout@v4.1.7
       - run: |
           ls -lta
           tflint --recursive

@@ -40,7 +40,7 @@ jobs:
     steps:
       - name: Checkout code
         id: checkout
-        uses: actions/checkout@v4.1.6
+        uses: actions/checkout@v4.1.7
         with:
           fetch-depth: '0'
 
