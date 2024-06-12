@@ -1,0 +1,4 @@
+---
+ipRange: 10.31.103.10-10.31.103.10
+ipPoolName: ip-pool
+clusterName: itnovative

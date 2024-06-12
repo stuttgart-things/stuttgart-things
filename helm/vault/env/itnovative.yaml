@@ -1,5 +1,6 @@
 ---
-domain: itnovative.sthings-pve.labul.sva.de
+domain: itnovative.sthings-vsphere.labul.sva.de
 storageClass: longhorn
 issuer: cluster-issuer-approle
 storageSize: 4
+hostname: vault-demo

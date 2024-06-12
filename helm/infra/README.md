@@ -24,10 +24,10 @@ works only for stuttgart-things project
 
 ```yaml
 LAB=labul
-CLOUD=pve
+CLOUD=vsphere
 CLUSTER_NAME=itnovative
-ZONE=sthings-pve.labul.sva.de.
-IP=10.31.103.6
+ZONE=sthings-vsphere.labul.sva.de.
+IP=10.31.103.10
 PR=$(echo $((1 + SRANDOM % 1000)))
 
 kubectl apply -f - <<EOF

@@ -76,5 +76,5 @@ environments:
   itnovative:
     values:
       - env/defaults.yaml
-      - env/labul-proxmox.yaml
+      - env/labul-vsphere.yaml
       - env/{{ .Environment.Name }}.yaml

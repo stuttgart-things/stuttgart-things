@@ -32,6 +32,10 @@ environments:
     values:
       - env/defaults.yaml
       - env/{{ .Environment.Name }}.yaml
+  itnovative-dev:
+    values:
+      - env/defaults.yaml
+      - env/{{ .Environment.Name }}.yaml
 
 helmDefaults:
   verify: false
