@@ -1,0 +1,75 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: nfs-csi-config
+  labels:
+    crossplane.io/xrd: xnfscsiconfigs.resources.stuttgart-things.com
+spec:
+  patchSets:
+    - name: name
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.storageClassName
+          toFieldPath: metadata.name
+    - name: provider
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.clusterName
+          toFieldPath: spec.providerConfigRef.name
+  writeConnectionSecretsToNamespace: crossplane-system
+  compositeTypeRef:
+    apiVersion: resources.stuttgart-things.com/v1alpha1
+    kind: XNfsCsiConfig
+  resources:
+    - name: nfs-csi-release
+      base:
+        apiVersion: resources.stuttgart-things.com/v1alpha1
+        kind: XNfsCsi
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: metadata.name
+          toFieldPath: metadata.name
+        - type: FromCompositeFieldPath
+          fromFieldPath: metadata.namespace
+          toFieldPath: metadata.namespace
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.clusterName
+          toFieldPath: spec.clusterName
+    - name: nfs-storage-class
+      base:
+        apiVersion: kubernetes.crossplane.io/v1alpha2
+        kind: Object
+        metadata:
+          name: nfs-csi
+        spec:
+          providerConfigRef:
+            name: kubernetes-clustername
+          forProvider:
+            manifest:
+              apiVersion: storage.k8s.io/v1
+              kind: StorageClass
+              parameters:
+                mountPermissions: "0777"
+                server: 10.31.101.26
+                share: /data/col1/sthings
+              provisioner: nfs.csi.k8s.io
+              reclaimPolicy: Delete
+              volumeBindingMode: Immediate
+      patches:
+        - type: PatchSet
+          patchSetName: provider
+        - type: PatchSet
+          patchSetName: name
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.storageClass.server
+          toFieldPath: spec.forProvider.manifest.spec.parameters.server
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.storageClass.share
+          toFieldPath: spec.forProvider.manifest.spec.parameters.share
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.storageClass.reclaimPolicy
+          toFieldPath: spec.forProvider.manifest.spec.reclaimPolicy
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.storageClass.volumeBindingMode
+          toFieldPath: spec.forProvider.manifest.spec.volumeBindingMode

@@ -1,0 +1,49 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: xnfscsis.resources.stuttgart-things.com
+spec:
+  connectionSecretKeys:
+    - kubeconfig
+  group: resources.stuttgart-things.com
+  names:
+    kind: XNfsCsi
+    plural: xnfscsis
+  claimNames:
+    kind: NfsCsi
+    plural: nfscsis
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          description: A NfsCsi is a composite resource that represents a helm release for a nfs csi deployment
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                deploymentNamespace:
+                  type: string
+                  default: kube-system
+                  description: namespace for nginx-ingress
+                clusterName:
+                  type: string
+                  default: in-cluster
+                  description: cluster name/helm provider name
+                version:
+                  type: string
+                  default: v4.7.0
+                  description: helm chart version for cert-manager
+              required:
+                - clusterName
+            status:
+              description: A Status represents the observed state
+              properties:
+                share:
+                  description: Freeform field containing status information
+                  type: object
+                  x-kubernetes-preserve-unknown-fields: true
+              type: object

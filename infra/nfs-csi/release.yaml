@@ -30,4 +30,4 @@ spec:
       enableInlineVolume: false
     kubeletDir: /var/lib/kubelet
     externalSnapshotter:
-      enabled: false
+      enabled: true

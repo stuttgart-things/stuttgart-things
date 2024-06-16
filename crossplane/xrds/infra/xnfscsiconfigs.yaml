@@ -1,0 +1,70 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: xnfscsiconfigs.resources.stuttgart-things.com
+spec:
+  connectionSecretKeys:
+    - kubeconfig
+  group: resources.stuttgart-things.com
+  names:
+    kind: XNfsCsiConfig
+    plural: xnfscsiconfigs
+  claimNames:
+    kind: NfsCsiConfig
+    plural: nfscsiconfigs
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          description: A NfsCsiConfig is a composite resource that represents a helm release for a nfs csi deployment + configuration
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                deploymentNamespace:
+                  type: string
+                  default: kube-system
+                  description: namespace for nginx-ingress
+                clusterName:
+                  type: string
+                  default: in-cluster
+                  description: cluster name/helm provider name
+                version:
+                  type: string
+                  default: v4.7.0
+                  description: helm chart version for nfs-csi
+                storageClass:
+                  type: object
+                  properties:
+                    server:
+                      type: string
+                      description: nfs server
+                    share:
+                      type: string
+                      description: nfs share
+                    reclaimPolicy:
+                      type: string
+                      default: Delete
+                      description: reclaim policy
+                    volumeBindingMode:
+                      type: string
+                      default: Immediate
+                      description: volume binding mode
+                  required:
+                    - server
+                    - share
+              required:
+                - clusterName
+                - storageClass
+            status:
+              description: A Status represents the observed state
+              properties:
+                share:
+                  description: Freeform field containing status information
+                  type: object
+                  x-kubernetes-preserve-unknown-fields: true
+              type: object

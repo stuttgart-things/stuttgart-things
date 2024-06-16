@@ -2,35 +2,49 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: Composition
 metadata:
-  name: cert-manager
+  name: nfs-csi
   labels:
-    crossplane.io/xrd: xcertmanagers.resources.stuttgart-things.com
+    crossplane.io/xrd: xnfscsis.resources.stuttgart-things.com
 spec:
   writeConnectionSecretsToNamespace: crossplane-system
   compositeTypeRef:
     apiVersion: resources.stuttgart-things.com/v1alpha1
-    kind: XCertManager
+    kind: XNfsCsi
   resources:
     - base:
         apiVersion: helm.crossplane.io/v1beta1
         kind: Release
         metadata:
-          name: cert-manager
+          name: nfs-csi
           annotations:
-            crossplane.io/external-name: cert-manager
+            crossplane.io/external-name: nfs-csi
         spec:
           forProvider:
             chart:
-              name: cert-manager
-              repository: https://charts.jetstack.io
-              version: v1.14.4
-            namespace: cert-manager
+              name: csi-driver-nfs
+              repository: https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/charts
+              version: v4.7.0
+            namespace: kube-system
             insecureSkipTLSVerify: true
             skipCreateNamespace: false
             wait: true
             skipCRDs: false
             values:
-              installCRDs: true
+              serviceAccount:
+                create: true
+                controller: csi-nfs-controller-sa
+              rbac:
+                create: true
+                name: nfs
+              driver:
+                name: nfs.csi.k8s.io
+                mountPermissions: 0
+              feature:
+                enableFSGroupPolicy: true
+                enableInlineVolume: false
+              kubeletDir: /var/lib/kubelet
+              externalSnapshotter:
+                enabled: false
       patches:
         - type: CombineFromComposite
           combine:
@@ -38,7 +52,7 @@ spec:
               - fromFieldPath: spec.clusterName
             strategy: string
             string:
-              fmt: "cert-manager-%s"
+              fmt: "nfs-csi-%s"
           toFieldPath: metadata.name
         - fromFieldPath: spec.deploymentNamespace
           toFieldPath: spec.forProvider.namespace
