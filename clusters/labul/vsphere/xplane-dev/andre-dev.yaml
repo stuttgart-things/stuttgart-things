@@ -1,0 +1,30 @@
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: NetworkStackMNPC
+metadata:
+  name: andre-dev
+  namespace: crossplane-system
+spec:
+  clusterName: andre-dev
+  ipPoolName: all
+  ipRanges:
+    - 10.31.103.8-10.31.103.9
+  issuerName: vault-approle
+  approle:
+    secretName: certmanager-labul-vsphere
+    secretNamespace: crossplane-system
+    pkiPath: pki/sign/sthings-vsphere.labul.sva.de
+    vaultAddr: https://vault-vsphere.labul.sva.de:8200
+    approleID: 1d42d7e7-8c14-e5f9-801d-b3ecef416616
+---
+apiVersion: kubernetes.crossplane.io/v1alpha1
+kind: ProviderConfig
+metadata:
+  name: andre-dev
+spec:
+  credentials:
+    source: Secret
+    secretRef:
+      namespace: crossplane-system
+      name: andre-dev
+      key: andre-dev
