@@ -6,7 +6,7 @@ metadata:
   namespace: crossplane-system
 spec:
   clusterName: andre-dev
-  ipPoolName: all
+  ipPoolName: ip-pool-1
   ipRanges:
     - 10.31.103.8-10.31.103.9
   issuerName: vault-approle
