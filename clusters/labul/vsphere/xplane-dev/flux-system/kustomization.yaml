@@ -5,7 +5,10 @@ resources:
   - gotk-components.yaml
   - gotk-sync.yaml
 patches:
-  - patch: |
+  - target:
+      kind: Kustomization
+      name: flux-system
+    patch: |
       - op: add
         path: /spec
         value:
@@ -13,9 +16,6 @@ patches:
           provider: sops
             secretRef:
               name: sops-age
-    target:
-      kind: Kustomization
-      name: flux-system
   - patch: |
       - op: add
         path: /spec/template/spec/volumes/-
@@ -40,5 +40,4 @@ patches:
     target:
       kind: Deployment
       name: source-controller
-
 
