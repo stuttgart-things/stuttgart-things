@@ -31,12 +31,11 @@ patches:
       name: source-controller
   - patch: |
       - op: add
-        path: /spec/
+        path: /spec/decryption/
         value:
-          decryption:
-            provider: sops
-            secretRef:
-              name: sops-age
+          provider: sops
+          secretRef:
+            name: sops-age
     target:
       kind: Kustomization
       name: flux-system
