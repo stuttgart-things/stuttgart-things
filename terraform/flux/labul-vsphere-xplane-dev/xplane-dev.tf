@@ -1,7 +1,6 @@
 module "rancher-mgmt-proxmox" {
-  source            = "github.com/stuttgart-things/flux2-cluster-bootstrap"
-   #"github.com/stuttgart-things/flux2-cluster-bootstrap?ref=2024.06.11"
-  kubeconfig_path   = "/home/sthings/.kube/xplane-dev"
+  source            = "github.com/stuttgart-things/flux2-cluster-bootstrap?ref=2024.06.16"
+  kubeconfig_path   = "/tmp/xplane-dev"
   github_token      = var.github_token
   github_repository = "stuttgart-things"
   github_org        = "stuttgart-things"
