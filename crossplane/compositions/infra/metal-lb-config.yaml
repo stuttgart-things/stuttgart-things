@@ -86,7 +86,7 @@ spec:
       patches:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.ipPoolName
-          toFieldPath: spec.forProvider.manifest.spec.ipAddressPools
+          toFieldPath: spec.forProvider.manifest.spec.ipAddressPools[0].value
         - type: PatchSet
           patchSetName: provider
         - type: PatchSet
