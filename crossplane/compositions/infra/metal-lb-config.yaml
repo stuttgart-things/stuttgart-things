@@ -63,8 +63,6 @@ spec:
                 addresses:
                   - rangeStart-rangeEnd
       patches:
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.ipRanges
         - type: PatchSet
           patchSetName: provider
         - type: PatchSet
