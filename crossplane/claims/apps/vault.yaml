@@ -8,6 +8,8 @@ spec:
   clusterName: andre-dev
   deploymentNamespace: vault
   domainName: andre-dev.sthings-vsphere.labul.sva.de
+  storageClass: nfs-csi
+  version: 0.28.0
   cert:
     secretName: vault-ingress-tls
     issuerName: vault-approle
