@@ -65,8 +65,12 @@ spec:
           toFieldPath: spec.forProvider.namespace
         - fromFieldPath: spec.clusterName
           toFieldPath: spec.providerConfigRef.name
-        # - fromFieldPath: spec.version
-        #   toFieldPath: spec.forProvider.chart.version
+        - fromFieldPath: spec.version
+          toFieldPath: spec.forProvider.chart.version
+        - fromFieldPath: spec.storageClass
+          toFieldPath: spec.forProvider.values.server.dataStorage.storageClass
+        - fromFieldPath: spec.storageSize
+          toFieldPath: spec.forProvider.values.server.dataStorage.size
     - name: vault-ingresscert
       base:
         apiVersion: resources.stuttgart-things.com/v1alpha1

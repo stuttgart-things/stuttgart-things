@@ -32,6 +32,18 @@ spec:
                 clusterName:
                   type: string
                   description: cluster name/helm provider name
+                version:
+                  type: string
+                  default: 0.28.0
+                  description: helm chart version
+                storageClass:
+                  type: string
+                  default: nfs-csi
+                  description: storage class name
+                storageSize:
+                  type: string
+                  default: 1Gi
+                  description: storage size
                 hostName:
                   type: string
                   default: vault
