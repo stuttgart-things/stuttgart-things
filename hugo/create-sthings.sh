@@ -59,6 +59,7 @@ CURR_DATE=$(date +'%Y-%m-%dT%H:%M:%S%:z')
 date = $CURR_DATE
 draft = false
 title = '$file'
+summary = '$file'
 +++
 EOF
     echo "New lines added to $file."
