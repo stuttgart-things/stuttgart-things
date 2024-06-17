@@ -36,6 +36,7 @@ wget https://raw.githubusercontent.com/stuttgart-things/docs/main/hugo/sthings-c
 cp -R hugo/*.html sthings/content/post
 cp ./.github/workflows/README.md sthings/content/post
 cp hugo/README.md sthings/content
+cp ansible/collections/README.md sthings/content/post/ansible-collection.md
 
 cp sthings-logo.png sthings/themes/github-style/static/images/avatar.png
 cp sthings-logo.png sthings/themes/github-style/images/sthings-logo.png
