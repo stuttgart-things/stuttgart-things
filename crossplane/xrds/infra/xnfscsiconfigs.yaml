@@ -57,6 +57,10 @@ spec:
                       type: string
                       default: Immediate
                       description: volume binding mode
+                    mountPermissions:
+                      type: string
+                      default: "0777"
+                      description: nfs share mount permissions
                   required:
                     - name
                     - server

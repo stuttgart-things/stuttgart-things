@@ -49,13 +49,7 @@ spec:
             manifest:
               apiVersion: storage.k8s.io/v1
               kind: StorageClass
-              parameters:
-                mountPermissions: "0777"
-                server: 10.31.101.26
-                share: /data/col1/sthings
               provisioner: nfs.csi.k8s.io
-              reclaimPolicy: Delete
-              volumeBindingMode: Immediate
       patches:
         - type: PatchSet
           patchSetName: provider
@@ -64,6 +58,9 @@ spec:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.storageClass.server
           toFieldPath: spec.forProvider.manifest.spec.parameters.server
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.storageClass.mountPermissions
+          toFieldPath: spec.forProvider.manifest.spec.parameters.mountPermissions
         - type: FromCompositeFieldPath
           fromFieldPath: spec.storageClass.share
           toFieldPath: spec.forProvider.manifest.spec.parameters.share
