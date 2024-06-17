@@ -50,10 +50,6 @@ spec:
               apiVersion: storage.k8s.io/v1
               kind: StorageClass
               provisioner: nfs.csi.k8s.io
-              parameters:
-                server: ""
-                share: ""
-                mountPermissions: "0777"
               allowVolumeExpansion: true
               mountOptions:
                 - nfsvers=4.1
@@ -64,16 +60,16 @@ spec:
           patchSetName: name
         - type: FromCompositeFieldPath
           fromFieldPath: spec.storageClass.server
-          toFieldPath: spec.forProvider.manifest.spec.parameters.server
+          toFieldPath: spec.forProvider.manifest.parameters.server
         - type: FromCompositeFieldPath
           fromFieldPath: spec.storageClass.mountPermissions
-          toFieldPath: spec.forProvider.manifest.spec.parameters.mountPermissions
+          toFieldPath: spec.forProvider.manifest.parameters.mountPermissions
         - type: FromCompositeFieldPath
           fromFieldPath: spec.storageClass.share
-          toFieldPath: spec.forProvider.manifest.spec.parameters.share
+          toFieldPath: spec.forProvider.manifest.parameters.share
         - type: FromCompositeFieldPath
           fromFieldPath: spec.storageClass.reclaimPolicy
-          toFieldPath: spec.forProvider.manifest.spec.reclaimPolicy
+          toFieldPath: spec.forProvider.manifest.reclaimPolicy
         - type: FromCompositeFieldPath
           fromFieldPath: spec.storageClass.volumeBindingMode
-          toFieldPath: spec.forProvider.manifest.spec.volumeBindingMode
+          toFieldPath: spec.forProvider.manifest.volumeBindingMode
