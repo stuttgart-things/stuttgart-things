@@ -40,6 +40,9 @@ spec:
                 storageClass:
                   type: object
                   properties:
+                    name:
+                      type: string
+                      description: nfs server
                     server:
                       type: string
                       description: nfs server
@@ -55,6 +58,7 @@ spec:
                       default: Immediate
                       description: volume binding mode
                   required:
+                    - name
                     - server
                     - share
               required:

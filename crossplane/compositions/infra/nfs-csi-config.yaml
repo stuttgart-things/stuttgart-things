@@ -10,7 +10,7 @@ spec:
     - name: name
       patches:
         - type: FromCompositeFieldPath
-          fromFieldPath: spec.storageClassName
+          fromFieldPath: spec.storageClass.name
           toFieldPath: metadata.name
     - name: provider
       patches:
