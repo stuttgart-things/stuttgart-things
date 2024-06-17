@@ -153,3 +153,11 @@ spec:
     kind: GitRepository
     name: flux-system
   path: ./crossplane/compositions/apps
+---
+apiVersion: kubernetes.crossplane.io/v1alpha1
+kind: ProviderConfig
+metadata:
+  name: kubernetes-incluster
+spec:
+  credentials:
+    source: InjectedIdentity
