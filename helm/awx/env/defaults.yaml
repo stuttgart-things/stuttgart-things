@@ -1,0 +1,7 @@
+---
+adminUser: admin
+ingressClassName: nginx
+ingressSecret: awx-tls
+postgresStorageRequest: 1Gi
+postgresStorageLimits: 8Gi
+hostname: awx

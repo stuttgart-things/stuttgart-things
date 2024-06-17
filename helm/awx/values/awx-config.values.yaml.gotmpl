@@ -11,6 +11,6 @@ customresources:
       dnsNames:
         - {{ .Values.hostname }}.{{ .Values.domain }}
       issuerRef:
-        name: cluster-issuer-approle
+        name: {{ .Values.clusterIssuer }}
         kind: ClusterIssuer
-      secretName: {{ .Values.ingress_secret }}
+      secretName: {{ .Values.ingressSecret }}

@@ -1,0 +1,5 @@
+---
+domain: andre-dev.sthings-vsphere.labul.sva.de
+projectStorageClass: nfs-csi
+postgresStorageClass: nfs-csi
+clusterIssuer: vault-approle
