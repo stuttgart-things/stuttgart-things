@@ -50,7 +50,7 @@ spec:
     value:
     - https://github.com/stuttgart-things/stuttgart-things/releases/download/0.5.0/sthings-base_os-0.5.0.tar.gz
     - community.crypto:2.10.0
-  - name: installExtraCollections
+  - naxme: installExtraCollections
     value: "true"
   pipelineRef:
     params:

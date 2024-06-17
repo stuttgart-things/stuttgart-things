@@ -1,7 +1,8 @@
 ---
 environments:
-  labul-vsphere:
+  andre-dev:
     values:
+      - env/defaults.yaml
       - env/{{ .Environment.Name }}.yaml
 
 releases:
