@@ -1,29 +1,29 @@
-# ---
-# apiVersion: resources.stuttgart-things.com/v1alpha1
-# kind: AnsibleRun
-# metadata:
-#   name: pdns-entry-labul-vsphere-itnovative3
-#   namespace: default
-# spec:
-#   pipelineRunName: pdns-entry-labul-vsphere-itnovative-3
-#   inventory:
-#     - "all+[\"localhost\"]"
-#   playbooks:
-#     - "ansible/playbooks/pdns-ingress-entry.yaml"
-#   ansibleVarsFile:
-#     - pdns_url+-https://pdns-vsphere.labul.sva.de:8443
-#     - entry_zone+-sthings-vsphere.labul.sva.de.
-#     - ip_address+-10.31.102.10
-#     - hostname+-itnovative3
-#   gitRepoUrl: https://github.com/stuttgart-things/stuttgart-things.git
-#   gitRevision: main
-#   providerRef:
-#     name: kubernetes-incluster
-#   vaultSecretName: vault
-#   pipelineNamespace: tektoncd
-#   workingImage: eu.gcr.io/stuttgart-things/sthings-ansible:9.2.0
-#   roles:
-#     - "https://github.com/stuttgart-things/install-configure-powerdns.git"
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: AnsibleRun
+metadata:
+  name: pdns-entry-labul-vsphere-andre-dev
+  namespace: default
+spec:
+  pipelineRunName: pdns-entry-labul-vsphere-andre-dev
+  inventory:
+    - "all+[\"localhost\"]"
+  playbooks:
+    - "ansible/playbooks/pdns-ingress-entry.yaml"
+  ansibleVarsFile:
+    - pdns_url+-https://pdns-vsphere.labul.sva.de:8443
+    - entry_zone+-sthings-vsphere.labul.sva.de.
+    - ip_address+-10.31.103.8
+    - hostname+-andre-dev
+  gitRepoUrl: https://github.com/stuttgart-things/stuttgart-things.git
+  gitRevision: main
+  providerRef:
+    name: kubernetes-incluster
+  vaultSecretName: vault
+  pipelineNamespace: tektoncd
+  workingImage: eu.gcr.io/stuttgart-things/sthings-ansible:10.0.1
+  roles:
+    - "https://github.com/stuttgart-things/install-configure-powerdns.git"
 ---
 apiVersion: resources.stuttgart-things.com/v1alpha1
 kind: NfsCsiConfig
@@ -80,3 +80,13 @@ spec:
       namespace: crossplane-system
       name: andre-dev
       key: andre-dev
+---
+apiVersion: kubernetes.crossplane.io/v1alpha1
+kind: ProviderConfig
+metadata:
+  name: kubernetes-incluster
+spec:
+  credentials:
+    source: InjectedIdentity
+# SA=$(kubectl -n crossplane-system get sa -o name | grep provider-kubernetes | sed -e 's|serviceaccount\/|crossplane-system:|g')
+# kubectl create clusterrolebinding provider-kubernetes-admin-binding --clusterrole cluster-admin --serviceaccount="${SA}"
