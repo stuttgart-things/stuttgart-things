@@ -1,0 +1,60 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: xawxes.resources.stuttgart-things.com
+spec:
+  connectionSecretKeys:
+    - kubeconfig
+  group: resources.stuttgart-things.com
+  names:
+    kind: XAwx
+    plural: xawxes
+  claimNames:
+    kind: Awx
+    plural: awxes
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          description: A Awx is a composite resource that represents a helm release for a awx deployment
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                deploymentNamespace:
+                  type: string
+                  default: awx
+                  description: namespace for awx
+                clusterName:
+                  type: string
+                  description: cluster name/helm provider name
+                hostName:
+                  type: string
+                  default: awx
+                  description: hostname of ingress resource
+                domainName:
+                  type: string
+                  description: domain (name) of ingress resource
+                cert:
+                  type: object
+                  properties:
+                    issuerName:
+                      type: string
+                      default: vault-approle
+                      description: name of cert-manager issuer
+                    issuerKind:
+                      type: string
+                      default: ClusterIssuer
+                      description: kind of cert-manager issuer
+                    secretName:
+                      type: string
+                      description: name of to be created secret
+                      default: awx-ingress-tls
+              required:
+                - cert
+                - clusterName
+                - domainName
