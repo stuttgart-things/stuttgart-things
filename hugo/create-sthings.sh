@@ -47,16 +47,23 @@ cp sthings-city.png sthings/themes/github-style/static/images/sthings-city.png
 
 # Modify Readme
 
-# Add new markdown lines at the beginning of the files
-cat <<EOF | cat - sthings/content/post/README.md > temp && mv temp sthings/content/post/README.md
+# Define vars
+file="*.md"
+dir="sthings/content/post"
+CURR_DATE=$(date +'%Y-%m-%dT%H:%M:%S%:z')
+
+# Add new markdown lines at the beginning of the .md files
+ for file in `cd ${dir};ls -1 ${file}` ;do
+     cat <<EOF | cat - "${dir}"/"$file" > temp && mv temp "${dir}"/"$file"
 +++
 date = $CURR_DATE
 draft = false
-title = 'README.md'
-summary = "README.md"
+title = '$file'
 +++
 EOF
-    echo "New lines added to README."
+    echo "New lines added to $file."
+done
+
 
 # Modify theme files
 sed -i 's/container-lg/container-xl/g' sthings/themes/github-style/layouts/partials/post.html
