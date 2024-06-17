@@ -7,6 +7,7 @@ metadata:
 spec:
   clusterName: labda-test
   deploymentNamespace: vault
-  domainName: apptest.sthings-vsphere.labul.sva.de
+  domainName: andre-dev.sthings-vsphere.labul.sva.de
   cert:
     secretName: vault-ingress-tls
+    issuerName: vault-approle
