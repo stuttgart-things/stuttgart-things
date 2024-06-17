@@ -1,0 +1,8 @@
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: NfsCsi
+metadata:
+  name: andre-dev
+  namespace: crossplane-system
+spec:
+  clusterName: andre-dev
