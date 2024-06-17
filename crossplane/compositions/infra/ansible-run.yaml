@@ -61,6 +61,8 @@ spec:
                   - name: ansibleVarsFile
                   - name: ansibleVarsInventory
                   - name: ansibleExtraCollections
+                    value:
+                    - community.crypto:2.10.0
                   - name: installExtraCollections
                     value: "true"
       patches:
