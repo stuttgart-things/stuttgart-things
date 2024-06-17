@@ -26,9 +26,9 @@ spec:
       base:
         apiVersion: resources.stuttgart-things.com/v1alpha1
         kind: XIngressCertificate
-        references:
-          - dependsOn:
-              name: awx-namespace
+        # references:
+        #   - dependsOn:
+        #       name: awx-namespace
       patches:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.deploymentNamespace

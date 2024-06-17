@@ -53,7 +53,6 @@ spec:
                     secretName:
                       type: string
                       description: name of to be created secret
-                      default: awx-ingress-tls
               required:
                 - cert
                 - clusterName
