@@ -39,7 +39,7 @@ spec:
                 enabled: true
                 dataStorage:
                   enabled: true
-                  storageClass: trident
+                  storageClass: nfs-csi
                   size: 1Gi
                 ingress:
                   enabled: true
