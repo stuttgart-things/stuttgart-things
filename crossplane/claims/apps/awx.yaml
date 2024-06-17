@@ -6,7 +6,7 @@ metadata:
   namespace: crossplane-system
 spec:
   clusterName: andre-dev
-  deploymentNamespace: awx
+  deploymentNamespace: default
   hostName: awx
   domainName: andre-dev.sthings-vsphere.labul.sva.de
   cert:
