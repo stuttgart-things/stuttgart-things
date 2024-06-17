@@ -82,3 +82,39 @@ spec:
     name: flux-system
   path: ./crossplane/compositions/infra
 ---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: crossplane-resources-xrds
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: crossplane
+  interval: 1h
+  retryInterval: 2m
+  timeout: 10m
+  prune: true
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./crossplane/xrds/resources
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: crossplane-resources-compositions
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: crossplane-infra-xrds
+  interval: 1h
+  retryInterval: 2m
+  timeout: 10m
+  prune: true
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./crossplane/compositions/resources
+---
