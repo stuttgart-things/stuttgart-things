@@ -7,6 +7,21 @@
 # spec:
 #   clusterName: andre-dev
 # ---
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: NfsCsiConfig
+metadata:
+  name: andre-dev
+  namespace: crossplane-system
+spec:
+  clusterName: andre-dev
+  storageClass:
+    name: nfs-csi
+    server: /data/col1/sthings
+    share: 10.31.101.26
+    reclaimPolicy: Delete
+    volumeBindingMode: Immediate
+---
 apiVersion: resources.stuttgart-things.com/v1alpha1
 kind: NetworkStackMNPC
 metadata:
