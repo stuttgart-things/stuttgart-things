@@ -1,4 +1,4 @@
-# stuttgart-things/ansbile/collections
+# stuttgart-things/ansible/collections
 
 ## BASE-OS
 
