@@ -1,0 +1,110 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: awx
+  labels:
+    crossplane.io/xrd: xawx.resources.stuttgart-things.com
+spec:
+  writeConnectionSecretsToNamespace: crossplane-system
+  compositeTypeRef:
+    apiVersion: resources.stuttgart-things.com/v1alpha1
+    kind: XAwx
+  resources:
+    - name: awx-namespace
+      base:
+        apiVersion: resources.stuttgart-things.com/v1alpha1
+        kind: XNamespace
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.deploymentNamespace
+          toFieldPath: spec.name
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.clusterName
+          toFieldPath: spec.clusterName
+    - name: awx-ingresscert
+      base:
+        apiVersion: resources.stuttgart-things.com/v1alpha1
+        kind: XIngressCertificate
+        references:
+          - dependsOn:
+              name: awx-namespace
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.deploymentNamespace
+          toFieldPath: spec.namespace
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.clusterName
+          toFieldPath: spec.clusterName
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.cert.issuerName
+          toFieldPath: spec.issuerName
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.cert.issuerKind
+          toFieldPath: spec.issuerKind
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.cert.secretName
+          toFieldPath: spec.certSecretName
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.hostName
+          toFieldPath: spec.hostName
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.domainName
+          toFieldPath: spec.domainName
+
+
+    # - base:
+    #     apiVersion: helm.crossplane.io/v1beta1
+    #     kind: Release
+    #     metadata:
+    #       name: awx
+    #       annotations:
+    #         crossplane.io/external-name: awx
+    #     spec:
+    #       providerConfigRef:
+    #         name: in-cluster
+    #       forProvider:
+    #         chart:
+    #           name: awx
+    #           repository: https://helm.releases.hashicorp.com
+    #           version: 0.28.0
+    #         namespace: awx
+    #         insecureSkipTLSVerify: false
+    #         skipCreateNamespace: false
+    #         wait: true
+    #         skipCRDs: false
+    #         values:
+    #           injector:
+    #             enabled: false
+    #           server:
+    #             enabled: true
+    #             dataStorage:
+    #               enabled: true
+    #               storageClass: trident
+    #               size: 1Gi
+    #             ingress:
+    #               enabled: true
+    #               hosts:
+    #                 - host: awx.apptest.sthings-vsphere.labul.sva.de
+    #               tls:
+    #                 - hosts:
+    #                     - awx.apptest.sthings-vsphere.labul.sva.de
+    #                   secretName: awx-ingress-tls
+    #               ingressClassName: nginx
+    #           csi:
+    #             enabled: true
+    #   patches:
+    #     - type: CombineFromComposite
+    #       combine:
+    #         variables:
+    #           - fromFieldPath: spec.clusterName
+    #         strategy: string
+    #         string:
+    #           fmt: "awx-%s"
+    #       toFieldPath: metadata.name
+    #     - fromFieldPath: spec.deploymentNamespace
+    #       toFieldPath: spec.forProvider.namespace
+    #     - fromFieldPath: spec.clusterName
+    #       toFieldPath: spec.providerConfigRef.name
+    #     - fromFieldPath: spec.version
+    #       toFieldPath: spec.forProvider.chart.version
