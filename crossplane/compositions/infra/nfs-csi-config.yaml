@@ -52,7 +52,12 @@ spec:
               provisioner: nfs.csi.k8s.io
               allowVolumeExpansion: true
               mountOptions:
-                - nfsvers=4.1
+                - nfsvers=3
+                - rsize=1048576
+                - wsize=1048576
+                - tcp
+                - hard
+                - nolock
       patches:
         - type: PatchSet
           patchSetName: provider
