@@ -11,33 +11,8 @@ spec:
     apiVersion: resources.stuttgart-things.com/v1alpha1
     kind: XVault
   resources:
-    - name: vault-ingresscert
+    - name: vault-release
       base:
-        apiVersion: resources.stuttgart-things.com/v1alpha1
-        kind: XIngressCertificate
-      patches:
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.deploymentNamespace
-          toFieldPath: spec.namespace
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.clusterName
-          toFieldPath: spec.clusterName
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.cert.issuerName
-          toFieldPath: spec.issuerName
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.cert.issuerKind
-          toFieldPath: spec.issuerKind
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.cert.secretName
-          toFieldPath: spec.certSecretName
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.hostName
-          toFieldPath: spec.hostName
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.domainName
-          toFieldPath: spec.domainName
-    - base:
         apiVersion: helm.crossplane.io/v1beta1
         kind: Release
         metadata:
@@ -90,5 +65,31 @@ spec:
           toFieldPath: spec.forProvider.namespace
         - fromFieldPath: spec.clusterName
           toFieldPath: spec.providerConfigRef.name
-        - fromFieldPath: spec.version
-          toFieldPath: spec.forProvider.chart.version
+        # - fromFieldPath: spec.version
+        #   toFieldPath: spec.forProvider.chart.version
+    - name: vault-ingresscert
+      base:
+        apiVersion: resources.stuttgart-things.com/v1alpha1
+        kind: XIngressCertificate
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.deploymentNamespace
+          toFieldPath: spec.namespace
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.clusterName
+          toFieldPath: spec.clusterName
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.cert.issuerName
+          toFieldPath: spec.issuerName
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.cert.issuerKind
+          toFieldPath: spec.issuerKind
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.cert.secretName
+          toFieldPath: spec.certSecretName
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.hostName
+          toFieldPath: spec.hostName
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.domainName
+          toFieldPath: spec.domainName

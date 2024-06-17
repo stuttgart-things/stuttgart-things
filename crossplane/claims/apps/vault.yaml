@@ -2,10 +2,10 @@
 apiVersion: resources.stuttgart-things.com/v1alpha1
 kind: Vault
 metadata:
-  name: labda-test
+  name: andre-dev
   namespace: crossplane-system
 spec:
-  clusterName: labda-test
+  clusterName: andre-dev
   deploymentNamespace: vault
   domainName: andre-dev.sthings-vsphere.labul.sva.de
   cert:
