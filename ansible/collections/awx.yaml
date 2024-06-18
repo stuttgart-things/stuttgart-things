@@ -167,7 +167,6 @@ playbooks:
           - "{{ path | default('.') }}/machine-creds-sthings.yaml"
           - "{{ path | default('.') }}/dynamic-inventory-vsphere.yaml"
           - "{{ path | default('.') }}/inventory-source.yaml"
-          - "{{ path | default('.') }}/hosts-test.yaml"
           - "{{ path | default('.') }}/ee-sthings.yaml"
           - "{{ path | default('.') }}/job-nerdctl.yaml"
 
