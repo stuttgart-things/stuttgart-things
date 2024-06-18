@@ -11,7 +11,6 @@
 | EXTRA VARS        | ansible vars (extra vars) |  |
 | Private Key       | vault secret path         | ssh/data/sthings:privateKey                                                         |
 | Requirements File | path to requirements file | ansible/requirements.yaml                                                           |
-|          
 
 </details>
 
@@ -24,7 +23,6 @@
 | EXTRA VARS        | ansible vars (extra vars) | -e cluster_setup=singlenode -e rke2_k8s_version=1.28.9 -e rke2_release_kind=rke2r1 |
 | Private Key       | vault secret path         | ssh/data/sthings:privateKey                                                         |
 | Requirements File | path to requirements file | ansible/requirements.yaml                                                           |
-|                   |                           |                                                                                     |
 
 </details>
 
@@ -37,7 +35,6 @@
 | EXTRA VARS        | ansible vars (extra vars) | -e cluster_setup=multinode |
 | Private Key       | vault secret path         | ssh/data/sthings:privateKey                                                         |
 | Requirements File | path to requirements file | ansible/requirements.yaml                                                           |
-|                   |                           |                                                                                     |
 
 </details>
 
