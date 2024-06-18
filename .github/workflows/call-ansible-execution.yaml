@@ -113,5 +113,11 @@ jobs:
       - name: Execute Ansible
         run: |
           ansible-galaxy install -r ${{ inputs.requirements-file }} -f
-          ansible-playbook ${{ inputs.playbook }} -i inventory ${{ inputs.extra-vars }} -vv
+
+          # EXECUTING PLAYBOOKS
+          for play in ${${{ inputs.playbook }}//,/ }
+          do
+              ansible-playbook ${play} -i inventory ${{ inputs.extra-vars }} -vv
+              echo "${play} playbook executed successfully"
+          done
         shell: bash
