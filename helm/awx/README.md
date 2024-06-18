@@ -1,5 +1,15 @@
 # AWX
 
+## INIT
+```bash
+helmfile init # install helmfile plugins
+```
+
+##
+```bash
+helmfile template --file awx.ymal -e labul-vsphere #Example ENV
+```
+
 ## APPLY
 ```bash
 helmfile apply --file awx.yaml -e labul-vsphere #EXAMPLE ENV
