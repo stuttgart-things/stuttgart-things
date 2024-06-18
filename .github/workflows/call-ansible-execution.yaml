@@ -115,9 +115,9 @@ jobs:
           ansible-galaxy install -r ${{ inputs.requirements-file }} -f
 
           # EXECUTING PLAYBOOKS
-          playbooks = ${{ inputs.playbook }}
+          playbooks=$(echo ${{ inputs.playbook }})
 
-          for play in  ${playbooks//,/ }
+          for play in ${playbooks//,/ }
           do
               ansible-playbook ${play} -i inventory ${{ inputs.extra-vars }} -vv
               echo "${play} playbook executed successfully"
