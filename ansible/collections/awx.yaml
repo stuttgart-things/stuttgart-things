@@ -243,7 +243,6 @@ playbooks:
           - "{{ path | default('.') }}/scm-creds-sthings.yaml"
           - "{{ path | default('.') }}/projects-sthings.yaml"
           - "{{ path | default('.') }}/machine-creds-sthings.yaml"
-          - "{{ path | default('.') }}/dynamic-inventory-vsphere.yaml"
           - "{{ path | default('.') }}/inventory-source.yaml"
           - "{{ path | default('.') }}/hosts-test.yaml"
           - "{{ path | default('.') }}/ee-sthings.yaml"
@@ -774,6 +773,16 @@ vars:
               "default": ""
             },
             {
+              "question_name": "Curl against which host?",
+              "question_description": "Enter host name",
+              "required": true,
+              "type": "text",
+              "variable": "test_host",
+              "min": null,
+              "max": null,
+              "default": ""
+            },
+            {
               "question_name": "Which homepage to curl?",
               "question_description": "Enter homepage",
               "required": true,
@@ -840,7 +849,7 @@ vars:
           state: present
           vmVariables: {ansible_connection: local}
         vsphere:
-          name: andretest.labul.sva.de
+          name: "{{ test_host }}"
           description: stuttgart-things organization
           inventory: dynamic-inventory-vsphere
           state: present
