@@ -6,6 +6,17 @@ metadata:
   labels:
     crossplane.io/xrd: xtektons.resources.stuttgart-things.com
 spec:
+  patchSets:
+    - name: provider
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.clusterName
+          toFieldPath: spec.providerConfigRef.name
+    - name: namespace
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.deploymentNamespace
+          toFieldPath: spec.forProvider.manifest.metadata.namespace
   writeConnectionSecretsToNamespace: crossplane-system
   compositeTypeRef:
     apiVersion: resources.stuttgart-things.com/v1alpha1
@@ -25,7 +36,7 @@ spec:
             chart:
               name: tekton-base
               repository: oci://eu.gcr.io/stuttgart-things
-              version: v0.57.1
+              version: v0.60.4
               pullSecretRef:
                 name: ghcr
                 namespace: crossplane-system
@@ -43,9 +54,53 @@ spec:
             string:
               fmt: "tekton-pipelines-%s"
           toFieldPath: metadata.name
-        - fromFieldPath: spec.deploymentNamespace
-          toFieldPath: spec.forProvider.namespace
-        - fromFieldPath: spec.clusterName
-          toFieldPath: spec.providerConfigRef.name
+        - type: PatchSet
+          patchSetName: namespace
+        - type: PatchSet
+          patchSetName: provider
         - fromFieldPath: spec.version
           toFieldPath: spec.forProvider.chart.version
+    - name: vault-secret
+      base:
+        apiVersion: kubernetes.crossplane.io/v1alpha2
+        kind: Object
+        metadata:
+          name: vault-secret
+        spec:
+          providerConfigRef:
+            name: kubernetes-clustername
+          references:
+            - patchesFrom:
+                apiVersion: v1
+                kind: Secret
+                name: tekton-vault
+                namespace: crossplane-system
+                fieldPath: data.VAULT_SECRET_ID
+              toFieldPath: data.VAULT_SECRET_ID
+          forProvider:
+            manifest:
+              apiVersion: v1
+              kind: Secret
+              metadata:
+                namespace: tekton-pipelines
+              data: {}
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.approle.secretName
+          toFieldPath: spec.references[0].patchesFrom.name
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.approle.secretNamespace
+          toFieldPath: spec.references[0].patchesFrom.namespace
+        - type: PatchSet
+          patchSetName: provider
+        - type: PatchSet
+          patchSetName: namespace
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.approle.vaultAddr
+          toFieldPath: spec.forProvider.manifest.data.VAULT_ADDR
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.approle.approleID
+          toFieldPath: spec.forProvider.manifest.data.VAULT_ROLE_ID
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.approle.vaultNamespace
+          toFieldPath: spec.forProvider.manifest.data.VAULT_NAMESPACE
