@@ -432,7 +432,7 @@ jobs:
 
       - name: Create Pull Request for VM config
         id: pr
-        uses: peter-evans/create-pull-request@v6.0.5
+        uses: peter-evans/create-pull-request@v6.1.0
         with:
           commit-message: '[CI][${{ inputs.build-engine }}] - Created template config for vm ${{ inputs.vm-name }} ${{ inputs.os-version }}-${{ env.LAB }}-${{ env.CLOUD }}'
           title: Created VM Config ${{ inputs.os-version }}-${{ env.LAB }}-${{ env.CLOUD }} w/ ${{ inputs.build-engine }}
