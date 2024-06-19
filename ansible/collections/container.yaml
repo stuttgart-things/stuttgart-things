@@ -1,6 +1,6 @@
 ---
 name: container
-version: 0.0.22
+version: 0.0.23
 namespace: sthings
 requirements: |
   roles:
@@ -24,6 +24,89 @@ requirements: |
       version: 2024.05.24
 
 playbooks:
+  - name: rancher_kubeconfig
+    play: |
+      ---
+      - hosts: "{{ target_host | default('localhost') }}"
+        become: false
+        gather_facts: false
+
+        vars:
+          vault_approle_id: "{{ lookup('env', 'VAULT_ROLE_ID') }}"
+          vault_approle_secret: "{{ lookup('env', 'VAULT_SECRET_ID') }}"
+          vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
+
+          rancher_api_secret_path: apps/data/rancher:apiUrl
+          rancher_api_accesskey_path: apps/data/rancher:accessKey
+          rancher_api_secretkey_path: apps/data/rancher:secretKey
+          rancher_api_url: "{{ lookup('community.hashi_vault.hashi_vault', 'secret={{ rancher_api_secret_path }} validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+          rancher_access_key: "{{ lookup('community.hashi_vault.hashi_vault', 'secret={{ rancher_api_accesskey_path }} validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+          rancher_secret_key: "{{ lookup('community.hashi_vault.hashi_vault', 'secret={{ rancher_api_secretkey_path }} validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+          secret_path_kubeconfig: kubeconfigs
+
+          upload_vault: true
+          check_kubeconfig: true
+          # cluster_name: app-dev-master
+          kubeconfig_destination: "/tmp/kubeconfig-{{ cluster_name }}"
+
+        tasks:
+          - name: Get cluster information
+            ansible.builtin.uri:
+              validate_certs: false
+              url: "{{ rancher_api_url }}/clusters?name={{ cluster_name }}"
+              user: "{{ rancher_access_key }}"
+              password: "{{ rancher_secret_key }}"
+              body_format: json
+              method: GET
+              force_basic_auth: yes
+              headers:
+                Content-Type: "application/json"
+            register: cluster_info
+
+          - name: Show clusterid
+            ansible.builtin.debug:
+              var:
+                cluster_info.json.data[0].id
+
+          - name: Get kubeconfig
+            ansible.builtin.uri:
+              validate_certs: false
+              url: "{{ rancher_api_url }}/clusters/{{ cluster_info.json.data[0].id }}?action=generateKubeconfig"
+              user: "{{ rancher_access_key }}"
+              password: "{{ rancher_secret_key }}"
+              body_format: json
+              method: POST
+              force_basic_auth: yes
+            register: kubeconfig
+
+          - name: Store kubeconfig to disk
+            ansible.builtin.copy:
+              content: "{{ kubeconfig.json.config  }}"
+              dest: "{{ kubeconfig_destination }}"
+
+          - name: Test if kubeconfig is valid
+            ansible.builtin.shell: |
+              kubectl get nodes --kubeconfig {{ kubeconfig_destination }}
+            register: cmd_result
+            retries: 20
+            delay: 30
+            until: ("NotReady" not in cmd_result.stdout)
+            when: check_kubeconfig|bool
+
+          - name: Write kubeconfig to vault using key value V2 engine
+            community.hashi_vault.vault_write:
+              auth_method: approle
+              url: "{{ vault_url }}"
+              role_id: "{{ vault_approle_id }}"
+              secret_id: "{{ vault_approle_secret }}"
+              validate_certs: false
+              path: "{{ secret_path_kubeconfig }}/data/{{ cluster_name }}"
+              data:
+                data:
+                  kubeconfig: "{{ lookup('ansible.builtin.file', kubeconfig_destination)|b64encode }}"
+            delegate_to: localhost
+            when: upload_vault|bool
+
   - name: podman
     play: |
       ---
