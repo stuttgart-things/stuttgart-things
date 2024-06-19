@@ -1,5 +1,49 @@
 ---
 apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: AnsibleRun
+metadata:
+  name: pdns-entry-labul-vsphere-app-dev
+  namespace: default
+spec:
+  pipelineRunName: pdns-entry-labul-vsphere-app-dev
+  inventory:
+    - "all+[\"localhost\"]"
+  playbooks:
+    - "ansible/playbooks/pdns-ingress-entry.yaml"
+  ansibleVarsFile:
+    - pdns_url+-https://pdns-vsphere.labul.sva.de:8443
+    - entry_zone+-sthings-vsphere.labul.sva.de.
+    - ip_address+-10.31.103.7
+    - hostname+-app-dev
+  gitRepoUrl: https://github.com/stuttgart-things/stuttgart-things.git
+  gitRevision: main
+  providerRef:
+    name: kubernetes-incluster
+  vaultSecretName: vault
+  pipelineNamespace: tektoncd
+  workingImage: eu.gcr.io/stuttgart-things/sthings-ansible:10.0.1
+  roles:
+    - "https://github.com/stuttgart-things/install-configure-powerdns.git"
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: NetworkStackMNPC
+metadata:
+  name: app-dev
+  namespace: crossplane-system
+spec:
+  clusterName: app-dev
+  ipPoolName: ip-pool-1
+  ipRanges:
+    - 10.31.103.7-10.31.103.7
+  issuerName: vault-approle
+  approle:
+    secretName: certmanager-labul-vsphere
+    secretNamespace: crossplane-system
+    pkiPath: pki/sign/sthings-vsphere.labul.sva.de
+    vaultAddr: https://vault-vsphere.labul.sva.de:8200
+    approleID: 1d42d7e7-8c14-e5f9-801d-b3ecef416616
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
 kind: NfsCsiConfig
 metadata:
   name: app-dev
