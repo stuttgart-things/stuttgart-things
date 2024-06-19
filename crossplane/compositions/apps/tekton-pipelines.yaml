@@ -37,10 +37,10 @@ spec:
             chart:
               name: tekton-base
               url: https://github.com/stuttgart-things/stuttgart-things/releases/download/tekton-base-v0.60.4/tekton-base-v0.60.4.tgz
-              # version: v0.60.4
-              # pullSecretRef:
-              #   name: ghcr
-              #   namespace: crossplane-system
+              version: v0.60.4
+              pullSecretRef:
+                name: ghcr
+                namespace: crossplane-system
             namespace: tekton-pipelines
             insecureSkipTLSVerify: false
             skipCreateNamespace: false
@@ -76,7 +76,7 @@ spec:
                 kind: Secret
                 name: tekton-vault
                 namespace: crossplane-system
-                fieldPath: data.VAULT_SECRET_ID
+                fieldPath: data.approleSecret
               toFieldPath: data.VAULT_SECRET_ID
           forProvider:
             manifest:
