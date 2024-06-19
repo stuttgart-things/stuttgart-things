@@ -74,7 +74,7 @@ spec:
             - patchesFrom:
                 apiVersion: v1
                 kind: Secret
-                name: tekton-vault
+                name: cert-manager
                 namespace: crossplane-system
                 fieldPath: data.approleSecret
               toFieldPath: data.VAULT_SECRET_ID
@@ -99,9 +99,24 @@ spec:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.approle.vaultAddr
           toFieldPath: spec.forProvider.manifest.data.VAULT_ADDR
+          transforms:
+            - type: string
+              string:
+                type: Convert
+                convert: "ToBase64"
         - type: FromCompositeFieldPath
           fromFieldPath: spec.approle.approleID
           toFieldPath: spec.forProvider.manifest.data.VAULT_ROLE_ID
+          transforms:
+            - type: string
+              string:
+                type: Convert
+                convert: "ToBase64"
         - type: FromCompositeFieldPath
           fromFieldPath: spec.approle.vaultNamespace
           toFieldPath: spec.forProvider.manifest.data.VAULT_NAMESPACE
+          transforms:
+            - type: string
+              string:
+                type: Convert
+                convert: "ToBase64"
