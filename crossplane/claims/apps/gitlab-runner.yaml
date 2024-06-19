@@ -5,7 +5,7 @@ metadata:
   name: app-dev
   namespace: crossplane-system
 spec:
-  clusterName: app-dev
+  clusterConfig: app-dev
   deploymentNamespace: gitlab
   gitlabUrl: https://codehub.sva.de
   tokenSecret:

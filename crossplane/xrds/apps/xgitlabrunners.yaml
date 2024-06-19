@@ -1,0 +1,69 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: xgitlabrunners.resources.stuttgart-things.com
+spec:
+  connectionSecretKeys:
+    - kubeconfig
+  group: resources.stuttgart-things.com
+  names:
+    kind: XGitlabRunner
+    plural: xgitlabrunners
+  claimNames:
+    kind: GitlabRunner
+    plural: gitlabrunners
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          description: A GitlabRunner is a composite resource that represents a helm release for a gitlab runner deployment
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                deploymentNamespace:
+                  type: string
+                  default: gitlab
+                  description: namespace of runner (release)
+                gitlabUrl:
+                  type: string
+                  default: https://codehub.sva.de
+                  description: gitlab url
+                version:
+                  type: string
+                  default: 0.65.0
+                  description: helm chart version for gitlab-runner
+                clusterConfig:
+                  type: string
+                  default: in-cluster
+                  description: cluster name/helm provider name
+                concurrent:
+                  type: string
+                  default: "10"
+                  description: concurrent runners
+                checkInterval:
+                  type: string
+                  default: "15"
+                  description: concurrent runners
+                tokenSecret:
+                  type: object
+                  properties:
+                    secretName:
+                      type: string
+                      default: gitlab
+                      description: name of secret
+                    secretNamespace:
+                      type: string
+                      default: crossplane-system
+                      description: namespace of secret
+                    secretKey:
+                      type: string
+                      default: RUNNER_TOKEN
+                      description: key of token secret
+              required:
+                - clusterConfig
+                - tokenSecret
