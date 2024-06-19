@@ -25,6 +25,18 @@ spec:
       name: app-dev
       key: kubeconfig
 ---
+apiVersion: helm.crossplane.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: app-dev
+spec:
+  credentials:
+    source: Secret
+    secretRef:
+      namespace: crossplane-system
+      name: app-dev
+      key: kubeconfig
+---
 apiVersion: v1
 kind: Secret
 data:
