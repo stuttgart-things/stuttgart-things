@@ -1,8 +1,20 @@
 ---
 name: awx
-version: 0.0.59
+version: 0.0.60
 namespace: sthings
 playbooks:
+  - name: check_connection
+    play: |
+      ---
+      - name: Pause play until a URL is reachable from the Ansible Controller
+        ansible.builtin.uri:
+          url: "{{ controller_host }}api/v2"
+          method: GET
+        register: _result
+        until: _result.status == 200
+        retries: 10
+        delay: 120
+  
   - name: creation_tasks
     play: |
       ---
@@ -152,6 +164,7 @@ playbooks:
           - "{{ path | default('.') }}/job-docker.yaml"
 
         tasks:
+          - ansible.builtin.import_tasks: check_connection.yaml
           - ansible.builtin.import_tasks: creation_tasks.yaml
 
   - name: nerdctl
@@ -171,6 +184,7 @@ playbooks:
           - "{{ path | default('.') }}/job-nerdctl.yaml"
 
         tasks:
+          - ansible.builtin.import_tasks: check_connection.yaml
           - ansible.builtin.import_tasks: creation_tasks.yaml
 
   - name: golang
@@ -190,6 +204,7 @@ playbooks:
           - "{{ path | default('.') }}/job-golang.yaml"
 
         tasks:
+          - ansible.builtin.import_tasks: check_connection.yaml
           - ansible.builtin.import_tasks: creation_tasks.yaml
 
   - name: baseos
@@ -210,6 +225,7 @@ playbooks:
           - "{{ path | default('.') }}/job-baseos.yaml"
 
         tasks:
+          - ansible.builtin.import_tasks: check_connection.yaml
           - ansible.builtin.import_tasks: creation_tasks.yaml
 
   - name: schedule_baseos
