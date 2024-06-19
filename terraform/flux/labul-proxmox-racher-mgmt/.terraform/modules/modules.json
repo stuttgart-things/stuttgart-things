@@ -1,0 +1,1 @@
+{"Modules":[{"Key":"","Source":"","Dir":"."},{"Key":"rancher-mgmt-proxmox","Source":"git::https://github.com/stuttgart-things/flux2-cluster-bootstrap.git","Dir":".terraform/modules/rancher-mgmt-proxmox"}]}
