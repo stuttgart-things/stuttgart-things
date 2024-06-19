@@ -22,7 +22,8 @@ spec:
     apiVersion: resources.stuttgart-things.com/v1alpha1
     kind: XTekton
   resources:
-    - base:
+    - name: tekton-pipelines
+      base:
         apiVersion: helm.crossplane.io/v1beta1
         kind: Release
         metadata:
@@ -54,8 +55,8 @@ spec:
             string:
               fmt: "tekton-pipelines-%s"
           toFieldPath: metadata.name
-        - type: PatchSet
-          patchSetName: namespace
+        - fromFieldPath: spec.deploymentNamespace
+          toFieldPath: spec.forProvider.namespace
         - type: PatchSet
           patchSetName: provider
         - fromFieldPath: spec.version
