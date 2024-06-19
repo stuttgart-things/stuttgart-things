@@ -1,0 +1,42 @@
+---
+environments:
+  andre-dev:
+    values:
+      - env/defaults.yaml
+      - env/{{ .Environment.Name }}.yaml
+
+releases:
+  - name: minio-configuration
+    disableValidationOnInstall: true
+    installed: true
+    namespace: minio
+    chart: stuttgart-things/sthings-cluster
+    version: 0.3.10
+    values:
+      - "values/minio-config.values.yaml.gotmpl"
+
+  - name: minio-operator
+    disableValidationOnInstall: true
+    installed: true
+    namespace: minio
+    chart: minio/minio-operator
+    version: 2.15.0
+    needs:
+      - minio/minio-configuration
+    values:
+      - "values/minio.values.yaml.gotmpl"
+
+repositories:
+  - name: stuttgart-things
+    url: eu.gcr.io/stuttgart-things
+    oci: true
+  - name: minio
+    url: https://ansible.github.io/minio-operator
+    oci: false
+
+helmDefaults:
+  verify: false
+  wait: true
+  timeout: 600
+  recreatePods: false
+  force: true

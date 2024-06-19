@@ -1,0 +1,60 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: awx-operator
+  labels:
+    crossplane.io/xrd: xawxoperators.resources.stuttgart-things.com
+spec:
+  writeConnectionSecretsToNamespace: crossplane-system
+  compositeTypeRef:
+    apiVersion: resources.stuttgart-things.com/v1alpha1
+    kind: XAwxOperator
+  resources:
+    - base:
+        apiVersion: helm.crossplane.io/v1beta1
+        kind: Release
+        metadata:
+          name: awx
+          annotations:
+            crossplane.io/external-name: awx
+        spec:
+          providerConfigRef:
+            name: in-cluster
+          forProvider:
+            chart:
+              name: awx
+              repository: https://charts.awx.io
+              version: 1.6.1
+            values:
+              installCRDs: true
+            namespace: awx-system
+            insecureSkipTLSVerify: true
+            skipCreateNamespace: false
+            wait: true
+            skipCRDs: false
+      patches:
+        - type: CombineFromComposite
+          combine:
+            variables:
+              - fromFieldPath: spec.clusterName
+            strategy: string
+            string:
+              fmt: "awx-%s"
+          toFieldPath: metadata.name
+        - fromFieldPath: spec.deploymentNamespace
+          toFieldPath: spec.forProvider.namespace
+        - fromFieldPath: spec.clusterName
+          toFieldPath: spec.providerConfigRef.name
+        - fromFieldPath: spec.version
+          toFieldPath: spec.forProvider.chart.version
+        - fromFieldPath: spec.persistence.defaultClass
+          toFieldPath: spec.forProvider.values.persistence.defaultClass
+        - fromFieldPath: spec.persistence.defaultFsType
+          toFieldPath: spec.forProvider.values.persistence.defaultFsType
+        - fromFieldPath: spec.persistence.defaultMkfsParams
+          toFieldPath: spec.forProvider.values.persistence.defaultMkfsParams
+        - fromFieldPath: spec.persistence.defaultDataLocality
+          toFieldPath: spec.forProvider.values.persistence.defaultDataLocality
+        - fromFieldPath: spec.persistence.reclaimPolicy
+          toFieldPath: spec.forProvider.values.persistence.reclaimPolicy
