@@ -255,6 +255,19 @@ ansible-playbook sthings.awx.baseos -vv -e target_host=example.labul.sva.de
 
 </details>
 
+<details><summary>Hello-AWX</summary>
+
+Awx job template to test Host w/ survey (without dynamic inventory)
+
+```bash
+export CONTROLLER_HOST=https://awx.<DOMAIN>.sva.de #EXAMPLE!
+export CONTROLLER_USERNAME=admin #EXAMPLE!
+export CONTROLLER_PASSWORD=<PASSWORD>
+ansible-playbook sthings.awx.hello_awx -vv -e test_host=example.labul.sva.de
+```
+
+</details>
+
 
 Author Information
 ------------------
