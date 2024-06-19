@@ -1,0 +1,87 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: gitlab-runner
+  labels:
+    crossplane.io/xrd: xgitlabrunners.resources.stuttgart-things.com
+spec:
+  writeConnectionSecretsToNamespace: crossplane-system
+  compositeTypeRef:
+    apiVersion: resources.stuttgart-things.com/v1alpha1
+    kind: XGitlabRunner
+  resources:
+    - base:
+        apiVersion: helm.crossplane.io/v1beta1
+        kind: Release
+        metadata:
+          name: gitlab-runner
+          annotations:
+            crossplane.io/external-name: gitlab-runner
+        spec:
+          providerConfigRef:
+            name: in-cluster
+          forProvider:
+            chart:
+              name: gitlab-runner
+              repository: http://charts.gitlab.io/
+            namespace: gitlab
+            insecureSkipTLSVerify: false
+            skipCreateNamespace: false
+            wait: true
+            skipCRDs: true
+            set:
+              - name: runnerToken
+                valueFrom:
+                  secretKeyRef:
+                    key: RUNNER_TOKEN
+                    name: gitlab
+                    namespace: crossplane-system
+            values:
+              rbac:
+                create: true
+                rules:
+                  - apiGroups: [""]
+                    resources: ["pods", "secrets", "configmaps"]
+                    verbs: ["get", "list", "watch", "create", "patch", "delete", "update"]
+                  - apiGroups: [""]
+                    resources: ["pods/exec", "pods/attach"]
+                    verbs: ["create", "patch", "delete"]
+                  - apiGroups: [""]
+                    resources: ["pods/log"]
+                    verbs: ["get"]
+      patches:
+        - type: CombineFromComposite
+          combine:
+            variables:
+              - fromFieldPath: spec.clusterConfig
+            strategy: string
+            string:
+              fmt: "gitlab-runner-%s"
+          toFieldPath: metadata.name
+        - type: CombineFromComposite
+          combine:
+            variables:
+              - fromFieldPath: spec.clusterConfig
+            strategy: string
+            string:
+              fmt: "gitlab-runner-%s"
+          toFieldPath: "metadata.annotations[crossplane.io/external-name]"
+        - fromFieldPath: spec.deploymentNamespace
+          toFieldPath: spec.forProvider.namespace
+        - fromFieldPath: spec.clusterConfig
+          toFieldPath: spec.providerConfigRef.name
+        - fromFieldPath: spec.version
+          toFieldPath: spec.forProvider.chart.version
+        - fromFieldPath: spec.concurrent
+          toFieldPath: spec.forProvider.values.concurrent
+        - fromFieldPath: spec.checkInterval
+          toFieldPath: spec.forProvider.values.checkInterval
+        - fromFieldPath: spec.gitlabUrl
+          toFieldPath: spec.forProvider.values.gitlabUrl
+        - fromFieldPath: spec.tokenSecret.secretName
+          toFieldPath: spec.forProvider.set[0].valueFrom.secretKeyRef.name
+        - fromFieldPath: spec.tokenSecret.secretNamespace
+          toFieldPath: spec.forProvider.set[0].valueFrom.secretKeyRef.namespace
+        - fromFieldPath: spec.tokenSecret.secretKey
+          toFieldPath: spec.forProvider.set[0].valueFrom.secretKeyRef.key

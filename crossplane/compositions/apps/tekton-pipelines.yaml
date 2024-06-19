@@ -87,17 +87,20 @@ spec:
               data: {}
       patches:
         - type: FromCompositeFieldPath
-          fromFieldPath: spec.approle.secretName
+          fromFieldPath: spec.vaultSecret.secretName
           toFieldPath: spec.references[0].patchesFrom.name
         - type: FromCompositeFieldPath
-          fromFieldPath: spec.approle.secretNamespace
+          fromFieldPath: spec.vaultSecret.secretNamespace
           toFieldPath: spec.references[0].patchesFrom.namespace
         - type: PatchSet
           patchSetName: provider
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.vaultSecret.name
+          toFieldPath: spec.forProvider.manifest.metadata.name
         - type: PatchSet
           patchSetName: namespace
         - type: FromCompositeFieldPath
-          fromFieldPath: spec.approle.vaultAddr
+          fromFieldPath: spec.vaultSecret.vaultAddr
           toFieldPath: spec.forProvider.manifest.data.VAULT_ADDR
           transforms:
             - type: string
@@ -105,7 +108,7 @@ spec:
                 type: Convert
                 convert: "ToBase64"
         - type: FromCompositeFieldPath
-          fromFieldPath: spec.approle.approleID
+          fromFieldPath: spec.vaultSecret.approleID
           toFieldPath: spec.forProvider.manifest.data.VAULT_ROLE_ID
           transforms:
             - type: string
@@ -113,7 +116,7 @@ spec:
                 type: Convert
                 convert: "ToBase64"
         - type: FromCompositeFieldPath
-          fromFieldPath: spec.approle.vaultNamespace
+          fromFieldPath: spec.vaultSecret.vaultNamespace
           toFieldPath: spec.forProvider.manifest.data.VAULT_NAMESPACE
           transforms:
             - type: string

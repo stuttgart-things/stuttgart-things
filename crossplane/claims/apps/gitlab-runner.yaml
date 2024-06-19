@@ -1,0 +1,14 @@
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: GitlabRunner
+metadata:
+  name: app-dev
+  namespace: crossplane-system
+spec:
+  clusterName: app-dev
+  deploymentNamespace: gitlab
+  gitlabUrl: https://codehub.sva.de
+  tokenSecret:
+    secretName: gitlab
+    secretNamespace: crossplane-system
+    secretKey: RUNNER_TOKEN

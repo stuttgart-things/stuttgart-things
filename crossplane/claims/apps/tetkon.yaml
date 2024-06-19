@@ -8,7 +8,7 @@ spec:
   clusterName: app-dev
   version: v0.60.4
   deploymentNamespace: tekton-pipelines
-  approle:
+  vaultSecret:
     vaultAddr: https://vault-vsphere.labul.sva.de:8200
     approleID: 1d42d7e7-8c14-e5f9-801d-b3ecef416616
     vaultNamespace: root

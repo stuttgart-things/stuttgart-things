@@ -35,11 +35,15 @@ spec:
                   description: cluster name/helm provider name
                 version:
                   type: string
-                  default: v0.57.1
+                  default: v0.60.4
                   description: helm chart version for tekton
-                approle:
+                vaultSecret:
                   type: object
                   properties:
+                    name:
+                      type: string
+                      description: vault secret name
+                      default: vault
                     vaultAddr:
                       type: string
                       description: vault addr
@@ -60,4 +64,4 @@ spec:
                       description: namespace of secret
               required:
                 - clusterName
-                - approle
+                - vaultSecret
