@@ -399,7 +399,7 @@ vars:
   - name: dev
     file: |
       ---
-      terraform_version: 1.8.3 # datasource=github-tags depName=hashicorp/terraform
+      terraform_version: 1.8.3 # datasource=custom.hashicorp
       gh_version: 2.49.2 # datasource=github-tags depName=cli/cli
       task_version: v3.37.2 # datasource=github-tags depName=go-task/task
 
