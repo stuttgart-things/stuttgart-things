@@ -43,5 +43,5 @@ RUN rm -rf /usr/local/share/ca-certificates/* \
     && wget -O /usr/local/share/ca-certificates/labul-pve.crt ${VAULT_URL_LABUL_PVE}/v1/pki/ca/pem --no-check-certificate \
     && update-ca-certificates
 
-# Switch back to non-root user
+# SWITCH BACK TO NON-ROOT USER
 USER 999
