@@ -10,7 +10,7 @@ LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 
 ARG ARGOCD_VAULT_PLUGIN_VERSION=1.16.1
 
-# Switch to root for the ability to perform install
+# SWITCH TO ROOT FOR THE ABILITY TO PERFORM INSTALL
 USER root
 
 # Install tools needed for your repo-server to retrieve & decrypt secrets, render manifests

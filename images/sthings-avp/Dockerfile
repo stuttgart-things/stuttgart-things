@@ -4,7 +4,7 @@ ARG IMAGE=sthings-alpine
 ARG TAG=3.12.0-alpine3.18
 
 FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
-# Switch to root for the ability to perform install
+# SWITCH TO ROOT FOR THE ABILITY TO PERFORM INSTALL
 
 LABEL version=1.17.0-1
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"

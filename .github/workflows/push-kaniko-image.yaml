@@ -13,14 +13,11 @@ on:
 
 jobs:
   Get-Changed-Dockerfiles:
-    outputs:
-      version: ${{ steps.version.outputs.version }}
-      artifact: ${{ steps.build.outputs.artifact }}
-    runs-on: ${{ inputs.runs-on }}
+    runs-on: ghr-stuttgart-things-labda-test
     container:
-      image: ${{ inputs.ansible-image }}
-    environment: ${{ inputs.environment-name }}
-    continue-on-error: ${{ inputs.continue-error }}
+      image: gcr.io/kaniko-project/executor
+    environment: k8s
+    continue-on-error: false
     steps:
       - name: Checkout code
         id: git
@@ -38,7 +35,7 @@ jobs:
           files: |
             images/*/*
 
-      - name: List all changed files 
+      - name: List all changed files
         env:
           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
         run: |
@@ -53,6 +50,7 @@ jobs:
         shell: bash
 
   Build-Images:
+    needs: Get-Changed-Dockerfiles
     strategy:
       matrix:
         context-path: [sthings-alpine]
