@@ -4,6 +4,7 @@ ARG IMAGE=sthings-ansible
 ARG TAG=10.0.1
 
 FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
+
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 LABEL version=1.10.3-9.5.1
 
@@ -32,5 +33,3 @@ RUN wget -q https://github.com/stuttgart-things/machineShop/releases/download/${
     && rm -rf machineShop_Linux_x86_64.tar.gz
 
 RUN mkdir -m 1777 /__w
-
-# USER 65532

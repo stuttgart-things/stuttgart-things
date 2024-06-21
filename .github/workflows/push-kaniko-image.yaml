@@ -43,9 +43,12 @@ jobs:
           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
         run: |
           dockerfiles=()
-          for file in ${ALL_CHANGED_FILES}; do
-            echo "$file was changed"
-            dockerfiles+=("$file")
+          for path in ${ALL_CHANGED_FILES}; do
+            echo "$path was changed"
+            dir=${path%/*}
+            dir=${dir##*/}
+            image_path=$(printf '%s\n' "$dir")
+            dockerfiles+=("$image_path")
           done
 
           #repository='{ "repository": ["repo1","repo2","repo3","repo4"] }'
