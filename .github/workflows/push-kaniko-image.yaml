@@ -55,7 +55,7 @@ jobs:
       - name: build matrix
         id: json
         run: |
-          contexts='{ "context-path": ["sthings-alpine"] }'
+          contexts='{ "context-path": ["sthings-alpine", "sthings-minio"] }'
           echo "contexts=$contexts" >> "$GITHUB_OUTPUT"
 
   Build-Images:
@@ -63,7 +63,6 @@ jobs:
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.Get-Changed-Dockerfiles.outputs.contexts) }}
-        #context-path: [sthings-alpine]
     uses: stuttgart-things/stuttgart-things/.github/workflows/call-kaniko-build.yaml@main
     with:
       runs-on: ghr-stuttgart-things-labda-test
