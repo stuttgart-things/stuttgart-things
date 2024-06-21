@@ -17,6 +17,9 @@ jobs:
     container:
       image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2-2
     environment: k8s
+    outputs:
+      repository: ${{ steps.json.outputs.repository }}
+
     continue-on-error: false
     steps:
       - name: Checkout code
@@ -49,11 +52,18 @@ jobs:
           echo hello $(jq -c -n '$ARGS.positional' --args "${dockerfiles[@]}" )
         shell: bash
 
+      - name: build matrix
+        id: json
+        run: |
+          repository='{ "repository": ["sthings-alpine"] }'
+          echo "repository=$repository" >> "$GITHUB_OUTPUT"
+
   Build-Images:
     needs: Get-Changed-Dockerfiles
     strategy:
       matrix:
-        context-path: [sthings-alpine]
+        context-path: ${{ fromJson(needs.Get-Changed-Dockerfiles.outputs.repository) }}
+        #context-path: [sthings-alpine]
     uses: stuttgart-things/stuttgart-things/.github/workflows/call-kaniko-build.yaml@main
     with:
       runs-on: ghr-stuttgart-things-labda-test
