@@ -6,11 +6,9 @@ USER root
 
 RUN apt update && apt install -y wget
 
-# VAULT LEGACY
+# VAULT CERTS
 ARG VAULT_URL_LABUL=https://vault.labul.sva.de:8200
 ARG VAULT_URL_LABDA=https://vault.tiab.labda.sva.de:8200
-
-# VAULT INGRESS
 ARG VAULT_URL_LABUL_VSPHERE=https://vault-vsphere.labul.sva.de:8200
 ARG VAULT_URL_LABUL_PVE=https://vault-pve.labul.sva.de:8200
 ARG VAULT_URL_LABDA_VSPHERE=https://vault-vsphere.tiab.labda.sva.de:8200
