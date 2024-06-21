@@ -59,7 +59,7 @@ jobs:
 
           part1=$(printf {)
           part2=$(printf context-path: )
-          part3=$(jq -c -n '$ARGS.positional' --args "${changed_image_dirs[@]}")
+          part3=$(jq -c -n '$ARGS.positional' --args "${changed_image_dirs[@]}" | sed 's/,/, /g')
           part4=$(printf })
 
           build_contexts_test=$(echo ${part1} ${part2} ${part3} ${part4})
