@@ -2,12 +2,9 @@ ARG REGISTRY=quay.io
 ARG REPOSITORY=argoproj
 ARG IMAGE=argocd
 ARG TAG=v2.11.3
-
 FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
-
 LABEL version=v2.8.6
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
-
 ARG ARGOCD_VAULT_PLUGIN_VERSION=1.16.1
 
 # SWITCH TO ROOT FOR THE ABILITY TO PERFORM INSTALL
@@ -44,5 +41,5 @@ RUN rm -rf /usr/local/share/ca-certificates/* \
     && wget -O /usr/local/share/ca-certificates/labul-pve.crt ${VAULT_URL_LABUL_PVE}/v1/pki/ca/pem --no-check-certificate \
     && update-ca-certificates
 
-# Switch back to non-root user
+# SWITCH BACK TO NON-ROOT USER
 USER 999

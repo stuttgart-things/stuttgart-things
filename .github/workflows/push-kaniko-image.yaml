@@ -57,17 +57,18 @@ jobs:
           # build_contexts_hardcoded='{ "context-path": ["sthings-alpine", "sthings-minio"] }'
           # echo "contexts=$build_contexts_hardcoded" >> "$GITHUB_OUTPUT"
 
-          part1=$(printf contexts="'"{)
-          part2=$(printf '"context-path"': )
+          part1=$(printf {)
+          part2=$(printf context-path: )
           part3=$(jq -c -n '$ARGS.positional' --args "${changed_image_dirs[@]}")
-          part4=$(printf }"'")
+          part4=$(printf })
 
           build_contexts_test=$(echo ${part1} ${part2} ${part3} ${part4})
           echo ${build_contexts_test}
 
-          echo "contexts=echo ${build_contexts_test}" >> "$GITHUB_OUTPUT"
+          # echo "contexts=${build_contexts_test} | sed 's/,/, /g'" >> "$GITHUB_OUTPUT"
           contexts1='{ "context-path": ["sthings-alpine", "sthings-minio"] }'
-          echo "contexts1=$contexts" >> "$GITHUB_OUTPUT"
+          # echo "contexts1=$contexts1" >> "$GITHUB_OUTPUT"
+
         shell: bash
 
       # - name: build matrix
@@ -87,23 +88,25 @@ jobs:
         run: |
           echo ${{ needs.Get-Changed-Dockerfiles.outputs.contexts }}
           echo ${{ needs.Get-Changed-Dockerfiles.outputs.contexts1 }}
-          echo ${{ fromJson(needs.Get-Changed-Dockerfiles.outputs.contexts1) }}
 
 
-  # Build-Images:
-  #   needs: Get-Changed-Dockerfiles
-  #   strategy:
-  #     fail-fast: false
-  #     matrix: ${{ fromJson(needs.Get-Changed-Dockerfiles.outputs.contexts) }}
-  #   uses: stuttgart-things/stuttgart-things/.github/workflows/call-kaniko-build.yaml@main
-  #   with:
-  #     runs-on: ghr-stuttgart-things-labda-test
-  #     environment-name: k8s
-  #     dockerfile: images/${{ matrix.context-path }}/Dockerfile
-  #     registry: ghcr.io
-  #     repository: stuttgart-things
-  #     image: ${{ matrix.context-path }}
-  #     tag: latest
-  #     kaniko-image: gcr.io/kaniko-project/executor
-  #     kaniko-tag: debug
-  #     push-retrys: "5"
+          # echo ${{ fromJson(needs.Get-Changed-Dockerfiles.outputs.contexts1) }}
+          # echo ${{ fromJson(needs.Get-Changed-Dockerfiles.outputs.contexts) }}
+
+  Build-Images:
+    needs: Get-Changed-Dockerfiles
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.Get-Changed-Dockerfiles.outputs.contexts1) }}
+    uses: stuttgart-things/stuttgart-things/.github/workflows/call-kaniko-build.yaml@main
+    with:
+      runs-on: ghr-stuttgart-things-labda-test
+      environment-name: k8s
+      dockerfile: images/${{ matrix.context-path }}/Dockerfile
+      registry: ghcr.io
+      repository: stuttgart-things
+      image: ${{ matrix.context-path }}
+      tag: latest
+      kaniko-image: gcr.io/kaniko-project/executor
+      kaniko-tag: debug
+      push-retrys: "5"
