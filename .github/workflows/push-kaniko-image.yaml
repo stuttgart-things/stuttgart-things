@@ -67,7 +67,7 @@ jobs:
 
           echo "contexts=echo ${build_contexts_test}" >> "$GITHUB_OUTPUT"
           contexts1='{ "context-path": ["sthings-alpine", "sthings-minio"] }'
-          echo "contexts1=$contexts" >> "$GITHUB_OUTPUT"
+          echo "contexts1=$contexts1" >> "$GITHUB_OUTPUT"
         shell: bash
 
       # - name: build matrix
