@@ -18,8 +18,8 @@ jobs:
       image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2-2
     environment: k8s
     outputs:
-      contexts: ${{ steps.json.outputs.contexts }}
-      contexts1: ${{ steps.json.outputs.contexts1 }}
+      constructed: ${{ steps.json.outputs.constructed }}
+      hardcoded: ${{ steps.json.outputs.hardcoded }}
     continue-on-error: false
     steps:
       - name: Checkout code
@@ -43,6 +43,8 @@ jobs:
         env:
           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
         run: |
+          set -x
+
           changed_image_dirs=()
 
           for path in ${ALL_CHANGED_FILES}; do
@@ -53,21 +55,19 @@ jobs:
             changed_image_dirs+=("$image_path")
           done
 
-          # HARDCODED / TEST
-          # build_contexts_hardcoded='{ "context-path": ["sthings-alpine", "sthings-minio"] }'
-          # echo "contexts=$build_contexts_hardcoded" >> "$GITHUB_OUTPUT"
+          hardcoded='{ "context-path": ["sthings-alpine", "sthings-minio"] }'
+          echo hardcoded: ${build_contexts_test}
 
-          part1=$(printf contexts="'"{)
-          part2=$(printf '"context-path"': )
+          echo "hardcoded=$hardcoded" >> "$GITHUB_OUTPUT"
+
+          part1=$(printf {)
+          part2=$(printf context-path: )
           part3=$(jq -c -n '$ARGS.positional' --args "${changed_image_dirs[@]}")
-          part4=$(printf }"'")
+          part4=$(printf })
 
           build_contexts_test=$(echo ${part1} ${part2} ${part3} ${part4})
-          echo ${build_contexts_test}
-
-          echo "contexts=echo ${build_contexts_test}" >> "$GITHUB_OUTPUT"
-          contexts1='{ "context-path": ["sthings-alpine", "sthings-minio"] }'
-          echo "contexts1=$contexts" >> "$GITHUB_OUTPUT"
+          echo constructed: ${build_contexts_test}
+          echo "constructed=${build_contexts_test} | sed 's/,/, /g'" >> "$GITHUB_OUTPUT"
         shell: bash
 
       # - name: build matrix
@@ -85,25 +85,23 @@ jobs:
     steps:
       - name: Echo
         run: |
-          echo ${{ needs.Get-Changed-Dockerfiles.outputs.contexts }}
-          echo ${{ needs.Get-Changed-Dockerfiles.outputs.contexts1 }}
-          echo ${{ fromJson(needs.Get-Changed-Dockerfiles.outputs.contexts1) }}
+          echo ${{ needs.Get-Changed-Dockerfiles.outputs.constructed }}
+          echo ${{ needs.Get-Changed-Dockerfiles.outputs.hardcoded }}
 
-
-  # Build-Images:
-  #   needs: Get-Changed-Dockerfiles
-  #   strategy:
-  #     fail-fast: false
-  #     matrix: ${{ fromJson(needs.Get-Changed-Dockerfiles.outputs.contexts) }}
-  #   uses: stuttgart-things/stuttgart-things/.github/workflows/call-kaniko-build.yaml@main
-  #   with:
-  #     runs-on: ghr-stuttgart-things-labda-test
-  #     environment-name: k8s
-  #     dockerfile: images/${{ matrix.context-path }}/Dockerfile
-  #     registry: ghcr.io
-  #     repository: stuttgart-things
-  #     image: ${{ matrix.context-path }}
-  #     tag: latest
-  #     kaniko-image: gcr.io/kaniko-project/executor
-  #     kaniko-tag: debug
-  #     push-retrys: "5"
+  Build-Images:
+    needs: Get-Changed-Dockerfiles
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.Get-Changed-Dockerfiles.outputs.hardcoded) }}
+    uses: stuttgart-things/stuttgart-things/.github/workflows/call-kaniko-build.yaml@main
+    with:
+      runs-on: ghr-stuttgart-things-labda-test
+      environment-name: k8s
+      dockerfile: images/${{ matrix.context-path }}/Dockerfile
+      registry: ghcr.io
+      repository: stuttgart-things
+      image: ${{ matrix.context-path }}
+      tag: latest
+      kaniko-image: gcr.io/kaniko-project/executor
+      kaniko-tag: debug
+      push-retrys: "5"

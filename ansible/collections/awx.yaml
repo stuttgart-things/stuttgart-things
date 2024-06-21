@@ -313,6 +313,50 @@ playbooks:
         tasks:
           - ansible.builtin.import_tasks: creation_tasks.yaml
 
+  - name: render_upload_vm
+    play: |
+      ---
+      - hosts: localhost
+        vars:
+          vault_approle_id: "{{ lookup('env', 'VAULT_ROLE_ID') }}"
+          vault_approle_secret: "{{ lookup('env', 'VAULT_SECRET_ID') }}"
+          vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
+          AWS_ACCESS_KEY_ID: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:accessKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+          AWS_SECRET_ACCESS_KEY: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:secretKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+          s3_endpoint: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:console validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+          bucket_name: andre-vm-config
+          j2_template_name: "vm.tf.j2" # -e j2_template_name=
+          platform: "" # -e platform=
+          rendered_config: "{{ ansible_date_time.date }}-{{ j2_template_name }}.tf"
+
+
+          #-e lab=labul -e cloud=vsphere -vv
+
+        vars_files:
+          - "vm_sizes.yaml"
+          - "defaults-{{ lab }}-{{ cloud }}.yaml"
+
+        tasks:
+          - name: Create a config file from a j2 template
+            ansible.builtin.template:
+              src: "{{ j2_template_name }}"
+              dest: "{{ rendered_config }}"
+
+          - name: Upload config to S3 Bucket
+            amazon.aws.s3_object:
+              bucket: "{{ bucket_name }}"
+              object: "{{ ansible_date_time.date }}-{{ ansible_date_time.hour }}-{{ ansible_date_time.minute }}-{{ j2_template_name }}.tf"
+              src: "{{ rendered_config }}"
+              mode: put
+              access_key: "{{ AWS_ACCESS_KEY_ID }}"
+              secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+              validate_certs: false
+              encrypt: false
+              rgw: false
+              permission: [private]
+              endpoint_url: "{{ s3_endpoint }}"
+
+
 templates:
   - name: vm-vsphere
     file: |

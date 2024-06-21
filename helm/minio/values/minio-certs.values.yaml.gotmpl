@@ -1,16 +1,30 @@
 ---
 customresources:
-  awx-application-certificate:
+  ingress-certificate-console:
     apiVersion: cert-manager.io/v1
     kind: Certificate
     metadata:
-      name: {{ .Values.hostname }}-ingress
-      namespace: {{ .Release.Namespace }}
+      name: minio-ingress-console
+      namespace: ${MINIO_NAMESPACE:-minio}
     spec:
-      commonName: {{ .Values.hostname }}.{{ .Values.domain }}
+      commonName: {{ .Values.hostnameConsole }}.{{ .Values.domain }}
       dnsNames:
-        - {{ .Values.hostname }}.{{ .Values.domain }}
+      - ${{ .Values.hostnameConsole }}.{{ .Values.domain }}
       issuerRef:
-        name: {{ .Values.clusterIssuer }}
+        name: ${CLUSTER_ISSUER}
         kind: ClusterIssuer
-      secretName: {{ .Values.ingressSecret }}
+      secretName: ${{ .Values.hostnameConsole }}-ingress-tls
+  ingress-certificate-api:
+    apiVersion: cert-manager.io/v1
+    kind: Certificate
+    metadata:
+      name: minio-ingress-api
+      namespace: ${MINIO_NAMESPACE:-minio}
+    spec:
+      commonName: ${INGRESS_HOSTNAME_API}.${INGRESS_DOMAIN}
+      dnsNames:
+      - ${INGRESS_HOSTNAME_API}.${INGRESS_DOMAIN}
+      issuerRef:
+        name: ${CLUSTER_ISSUER}
+        kind: ClusterIssuer
+      secretName: ${INGRESS_HOSTNAME_API}-ingress-tls

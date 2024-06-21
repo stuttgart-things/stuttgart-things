@@ -9,15 +9,15 @@ FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
 LABEL version=1.17.0-1
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 
+# VERSIONS
 ENV AWSCDK_VERSION=2.99.0
 ENV GLIBC_VER=2.34-r0
 ENV AVP_VERSION=1.17.0
 ENV BIN=argocd-vault-plugin
-# INSTALL TOOLS NEEDED FOR YOUR REPO-SERVER TO RETRIEVE & DECRYPT SECRETS, RENDER MANIFESTS
 
+# INSTALL TOOLS NEEDED FOR YOUR REPO-SERVER TO RETRIEVE & DECRYPT SECRETS, RENDER MANIFESTS
 RUN apk update && apk upgrade -i -a --update-cache && apk --no-cache add \
-        binutils \
-        curl \
+        binutils curl \
     && curl -sL https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub -o /etc/apk/keys/sgerrand.rsa.pub \
     && curl -sLO https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VER}/glibc-${GLIBC_VER}.apk \
     && curl -sLO https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VER}/glibc-bin-${GLIBC_VER}.apk \
@@ -40,7 +40,7 @@ RUN apk update && apk upgrade -i -a --update-cache && apk --no-cache add \
     && rm glibc-bin-${GLIBC_VER}.apk \
     && rm -rf /var/cache/apk/*
 
-# Install the AVP plugin (as root so we can copy to /usr/local/bin)
+# INSTALL THE AVP PLUGIN (AS ROOT SO WE CAN COPY TO /USR/LOCAL/BIN)
 RUN wget https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/v${AVP_VERSION}/argocd-vault-plugin_${AVP_VERSION}_linux_amd64
 RUN chmod +x ${BIN}*
 RUN mv ${BIN}* /usr/local/bin/${BIN}
@@ -51,7 +51,6 @@ ENV GROUP_ID=998
 ENV USER_NAME=argocd
 ENV GROUP_NAME=argocd
 ENV USER_HOME=/home/argocd
-
 RUN addgroup -g $GROUP_ID $GROUP_NAME && \
      adduser --shell /bin/bash --disabled-password -h ${USER_HOME} \
      --uid $USER_ID --ingroup $GROUP_NAME $USER_NAME
