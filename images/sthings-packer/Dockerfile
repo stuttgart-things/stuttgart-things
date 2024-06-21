@@ -12,7 +12,6 @@ USER root
 ARG PACKER_VERSION=1.10.3
 ARG MACHINE_SHOP_VERSION=v1.7.0
 ARG GOVC_VERSION=0.37.1
-
 RUN apk add --no-cache alpine-sdk build-base apk-tools alpine-conf busybox fakeroot syslinux xorriso squashfs-tools sudo mtools dosfstools grub-efi
 
 # PACKER

@@ -54,7 +54,10 @@ jobs:
           done
 
           # TEST
-          build_contexts_test='{ "context-path": [$(jq -c -n '$ARGS.positional' --args "${changed_image_dirs[@]}")] }'
+          part1=$(printf contexts="'"{)
+          part2=$(jq -c -n '$ARGS.positional' --args "${changed_image_dirs[@]}")
+
+          build_contexts_test=$(echo $part1 $part2)
           echo ${build_contexts_test}
 
           # build_contexts=$(echo $(printf contexts="'"{) $(printf '"'context-path'"':) $(jq -c -n '$ARGS.positional' --args "${changed_image_dirs[@]}") $(printf }"'"))
