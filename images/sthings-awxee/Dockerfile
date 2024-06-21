@@ -15,7 +15,6 @@ ARG VAULT_URL_LABDA_VSPHERE=https://vault-vsphere.tiab.labda.sva.de:8200
 USER root
 
 # RUN python3 --version
-# RUN dnf -y install epel-release
 RUN dnf -y install wget python3-requests sudo
 RUN pip3 install hvac
 RUN rm -rf /etc/pki/ca-trust/source/anchors/* \
