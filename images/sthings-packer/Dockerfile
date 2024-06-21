@@ -9,7 +9,6 @@ LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 LABEL version=1.10.3-9.5.1
 
 USER root
-
 ARG PACKER_VERSION=1.10.3
 ARG MACHINE_SHOP_VERSION=v1.7.0
 ARG GOVC_VERSION=0.37.1
