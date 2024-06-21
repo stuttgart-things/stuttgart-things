@@ -58,10 +58,11 @@ jobs:
           # echo "contexts=$build_contexts_hardcoded" >> "$GITHUB_OUTPUT"
 
           part1=$(printf contexts="'"{)
-          part2=$(jq -c -n '$ARGS.positional' --args "${changed_image_dirs[@]}")
-          part3=$(printf }"'")
+          part2=$(printf '"context-path"': )
+          part3=$(jq -c -n '$ARGS.positional' --args "${changed_image_dirs[@]}")
+          part4=$(printf }"'")
 
-          build_contexts_test=$(echo ${part1} ${part2} ${part3})
+          build_contexts_test=$(echo ${part1} ${part2} ${part3} ${part4})
           echo ${build_contexts_test}
 
           echo "contexts=$build_contexts_test" >> "$GITHUB_OUTPUT"
