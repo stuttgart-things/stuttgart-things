@@ -42,19 +42,18 @@ jobs:
         env:
           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
         run: |
-          dockerfiles=()
+          changed_image_dirs=()
+
           for path in ${ALL_CHANGED_FILES}; do
             echo "$path was changed"
-            dir=${path%/*}
-            dir=${dir##*/}
-            image_path=$(printf '%s\n' "$dir")
-            dockerfiles+=("$image_path")
+            image_context=${path%/*}
+            image_context=${image_context##*/}
+            image_path=$(printf '%s\n' "$image_context")
+            changed_image_dirs+=("$image_path")
           done
 
-          echo contexts=echo $($(printf contexts="'"{) $(printf '"'context-path'"':) $(jq -c -n '$ARGS.positional' --args "${dockerfiles[@]}") $(printf }"'"))
-          bla=$($(printf contexts="'"{) $(printf '"'context-path'"':) $(jq -c -n '$ARGS.positional' --args "${dockerfiles[@]}") $(printf }"'"))
-          echo hellllo ${bla}
-          echo "contexts=$contexts" >> "$GITHUB_OUTPUT"
+          echo $(printf contexts="'"{) $(printf '"'context-path'"':) $(jq -c -n '$ARGS.positional' --args "${changed_image_dirs[@]}") $(printf }"'")
+
         shell: bash
 
       - name: build matrix

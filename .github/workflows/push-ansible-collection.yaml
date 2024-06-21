@@ -6,21 +6,11 @@ on:
       - main
     paths:
       - 'ansible/collections/*'
-#   pull_request:
-#     paths:
-#     - 'ansible/collections'
-# env:
-#   environment:
+  pull_request:
+    paths:
+      - 'ansible/collections/*'
 
 jobs:
-  # Build-Collection:
-  #   name: Build Ansible Collection
-  #   uses: stuttgart-things/stuttgart-things/.github/workflows/call-ansible-collection.yaml@main
-  #   with:
-  #     runs-on: ghr-stuttgart-things-labda-test
-  #     environment-name: k8s
-  #     continue-error: false
-  #     collection-file: ansible/collections/base-os.yaml
   Build-Collections:
     strategy:
       matrix:
