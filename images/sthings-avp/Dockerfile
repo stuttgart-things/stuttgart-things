@@ -9,6 +9,7 @@ FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
 LABEL version=1.17.0-1
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 
+# VERSIONS
 ENV AWSCDK_VERSION=2.99.0
 ENV GLIBC_VER=2.34-r0
 ENV AVP_VERSION=1.17.0

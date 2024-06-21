@@ -87,8 +87,8 @@ jobs:
         run: |
           echo ${{ needs.Get-Changed-Dockerfiles.outputs.contexts }}
           echo ${{ needs.Get-Changed-Dockerfiles.outputs.contexts1 }}
-          echo ${{ fromJson(needs.Get-Changed-Dockerfiles.outputs.contexts1) }}
-          echo ${{ fromJson(needs.Get-Changed-Dockerfiles.outputs.contexts) }}
+          # echo ${{ fromJson(needs.Get-Changed-Dockerfiles.outputs.contexts1) }}
+          # echo ${{ fromJson(needs.Get-Changed-Dockerfiles.outputs.contexts) }}
 
   Build-Images:
     needs: Get-Changed-Dockerfiles
