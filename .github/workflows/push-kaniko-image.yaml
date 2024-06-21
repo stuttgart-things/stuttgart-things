@@ -65,9 +65,12 @@ jobs:
           build_contexts_test=$(echo ${part1} ${part2} ${part3} ${part4})
           echo ${build_contexts_test}
 
-          echo "contexts=${build_contexts_test}" >> "$GITHUB_OUTPUT"
+          # echo "contexts=${build_contexts_test}" >> "$GITHUB_OUTPUT"
           contexts1='{ "context-path": ["sthings-alpine", "sthings-minio"] }'
-          echo "contexts1=$contexts1" >> "$GITHUB_OUTPUT"
+          # echo "contexts1=$contexts1" >> "$GITHUB_OUTPUT"
+
+          echo "::set-output name=contexts::${build_contexts_test}"
+          echo "::set-output name=contexts1::${contexts1}"
         shell: bash
 
       # - name: build matrix
@@ -87,6 +90,8 @@ jobs:
         run: |
           echo ${{ needs.Get-Changed-Dockerfiles.outputs.contexts }}
           echo ${{ needs.Get-Changed-Dockerfiles.outputs.contexts1 }}
+
+
           # echo ${{ fromJson(needs.Get-Changed-Dockerfiles.outputs.contexts1) }}
           # echo ${{ fromJson(needs.Get-Changed-Dockerfiles.outputs.contexts) }}
 
