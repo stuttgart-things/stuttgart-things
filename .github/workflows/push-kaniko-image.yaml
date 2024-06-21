@@ -84,7 +84,7 @@ jobs:
       - name: Echo
         run: |
           echo ${{ needs.Get-Changed-Dockerfiles.outputs.contexts }}
-
+          echo ${{ fromJson(needs.Get-Changed-Dockerfiles.outputs.contexts) }}
   # Build-Images:
   #   needs: Get-Changed-Dockerfiles
   #   strategy:
