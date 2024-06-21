@@ -40,7 +40,7 @@ RUN apk update && apk upgrade -i -a --update-cache && apk --no-cache add \
     && rm glibc-bin-${GLIBC_VER}.apk \
     && rm -rf /var/cache/apk/*
 
-# Install the AVP plugin (as root so we can copy to /usr/local/bin)
+# INSTALL THE AVP PLUGIN (AS ROOT SO WE CAN COPY TO /USR/LOCAL/BIN)
 RUN wget https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/v${AVP_VERSION}/argocd-vault-plugin_${AVP_VERSION}_linux_amd64
 RUN chmod +x ${BIN}*
 RUN mv ${BIN}* /usr/local/bin/${BIN}
