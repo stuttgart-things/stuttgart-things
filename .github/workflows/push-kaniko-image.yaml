@@ -53,9 +53,11 @@ jobs:
             changed_image_dirs+=("$image_path")
           done
 
-          build_contexts=$(echo $(printf contexts="'"{) $(printf '"'context-path'"':) $(jq -c -n '$ARGS.positional' --args "${changed_image_dirs[@]}") $(printf }"'"))
-          echo ${build_contexts}
+          build_contexts='{ "context-path": ["sthings-alpine", "sthings-minio"] }'
           echo "contexts=$build_contexts" >> "$GITHUB_OUTPUT"
+
+          # build_contexts=$(echo $(printf contexts="'"{) $(printf '"'context-path'"':) $(jq -c -n '$ARGS.positional' --args "${changed_image_dirs[@]}") $(printf }"'"))
+          # echo ${build_contexts}
         shell: bash
 
       # - name: build matrix
