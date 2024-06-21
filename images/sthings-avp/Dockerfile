@@ -13,6 +13,7 @@ ENV AWSCDK_VERSION=2.99.0
 ENV GLIBC_VER=2.34-r0
 ENV AVP_VERSION=1.17.0
 ENV BIN=argocd-vault-plugin
+
 # INSTALL TOOLS NEEDED FOR YOUR REPO-SERVER TO RETRIEVE & DECRYPT SECRETS, RENDER MANIFESTS
 
 RUN apk update && apk upgrade -i -a --update-cache && apk --no-cache add \
