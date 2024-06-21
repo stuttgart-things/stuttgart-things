@@ -51,7 +51,6 @@ ENV GROUP_ID=998
 ENV USER_NAME=argocd
 ENV GROUP_NAME=argocd
 ENV USER_HOME=/home/argocd
-
 RUN addgroup -g $GROUP_ID $GROUP_NAME && \
      adduser --shell /bin/bash --disabled-password -h ${USER_HOME} \
      --uid $USER_ID --ingroup $GROUP_NAME $USER_NAME
