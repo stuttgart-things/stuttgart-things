@@ -80,6 +80,7 @@ jobs:
           echo "output-matrix<<EOF" >> ${GITHUB_OUTPUT}
           echo -n "{\"include\": [{\"key\": \"value1\"}, {\"key\": \"value2\"}]}" >> ${GITHUB_OUTPUT}
           echo "EOF" >> ${GITHUB_OUTPUT}
+        shell: bash
 
       # - name: build matrix
       #   run: |
