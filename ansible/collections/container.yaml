@@ -1,6 +1,6 @@
 ---
 name: container
-version: 0.0.23
+version: 0.0.24
 namespace: sthings
 requirements: |
   roles:
@@ -216,94 +216,104 @@ vars:
   - name: tools
     file: |
       ---
+      ko_version: v0.15.4
+      kind_version: v0.23.0
+      skopeo_version: v1.14.4
+      helm_version: v3.15.2
+      kubectl_version: v1.30.2
+      k9s_version: v0.32.5
+      velero_version: v1.14.0
+      kubectl_slice_version: v1.3.1
+      helmfile_version: 0.165.0
+
       bin:
         ko:
           bin_name: ko
-          bin_version: v0.15.2
+          bin_version: "{{ ko_version }}"
           check_bin_version_before_installing: true
-          source_url: "https://github.com/ko-build/ko/releases/download/v0.15.2/ko_Linux_x86_64.tar.gz"
+          source_url: "https://github.com/ko-build/ko/releases/download/{{ ko_version }}/ko_Linux_x86_64.tar.gz"
           bin_to_copy: ko
           to_remove: ""
           bin_dir: "/usr/bin/ko"
           version_cmd: "version"
-          target_version: v0.15.2
+          target_version: "{{ ko_version }}"
         kind:
           bin_name: kind
-          bin_version: v0.23.0
+          bin_version: "{{ kind_version }}"
           check_bin_version_before_installing: true
-          source_url: "https://github.com/kubernetes-sigs/kind/releases/download/v0.23.0/kind-linux-amd64"
+          source_url: "https://github.com/kubernetes-sigs/kind/releases/download/{{ kind_version }}/kind-linux-amd64"
           bin_to_copy: kind-linux-amd64
           to_remove: ""
           bin_dir: "/usr/bin/kind"
           version_cmd: "version"
-          target_version: v0.23.0
+          target_version: "{{ kind_version }}"
         skopeo:
-          bin_name: skopeo
+          bin_name: "{{ skopeo_version }}"
           bin_version: v1.14.4
           check_bin_version_before_installing: true
-          source_url: "https://github.com/lework/skopeo-binary/releases/download/v1.14.4/skopeo-linux-amd64"
+          source_url: "https://github.com/lework/skopeo-binary/releases/download/{{ skopeo_version }}/skopeo-linux-amd64"
           bin_to_copy: skopeo-linux-amd64
           to_remove: ""
           bin_dir: "/usr/bin/skopeo"
           version_cmd: "version"
-          target_version: v1.14.4
+          target_version: "{{ skopeo_version }}"
         helm:
           bin_name: "helm"
-          bin_version: "3.15.1"
+          bin_version: "{{ helm_version }}"
           check_bin_version_before_installing: true
-          source_url: "https://get.helm.sh/helm-v3.15.0-linux-amd64.tar.gz"
+          source_url: "https://get.helm.sh/helm-{{ helm_version }}-linux-amd64.tar.gz"
           bin_to_copy: "linux-amd64/helm"
           to_remove: "linux-amd64"
           bin_dir: "/usr/local/bin"
           version_cmd: " version"
-          target_version: v3.15.0
+          target_version: "{{ helm_version }}"
         kubectl:
           bin_name: "kubectl"
-          bin_version: "1.30.1"
+          bin_version: "{{ kubectl_version }}"
           check_bin_version_before_installing: true
-          source_url: "https://dl.k8s.io/v1.30.1/bin/linux/amd64/kubectl"
+          source_url: "https://dl.k8s.io/{{ kubectl_version }}/bin/linux/amd64/kubectl"
           bin_to_copy: "kubectl"
           to_remove: "kubectl"
           bin_dir: "/usr/local/bin"
           version_cmd: " version --client"
-          target_version: v1.30.1
+          target_version: "{{ kubectl_version }}"
         k9s:
           bin_name: "k9s"
-          bin_version: "0.32.4"
+          bin_version: "{{ k9s_version }}"
           check_bin_version_before_installing: true
-          source_url: "https://github.com/derailed/k9s/releases/download/v0.32.4/k9s_Linux_amd64.tar.gz"
+          source_url: "https://github.com/derailed/k9s/releases/download/{{ k9s_version }}/k9s_Linux_amd64.tar.gz"
           bin_to_copy: "k9s"
           to_remove: "k9s"
           bin_dir: "/usr/local/bin"
           version_cmd: " version --short"
-          target_version: v0.32.4
+          target_version: "{{ k9s_version }}"
         velero:
           bin_name: velero
-          bin_version: 1.13.2
+          bin_version: "{{ velero_version }}"
           check_bin_version_before_installing: true
-          source_url: "https://github.com/vmware-tanzu/velero/releases/download/v1.13.2/velero-v1.13.2-linux-amd64.tar.gz"
-          bin_to_copy: "velero-v1.13.2-linux-amd64/velero"
-          to_remove: "velero-v1.13.2-linux-amd64"
+          source_url: "https://github.com/vmware-tanzu/velero/releases/download/{{ velero_version }}/velero-{{ velero_version }}-linux-amd64.tar.gz"
+          bin_to_copy: "velero-{{ velero_version }}-linux-amd64/velero"
+          to_remove: "velero-{{ velero_version }}-linux-amd64"
           bin_dir: "/usr/local/bin"
           version_cmd: " version --client-only"
-          target_version: v1.13.2
+          target_version: "{{ velero_version }}"
         kubectl_slice:
           bin_name: kubectl-slice
-          bin_version: v1.2.9
+          bin_version: "{{ kubectl_slice_version }}"
           check_bin_version_before_installing: true
-          source_url: "https://github.com/patrickdappollonio/kubectl-slice/releases/download/v1.2.9/kubectl-slice_linux_x86_64.tar.gz"
+          source_url: "https://github.com/patrickdappollonio/kubectl-slice/releases/download/{{ kubectl_slice_version }}/kubectl-slice_linux_x86_64.tar.gz"
           bin_to_copy: kubectl-slice
           to_remove: kubectl-slice
           bin_dir: "/usr/bin"
           version_cmd: " --version"
-          target_version: v1.2.9
+          target_version: "{{ kubectl_slice_version }}"
         helmfile:
           bin_name: helmfile
-          bin_version: v0.165.0
+          bin_version: "v{{ helmfile_version }}"
           check_bin_version_before_installing: true
-          source_url: "https://github.com/helmfile/helmfile/releases/download/v0.165.0/helmfile_0.165.0_linux_amd64.tar.gz"
+          source_url: "https://github.com/helmfile/helmfile/releases/download/v{{ helmfile_version }}/helmfile_{{ helmfile_version }}_linux_amd64.tar.gz"
           bin_to_copy: helmfile
           to_remove: helmfile
           bin_dir: "/usr/bin"
           version_cmd: " --version"
-          target_version: v0.165.0
+          target_version: "v{{ helmfile_version }}"
