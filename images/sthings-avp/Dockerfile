@@ -6,7 +6,6 @@ ARG TAG=3.12.0-alpine3.18
 FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
 
 # SWITCH TO ROOT FOR THE ABILITY TO PERFORM INSTALLATION
-
 LABEL version=1.17.0-1
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 
@@ -61,5 +60,5 @@ RUN mkdir -p /home/nonroot
 
 RUN chown -R ${USER_ID}:${GROUP_ID} ${USER_HOME}
 
-# Switch back to non-root user
+# SWITCH BACK TO NON-ROOT USER
 USER 999
