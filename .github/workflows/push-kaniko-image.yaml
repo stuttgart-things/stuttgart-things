@@ -51,9 +51,9 @@ jobs:
             dockerfiles+=("$image_path")
           done
 
-          #repository='{ "repository": ["repo1","repo2","repo3","repo4"] }'
-          echo hello='$(jq -c -n '$ARGS.positional' --args "${dockerfiles[@]}" )'
           echo $(printf contexts="'"{) $(printf '"'context-path'"':) $(jq -c -n '$ARGS.positional' --args "${dockerfiles[@]}") $(printf }"'")
+          echo ${contexts}
+          echo "contexts=$contexts" >> "$GITHUB_OUTPUT"
         shell: bash
 
       - name: build matrix
