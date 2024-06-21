@@ -1,9 +1,9 @@
-LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
-
 ARG REGISTRY=eu.gcr.io
 ARG REPOSITORY=stuttgart-things
 ARG IMAGE=sthings-alpine
 ARG TAG=3.12.2-alpine3.19
+
+LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 
 FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
 
