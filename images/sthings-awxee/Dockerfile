@@ -21,4 +21,5 @@ RUN rm -rf /etc/pki/ca-trust/source/anchors/* \
     && wget -O /etc/pki/ca-trust/source/anchors/labul-pve.crt ${VAULT_URL_LABUL_PVE}/v1/pki/ca/pem --no-check-certificate \
     && update-ca-trust
 
+# USER
 USER 1000
