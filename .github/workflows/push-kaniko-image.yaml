@@ -19,6 +19,7 @@ jobs:
     environment: k8s
     outputs:
       contexts: ${{ steps.json.outputs.contexts }}
+      contexts1: ${{ steps.json.outputs.contexts1 }}
     continue-on-error: false
     steps:
       - name: Checkout code
@@ -65,7 +66,8 @@ jobs:
           echo ${build_contexts_test}
 
           echo "contexts=echo ${build_contexts_test}" >> "$GITHUB_OUTPUT"
-
+          contexts1='{ "context-path": ["sthings-alpine", "sthings-minio"] }'
+          echo "contexts1=$contexts" >> "$GITHUB_OUTPUT"
         shell: bash
 
       # - name: build matrix
@@ -84,7 +86,10 @@ jobs:
       - name: Echo
         run: |
           echo ${{ needs.Get-Changed-Dockerfiles.outputs.contexts }}
-          echo ${{ fromJson(needs.Get-Changed-Dockerfiles.outputs.contexts) }}
+          echo ${{ needs.Get-Changed-Dockerfiles.outputs.contexts1 }}
+          echo ${{ fromJson(needs.Get-Changed-Dockerfiles.outputs.contexts1) }}
+
+
   # Build-Images:
   #   needs: Get-Changed-Dockerfiles
   #   strategy:
