@@ -19,7 +19,6 @@ jobs:
     environment: k8s
     outputs:
       contexts: ${{ steps.json.outputs.contexts }}
-
     continue-on-error: false
     steps:
       - name: Checkout code
@@ -74,20 +73,34 @@ jobs:
       #     contexts='{ "context-path": ["sthings-alpine", "sthings-minio"] }'
       #     echo "contexts=$contexts" >> "$GITHUB_OUTPUT"
 
-  Build-Images:
+  Test:
     needs: Get-Changed-Dockerfiles
-    strategy:
-      fail-fast: false
-      matrix: ${{ fromJson(needs.Get-Changed-Dockerfiles.outputs.contexts) }}
-    uses: stuttgart-things/stuttgart-things/.github/workflows/call-kaniko-build.yaml@main
-    with:
-      runs-on: ghr-stuttgart-things-labda-test
-      environment-name: k8s
-      dockerfile: images/${{ matrix.context-path }}/Dockerfile
-      registry: ghcr.io
-      repository: stuttgart-things
-      image: ${{ matrix.context-path }}
-      tag: latest
-      kaniko-image: gcr.io/kaniko-project/executor
-      kaniko-tag: debug
-      push-retrys: "5"
+    runs-on: ghr-stuttgart-things-labda-test
+    container:
+      image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2-2
+    environment: k8s
+    continue-on-error: false
+    steps:
+      - name: Echo
+        run: |
+          echo ${{ needs.Get-Changed-Dockerfiles.outputs.contexts }}
+          echo ${{ fromJson(needs.Get-Changed-Dockerfiles.outputs.contexts) }}
+
+
+  # Build-Images:
+  #   needs: Get-Changed-Dockerfiles
+  #   strategy:
+  #     fail-fast: false
+  #     matrix: ${{ fromJson(needs.Get-Changed-Dockerfiles.outputs.contexts) }}
+  #   uses: stuttgart-things/stuttgart-things/.github/workflows/call-kaniko-build.yaml@main
+  #   with:
+  #     runs-on: ghr-stuttgart-things-labda-test
+  #     environment-name: k8s
+  #     dockerfile: images/${{ matrix.context-path }}/Dockerfile
+  #     registry: ghcr.io
+  #     repository: stuttgart-things
+  #     image: ${{ matrix.context-path }}
+  #     tag: latest
+  #     kaniko-image: gcr.io/kaniko-project/executor
+  #     kaniko-tag: debug
+  #     push-retrys: "5"
