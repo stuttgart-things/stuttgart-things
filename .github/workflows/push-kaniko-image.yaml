@@ -21,6 +21,7 @@ jobs:
       constructed: ${{ steps.json.outputs.constructed }}
       hardcoded: ${{ steps.json.outputs.hardcoded }}
       matrix: ${{ steps.json.outputs.matrix }}
+      dirs: ${{ steps.json.outputs.dirs }}
     continue-on-error: false
     steps:
       - name: Checkout code
@@ -38,6 +39,7 @@ jobs:
           path: source
           files: |
             images/*/*
+          dir_names: true
 
       - name: List all changed files
         id: json
@@ -88,6 +90,7 @@ jobs:
           echo ${{ needs.Get-Changed-Dockerfiles.outputs.constructed }}
           echo ${{ needs.Get-Changed-Dockerfiles.outputs.hardcoded }}
           echo ${{ needs.Get-Changed-Dockerfiles.outputs.matrix }}
+          echo ${{ needs.Get-Changed-Dockerfiles.outputs.dirs }}
 
   Build-Images:
     needs: Get-Changed-Dockerfiles

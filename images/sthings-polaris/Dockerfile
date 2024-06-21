@@ -15,7 +15,7 @@ RUN wget -q https://github.com/FairwindsOps/polaris/releases/download/${POLARIS_
 && chmod +x /usr/bin/polaris \
 && rm -rf polaris_linux_amd64.tar.gz
 
+# INSTALL PYTHON PACKAGES
 COPY requirements.txt .
 RUN python3 -m venv venv
-
 RUN pip install --no-cache-dir -r requirements.txt
