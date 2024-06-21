@@ -7,7 +7,7 @@ LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 RUN apk update && apk add ca-certificates && rm -rf /var/cache/apk/* \
   mkdir /usr/local/share/ca-certificates/extra
 
-# VAULT ADDRS
+# VAULT ADDR
 ARG VAULT_URL_LABUL=https://vault.labul.sva.de:8200
 ARG VAULT_URL_LABDA=https://vault.tiab.labda.sva.de:8200
 ARG VAULT_URL_LABUL_VSPHERE=https://vault-vsphere.labul.sva.de:8200

@@ -13,8 +13,8 @@ ENV AWSCDK_VERSION=2.99.0
 ENV GLIBC_VER=2.34-r0
 ENV AVP_VERSION=1.17.0
 ENV BIN=argocd-vault-plugin
-# Install tools needed for your repo-server to retrieve & decrypt secrets, render manifests
-# (e.g. curl, awscli, gpg, sops)
+# INSTALL TOOLS NEEDED FOR YOUR REPO-SERVER TO RETRIEVE & DECRYPT SECRETS, RENDER MANIFESTS
+# (E.G. CURL, AWSCLI, GPG, SOPS)
 
 RUN apk update && apk upgrade -i -a --update-cache && apk --no-cache add \
         binutils \
