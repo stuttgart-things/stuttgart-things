@@ -38,9 +38,8 @@ RUN wget -q https://github.com/stuttgart-things/machineShop/releases/download/${
     && tar -xvf machineShop_Linux_x86_64.tar.gz -C /usr/bin/ machineShop \
     && rm -rf machineShop_Linux_x86_64.tar.gz
 
-# Get Rust; NOTE: using sh for better compatibility with other base images
+# GET RUST; NOTE: USING SH FOR BETTER COMPATIBILITY WITH OTHER BASE IMAGES
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
-# Add .cargo/bin to PATH
 ENV PATH="/root/.cargo/bin:${PATH}"
 
 RUN /usr/local/bin/python -m pip install --upgrade pip && pip install pip --upgrade

@@ -18,7 +18,7 @@ jobs:
       image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2-2
     environment: k8s
     outputs:
-      repository: ${{ steps.json.outputs.repository }}
+      contexts: ${{ steps.json.outputs.contexts }}
 
     continue-on-error: false
     steps:
@@ -55,14 +55,14 @@ jobs:
       - name: build matrix
         id: json
         run: |
-          repository='{ "context-path": ["sthings-alpine"] }'
-          echo "repository=$repository" >> "$GITHUB_OUTPUT"
+          contexts='{ "context-path": ["sthings-alpine"] }'
+          echo "contexts=$contexts" >> "$GITHUB_OUTPUT"
 
   Build-Images:
     needs: Get-Changed-Dockerfiles
     strategy:
-      matrix:
-        context-path: ${{ fromJson(needs.Get-Changed-Dockerfiles.outputs.repository) }}
+      fail-fast: false
+      matrix: ${{ fromJson(needs.Get-Changed-Dockerfiles.outputs.contexts) }}
         #context-path: [sthings-alpine]
     uses: stuttgart-things/stuttgart-things/.github/workflows/call-kaniko-build.yaml@main
     with:
