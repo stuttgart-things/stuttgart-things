@@ -39,6 +39,7 @@ jobs:
             images/*/*
 
       - name: List all changed files
+        id: json
         env:
           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
         run: |
@@ -54,14 +55,8 @@ jobs:
 
           build_contexts=$(echo $(printf contexts="'"{) $(printf '"'context-path'"':) $(jq -c -n '$ARGS.positional' --args "${changed_image_dirs[@]}") $(printf }"'"))
           echo ${build_contexts}
-
+          echo "contexts=$build_contexts" >> "$GITHUB_OUTPUT"
         shell: bash
-
-      - name: build matrix
-        id: json
-        run: |
-          contexts='{ "context-path": ["sthings-alpine", "sthings-minio"] }'
-          echo "contexts=$contexts" >> "$GITHUB_OUTPUT"
 
   Build-Images:
     needs: Get-Changed-Dockerfiles
