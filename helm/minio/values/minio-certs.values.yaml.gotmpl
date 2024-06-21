@@ -7,13 +7,13 @@ customresources:
       name: minio-ingress-console
       namespace: ${MINIO_NAMESPACE:-minio}
     spec:
-      commonName: ${INGRESS_HOSTNAME_CONSOLE}.${INGRESS_DOMAIN}
+      commonName: {{ .Values.hostnameConsole }}.{{ .Values.domain }}
       dnsNames:
-      - ${INGRESS_HOSTNAME_CONSOLE}.${INGRESS_DOMAIN}
+      - ${{ .Values.hostnameConsole }}.{{ .Values.domain }}
       issuerRef:
         name: ${CLUSTER_ISSUER}
         kind: ClusterIssuer
-      secretName: ${INGRESS_HOSTNAME_CONSOLE}-ingress-tls
+      secretName: ${{ .Values.hostnameConsole }}-ingress-tls
   ingress-certificate-api:
     apiVersion: cert-manager.io/v1
     kind: Certificate

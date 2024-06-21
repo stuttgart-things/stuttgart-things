@@ -20,6 +20,7 @@ jobs:
     outputs:
       contexts: ${{ steps.json.outputs.contexts }}
       contexts1: ${{ steps.json.outputs.contexts1 }}
+      matrix: ${{ steps.generate-matrix.outputs.generate-matrix }}
     continue-on-error: false
     steps:
       - name: Checkout code
@@ -43,6 +44,8 @@ jobs:
         env:
           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
         run: |
+          set -x
+
           changed_image_dirs=()
 
           for path in ${ALL_CHANGED_FILES}; do
@@ -68,8 +71,15 @@ jobs:
           # echo "contexts=${build_contexts_test} | sed 's/,/, /g'" >> "$GITHUB_OUTPUT"
           contexts1='{ "context-path": ["sthings-alpine", "sthings-minio"] }'
           # echo "contexts1=$contexts1" >> "$GITHUB_OUTPUT"
-
         shell: bash
+
+      - name: Generate Matrix
+        id: generate-matrix
+        run: |
+          echo "For the matrix step later we need to create the output via a here doc method"
+          echo "output-matrix<<EOF" >> ${GITHUB_OUTPUT}
+          echo -n "{\"include\": [{\"key\": \"value1\"}, {\"key\": \"value2\"}]}" >> ${GITHUB_OUTPUT}
+          echo "EOF" >> ${GITHUB_OUTPUT}
 
       # - name: build matrix
       #   run: |
@@ -86,7 +96,7 @@ jobs:
     steps:
       - name: Echo
         run: |
-          echo ${{ needs.Get-Changed-Dockerfiles.outputs.contexts }}
+          #echo ${{ needs.Get-Changed-Dockerfiles.outputs.contexts }}
           echo ${{ needs.Get-Changed-Dockerfiles.outputs.contexts1 }}
 
 
