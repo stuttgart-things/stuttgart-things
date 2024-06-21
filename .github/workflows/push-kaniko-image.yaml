@@ -1,0 +1,30 @@
+---
+name: Build Container Image w/ kaniko
+on:
+  push:
+    branches:
+      - "*"
+    paths:
+      - 'images/*'
+
+  pull_request:
+    paths:
+      - 'images/*'
+
+jobs:
+  Build-Images:
+    strategy:
+      matrix:
+        context-path: [sthings-alpine]
+    uses: stuttgart-things/stuttgart-things/.github/workflows/call-kaniko-build.yaml@main
+    with:
+      runs-on: ghr-stuttgart-things-labda-test
+      environment-name: k8s
+      dockerfile: images/${{ matrix.context-path }}/Dockerfile
+      registry: ghcr.io
+      repository: stuttgart-things
+      image: ${{ matrix.context-path }}
+      tag: latest
+      kaniko-image: gcr.io/kaniko-project/executor
+      kaniko-tag: debug
+      push-retrys: "5"
