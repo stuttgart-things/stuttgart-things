@@ -57,10 +57,10 @@ jobs:
           # build_contexts_hardcoded='{ "context-path": ["sthings-alpine", "sthings-minio"] }'
           # echo "contexts=$build_contexts_hardcoded" >> "$GITHUB_OUTPUT"
 
-          part1=$(printf contexts="'"{)
-          part2=$(printf '"context-path"': )
+          part1=$(printf {)
+          part1=$(printf context-path: )
           part3=$(jq -c -n '$ARGS.positional' --args "${changed_image_dirs[@]}")
-          part4=$(printf }"'")
+          part4=$(printf })
 
           build_contexts_test=$(echo ${part1} ${part2} ${part3} ${part4})
           echo ${build_contexts_test}
@@ -87,7 +87,6 @@ jobs:
         run: |
           echo ${{ needs.Get-Changed-Dockerfiles.outputs.contexts }}
           echo ${{ needs.Get-Changed-Dockerfiles.outputs.contexts1 }}
-
 
   Build-Images:
     needs: Get-Changed-Dockerfiles
