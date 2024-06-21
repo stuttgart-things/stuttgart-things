@@ -8,6 +8,7 @@ LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
 
 LABEL version=2024-05-14
+
 ARG MC_VERSION=RELEASE.2024-05-09T17-04-24Z
 ARG RCLONE_VERSION=v1.66.0
 
