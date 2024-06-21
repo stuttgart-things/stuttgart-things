@@ -56,11 +56,10 @@ jobs:
           # TEST
           part1=$(printf contexts="'"{)
           part2=$(jq -c -n '$ARGS.positional' --args "${changed_image_dirs[@]}")
+          part3=$(printf }"'")
 
-          build_contexts_test=$(echo $part1 $part2)
+          build_contexts_test=$(echo ${part1} ${part2} ${part3})
           echo ${build_contexts_test}
-
-          # build_contexts=$(echo $(printf contexts="'"{) $(printf '"'context-path'"':) $(jq -c -n '$ARGS.positional' --args "${changed_image_dirs[@]}") $(printf }"'"))
 
           # HARDCODED / TEST
           build_contexts='{ "context-path": ["sthings-alpine", "sthings-minio"] }'
