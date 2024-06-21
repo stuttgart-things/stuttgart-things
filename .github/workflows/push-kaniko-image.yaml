@@ -53,7 +53,7 @@ jobs:
           done
 
           echo $(printf contexts="'"{) $(printf '"'context-path'"':) $(jq -c -n '$ARGS.positional' --args "${changed_image_dirs[@]}") $(printf }"'")
-          build_contexts=$(echo printf contexts="'"{) echo $(printf '"'context-path'"':) echo $(jq -c -n '$ARGS.positional' --args "${changed_image_dirs[@]}") $(printf }"'")
+          build_contexts=$(echo $(printf contexts="'"{)) echo $(printf '"'context-path'"':) $(jq -c -n '$ARGS.positional' --args "${changed_image_dirs[@]}") $(printf }"'")
           echo ${build_contexts}
 
         shell: bash
