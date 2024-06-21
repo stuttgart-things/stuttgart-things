@@ -2,7 +2,6 @@ ARG FROM_TAG=alpine3.19
 FROM python:${FROM_TAG}
 
 LABEL version=3.12.3-alpine3.19-5.19.1
-
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 
 ARG PLUTO_VERSION=5.19.1
