@@ -55,7 +55,7 @@ jobs:
 
           build_contexts=$(echo $(printf contexts="'"{) $(printf '"'context-path'"':) $(jq -c -n '$ARGS.positional' --args "${changed_image_dirs[@]}") $(printf }"'"))
           echo ${build_contexts}
-          echo "contexts=echo $(printf contexts="'"{) $(printf '"'context-path'"':) $(jq -c -n '$ARGS.positional' --args "${changed_image_dirs[@]}") $(printf }"'")" >> "$GITHUB_OUTPUT"
+          echo "contexts=$build_contexts" >> "$GITHUB_OUTPUT"
         shell: bash
 
       # - name: build matrix
