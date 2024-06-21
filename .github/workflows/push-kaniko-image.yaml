@@ -79,6 +79,7 @@ jobs:
         with:
           dirs: ${{ env.DIRS }}
           __depth: 1
+          my_key.deep: '{ "myObjectKey": { ${{ env.DIRS }}}}'
 
           # __case: kebab
           # dirs:
