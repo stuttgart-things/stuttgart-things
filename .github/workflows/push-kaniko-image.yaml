@@ -51,8 +51,8 @@ jobs:
             dockerfiles+=("$image_path")
           done
 
-          echo $(printf contexts="'"{) $(printf '"'context-path'"':) $(jq -c -n '$ARGS.positional' --args "${dockerfiles[@]}") $(printf }"'")
-          echo ${contexts}
+          echo contexts=$(printf contexts="'"{) $(printf '"'context-path'"':) $(jq -c -n '$ARGS.positional' --args "${dockerfiles[@]}") $(printf }"'")
+          echo hellllo ${contexts}
           echo "contexts=$contexts" >> "$GITHUB_OUTPUT"
         shell: bash
 

@@ -15,7 +15,6 @@ ENV GLIBC_VER=2.34-r0
 ENV AVP_VERSION=1.17.0
 ENV BIN=argocd-vault-plugin
 # INSTALL TOOLS NEEDED FOR YOUR REPO-SERVER TO RETRIEVE & DECRYPT SECRETS, RENDER MANIFESTS
-# (E.G. CURL, AWSCLI, GPG, SOPS)
 
 RUN apk update && apk upgrade -i -a --update-cache && apk --no-cache add \
         binutils \

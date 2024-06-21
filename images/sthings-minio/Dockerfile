@@ -2,7 +2,6 @@ FROM docker.io/bitnami/minio:2024.6.13-debian-12-r2
 
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 LABEL version=13.3.3
-
 USER root
 
 RUN apt update && apt install -y wget
