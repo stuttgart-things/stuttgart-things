@@ -5,6 +5,7 @@ ARG TAG=3.12.2-alpine3.19
 
 FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
+
 LABEL version=10.0.1
 
 ARG FLUX_VERSION=2.2.3

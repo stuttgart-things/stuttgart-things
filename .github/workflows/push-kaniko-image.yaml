@@ -64,7 +64,7 @@ jobs:
           build_contexts_test=$(echo ${part1} ${part2} ${part3} ${part4})
           echo ${build_contexts_test}
 
-          echo "contexts=$build_contexts_test" >> "$GITHUB_OUTPUT"
+          echo "contexts=echo ${build_contexts_test}" >> "$GITHUB_OUTPUT"
 
         shell: bash
 
@@ -84,8 +84,6 @@ jobs:
       - name: Echo
         run: |
           echo ${{ needs.Get-Changed-Dockerfiles.outputs.contexts }}
-          echo ${{ fromJson(needs.Get-Changed-Dockerfiles.outputs.contexts) }}
-
 
   # Build-Images:
   #   needs: Get-Changed-Dockerfiles
