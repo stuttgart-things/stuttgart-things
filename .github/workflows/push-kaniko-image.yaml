@@ -53,7 +53,10 @@ jobs:
             changed_image_dirs+=("$image_path")
           done
 
-          # TEST
+          # HARDCODED / TEST
+          # build_contexts_hardcoded='{ "context-path": ["sthings-alpine", "sthings-minio"] }'
+          # echo "contexts=$build_contexts_hardcoded" >> "$GITHUB_OUTPUT"
+
           part1=$(printf contexts="'"{)
           part2=$(jq -c -n '$ARGS.positional' --args "${changed_image_dirs[@]}")
           part3=$(printf }"'")
@@ -61,9 +64,7 @@ jobs:
           build_contexts_test=$(echo ${part1} ${part2} ${part3})
           echo ${build_contexts_test}
 
-          # HARDCODED / TEST
-          build_contexts='{ "context-path": ["sthings-alpine", "sthings-minio"] }'
-          echo "contexts=$build_contexts" >> "$GITHUB_OUTPUT"
+          echo "contexts=$build_contexts_test" >> "$GITHUB_OUTPUT"
 
         shell: bash
 
