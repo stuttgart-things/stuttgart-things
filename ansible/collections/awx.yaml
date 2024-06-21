@@ -1,8 +1,30 @@
 ---
 name: awx
-version: 0.0.62
+version: 0.0.63
 namespace: sthings
 playbooks:
+  - name: create_upload_template
+    play: |
+      ---
+      - name: Create a config file from a j2 template
+        ansible.builtin.template:
+          src: ./templates/{{ j2_template_name }}
+          dest: "./templates/{{ ansible_date_time.date }}-{{ j2_template_name }}.tf"
+
+      - name: Upload config to S3 Bucket
+        amazon.aws.s3_object:
+          bucket: "{{ bucket_name }}"
+          object: "{{ ansible_date_time.date }}-{{ ansible_date_time.hour }}-{{ ansible_date_time.minute }}-{{ vmName }}.tf"
+          src: "./templates/{{ ansible_date_time.date }}-{{ j2_template_name }}.tf"
+          mode: put
+          access_key: "{{ AWS_ACCESS_KEY_ID }}"
+          secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+          validate_certs: false
+          encrypt: false
+          rgw: false
+          permission: [private]
+          endpoint_url: "{{ s3_endpoint }}"
+
   - name: check_connection
     play: |
       ---
@@ -147,10 +169,33 @@ playbooks:
         loop: "{{ lookup('dict', scheduler, wantlist=True) }}"
         when: scheduler is defined and target_host != 'localhost'
 
+  - name: create_template
+    play: |
+      ---
+      - hosts: "{{ target_host | default('localhost') }}"
+
+        vars_files:
+          - "{{ path | default('.') }}/awx-local-env.yaml"
+          - "{{ path | default('.') }}/organization-sthings.yaml"
+          - "{{ path | default('.') }}/scm-creds-sthings.yaml"
+          - "{{ path | default('.') }}/projects-sthings.yaml"
+          - "{{ path | default('.') }}/machine-creds-sthings.yaml"
+          - "{{ path | default('.') }}/dynamic-inventory-vsphere.yaml"
+          - "{{ path | default('.') }}/inventory-source.yaml"
+          - "{{ path | default('.') }}/ee-sthings.yaml"
+          - "{{ path | default('.') }}/labul-vsphere.yaml"
+          - "{{ path | default('.') }}/defaults-labul-vsphere.yaml"
+          - "{{ path | default('.') }}/job-create-upload-template.yaml"
+
+        tasks:
+          - ansible.builtin.import_tasks: create_upload_template.yaml
+          - ansible.builtin.import_tasks: check_connection.yaml
+          - ansible.builtin.import_tasks: creation_tasks.yaml
+
   - name: docker
     play: |
       ---
-      - hosts: localhost
+      - hosts: "{{ target_host | default('localhost') }}"
 
         vars_files:
           - "{{ path | default('.') }}/awx-local-env.yaml"
@@ -170,7 +215,7 @@ playbooks:
   - name: nerdctl
     play: |
       ---
-      - hosts: localhost
+      - hosts: "{{ target_host | default('localhost') }}"
 
         vars_files:
           - "{{ path | default('.') }}/awx-local-env.yaml"
@@ -190,7 +235,7 @@ playbooks:
   - name: golang
     play: |
       ---
-      - hosts: localhost
+      - hosts: "{{ target_host | default('localhost') }}"
 
         vars_files:
           - "{{ path | default('.') }}/awx-local-env.yaml"
@@ -210,7 +255,7 @@ playbooks:
   - name: baseos
     play: |
       ---
-      - hosts: localhost
+      - hosts: "{{ target_host | default('localhost') }}"
 
         vars_files:
           - "{{ path | default('.') }}/awx-local-env.yaml"
@@ -231,7 +276,7 @@ playbooks:
   - name: schedule_baseos
     play: |
       ---
-      - hosts: localhost
+      - hosts: "{{ target_host | default('localhost') }}"
 
         vars_files:
           - "{{ path | default('.') }}/awx-local-env.yaml"
@@ -251,7 +296,7 @@ playbooks:
   - name: hello_awx
     play: |
       ---
-      - hosts: localhost
+      - hosts: "{{ target_host | default('localhost') }}"
 
         vars_files:
           - "{{ path | default('.') }}/awx-local-env.yaml"
@@ -315,64 +360,184 @@ playbooks:
 templates:
   - name: vm-vsphere
     file: |
-      module "{{ vm_name }}" {
-        vm_count               = {{ vmCpu }}
-        vsphere_vm_name        = "{{ vm_name }}"
-        datastore              = "{{ datastore }}"
+      module {{ vmName }} {
+        source                 = "{{ tf_module_source }}"
+        vm_count               = {{ vmCount }}
+        vsphere_vm_name        = "{{ vmName }}"
+        vm_memory              = {{ vm_memory }}
+        vsphere_vm_template    = "{{ vm_template }}"
+        vm_disk_size           = "{{ vm_disk }}"
+        vm_num_cpus            = {{ vm_cpu }}
+        firmware               = "{{ vmFirmware }}"
+        vsphere_vm_folder_path = "{{ rootFolderpath }}/{{ folderpath }}"
+        vsphere_datacenter     = "{{ datacenter }}"/"{{ vm_datastores }}"
+        vsphere_datastore      = "{{ vm_datastores }}"
+        vsphere_resource_pool  = "{{ resourcePool }}"
+        vsphere_network        = "{{ vm_network }}"
+        bootstrap              = ["echo STUTTGART-THINGS"]
+        annotation             = "VSPHERE-VM {{ vmName }} {{ vmTemplate }} BUILD w/ TERRAFORM FOR STUTTGART-THINGS"
+        vsphere_server         = var.vsphere_server
+        vsphere_user           = var.vsphere_user
+        vsphere_password       = var.vsphere_password
+        vm_ssh_user            = var.vm_ssh_user
+        vm_ssh_password        = var.vm_ssh_password
       }
 
+      variable "vsphere_server" {
+        default     = false
+        type        = string
+        description = "name of vsphere vm server"
+      }
+
+      variable "vm_ssh_user" {
+        default     = false
+        type        = string
+        description = "username of ssh user for vm"
+      }
+
+      variable "vm_ssh_password" {
+        default     = false
+        type        = string
+        description = "password of ssh user"
+        }
+
+      variable "vsphere_user" {
+        default     = false
+        type        = string
+        description = "password of vsphere user"
+      }
+
+      variable "vsphere_password" {
+        default     = false
+        type        = string
+        description = "password of vsphere user"
+      }
+
+      output "ip" {
+        value = [module.{{ vmName }}.ip]
+      }
+
+  - name: vsphere-backend
+    file: |
+      terraform {
+        backend "s3" {
+
+          endpoints = {
+            s3 = "{{ backend_host_url }}"
+          }
+
+          skip_requesting_account_id = true
+          skip_s3_checksum = true
+          key = "{{ vmName }}.tfstate"
+          bucket = "{{ bucket_name }}"
+          region = "main"
+          skip_credentials_validation = true
+          skip_metadata_api_check = true
+          skip_region_validation = true
+          force_path_style = true
+          workspace_key_prefix = "{{ vmName }}"
+        }
+      }
 vars:
-  - name: defaults-labul-vsphere
+  - name: job-create-upload-template
     file: |
       ---
-      tf_module_source: "github.com/stuttgart-things/vsphere-vm?ref=v1.7.5-2.7.0-1"
-      lab_values:
-        template:
-          ubuntu22: "sthings-u22"
-        datastore:
-          - datastore1
-          - datastore2
-          - datastore3
-        network:
+      job_templates:
+        stuttgartThings:
+          name: create-upload-template
+          organization: stuttgart-things
+          inventory: dynamic-inventory-vsphere
+          project: stuttgart-things
+          playbook: plays/create-template.yaml
+          credentials: sthings-ssh
+          executionenv: sthings-ee
+          state: present
+          ask_verbosity_on_launch: true
+          survey_enabled: true
+          survey_spec: "{{ lookup('file', 'vars/survey-create-upload-template.yaml') }}"
 
-      vsphere_vm_template: "{{ lab_values['template']['ubuntu22'] }}"
-      datastore: "{{ lab_values['datastore'] | random }}"
-      backend_host_url: "https://artifacts.app1.sthings-vsphere.labul.sva.de"
-      s3region: "main"
-      vmFirmware: "bios"
-      rootFolderpath: "stuttgart-things"
-      resourcePool: "/LabUL/host/Cluster-V6.7/Resources"
-      rootFolder: stuttgart-things
-      subFolder: testing # survey
-      firmware: "bios"
-      # sizes = cpu, ram, memory (1var = vm_size via survey)
-      # vm_count = 1/5 via survey
-      # vm_name via survey
-      # os_version via survey (= vsphere_vm_template)
-
-  - name: vm_sizes
+  - name: survey-create-upload-template
     file: |
-      ---
-      #key: m
-      vmCpu: "{{ vm_size['cpu'][key] }}"
-      vm_name: test
-
-      vm_size:
-        cpu:
-          s: "2"
-          m: "4"
-          l: "6"
-          xl: "8"
-        memory:
-          s: "4096"
-          m: "6144"
-          l: "8192"
-          xl: "12288"
-        disk:
-          s: "32"
-          m: "64"
-          l: "96"
-          xl: "128"
+      {
+          "name": "",
+          "description": "",
+          "spec": [
+            {
+              "question_name": "Which template do you want to create?",
+              "question_description": "Enter template name to create",
+              "required": true,
+              "type": "multiplechoice",
+              "variable": "j2_template_name",
+              "choices": ["vm_vsphere.yaml", "vsphere-backend.yaml", "vm_proxmox.yaml", "proxmox-backend.yaml"],
+              "min": null,
+              "max": null,
+              "default": ""
+            },
+            {
+              "question_name": "What is the VM name?",
+              "question_description": "Enter VM name",
+              "required": true,
+              "type": "text",
+              "variable": "vmName",
+              "min": null,
+              "max": null,
+              "default": ""
+            },
+            {
+              "question_name": "What is the VM size?",
+              "question_description": "Enter VM sizes s,m,l or xl",
+              "required": true,
+              "type": "multiplechoice",
+              "variable": "vmSize",
+              "choices": ["s", "m", "l", "xl"],
+              "min": null,
+              "max": null,
+              "default": "s"
+            },
+            {
+              "question_name": "How many VMs?",
+              "question_description": "Enter VM count",
+              "required": true,
+              "type": "multiplechoice",
+              "variable": "vmCount",
+              "choices": ["1", "2", "3", "4", "5"],
+              "min": null,
+              "max": null,
+              "default": "1"
+            },
+            {
+              "question_name": "Which VM template do you want to use? (see description)",
+              "question_description": "Choose os",
+              "required": true,
+              "type": "multiplechoice",
+              "variable": "vmTemplate",
+              "choices": ["ubuntu22", "ubuntu24", "rocky9"],
+              "min": null,
+              "max": null,
+              "default": ""
+            },
+            {
+              "question_name": "What is the bucket name in s3?",
+              "question_description": "Enter bucket name to PUT templates",
+              "required": true,
+              "type": "text",
+              "variable": "bucket_name",
+              "min": null,
+              "max": null,
+              "default": ""
+            },
+            {
+              "question_name": "What is the platform subfolderpath?",
+              "question_description": "Enter subfolderpath of vsphere / proxmox",
+              "required": true,
+              "type": "text",
+              "variable": "subfolderpath",
+              "min": null,
+              "max": null,
+              "default": "testing"
+            }
+          ]
+        }
 
   - name: job-golang
     file: |
@@ -1085,6 +1250,74 @@ vars:
           interval: 1
           byweekday: [ 'saturday', 'sunday' ]
           include: False
+
+  - name: defaults-labul-vsphere
+    file: |
+      ---
+      tf_module_source: "github.com/stuttgart-things/vsphere-vm?ref=v1.7.5-2.7.0-1"
+      vmFirmware: "bios"
+      rootFolderpath: "stuttgart-things"
+      resourcePool: "/LabUL/host/Cluster-V6.5/Resources"
+      backend_host_url: "https://artifacts.app1.sthings-vsphere.labul.sva.de"
+      s3region: "main"
+      datacenter: "/LabUL"
+      s3_endpoint: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:console validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+      AWS_ACCESS_KEY_ID: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:accessKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+      AWS_SECRET_ACCESS_KEY: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:secretKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+
+  - name: labul-vsphere
+    file: |
+      ---
+      vm_cpu: "{{ vm_size['cpu'][vmSize] }}"
+      vm_memory: "{{ vm_size['memory'][vmSize] }}"
+      vm_disk: "{{ vm_size['disk'][vmSize] }}"
+      vm_template: "{{ lab_values['template'][vmTemplate] }}"
+      vm_datastores: "{{ lab_values['datastore'] | random }}"
+      vm_network: "{{ lab_values['network'] | random }}"
+      folderpath: "{{ subfolderpath }}"
+
+      # default values
+      j2_template_name: "vsphere-vm.yaml"
+      vmName: "test-vm"
+      vmCount: "1"
+      vmSize: "s"
+      vmTemplate: "ubuntu24"
+      subfolderpath: "testing"
+      bucket_name: "andre-vm-config"
+
+      vm_size:
+        cpu:
+          s: 2
+          m: 4
+          l: 6
+          xl: 8
+        memory:
+          s: 4096
+          m: 6144
+          l: 8192
+          xl: 12288
+        disk:
+          s: 32
+          m: 64
+          l: 96
+          xl: 128
+
+      lab_values:
+        template:
+          ubuntu22: "sthings-u22"
+          ubuntu24: "sthings-u24"
+          rocky9: "sthings-r9"
+        datastore:
+          - "/LabUL/datastore/UL-ESX-SAS-01"
+          - "/LabUL/datastore/UL-ESX-SAS-02"
+          - "/LabUL/datastore/UL-V5010-01-LUN1"
+          - "/LabUL/datastore/UL-V5010-01-LUN2"
+          - "/LabUL/datastore/UL-V5010-01-LUN3"
+        network:
+          - "/LabUL/network/MGMT-10.31.101"
+          - "/LabUL/network/LAB-10.31.102"
+          - "/LabUL/network/LAB-10.31.103"
+          - "/LabUL/network/LAB-10.31.104"
 
   - name: awx-local-env
     file: |
