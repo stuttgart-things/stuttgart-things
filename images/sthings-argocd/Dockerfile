@@ -29,7 +29,7 @@ RUN curl -L -o argocd-vault-plugin https://github.com/IBM/argocd-vault-plugin/re
 RUN chmod +x argocd-vault-plugin
 RUN mv argocd-vault-plugin /usr/local/bin
 
-# VAULT CERTS
+# INSTALL VAULT CERTS
 ARG VAULT_URL_LABUL=https://vault.labul.sva.de:8200
 ARG VAULT_URL_LABDA=https://vault.tiab.labda.sva.de:8200
 ARG VAULT_URL_LABUL_VSPHERE=https://vault-vsphere.labul.sva.de:8200
