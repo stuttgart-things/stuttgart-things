@@ -56,7 +56,13 @@ jobs:
           build_contexts=$(echo $(printf contexts="'"{) $(printf '"'context-path'"':) $(jq -c -n '$ARGS.positional' --args "${changed_image_dirs[@]}") $(printf }"'"))
           echo ${build_contexts}
           echo "contexts=$build_contexts" >> "$GITHUB_OUTPUT"
+          echo ${build_contexts}
         shell: bash
+
+      # - name: build matrix
+      #   run: |
+      #     contexts='{ "context-path": ["sthings-alpine", "sthings-minio"] }'
+      #     echo "contexts=$contexts" >> "$GITHUB_OUTPUT"
 
   Build-Images:
     needs: Get-Changed-Dockerfiles
