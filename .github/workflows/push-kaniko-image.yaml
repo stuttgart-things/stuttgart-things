@@ -20,6 +20,7 @@ jobs:
     outputs:
       constructed: ${{ steps.json.outputs.constructed }}
       hardcoded: ${{ steps.json.outputs.hardcoded }}
+      matrix: ${{ steps.prepare.outputs.json }}
     continue-on-error: false
     steps:
       - name: Checkout code
@@ -55,6 +56,8 @@ jobs:
             changed_image_dirs+=("$image_path")
           done
 
+          echo "DIRS=${changed_image_dirs}" >> $GITHUB_ENV
+
           hardcoded='{ "context-path": ["sthings-alpine", "sthings-minio"] }'
           echo hardcoded: ${build_contexts_test}
 
@@ -68,12 +71,15 @@ jobs:
           build_contexts_test=$(echo ${part1} ${part2} ${part3} ${part4})
           echo constructed: ${build_contexts_test}
           echo "constructed=${build_contexts_test} | sed 's/,/, /g'" >> "$GITHUB_OUTPUT"
+          ${{ toJson(needs.Get-Changed-Dockerfiles.outputs.hardcoded) }}
         shell: bash
 
-      # - name: build matrix
-      #   run: |
-      #     contexts='{ "context-path": ["sthings-alpine", "sthings-minio"] }'
-      #     echo "contexts=$contexts" >> "$GITHUB_OUTPUT"
+      - name: Prepare matrix JSON Object
+        id: prepare
+        uses: nickofthyme/object-remap@v2.0.0
+        with:
+          __case: kebab
+          dirs: ${{ env.DIRS }}
 
   Test:
     needs: Get-Changed-Dockerfiles

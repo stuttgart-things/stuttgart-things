@@ -17,6 +17,7 @@ ENV GROUP_ID=65532
 # OS + PIP PACKAGES
 RUN apk add --no-cache git
 
+
 # FLUX CLI
 RUN wget -q https://github.com/fluxcd/flux2/releases/download/v${FLUX_VERSION}/flux_${FLUX_VERSION}_linux_amd64.tar.gz \
     && tar xvfz flux_${FLUX_VERSION}_linux_amd64.tar.gz -C /usr/bin \
