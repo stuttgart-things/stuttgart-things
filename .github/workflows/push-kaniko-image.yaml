@@ -15,7 +15,7 @@ jobs:
   Get-Changed-Dockerfiles:
     runs-on: ghr-stuttgart-things-labda-test
     container:
-      image: gcr.io/kaniko-project/executor
+      image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2-2
     environment: k8s
     continue-on-error: false
     steps:

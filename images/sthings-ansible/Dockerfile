@@ -45,7 +45,6 @@ ENV PATH="/root/.cargo/bin:${PATH}"
 
 RUN /usr/local/bin/python -m pip install --upgrade pip && pip install pip --upgrade
 RUN pip install --no-cache-dir cryptography hvac "hvac[parser]" paramiko jmespath openshift kubernetes boto3 passlib kubernetes-validate==1.27.0 proxmoxer netaddr setuptools requests pyVim PyVmomi python.dateutil dnspython pycrypto pywinrm pytz ansible==${ANSIBLE_VERSION} ansible-lint==${ANSIBLE_LINT_VERSION}
-
 RUN mkdir -p /home/nonroot/.ansible && chown -R ${USER_ID}:${GROUP_ID} /home/nonroot/.ansible
 
 # ANSIBLE REQUIREMENTS
