@@ -7,7 +7,6 @@ LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 
 ARG PLUTO_VERSION=5.19.1
 
-
 RUN apk add --no-cache build-base sudo gawk libc6-compat openssl libffi-dev openssl-dev openssh unzip jq curl ca-certificates wget \
    && apk add --update bash \
        && rm -rf /var/cache/apk/*

@@ -3,7 +3,6 @@ FROM python:${FROM_TAG}
 LABEL version=9.0.1-3.12.3-2
 
 ARG POLARIS_VERSION=9.0.1
-
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 
 # INSTALL OS PACKAGES
