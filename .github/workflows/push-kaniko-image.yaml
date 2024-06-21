@@ -46,7 +46,7 @@ jobs:
         run: |
           set -x
 
-          echo "::set-output name=matrix::{\"container\":${{ steps.changed-files.outputs.all_changed_files }}}"
+          echo "::set-output name=matrix::{\"context-path: \":${{ steps.changed-files.outputs.all_changed_files }}}"
 
           changed_image_dirs=()
 
