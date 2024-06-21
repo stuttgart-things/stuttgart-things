@@ -77,8 +77,12 @@ jobs:
         id: prepare
         uses: nickofthyme/object-remap@v2.0.0
         with:
-          __case: kebab
-          dirs: ${{ env.DIRS }}
+          __case: upper
+          __deep_casing: true
+          my_key.deep: '{ "myObjectKey": { "nestedKey": 1 }}'
+
+          # __case: kebab
+          # dirs: ${{ env.DIRS }}
 
   Test:
     needs: Get-Changed-Dockerfiles
