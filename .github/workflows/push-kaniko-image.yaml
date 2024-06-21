@@ -12,6 +12,46 @@ on:
       - 'images/*/*'
 
 jobs:
+  Get-Changed-Dockerfiles:
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      artifact: ${{ steps.build.outputs.artifact }}
+    runs-on: ${{ inputs.runs-on }}
+    container:
+      image: ${{ inputs.ansible-image }}
+    environment: ${{ inputs.environment-name }}
+    continue-on-error: ${{ inputs.continue-error }}
+    steps:
+      - name: Checkout code
+        id: git
+        uses: actions/checkout@v4.1.7
+        with:
+          path: source
+          fetch-depth: '0'
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v44
+        with:
+          since_last_remote_commit: true
+          path: source
+          files: |
+            images/*/*
+
+      - name: List all changed files 
+        env:
+          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+        run: |
+          dockerfiles=()
+          for file in ${ALL_CHANGED_FILES}; do
+            echo "$file was changed"
+            dockerfiles+=("$file")
+          done
+
+          #repository='{ "repository": ["repo1","repo2","repo3","repo4"] }'
+          echo hello $(jq -c -n '$ARGS.positional' --args "${dockerfiles[@]}" )
+        shell: bash
+
   Build-Images:
     strategy:
       matrix:
