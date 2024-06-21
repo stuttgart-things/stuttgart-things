@@ -69,7 +69,8 @@ jobs:
 
           # echo "contexts=${build_contexts_test} | sed 's/,/, /g'" >> "$GITHUB_OUTPUT"
           contexts1='{ "context-path": ["sthings-alpine", "sthings-minio"] }'
-          # echo "contexts1=$contexts1" >> "$GITHUB_OUTPUT"
+          echo "contexts=$contexts1" >> "$GITHUB_OUTPUT"
+          echo "contexts1=$build_contexts_test" >> "$GITHUB_OUTPUT"
         shell: bash
 
       # - name: build matrix
@@ -87,6 +88,7 @@ jobs:
     steps:
       - name: Echo
         run: |
+          echo ${{ needs.Get-Changed-Dockerfiles.outputs.contexts }}
           echo ${{ needs.Get-Changed-Dockerfiles.outputs.contexts1 }}
 
   Build-Images:
