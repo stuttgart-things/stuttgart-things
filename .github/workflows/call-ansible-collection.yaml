@@ -208,6 +208,33 @@ jobs:
           # LIST CREATED VARS FILES
           ls -lta ${vars_dir}
 
+      - name: Adding templates
+        id: templates
+        run: |
+          templates_dir=${{ env.COLLECTION_DIR }}/playbooks/templates
+          mkdir -p ${templates_dir}
+
+          # GET COUNT OF ALL KEYS OF SUBKEY TEMPLATES
+          count_template_files=$(yq '.templates | keys' ${{ env.COLLECTION_FILEPATH }} | wc -l)
+          echo FOUND $count_template_files TEMPLATE FILES FOR THIS COLLECTION
+
+          COUNTER=0
+          while [ $COUNTER != $count_template_files ]; do
+              echo PROCESS TEMPLATE FILE: $COUNTER
+
+              # GET TEMPLATE FILE NAME AND CONTENT
+              yq ".templates[$COUNTER].name" ${{ env.COLLECTION_FILEPATH }}
+              filename=$(yq ".templates[$COUNTER].name" ${{ env.COLLECTION_FILEPATH }})
+              template_file_content=$(yq ".templates[$COUNTER].file" ${{ env.COLLECTION_FILEPATH }})
+
+              # CREATE VARS FILE ON FS
+              echo "$template_file_content" > "${templates_dir}/${filename}.yaml"
+              let COUNTER=COUNTER+1
+          done
+
+          # LIST CREATED TEMPLATE FILES
+          ls -lta ${templates_dir}
+
       - name: Adding plugins modules
         id: modules
         run: |

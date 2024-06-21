@@ -1,6 +1,6 @@
 ---
 name: awx
-version: 0.0.60
+version: 0.0.61
 namespace: sthings
 playbooks:
   - name: check_connection
@@ -267,6 +267,13 @@ playbooks:
 
         tasks:
           - ansible.builtin.import_tasks: creation_tasks.yaml
+
+templates:
+  - name: vm-vsphere
+    file: |
+      module {{ module_name }} {
+        source = ""
+      }
 
 vars:
   - name: job-golang
