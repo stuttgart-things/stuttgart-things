@@ -20,7 +20,6 @@ jobs:
     outputs:
       contexts: ${{ steps.json.outputs.contexts }}
       contexts1: ${{ steps.json.outputs.contexts1 }}
-      matrix: ${{ steps.generate-matrix.outputs.generate-matrix }}
     continue-on-error: false
     steps:
       - name: Checkout code
@@ -73,15 +72,6 @@ jobs:
           # echo "contexts1=$contexts1" >> "$GITHUB_OUTPUT"
         shell: bash
 
-      - name: Generate Matrix
-        id: generate-matrix
-        run: |
-          echo "For the matrix step later we need to create the output via a here doc method"
-          echo "output-matrix<<EOF" >> ${GITHUB_OUTPUT}
-          echo -n "{\"include\": [{\"key\": \"value1\"}, {\"key\": \"value2\"}]}" >> ${GITHUB_OUTPUT}
-          echo "EOF" >> ${GITHUB_OUTPUT}
-        shell: bash
-
       # - name: build matrix
       #   run: |
       #     contexts='{ "context-path": ["sthings-alpine", "sthings-minio"] }'
@@ -97,12 +87,7 @@ jobs:
     steps:
       - name: Echo
         run: |
-          #echo ${{ needs.Get-Changed-Dockerfiles.outputs.contexts }}
           echo ${{ needs.Get-Changed-Dockerfiles.outputs.contexts1 }}
-
-
-          # echo ${{ fromJson(needs.Get-Changed-Dockerfiles.outputs.contexts1) }}
-          # echo ${{ fromJson(needs.Get-Changed-Dockerfiles.outputs.contexts) }}
 
   Build-Images:
     needs: Get-Changed-Dockerfiles
