@@ -13,7 +13,7 @@ ARG ARGOCD_VAULT_PLUGIN_VERSION=1.16.1
 # SWITCH TO ROOT FOR THE ABILITY TO PERFORM INSTALL
 USER root
 
-# Install tools needed for your repo-server to retrieve & decrypt secrets, render manifests
+# INSTALL TOOLS NEEDED FOR YOUR REPO-SERVER TO RETRIEVE & DECRYPT SECRETS, RENDER MANIFESTS
 RUN apt-get update && \
     apt-get install -y \
         curl \

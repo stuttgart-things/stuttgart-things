@@ -55,7 +55,7 @@ jobs:
       - name: build matrix
         id: json
         run: |
-          repository='{ "repository": ["sthings-alpine"] }'
+          repository='{ "context-path": ["sthings-alpine"] }'
           echo "repository=$repository" >> "$GITHUB_OUTPUT"
 
   Build-Images:
