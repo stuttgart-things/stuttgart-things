@@ -27,7 +27,7 @@ RUN apk add --no-cache build-base sudo gawk libc6-compat openssl libffi-dev open
    && apk add --update bash \
        && rm -rf /var/cache/apk/*
 
-# install glibc
+# INSTALL GLIBC
 RUN wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub \
    && wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.35-r0/glibc-2.35-r0.apk \
        && apk add --force-overwrite glibc-2.35-r0.apk \
