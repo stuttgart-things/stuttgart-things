@@ -10,7 +10,7 @@
                 "\\.yaml$"
             ],
             "matchStrings": [
-                "\\s*(?<binName>.+)_version:\\s(?<currentValue>v?\\d+\\.\\d+\\.\\d+)\\s*#\\s*(datasource=(?<datasource>.*?))?\\s*(depName=(?<depName>.*?))?\\s*"
+                "\\s*(?<binName>.+)_version:\\s(?<currentValue>v?\\d+\\.\\d+\\.\\d+)\\s*#\\s*(datasource=(?<datasource>[^\\s]*))\\s*(depName=(?<depName>.*?))?\\s*"
             ],
             "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}",
             "extractVersionTemplate": "^v?(?<version>.*)$",
