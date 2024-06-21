@@ -71,7 +71,6 @@ jobs:
           build_contexts_test=$(echo ${part1} ${part2} ${part3} ${part4})
           echo constructed: ${build_contexts_test}
           echo "constructed=${build_contexts_test} | sed 's/,/, /g'" >> "$GITHUB_OUTPUT"
-          ${{ toJson(needs.Get-Changed-Dockerfiles.outputs.hardcoded) }}
         shell: bash
 
       - name: Prepare matrix JSON Object
