@@ -61,7 +61,7 @@ jobs:
           part3=$(jq -c -n '$ARGS.positional' --args "${changed_image_dirs[@]}")
           part4=$(printf }"'")
 
-          build_contexts_test=$(echo ${part1} ${part2} ${part3} ${part4})
+          build_contexts_test=$(echo ${part1} ${part2} ${part3} ${part4} | jq -c '. | map(split("/")[0]) | unique')
           echo ${build_contexts_test}
 
           echo "contexts=echo ${build_contexts_test}" >> "$GITHUB_OUTPUT"
