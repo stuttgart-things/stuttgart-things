@@ -5,11 +5,11 @@ on:
     branches:
       - "*"
     paths:
-      - 'images/*'
+      - 'images/*/*'
 
   pull_request:
     paths:
-      - 'images/*'
+      - 'images/*/*'
 
 jobs:
   Build-Images:
