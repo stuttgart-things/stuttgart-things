@@ -1,6 +1,6 @@
 ---
 name: base_os
-version: 0.5.1
+version: 0.5.2
 namespace: sthings
 requirements: |
   roles:
@@ -111,7 +111,6 @@ playbooks:
           object_name: ""
           bucket_name: ""
           download_config_s3: false
-
 
           #to be defined q/ extra vars
           #tf_project_path: ""
@@ -399,9 +398,13 @@ vars:
   - name: dev
     file: |
       ---
-      terraform_version: 1.8.3 # datasource=custom.hashicorp
       gh_version: 2.49.2 # datasource=github-tags depName=cli/cli
       task_version: v3.37.2 # datasource=github-tags depName=go-task/task
+      hugo_version: 0.127.0
+      terraform_version: 1.8.3 # datasource=custom.hashicorp
+      packer_version: 1.11.0
+      yq_version: 4.44.2
+      machineshop_version: 2.1.9
 
       bin:
         gh:
@@ -425,15 +428,15 @@ vars:
           version_cmd: "-- version"
           target_version: "{{ task_version }}"
         hugo:
-          bin_name: "hugo"
-          bin_version: "0.126.3"
+          bin_name: hugo
+          bin_version: "v{{ hugo_version }}"
           check_bin_version_before_installing: true
-          source_url: "https://github.com/gohugoio/hugo/releases/download/v0.126.3/hugo_0.126.3_linux-amd64.tar.gz"
+          source_url: "https://github.com/gohugoio/hugo/releases/download/v{{ hugo_version }}/hugo_{{ hugo_version }}_linux-amd64.tar.gz"
           bin_to_copy: "hugo"
           to_remove: "hugo"
           bin_dir: "/usr/local/bin"
           version_cmd: " --version"
-          target_version: 0.126.3
+          target_version: v{{ hugo_version }}
         terraform:
           bin_name: "terraform"
           bin_version: "{{ terraform_version }}"
@@ -446,35 +449,35 @@ vars:
           target_version: "{{ terraform_version }}"
         packer:
           bin_name: "packer"
-          bin_version: "1.10.3"
+          bin_version: "v{{ packer_version }}"
           check_bin_version_before_installing: true
-          source_url: "https://releases.hashicorp.com/packer/1.10.3/packer_1.10.3_linux_amd64.zip"
+          source_url: "https://releases.hashicorp.com/packer/{{ packer_version }}/packer_{{ packer_version }}_linux_amd64.zip"
           bin_to_copy: "packer"
           to_remove: "packer"
           bin_dir: "/usr/local/bin"
           version_cmd: " --version"
-          target_version: v1.10.2
+          target_version: v{{ packer_version }}
           #md5_checksum: "374f22185f1f8cb25bc53187a2154ef0"
         yq:
           bin_name: yq
-          bin_version: 4.43.1
+          bin_version: "v{{ yq_version }}"
           check_bin_version_before_installing: true
-          source_url: "https://github.com/mikefarah/yq/releases/download/v4.43.1/yq_linux_amd64.tar.gz"
+          source_url: "https://github.com/mikefarah/yq/releases/download/v{{ yq_version }}/yq_linux_amd64.tar.gz"
           bin_to_copy: yq
           to_remove: ""
           bin_dir: "/usr/bin"
           version_cmd: " version"
-          target_version: 4.43.1
+          target_version: "v{{ yq_version }}"
         machineshop:
           bin_name: machineshop
-          bin_version: 1.9.9
+          bin_version: "{{ machineshop_version }}"
           check_bin_version_before_installing: true
-          source_url: https://github.com/stuttgart-things/machineshop/releases/download/1.9.9/machineshop_Linux_x86_64.tar.gz
+          source_url: https://github.com/stuttgart-things/machineshop/releases/download/{{ machineshop_version }}/machineshop_Linux_x86_64.tar.gz
           bin_to_copy: machineshop
           to_remove: ""
           bin_dir: "/usr/bin"
           version_cmd: " version"
-          target_version: 1.9.9
+          target_version: "{{ machineshop_version }}"
 
 modules:
   - name: get_checksum

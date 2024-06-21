@@ -1,0 +1,21 @@
+```
+---
+concurrent: 10
+checkInterval: 15
+runnerToken: "TOBE DEFINED"
+gitlabUrl: https://codehub.sva.de
+runners:
+  tags: go, kaniko
+rbac:
+  create: true
+  rules:
+    - apiGroups: [""]
+      resources: ["pods", "secrets", "configmaps"]
+      verbs: ["get", "list", "watch", "create", "patch", "delete", "update"]
+    - apiGroups: [""]
+      resources: ["pods/exec", "pods/attach"]
+      verbs: ["create", "patch", "delete"]
+    - apiGroups: [""]
+      resources: ["pods/log"]
+      verbs: ["get"]
+```

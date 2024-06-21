@@ -14,7 +14,7 @@ playbooks:
         until: _result.status == 200
         retries: 10
         delay: 120
-  
+
   - name: creation_tasks
     play: |
       ---
@@ -833,7 +833,7 @@ vars:
           credential: sthings-labul
           source: vmware
           source_vars:
-            hostnames: 
+            hostnames:
               - config.name
             properties:
               - name
