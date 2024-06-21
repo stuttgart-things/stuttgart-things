@@ -48,5 +48,4 @@ RUN addgroup -g $GROUP_ID $GROUP_NAME && \
      --uid $USER_ID --ingroup $GROUP_NAME $USER_NAME
 
 RUN mkdir -p /home/nonroot
-
 RUN chown -R ${USER_ID}:${GROUP_ID} ${USER_HOME}
