@@ -424,7 +424,7 @@ vars:
               "required": true,
               "type": "multiplechoice",
               "variable": "j2_template_name",
-              "choices": ["vm_vsphere", "vsphere-backend", "vm_proxmox", "proxmox-backend"],
+              "choices": ["vm_vsphere.yaml", "vsphere-backend.yaml", "vm_proxmox.yaml", "proxmox-backend.yaml"],
               "min": null,
               "max": null,
               "default": ""
@@ -1233,7 +1233,7 @@ vars:
       folderpath: "{{ subfolderpath }}"
 
       # default values
-      j2_template_name: "vsphere-vm.tf.j2"
+      j2_template_name: "vsphere-vm.yaml"
       vmName: "test-vm"
       vmCount: "1"
       vmSize: "s"
