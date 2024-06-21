@@ -20,7 +20,7 @@ jobs:
     outputs:
       constructed: ${{ steps.json.outputs.constructed }}
       hardcoded: ${{ steps.json.outputs.hardcoded }}
-      matrix: ${{ steps.prepare.outputs.json }}
+      matrix: ${{ steps.json.outputs.matrix }}
     continue-on-error: false
     steps:
       - name: Checkout code
@@ -45,6 +45,8 @@ jobs:
           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
         run: |
           set -x
+
+          echo "::set-output name=matrix::{\"container\":${{ steps.changed-files.outputs.all_changed_files }}}"
 
           changed_image_dirs=()
 
@@ -73,17 +75,6 @@ jobs:
           echo "constructed=${build_contexts_test} | sed 's/,/, /g'" >> "$GITHUB_OUTPUT"
         shell: bash
 
-      - name: Prepare matrix JSON Object
-        id: prepare
-        uses: nickofthyme/object-remap@v2.0.0
-        with:
-          dirs: ${{ env.DIRS }}
-          __depth: 1
-          my_key.deep: '{ "myObjectKey": { ${{ env.DIRS }}}}'
-
-          # __case: kebab
-          # dirs:
-
   Test:
     needs: Get-Changed-Dockerfiles
     runs-on: ghr-stuttgart-things-labda-test
@@ -96,6 +87,7 @@ jobs:
         run: |
           echo ${{ needs.Get-Changed-Dockerfiles.outputs.constructed }}
           echo ${{ needs.Get-Changed-Dockerfiles.outputs.hardcoded }}
+          echo ${{ needs.Get-Changed-Dockerfiles.outputs.matrix }}
 
   Build-Images:
     needs: Get-Changed-Dockerfiles
