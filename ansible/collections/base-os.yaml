@@ -398,7 +398,7 @@ vars:
   - name: dev
     file: |
       ---
-      gh_version: 2.49.2 # datasource=github-tags depName=cli/cli
+      gh_version: 2.51.0 # datasource=github-tags depName=cli/cli
       task_version: v3.37.2 # datasource=github-tags depName=go-task/task
       hugo_version: 0.127.0
       terraform_version: 1.8.3 # datasource=custom.hashicorp
