@@ -55,8 +55,13 @@ jobs:
 
           echo ${changed_image_dirs[@]}
 
-          BUCKET_NAME="'"sthings-alpine"'"
-          hardcoded2='{ "context-path": [$BUCKET_NAME] }'
+          BUCKET_NAME=sthings-alpine
+          hardcoded2='{ "context-path": ["'"$BUCKET_NAME"'"] }'
+
+          BUCKET_NAMES=sthings-alpine, sthings-packer
+          bla=$(echo "\"$BUCKET_NAMES\"" | sed 's/,/", "/g')
+          JSON_STRING='{ "context-path": ['"$bla"'] }'
+          echo $JSON_STRING
 
           echo hardcoded2: ${hardcoded2}
           echo "hardcoded2=$hardcoded2" >> "$GITHUB_OUTPUT"
