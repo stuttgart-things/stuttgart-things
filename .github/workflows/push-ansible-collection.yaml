@@ -63,6 +63,7 @@ jobs:
         shell: bash
 
   Build-Collections:
+    needs: Get-Changed-Collectionfiles
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.Get-Changed-Collectionfiles.outputs.collections) }}
