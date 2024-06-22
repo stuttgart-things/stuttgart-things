@@ -53,8 +53,8 @@ jobs:
             changed_image_dirs+=("$image_path")
           done
 
-          dirs="${changed_image_dirs[@]}"
-          changed_contexts=$(echo ${dirs// /,})
+          # dirs="${changed_image_dirs[@]}"
+          changed_contexts=$(echo ${changed_image_dirs// /,})
 
           contexts=$(echo "\"${changed_contexts}\"" | sed 's/,/", "/g')
           JSON_CONTEXTS='{ "context-path": ['"${contexts}"'] }'
@@ -62,17 +62,17 @@ jobs:
           echo "contexts=$JSON_CONTEXTS" >> "$GITHUB_OUTPUT"
         shell: bash
 
-  Test:
-    needs: Get-Changed-Dockerfiles
-    runs-on: ghr-stuttgart-things-labda-test
-    container:
-      image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2-2
-    environment: k8s
-    continue-on-error: false
-    steps:
-      - name: Echo
-        run: |
-          echo ${{ needs.Get-Changed-Dockerfiles.outputs.contexts }}
+  # Test:
+  #   needs: Get-Changed-Dockerfiles
+  #   runs-on: ghr-stuttgart-things-labda-test
+  #   container:
+  #     image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2-2
+  #   environment: k8s
+  #   continue-on-error: false
+  #   steps:
+  #     - name: Echo
+  #       run: |
+  #         echo ${{ needs.Get-Changed-Dockerfiles.outputs.contexts }}
 
   Build-Images:
     needs: Get-Changed-Dockerfiles
