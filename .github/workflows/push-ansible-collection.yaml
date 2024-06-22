@@ -49,7 +49,7 @@ jobs:
             echo "$path was changed"
             path=${path##*/}
             echo "${path%.yaml}"
-            changed_collection_dirs+=("$image_path")
+            changed_collection_dirs+=("${path%.yaml}")
           done
 
           # GET ALL CHANGED COLLECTIONS AS (ONE) COMMA SEPERATED STRING
