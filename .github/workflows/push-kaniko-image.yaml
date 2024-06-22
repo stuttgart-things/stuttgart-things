@@ -57,13 +57,17 @@ jobs:
           echo ${changed_image_dirs[@]}
           printf -v ids_d '|%s' "${ids[@]}"
 
-          id="${changed_image_dirs[@]}"
-          echo ${id// /,}
-
           BUCKET_NAME=sthings-alpine
           hardcoded2='{ "context-path": ["'"$BUCKET_NAME"'"] }'
 
-          BUCKET_NAMES="sthings-alpine,sthings-packer"
+
+
+          #BUCKET_NAMES="sthings-alpine,sthings-packer"
+
+          id="${changed_image_dirs[@]}"
+
+          BUCKET_NAMES=$(echo ${id// /,})
+
           bla=$(echo "\"$BUCKET_NAMES\"" | sed 's/,/", "/g')
           JSON_STRING='{ "context-path": ['"$bla"'] }'
           echo $JSON_STRING
