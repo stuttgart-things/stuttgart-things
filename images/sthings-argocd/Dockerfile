@@ -7,6 +7,7 @@ FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
 
 LABEL version=v2.8.6
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
+
 ARG ARGOCD_VAULT_PLUGIN_VERSION=1.16.1
 
 # SWITCH TO ROOT FOR THE ABILITY TO PERFORM INSTALL

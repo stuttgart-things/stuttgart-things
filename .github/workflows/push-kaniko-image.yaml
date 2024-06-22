@@ -45,8 +45,6 @@ jobs:
         run: |
           set -x
 
-          echo "::set-output name=matrix::{ \"context-path: \"${{ steps.changed-files.outputs.all_changed_files }} }"
-
           changed_image_dirs=()
 
           for path in ${ALL_CHANGED_FILES}; do
@@ -57,8 +55,8 @@ jobs:
             changed_image_dirs+=("$image_path")
           done
 
-          echo ARRAY: ${changed_image_dirs[@]}
-          echo VAR: ${changed_image_dirs}
+          echo ${changed_image_dirs[@]}
+          echo ${changed_image_dirs}
 
           BUCKET_NAME=sthings-alpine
           hardcoded2='{ "context-path": ["'"$BUCKET_NAME"'"] }'
