@@ -68,7 +68,7 @@ jobs:
           echo "hardcoded=$hardcoded" >> "$GITHUB_OUTPUT"
 
           BUCKET_NAME=sthings-alpine
-          hardcoded2='{ "context-path": "'"$BUCKET_NAME"'" }'
+          hardcoded2='{ "context-path": ["'"$BUCKET_NAME"'"] }'
           echo hardcoded2: ${hardcoded2}
           echo "hardcoded2=$hardcoded2" >> "$GITHUB_OUTPUT"
 
