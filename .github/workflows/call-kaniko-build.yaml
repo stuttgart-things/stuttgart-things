@@ -51,7 +51,6 @@ jobs:
     steps:
       - name: Build and push image w/ kaniko
         run: |
-
           # GENERATE TAG IF NONE IS GIVEN
           if [ -z "${IMAGE_TAG}" ]
           then

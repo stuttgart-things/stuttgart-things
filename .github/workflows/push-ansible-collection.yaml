@@ -11,6 +11,41 @@ on:
       - 'ansible/collections/*'
 
 jobs:
+  Get-Changed-Collectionfiles:
+    runs-on: ghr-stuttgart-things-labda-test
+    container:
+      image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2-2
+    environment: k8s
+    outputs:
+      collections: ${{ steps.json.outputs.collections }}
+    continue-on-error: false
+    steps:
+      - name: Checkout code
+        id: git
+        uses: actions/checkout@v4.1.7
+        with:
+          path: source
+          fetch-depth: '0'
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v44
+        with:
+          since_last_remote_commit: true
+          path: source
+          files: |
+            ansible/collections/*
+          dir_names: false
+
+      - name: Get all changed contexts
+        id: json
+        env:
+          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+        run: |
+          # LOOP OVER ALL CHANGED PATHS FOR GETTING CONTEXT DIRS
+          echo ${ALL_CHANGED_FILES}
+        shell: bash
+
   Build-Collections:
     strategy:
       matrix:

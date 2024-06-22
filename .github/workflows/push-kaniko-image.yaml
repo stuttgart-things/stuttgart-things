@@ -38,13 +38,13 @@ jobs:
             images/*/*
           dir_names: false
 
-      - name: List all changed files
+      - name: Get all changed contexts
         id: json
         env:
           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
         run: |
+          # LOOP OVER ALL CHANGED PATHS FOR GETTING CONTEXT DIRS
           changed_image_dirs=()
-
           for path in ${ALL_CHANGED_FILES}; do
             echo "$path was changed"
             image_context=${path%/*}
@@ -53,26 +53,15 @@ jobs:
             changed_image_dirs+=("$image_path")
           done
 
-          # dirs="${changed_image_dirs[@]}"
+          # GET ALL CHANGED PATHS AS COMMA SEPERATED STRING
           changed_contexts=$(echo ${changed_image_dirs// /,})
 
+          # SET CONTEXTS AS JSON
           contexts=$(echo "\"${changed_contexts}\"" | sed 's/,/", "/g')
           JSON_CONTEXTS='{ "context-path": ['"${contexts}"'] }'
           echo $JSON_CONTEXTS
           echo "contexts=$JSON_CONTEXTS" >> "$GITHUB_OUTPUT"
         shell: bash
-
-  # Test:
-  #   needs: Get-Changed-Dockerfiles
-  #   runs-on: ghr-stuttgart-things-labda-test
-  #   container:
-  #     image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2-2
-  #   environment: k8s
-  #   continue-on-error: false
-  #   steps:
-  #     - name: Echo
-  #       run: |
-  #         echo ${{ needs.Get-Changed-Dockerfiles.outputs.contexts }}
 
   Build-Images:
     needs: Get-Changed-Dockerfiles
@@ -91,3 +80,4 @@ jobs:
       kaniko-image: gcr.io/kaniko-project/executor
       kaniko-tag: debug
       push-retrys: "5"
+    secrets: inherit
