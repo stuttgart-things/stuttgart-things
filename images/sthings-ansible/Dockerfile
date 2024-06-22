@@ -24,7 +24,6 @@ RUN wget -q https://github.com/fluxcd/flux2/releases/download/v${FLUX_VERSION}/f
     && tar xvfz flux_${FLUX_VERSION}_linux_amd64.tar.gz -C /usr/bin \
     && chmod +x /usr/bin/flux \
     && rm -rf flux_${FLUX_VERSION}_linux_amd64.tar.gz
-
 # YQ
 RUN wget -q https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_linux_amd64.tar.gz \
     && tar xvfz yq_linux_amd64.tar.gz -C /usr/bin \

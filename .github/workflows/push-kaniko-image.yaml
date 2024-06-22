@@ -55,6 +55,10 @@ jobs:
           done
 
           echo ${changed_image_dirs[@]}
+          printf -v ids_d '|%s' "${ids[@]}"
+
+          id="${changed_image_dirs[@]}"
+          echo ${id// /,}
 
           BUCKET_NAME=sthings-alpine
           hardcoded2='{ "context-path": ["'"$BUCKET_NAME"'"] }'
