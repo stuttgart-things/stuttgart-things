@@ -18,11 +18,7 @@ jobs:
       image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2-2
     environment: k8s
     outputs:
-      constructed: ${{ steps.json.outputs.constructed }}
-      hardcoded: ${{ steps.json.outputs.hardcoded }}
       hardcoded2: ${{ steps.json.outputs.hardcoded2 }}
-      matrix: ${{ steps.json.outputs.matrix }}
-      dirs: ${{ steps.json.outputs.dirs }}
     continue-on-error: false
     steps:
       - name: Checkout code
@@ -61,25 +57,13 @@ jobs:
             changed_image_dirs+=("$image_path")
           done
 
-          echo "DIRS=${changed_image_dirs}" >> $GITHUB_ENV
-
-          hardcoded='{ "context-path": ["sthings-alpine", "sthings-minio"] }'
-          echo hardcoded: ${build_contexts_test}
-          echo "hardcoded=$hardcoded" >> "$GITHUB_OUTPUT"
+          echo ARRAY: ${changed_image_dirs[@]}
+          echo VAR: ${changed_image_dirs}
 
           BUCKET_NAME=sthings-alpine
           hardcoded2='{ "context-path": ["'"$BUCKET_NAME"'"] }'
           echo hardcoded2: ${hardcoded2}
           echo "hardcoded2=$hardcoded2" >> "$GITHUB_OUTPUT"
-
-          part1=$(printf {)
-          part2=$(printf context-path: )
-          part3=$(jq -c -n '$ARGS.positional' --args "${changed_image_dirs[@]}")
-          part4=$(printf })
-
-          build_contexts_test=$(echo ${part1} ${part2} ${part3} ${part4})
-          echo constructed: ${build_contexts_test}
-          echo "constructed=${build_contexts_test} | sed 's/,/, /g'" >> "$GITHUB_OUTPUT"
         shell: bash
 
   Test:
@@ -92,10 +76,6 @@ jobs:
     steps:
       - name: Echo
         run: |
-          echo ${{ needs.Get-Changed-Dockerfiles.outputs.constructed }}
-          echo ${{ needs.Get-Changed-Dockerfiles.outputs.hardcoded }}
-          echo ${{ needs.Get-Changed-Dockerfiles.outputs.matrix }}
-          echo ${{ needs.Get-Changed-Dockerfiles.outputs.dirs }}
           echo ${{ needs.Get-Changed-Dockerfiles.outputs.hardcoded2 }}
 
   Build-Images:
