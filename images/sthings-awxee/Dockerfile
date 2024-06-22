@@ -1,4 +1,4 @@
-FROM quay.io/ansible/awx-ee:24.5.0
+FROM quay.io/ansible/awx-ee:24.6.0
 
 #MAINTAINER
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
