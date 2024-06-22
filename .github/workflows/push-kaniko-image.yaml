@@ -102,7 +102,7 @@ jobs:
     needs: Get-Changed-Dockerfiles
     strategy:
       fail-fast: false
-      matrix: ${{ fromJson(needs.Get-Changed-Dockerfiles.outputs.dirs) }}
+      matrix: ${{ fromJson(needs.Get-Changed-Dockerfiles.outputs.hardcoded2) }}
     uses: stuttgart-things/stuttgart-things/.github/workflows/call-kaniko-build.yaml@main
     with:
       runs-on: ghr-stuttgart-things-labda-test
