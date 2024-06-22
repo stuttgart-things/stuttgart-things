@@ -58,7 +58,7 @@ jobs:
           BUCKET_NAME=sthings-alpine
           hardcoded2='{ "context-path": ["'"$BUCKET_NAME"'"] }'
 
-          BUCKET_NAMES=sthings-alpine, sthings-packer
+          BUCKET_NAMES="sthings-alpine, sthings-packer"
           bla=$(echo "\"$BUCKET_NAMES\"" | sed 's/,/", "/g')
           JSON_STRING='{ "context-path": ['"$bla"'] }'
           echo $JSON_STRING
