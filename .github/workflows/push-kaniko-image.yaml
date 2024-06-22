@@ -43,8 +43,6 @@ jobs:
         env:
           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
         run: |
-          set -x
-
           changed_image_dirs=()
 
           for path in ${ALL_CHANGED_FILES}; do
@@ -55,7 +53,6 @@ jobs:
             changed_image_dirs+=("$image_path")
           done
 
-          echo ${changed_image_dirs[@]}
           echo ${changed_image_dirs}
 
           BUCKET_NAME=sthings-alpine
