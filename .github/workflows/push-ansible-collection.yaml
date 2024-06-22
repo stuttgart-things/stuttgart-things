@@ -37,7 +37,7 @@ jobs:
             ansible/collections/*
           dir_names: false
 
-      - name: Get all changed contexts
+      - name: Get all changed collections
         id: json
         env:
           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
@@ -53,14 +53,21 @@ jobs:
           done
 
           # GET ALL CHANGED COLLECTIONS AS (ONE) COMMA SEPERATED STRING
-          changed_contexts=$(echo ${changed_collection_dirs// /,})
-          echo ${changed_contexts}
+          changed_collections=$(echo ${changed_collection_dirs// /,})
+
+          # SET COLLECTIONS AS JSON
+          collections=$(echo "\"${changed_collections}\"" | sed 's/,/", "/g')
+          JSON_COLLECTIONS='{ "collection-file": ['"${collections}"'] }'
+          echo $JSON_COLLECTIONS
+          echo "collections=$JSON_COLLECTIONS" >> "$GITHUB_OUTPUT"
         shell: bash
 
   Build-Collections:
     strategy:
-      matrix:
-        collection-file: [base-os, container, awx]
+      fail-fast: false
+      matrix: ${{ fromJson(needs.Get-Changed-Collectionfiles.outputs.collections) }}
+      # matrix:
+      #   collection-file: [base-os, container, awx]
     uses: stuttgart-things/stuttgart-things/.github/workflows/call-ansible-collection.yaml@main
     with:
       runs-on: ghr-stuttgart-things-labda-test

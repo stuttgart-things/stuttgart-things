@@ -1,6 +1,6 @@
 ---
 name: awx
-version: 0.0.65
+version: 0.0.66
 namespace: sthings
 playbooks:
   - name: create_upload_template
