@@ -60,8 +60,6 @@ jobs:
           BUCKET_NAME=sthings-alpine
           hardcoded2='{ "context-path": ["'"$BUCKET_NAME"'"] }'
 
-
-
           #BUCKET_NAMES="sthings-alpine,sthings-packer"
 
           id="${changed_image_dirs[@]}"

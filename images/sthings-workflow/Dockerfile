@@ -23,6 +23,7 @@ RUN apk add --no-cache ca-certificates bash git openssh curl libc6-compat \
     && chmod g+rwx /config \
     && helm repo add "stable" "https://charts.helm.sh/stable" --force-update
 
+# INSTALL GITHUB CLI
 RUN apk add gawk git jq github-cli
 
 RUN wget -q https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_linux_amd64.tar.gz \
