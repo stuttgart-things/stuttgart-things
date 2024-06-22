@@ -19,6 +19,7 @@ jobs:
     environment: k8s
     outputs:
       hardcoded2: ${{ steps.json.outputs.hardcoded2 }}
+      hardcoded3: ${{ steps.json.outputs.hardcoded3 }}
     continue-on-error: false
     steps:
       - name: Checkout code
@@ -58,10 +59,11 @@ jobs:
           BUCKET_NAME=sthings-alpine
           hardcoded2='{ "context-path": ["'"$BUCKET_NAME"'"] }'
 
-          BUCKET_NAMES="sthings-alpine, sthings-packer"
+          BUCKET_NAMES="sthings-alpine,sthings-packer"
           bla=$(echo "\"$BUCKET_NAMES\"" | sed 's/,/", "/g')
           JSON_STRING='{ "context-path": ['"$bla"'] }'
           echo $JSON_STRING
+          echo "hardcoded3=$JSON_STRING" >> "$GITHUB_OUTPUT"
 
           echo hardcoded2: ${hardcoded2}
           echo "hardcoded2=$hardcoded2" >> "$GITHUB_OUTPUT"
@@ -78,6 +80,7 @@ jobs:
       - name: Echo
         run: |
           echo ${{ needs.Get-Changed-Dockerfiles.outputs.hardcoded2 }}
+          echo ${{ needs.Get-Changed-Dockerfiles.outputs.hardcoded3 }}
 
   Build-Images:
     needs: Get-Changed-Dockerfiles
