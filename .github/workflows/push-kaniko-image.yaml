@@ -20,6 +20,7 @@ jobs:
     outputs:
       constructed: ${{ steps.json.outputs.constructed }}
       hardcoded: ${{ steps.json.outputs.hardcoded }}
+      hardcoded2: ${{ steps.json.outputs.hardcoded2 }}
       matrix: ${{ steps.json.outputs.matrix }}
       dirs: ${{ steps.json.outputs.dirs }}
     continue-on-error: false
@@ -64,8 +65,12 @@ jobs:
 
           hardcoded='{ "context-path": ["sthings-alpine", "sthings-minio"] }'
           echo hardcoded: ${build_contexts_test}
-
           echo "hardcoded=$hardcoded" >> "$GITHUB_OUTPUT"
+
+          project1="sthings-alpine"
+          hardcoded2=$(echo '{ "context-path": ["sthings-alpine", "sthings-minio"] }')
+          echo hardcoded2: ${build_contexts_test}
+          echo "hardcoded2=$hardcoded2" >> "$GITHUB_OUTPUT"
 
           part1=$(printf {)
           part2=$(printf context-path: )
@@ -91,6 +96,7 @@ jobs:
           echo ${{ needs.Get-Changed-Dockerfiles.outputs.hardcoded }}
           echo ${{ needs.Get-Changed-Dockerfiles.outputs.matrix }}
           echo ${{ needs.Get-Changed-Dockerfiles.outputs.dirs }}
+          echo ${{ needs.Get-Changed-Dockerfiles.outputs.hardcoded2 }}
 
   Build-Images:
     needs: Get-Changed-Dockerfiles
