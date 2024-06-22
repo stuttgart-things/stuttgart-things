@@ -43,7 +43,17 @@ jobs:
           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
         run: |
           # LOOP OVER ALL CHANGED PATHS FOR GETTING CONTEXT DIRS
-          echo ${ALL_CHANGED_FILES}
+          changed_collection_dirs=()
+
+          for path in ${ALL_CHANGED_FILES}; do
+            echo "$path was changed"
+            path=${path##*/}
+            echo "${path%.yaml}"
+          done
+
+          # GET ALL CHANGED COLLECTIONS AS (ONE) COMMA SEPERATED STRING
+          changed_contexts=$(echo ${changed_collection_dirs// /,})
+          echo ${changed_contexts}
         shell: bash
 
   Build-Collections:
