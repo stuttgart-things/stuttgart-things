@@ -4,7 +4,6 @@ LABEL version=13.3.3
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 
 USER root
-
 RUN apt update && apt install -y wget
 
 # INSTALL VAULT CERTS

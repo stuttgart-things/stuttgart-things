@@ -18,8 +18,7 @@ jobs:
       image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2-2
     environment: k8s
     outputs:
-      hardcoded2: ${{ steps.json.outputs.hardcoded2 }}
-      hardcoded3: ${{ steps.json.outputs.hardcoded3 }}
+      contexts: ${{ steps.json.outputs.contexts }}
     continue-on-error: false
     steps:
       - name: Checkout code
@@ -54,25 +53,13 @@ jobs:
             changed_image_dirs+=("$image_path")
           done
 
-          echo ${changed_image_dirs[@]}
-          printf -v ids_d '|%s' "${ids[@]}"
+          dirs="${changed_image_dirs[@]}"
+          changed_contexts=$(echo ${dirs// /,})
 
-          BUCKET_NAME=sthings-alpine
-          hardcoded2='{ "context-path": ["'"$BUCKET_NAME"'"] }'
-
-          #BUCKET_NAMES="sthings-alpine,sthings-packer"
-
-          id="${changed_image_dirs[@]}"
-
-          BUCKET_NAMES=$(echo ${id// /,})
-
-          bla=$(echo "\"$BUCKET_NAMES\"" | sed 's/,/", "/g')
-          JSON_STRING='{ "context-path": ['"$bla"'] }'
-          echo $JSON_STRING
-          echo "hardcoded3=$JSON_STRING" >> "$GITHUB_OUTPUT"
-
-          echo hardcoded2: ${hardcoded2}
-          echo "hardcoded2=$hardcoded2" >> "$GITHUB_OUTPUT"
+          contexts=$(echo "\"${changed_contexts}\"" | sed 's/,/", "/g')
+          JSON_CONTEXTS='{ "context-path": ['"${contexts}"'] }'
+          echo $JSON_CONTEXTS
+          echo "contexts=$JSON_CONTEXTS" >> "$GITHUB_OUTPUT"
         shell: bash
 
   Test:
@@ -85,14 +72,13 @@ jobs:
     steps:
       - name: Echo
         run: |
-          echo ${{ needs.Get-Changed-Dockerfiles.outputs.hardcoded2 }}
-          echo ${{ needs.Get-Changed-Dockerfiles.outputs.hardcoded3 }}
+          echo ${{ needs.Get-Changed-Dockerfiles.outputs.contexts }}
 
   Build-Images:
     needs: Get-Changed-Dockerfiles
     strategy:
       fail-fast: false
-      matrix: ${{ fromJson(needs.Get-Changed-Dockerfiles.outputs.hardcoded3) }}
+      matrix: ${{ fromJson(needs.Get-Changed-Dockerfiles.outputs.contexts) }}
     uses: stuttgart-things/stuttgart-things/.github/workflows/call-kaniko-build.yaml@main
     with:
       runs-on: ghr-stuttgart-things-labda-test
