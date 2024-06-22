@@ -36,7 +36,7 @@ jobs:
           path: source
           files: |
             images/*/*
-          dir_names: true
+          dir_names: false
 
       - name: List all changed files
         id: json
