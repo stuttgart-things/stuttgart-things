@@ -72,12 +72,8 @@ jobs:
     with:
       runs-on: ghr-stuttgart-things-labda-test
       environment-name: k8s
-      dockerfile: images/${{ matrix.context-path }}/Dockerfile
-      registry: ghcr.io
-      repository: stuttgart-things
-      image: ${{ matrix.context-path }}
-      tag: latest
-      kaniko-image: gcr.io/kaniko-project/executor
-      kaniko-tag: debug
-      push-retrys: "5"
+      dockerfile: Dockerfile
+      context: git://github.com/stuttgart-things/stuttgart-things
+      kaniko-image: gcr.io/kaniko-project/executor:v1.23.1
+      context-sub-path: images/${{ matrix.context-path }}
     secrets: inherit
