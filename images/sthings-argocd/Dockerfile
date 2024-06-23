@@ -2,7 +2,6 @@ ARG REGISTRY=quay.io
 ARG REPOSITORY=argoproj
 ARG IMAGE=argocd
 ARG TAG=v2.11.3
-
 FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
 
 LABEL version=v2.8.6
