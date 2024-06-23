@@ -31,7 +31,7 @@ on:
       kaniko-image:
         required: false
         type: string
-        default: gcr.io/kaniko-project/executor
+        default: gcr.io/kaniko-project/executor:v1.23.1 #gcr.io/kaniko-project/executor
       kaniko-tag:
         required: false
         type: string
@@ -66,10 +66,16 @@ jobs:
 
           # BUILD AND PUSH
           /kaniko/executor --dockerfile="${{ inputs.dockerfile }}" \
-          --context="${{ github.repositoryUrl }}" \
-          --destination="${{ inputs.registry }}/${{ inputs.repository }}/${{ inputs.image }}:${IMAGE_TAG}" \
-          --push-retry ${{ inputs.push-retrys }} \
-          --image-name-with-digest-file /workspace/image-digest.txt
+          --context git://github.com/stuttgart-things/stuttgart-things \
+          --context-sub-path images/sthings-alpine/  \
+          --no-push
+
+          # BUILD AND PUSH
+          #/kaniko/executor --dockerfile="${{ inputs.dockerfile }}" \
+          #--context="${{ github.repositoryUrl }}" \
+          #--destination="${{ inputs.registry }}/${{ inputs.repository }}/${{ inputs.image }}:${IMAGE_TAG}" \
+          #--push-retry ${{ inputs.push-retrys }} \
+          #--image-name-with-digest-file /workspace/image-digest.txt
 
           # CHECK DIGEST
-          cat /workspace/image-digest.txt
+          #cat /workspace/image-digest.txt
