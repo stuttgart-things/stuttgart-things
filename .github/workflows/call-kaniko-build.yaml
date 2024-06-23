@@ -65,7 +65,8 @@ jobs:
           export GIT_PASSWORD="${{ secrets.GITHUB_TOKEN }}"
 
           # BUILD AND PUSH
-          /kaniko/executor --dockerfile="${{ inputs.dockerfile }}" \
+          /kaniko/executor \
+          --dockerfile=Dockerfile \
           --context git://github.com/stuttgart-things/stuttgart-things \
           --context-sub-path images/sthings-alpine/  \
           --no-push
