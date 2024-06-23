@@ -1,0 +1,15 @@
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: Zot
+metadata:
+  name: andre-dev
+  namespace: crossplane-system
+spec:
+  clusterName: andre-dev
+  deploymentNamespace: zot
+  hostName: zot
+  domainName: andre-dev.sthings-vsphere.labul.sva.de
+  version: 0.1.56
+  cert:
+    secretName: zot-ingress-tls
+    issuerName: vault-approle

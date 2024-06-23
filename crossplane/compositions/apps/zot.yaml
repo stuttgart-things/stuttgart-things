@@ -1,0 +1,128 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: zot
+  labels:
+    crossplane.io/xrd: xzot.resources.stuttgart-things.com
+spec:
+  writeConnectionSecretsToNamespace: crossplane-system
+  compositeTypeRef:
+    apiVersion: resources.stuttgart-things.com/v1alpha1
+    kind: XZot
+  resources:
+    - name: zot-release
+      base:
+        apiVersion: helm.crossplane.io/v1beta1
+        kind: Release
+        metadata:
+          name: zot
+          annotations:
+            crossplane.io/external-name: zot
+        spec:
+          providerConfigRef:
+            name: in-cluster
+          forProvider:
+            chart:
+              name: zot
+              repository: https://zotregistry.dev/helm-charts/
+              version: 0.1.56
+            namespace: zot
+            insecureSkipTLSVerify: false
+            skipCreateNamespace: false
+            wait: true
+            skipCRDs: false
+            values:
+              ingress:
+                enabled: true
+                className: nginx
+                hosts:
+                  - host: zot.andre-dev.sthings-vsphere.labul.sva.de
+                    paths:
+                      - path: /
+                    tls:
+                      - secretName: cert
+                        hosts:
+                          - zot.andre-dev.sthings-vsphere.labul.sva.de
+      patches:
+        - type: CombineFromComposite
+          combine:
+            variables:
+              - fromFieldPath: spec.clusterName
+            strategy: string
+            string:
+              fmt: "zot-%s"
+          toFieldPath: metadata.name
+        - fromFieldPath: spec.deploymentNamespace
+          toFieldPath: spec.forProvider.namespace
+        - fromFieldPath: spec.clusterName
+          toFieldPath: spec.providerConfigRef.name
+        - fromFieldPath: spec.version
+          toFieldPath: spec.forProvider.chart.version
+        # - type: CombineFromComposite
+        #   combine:
+        #     variables:
+        #       - fromFieldPath: spec.hostName
+        #       - fromFieldPath: spec.domainName
+        #     strategy: string
+        #     string:
+        #       fmt: "%s.%s"
+        #   toFieldPath: spec.forProvider.values.ingress.hosts[0].hosts
+        # - type: CombineFromComposite
+        #   combine:
+        #     variables:
+        #       - fromFieldPath: spec.hostName
+        #       - fromFieldPath: spec.domainName
+        #     strategy: string
+        #     string:
+        #       fmt: |
+        #         # enabled: true
+        #         # className: nginx
+        #         # hosts:
+        #         #   - host: zot.andre-dev.sthings-vsphere.labul.sva.de
+        #         #     paths:
+        #         #       - path: /
+        #         #   tls:
+        #         #     - secretName: cert
+        #         #       hosts:
+        #         #         - zot.andre-dev.sthings-vsphere.labul.sva.de
+        #   toFieldPath: spec.forProvider.values.ingress
+        # - fromFieldPath: spec.path
+        #   toFieldPath: spec.forProvider.values.ingress.hosts[0].paths[0].path
+        - type: CombineFromComposite
+          combine:
+            variables:
+              - fromFieldPath: spec.hostName
+              - fromFieldPath: spec.domainName
+            strategy: string
+            string:
+              fmt: "%s.%s"
+          toFieldPath: spec.forProvider.values.ingress.tls[0].hosts[0]
+        - fromFieldPath: spec.cert.secretName
+          toFieldPath: spec.forProvider.values.ingress.tls[0].secretName
+    - name: zot-ingresscert
+      base:
+        apiVersion: resources.stuttgart-things.com/v1alpha1
+        kind: XIngressCertificate
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.deploymentNamespace
+          toFieldPath: spec.namespace
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.clusterName
+          toFieldPath: spec.clusterName
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.cert.issuerName
+          toFieldPath: spec.issuerName
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.cert.issuerKind
+          toFieldPath: spec.issuerKind
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.cert.secretName
+          toFieldPath: spec.certSecretName
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.hostName
+          toFieldPath: spec.hostName
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.domainName
+          toFieldPath: spec.domainName

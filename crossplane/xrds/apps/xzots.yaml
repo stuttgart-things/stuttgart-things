@@ -1,0 +1,68 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: xzots.resources.stuttgart-things.com
+spec:
+  connectionSecretKeys:
+    - kubeconfig
+  group: resources.stuttgart-things.com
+  names:
+    kind: XZot
+    plural: xzots
+  claimNames:
+    kind: Zot
+    plural: zots
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          description: A Zot is a composite resource that represents a helm release for a zot deployment
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                deploymentNamespace:
+                  type: string
+                  default: zot
+                  description: namespace for zot
+                clusterName:
+                  type: string
+                  description: cluster name/helm provider name
+                version:
+                  type: string
+                  default: 0.1.34
+                  description: helm chart version
+                hostName:
+                  type: string
+                  default: zot
+                  description: hostname of ingress resource
+                domainName:
+                  type: string
+                  description: domain (name) of ingress resources
+                path:
+                  type: string
+                  default: /
+                  description: ingress path
+                cert:
+                  type: object
+                  properties:
+                    issuerName:
+                      type: string
+                      default: zot-approle
+                      description: name of cert-manager issuer
+                    issuerKind:
+                      type: string
+                      default: ClusterIssuer
+                      description: kind of cert-manager issuer
+                    secretName:
+                      type: string
+                      description: name of to be created secret
+                      default: zot-ingress-tls
+              required:
+                - cert
+                - clusterName
+                - domainName
