@@ -12,34 +12,20 @@ on:
         type: string
       dockerfile:
         required: false
-        default: "./Dockerfile"
+        default: Dockerfile
         type: string
-      registry:
+      context:
         required: false
-        default:  ghcr.io
-        type: string
-      repository:
-        required: false
-        default: stuttgart-things
-        type: string
-      image:
-        required: true
-        type: string
-      tag:
-        required: true
+        default: git://github.com/stuttgart-things/stuttgart-things
         type: string
       kaniko-image:
         required: false
         type: string
-        default: gcr.io/kaniko-project/executor:v1.23.1 #gcr.io/kaniko-project/executor
-      kaniko-tag:
-        required: false
+        default: gcr.io/kaniko-project/executor:v1.23.1
+      context-sub-path:
+        required: true
         type: string
-        default: debug
-      push-retrys:
-        required: false
-        type: string
-        default: "5"
+      
 jobs:
   kaniko-build:
     runs-on: ${{ inputs.runs-on }}
@@ -66,9 +52,9 @@ jobs:
 
           # BUILD AND PUSH
           /kaniko/executor \
-          --dockerfile=Dockerfile \
-          --context git://github.com/stuttgart-things/stuttgart-things \
-          --context-sub-path images/sthings-alpine/  \
+          --dockerfile=${{ inputs.dockerfile }} \
+          --context ${{ inputs.context }} \
+          --context-sub-path ${{ inputs.context-sub-path }}  \
           --no-push
 
           # BUILD AND PUSH
