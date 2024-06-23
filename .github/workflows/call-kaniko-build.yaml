@@ -33,7 +33,7 @@ jobs:
     env:
       IMAGE_TAG: ${{ inputs.tag }}
     container:
-      image: ${{ inputs.kaniko-image }}:${{ inputs.kaniko-tag }}
+      image: ${{ inputs.kaniko-image }}
     steps:
       - name: Build and push image w/ kaniko
         run: |
