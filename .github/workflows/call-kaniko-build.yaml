@@ -47,7 +47,7 @@ jobs:
           --dockerfile=${{ inputs.dockerfile }} \
           --context ${{ inputs.context }} \
           --context-sub-path ${{ inputs.context-sub-path }} \
-          --tar-path /tmp/$(echo ${{ inputs.context-sub-path }} | sed 's:.*/::').tar
+          --tar-path /tmp/$(echo ${{ inputs.context-sub-path }} | sed 's:.*/::').tar \
           --no-push
 
         shell: bash

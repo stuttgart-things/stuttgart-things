@@ -1,13 +1,10 @@
 ---
 name: Build Container Image w/ kaniko
 on:
-  push:
-    branches:
-      - "*"
-    paths:
-      - 'images/*/*'
-
   pull_request:
+    types:
+      - opened
+      - reopened
     paths:
       - 'images/*/*'
 
