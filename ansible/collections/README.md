@@ -268,6 +268,23 @@ ansible-playbook sthings.awx.hello_awx -vv -e test_host=example.labul.sva.de
 
 </details>
 
+<details><summary>RENDER UPLOAD TEMPLATE/VM</summary>
+
+Awx job template /w survey and play to render and upload templates for VMs
+
+```bash
+export CONTROLLER_HOST=https://awx.<DOMAIN>.sva.de #EXAMPLE!
+export CONTROLLER_USERNAME=admin #EXAMPLE!
+export CONTROLLER_PASSWORD=<PASSWORD>
+
+#create awx resource
+ansible-playbook sthings.awx.render_upload_template -vv -e lab=labul -e cloud=vsphere -e j2_template_name=<example-template>.tf.j2 -e bucket_name=<example-bucket-name>
+
+#use play to render and upload without awx
+ansible-playbook sthings.awx.render_upload_vm -vv -e lab=labul -e cloud=vsphere -e j2_template_name=<example-template>.tf.j2 -e bucket_name=<example-bucket-name>
+```
+
+</details>
 
 Author Information
 ------------------
