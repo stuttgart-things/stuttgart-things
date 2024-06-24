@@ -62,6 +62,7 @@ jobs:
 
   Build-Collections:
     needs: Get-Changed-Collectionfiles
+    if: ${{ needs.Get-Changed-Collectionfiles.outputs.collections!= '[]' && needs.Get-Changed-Collectionfiles.outputs.collections != '' }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.Get-Changed-Collectionfiles.outputs.collections) }}
