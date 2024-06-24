@@ -1,21 +1,21 @@
 ---
 name: awx
-version: 0.0.68
+version: 0.0.69
 namespace: sthings
 playbooks:
-  - name: create_upload_template
+  - name: render_upload_template
     play: |
       ---
       - name: Create a config file from a j2 template
         ansible.builtin.template:
           src: {{ j2_template_name }}
-          dest: "{{ ansible_date_time.date }}-{{ j2_template_name }}.tf"
+          dest: "{{ rendered_config }}"
 
       - name: Upload config to S3 Bucket
         amazon.aws.s3_object:
           bucket: "{{ bucket_name }}"
           object: "{{ ansible_date_time.date }}-{{ ansible_date_time.hour }}-{{ ansible_date_time.minute }}-{{ vmName }}.tf"
-          src: "{{ ansible_date_time.date }}-{{ j2_template_name }}.tf"
+          src: "{{ rendered_config }}"
           mode: put
           access_key: "{{ AWS_ACCESS_KEY_ID }}"
           secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
@@ -169,7 +169,7 @@ playbooks:
         loop: "{{ lookup('dict', scheduler, wantlist=True) }}"
         when: scheduler is defined and target_host != 'localhost'
 
-  - name: create_template
+  - name: render_upload_template
     play: |
       ---
       - hosts: "{{ target_host | default('localhost') }}"
@@ -183,12 +183,12 @@ playbooks:
           - "{{ path | default('.') }}/dynamic-inventory-vsphere.yaml"
           - "{{ path | default('.') }}/inventory-source.yaml"
           - "{{ path | default('.') }}/ee-sthings.yaml"
-          - "{{ path | default('.') }}/labul-vsphere.yaml"
-          - "{{ path | default('.') }}/defaults-labul-vsphere.yaml"
-          - "{{ path | default('.') }}/job-create-upload-template.yaml"
+          - "{{ path | default('.') }}/{{ lab }}-{{ cloud }}.yaml"
+          - "{{ path | default('.') }}/defaults-{{ lab }}-{{ cloud }}.yaml"
+          - "{{ path | default('.') }}/job-render-upload-template.yaml"
 
         tasks:
-          - ansible.builtin.import_tasks: create_upload_template.yaml
+          - ansible.builtin.import_tasks: render_upload_template.yaml
           - ansible.builtin.import_tasks: check_connection.yaml
           - ansible.builtin.import_tasks: creation_tasks.yaml
 
@@ -326,14 +326,12 @@ playbooks:
           s3_endpoint: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:console validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
           bucket_name: andre-vm-config
           j2_template_name: "vm.tf.j2" # -e j2_template_name=
-          platform: "" # -e platform=
           rendered_config: "{{ ansible_date_time.date }}-{{ j2_template_name }}.tf"
-
 
           #-e lab=labul -e cloud=vsphere -vv
 
         vars_files:
-          - "vm_sizes.yaml"
+          - "{{ lab }}-{{ cloud }}.yaml"
           - "defaults-{{ lab }}-{{ cloud }}.yaml"
 
         tasks:
@@ -345,7 +343,7 @@ playbooks:
           - name: Upload config to S3 Bucket
             amazon.aws.s3_object:
               bucket: "{{ bucket_name }}"
-              object: "{{ ansible_date_time.date }}-{{ ansible_date_time.hour }}-{{ ansible_date_time.minute }}-{{ j2_template_name }}.tf"
+              object: "{{ ansible_date_time.date }}-{{ ansible_date_time.hour }}-{{ ansible_date_time.minute }}-{{ vmName }}.tf"
               src: "{{ rendered_config }}"
               mode: put
               access_key: "{{ AWS_ACCESS_KEY_ID }}"
@@ -438,8 +436,9 @@ templates:
           workspace_key_prefix = "{{ vmName }}"
         }
       }
+
 vars:
-  - name: job-create-upload-template
+  - name: job-render-upload-template
     file: |
       ---
       job_templates:
@@ -1264,6 +1263,7 @@ vars:
       s3_endpoint: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:console validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
       AWS_ACCESS_KEY_ID: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:accessKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
       AWS_SECRET_ACCESS_KEY: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:secretKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+      rendered_config: "{{ ansible_date_time.date }}-{{ j2_template_name }}.tf"
 
   - name: labul-vsphere
     file: |
