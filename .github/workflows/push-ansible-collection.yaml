@@ -34,7 +34,7 @@ jobs:
           since_last_remote_commit: true
           path: source
           files: |
-            ansible/collections/*
+            ansible/collections/*.yaml
           dir_names: false
 
       - name: Get all changed collections
