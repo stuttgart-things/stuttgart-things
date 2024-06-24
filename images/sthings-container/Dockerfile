@@ -26,14 +26,3 @@ RUN cd /tmp && wget https://github.com/aquasecurity/trivy/releases/download/v${T
     && chmod +x /usr/bin/trivy
 
 ENTRYPOINT ["/kaniko/executor"]
-
-
-/kaniko/executor --dockerfile Dockerfile \
---context git://github.com/stuttgart-things/stuttgart-things \
---context-sub-path images/sthings-alpine \
---no-push \
---tar-path /tmp/bla.tar
-
-skopeo login scr.cd43.sthings-pve.labul.sva.de -u admin -p Atlan7is2023
-
-skopeo --insecure-policy copy -f oci tarball:/tmp/bla.tar docker://scr.cd43.sthings-pve.labul.sva.de/crossplane-demo/test:v1

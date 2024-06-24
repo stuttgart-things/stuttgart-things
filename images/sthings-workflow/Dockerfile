@@ -8,7 +8,7 @@ FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 LABEL version=1.30.1
 
-ARG KUBECTL_VERSION=1.30.1
+ARG KUBECTL_VERSION=1.30.2
 ARG HELM_VERSION=3.15.1
 ARG YQ_VERSION=4.43.1
 
