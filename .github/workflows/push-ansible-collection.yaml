@@ -1,11 +1,6 @@
 ---
 name: Build Ansible Collection
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'ansible/collections/*'
   pull_request:
     paths:
       - 'ansible/collections/*'
