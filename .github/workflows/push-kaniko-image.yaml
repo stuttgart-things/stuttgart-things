@@ -74,6 +74,6 @@ jobs:
       environment-name: k8s
       dockerfile: Dockerfile
       context: git://github.com/stuttgart-things/stuttgart-things
-      kaniko-image: gcr.io/kaniko-project/executor:v1.23.1
+      kaniko-image: eu.gcr.io/stuttgart-things/sthings-container:v1.23.1
       context-sub-path: images/${{ matrix.context-path }}
     secrets: inherit
