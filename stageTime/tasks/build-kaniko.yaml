@@ -77,7 +77,7 @@ spec:
         runAsNonRoot: false
         runAsUser: 0
     - name: write-url
-      image: "docker.io/library/bash:5.2.26@sha256:b0644a10c7961325e6d1540e3b0350cda3cb8a82d39019374f8bef5dec32d7ac"
+      image: "docker.io/library/bash:5.2.26@sha256:4b5f0dfc184cd521d6cd01d0dc8096cdb216b1d7f0a2d23f6e7577be97997434"
       securityContext:
         privileged: false
       script: |
