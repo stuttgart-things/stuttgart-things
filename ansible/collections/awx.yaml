@@ -1,6 +1,6 @@
 ---
 name: awx
-version: 0.0.71
+version: 0.0.72
 namespace: sthings
 playbooks:
   - name: render_upload_template
@@ -103,6 +103,14 @@ playbooks:
         loop: "{{ lookup('dict', inventorySource, wantlist=True) }}"
         when: inventorySource is defined
 
+      - name: Update a single inventory source
+        awx.awx.inventory_source_update:
+          name: "{{ item.value.name }}"
+          inventory: "{{ item.value.inventory }}"
+          organization: "{{ item.value.organization }}"
+        loop: "{{ lookup('dict', inventorySource, wantlist=True) }}"
+        when: inventorySource is defined
+
       - name: Add host
         awx.awx.host:
           name: "{{ item.value.name }}"
@@ -126,6 +134,7 @@ playbooks:
           scm_update_on_launch: "{{ item.value.scm_update_on_launch | default(omit) }}"
           scm_update_cache_timeout: "{{ item.value.scm_update_cache_timeout | default(omit) }}"
           validate_certs: false
+          update_project: true
         loop: "{{ lookup('dict', projects, wantlist=True) }}"
         when: projects is defined
 

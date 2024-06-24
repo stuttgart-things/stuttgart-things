@@ -37,20 +37,9 @@ export CONTROLLER_USERNAME=admin
 
 # Provision all awx ressources
 ```bash
-cat <<EOF > provisioning.sh
-#!/bin/bash 
-plays
-for var in $var
+for i in ${!arr[@]};
 do
-
+  echo $i "${arr[i]}";
+  ansible-playbook sthings.awx."${arr[i]}" -vv;
 done
 ```
-
-+ (for loop) für alle awx resourcen (bashscript)
-
-ansible-playbook sthings.awx.golang -vv
-ansible-playbook sthings.awx.docker -vv
-ansible-playbook sthings.awx.nerdctl -vv
-ansible-playbook sthings.awx.baseos -vv
-ansible-playbook sthings.awx.schedule_baseos -vv
-ansible-playbook sthings.awx.hello_awx -vv -e test_host=example.labul.sva.de
