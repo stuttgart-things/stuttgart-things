@@ -52,5 +52,5 @@ jobs:
         shell: bash
       - name: Scan image w/ trivy
         run: |
-          trivy image --input ${{ inputs.context-sub-path }} | sed 's:.*/::').tar
+          trivy image --input /tmp/$(echo ${{ inputs.context-sub-path }} | sed 's:.*/::').tar
         shell: bash
