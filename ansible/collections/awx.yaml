@@ -1,14 +1,14 @@
 ---
 name: awx
-version: 0.0.72
+version: 0.0.75
 namespace: sthings
 playbooks:
-  - name: render_upload_template
+  - name: create_template
     play: |
       ---
       - name: Create a config file from a j2 template
         ansible.builtin.template:
-          src: {{ j2_template_name }}
+          src: "{{ j2_template_name }}"
           dest: "{{ rendered_config }}"
 
       - name: Upload config to S3 Bucket
@@ -134,7 +134,6 @@ playbooks:
           scm_update_on_launch: "{{ item.value.scm_update_on_launch | default(omit) }}"
           scm_update_cache_timeout: "{{ item.value.scm_update_cache_timeout | default(omit) }}"
           validate_certs: false
-          update_project: true
         loop: "{{ lookup('dict', projects, wantlist=True) }}"
         when: projects is defined
 
@@ -178,6 +177,13 @@ playbooks:
         loop: "{{ lookup('dict', scheduler, wantlist=True) }}"
         when: scheduler is defined and target_host != 'localhost'
 
+      - name: Update project
+        awx.awx.project:
+          name: "{{ item.value.name }}"
+          update_project: true
+        loop: "{{ lookup('dict', projects, wantlist=True) }}"
+        when: projects is defined
+
   - name: render_upload_template
     play: |
       ---
@@ -197,7 +203,7 @@ playbooks:
           - "{{ path | default('.') }}/job-render-upload-template.yaml"
 
         tasks:
-          - ansible.builtin.import_tasks: render_upload_template.yaml
+          - ansible.builtin.import_tasks: create_template.yaml
           - ansible.builtin.import_tasks: check_connection.yaml
           - ansible.builtin.import_tasks: creation_tasks.yaml
 
@@ -1286,7 +1292,7 @@ vars:
       folderpath: "{{ subfolderpath }}"
 
       # default values
-      j2_template_name: "vsphere-vm.yaml"
+      j2_template_name: "vm-vsphere.yaml"
       vmName: "test-vm"
       vmCount: "1"
       vmSize: "s"
