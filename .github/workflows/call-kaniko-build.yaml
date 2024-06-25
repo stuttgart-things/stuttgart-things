@@ -21,11 +21,11 @@ on:
       kaniko-image:
         required: false
         type: string
-        default: gcr.io/kaniko-project/executor:v1.23.1
+        default: eu.gcr.io/stuttgart-things/sthings-container:v1.23.1
       context-sub-path:
         required: true
         type: string
-      
+
 jobs:
   kaniko-build:
     runs-on: ${{ inputs.runs-on }}
@@ -35,16 +35,20 @@ jobs:
     steps:
       - name: Build and push image w/ kaniko
         run: |
-          # WRITE CONFIG FILE
-          echo ${{ secrets.DOCKER_CONFIG }} | base64 -d > /kaniko/.docker/config.json
-
           # CONFIGURE GIT
           export GIT_USERNAME="kaniko-bot"
           export GIT_PASSWORD="${{ secrets.GITHUB_TOKEN }}"
 
-          # BUILD AND PUSH LOCAL
+          # BUILD AND CREATE IMAGE LOCAL
           /kaniko/executor \
           --dockerfile=${{ inputs.dockerfile }} \
           --context ${{ inputs.context }} \
-          --context-sub-path ${{ inputs.context-sub-path }}  \
+          --context-sub-path ${{ inputs.context-sub-path }} \
+          --tar-path /tmp/$(echo ${{ inputs.context-sub-path }} | sed 's:.*/::').tar \
           --no-push
+        shell: bash
+      - name: Scan image w/ trivy
+        run: |
+          # SCAN LOCAL IMAGE FROM TARBALL
+          trivy image --input /tmp/$(echo ${{ inputs.context-sub-path }} | sed 's:.*/::').tar
+        shell: bash

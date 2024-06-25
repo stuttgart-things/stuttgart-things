@@ -285,7 +285,7 @@ jobs:
           path: ${{ env.COLLECTION_PACKAGE_PATH }}
 
       - name: Release module
-        if: ${{ github.ref == 'refs/heads/main' }}
+        # if: ${{ github.ref == 'refs/heads/main' }}
         uses: ncipollo/release-action@v1.14.0
         with:
           name: "${{ env.COLLECTION_NAMESPACE }}.${{ env.COLLECTION_NAME }}-${{ env.COLLECTION_VERSION }}"
