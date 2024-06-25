@@ -8,6 +8,9 @@ FROM gcr.io/kaniko-project/executor:v1.23.1 AS kaniko
 FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
 ARG SKOPEO_VERSION=1.14.4
 ARG TRIVY_VERSION=0.52.2
+ARG YQ_VERSION=4.43.1
+ARG MACHINE_SHOP_VERSION=2.1.9
+ARG JQ_VERSION=1.7.1
 
 COPY --from=kaniko /kaniko/ /kaniko/
 
@@ -24,5 +27,22 @@ RUN cd /tmp && wget https://github.com/aquasecurity/trivy/releases/download/v${T
     && tar xvfz /tmp/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz \
     && mv /tmp/trivy /usr/bin/trivy \
     && chmod +x /usr/bin/trivy
+
+# MACHINE-SHOP
+RUN wget -q https://github.com/stuttgart-things/machineshop/releases/download/${MACHINE_SHOP_VERSION}/machineshop_Linux_x86_64.tar.gz \
+    && tar -xvf machineshop_Linux_x86_64.tar.gz -C /usr/bin/ machineshop \
+    && rm -rf machineshop_Linux_x86_64.tar.gz
+
+# INSTALL YQ
+RUN wget -q https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_linux_amd64.tar.gz \
+    && tar xvfz yq_linux_amd64.tar.gz -C /usr/bin \
+    && mv /usr/bin/yq_linux_amd64 /usr/bin/yq \
+    && chmod +x /usr/bin/yq \
+    && rm -rf yq_linux_amd64.tar.gz
+
+# INSTALL JQ
+RUN wget -q https://github.com/jqlang/jq/releases/download/jq-${JQ_VERSION}/jq-linux-amd64 \
+    && mv jq-linux-amd64 /usr/bin/jq \
+    && chmod +x /usr/bin/jq
 
 ENTRYPOINT ["/kaniko/executor"]

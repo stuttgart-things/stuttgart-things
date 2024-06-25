@@ -33,6 +33,9 @@ jobs:
     container:
       image: ${{ inputs.kaniko-image }}
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Build and push image w/ kaniko
         run: |
           # CONFIGURE GIT
@@ -47,8 +50,16 @@ jobs:
           --tar-path /tmp/$(echo ${{ inputs.context-sub-path }} | sed 's:.*/::').tar \
           --no-push
         shell: bash
+
       - name: Scan image w/ trivy
         run: |
           # SCAN LOCAL IMAGE FROM TARBALL
           trivy image --input /tmp/$(echo ${{ inputs.context-sub-path }} | sed 's:.*/::').tar
         shell: bash
+
+      - name: Push w/ skopeo to dev registires
+        run: |
+
+          skopeo login scr.cd43.sthings-pve.labul.sva.de -u admin -p Atlan7is2023
+
+          skopeo --insecure-policy copy -f oci tarball:/tmp/bla.tar docker://scr.cd43.sthings-pve.labul.sva.de/crossplane-demo/test:v1
