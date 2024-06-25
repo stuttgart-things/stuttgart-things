@@ -49,5 +49,6 @@ jobs:
         shell: bash
       - name: Scan image w/ trivy
         run: |
+          # SCAN LOCAL IMAGE FROM TARBALL
           trivy image --input /tmp/$(echo ${{ inputs.context-sub-path }} | sed 's:.*/::').tar
         shell: bash
