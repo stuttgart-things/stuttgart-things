@@ -25,13 +25,25 @@ on:
       context-sub-path:
         required: true
         type: string
+      registry-config:
+        required: true
+        default: images/dev-registries.yaml
+        type: string
 
 jobs:
-  kaniko-build:
+  kaniko-build-push:
     runs-on: ${{ inputs.runs-on }}
     environment: ${{ inputs.environment-name }}
     container:
       image: ${{ inputs.kaniko-image }}
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_ACCESS_KEY }}
+      VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
+      VAULT_AUTH_METHOD: ${{ secrets.VAULT_AUTH_METHOD }}
+      VAULT_NAMESPACE: ${{ secrets.VAULT_NAMESPACE }}
+      VAULT_ROLE_ID: ${{ secrets.VAULT_ROLE_ID }}
+      VAULT_SECRET_ID: ${{ secrets.VAULT_SECRET_ID }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -59,7 +71,23 @@ jobs:
 
       - name: Push w/ skopeo to dev registires
         run: |
+          # GENERATE TAG IF NONE IS GIVEN
+          if [ -z "${IMAGE_TAG}" ]
+          then
+            IMAGE_TAG=$(date '+%Y-%m-%d-%H-%M-%S')
+          fi
 
-          skopeo login scr.cd43.sthings-pve.labul.sva.de -u admin -p Atlan7is2023
+          for registry in $(yq eval -o=j ${{ inputs.registry-config }} | jq -cr '.registries[]'); do
 
-          skopeo --insecure-policy copy -f oci tarball:/tmp/bla.tar docker://scr.cd43.sthings-pve.labul.sva.de/crossplane-demo/test:v1
+            alias=$(echo $registry | jq -r '.name' -)
+            url=$(echo $registry | jq -r '.url' -)
+            vault_path_username=$(echo $registry | jq -r '.username' -)
+            vault_path_password=$(echo $registry | jq -r '.password' -)
+
+            echo pushing to $url
+
+            skopeo login $url --username $(machineshop get --path ${vault_path_username} | tail -n +8) --password $(machineshop get --path ${vault_path_password} | tail -n +8)
+            skopeo --insecure-policy copy -f oci tarball:/tmp/$(echo ${{ inputs.context-sub-path }} | sed 's:.*/::').tar docker://${url}/$(echo ${{ inputs.context-sub-path }} | sed 's:.*/::')/${IMAGE_TAG}
+
+          done
+        shell: bash
