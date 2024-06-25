@@ -1,0 +1,10 @@
+---
+registries:
+  - name: scr-pve
+    url: scr.cd43.sthings-pve.labul.sva.de
+    username: apps/data/scr:username
+    password: apps/data/scr:password
+  - name: scr-vsphere
+    url: scr.cd43.sthings-vsphere.labul.sva.de
+    username: apps/data/scr:username
+    password: apps/data/scr:password
