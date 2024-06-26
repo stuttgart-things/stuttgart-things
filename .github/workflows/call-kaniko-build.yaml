@@ -69,7 +69,7 @@ jobs:
           trivy image --input /tmp/$(echo ${{ inputs.context-sub-path }} | sed 's:.*/::').tar
         shell: bash
 
-      - name: Push w/ skopeo to dev registires
+      - name: Push w/ skopeo to dev registries
         run: |
           # GENERATE TAG IF NONE IS GIVEN
           if [ -z "${IMAGE_TAG}" ]
@@ -87,7 +87,8 @@ jobs:
             echo pushing to $url
 
             skopeo login $url --username $(machineshop get --path ${vault_path_username} | tail -n +8) --password $(machineshop get --path ${vault_path_password} | tail -n +8)
-            skopeo --insecure-policy copy -f oci tarball:/tmp/$(echo ${{ inputs.context-sub-path }} | sed 's:.*/::').tar docker://${url}/$(echo ${{ inputs.context-sub-path }} | sed 's:.*/::'):${IMAGE_TAG}
+            #skopeo copy -f oci tarball:/tmp/$(echo ${{ inputs.context-sub-path }} | sed 's:.*/::').tar docker://${url}/$(echo ${{ inputs.context-sub-path }} | sed 's:.*/::'):${IMAGE_TAG}
+            skopeo copy -f oci tarball:/tmp/$(echo ${{ inputs.context-sub-path }} | sed 's:.*/::').tar docker://scr.cd43.sthings-pve.labul.sva.de/sthings-alpine:123
 
           done
         shell: bash
