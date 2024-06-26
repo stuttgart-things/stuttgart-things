@@ -1,6 +1,6 @@
 ---
 name: awx
-version: 0.0.76
+version: 0.0.77
 namespace: sthings
 playbooks:
   - name: create_template
@@ -9,7 +9,14 @@ playbooks:
       - name: Create a config file from a j2 template
         ansible.builtin.template:
           src: "{{ j2_template_name }}"
-          dest: "{{ rendered_config }}"
+          dest: "{{ ansible_date_time.date }}-{{ item.value.name }}.tf"
+          loop: "{{ lookup('dict', j2_template_name, wantlist=True) }}"
+
+      - name: concat template files
+        lineinfile:
+          create: true
+          path: tf-config.yaml
+          line: "{{ lookup('file', '{{ ansible_date_time.date }}-vm-{{ cloud }}.yaml.tf') }}\n\n{{ lookup('file', '{{ ansible_date_time.date }}-{{ cloud }}-backend.yaml.tf') }}"
 
       - name: Upload config to S3 Bucket
         amazon.aws.s3_object:
@@ -134,7 +141,6 @@ playbooks:
           scm_update_on_launch: "{{ item.value.scm_update_on_launch | default(omit) }}"
           scm_update_cache_timeout: "{{ item.value.scm_update_cache_timeout | default(omit) }}"
           validate_certs: false
-          update_project: true
         loop: "{{ lookup('dict', projects, wantlist=True) }}"
         when: projects is defined
 
@@ -459,7 +465,7 @@ vars:
       ---
       job_templates:
         stuttgartThings:
-          name: create-upload-template
+          name: render-upload-template
           organization: stuttgart-things
           inventory: dynamic-inventory-vsphere
           project: stuttgart-things
@@ -1279,7 +1285,7 @@ vars:
       s3_endpoint: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:console validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
       AWS_ACCESS_KEY_ID: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:accessKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
       AWS_SECRET_ACCESS_KEY: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:secretKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
-      rendered_config: "{{ ansible_date_time.date }}-{{ j2_template_name }}.tf"
+      rendered_config: "tf-config.yaml"
 
   - name: labul-vsphere
     file: |
@@ -1293,13 +1299,19 @@ vars:
       folderpath: "{{ subfolderpath }}"
 
       # default values
-      j2_template_name: "vm-vsphere.yaml"
       vmName: "test-vm"
       vmCount: "1"
       vmSize: "s"
       vmTemplate: "ubuntu24"
       subfolderpath: "testing"
       bucket_name: "andre-vm-config"
+      object_name: tf-config.yaml
+
+      j2_template_name:
+        backend:
+          name: "{{ cloud }}-backend.yaml"
+        main:
+          name: "vm-{{ cloud }}.yaml"
 
       vm_size:
         cpu:
