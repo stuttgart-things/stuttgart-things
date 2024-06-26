@@ -77,9 +77,9 @@ jobs:
       - name: Create Inventory
         run: |
           if [[ ${{ inputs.inventory }} == *'['* ]] || [[ ${{ inputs.inventory }} == *']'* ]]; then
-            echo ${{ inputs.inventory }} | tr '+' '\n' > inventory
+            echo ${{ inputs.inventory }} | tr '+' '\n' | sed 's/.\(.*\)/\1/'| sed 's/ //g' > inventory
           else
-            echo ${{ inputs.inventory }} | tr ',' '\n' > inventory
+            echo ${{ inputs.inventory }} | tr ',' '\n' | sed 's/.\(.*\)/\1/'| sed 's/ //g' > inventory
           fi
 
           printf "[all:vars]\nansible_user=${{ inputs.ansible-user }}\n" >> inventory
