@@ -1,0 +1,23 @@
+- hosts: localhost
+  vars:
+    helm_repositories:
+      bitnami:
+        url: https://charts.bitnami.com/bitnami
+      rancher:
+        url: https://releases.rancher.com/server-charts/stable
+
+    helm_releases:
+      metallb:
+        ref: bitnami/metallb
+        version: 4.7.0
+        namespace: metallb-system
+        ignore: true
+        wait: true
+        values: |
+      # rancher:
+      #   ref: rancher/rancher
+      #   version: 2.7.5
+      #   namespace: cattle-system
+      #   ignore: true
+      #   values: |
+      # #     ---
