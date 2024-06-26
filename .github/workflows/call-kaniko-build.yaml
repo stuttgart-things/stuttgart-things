@@ -7,7 +7,7 @@ on:
         required: true
         type: string
       environment-name:
-        default: k8s
+        default: labul-vsphere #k8s
         required: false
         type: string
       dockerfile:
