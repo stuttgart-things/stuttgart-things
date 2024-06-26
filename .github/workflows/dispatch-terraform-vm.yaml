@@ -379,7 +379,7 @@ jobs:
       - name: Render vm config
         id: config
         run: |
-          machineShop render \
+          machineshop render \
           --source local \
           --template ${{ env.template }} \
           --defaults ${{ inputs.vm-name }}.yaml \
@@ -389,7 +389,7 @@ jobs:
       - name: Render provider config
         id: provider
         run: |
-          machineShop render \
+          machineshop render \
           --source local \
           --template ${{ env.provider_template }} \
           --defaults ${{ inputs.vm-name }}.yaml \
@@ -399,7 +399,7 @@ jobs:
       - name: Render secrets template
         id: secrets
         run: |
-          machineShop render \
+          machineshop render \
           --source local \
           --template ${{ env.secrets_template }} \
           --defaults ${{ inputs.vm-name }}.yaml \
@@ -411,7 +411,7 @@ jobs:
       - name: Render README.md
         id: readme
         run: |
-          machineShop render \
+          machineshop render \
           --source local \
           --template ${{ env.readme_template }} \
           --defaults ${{ inputs.vm-name }}.yaml \
