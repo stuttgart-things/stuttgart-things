@@ -72,6 +72,6 @@ jobs:
       registry-config: images/dev-registries.yaml
       dockerfile: Dockerfile
       context: git://github.com/stuttgart-things/stuttgart-things
-      kaniko-image: eu.gcr.io/stuttgart-things/sthings-container:1.23.1-1
+      kaniko-image: eu.gcr.io/stuttgart-things/sthings-container:v1.23.1-2
       context-sub-path: images/${{ matrix.context-path }}
     secrets: inherit

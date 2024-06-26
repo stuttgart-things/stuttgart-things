@@ -21,7 +21,10 @@ ENV SSL_CERT_DIR /kaniko/ssl/certs
 
 RUN wget https://github.com/lework/skopeo-binary/releases/download/v${SKOPEO_VERSION}/skopeo-linux-amd64 \
     && mv skopeo-linux-amd64 /usr/bin/skopeo \
-    && chmod +x /usr/bin/skopeo
+    && chmod +x /usr/bin/skopeo \
+    && mkdir -p /etc/containers
+
+ADD policy.json /etc/containers/policy.json
 
 RUN cd /tmp && wget https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz \
     && tar xvfz /tmp/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz \
