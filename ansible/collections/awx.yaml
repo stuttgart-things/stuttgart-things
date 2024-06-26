@@ -1,6 +1,6 @@
 ---
 name: awx
-version: 0.0.77
+version: 0.0.78
 namespace: sthings
 playbooks:
   - name: create_template
@@ -8,9 +8,9 @@ playbooks:
       ---
       - name: Create a config file from a j2 template
         ansible.builtin.template:
-          src: "{{ j2_template_name }}"
+          src: "{{ item.value.name }}"
           dest: "{{ ansible_date_time.date }}-{{ item.value.name }}.tf"
-          loop: "{{ lookup('dict', j2_template_name, wantlist=True) }}"
+        loop: "{{ lookup('dict', j2_template_name, wantlist=True) }}"
 
       - name: concat template files
         lineinfile:
@@ -31,6 +31,17 @@ playbooks:
           rgw: false
           permission: [private]
           endpoint_url: "{{ s3_endpoint }}"
+
+      - name: Remove template files
+        ansible.builtin.file:
+          path: "{{ ansible_date_time.date }}-{{ item.value.name }}.tf"
+          state: absent
+        loop: "{{ lookup('dict', j2_template_name, wantlist=True) }}"
+
+      - name: Remove concatenated template file
+        ansible.builtin.file:
+          path: "tf-config.yaml"
+          state: absent
 
   - name: check_connection
     play: |
