@@ -13,7 +13,7 @@ jobs:
     runs-on: ghr-stuttgart-things-labda-test
     container:
       image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2-2
-    environment: k8s
+    environment: labul-vsphere #k8s
     outputs:
       contexts: ${{ steps.json.outputs.contexts }}
     continue-on-error: false
@@ -68,7 +68,8 @@ jobs:
     uses: stuttgart-things/stuttgart-things/.github/workflows/call-kaniko-build.yaml@main
     with:
       runs-on: ghr-stuttgart-things-labda-test
-      environment-name: k8s
+      environment-name: labul-vsphere
+      registry-config: images/dev-registries.yaml
       dockerfile: Dockerfile
       context: git://github.com/stuttgart-things/stuttgart-things
       kaniko-image: eu.gcr.io/stuttgart-things/sthings-container:v1.23.1

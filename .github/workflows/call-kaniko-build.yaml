@@ -7,7 +7,7 @@ on:
         required: true
         type: string
       environment-name:
-        default: labul-vsphere #k8s
+        default: k8s
         required: false
         type: string
       dockerfile:
@@ -26,7 +26,7 @@ on:
         required: true
         type: string
       registry-config:
-        required: true
+        required: false
         default: images/dev-registries.yaml
         type: string
 
