@@ -4,7 +4,7 @@
 
 | OS       | PROVISIOING | CLOUD   | LAB   | TEMPLATE-NAME   | BUILD-DATE |
 |----------|-------------|---------|-------|-----------------|------------|
-| UBUNTU24 | BASE-OS     | VSPHERE | LABUL | sthings-u24     |  |
+| UBUNTU24 | BASE-OS     | VSPHERE | LABUL | sthings-u24     | 2024-06-26 |
 | UBUNTU24 | RKE2-NODE   | VSPHERE | LABUL | sthings-u24-k8s | 2024-06-26 |
 | UBUNTU24 | BASE-OS     | VSPHERE | LABDA | sthings-u24     |  |
 | UBUNTU24 | RKE2-NODE   | VSPHERE | LABDA | sthings-u24-k8s | 2024-06-26 |
