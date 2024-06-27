@@ -134,6 +134,7 @@ ansible-playbook sthings.base_os.render_upload_vm -vv \
 -e vm_disk=32 \
 -e vm_cpu=2
 ```
+</details>
 
 ### COLLECTION HISTORY
 
