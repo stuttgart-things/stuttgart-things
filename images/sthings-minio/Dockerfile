@@ -1,13 +1,13 @@
 FROM docker.io/bitnami/minio:2024.6.26-debian-12-r0
 
-LABEL version=13.3.3
+LABEL version=14.6.13
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 
 # SWITCH TO ROOT USER
 USER root
 
 # INSTALL WGET
-RUN apt update && apt install -y wget
+#RUN apt update && apt install -y wget
 
 # INSTALL VAULT CERTS
 ARG VAULT_URL_LABUL=https://vault.labul.sva.de:8200
