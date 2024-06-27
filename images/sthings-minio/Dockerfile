@@ -7,7 +7,8 @@ LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 USER root
 
 # INSTALL WGET
-RUN apt update && apt install -y wget
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt update && apt install -q -y wget
 
 # INSTALL VAULT CERTS
 ARG VAULT_URL_LABUL=https://vault.labul.sva.de:8200
