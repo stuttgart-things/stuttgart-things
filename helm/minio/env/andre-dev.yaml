@@ -1,0 +1,5 @@
+---
+domain: andre-dev.sthings-vsphere.labul.sva.de
+rootUser: sthings
+rootPassword: ref+vault://apps/artifacts/secretKey
+storageClass: nfs-csi

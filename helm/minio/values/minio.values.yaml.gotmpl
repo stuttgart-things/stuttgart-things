@@ -1,13 +1,13 @@
 image:
-  registry: eu.gcr.io
-  repository: stuttgart-things/sthings-minio
-  tag: 13.3.3
+  registry: {{ .Values.imageRegistry }}
+  repository: {{ .Values.imageRepository }}
+  tag: {{ .Values.imageTag }}
 networkPolicy:
   enabled: true
   allowExternal: true
 auth:
-  rootUser: ${MINIO_ADMIN_USER}
-  rootPassword: ${MINIO_ADMIN_PASSWORD}
+  rootUser: {{ .Values.rootUser }}
+  rootPassword: {{ .Values.rootPassword }}
 ingress:
   enabled: true
   ingressClassName: nginx
@@ -16,9 +16,9 @@ ingress:
     nginx.ingress.kubernetes.io/proxy-body-size: 500m
   extraTls:
     - hosts:
-        - ${INGRESS_HOSTNAME_CONSOLE}.${INGRESS_DOMAIN}
-      secretName: ${INGRESS_HOSTNAME_CONSOLE}-ingress-tls
-  hostname: ${INGRESS_HOSTNAME_CONSOLE}.${INGRESS_DOMAIN}
+        - {{ .Values.hostnameConsole }}.{{ .Values.domain }}
+      secretName: {{ .Values.hostnameConsole }}-ingress-tls
+  hostname: {{ .Values.hostnameConsole }}.{{ .Values.domain }}
 apiIngress:
   enabled: true
   ingressClassName: nginx
@@ -27,14 +27,14 @@ apiIngress:
   tls: true
   extraTls:
     - hosts:
-        - ${INGRESS_HOSTNAME_API}.${INGRESS_DOMAIN}
-      secretName: ${INGRESS_HOSTNAME_API}-ingress-tls
-  hostname: ${INGRESS_HOSTNAME_API}.${INGRESS_DOMAIN}
+        - {{ .Values.hostnameApi }}.{{ .Values.domain }}
+      secretName: {{ .Values.hostnameApi }}-ingress-tls
+  hostname: {{ .Values.hostnameApi }}.{{ .Values.domain }}
 persistence:
   enabled: true
-  storageClass: ${STORAGE_CLASS:-longhorn}
+  storageClass: {{ .Values.storageClass }}
 extraEnvVars:
   - name: MINIO_SERVER_URL
-    value: https://${INGRESS_HOSTNAME_API}.${INGRESS_DOMAIN}
+    value: https://{{ .Values.hostnameApi }}.{{ .Values.domain }}
   - name: MINIO_BROWSER_REDIRECT_URL
-    value: https://${INGRESS_HOSTNAME_CONSOLE}.${INGRESS_DOMAIN}:9001
+    value: https://{{ .Values.hostnameConsole }}.{{ .Values.domain }}:9001

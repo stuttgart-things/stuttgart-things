@@ -5,26 +5,26 @@ customresources:
     kind: Certificate
     metadata:
       name: minio-ingress-console
-      namespace: ${MINIO_NAMESPACE:-minio}
+      namespace: {{ .Release.Namespace }}
     spec:
       commonName: {{ .Values.hostnameConsole }}.{{ .Values.domain }}
       dnsNames:
-      - ${{ .Values.hostnameConsole }}.{{ .Values.domain }}
+        - {{ .Values.hostnameConsole }}.{{ .Values.domain }}
       issuerRef:
-        name: ${CLUSTER_ISSUER}
+        name: {{ .Values.clusterIssuer }}
         kind: ClusterIssuer
-      secretName: ${{ .Values.hostnameConsole }}-ingress-tls
+      secretName: {{ .Values.hostnameConsole }}-ingress-tls
   ingress-certificate-api:
     apiVersion: cert-manager.io/v1
     kind: Certificate
     metadata:
       name: minio-ingress-api
-      namespace: ${MINIO_NAMESPACE:-minio}
+      namespace: {{ .Release.Namespace }}
     spec:
-      commonName: ${INGRESS_HOSTNAME_API}.${INGRESS_DOMAIN}
+      commonName: {{ .Values.hostnameApi }}.{{ .Values.domain }}
       dnsNames:
-      - ${INGRESS_HOSTNAME_API}.${INGRESS_DOMAIN}
+        - {{ .Values.hostnameApi }}.{{ .Values.domain }}
       issuerRef:
-        name: ${CLUSTER_ISSUER}
+        name: {{ .Values.clusterIssuer }}
         kind: ClusterIssuer
-      secretName: ${INGRESS_HOSTNAME_API}-ingress-tls
+      secretName: {{ .Values.hostnameApi }}-ingress-tls

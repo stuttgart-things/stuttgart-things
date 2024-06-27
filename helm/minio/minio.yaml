@@ -13,14 +13,14 @@ releases:
     chart: stuttgart-things/sthings-cluster
     version: 0.3.10
     values:
-      - "values/minio-config.values.yaml.gotmpl"
+      - "values/minio-certs.values.yaml.gotmpl"
 
-  - name: minio-operator
+  - name: minio-deployment
     disableValidationOnInstall: true
     installed: true
     namespace: minio
-    chart: minio/minio-operator
-    version: 2.15.0
+    chart: bitnami/minio
+    version: 14.6.13 #13.3.3
     needs:
       - minio/minio-configuration
     values:
@@ -30,8 +30,8 @@ repositories:
   - name: stuttgart-things
     url: eu.gcr.io/stuttgart-things
     oci: true
-  - name: minio
-    url: https://ansible.github.io/minio-operator
+  - name: bitnami
+    url: https://charts.bitnami.com/bitnami
     oci: false
 
 helmDefaults:

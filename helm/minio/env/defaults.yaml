@@ -1,0 +1,8 @@
+---
+clusterIssuer: vault-approle
+hostnameApi: artifacts
+hostnameConsole: artifacts-console
+rootUser: admin
+imageRegistry: eu.gcr.io
+imageRepository: stuttgart-things/sthings-minio
+imageTag: 14.6.13 # 13.3.3
