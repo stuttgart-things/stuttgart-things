@@ -31,7 +31,7 @@ jobs:
     continue-on-error: ${{ inputs.continue-error }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v2.3.1
         with:
           path: ''
           fetch-depth: '0'
