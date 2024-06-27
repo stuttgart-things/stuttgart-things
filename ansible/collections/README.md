@@ -239,7 +239,6 @@ ansible-galaxy collection install -f \
 https://github.com/stuttgart-things/stuttgart-things/releases/download/${VERSION}/sthings-awx-${VERSION}.tar.gz
 ```
 
-
 ### VARIABLES
 
 <details><summary>VARIABLES</summary>
@@ -343,6 +342,75 @@ ansible-playbook sthings.awx.render_upload_vm -vv -e lab=labul -e cloud=vsphere 
 ```
 
 </details>
+
+## DEPLOY_RKE
+
+### INSTALLATION
+
+```bash
+VERSION=1.29.4-6
+ansible-galaxy collection install -f \
+https://github.com/stuttgart-things/stuttgart-things/releases/download/${VERSION}/sthings-deploy_rke-${VERSION}.tar.gz
+```
+
+### PLAYBOOKS
+
+<details><summary>INSTALL SINGLE-NODE CLUSTER</summary>
+
+Deploys a rke2 multi-node cluster.
+
+```bash
+# CREATE INVENTORY
+cat <<EOF > rke2
+[initial_master_node]
+10.100.136.151
+[additional_master_nodes]
+10.100.136.152
+10.100.136.153
+EOF
+
+# PLAYBOOK CALL
+CLUSTER_NAME=rke2
+mkdir ~/.kube/${CLUSTER_NAME}
+
+ansible-playbook sthings.deploy_rke.rke2 \
+-i rke2 -vv \
+-e rke2_fetched_kubeconfig_path=~/.kube/${CLUSTER_NAME} \
+-e cluster_setup=multinode \
+-vv
+```
+
+</details>
+
+<details><summary>INSTALL SINGLE-NODE CLUSTER</summary>
+
+Deploys a rke2 single-node cluster.
+
+```bash
+# CREATE INVENTORY
+cat <<EOF > rke2
+[initial_master_node]
+10.100.136.151
+[additional_master_nodes]
+# no details needed but group needs to be defined
+EOF
+
+# PLAYBOOK CALL
+CLUSTER_NAME=rke2
+mkdir ~/.kube/
+
+ansible-playbook sthings.deploy_rke.rke2 \
+-i rke2 -vv \
+-e rke2_fetched_kubeconfig_path=~/.kube/${CLUSTER_NAME} \
+-e cluster_setup=singlenode \
+-vv
+```
+
+</details>
+
+
+</details>
+
 
 Author Information
 ------------------
