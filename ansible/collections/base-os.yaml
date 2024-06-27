@@ -368,7 +368,6 @@ playbooks:
           AWS_SECRET_ACCESS_KEY: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:secretKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
           s3_endpoint: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:console validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
           bucket_name: andre-vm-config
-          j2_template_name: "vm.tf.j2" # -e j2_template_name=
           rendered_all: "tf-config-all.tf"
           bucket_permission: [private]
 
@@ -563,8 +562,6 @@ vars:
       backend_host_url: "https://artifacts.app1.sthings-vsphere.labul.sva.de"
       s3region: "main"
       datacenter: "/LabUL"
-      AWS_ACCESS_KEY_ID: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:accessKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
-      AWS_SECRET_ACCESS_KEY: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:secretKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
 
   - name: vsphere
     file: |
