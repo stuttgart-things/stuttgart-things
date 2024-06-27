@@ -23,7 +23,6 @@ requirements: |
       scm: git
       version: 2024.04.30
 
-vars: {}
 playbooks:
   - name: rke2
     play: |
@@ -163,8 +162,9 @@ playbooks:
           wait: true
           release_values: {}
 
+vars:
   - name: metallb
-    play: |
+    file: |
       ---
       helm_repositories:
         bitnami:
