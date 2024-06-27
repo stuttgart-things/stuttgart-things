@@ -112,10 +112,11 @@ playbooks:
           cloud: "vsphere"
           tf_vars_file: "{{ tf_vars }}"
           bucket_permission: [private]
+          path: "vars"
 
         vars_files:
-          - "{{ path | default('.') }}/vars/terraform-vars.yaml"
-          - "{{ path | default('.') }}/vars/tf-vars-{{ cloud }}.yaml"
+          - "{{ path | default('.') }}/terraform-vars.yaml"
+          - "{{ path | default('.') }}/tf-vars-{{ cloud }}.yaml"
 
         environment:
           AWS_ACCESS_KEY_ID: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:accessKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
@@ -375,13 +376,14 @@ playbooks:
           bucket_name: andre-vm-config
           rendered_all: "tf-config-all.tf"
           bucket_permission: [private]
+          path: "vars"
 
           #-e lab=labul -e cloud=vsphere -vv
 
         vars_files:
-          - "{{ path | default('.') }}/vars/{{ lab }}.yaml"
-          - "{{ path | default('.') }}/vars/{{ cloud }}.yaml"
-          - "{{ path | default('.') }}/vars/vm-defaults.yaml"
+          - "{{ path | default('.') }}/{{ lab }}.yaml"
+          - "{{ path | default('.') }}/{{ cloud }}.yaml"
+          - "{{ path | default('.') }}/vm-defaults.yaml"
 
         tasks:
           - name: Create a config file from a j2 template
