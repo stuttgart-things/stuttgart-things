@@ -1,6 +1,6 @@
 ---
 name: deploy_rke
-version: 1.29.4-8
+version: 1.29.4-9
 namespace: sthings
 requirements: |
   roles:
@@ -145,24 +145,6 @@ playbooks:
           state: "{{ state | default('present') }}"
           definition: "{{ lookup('template', '/tmp/{{ item.key }}.yaml.j2') | from_yaml }}"
 
-  - name: ingress-nginx
-    play: |
-      ---
-      namespace: "{{ namespace }}"
-
-      helm_repositories:
-        ingress-nginx:
-          url: https://kubernetes.github.io/ingress-nginx
-
-      helm_releases:
-        ingress-nginx:
-          ref: ingress-nginx/ingress-nginx
-          version: 4.10.1
-          namespace: ingress-nginx
-          ignore: false
-          wait: true
-          release_values: {}
-
   - name: api-token
     play: |
       ---
@@ -193,6 +175,26 @@ playbooks:
             "ttl": 0,
             "userId": "{{ token_user_id }}"
           }
+
+vars:
+  - name: ingress-nginx
+    play: |
+      ---
+      namespace: "{{ namespace }}"
+
+      helm_repositories:
+        ingress-nginx:
+          url: https://kubernetes.github.io/ingress-nginx
+
+      helm_releases:
+        ingress-nginx:
+          ref: ingress-nginx/ingress-nginx
+          version: 4.10.1
+          namespace: ingress-nginx
+          ignore: false
+          wait: true
+          release_values: {}
+
   - name: metallb
     file: |
       ---
