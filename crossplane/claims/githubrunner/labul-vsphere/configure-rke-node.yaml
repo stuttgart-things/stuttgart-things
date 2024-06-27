@@ -7,3 +7,4 @@ metadata:
 spec:
   repository: configure-rke-node
   clusterConfig: labda-test
+  version: 0.9.1

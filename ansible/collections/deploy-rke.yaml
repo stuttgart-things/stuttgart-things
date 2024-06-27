@@ -1,6 +1,6 @@
 ---
 name: deploy_rke
-version: 1.29.4-5
+version: 1.29.4-6
 namespace: sthings
 requirements: |
   roles:
@@ -12,10 +12,10 @@ requirements: |
       version: main
     - src: https://github.com/stuttgart-things/install-requirements.git
       scm: git
-      version: main
+      version: 2024.05.11
     - src: https://github.com/stuttgart-things/download-install-binary.git
       scm: git
-      version: 2024.04.19
+      version: 2024.05.24
     - src: https://github.com/stuttgart-things/create-os-user.git
       scm: git
       version: 2024.04.25
@@ -67,30 +67,30 @@ playbooks:
       - hosts: "{{ target_host | default('localhost') }}"
         vars_files:
           - "{{ path | default('.') }}/{{ profile }}.yaml"
-      
+
         #path_to_kubeconfig: ~/.kube/rancher
-      
+
         tasks:
           - name: Create pre manifests
             ansible.builtin.include_tasks: manifests.yaml
             loop: "{{ q('ansible.builtin.dict', pre_manifests) }}"
             when: pre_manifests is defined
-      
+
           - name: Configure and (un)install helm charts
             block:
               - name: Install helm requirements
                 ansible.builtin.include_tasks: helm-config.yaml
-      
+
               - name: Deploy helm chart(s)
                 ansible.builtin.include_tasks: helm.yaml
                 loop: "{{ q('ansible.builtin.dict', helm_releases) }}"
             when: helm_releases is defined
-      
+
           - name: Create post manifests
             ansible.builtin.include_tasks: manifests.yaml
             loop: "{{ q('ansible.builtin.dict', post_manifests) }}"
             when: post_manifests is defined
-            
+
   - name: helm-config
     play: |
       ---
@@ -101,7 +101,7 @@ playbooks:
           force_update: true
         loop: "{{ q('ansible.builtin.dict', helm_repositories) }}"
         when: helm_repositories is defined and state == "present"
-      
+
       - name: Install Helm Diff
         kubernetes.core.helm_plugin:
           plugin_path: "https://github.com/databus23/helm-diff"
@@ -117,7 +117,7 @@ playbooks:
           content: "{{ item.value.release_values }}" #().0
           dest: "/tmp/{{ item.key }}-values.yaml.j2"
         when: state == "present" and item.value.values is defined
-      
+
       - name: Deploy helm charts
         kubernetes.core.helm:
           kubeconfig: "{{ path_to_kubeconfig }}"
@@ -140,7 +140,7 @@ playbooks:
           content: "{{ item.value }}"
           dest: "/tmp/{{ item.key }}.yaml.j2"
         when: state == "present"
-      
+
       - name: Deploy additional manifests
         kubernetes.core.k8s:
           kubeconfig: "{{ path_to_kubeconfig }}"
@@ -153,7 +153,7 @@ playbooks:
       helm_repositories:
         ingress-nginx:
           url: https://kubernetes.github.io/ingress-nginx
-      
+
       helm_releases:
         ingress-nginx:
           ref: ingress-nginx/ingress-nginx
@@ -169,7 +169,7 @@ playbooks:
       helm_repositories:
         bitnami:
           url: https://charts.bitnami.com/bitnami
-      
+
       helm_releases:
         metallb:
           ref: bitnami/metallb
@@ -178,7 +178,7 @@ playbooks:
           ignore: true
           wait: true
           release_values: {}
-      
+
       post_manifests:
         ip_pool: |
           apiVersion: metallb.io/v1beta1
