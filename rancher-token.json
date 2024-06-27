@@ -1,0 +1,20 @@
+{
+  "apiVersion": "management.cattle.io/v3",
+  "authProvider": "local",
+  "current": false,
+  "description": "automation token",
+  "expired": false,
+  "expiresAt": "",
+  "isDerived": true,
+  "kind": "Token",
+  "metadata": {
+    "labels": {
+      "authn.management.cattle.io/token-userId": "user-zglmv",
+      "cattle.io/creator": "kubectl"
+    },
+    "name": "sthings"
+  },
+  "token": "Atlan7island8sailor9",
+  "ttl": 0,
+  "userId": "user-zglmv"
+}

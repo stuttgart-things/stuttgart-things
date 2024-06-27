@@ -107,7 +107,6 @@ playbooks:
           state: present
         when: state == "present"
 
-
   - name: helm
     play: |
       ---
@@ -149,6 +148,8 @@ playbooks:
   - name: ingress-nginx
     play: |
       ---
+      namespace: "{{ namespace }}"
+
       helm_repositories:
         ingress-nginx:
           url: https://kubernetes.github.io/ingress-nginx
@@ -162,10 +163,43 @@ playbooks:
           wait: true
           release_values: {}
 
-vars:
+  - name: api-token
+    play: |
+      ---
+      token_name: automation
+      token_description: automation token
+      token_password: lookup('community.general.random_string', length=12)
+      token_user_id: test-user # kubectl get users -n cattle-system
+
+      pre_manifests:
+        token: |
+          {
+            "apiVersion": "management.cattle.io/v3",
+            "authProvider": "local",
+            "current": false,
+            "description": "{{ token_description | default('automation token') }}",
+            "expired": false,
+            "expiresAt": "",
+            "isDerived": true,
+            "kind": "Token",
+            "metadata": {
+              "labels": {
+                "authn.management.cattle.io/token-userId": "{{ token_user_id }}",
+                "cattle.io/creator": "kubectl"
+              },
+              "name": "{{ token_name | default('automation') }}"
+            },
+            "token": "{{ token_password }}",
+            "ttl": 0,
+            "userId": "{{ token_user_id }}"
+          }
   - name: metallb
     file: |
       ---
+      name_ip_pool: ip-pool
+      namespace: metallb-system
+      ip_range: 10.31.102.112-10.31.102.112
+
       helm_repositories:
         bitnami:
           url: https://charts.bitnami.com/bitnami
@@ -174,7 +208,7 @@ vars:
         metallb:
           ref: bitnami/metallb
           version: 6.1.4
-          namespace: metallb-system
+          namespace: "{{ namespace }}"
           ignore: true
           wait: true
           release_values: {}
@@ -184,21 +218,21 @@ vars:
           apiVersion: metallb.io/v1beta1
           kind: IPAddressPool
           metadata:
-            name: ip-pool
-            namespace: metallb-system
+            name: {{ name_ip_pool | default('ip-pool') }}
+            namespace: {{ namespace }}
             labels:
               app: metallb
           spec:
             addresses:
-              - 10.31.102.112-10.31.102.112
+              - {{ ip_range }}
         poolAdvertisement: |
           apiVersion: metallb.io/v1beta1
           kind: L2Advertisement
           metadata:
             name: pool-advertisement
-            namespace: metallb-system
+            namespace: {{ namespace }}
             labels:
               app: metallb
           spec:
             ipAddressPools:
-              - ip-pool
+              - {{ name_ip_pool | default('ip-pool') }}
