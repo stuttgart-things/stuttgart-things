@@ -176,6 +176,191 @@ playbooks:
             "userId": "{{ token_user_id }}"
           }
 
+  - name: deploy_downstream_cluster
+    play: |
+      ---
+      - hosts: all
+        become: true
+        vars:
+          rancher_api_secret_path: apps/data/rancher:apiUrl
+          rancher_api_accesskey_path: apps/data/rancher:apiAccessKey
+          rancher_api_secretkey_path: apps/data/rancher:apiSecretKey
+      
+          rancher_api_url: "{{ lookup('community.hashi_vault.hashi_vault', 'secret={{ rancher_api_secret_path }} validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+          rancher_access_key: "{{ lookup('community.hashi_vault.hashi_vault', 'secret={{ rancher_api_accesskey_path }} validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+          rancher_secret_key: "{{ lookup('community.hashi_vault.hashi_vault', 'secret={{ rancher_api_secretkey_path }} validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+      
+          vault_approle_id: "{{ lookup('env', 'VAULT_ROLE_ID') }}"
+          vault_approle_secret: "{{ lookup('env', 'VAULT_SECRET_ID') }}"
+          vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
+          role_cmd:
+            worker: "--worker"
+            master: "--etcd --controlplane"
+            all: "--etcd --controlplane --worker"
+      
+        pre_tasks:
+          - name: Include vars
+            ansible.builtin.include_vars: "{{ path_to_vars_file }}.yaml"
+            when: path_to_vars_file is defined
+      
+        tasks:
+          - name: Set node role command
+            set_fact:
+              node_role: '{{ item.split(":")[1] }}'
+            with_items:
+              - "{{ roles.split(';') }}"
+            when: inventory_hostname_short == item.split(":")[0]
+      
+          - name: Show node role
+            ansible.builtin.debug:
+              var: role_cmd[node_role]
+      
+          - name: Get cluster information
+            ansible.builtin.uri:
+              validate_certs: false
+              url: "{{ rancher_api_url }}/clusters?name={{ cluster_name }}"
+              user: "{{ rancher_access_key }}"
+              password: "{{ rancher_secret_key }}"
+              body_format: json
+              method: GET
+              force_basic_auth: yes
+              headers:
+                Content-Type: "application/json"
+            register: cluster_info
+      
+          - name: Show clusterid
+            ansible.builtin.debug:
+              var:
+                cluster_info.json.data[0].id
+      
+          - name: Set clusterid
+            ansible.builtin.set_fact:
+              cluster_id: "{{ cluster_info.json.data[0].id }}"
+      
+          - name: Get cluster registration tokens
+            ansible.builtin.uri:
+              validate_certs: false
+              url: "{{ rancher_api_url }}/clusters/{{ cluster_id }}/clusterregistrationtokens?sort=insecureCommand"
+              user: "{{ rancher_access_key }}"
+              password: "{{ rancher_secret_key }}"
+              body_format: json
+              method: GET
+              force_basic_auth: yes
+              headers:
+                  Content-Type: "application/json"
+            register: cluster_registration_tokens
+      
+          - name: Create Cluster w/ node command
+            ansible.builtin.shell: |
+              {{ cluster_registration_tokens.json.data[0].nodeCommand }} {{ role_cmd[node_role] }}
+      
+          - name: Create directory for kubeconfig
+            ansible.builtin.file:
+              path: /home/{{ username }}/.kube
+              state: directory
+              owner: "{{ username }}"
+              group: "{{ username }}"
+      
+          - name: Ensure kubectl is sourced from the .bashrc
+            ansible.builtin.blockinfile:
+              dest: "/home/{{ username }}/.bashrc"
+              block: |
+                export PATH="/var/lib/rancher/rke2/bin/:$PATH"
+                sudo cp {{ kubeconfig_path }} /home/{{ username }}/.kube/config
+                sudo chown {{ username }}:{{ username }} /home/{{ username }}/.kube/config
+              marker: '# {mark} ANSIBLE MANAGED BLOCK - kubectl'
+              insertbefore: EOF
+              create: yes
+
+  - name: keycloak_oidc_config
+    play: |
+      ---
+      - hosts: localhost
+        vars:
+          idp:
+            hostname: "dev17.labul.sva.de:8080"
+            realm:
+              name: "master"
+      
+          admin_password: "admin"
+          rancher_client_secret: "Atlan7island8sailor9"
+          rancher_api_token: token-98src:mkxfj52dhr495tw5g8hw5rblpbxr5lsbw5k2ldc2d24fpksc2jnwlk
+          rancher_access_key: token-98src
+          rancher_secret_key: mkxfj52dhr495tw5g8hw5rblpbxr5lsbw5k2ldc2d24fpksc2jnwlk
+      
+        tasks:
+          - name: Create Rancher Client
+            community.general.keycloak_client:
+              auth_keycloak_url: http://{{ idp.hostname }}
+              auth_realm: "master"
+              auth_username: "admin"
+              auth_password: "{{ admin_password }}"
+              state: present
+              realm: "{{ idp.realm.name }}"
+              client_id: "rancher"
+              name: "rancher"
+              description: "Client used by Rancher for OIDC authentication"
+              protocol: "openid-connect"
+              enabled: true
+              public_client: false
+              client_authenticator_type: client-secret
+              secret: "{{ rancher_client_secret }}"
+              web_origins:
+                - "https://rancher-things.demo.sthings-vsphere.labul.sva.de/*"
+              redirect_uris:
+                - "https://rancher-things.demo.sthings-vsphere.labul.sva.de/verify-auth"
+              protocol_mappers:
+                - name: "Groups Mapper"
+                  protocol: "openid-connect"
+                  protocolMapper: "oidc-group-membership-mapper"
+                  config:
+                    claim.name: "groups"
+                    id.token.claim: false
+                    access.token.claim: false
+                    userinfo.token.claim: true
+                - name: "Client Audience"
+                  protocol: "openid-connect"
+                  protocolMapper: "oidc-audience-mapper"
+                  config:
+                    included.client.audience: "rancher"
+                    id.token.claim: false
+                    access.token.claim: true
+                    userinfo.token.claim: false
+                - name: "Groups Path"
+                  protocol: "openid-connect"
+                  protocolMapper: "oidc-group-membership-mapper"
+                  config:
+                    claim.name: "full_group_path"
+                    full.path: true
+                    id.token.claim: false
+                    access.token.claim: false
+                    userinfo.token.claim: true
+      
+          - name: Test and Apply Rancher Keycloak OIDC Config
+            uri:
+              url: "https://rancher-things.demo.sthings-vsphere.labul.sva.de/v3/keyCloakOIDCConfigs/keycloakoidc"
+              user: "{{ rancher_access_key }}"
+              password: "{{ rancher_secret_key }}"
+              method: PUT
+              validate_certs: no
+              headers:
+                Authorization: "Bearer {{ rancher_api_token }}"
+              body:
+                type: "keyCloakOIDCConfig"
+                name: "keycloakoidc"
+                clientId: "rancher"
+                clientSecret: "{{ rancher_client_secret }}"
+                issuer: "http://{{ idp.hostname }}/realms/{{ idp.realm.name }}"
+                authEndpoint: 'http://{{ idp.hostname }}/realms/{{ idp.realm.name }}/protocol/openid-connect/auth'
+                rancherUrl: "https://rancher-things.demo.sthings-vsphere.labul.sva.de/verify-auth"
+                enabled: true
+                scope: "rancher"
+                groupSearchEnabled: true
+                allowedPrincipalIds: [ "keycloakoidc_group://rancher" ]
+                accessMode: "required"
+              body_format: json
+              status_code: 200
+
 vars:
   - name: ingress-nginx
     play: |
