@@ -119,7 +119,7 @@ ansible-playbook sthings.base_os.delete_proxmox -vv -e vmname_delete=example-nam
 # Default render of vm templates
 ansible-playbook sthings.base_os.render_upload_vm -vv \
 -e lab=labul \
--e cloud=vsphere \
+-e cloud=vsphere
 ```
 
 ```bash
