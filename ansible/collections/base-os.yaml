@@ -429,7 +429,7 @@ templates:
         vm_num_cpus            = {{ vm_cpu }}
         firmware               = "{{ vmFirmware }}"
         vsphere_vm_folder_path = "{{ rootFolderpath }}/{{ folderpath }}"
-        vsphere_datacenter     = "{{ datacenter }}"/"{{ vm_datastores }}"
+        vsphere_datacenter     = "{{ datacenter }}"
         vsphere_datastore      = "{{ vm_datastores }}"
         vsphere_resource_pool  = "{{ resourcePool }}"
         vsphere_network        = "{{ vm_network }}"
