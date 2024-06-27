@@ -145,6 +145,31 @@ ansible-playbook sthings.base_os.render_upload_vm -vv \
 ```
 </details>
 
+<details><summary>GET AND EXECUTE TERRAFORM</summary>
+
+## Get rendered VM config and execute terraform
+```bash
+# Get vm config and execute terraform
+ansible-playbook sthings.base_os.get_execute_terraform -vv \
+-e lab=labul \
+-e cloud=vsphere \
+-e project_name=martin \
+-e bucket_name=martin-vm-config \
+-e object_name=2024-06-27-test-vnrqr.tf
+```
+
+```bash
+# Destroy VM
+ansible-playbook sthings.base_os.render_upload_vm -vv \
+-e lab=labul \
+-e cloud=vsphere \
+-e project_name=martin \
+-e bucket_name=martin-vm-config \
+-e object_name=2024-06-27-test-vnrqr.tf \
+-e state=absent
+```
+</details>
+
 ### COLLECTION HISTORY
 
 ----------------
