@@ -112,6 +112,29 @@ ansible-playbook sthings.base_os.delete_proxmox -vv -e vmname_delete=example-nam
 
 </details>
 
+<details><summary>RENDER UPLOAD TEMPLATE/VM</summary>
+
+## Render and upload rendered VM config to s3 bucket
+```bash
+# Default render of vm templates
+ansible-playbook sthings.base_os.render_upload_vm -vv \
+-e lab=labul \
+-e cloud=vsphere \
+```
+
+```bash
+# Render with changed VM attributes
+ansible-playbook sthings.base_os.render_upload_vm -vv \
+-e lab=labul \
+-e cloud=vsphere \
+-e vmName=test-vm \
+-e vmCount=1 \
+-e vm_memory=4096 \
+-e vm_template=ubuntu24 \
+-e vm_disk=32 \
+-e vm_cpu=2
+```
+
 ### COLLECTION HISTORY
 
 ----------------
@@ -268,7 +291,7 @@ ansible-playbook sthings.awx.hello_awx -vv -e test_host=example.labul.sva.de
 
 </details>
 
-<details><summary>RENDER UPLOAD TEMPLATE/VM</summary>
+<details><summary>!! WORK IN PROGRESS !! RENDER UPLOAD TEMPLATE/VM</summary>
 
 Awx job template /w survey and play to render and upload templates for VMs
 

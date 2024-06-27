@@ -1,6 +1,6 @@
 ---
 name: base_os
-version: 0.5.5
+version: 0.5.6
 namespace: sthings
 requirements: |
   roles:
@@ -356,7 +356,224 @@ playbooks:
         roles:
           - role: sthings.base_os.manage_proxmox_resources
 
+  - name: render_upload_vm
+    play: |
+      ---
+      - hosts: localhost
+        vars:
+          vault_approle_id: "{{ lookup('env', 'VAULT_ROLE_ID') }}"
+          vault_approle_secret: "{{ lookup('env', 'VAULT_SECRET_ID') }}"
+          vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
+          AWS_ACCESS_KEY_ID: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:accessKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+          AWS_SECRET_ACCESS_KEY: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:secretKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+          s3_endpoint: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:console validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+          bucket_name: andre-vm-config
+          rendered_all: "tf-config-all.tf"
+          bucket_permission: [private]
+
+          #-e lab=labul -e cloud=vsphere -vv
+
+        vars_files:
+          - "{{ path | default('.') }}/vars/{{ lab }}.yaml"
+          - "{{ path | default('.') }}/vars/{{ cloud }}.yaml"
+          - "{{ path | default('.') }}/vars/vm-defaults.yaml"
+
+        tasks:
+          - name: Create a config file from a j2 template
+            ansible.builtin.template:
+              src: "{{ item.value.name }}.yaml"
+              dest: "{{ ansible_date_time.date }}-{{ item.value.name }}.tf"
+            loop: "{{ lookup('dict', j2_template_name, wantlist=True) }}"
+
+          - name: Concat template files
+            ansible.builtin.lineinfile:
+              create: true
+              path: "{{ rendered_all }}"
+              line: "{{ lookup('file', '{{ ansible_date_time.date }}-vm-{{ cloud }}.tf') }}\n\n{{ lookup('file', '{{ ansible_date_time.date }}-{{ cloud }}-backend.tf') }}"
+
+          - name: Upload config to S3 Bucket
+            amazon.aws.s3_object:
+              bucket: "{{ bucket_name }}"
+              object: "{{ ansible_date_time.date }}-{{ vmName }}.tf"
+              src: "{{ rendered_all }}"
+              mode: put
+              access_key: "{{ AWS_ACCESS_KEY_ID }}"
+              secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+              validate_certs: false
+              encrypt: false
+              rgw: false
+              permission: "{{ bucket_permission }}"
+              endpoint_url: "{{ s3_endpoint }}"
+
+          - name: Remove rendered vm config
+            ansible.builtin.file:
+              path: "{{ ansible_date_time.date }}-{{ item.value.name }}.tf"
+              state: absent
+            loop: "{{ lookup('dict', j2_template_name, wantlist=True) }}"
+
+          - name: Remove concatenated template file
+            ansible.builtin.file:
+              path: "{{ rendered_all }}"
+              state: absent
+
+templates:
+  - name: vm-vsphere
+    file: |
+      module {{ vmName }} {
+        source                 = "{{ tf_module_source }}"
+        vm_count               = {{ vmCount }}
+        vsphere_vm_name        = "{{ vmName }}"
+        vm_memory              = {{ vm_memory }}
+        vsphere_vm_template    = "{{ vm_template }}"
+        vm_disk_size           = "{{ vm_disk }}"
+        vm_num_cpus            = {{ vm_cpu }}
+        firmware               = "{{ vmFirmware }}"
+        vsphere_vm_folder_path = "{{ rootFolderpath }}/{{ folderpath }}"
+        vsphere_datacenter     = "{{ datacenter }}"/"{{ vm_datastores }}"
+        vsphere_datastore      = "{{ vm_datastores }}"
+        vsphere_resource_pool  = "{{ resourcePool }}"
+        vsphere_network        = "{{ vm_network }}"
+        bootstrap              = ["echo STUTTGART-THINGS"]
+        annotation             = "VSPHERE-VM {{ vmName }} {{ vmTemplate }} BUILD w/ TERRAFORM FOR STUTTGART-THINGS"
+        vsphere_server         = var.vsphere_server
+        vsphere_user           = var.vsphere_user
+        vsphere_password       = var.vsphere_password
+        vm_ssh_user            = var.vm_ssh_user
+        vm_ssh_password        = var.vm_ssh_password
+      }
+
+      variable "vsphere_server" {
+        default     = false
+        type        = string
+        description = "name of vsphere vm server"
+      }
+
+      variable "vm_ssh_user" {
+        default     = false
+        type        = string
+        description = "username of ssh user for vm"
+      }
+
+      variable "vm_ssh_password" {
+        default     = false
+        type        = string
+        description = "password of ssh user"
+        }
+
+      variable "vsphere_user" {
+        default     = false
+        type        = string
+        description = "password of vsphere user"
+      }
+
+      variable "vsphere_password" {
+        default     = false
+        type        = string
+        description = "password of vsphere user"
+      }
+
+      output "ip" {
+        value = [module.{{ vmName }}.ip]
+      }
+
+  - name: vsphere-backend
+    file: |
+      terraform {
+        backend "s3" {
+
+          endpoints = {
+            s3 = "{{ backend_host_url }}"
+          }
+
+          skip_requesting_account_id = true
+          skip_s3_checksum = true
+          key = "{{ vmName }}.tfstate"
+          bucket = "{{ bucket_name }}"
+          region = "main"
+          skip_credentials_validation = true
+          skip_metadata_api_check = true
+          skip_region_validation = true
+          force_path_style = true
+          workspace_key_prefix = "{{ vmName }}"
+        }
+      }
+
 vars:
+  - name: labul
+    file: |
+      ---
+      lab_values:
+        vsphere:
+          template:
+            ubuntu22: "sthings-u22"
+            ubuntu24: "sthings-u24"
+            rocky9: "sthings-r9"
+          datastore:
+            - "/LabUL/datastore/UL-ESX-SAS-01"
+            - "/LabUL/datastore/UL-ESX-SAS-02"
+            - "/LabUL/datastore/UL-V5010-01-LUN1"
+            - "/LabUL/datastore/UL-V5010-01-LUN2"
+            - "/LabUL/datastore/UL-V5010-01-LUN3"
+          network:
+            - "/LabUL/network/MGMT-10.31.101"
+            - "/LabUL/network/LAB-10.31.102"
+            - "/LabUL/network/LAB-10.31.103"
+            - "/LabUL/network/LAB-10.31.104"
+          subfolderpath: "testing"
+          bucket_name: "andre-vm-config"
+
+  - name: vm-defaults
+    file: |
+      ---
+      vm_size:
+        cpu:
+          s: 2
+          m: 4
+          l: 6
+          xl: 8
+        memory:
+          s: 4096
+          m: 6144
+          l: 8192
+          xl: 12288
+        disk:
+          s: 32
+          m: 64
+          l: 96
+          xl: 128
+
+      j2_template_name:
+        backend:
+          name: "{{ cloud }}-backend"
+        main:
+          name: "vm-{{ cloud }}"
+
+      object_name: "{{ ansible_date_time.date }}-{{ project_name }}.tf"
+
+      vmName: "test-{{ lookup('community.general.random_string', length=5, special=false) | lower }}" 
+      vmCount: "1"
+      vmSize: "s"
+      vmTemplate: "ubuntu24"
+      s3_endpoint: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:console validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+      tf_module_source: "github.com/stuttgart-things/vsphere-vm?ref=v1.7.5-2.7.0-1"
+      vmFirmware: "bios"
+      rootFolderpath: "stuttgart-things"
+      resourcePool: "/LabUL/host/Cluster-V6.5/Resources"
+      backend_host_url: "https://artifacts.app1.sthings-vsphere.labul.sva.de"
+      s3region: "main"
+      datacenter: "/LabUL"
+
+  - name: vsphere
+    file: |
+      ---
+      vm_cpu: "{{ vm_size['cpu'][vmSize] }}"
+      vm_memory: "{{ vm_size['memory'][vmSize] }}"
+      vm_disk: "{{ vm_size['disk'][vmSize] }}"
+      vm_template: "{{ lab_values[cloud]['template'][vmTemplate] }}"
+      vm_datastores: "{{ lab_values[cloud]['datastore'] | random }}"
+      vm_network: "{{ lab_values[cloud]['network'] | random }}"
+      folderpath: "{{ lab_values[cloud]['subfolderpath'] }}"
+
   - name: vsphere-terraform
     file: |
       s3_endpoint: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:console validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
