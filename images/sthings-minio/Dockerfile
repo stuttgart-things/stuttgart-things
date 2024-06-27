@@ -6,7 +6,7 @@ LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 # SWITCH TO ROOT USER
 USER root
 
-# INSTALL WGET
+# INSTALL WGET (FOR INSTALLUNG CERTS)
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt update && apt install -q -y wget
 
