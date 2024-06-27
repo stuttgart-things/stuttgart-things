@@ -1,0 +1,12 @@
+---
+- name: Create template on disk
+  ansible.builtin.copy:
+    content: "{{ item.value }}"
+    dest: "/tmp/{{ item.key }}.yaml.j2"
+  when: state == "present"
+
+- name: Deploy additional manifests
+  kubernetes.core.k8s:
+    kubeconfig: "{{ path_to_kubeconfig }}"
+    state: "{{ state | default('present') }}"
+    definition: "{{ lookup('template', '/tmp/{{ item.key }}.yaml.j2') | from_yaml }}"

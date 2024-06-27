@@ -1,0 +1,37 @@
+---
+helm_repositories:
+  bitnami:
+    url: https://charts.bitnami.com/bitnami
+
+helm_releases:
+  metallb:
+    ref: bitnami/metallb
+    version: 6.1.4
+    namespace: metallb-system
+    ignore: true
+    wait: true
+    release_values: {}
+
+post_manifests:
+  ip_pool: |
+    apiVersion: metallb.io/v1beta1
+    kind: IPAddressPool
+    metadata:
+      name: ip-pool
+      namespace: metallb-system
+      labels:
+        app: metallb
+    spec:
+      addresses:
+        - 10.31.102.112-10.31.102.112
+  poolAdvertisement: |
+    apiVersion: metallb.io/v1beta1
+    kind: L2Advertisement
+    metadata:
+      name: pool-advertisement
+      namespace: metallb-system
+      labels:
+        app: metallb
+    spec:
+      ipAddressPools:
+        - ip-pool

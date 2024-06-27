@@ -1,0 +1,20 @@
+---
+- name: Create values on disk
+  ansible.builtin.copy:
+    content: "{{ item.value.release_values }}" #().0
+    dest: "/tmp/{{ item.key }}-values.yaml.j2"
+  when: state == "present" and item.value.values is defined
+
+- name: Deploy helm charts
+  kubernetes.core.helm:
+    kubeconfig: "{{ path_to_kubeconfig }}"
+    name: "{{ item.key }}"
+    chart_ref: "{{ item.value.ref }}"
+    chart_version: "{{ item.value.version | default('latest') }}"
+    release_namespace: "{{ item.value.namespace }}"
+    create_namespace: true
+    state: "{{ state | default('present') }}"
+    values: "{{ lookup('template', '/tmp/{{ item.key }}-values.yaml.j2') | from_yaml | default(omit) }}"
+    wait: "{{ item.values.wait | default(omit) }}"
+  when: helm_releases is defined
+  ignore_errors: "{{ item.value.ignore | default(omit) }}"

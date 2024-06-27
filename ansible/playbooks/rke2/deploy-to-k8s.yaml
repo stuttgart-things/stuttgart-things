@@ -1,0 +1,27 @@
+---
+- hosts: "{{ target_host | default('localhost') }}"
+  vars_files:
+    - "{{ path | default('.') }}/{{ profile }}.yaml"
+
+  #path_to_kubeconfig: ~/.kube/orlando
+
+  tasks:
+    - name: Create pre manifests
+      ansible.builtin.include_tasks: manifests.yaml
+      loop: "{{ q('ansible.builtin.dict', pre_manifests) }}"
+      when: pre_manifests is defined
+
+    - name: Configure and (un)install helm charts
+      block:
+        - name: Install helm requirements
+          ansible.builtin.include_tasks: helm-config.yaml
+
+        - name: Deploy helm chart(s)
+          ansible.builtin.include_tasks: helm.yaml
+          loop: "{{ q('ansible.builtin.dict', helm_releases) }}"
+      when: helm_releases is defined
+
+    - name: Create post manifests
+      ansible.builtin.include_tasks: manifests.yaml
+      loop: "{{ q('ansible.builtin.dict', post_manifests) }}"
+      when: post_manifests is defined
