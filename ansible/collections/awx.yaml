@@ -8,21 +8,21 @@ playbooks:
       ---
       - name: Create a config file from a j2 template
         ansible.builtin.template:
-          src: "{{ item.value.name }}"
+          src: "{{ item.value.name }}.yaml"
           dest: "{{ ansible_date_time.date }}-{{ item.value.name }}.tf"
         loop: "{{ lookup('dict', j2_template_name, wantlist=True) }}"
 
       - name: concat template files
         lineinfile:
           create: true
-          path: tf-config.yaml
-          line: "{{ lookup('file', '{{ ansible_date_time.date }}-vm-{{ cloud }}.yaml.tf') }}\n\n{{ lookup('file', '{{ ansible_date_time.date }}-{{ cloud }}-backend.yaml.tf') }}"
+          path: "{{ rendered_config }}"
+          line: "{{ lookup('file', '{{ ansible_date_time.date }}-vm-{{ cloud }}.tf') }}\n\n{{ lookup('file', '{{ ansible_date_time.date }}-{{ cloud }}-backend.tf') }}"
 
       - name: Upload config to S3 Bucket
         amazon.aws.s3_object:
           bucket: "{{ bucket_name }}"
           object: "{{ ansible_date_time.date }}-{{ ansible_date_time.hour }}-{{ ansible_date_time.minute }}-{{ vmName }}.tf"
-          src: "{{ rendered_config }}"
+          src: "./{{ rendered_all }}"
           mode: put
           access_key: "{{ AWS_ACCESS_KEY_ID }}"
           secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
@@ -40,7 +40,7 @@ playbooks:
 
       - name: Remove concatenated template file
         ansible.builtin.file:
-          path: "tf-config.yaml"
+          path: "{{ rendered_all }}"
           state: absent
 
   - name: check_connection
@@ -345,48 +345,6 @@ playbooks:
 
         tasks:
           - ansible.builtin.import_tasks: creation_tasks.yaml
-
-  - name: render_upload_vm
-    play: |
-      ---
-      - hosts: localhost
-        vars:
-          vault_approle_id: "{{ lookup('env', 'VAULT_ROLE_ID') }}"
-          vault_approle_secret: "{{ lookup('env', 'VAULT_SECRET_ID') }}"
-          vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
-          AWS_ACCESS_KEY_ID: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:accessKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
-          AWS_SECRET_ACCESS_KEY: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:secretKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
-          s3_endpoint: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:console validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
-          bucket_name: andre-vm-config
-          j2_template_name: "vm.tf.j2" # -e j2_template_name=
-          rendered_config: "{{ ansible_date_time.date }}-{{ j2_template_name }}.tf"
-
-          #-e lab=labul -e cloud=vsphere -vv
-
-        vars_files:
-          - "{{ lab }}-{{ cloud }}.yaml"
-          - "defaults-{{ lab }}-{{ cloud }}.yaml"
-
-        tasks:
-          - name: Create a config file from a j2 template
-            ansible.builtin.template:
-              src: "{{ j2_template_name }}"
-              dest: "{{ rendered_config }}"
-
-          - name: Upload config to S3 Bucket
-            amazon.aws.s3_object:
-              bucket: "{{ bucket_name }}"
-              object: "{{ ansible_date_time.date }}-{{ ansible_date_time.hour }}-{{ ansible_date_time.minute }}-{{ vmName }}.tf"
-              src: "{{ rendered_config }}"
-              mode: put
-              access_key: "{{ AWS_ACCESS_KEY_ID }}"
-              secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
-              validate_certs: false
-              encrypt: false
-              rgw: false
-              permission: [private]
-              endpoint_url: "{{ s3_endpoint }}"
-
 
 templates:
   - name: vm-vsphere
@@ -1296,7 +1254,7 @@ vars:
       s3_endpoint: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:console validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
       AWS_ACCESS_KEY_ID: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:accessKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
       AWS_SECRET_ACCESS_KEY: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:secretKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
-      rendered_config: "tf-config.yaml"
+      rendered_all: "tf-config-all.tf"
 
   - name: labul-vsphere
     file: |
@@ -1316,13 +1274,13 @@ vars:
       vmTemplate: "ubuntu24"
       subfolderpath: "testing"
       bucket_name: "andre-vm-config"
-      object_name: tf-config.yaml
+      object_name: "{{ ansible_date_time.date }}-{{ vmName }}.tf"
 
       j2_template_name:
         backend:
-          name: "{{ cloud }}-backend.yaml"
+          name: "{{ cloud }}-backend"
         main:
-          name: "vm-{{ cloud }}.yaml"
+          name: "vm-{{ cloud }}"
 
       vm_size:
         cpu:
@@ -1357,6 +1315,22 @@ vars:
           - "/LabUL/network/LAB-10.31.102"
           - "/LabUL/network/LAB-10.31.103"
           - "/LabUL/network/LAB-10.31.104"
+
+  - name: tf-vars-vsphere
+    file: |
+      ---
+      tf_vars:
+        vsphere_server: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/vsphere:ip validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+        vsphere_user: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/vsphere:username validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+        vsphere_password: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/vsphere:password validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+        vm_ssh_user: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/vsphere:vm_ssh_user validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+        vm_ssh_password: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/vsphere:vm_ssh_password validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+
+  - name: terraform-vars
+    file: |
+      ---
+      tf_project_path: "./terraform"
+      state: "present"
 
   - name: awx-local-env
     file: |
