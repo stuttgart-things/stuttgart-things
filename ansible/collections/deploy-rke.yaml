@@ -1,0 +1,204 @@
+---
+name: deploy_rke
+version: 1.29.4-5
+namespace: sthings
+requirements: |
+  roles:
+    - src: https://github.com/stuttgart-things/deploy-configure-rke.git
+      scm: git
+      version: main
+    - src: https://github.com/stuttgart-things/configure-rke-node.git
+      scm: git
+      version: main
+    - src: https://github.com/stuttgart-things/install-requirements.git
+      scm: git
+      version: main
+    - src: https://github.com/stuttgart-things/download-install-binary.git
+      scm: git
+      version: 2024.04.19
+    - src: https://github.com/stuttgart-things/create-os-user.git
+      scm: git
+      version: 2024.04.25
+    - src: https://github.com/stuttgart-things/install-configure-docker.git
+      scm: git
+      version: 2024.04.30
+
+vars: {}
+playbooks:
+  - name: rke2
+    play: |
+      - hosts: all
+        become: true
+        vars:
+          rke_version: 2
+          rke2_k8s_version: 1.29.4
+          rke2_airgapped_installation: true
+          rke2_release_kind: rke2r1
+          disable_rke2_components:
+            - rke2-ingress-nginx
+            - rke-snapshot-controller
+          cluster_setup: multinode
+
+        roles:
+          - role: sthings.deploy_rke.deploy_configure_rke
+
+  - name: rke1
+    play: |
+      - hosts: all
+        become: true
+        vars:
+          rke_docker_version: '=5:23.0.6-1~ubuntu.22.04~jammy'
+          rke_docker_ce_version: '5:23.0.6*'
+          rke_version: 1
+          rke_user_name: rke
+          rke_installer_version: 1.4.8
+          rke_kubernetes_version: v1.26.7-rancher1-1
+          project_folder: rancher-things
+          rke_create_rke_user: true
+          network_plugin: calico
+          rke2_airgapped_installation: false
+
+        roles:
+          - role: sthings.deploy_rke.deploy_configure_rke
+
+  - name: deploy-to-k8s
+    play: |
+      ---
+      - hosts: "{{ target_host | default('localhost') }}"
+        vars_files:
+          - "{{ path | default('.') }}/{{ profile }}.yaml"
+      
+        #path_to_kubeconfig: ~/.kube/rancher
+      
+        tasks:
+          - name: Create pre manifests
+            ansible.builtin.include_tasks: manifests.yaml
+            loop: "{{ q('ansible.builtin.dict', pre_manifests) }}"
+            when: pre_manifests is defined
+      
+          - name: Configure and (un)install helm charts
+            block:
+              - name: Install helm requirements
+                ansible.builtin.include_tasks: helm-config.yaml
+      
+              - name: Deploy helm chart(s)
+                ansible.builtin.include_tasks: helm.yaml
+                loop: "{{ q('ansible.builtin.dict', helm_releases) }}"
+            when: helm_releases is defined
+      
+          - name: Create post manifests
+            ansible.builtin.include_tasks: manifests.yaml
+            loop: "{{ q('ansible.builtin.dict', post_manifests) }}"
+            when: post_manifests is defined
+            
+  - name: helm-config
+    play: |
+      ---
+      - name: Add helm chart repositories
+        kubernetes.core.helm_repository:
+          name: "{{ item.key }}"
+          repo_url: "{{ item.value.url }}"
+          force_update: true
+        loop: "{{ q('ansible.builtin.dict', helm_repositories) }}"
+        when: helm_repositories is defined and state == "present"
+      
+      - name: Install Helm Diff
+        kubernetes.core.helm_plugin:
+          plugin_path: "https://github.com/databus23/helm-diff"
+          state: present
+        when: state == "present"
+
+
+  - name: helm
+    play: |
+      ---
+      - name: Create values on disk
+        ansible.builtin.copy:
+          content: "{{ item.value.release_values }}" #().0
+          dest: "/tmp/{{ item.key }}-values.yaml.j2"
+        when: state == "present" and item.value.values is defined
+      
+      - name: Deploy helm charts
+        kubernetes.core.helm:
+          kubeconfig: "{{ path_to_kubeconfig }}"
+          name: "{{ item.key }}"
+          chart_ref: "{{ item.value.ref }}"
+          chart_version: "{{ item.value.version | default('latest') }}"
+          release_namespace: "{{ item.value.namespace }}"
+          create_namespace: true
+          state: "{{ state | default('present') }}"
+          values: "{{ lookup('template', '/tmp/{{ item.key }}-values.yaml.j2') | from_yaml | default(omit) }}"
+          wait: "{{ item.values.wait | default(omit) }}"
+        when: helm_releases is defined
+        ignore_errors: "{{ item.value.ignore | default(omit) }}"
+
+  - name: manifests
+    play: |
+      ---
+      - name: Create template on disk
+        ansible.builtin.copy:
+          content: "{{ item.value }}"
+          dest: "/tmp/{{ item.key }}.yaml.j2"
+        when: state == "present"
+      
+      - name: Deploy additional manifests
+        kubernetes.core.k8s:
+          kubeconfig: "{{ path_to_kubeconfig }}"
+          state: "{{ state | default('present') }}"
+          definition: "{{ lookup('template', '/tmp/{{ item.key }}.yaml.j2') | from_yaml }}"
+
+  - name: ingress-nginx
+    play: |
+      ---
+      helm_repositories:
+        ingress-nginx:
+          url: https://kubernetes.github.io/ingress-nginx
+      
+      helm_releases:
+        ingress-nginx:
+          ref: ingress-nginx/ingress-nginx
+          version: 4.10.1
+          namespace: ingress-nginx
+          ignore: false
+          wait: true
+          release_values: {}
+
+  - name: metallb
+    play: |
+      ---
+      helm_repositories:
+        bitnami:
+          url: https://charts.bitnami.com/bitnami
+      
+      helm_releases:
+        metallb:
+          ref: bitnami/metallb
+          version: 6.1.4
+          namespace: metallb-system
+          ignore: true
+          wait: true
+          release_values: {}
+      
+      post_manifests:
+        ip_pool: |
+          apiVersion: metallb.io/v1beta1
+          kind: IPAddressPool
+          metadata:
+            name: ip-pool
+            namespace: metallb-system
+            labels:
+              app: metallb
+          spec:
+            addresses:
+              - 10.31.102.112-10.31.102.112
+        poolAdvertisement: |
+          apiVersion: metallb.io/v1beta1
+          kind: L2Advertisement
+          metadata:
+            name: pool-advertisement
+            namespace: metallb-system
+            labels:
+              app: metallb
+          spec:
+            ipAddressPools:
+              - ip-pool
