@@ -5,7 +5,7 @@
 ### INSTALLATION
 
 ```bash
-VERSION=0.5.4
+VERSION=0.5.6
 ansible-galaxy collection install -f \
 https://github.com/stuttgart-things/stuttgart-things/releases/download/${VERSION}/sthings-base_os-${VERSION}.tar.gz
 ```
@@ -120,6 +120,15 @@ ansible-playbook sthings.base_os.delete_proxmox -vv -e vmname_delete=example-nam
 ansible-playbook sthings.base_os.render_upload_vm -vv \
 -e lab=labul \
 -e cloud=vsphere
+```
+
+```bash
+# Render w/ given name and size
+ansible-playbook sthings.base_os.render_upload_vm -vv \
+-e lab=labul \
+-e cloud=vsphere \
+-e vmSize=l \
+-e vmName=martin
 ```
 
 ```bash
