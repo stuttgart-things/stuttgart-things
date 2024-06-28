@@ -1,3 +1,20 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: filebeat-config
+  labels:
+    component: filebeat
+data:
+  conf.yaml: |
+    filebeat.inputs:
+    - type: log
+      paths:
+        - '/var/log/*.log'
+    output:
+      logstash:
+        hosts: [ "logstash:5044" ]
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
