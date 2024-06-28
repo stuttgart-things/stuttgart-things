@@ -1,6 +1,6 @@
 ---
 name: awx
-version: 0.0.81
+version: 0.0.82
 namespace: sthings
 playbooks:
   - name: check_connection
@@ -60,11 +60,11 @@ playbooks:
       - name: Create custom credential type
         awx.awx.tower_credential_type:
           name: "{{ item.value.name }}"
-          kind: cloud
+          kind: "{{ item.value.kind }}"
           state: "{{ item.value.state }}"
           inputs: "{{ item.value.inputs }}"
           injectors: "{{ item.value.injectors }}"
-          validate_certs: no
+          validate_certs: false
         loop: "{{ lookup('dict', custom_credential_types, wantlist=True) }}"
         when: custom_credential_types is defined
 
@@ -76,7 +76,7 @@ playbooks:
           description: "{{ item.value.description }}"
           state: "{{ item.value.state }}"
           inputs: "{{ item.value.inputs }}"
-          validate_certs: no
+          validate_certs: false
         loop: "{{ lookup('dict', custom_credentials, wantlist=True) }}"
         when: custom_credentials is defined
 
@@ -1204,45 +1204,15 @@ vars:
           username: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps/data/harbor:user validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
           password: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps/data/harbor:password validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
 
-  - name: custom-credentials
-    file: |
-      ---
-      custom_credentials:
-        vault_custom:
-          name: labul-vault
-          description: labul vault credentials
-          credential_type: vault-custom
-          organization: stuttgart-things
-          state: present
-          inputs:
-            vault_url: "{{ vault_url }}"
-            vault_token: "{{ lookup('env', 'VAULT_TOKEN') }}"
-            vault_approle_id: "{{ vault_approle_id }}"
-            vault_approle_secret: "{{ vault_approle_secret }}"
-
-  - name: custom-credential-type
-    file: |
-      ---
-      custom_credential_types:
-        vault:
-          name: vault-custom
-          state: present
-          inputs: "{{ lookup('file', 'vars/vault-input.yaml') }}"
-          injectors: "{{ lookup('file', 'vars/vault-injector.yaml') }}"
-
   - name: vault-injector
     file: |
       {
           "env": {
-            "VAULT_URL": "{{ vault_url }}",
-            "VAULT_USERNAME": "{{ vault_username }}",
-            "VAULT_PASSWORD": "{{ vault_password }}",
-            "VAULT_TOKEN": "{{ vault_token }}",
-            "VAULT_ROLE_NAME": "{{ vault_role_name }}"
+            "VAULT_ADDR": "{{ vault_url }}",
+            "VAULT_ROLE_ID": "{{ vault_approle_id }}",
+            "VAULT_SECRET_ID": "{{ vault_approle_secret }}",
           },
-          "extra_vars": {
-            "vault_url": "{{ vault_url }}"
-          }
+          "extra_vars": {}
       }
 
   - name: vault-input
@@ -1255,33 +1225,46 @@ vars:
                 "label": "vault_url"
             },
             {
-                "id": "vault_username",
+                "id": "vault_approle_id",
                 "type": "string",
-                "label": "vault_username"
+                "label": "vault_approle_id"
             },
             {
-                "id": "vault_password",
+                "id": "vault_approle_secret",
                 "type": "string",
-                "label": "vault_password"
-            },
-            {
-                "id": "vault_token",
-                "type": "string",
-                "label": "vault_token",
-                "secret": true
-            },
-            {
-              "id": "vault_role_name",
-              "type": "string",
-              "label": "vault_role_name",
-              "secret": true
+                "label": "vault_approle_secret"
             }
           ],
           "required": [
             "vault_url",
-            "vault_token"
           ]
       }
+
+  - name: custom-credential-type
+    file: |
+      ---
+      custom_credential_types:
+        vault:
+          name: vault-custom
+          state: present
+          kind: Cloud
+          inputs: "{{ lookup('file', 'vars/vault-input.yaml') }}"
+          injectors: "{{ lookup('file', 'vars/vault-injector.yaml') }}"
+
+  - name: custom-credentials
+    file: |
+      ---
+      custom_credentials:
+        vault_custom:
+          name: labul-vault
+          description: labul vault credentials
+          credential_type: vault-custom
+          organization: stuttgart-things
+          state: present
+          inputs:
+            vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
+            vault_approle_id: "{{ lookup('env', 'VAULT_ROLE_ID') }}"
+            vault_approle_secret: "{{ lookup('env', 'VAULT_SECRET_ID') }}"
 
   - name: ee-sthings
     file: |
