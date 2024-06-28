@@ -137,6 +137,7 @@ playbooks:
 
         roles:
           - role: sthings.base_os.download_install_binary
+            become: true
 
         tasks:
           - name: Create terraform dir
