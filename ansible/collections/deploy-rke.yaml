@@ -1,6 +1,6 @@
 ---
 name: deploy_rke
-version: 1.29.4-15
+version: 1.28.10
 namespace: sthings
 requirements: |
   roles:
@@ -238,17 +238,72 @@ playbooks:
     play: |
       ---
       - hosts: "{{ target_host | default('localhost') }}"
+        vars:
+          defaults_file: downstream-defaults
         vars_files:
-          - "{{ path | default('.') }}/{{ profile }}.yaml"
-          - "{{ extra_file | default(omit) }}"
+          - "{{ path | default('.') }}/{{ defaults_file }}.yaml"
 
         tasks:
           - name: Create cluster on rancher
             kubernetes.core.k8s:
               kubeconfig: "{{ path_to_kubeconfig }}"
               state: "{{ state | default('present') }}"
-              definition: "{{ lookup('template', '{{ cluster_template }}.yaml.j2') | from_yaml }}"
+              definition: "{{ lookup('template', '{{ cluster_template }}.yaml') | from_yaml }}"
             when: state == "present"
+
+      - hosts: "{{ target_host | default('all') }}"
+        become: true
+        vars:
+          defaults_file: downstream-defaults
+          rancher_api_url: "https://rancher-things.demo-rancher.sthings-vsphere.labul.sva.de/v3"
+          rancher_access_key: "admin"
+          rancher_secret_key: ""
+
+        vars_files:
+          - "{{ path | default('.') }}/{{ defaults_file }}.yaml"
+
+        tasks:
+          - debug:
+              var: rancher_cluster_cmd
+
+          - name: Get cluster information
+            ansible.builtin.uri:
+              validate_certs: false
+              url: "{{ rancher_api_url }}/clusters?name={{ cluster_name }}"
+              user: "{{ rancher_access_key }}"
+              password: "{{ rancher_secret_key }}"
+              body_format: json
+              method: GET
+              force_basic_auth: yes
+              headers:
+                Content-Type: "application/json"
+            register: cluster_info
+
+          - name: Show clusterid
+            ansible.builtin.debug:
+              var:
+                cluster_info.json.data[0].id
+
+          - name: Set clusterid
+            ansible.builtin.set_fact:
+              cluster_id: "{{ cluster_info.json.data[0].id }}"
+
+          - name: Get cluster registration tokens
+            ansible.builtin.uri:
+              validate_certs: false
+              url: "{{ rancher_api_url }}/clusters/{{ cluster_id }}/clusterregistrationtokens?sort=insecureCommand"
+              user: "{{ rancher_access_key }}"
+              password: "{{ rancher_secret_key }}"
+              body_format: json
+              method: GET
+              force_basic_auth: yes
+              headers:
+                  Content-Type: "application/json"
+            register: cluster_registration_tokens
+
+          - name: Create Cluster w/ node command
+            ansible.builtin.shell: |
+              {{ cluster_registration_tokens.json.data[0].nodeCommand }} {{ rancher_cluster_cmd }}
 
   - name: keycloak_oidc_config
     play: |
