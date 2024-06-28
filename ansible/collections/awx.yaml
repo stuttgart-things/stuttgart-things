@@ -1217,8 +1217,6 @@ vars:
           inputs:
             vault_url: "{{ vault_url }}"
             vault_token: "{{ lookup('env', 'VAULT_TOKEN') }}"
-            vault_approle_id: "{{ vault_approle_id }}"
-            vault_approle_secret: "{{ vault_approle_secret }}"
 
   - name: custom-credential-type
     file: |
