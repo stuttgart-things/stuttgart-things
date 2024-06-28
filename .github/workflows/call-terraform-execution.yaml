@@ -163,7 +163,7 @@ jobs:
           echo $extraction
 
           # SET ENV VARS
-          echo "TF_OUTPUT=$(echo ${extraction})" >> "$GITHUB_OUTPUT"
+          echo "TF_OUTPUT=$(echo ${extraction} | sed 's/ //g')" >> "$GITHUB_OUTPUT"
 
   Delete-Terraform-Config:
     if: ${{ (inputs.operation == 'destroy') && (inputs.delete-folder == true || inputs.delete-folder  == 'true') }}
