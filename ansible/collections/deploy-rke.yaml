@@ -1,6 +1,6 @@
 ---
 name: deploy_rke
-version: 1.29.4-12
+version: 1.29.4-14
 namespace: sthings
 requirements: |
   roles:
