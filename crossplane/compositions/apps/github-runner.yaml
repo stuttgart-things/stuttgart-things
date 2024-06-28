@@ -55,7 +55,7 @@ spec:
                 spec:
                   containers:
                   - name: runner
-                    image: ghcr.io/actions/actions-runner:2.316.1
+                    image: ghcr.io/actions/actions-runner:2.317.0
                     command: ["/home/runner/run.sh"]
                     env:
                       - name: ACTIONS_RUNNER_REQUIRE_JOB_CONTAINER
@@ -66,7 +66,7 @@ spec:
                             fieldPath: metadata.name
                   initContainers:
                     - name: kube-init
-                      image: ghcr.io/actions/actions-runner:2.316.1
+                      image: ghcr.io/actions/actions-runner:2.317.0
                       command: ["/bin/sh", "-c"]
                       args:
                         - |
