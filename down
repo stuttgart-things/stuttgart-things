@@ -1,0 +1,4 @@
+10.31.104.124 rancher_cluster_cmd="--controlplane --etcd --worker"
+
+[all:vars] 
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
