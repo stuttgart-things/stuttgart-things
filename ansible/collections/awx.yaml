@@ -1247,7 +1247,7 @@ vars:
         vault:
           name: vault-custom
           state: present
-          kind: Cloud
+          kind: cloud
           inputs: "{{ lookup('file', 'vars/vault-input.yaml') }}"
           injectors: "{{ lookup('file', 'vars/vault-injector.yaml') }}"
 
