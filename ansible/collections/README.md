@@ -371,12 +371,14 @@ EOF
 
 # PLAYBOOK CALL
 CLUSTER_NAME=rke2
-mkdir ~/.kube/${CLUSTER_NAME}
+mkdir -p ~/.kube/
 
 ansible-playbook sthings.deploy_rke.rke2 \
--i rke2 -vv \
+-i rke2 \
 -e rke2_fetched_kubeconfig_path=~/.kube/${CLUSTER_NAME} \
 -e cluster_setup=multinode \
+-e 1.28.10 \
+-e rke2_release_kind=rke2r1
 -vv
 ```
 
@@ -397,7 +399,6 @@ EOF
 
 # PLAYBOOK CALL
 CLUSTER_NAME=rke2
-mkdir ~/.kube/
 
 ansible-playbook sthings.deploy_rke.rke2 \
 -i rke2 -vv \
