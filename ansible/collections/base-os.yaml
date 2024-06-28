@@ -104,7 +104,6 @@ playbooks:
     play: |
       ---
       - hosts: localhost
-        become: true
         vars:
           vault_approle_id: "{{ lookup('env', 'VAULT_ROLE_ID') }}"
           vault_approle_secret: "{{ lookup('env', 'VAULT_SECRET_ID') }}"
