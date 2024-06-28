@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: busybox
+  labels:
+    component: busybox
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      component: busybox
+  template:
+    metadata:
+      labels:
+        component: busybox
+    spec:
+      containers:
+        - name: busybox
+          image: busybox
+          args:
+            - sh
+            - -c
+            - >
+              while true;
+              do
+                echo $(date) - filebeat log >> /var/log/access.log;
+                sleep 10;
+              done
+          volumeMounts:
+            - name: log
+              mountPath: /var/log
+        - name: filebeat
+          image: elastic/filebeat:7.16.3
+          args:
+            - -c
+            - /etc/filebeat/conf.yaml
+            - -e
+          volumeMounts:
+            - name: filebeat-config
+              mountPath: /etc/filebeat
+            - name: log
+              mountPath: /var/log
+      volumes:
+        - name: log
+          emptyDir: {}
+        - name: filebeat-config
+          configMap:
+            name: filebeat-config

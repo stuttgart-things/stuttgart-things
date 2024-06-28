@@ -1,6 +1,6 @@
 ---
 name: deploy_rke
-version: 1.29.4-9
+version: 1.29.4-10
 namespace: sthings
 requirements: |
   roles:
@@ -185,11 +185,11 @@ playbooks:
           rancher_api_secret_path: apps/data/rancher:apiUrl
           rancher_api_accesskey_path: apps/data/rancher:apiAccessKey
           rancher_api_secretkey_path: apps/data/rancher:apiSecretKey
-      
+
           rancher_api_url: "{{ lookup('community.hashi_vault.hashi_vault', 'secret={{ rancher_api_secret_path }} validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
           rancher_access_key: "{{ lookup('community.hashi_vault.hashi_vault', 'secret={{ rancher_api_accesskey_path }} validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
           rancher_secret_key: "{{ lookup('community.hashi_vault.hashi_vault', 'secret={{ rancher_api_secretkey_path }} validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
-      
+
           vault_approle_id: "{{ lookup('env', 'VAULT_ROLE_ID') }}"
           vault_approle_secret: "{{ lookup('env', 'VAULT_SECRET_ID') }}"
           vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
@@ -197,12 +197,12 @@ playbooks:
             worker: "--worker"
             master: "--etcd --controlplane"
             all: "--etcd --controlplane --worker"
-      
+
         pre_tasks:
           - name: Include vars
             ansible.builtin.include_vars: "{{ path_to_vars_file }}.yaml"
             when: path_to_vars_file is defined
-      
+
         tasks:
           - name: Set node role command
             set_fact:
@@ -210,11 +210,11 @@ playbooks:
             with_items:
               - "{{ roles.split(';') }}"
             when: inventory_hostname_short == item.split(":")[0]
-      
+
           - name: Show node role
             ansible.builtin.debug:
               var: role_cmd[node_role]
-      
+
           - name: Get cluster information
             ansible.builtin.uri:
               validate_certs: false
@@ -227,16 +227,16 @@ playbooks:
               headers:
                 Content-Type: "application/json"
             register: cluster_info
-      
+
           - name: Show clusterid
             ansible.builtin.debug:
               var:
                 cluster_info.json.data[0].id
-      
+
           - name: Set clusterid
             ansible.builtin.set_fact:
               cluster_id: "{{ cluster_info.json.data[0].id }}"
-      
+
           - name: Get cluster registration tokens
             ansible.builtin.uri:
               validate_certs: false
@@ -249,18 +249,18 @@ playbooks:
               headers:
                   Content-Type: "application/json"
             register: cluster_registration_tokens
-      
+
           - name: Create Cluster w/ node command
             ansible.builtin.shell: |
               {{ cluster_registration_tokens.json.data[0].nodeCommand }} {{ role_cmd[node_role] }}
-      
+
           - name: Create directory for kubeconfig
             ansible.builtin.file:
               path: /home/{{ username }}/.kube
               state: directory
               owner: "{{ username }}"
               group: "{{ username }}"
-      
+
           - name: Ensure kubectl is sourced from the .bashrc
             ansible.builtin.blockinfile:
               dest: "/home/{{ username }}/.bashrc"
@@ -281,13 +281,13 @@ playbooks:
             hostname: "dev17.labul.sva.de:8080"
             realm:
               name: "master"
-      
+
           admin_password: "admin"
           rancher_client_secret: "Atlan7island8sailor9"
           rancher_api_token: token-98src:mkxfj52dhr495tw5g8hw5rblpbxr5lsbw5k2ldc2d24fpksc2jnwlk
           rancher_access_key: token-98src
           rancher_secret_key: mkxfj52dhr495tw5g8hw5rblpbxr5lsbw5k2ldc2d24fpksc2jnwlk
-      
+
         tasks:
           - name: Create Rancher Client
             community.general.keycloak_client:
@@ -335,7 +335,7 @@ playbooks:
                     id.token.claim: false
                     access.token.claim: false
                     userinfo.token.claim: true
-      
+
           - name: Test and Apply Rancher Keycloak OIDC Config
             uri:
               url: "https://rancher-things.demo.sthings-vsphere.labul.sva.de/v3/keyCloakOIDCConfigs/keycloakoidc"
