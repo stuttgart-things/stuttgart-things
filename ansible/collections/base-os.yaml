@@ -114,6 +114,18 @@ playbooks:
           bucket_permission: [private]
           path: "vars"
 
+          bin:
+            terraform:
+              bin_name: "terraform"
+              bin_version: "1.9.0"
+              check_bin_version_before_installing: true
+              source_url: "https://releases.hashicorp.com/terraform/1.9.0/terraform_1.9.0_linux_amd64.zip"
+              bin_to_copy: "terraform"
+              to_remove: "terraform"
+              bin_dir: "/usr/local/bin"
+              version_cmd: " --version"
+              target_version: v1.9.0
+
         vars_files:
           - "{{ path | default('.') }}/terraform-vars.yaml"
           - "{{ path | default('.') }}/tf-vars-{{ cloud }}.yaml"
@@ -121,6 +133,9 @@ playbooks:
         environment:
           AWS_ACCESS_KEY_ID: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:accessKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
           AWS_SECRET_ACCESS_KEY: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:secretKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+
+        roles:
+          - role: sthings.base_os.download_install_binary
 
         tasks:
           - name: Create terraform dir
