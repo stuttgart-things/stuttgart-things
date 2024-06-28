@@ -1,6 +1,6 @@
 ---
 name: awx
-version: 0.0.80
+version: 0.0.81
 namespace: sthings
 playbooks:
   - name: check_connection
@@ -56,6 +56,31 @@ playbooks:
           validate_certs: false
         loop: "{{ lookup('dict', scmCredentials, wantlist=True) }}"
         when: scmCredentials is defined
+
+      - name: Create custom credential type
+        awx.awx.tower_credential_type:
+          name: "{{ custom_credential_type.value.name }}"
+          kind: cloud
+          state: "{{ custom_credential_type.value.state }}"
+          inputs: "{{ custom_credential_type.value.inputs }}"
+          injectors: "{{ custom_credential_type.value.injectors }}"
+          validate_certs: no
+        loop: "{{ lookup('dict', custom_credential_types, wantlist=True) }}"
+        loop_control:
+          loop_var: custom_credential_type
+
+      - name: Create custom credential from custom credential type
+        awx.awx.tower_credential:
+          name: "{{ custom_credential.value.name }}"
+          organization: "{{ custom_credential.value.organization }}"
+          credential_type: "{{ custom_credential.value.credential_type }}"
+          description: "{{ custom_credential.value.description }}"
+          state: "{{ custom_credential.value.state }}"
+          inputs: "{{ custom_credential.value.inputs }}"
+          validate_certs: no
+        loop: "{{ lookup('dict', custom_credentials, wantlist=True) }}"
+        loop_control:
+          loop_var: custom_credential
 
       - name: Add inventory
         awx.awx.inventory:
@@ -173,6 +198,8 @@ playbooks:
           - "{{ path | default('.') }}/scm-creds-sthings.yaml"
           - "{{ path | default('.') }}/projects-sthings.yaml"
           - "{{ path | default('.') }}/machine-creds-sthings.yaml"
+          - "{{ path | default('.') }}/cusotm-credentials.yaml"
+          - "{{ path | default('.') }}/custom-credential-type.yaml"
           - "{{ path | default('.') }}/dynamic-inventory-vsphere.yaml"
           - "{{ path | default('.') }}/inventory-source.yaml"
           - "{{ path | default('.') }}/ee-sthings.yaml"
@@ -195,6 +222,8 @@ playbooks:
           - "{{ path | default('.') }}/scm-creds-sthings.yaml"
           - "{{ path | default('.') }}/projects-sthings.yaml"
           - "{{ path | default('.') }}/machine-creds-sthings.yaml"
+          - "{{ path | default('.') }}/cusotm-credentials.yaml"
+          - "{{ path | default('.') }}/custom-credential-type.yaml"
           - "{{ path | default('.') }}/dynamic-inventory-vsphere.yaml"
           - "{{ path | default('.') }}/inventory-source.yaml"
           - "{{ path | default('.') }}/ee-sthings.yaml"
@@ -215,6 +244,8 @@ playbooks:
           - "{{ path | default('.') }}/scm-creds-sthings.yaml"
           - "{{ path | default('.') }}/projects-sthings.yaml"
           - "{{ path | default('.') }}/machine-creds-sthings.yaml"
+          - "{{ path | default('.') }}/cusotm-credentials.yaml"
+          - "{{ path | default('.') }}/custom-credential-type.yaml"
           - "{{ path | default('.') }}/dynamic-inventory-vsphere.yaml"
           - "{{ path | default('.') }}/inventory-source.yaml"
           - "{{ path | default('.') }}/ee-sthings.yaml"
@@ -235,6 +266,8 @@ playbooks:
           - "{{ path | default('.') }}/scm-creds-sthings.yaml"
           - "{{ path | default('.') }}/projects-sthings.yaml"
           - "{{ path | default('.') }}/machine-creds-sthings.yaml"
+          - "{{ path | default('.') }}/cusotm-credentials.yaml"
+          - "{{ path | default('.') }}/custom-credential-type.yaml"
           - "{{ path | default('.') }}/dynamic-inventory-vsphere.yaml"
           - "{{ path | default('.') }}/inventory-source.yaml"
           - "{{ path | default('.') }}/ee-sthings.yaml"
@@ -255,6 +288,8 @@ playbooks:
           - "{{ path | default('.') }}/scm-creds-sthings.yaml"
           - "{{ path | default('.') }}/projects-sthings.yaml"
           - "{{ path | default('.') }}/machine-creds-sthings.yaml"
+          - "{{ path | default('.') }}/cusotm-credentials.yaml"
+          - "{{ path | default('.') }}/custom-credential-type.yaml"
           - "{{ path | default('.') }}/dynamic-inventory-vsphere.yaml"
           - "{{ path | default('.') }}/inventory-source.yaml"
           - "{{ path | default('.') }}/ee-sthings.yaml"
@@ -276,6 +311,8 @@ playbooks:
           - "{{ path | default('.') }}/scm-creds-sthings.yaml"
           - "{{ path | default('.') }}/projects-sthings.yaml"
           - "{{ path | default('.') }}/machine-creds-sthings.yaml"
+          - "{{ path | default('.') }}/cusotm-credentials.yaml"
+          - "{{ path | default('.') }}/custom-credential-type.yaml"
           - "{{ path | default('.') }}/dynamic-inventory-vsphere.yaml"
           - "{{ path | default('.') }}/inventory-source.yaml"
           - "{{ path | default('.') }}/ee-sthings.yaml"
@@ -296,6 +333,8 @@ playbooks:
           - "{{ path | default('.') }}/scm-creds-sthings.yaml"
           - "{{ path | default('.') }}/projects-sthings.yaml"
           - "{{ path | default('.') }}/machine-creds-sthings.yaml"
+          - "{{ path | default('.') }}/cusotm-credentials.yaml"
+          - "{{ path | default('.') }}/custom-credential-type.yaml"
           - "{{ path | default('.') }}/inventory-source.yaml"
           - "{{ path | default('.') }}/hosts-test.yaml"
           - "{{ path | default('.') }}/ee-sthings.yaml"
@@ -1164,6 +1203,83 @@ vars:
           state: present
           username: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps/data/harbor:user validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
           password: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps/data/harbor:password validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+
+  - name: cusotm-credentials.yaml
+    file: |
+      ---
+      custom_credentials:
+        vault_custom:
+          name: labul-vault
+          description: labul vault credentials
+          credential_type: vault-custom
+          organization: stuttgart-things
+          state: present
+          inputs:
+            vault_url: "https://vault.automation.sthings-vsphere.labul.sva.de"
+            vault_token: ""
+
+  - name: cusotm-credential-type.yaml
+    file: |
+      ---
+      custom_credential_types:
+        vault:
+          name: vault-custom
+          state: present
+          inputs: "{{ lookup('file', 'vars/vault-input.yaml') }}"
+          injectors: "{{ lookup('file', 'vars/vault-injector.yaml') }}"
+
+  - name: vault-injector
+    file: |
+      {
+          "env": {
+            "VAULT_URL": "{{ vault_url }}",
+            "VAULT_USERNAME": "{{ vault_username }}",
+            "VAULT_PASSWORD": "{{ vault_password }}",
+            "VAULT_TOKEN": "{{ vault_token }}",
+            "VAULT_ROLE_NAME": "{{ vault_role_name }}"
+          },
+          "extra_vars": {
+            "vault_url": "{{ vault_url }}"
+          }
+      }
+
+  - name: vault-input
+    file: |
+      {
+          "fields": [
+            {
+                "id": "vault_url",
+                "type": "string",
+                "label": "vault_url"
+            },
+            {
+                "id": "vault_username",
+                "type": "string",
+                "label": "vault_username"
+            },
+            {
+                "id": "vault_password",
+                "type": "string",
+                "label": "vault_password"
+            },
+            {
+                "id": "vault_token",
+                "type": "string",
+                "label": "vault_token",
+                "secret": true
+            },
+            {
+              "id": "vault_role_name",
+              "type": "string",
+              "label": "vault_role_name",
+              "secret": true
+            }
+          ],
+          "required": [
+            "vault_url",
+            "vault_token"
+          ]
+      }
 
   - name: ee-sthings
     file: |
