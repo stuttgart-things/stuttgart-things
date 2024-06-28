@@ -59,28 +59,26 @@ playbooks:
 
       - name: Create custom credential type
         awx.awx.tower_credential_type:
-          name: "{{ custom_credential_type.value.name }}"
+          name: "{{ item.value.name }}"
           kind: cloud
-          state: "{{ custom_credential_type.value.state }}"
-          inputs: "{{ custom_credential_type.value.inputs }}"
-          injectors: "{{ custom_credential_type.value.injectors }}"
+          state: "{{ item.value.state }}"
+          inputs: "{{ item.value.inputs }}"
+          injectors: "{{ item.value.injectors }}"
           validate_certs: no
         loop: "{{ lookup('dict', custom_credential_types, wantlist=True) }}"
-        loop_control:
-          loop_var: custom_credential_type
+        when: custom_credential_types is defined
 
       - name: Create custom credential from custom credential type
         awx.awx.tower_credential:
-          name: "{{ custom_credential.value.name }}"
-          organization: "{{ custom_credential.value.organization }}"
-          credential_type: "{{ custom_credential.value.credential_type }}"
-          description: "{{ custom_credential.value.description }}"
-          state: "{{ custom_credential.value.state }}"
-          inputs: "{{ custom_credential.value.inputs }}"
+          name: "{{ item.value.name }}"
+          organization: "{{ item.value.organization }}"
+          credential_type: "{{ item.value.credential_type }}"
+          description: "{{ item.value.description }}"
+          state: "{{ item.value.state }}"
+          inputs: "{{ item.value.inputs }}"
           validate_certs: no
         loop: "{{ lookup('dict', custom_credentials, wantlist=True) }}"
-        loop_control:
-          loop_var: custom_credential
+        when: custom_credentials is defined
 
       - name: Add inventory
         awx.awx.inventory:
@@ -1206,7 +1204,7 @@ vars:
           username: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps/data/harbor:user validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
           password: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps/data/harbor:password validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
 
-  - name: cusotm-credentials.yaml
+  - name: custom-credentials
     file: |
       ---
       custom_credentials:
@@ -1220,7 +1218,7 @@ vars:
             vault_url: "https://vault.automation.sthings-vsphere.labul.sva.de"
             vault_token: ""
 
-  - name: cusotm-credential-type.yaml
+  - name: custom-credential-type
     file: |
       ---
       custom_credential_types:
