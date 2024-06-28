@@ -517,7 +517,7 @@ vars:
               "default": "https://artifacts.app1.sthings-vsphere.labul.sva.de"
             },
             {
-              "question_name": "What is the platform subfolderpath?",
+              "question_name": "Do you want to apply or destroy VM?",
               "question_description": "Enter state of terrform VM",
               "required": true,
               "type": "multiplechoice",
