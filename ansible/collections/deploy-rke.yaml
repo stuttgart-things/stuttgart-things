@@ -30,7 +30,7 @@ playbooks:
         become: true
         vars:
           rke_version: 2
-          rke2_k8s_version: 1.29.4
+          rke2_k8s_version: 1.28.10
           rke2_airgapped_installation: true
           rke2_release_kind: rke2r1
           disable_rke2_components:
@@ -66,7 +66,7 @@ playbooks:
       - hosts: "{{ target_host | default('localhost') }}"
         vars_files:
           - "{{ path | default('.') }}/{{ profile }}.yaml"
-          - "{{ extra_file | default(omit) }}"
+          - "{{ deployment_vars | default(omit) }}"
         #path_to_kubeconfig: ~/.kube/rancher
 
         tasks:
@@ -255,9 +255,6 @@ playbooks:
         become: true
         vars:
           defaults_file: downstream-defaults
-          rancher_api_url: "https://rancher-things.demo-rancher.sthings-vsphere.labul.sva.de/v3"
-          rancher_access_key: "admin"
-          rancher_secret_key: ""
 
         vars_files:
           - "{{ path | default('.') }}/{{ defaults_file }}.yaml"
@@ -398,8 +395,12 @@ vars:
   - name: downstream_defaults.yaml
     file: |
       ---
-      cni: cilium
+      #cluster_name:
       cluster_description: "{{ cluster_name }}"
+      #rancher_api_url: "https://<HOSTNAME>.<DOMAIN>/v3"
+      #rancher_access_key: "admin"
+      #rancher_secret_key: ""
+      cni: cilium
       kubernetes_version: v1.28.10+rke2r1
       cluster_template: cluster
       state: present
@@ -429,7 +430,7 @@ vars:
       ---
       name_ip_pool: ip-pool
       namespace: metallb-system
-      ip_range: 10.31.102.112-10.31.102.112
+      #ip_range: 10.31.102.112-10.31.102.112
 
       helm_repositories:
         bitnami:
