@@ -226,7 +226,7 @@ playbooks:
           source_url: "https://go.dev/dl/go{{ golang_version }}.linux-amd64.tar.gz"
           golang_install_dir: /usr/local
           golangci_version: 1.59.2 # datasource=github-tags depName=golangci/golangci-lint
-          goreleaser_version: 1.26.2 # datasource=github-tags depName=goreleaser/goreleaser
+          goreleaser_version: 2.0.1 # datasource=github-tags depName=goreleaser/goreleaser
           ko_version: v0.15.4 # datasource=github-tags depName=ko-build/ko
 
           # USE WITH EXISTING USER
