@@ -15,9 +15,12 @@ on:
         description: EXTRA VARS
         default: "-e target_host=all -e reboot_all=false"
       environment-name:
-        type: string
+        type: choice
         description: ENVIRONMENT NAME
-        default: labul-vsphere
+        options:
+          - labul-vsphere
+          - labda-vsphere
+          - labul-proxmox
       private-key:
         type: string
         description: Private Key
