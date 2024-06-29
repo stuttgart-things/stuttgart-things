@@ -225,8 +225,9 @@ playbooks:
           go_checksum_type: "sha256"
           source_url: "https://go.dev/dl/go{{ golang_version }}.linux-amd64.tar.gz"
           golang_install_dir: /usr/local
-          golangci_version: 1.59.1 datasource=github-tags depName=golangci/golangci-lint
-          goreleaser_version: 1.26.2 datasource=github-tags depName=goreleaser/goreleaser
+          golangci_version: 1.59.2 # datasource=github-tags depName=golangci/golangci-lint
+          goreleaser_version: 1.26.2 # datasource=github-tags depName=goreleaser/goreleaser
+          ko_version: v0.15.4 # datasource=github-tags depName=ko-build/ko
 
           # USE WITH EXISTING USER
           go_username: sthings
@@ -254,6 +255,16 @@ playbooks:
               bin_dir: "/usr/local/bin"
               version_cmd: "-- version"
               target_version: "{{ goreleaser_version }}"
+            ko:
+              bin_name: ko
+              bin_version: "{{ ko_version }}"
+              check_bin_version_before_installing: true
+              source_url: "https://github.com/ko-build/ko/releases/download/{{ ko_version }}/ko_Linux_x86_64.tar.gz"
+              bin_to_copy: ko
+              to_remove: ""
+              bin_dir: "/usr/bin/ko"
+              version_cmd: "version"
+              target_version: "{{ ko_version }}"
 
         pre_tasks:
           - name: Check if Golang is already installed
