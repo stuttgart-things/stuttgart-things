@@ -220,11 +220,13 @@ playbooks:
       - hosts: "{{ target_host | default('all') }}"
         become: true
         vars:
-          golang_version: 1.22.3
-          golang_checksum: 5fb8b3ed4a78a8eab444dfcb472b8c07a06980dcaee62ce3645edd6d130004c6
-          source_url: "https://go.dev/dl/go1.22.3.linux-amd64.tar.gz"
-          golang_install_dir: /usr/local
+          golang_version: 1.22.4
+          #golang_checksum: 5fb8b3ed4a78a8eab444dfcb472b8c07a06980dcaee62ce3645edd6d130004c6 #1.22.3
           go_checksum_type: "sha256"
+          source_url: "https://go.dev/dl/go{{ golang_version }}.linux-amd64.tar.gz"
+          golang_install_dir: /usr/local
+          golangci_version: 1.59.1 datasource=github-tags depName=golangci/golangci-lint
+          goreleaser_version: 1.26.2 datasource=github-tags depName=goreleaser/goreleaser
 
           # USE WITH EXISTING USER
           go_username: sthings
@@ -234,24 +236,24 @@ playbooks:
           bin:
             golangci-lint:
               bin_name: golangci-lint
-              bin_version: 1.58.1
+              bin_version: "{{ golangci_version }}"
               check_bin_version_before_installing: true
-              source_url: "https://github.com/golangci/golangci-lint/releases/download/v1.58.1/golangci-lint-1.58.1-linux-amd64.tar.gz"
-              bin_to_copy: golangci-lint-1.58.1-linux-amd64/golangci-lint
-              to_remove: golangci-lint-1.58.1-linux-amd64.tar.gz
+              source_url: "https://github.com/golangci/golangci-lint/releases/download/v{{ golangci_version }}/golangci-lint-{{ golangci_version }}-linux-amd64.tar.gz"
+              bin_to_copy: golangci-lint-{{ golangci_version }}-linux-amd64/golangci-lint
+              to_remove: golangci-lint-{{ golangci_version }}-linux-amd64.tar.gz
               bin_dir: "/usr/local/bin"
               version_cmd: "-- version"
-              target_version: 1.58.1
+              target_version: "{{ golangci_version }}"
             goreleaser:
               bin_name: goreleaser
-              bin_version: v1.26.1
+              bin_version: "{{ goreleaser_version }}"
               check_bin_version_before_installing: true
-              source_url: "https://github.com/goreleaser/goreleaser/releases/download/v1.26.1/goreleaser_Linux_x86_64.tar.gz"
+              source_url: "https://github.com/goreleaser/goreleaser/releases/download/v{{ goreleaser_version }}/goreleaser_Linux_x86_64.tar.gz"
               bin_to_copy: goreleaser
               to_remove: goreleaser_Linux_x86_64.tar.gz
               bin_dir: "/usr/local/bin"
               version_cmd: "-- version"
-              target_version: v1.26.1
+              target_version: "{{ goreleaser_version }}"
 
         pre_tasks:
           - name: Check if Golang is already installed
@@ -573,7 +575,7 @@ vars:
 
       object_name: "{{ ansible_date_time.date }}-{{ project_name }}.tf"
 
-      vmName: "test-{{ lookup('community.general.random_string', length=5, special=false) | lower }}" 
+      vmName: "test-{{ lookup('community.general.random_string', length=5, special=false) | lower }}"
       vmCount: "1"
       vmSize: "s"
       vmTemplate: "ubuntu24"
@@ -638,9 +640,9 @@ vars:
       ---
       gh_version: 2.52.0 # datasource=github-tags depName=cli/cli
       task_version: v3.37.2 # datasource=github-tags depName=go-task/task
-      hugo_version: 0.127.0
+      hugo_version: 0.127.0 # datasource=github-tags depName=gohugoio/hugo
       terraform_version: 1.9.0 # datasource=custom.hashicorp
-      packer_version: 1.11.0
+      packer_version: 1.11.0 # datasource=custom.hashicorp
       yq_version: 4.44.2
       machineshop_version: 2.1.9
 
