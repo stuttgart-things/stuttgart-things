@@ -68,10 +68,10 @@ jobs:
         id: createMetadata
         run: touch ${{ env.WORKING_DIR }}/meta-data
 
-      - name: Render OS template w/ machineShop
+      - name: Render OS template w/ machineshop
         id: renderOsTemplate
         run: |
-          machineShop render \
+          machineshop render \
           --source local \
           --template packer/template/${{ inputs.os-version }}-${{ inputs.cloud }}.pkr.tpl.hcl \
           --defaults packer/environments/${{ inputs.lab }}-${{ inputs.cloud }}.yaml \
@@ -80,24 +80,24 @@ jobs:
           --destination ${{ env.WORKING_DIR }}/${{ inputs.os-version }}-${{ inputs.ansible-provisioning }}.pkr.hcl \
           --output file
 
-      - name: Render Kickstart w/ machineShop
+      - name: Render Kickstart w/ machineshop
         id: renderKickstart
         shell: bash
         run: |
           KICKSTART_TEMPLATE=$(yq -r ".kickstart.${{ inputs.os-version }}.template" packer/environments/${{ inputs.lab }}-${{ inputs.cloud }}.yaml)
           KICKSTART_FILENAME=$(yq -r ".kickstart.${{ inputs.os-version }}.filename" packer/environments/${{ inputs.lab }}-${{ inputs.cloud }}.yaml)
 
-          machineShop render \
+          machineshop render \
           --source local \
           --template packer/kickstart/${KICKSTART_TEMPLATE} \
           --defaults packer/environments/${{ inputs.lab }}-${{ inputs.cloud }}.yaml \
           --output file \
           --destination ${{ env.WORKING_DIR }}/${KICKSTART_FILENAME}
 
-      - name: Render Playbook w/ machineShop
+      - name: Render Playbook w/ machineshop
         id: renderBase-os
         run: |
-          machineShop render \
+          machineshop render \
           --source local \
           --template packer/ansible/play.yaml \
           --defaults packer/ansible/${{ inputs.ansible-provisioning }}.yaml \
@@ -105,10 +105,10 @@ jobs:
           --brackets square \
           --destination ${{ env.WORKING_DIR }}/${{ inputs.ansible-provisioning }}.yaml
 
-      - name: Render ansible requirements w/ machineShop requirements
+      - name: Render ansible requirements w/ machineshop requirements
         id: renderRequirements
         run: |
-          machineShop render \
+          machineshop render \
           --source local \
           --template packer/ansible/requirements.yaml \
           --defaults packer/ansible/${{ inputs.ansible-provisioning }}.yaml \
@@ -121,7 +121,7 @@ jobs:
         run: |
           yq -r ".testVmSecrets" packer/environments/${{ inputs.lab }}-${{ inputs.cloud }}.yaml > ./secret-defaults.yaml
 
-          machineShop render \
+          machineshop render \
           --source local \
           --template terraform/${{ inputs.cloud }}-vm-tfvars.tpl \
           --defaults ./secret-defaults.yaml \
@@ -130,10 +130,10 @@ jobs:
           --output file \
           --destination ${{ env.WORKING_DIR }}/test-vm/terraform.tfvars
 
-      - name: Render Terraform template w/ machineShop
+      - name: Render Terraform template w/ machineshop
         id: renderTerraformTemplate
         run: |
-          machineShop render \
+          machineshop render \
           --source local \
           --template packer/template/${{ inputs.cloud }}-vm.tf.tpl.hcl \
           --output file \
@@ -142,10 +142,10 @@ jobs:
           --values osVersion="${{ inputs.os-version }}, lab=${{ inputs.lab }}, cloud=${{ inputs.cloud }}, ansibleOsProvisioning=${{ inputs.ansible-provisioning }}" \
           --destination ${{ env.WORKING_DIR }}/test-vm/main.tf
 
-      - name: Render Terraform provider config w/ machineShop
+      - name: Render Terraform provider config w/ machineshop
         id: renderTerraformProviderConfig
         run: |
-          machineShop render \
+          machineshop render \
           --source local \
           --template terraform/state-provider.tf.tpl \
           --output file \
@@ -153,13 +153,13 @@ jobs:
           --values stateKey="packer-${{ inputs.os-version }}" \
           --destination ${{ env.WORKING_DIR }}/test-vm/state.tf
 
-      - name: Render Readme template w/ machineShop
+      - name: Render Readme template w/ machineshop
         id: renderReadMeTemplate
         run: |
           PACKER_VERSION=$(yq -r ".packerVersion" packer/environments/${{ inputs.lab }}-${{ inputs.cloud }}.yaml)
           DATE=$(echo `date "+%Y-%m-%d %H:%M"`)
 
-          machineShop render \
+          machineshop render \
           --source local \
           --template packer/README.md.tpl \
           --output file \
