@@ -573,27 +573,54 @@ Creates rancher downstream cluster (w/ api token + ssh)
 
 ```bash
 # CREATE INVENTORY
+cat <<EOF > ~/projects/rke2/dev1-inv
+losangeles5.tiab.labda.sva.de rancher_cluster_cmd="--controlplane --etcd --worker"
+
+[all:vars]
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+EOF
 
 # CREATE CLUSTER PROFILE
-cat <<EOF > dev1.yaml
+cat <<EOF > ~/projects/rke2/dev1.yaml
 ---
 cluster_name: dev1
 cluster_description: "{{ cluster_name }} cluster"
 cni: cilium
 kubernetes_version: v1.28.10+rke2r1
+cluster_template: cluster
 EOF
 
-      #rancher_secret_key: ""
-      rancher_access_key: admin
-      rancer_hostname: ""
-      rancher_domain: ""
-      state: present
+RANCHER_SECRET_KEY=<SECRET FROM TOKEN CREATION>
+
+ansible-playbook sthings.deploy_rke.deploy_downstream_cluster \
+-e path_to_kubeconfig=~/.kube/rke2 \
+-e rancher_access_key=admin \
+-e rancher_secret_key=${RANCHER_SECRET_KEY} \
+-e rancher_hostname=rancher-things \
+-e rancher_domain=demo-rancher.sthings-vsphere.labul.sva.de \
+-e cluster_profile=~/projects/rke2/dev1.yaml \
+-e state=present \
+-e prepare_rke_nodes=true \
+-i ~/projects/rke2/dev1-inv \
+-vv
+
 
 password hY4EFxZKrIUTxTOC. Bearer is admin:hY4EFxZKrIUTxTOC"
 
 ```
 
 </details>
+
+<details><summary>GET KUBECONFIG FROM DOWNSTREAM CLUSTER</summary>
+
+Downloads kubeconfig from downstream cluster
+
+```bash
+
+```
+
+</details>
+
 
 </details>
 
