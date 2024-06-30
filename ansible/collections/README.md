@@ -416,7 +416,7 @@ Deploys metallb helm chart + ip config
 ```bash
 ansible-playbook sthings.deploy_rke.deploy_to_k8s \
 -e deployment_vars=~/projects/rke2/metallb.yaml \
--e path_to_kubeconfig=~/.kube/rke2 \ # example
+-e path_to_kubeconfig=~/.kube/rke2 \ # EXAMPLE
 -e profile=metallb \
 -e state=present \
 -vv \
@@ -439,20 +439,161 @@ ansible-playbook sthings.deploy_rke.deploy_to_k8s \
 
 </details>
 
-<details><summary>DEPLOY INGRESS-NGINX</summary>
+<details><summary>DEPLOY CERT-MANAGER</summary>
 
-Deploys ingress-nginx helm chart
+Deploys cert-manager + config
 
 ```bash
+# DEPLOYMENT VARS
+cat <<EOF > cert-manager.yaml
+cert_manager_version: v1.14.4
+approle_id: 1d42d7e7-8c14-e5f9-801d-b3ecef416616
+approle_secret: <SECRET>
+name_cluster_issuer: cluster-issuer-approle
+pki_path: pki/sign/sthings-vsphere.labul.sva.de
+vault_server: https://vault-vsphere.labul.sva.de:8200
+ca_bundle: LS0tLS0= #...
+vault_secret: vault-approle
+
+post_manifests:
+  secret_approle: |
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: {{ vault_secret }}
+      namespace: {{ namespace }}
+    data:
+      approle: {{ approle_secret }}
+
+  cluster_issuer: |
+    apiVersion: cert-manager.io/v1
+    kind: ClusterIssuer
+    metadata:
+      name: {{ name_cluster_issuer }}
+      namespace: {{ namespace }}
+    spec:
+      vault:
+        path: {{ pki_path }}
+        server: {{ vault_server }}
+        caBundle: {{ ca_bundle }}
+        auth:
+          appRole:
+            path: approle
+            roleId: {{ approle_id }}
+            secretRef:
+              name: {{ vault_secret }}
+              key: approle
+EOF
+
 ansible-playbook sthings.deploy_rke.deploy_to_k8s \
 -e path_to_kubeconfig=~/.kube/rke2 \
--e profile=ingress-nginx \
+-e profile=cert-manager \
+-e state=present \
+-e deployment_vars=~/projects/rke2/cert-manager.yaml #ABSOLUTE PATH REQUIRED!
+-vv
+```
+
+<details><summary>DEPLOY RANCHER</summary>
+
+Deploys configuration + rancher
+
+```bash
+cat <<EOF > rancher.yaml
+rancher_version: 2.8.5
+hostname: rancher-things
+domain: demo-rancher.sthings-vsphere.labul.sva.de  # EXAMPLE
+password: "{{ lookup('community.general.random_string', length=17) }}"  # EXAMPLE
+ca_certs: LS0tLS1CtLS0= #..
+cluster_issuer: cluster-issuer-approle
+
+pre_manifests:
+  namespace: |
+    apiVersion: v1
+    kind: Namespace
+    metadata:
+      name: {{ deployment_namespace }}
+
+  certificate: |
+    apiVersion: cert-manager.io/v1
+    kind: Certificate
+    metadata:
+      name: {{ hostname }}-ingress
+      namespace: {{ deployment_namespace }}
+    spec:
+      commonName: {{ hostname }}.{{ domain }}
+      dnsNames:
+        - {{ hostname }}.{{ domain }}
+      issuerRef:
+        name: {{ cluster_issuer }}
+        kind: ClusterIssuer
+      secretName: {{ hostname }}-tls
+
+  tls_secret: |
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: tls-ca
+      namespace: {{ deployment_namespace }}
+    data:
+      cacerts.pem: {{ ca_certs }}
+post_manifests: {}
+EOF
+
+ansible-playbook sthings.deploy_rke.deploy_to_k8s \
+-e path_to_kubeconfig=~/.kube/rke2 \
+-e profile=cert-manager \
+-e state=present \
+-e deployment_vars=~/projects/rke2/cert-manager.yaml #ABSOLUTE PATH REQUIRED!
+-vv
+```
+
+</details>
+
+<details><summary>CREATE API-TOKEN</summary>
+
+Creates rancher api token
+
+```bash
+ansible-playbook sthings.deploy_rke.api_token \
+-e path_to_kubeconfig=~/.kube/rke2 \
+-e token_name=admin \
+-e token_description="admin api token" \
+-e output_token_creds=true \
+# -e token_password=whatever -> can be set
+# -e token_user_id -> can be set / rancher user id (must exist)
 -e state=present \
 -vv
 ```
 
 </details>
 
+<details><summary>CREATE DOWNSTREAM-CLUSTER</summary>
+
+Creates rancher downstream cluster (w/ api token + ssh)
+
+```bash
+# CREATE INVENTORY
+
+# CREATE CLUSTER PROFILE
+cat <<EOF > dev1.yaml
+---
+cluster_name: dev1
+cluster_description: "{{ cluster_name }} cluster"
+cni: cilium
+kubernetes_version: v1.28.10+rke2r1
+EOF
+
+      #rancher_secret_key: ""
+      rancher_access_key: admin
+      rancer_hostname: ""
+      rancher_domain: ""
+      state: present
+
+password hY4EFxZKrIUTxTOC. Bearer is admin:hY4EFxZKrIUTxTOC"
+
+```
+
+</details>
 
 </details>
 
