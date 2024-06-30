@@ -60,7 +60,7 @@ playbooks:
         roles:
           - role: sthings.deploy_rke.deploy_configure_rke
 
-  - name: deploy-to-k8s
+  - name: deploy_to_k8s
     play: |
       ---
       - hosts: "{{ target_host | default('localhost') }}"
@@ -78,7 +78,7 @@ playbooks:
           - name: Configure and (un)install helm charts
             block:
               - name: Install helm requirements
-                ansible.builtin.include_tasks: helm-config.yaml
+                ansible.builtin.include_tasks: helm_config.yaml
 
               - name: Deploy helm chart(s)
                 ansible.builtin.include_tasks: helm.yaml
@@ -89,7 +89,7 @@ playbooks:
             ansible.builtin.include_tasks: manifests.yaml
             loop: "{{ q('ansible.builtin.dict', post_manifests) }}"
 
-  - name: helm-config
+  - name: helm_config
     play: |
       ---
       - name: Add helm chart repositories
@@ -302,94 +302,94 @@ playbooks:
             ansible.builtin.shell: |
               {{ cluster_registration_tokens.json.data[0].nodeCommand }} {{ rancher_cluster_cmd }}
 
-  - name: keycloak_oidc_config
-    play: |
-      ---
-      - hosts: localhost
-        vars:
-          idp:
-            hostname: "dev17.labul.sva.de:8080"
-            realm:
-              name: "master"
+  # - name: keycloak_oidc_config
+  #   play: |
+  #     ---
+  #     - hosts: localhost
+  #       vars:
+  #         idp:
+  #           hostname: "dev17.labul.sva.de:8080"
+  #           realm:
+  #             name: "master"
 
-          admin_password: "admin"
-          rancher_client_secret: "Atlan7island8sailor9"
-          rancher_api_token: token-98src:mkxfj52dhr495tw5g8hw5rblpbxr5lsbw5k2ldc2d24fpksc2jnwlk
-          rancher_access_key: token-98src
-          rancher_secret_key: mkxfj52dhr495tw5g8hw5rblpbxr5lsbw5k2ldc2d24fpksc2jnwlk
+  #         admin_password: "admin"
+  #         rancher_client_secret: "Atlan7island8sailor9"
+  #         rancher_api_token: token-98src:mkxfj52dhr495tw5g8hw5rblpbxr5lsbw5k2ldc2d24fpksc2jnwlk
+  #         rancher_access_key: token-98src
+  #         rancher_secret_key: mkxfj52dhr495tw5g8hw5rblpbxr5lsbw5k2ldc2d24fpksc2jnwlk
 
-        tasks:
-          - name: Create Rancher Client
-            community.general.keycloak_client:
-              auth_keycloak_url: http://{{ idp.hostname }}
-              auth_realm: "master"
-              auth_username: "admin"
-              auth_password: "{{ admin_password }}"
-              state: present
-              realm: "{{ idp.realm.name }}"
-              client_id: "rancher"
-              name: "rancher"
-              description: "Client used by Rancher for OIDC authentication"
-              protocol: "openid-connect"
-              enabled: true
-              public_client: false
-              client_authenticator_type: client-secret
-              secret: "{{ rancher_client_secret }}"
-              web_origins:
-                - "https://rancher-things.demo.sthings-vsphere.labul.sva.de/*"
-              redirect_uris:
-                - "https://rancher-things.demo.sthings-vsphere.labul.sva.de/verify-auth"
-              protocol_mappers:
-                - name: "Groups Mapper"
-                  protocol: "openid-connect"
-                  protocolMapper: "oidc-group-membership-mapper"
-                  config:
-                    claim.name: "groups"
-                    id.token.claim: false
-                    access.token.claim: false
-                    userinfo.token.claim: true
-                - name: "Client Audience"
-                  protocol: "openid-connect"
-                  protocolMapper: "oidc-audience-mapper"
-                  config:
-                    included.client.audience: "rancher"
-                    id.token.claim: false
-                    access.token.claim: true
-                    userinfo.token.claim: false
-                - name: "Groups Path"
-                  protocol: "openid-connect"
-                  protocolMapper: "oidc-group-membership-mapper"
-                  config:
-                    claim.name: "full_group_path"
-                    full.path: true
-                    id.token.claim: false
-                    access.token.claim: false
-                    userinfo.token.claim: true
+  #       tasks:
+  #         - name: Create Rancher Client
+  #           community.general.keycloak_client:
+  #             auth_keycloak_url: http://{{ idp.hostname }}
+  #             auth_realm: "master"
+  #             auth_username: "admin"
+  #             auth_password: "{{ admin_password }}"
+  #             state: present
+  #             realm: "{{ idp.realm.name }}"
+  #             client_id: "rancher"
+  #             name: "rancher"
+  #             description: "Client used by Rancher for OIDC authentication"
+  #             protocol: "openid-connect"
+  #             enabled: true
+  #             public_client: false
+  #             client_authenticator_type: client-secret
+  #             secret: "{{ rancher_client_secret }}"
+  #             web_origins:
+  #               - "https://rancher-things.demo.sthings-vsphere.labul.sva.de/*"
+  #             redirect_uris:
+  #               - "https://rancher-things.demo.sthings-vsphere.labul.sva.de/verify-auth"
+  #             protocol_mappers:
+  #               - name: "Groups Mapper"
+  #                 protocol: "openid-connect"
+  #                 protocolMapper: "oidc-group-membership-mapper"
+  #                 config:
+  #                   claim.name: "groups"
+  #                   id.token.claim: false
+  #                   access.token.claim: false
+  #                   userinfo.token.claim: true
+  #               - name: "Client Audience"
+  #                 protocol: "openid-connect"
+  #                 protocolMapper: "oidc-audience-mapper"
+  #                 config:
+  #                   included.client.audience: "rancher"
+  #                   id.token.claim: false
+  #                   access.token.claim: true
+  #                   userinfo.token.claim: false
+  #               - name: "Groups Path"
+  #                 protocol: "openid-connect"
+  #                 protocolMapper: "oidc-group-membership-mapper"
+  #                 config:
+  #                   claim.name: "full_group_path"
+  #                   full.path: true
+  #                   id.token.claim: false
+  #                   access.token.claim: false
+  #                   userinfo.token.claim: true
 
-          - name: Test and Apply Rancher Keycloak OIDC Config
-            uri:
-              url: "https://rancher-things.demo.sthings-vsphere.labul.sva.de/v3/keyCloakOIDCConfigs/keycloakoidc"
-              user: "{{ rancher_access_key }}"
-              password: "{{ rancher_secret_key }}"
-              method: PUT
-              validate_certs: no
-              headers:
-                Authorization: "Bearer {{ rancher_api_token }}"
-              body:
-                type: "keyCloakOIDCConfig"
-                name: "keycloakoidc"
-                clientId: "rancher"
-                clientSecret: "{{ rancher_client_secret }}"
-                issuer: "http://{{ idp.hostname }}/realms/{{ idp.realm.name }}"
-                authEndpoint: 'http://{{ idp.hostname }}/realms/{{ idp.realm.name }}/protocol/openid-connect/auth'
-                rancherUrl: "https://rancher-things.demo.sthings-vsphere.labul.sva.de/verify-auth"
-                enabled: true
-                scope: "rancher"
-                groupSearchEnabled: true
-                allowedPrincipalIds: [ "keycloakoidc_group://rancher" ]
-                accessMode: "required"
-              body_format: json
-              status_code: 200
+  #         - name: Test and Apply Rancher Keycloak OIDC Config
+  #           uri:
+  #             url: "https://rancher-things.demo.sthings-vsphere.labul.sva.de/v3/keyCloakOIDCConfigs/keycloakoidc"
+  #             user: "{{ rancher_access_key }}"
+  #             password: "{{ rancher_secret_key }}"
+  #             method: PUT
+  #             validate_certs: no
+  #             headers:
+  #               Authorization: "Bearer {{ rancher_api_token }}"
+  #             body:
+  #               type: "keyCloakOIDCConfig"
+  #               name: "keycloakoidc"
+  #               clientId: "rancher"
+  #               clientSecret: "{{ rancher_client_secret }}"
+  #               issuer: "http://{{ idp.hostname }}/realms/{{ idp.realm.name }}"
+  #               authEndpoint: 'http://{{ idp.hostname }}/realms/{{ idp.realm.name }}/protocol/openid-connect/auth'
+  #               rancherUrl: "https://rancher-things.demo.sthings-vsphere.labul.sva.de/verify-auth"
+  #               enabled: true
+  #               scope: "rancher"
+  #               groupSearchEnabled: true
+  #               allowedPrincipalIds: [ "keycloakoidc_group://rancher" ]
+  #               accessMode: "required"
+  #             body_format: json
+  #             status_code: 200
 
 vars:
   - name: downstream_defaults.yaml
