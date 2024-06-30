@@ -1,25 +1,60 @@
 ---
+# GLOBAL
+packerVersion: 1.10.3
+vmWwarePluginMinVersion: 1.2.7
+ansibleProvisionerMinVersion: 1.1.1
+
+# KICKSTART
+kickstart:
+  ubuntu24:
+    template: ubuntu24.yaml
+    filename: user-data
+  ubuntu22:
+    template: ubuntu.yaml
+    filename: user-data
+  rocky9:
+    template: rocky9.cfg
+    filename: user-data
+
+output:
+  ubuntu22:
+    base-os: sthings-u22
+    rke2-node: sthings-u22-k8s
+  ubuntu24:
+    base-os: sthings-u24
+    rke2-node: sthings-u24-k8s
+  rocky9:
+    base-os: sthings-r9
+    rke2-node: sthings-r9-k8s
 
 paravirtualizatedDiskDriver: sda
 
-# GLOBAL
-packerVersion: 1.10.0
-vmWwarePluginMinVersion: 1.2.7
-ansibleProvisionerMinVersion: 1.1.1
+# S3
+s3Endpoint: https://artifacts.app1.sthings-vsphere.labul.sva.de
+s3Bucket: vspherevm-labda
+s3Region: main
 
 ipWaitTimeout: 30m
 vmWareProvider: github.com/hashicorp/vsphere
 ansibleProvisioner: github.com/hashicorp/ansible
 ipSettleTimeout: 20s
 bootWait: 5s
-ubuntu23IsoUrl: https://releases.ubuntu.com/lunar/ubuntu-23.04-live-server-amd64.iso
-ubuntu23IsoChecksum: c7cda48494a6d7d9665964388a3fc9c824b3bef0c9ea3818a1be982bc80d346b
-cpu: 8
+
+pu: 8
 ram: 8192
 diskSize: 16
 osVersion: ubuntu23
 sshTimeout: 20m
 sshHandshakeAttempts: 900
+
+# UBUNTU24=LATEST RELEASE
+ubuntuIsoUrl: https://releases.ubuntu.com/noble/ubuntu-24.04-live-server-amd64.iso
+ubuntuIsoChecksum: 8762f7e74e4d64d72fceb5f70682e6b069932deedb4949c6975d0f0fe0a91be3
+ubuntuPassword: ubuntu
+ubuntuUser: ubuntu
+ubuntuDiskSize: 15360
+ubuntuShellProvisioner: "sudo apt-get -y update; sudo apt-get -y upgrade; sudo apt-get -y install python3; sudo apt-get autoremove --purge -y && sudo apt-get autoclean -y && sudo apt-get clean -y; sudo truncate -s 0 /etc/machine-id && echo 'machine-id was reset successfully'; sudo systemctl stop systemd-resolved; sudo sed -i 's/#DNSStubListener=yes/DNSStubListener=no/g' /etc/systemd/resolved.conf; sudo rm /etc/resolv.conf; sudo ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf; sudo systemctl start systemd-resolved"
+ubuntuNetworkCard: vmxnet3
 
 # UBUNTU23
 ubuntu23DiskSize: 15360

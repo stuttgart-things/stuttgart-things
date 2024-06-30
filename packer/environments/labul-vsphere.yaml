@@ -12,9 +12,6 @@ kickstart:
   ubuntu22:
     template: ubuntu.yaml
     filename: user-data
-  ubuntu23:
-    template: ubuntu.yaml
-    filename: user-data
   rocky9:
     template: rocky9.cfg
     filename: user-data
@@ -23,9 +20,6 @@ output:
   ubuntu22:
     base-os: sthings-u22
     rke2-node: sthings-u22-k8s
-  ubuntu23:
-    base-os: sthings-u23
-    rke2-node: sthings-u23-k8s
   ubuntu24:
     base-os: sthings-u24
     rke2-node: sthings-u24-k8s
