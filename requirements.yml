@@ -1,0 +1,11 @@
+---
+collections:
+  - name: community.crypto
+    version: 2.20.0
+  - name: community.general
+    version: 9.1.0
+  - name: ansible.posix
+    version: 1.5.4
+  - name: kubernetes.core
+    version: 5.0.0
+  - name: https://github.com/stuttgart-things/stuttgart-things/releases/download/1.28.10/sthings-deploy_rke-1.28.10.tar.gz
