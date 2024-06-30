@@ -409,6 +409,50 @@ ansible-playbook sthings.deploy_rke.rke2 \
 
 </details>
 
+<details><summary>DEPLOY METALLB</summary>
+
+Deploys metallb helm chart + ip config
+
+```bash
+ansible-playbook sthings.deploy_rke.deploy_to_k8s \
+-e deployment_vars=~/projects/rke2/metallb.yaml \
+-e path_to_kubeconfig=~/.kube/rke2 \ # example
+-e profile=metallb \
+-e state=present \
+-vv \
+-e ip_range: 10.31.103.18-10.31.103.18 # example
+```
+
+</details>
+
+<details><summary>DEPLOY INGRESS-NGINX</summary>
+
+Deploys ingress-nginx helm chart
+
+```bash
+ansible-playbook sthings.deploy_rke.deploy_to_k8s \
+-e path_to_kubeconfig=~/.kube/rke2 \
+-e profile=ingress-nginx \
+-e state=present \
+-vv
+```
+
+</details>
+
+<details><summary>DEPLOY INGRESS-NGINX</summary>
+
+Deploys ingress-nginx helm chart
+
+```bash
+ansible-playbook sthings.deploy_rke.deploy_to_k8s \
+-e path_to_kubeconfig=~/.kube/rke2 \
+-e profile=ingress-nginx \
+-e state=present \
+-vv
+```
+
+</details>
+
 
 </details>
 

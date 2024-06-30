@@ -138,10 +138,14 @@ playbooks:
           wait_sleep: 30
           wait_timeout: 360
         register: pod_list
-        retries: 10
-        delay: 30
+        retries: {{ item.values.wait_retries | default(15) }}
+        delay: "{{ item.values.wait_delay | default(30) }}"
         until: pod_list|json_query('resources[*].status.phase')|unique == ["Running"]
         when: state == "present" and item.value.values is defined
+
+      - name: Wait for webhooks beeing ready
+        ansible.builtin.wait_for:
+          timeout: "{{ webhook_wait | default(0) }}"
 
   - name: manifests
     play: |
@@ -412,15 +416,19 @@ vars:
   - name: ingress-nginx
     file: |
       ---
+      ingress_nginx_version: 4.10.1
+      deployment_namespace: ingress-nginx
       helm_repositories:
         ingress-nginx:
           url: https://kubernetes.github.io/ingress-nginx
 
+      post_manifests: {}
+
       helm_releases:
         ingress-nginx:
           ref: ingress-nginx/ingress-nginx
-          version: 4.10.1
-          namespace: ingress-nginx
+          version: "{{ ingress_nginx_version }}"
+          namespace: "{{ deployment_namespace }}"
           ignore: false
           wait: true
           release_values: {}
@@ -429,8 +437,8 @@ vars:
     file: |
       ---
       name_ip_pool: ip-pool
-      namespace: metallb-system
-      #ip_range: 10.31.102.112-10.31.102.112
+      deployment_namespace: metallb-system
+      metallb_version: 6.1.4
 
       helm_repositories:
         bitnami:
@@ -439,8 +447,8 @@ vars:
       helm_releases:
         metallb:
           ref: bitnami/metallb
-          version: 6.1.4
-          namespace: "{{ namespace }}"
+          version: "{{ metallb_version }}"
+          namespace: "{{ deployment_namespace }}"
           ignore: true
           wait: true
           release_values: {}
@@ -451,7 +459,7 @@ vars:
           kind: IPAddressPool
           metadata:
             name: {{ name_ip_pool | default('ip-pool') }}
-            namespace: {{ namespace }}
+            namespace: {{ deployment_namespace }}
             labels:
               app: metallb
           spec:
@@ -462,7 +470,7 @@ vars:
           kind: L2Advertisement
           metadata:
             name: pool-advertisement
-            namespace: {{ namespace }}
+            namespace: {{ deployment_namespace }}
             labels:
               app: metallb
           spec:
@@ -472,7 +480,8 @@ vars:
   - name: rancher
     file: |
       ---
-      namespace: cattle-system
+      rancher_version: 2.8.5
+      deployment_namespace: cattle-system
       helm_repositories:
         rancher-stable:
           url: https://releases.rancher.com/server-charts/latest
@@ -482,14 +491,14 @@ vars:
           apiVersion: v1
           kind: Namespace
           metadata:
-            name: {{ namespace }}
+            name: {{ deployment_namespace }}
 
         certificate: |
           apiVersion: cert-manager.io/v1
           kind: Certificate
           metadata:
             name: {{ hostname }}-ingress
-            namespace: {{ namespace }}
+            namespace: {{ deployment_namespace }}
           spec:
             commonName: {{ hostname }}.{{ domain }}
             dnsNames:
@@ -504,15 +513,15 @@ vars:
           kind: Secret
           metadata:
             name: tls-ca
-            namespace: {{ namespace }}
+            namespace: {{ deployment_namespace }}
           data:
             cacerts.pem: {{ ca_certs }}
 
       helm_releases:
         rancher:
           ref: rancher-stable/rancher
-          version: 2.8.5
-          namespace: "{{ namespace }}"
+          version: "{{ rancher_version }}"
+          namespace: "{{ deployment_namespace }}"
           ignore: false
           wait: true
           release_values: |
@@ -535,7 +544,7 @@ vars:
   - name: cert-manager
     file: |
       ---
-      namespace: cert-manager
+      deployment_namespace: cert-manager
       helm_repositories:
         cert-manager:
           url: https://charts.jetstack.io
@@ -544,40 +553,11 @@ vars:
         cert-manager:
           ref: cert-manager/cert-manager
           version: v1.14.4
-          namespace: "{{ namespace }}"
+          namespace: "{{ deployment_namespace }}"
           ignore: false
           wait: true
           release_values: |
             installCRDs: true
-
-      post_manifests:
-        secret_approle: |
-          apiVersion: v1
-          kind: Secret
-          metadata:
-            name: {{ vault_secret }}
-            namespace: {{ namespace }}
-          data:
-            approle: {{ approle_secret }}
-
-        cluster_issuer: |
-          apiVersion: cert-manager.io/v1
-          kind: ClusterIssuer
-          metadata:
-            name: {{ name_cluster_issuer }}
-            namespace: {{ namespace }}
-          spec:
-            vault:
-              path: {{ pki_path }}
-              server: {{ vault_server }}
-              caBundle: {{ ca_bundle }}
-              auth:
-                appRole:
-                  path: approle
-                  roleId: {{ approle_id }}
-                  secretRef:
-                    name: {{ vault_secret }}
-                    key: approle
 
 templates:
   - name: cluster
