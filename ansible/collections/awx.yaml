@@ -1581,7 +1581,7 @@ vars:
         backend:
           name: "backend"
         main:
-          name: "vm-{{ cloud }}"
+          name: "{{ cloud }}"
 
       object_name: "{{ ansible_date_time.date }}-{{ project_name }}.tf"
 
