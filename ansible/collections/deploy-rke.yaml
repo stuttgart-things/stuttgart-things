@@ -243,10 +243,9 @@ playbooks:
       ---
       - hosts: "{{ target_host | default('localhost') }}"
         vars:
-          defaults_file: downstream-defaults
+          cluster_template: cluster
 
         vars_files:
-          - "{{ path | default('.') }}/{{ defaults_file }}.yaml"
           - "{{ cluster_profile | default(omit) }}"
 
         tasks:
@@ -260,15 +259,18 @@ playbooks:
       - hosts: "{{ target_host | default('all') }}"
         become: true
         vars:
-          defaults_file: downstream-defaults
-
+          rancher_api_url: "https://{{ rancher_hostname }}.{{ rancher_domain }}/v3"
+          prepare_rke_nodes: true
         vars_files:
-          - "{{ path | default('.') }}/{{ defaults_file }}.yaml"
+          - "{{ cluster_profile | default(omit) }}"
 
         pre_tasks:
           - name: Prepare rancher nodes
             ansible.builtin.include_role:
               name: configure-rke-node
+            vars:
+              install_docker: false
+              cloudinit: false
             when: prepare_rke_nodes|bool
 
         tasks:
@@ -310,18 +312,72 @@ playbooks:
                   Content-Type: "application/json"
             register: cluster_registration_tokens
 
+          - name: Set nodeCommand
+            ansible.builtin.set_fact:
+              nodeCommand: "{{ cluster_registration_tokens.json.data[0].nodeCommand }}"
+
           - name: Create Cluster w/ node command
             ansible.builtin.shell: |
-              {{ cluster_registration_tokens.json.data[0].nodeCommand }} {{ rancher_cluster_cmd }}
+              {{ nodeCommand }} {{ rancher_cluster_cmd }}
+
+  - name: get_kubeconfig
+    play: |
+      ---
+      - hosts: "{{ target_host | default('localhost') }}"
+        become: true
+        vars:
+          rancher_api_url: "https://{{ rancher_hostname }}.{{ rancher_domain }}/v3"
+          check_kubeconfig: true
+
+        tasks:
+        - name: Get cluster information
+          ansible.builtin.uri:
+            validate_certs: false
+            url: "{{ rancher_api_url }}/clusters?name={{ cluster_name }}"
+            user: "{{ rancher_access_key }}"
+            password: "{{ rancher_secret_key }}"
+            body_format: json
+            method: GET
+            force_basic_auth: yes
+            headers:
+              Content-Type: "application/json"
+          register: cluster_info
+
+        - name: Show clusterid
+          ansible.builtin.debug:
+            var:
+              cluster_info.json.data[0].id
+
+        - name: Set clusterid
+          ansible.builtin.set_fact:
+            cluster_id: "{{ cluster_info.json.data[0].id }}"
+
+        - name: Get kubeconfig
+          ansible.builtin.uri:
+            validate_certs: false
+            url: "{{ rancher_api_url }}/clusters/{{ cluster_info.json.data[0].id }}?action=generateKubeconfig"
+            user: "{{ rancher_access_key }}"
+            password: "{{ rancher_secret_key }}"
+            body_format: json
+            method: POST
+            force_basic_auth: yes
+          register: kubeconfig
+
+        - name: Store kubeconfig on disk
+          ansible.builtin.copy:
+            content: "{{ kubeconfig.json.config  }}"
+            dest: "{{ kubeconfig_destination }}"
+
+        - name: Test if kubeconfig is valid
+          ansible.builtin.shell: |
+            kubectl get nodes --kubeconfig {{ kubeconfig_destination }}
+          register: cmd_result
+          retries: 20
+          delay: 30
+          until: ("NotReady" not in cmd_result.stdout)
+          when: check_kubeconfig|bool
 
 vars:
-  - name: downstream_defaults
-    file: |
-      ---
-      rancher_api_url: "https://{{ rancer_hostname }}.{{ rancher_domain }}/v3"
-      cluster_template: cluster
-      prepare_rke_nodes: true
-
   - name: ingress-nginx
     file: |
       ---

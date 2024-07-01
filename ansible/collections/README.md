@@ -574,7 +574,7 @@ Creates rancher downstream cluster (w/ api token + ssh)
 ```bash
 # CREATE INVENTORY
 cat <<EOF > ~/projects/rke2/dev1-inv
-losangeles5.tiab.labda.sva.de rancher_cluster_cmd="--controlplane --etcd --worker"
+dev1-aio.tiab.labda.sva.de rancher_cluster_cmd="--controlplane --etcd --worker"
 
 [all:vars]
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
@@ -603,10 +603,6 @@ ansible-playbook sthings.deploy_rke.deploy_downstream_cluster \
 -e prepare_rke_nodes=true \
 -i ~/projects/rke2/dev1-inv \
 -vv
-
-
-password hY4EFxZKrIUTxTOC. Bearer is admin:hY4EFxZKrIUTxTOC"
-
 ```
 
 </details>
@@ -616,7 +612,15 @@ password hY4EFxZKrIUTxTOC. Bearer is admin:hY4EFxZKrIUTxTOC"
 Downloads kubeconfig from downstream cluster
 
 ```bash
-
+ansible-playbook sthings.deploy_rke.get_downstream_kubeconfig \
+-e rancher_access_key=admin \
+-e rancher_secret_key=${RANCHER_SECRET_KEY} \
+-e rancher_hostname=rancher-things \
+-e rancher_domain=demo-rancher.sthings-vsphere.labul.sva.de \
+-e cluster_name=dev1 \
+-e kubeconfig_destination=/tmp/dev1 \
+-e check_kubeconfig=true \
+-vv
 ```
 
 </details>
