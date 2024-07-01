@@ -8,15 +8,21 @@ collections:
     version: 1.5.4
   - name: kubernetes.core
     version: 5.0.0
+  - name: community.docker
+    version: 3.10.4
   - name: community.vmware
     version: 4.4.0
+  - name: awx.awx
+    version: 24.6.0
   - name: community.hashi_vault
     version: 6.2.0
+  - name: https://github.com/stuttgart-things/stuttgart-things/releases/download/0.5.15/sthings-base_os-0.5.15.tar.gz
+  - name: https://github.com/stuttgart-things/stuttgart-things/releases/download/0.0.30/sthings-container-0.0.30.tar.gz
+  - name: https://github.com/stuttgart-things/deploy-configure-rke/releases/download/1.29.4/sthings-deploy_rke-1.29.4.tar.gz
+  - name: https://github.com/stuttgart-things/stuttgart-things/releases/download/0.0.83/sthings-awx-0.0.83.tar.gz
 
 roles:
   - src: https://github.com/stuttgart-things/deploy-configure-rke.git
-    scm: git
-  - src: https://github.com/stuttgart-things/download-install-binary.git
     scm: git
   - src: https://github.com/stuttgart-things/install-configure-powerdns.git
     scm: git
@@ -25,14 +31,27 @@ roles:
   - src: https://github.com/stuttgart-things/install-requirements.git
     scm: git
   - src: https://github.com/stuttgart-things/create-send-webhook.git
-    scm: git
-  - src: https://github.com/stuttgart-things/create-os-user.git
+    version: 2024.06.06
     scm: git
   - src: https://github.com/stuttgart-things/install-configure-vault.git
     scm: git
   - src: https://github.com/stuttgart-things/install-configure-nfs.git
     scm: git
+  - src: https://github.com/stuttgart-things/manage-filesystem.git
+    version: 2024.06.07
+    scm: git
+  - src: https://github.com/stuttgart-things/download-install-binary.git
+    scm: git
+    version: 2024.05.24
+  - src: https://github.com/stuttgart-things/create-os-user.git
+    scm: git
+    version: 2024.05.03
   - src: https://github.com/stuttgart-things/install-configure-docker.git
     scm: git
-  - src: https://github.com/stuttgart-things/manage-filesystem.git
+    version: 2024.04.30
+  - src: https://github.com/stuttgart-things/install-configure-podman.git
     scm: git
+    version: 2024.05.08
+  - src: https://github.com/stuttgart-things/manage-proxmox-resources.git
+    scm: git
+    version: 2024.05.27
