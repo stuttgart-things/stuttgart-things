@@ -1,6 +1,6 @@
 ---
 name: base_os
-version: 0.5.19
+version: 0.5.20
 namespace: sthings
 requirements: |
   roles:
@@ -338,7 +338,7 @@ playbooks:
             ansible.builtin.lineinfile:
               create: true
               path: "{{ rendered_all }}"
-              line: "{{ lookup('file', '{{ ansible_date_time.date }}-{{ cloud }}.tf') }}\n\n{{ lookup('file', '{{ ansible_date_time.date }}-backend.tf') }}"
+              line: "{{ lookup('file', '{{ ansible_date_time.date }}-vm-{{ cloud }}.tf') }}\n\n{{ lookup('file', '{{ ansible_date_time.date }}-backend.tf') }}"
 
           - name: Upload config to S3 Bucket
             amazon.aws.s3_object:
@@ -640,7 +640,7 @@ vars:
         backend:
           name: "backend"
         main:
-          name: "{{ cloud }}"
+          name: "vm-{{ cloud }}"
 
       object_name: "{{ ansible_date_time.date }}-{{ project_name }}.tf"
 
