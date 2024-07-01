@@ -40,6 +40,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4.1.7
+
       - name: Lint code
         run: |
           golangci-lint run
@@ -53,6 +54,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4.1.7
+
       - name: Test code
         run: |
           go mod tidy
@@ -70,5 +72,5 @@ jobs:
       - name: Test code
         run: |
           go mod tidy
-          CGO_ENABLED=0 go build -buildvcs=false -o ${{ inputs.module-name }}   
+          CGO_ENABLED=0 go build -buildvcs=false -o ${{ inputs.module-name }}
           du -sh ./${{ inputs.module-name }}
