@@ -307,7 +307,7 @@ playbooks:
   - name: render_upload_vm
     play: |
       ---
-      - hosts: localhost
+      - hosts: "{{ target_host | default('localhost') }}"
         vars:
           vault_approle_id: "{{ lookup('env', 'VAULT_ROLE_ID') }}"
           vault_approle_secret: "{{ lookup('env', 'VAULT_SECRET_ID') }}"
