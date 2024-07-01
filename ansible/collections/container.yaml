@@ -35,7 +35,6 @@ playbooks:
           vault_approle_id: "{{ lookup('env', 'VAULT_ROLE_ID') }}"
           vault_approle_secret: "{{ lookup('env', 'VAULT_SECRET_ID') }}"
           vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
-
           rancher_api_secret_path: apps/data/rancher:apiUrl
           rancher_api_accesskey_path: apps/data/rancher:accessKey
           rancher_api_secretkey_path: apps/data/rancher:secretKey
