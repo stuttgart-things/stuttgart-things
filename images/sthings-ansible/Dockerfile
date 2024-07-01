@@ -7,6 +7,7 @@ FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 LABEL version=10.1.0
 
+# SW VERSIONS
 ARG YQ_VERSION=4.42.1
 ARG ANSIBLE_VERSION=10.1.0
 ARG ANSIBLE_LINT_VERSION=24.6.0

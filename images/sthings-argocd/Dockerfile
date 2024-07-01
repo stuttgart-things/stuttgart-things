@@ -4,8 +4,8 @@ ARG IMAGE=argocd
 ARG TAG=v2.11.3
 FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
 
-LABEL version=v2.11.3
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
+LABEL version=v2.11.3
 
 # SW VERSIONS
 ARG ARGOCD_VAULT_PLUGIN_VERSION=1.18.1
