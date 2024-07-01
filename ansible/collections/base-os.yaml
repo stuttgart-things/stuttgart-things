@@ -185,6 +185,7 @@ playbooks:
       - hosts: "{{ target_host | default('all') }}"
         become: true
         gather_facts: true
+
         vars:
           update_packages: true
           ansible_username: sthings
