@@ -51,8 +51,10 @@ jobs:
           done
 
           # GET ALL CHANGED COLLECTIONS AS (ONE) COMMA SEPERATED STRING
-          changed_collections=$(echo ${changed_collection_dirs[@]// /,})
-          changed_collections=$(echo ${document_keywords//[[:blank:]]/,})
+          changed_collections=$(echo ${changed_collection_dirs// /,})
+
+          # changed_collections=$(echo ${changed_collection_dirs[@]// /,})
+          # changed_collections=$(echo ${document_keywords//[[:blank:]]/,})
 
           # SET COLLECTIONS AS JSON
           collections=$(echo "\"${changed_collections}\"" | sed 's/,/", "/g')
