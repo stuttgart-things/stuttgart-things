@@ -543,11 +543,11 @@ vars:
               "choices": ["true", "false"],
               "min": null,
               "max": null,
-              "default": ""
+              "default": "true"
             },
             {
               "question_name": "What is the project name?",
-              "question_description": "Enter project name",
+              "question_description": "Enter project name (name of vm)",
               "required": true,
               "type": "text",
               "variable": "project_name",
@@ -605,7 +605,7 @@ vars:
               "choices": ["labul", "labda"],
               "min": null,
               "max": null,
-              "default": ""
+              "default": "labul"
             },
             {
               "question_name": "What cloud for the VM?",
@@ -616,7 +616,7 @@ vars:
               "choices": ["vsphere", "proxmox"],
               "min": null,
               "max": null,
-              "default": ""
+              "default": "vsphere"
             }
           ]
         }
@@ -647,6 +647,16 @@ vars:
           "name": "",
           "description": "",
           "spec": [
+            {
+              "question_name": "Execute against which host?",
+              "question_description": "Enter host name",
+              "required": true,
+              "type": "text",
+              "variable": "target_host",
+              "min": null,
+              "max": null,
+              "default": "localhost"
+            },
             {
               "question_name": "What is the VM name?",
               "question_description": "Enter VM name",
@@ -702,7 +712,7 @@ vars:
             },
             {
               "question_name": "What is the platform subfolderpath?",
-              "question_description": "Enter subfolderpath of vsphere / proxmox",
+              "question_description": "Enter subfolderpath of vsphere (testing)/ proxmox (stuttgart-things)",
               "required": true,
               "type": "text",
               "variable": "subfolderpath",
@@ -719,7 +729,7 @@ vars:
               "choices": ["labul", "labda"],
               "min": null,
               "max": null,
-              "default": ""
+              "default": "labul"
             },
             {
               "question_name": "What cloud for the VM?",
@@ -730,7 +740,7 @@ vars:
               "choices": ["vsphere", "proxmox"],
               "min": null,
               "max": null,
-              "default": ""
+              "default": "vsphere"
             }
           ]
         }
