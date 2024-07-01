@@ -487,6 +487,17 @@ vars:
               "default": ""
             },
             {
+              "question_name": "Do you want to install Terraform?",
+              "question_description": "Choose true or false",
+              "required": true,
+              "type": "multiplechoice",
+              "variable": "install_terraform",
+              "choices": ["true", "false"],
+              "min": null,
+              "max": null,
+              "default": ""
+            },
+            {
               "question_name": "What is the project name?",
               "question_description": "Enter project name",
               "required": true,
