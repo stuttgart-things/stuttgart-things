@@ -51,15 +51,8 @@ jobs:
             changed_image_dirs+=("$image_path")
           done
 
-          echo array is ${changed_image_dirs[@]}
-
           # GET ALL CHANGED PATHS AS COMMA SEPERATED STRING
-          changed_contexts=$(echo ${changed_image_dirs// /,})
-
-          echo string is ${changed_contexts}
-
-          echo test echo ${changed_image_dirs[@]// /,}
-
+          changed_contexts=$(echo ${changed_image_dirs[@]// /,})
 
           # SET CONTEXTS AS JSON
           contexts=$(echo "\"${changed_contexts}\"" | sed 's/,/", "/g')
