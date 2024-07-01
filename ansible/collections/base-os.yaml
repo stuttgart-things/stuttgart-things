@@ -6,7 +6,7 @@ requirements: |
   roles:
     - src: https://github.com/stuttgart-things/download-install-binary.git
       scm: git
-      version: 2024.05.24
+      version: 2024.07.01
     - src: https://github.com/stuttgart-things/create-os-user.git
       scm: git
       version: 2024.05.03
@@ -244,7 +244,7 @@ playbooks:
           download_dir: "/tmp/downloads"
 
         vars_files:
-          - "{{ path | default('.') }}/{{ profile | default('dev') }}.yaml"
+          - "{{ path | default('.') }}/{{ profile | default('binaries') }}.yaml"
 
         roles:
           - role: sthings.base_os.download_install_binary
@@ -307,7 +307,7 @@ playbooks:
   - name: render_upload_vm
     play: |
       ---
-      - hosts: "{{ target_host | default('localhost') }}"
+      - hosts: localhost
         vars:
           vault_approle_id: "{{ lookup('env', 'VAULT_ROLE_ID') }}"
           vault_approle_secret: "{{ lookup('env', 'VAULT_SECRET_ID') }}"
@@ -727,16 +727,17 @@ vars:
           generate_ssh_key: true
           enable_ssh_tcp_forwarding: true
 
-  - name: dev
+  - name: binaries
     file: |
       ---
       gh_version: 2.52.0 # datasource=github-tags depName=cli/cli
       task_version: v3.37.2 # datasource=github-tags depName=go-task/task
-      hugo_version: 0.127.0
+      hugo_version: 0.127.0 # datasource=github-tags depName=gohugoio/hugo
       terraform_version: 1.9.0 # datasource=custom.hashicorp
-      packer_version: 1.11.0
-      yq_version: 4.44.2
-      machineshop_version: 2.1.9
+      packer_version: 1.11.0 # datasource=custom.hashicorp
+      yq_version: 4.44.2 # datasource=github-tags depName=mikefarah/yq
+      machineshop_version: 2.1.9 # datasource=github-tags depName=stuttgart-things/machineshop
+      jq_version: 1.7.1 # datasource=github-tags depName=jqlang/jq
 
       bin:
         gh:
@@ -795,9 +796,9 @@ vars:
           bin_version: "v{{ yq_version }}"
           check_bin_version_before_installing: true
           source_url: "https://github.com/mikefarah/yq/releases/download/v{{ yq_version }}/yq_linux_amd64.tar.gz"
-          bin_to_copy: yq
+          bin_to_copy: yq_linux_amd64
           to_remove: ""
-          bin_dir: "/usr/bin"
+          bin_dir: "/usr/bin/yq"
           version_cmd: " version"
           target_version: "v{{ yq_version }}"
         machineshop:
@@ -810,6 +811,16 @@ vars:
           bin_dir: "/usr/bin"
           version_cmd: " version"
           target_version: "{{ machineshop_version }}"
+        jq:
+          bin_name: jq
+          bin_version: "v{{ jq_version }}"
+          check_bin_version_before_installing: true
+          source_url: "https://github.com/jqlang/jq/releases/download/jq-{{ jq_version }}/jq-linux-amd64"
+          bin_to_copy: jq-linux-amd64
+          to_remove: ""
+          bin_dir: "/usr/bin/jq"
+          version_cmd: " version"
+          target_version: "v{{ jq_version }}"
 
 modules:
   - name: get_checksum
