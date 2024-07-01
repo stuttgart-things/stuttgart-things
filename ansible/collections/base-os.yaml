@@ -113,6 +113,7 @@ playbooks:
           tf_vars_file: "{{ tf_vars }}"
           bucket_permission: [private]
           path: "vars"
+          install_terraform: true
 
           bin:
             terraform:
@@ -134,11 +135,13 @@ playbooks:
           AWS_ACCESS_KEY_ID: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:accessKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
           AWS_SECRET_ACCESS_KEY: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:secretKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
 
-        tasks:
+        pre_tasks:
           - name: call role and install terraform
             ansible.builtin.include_role:
               name: sthings.base_os.download_install_binary
+            when: install_terraform
 
+        tasks:
           - name: Create terraform dir
             ansible.builtin.file:
               path: "{{ tf_project_path }}"
