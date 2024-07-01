@@ -55,7 +55,8 @@ jobs:
 
           echo changed_collections: $changed_collections
 
-          echo test: ${changed_collections//[[:blank:]]/,}
+          echo test: ${changed_collections//[[:blank:]]/, }
+          changed_collections=$(echo ${changed_collections//[[:blank:]]/, })
 
           # changed_collections=$(echo ${changed_collection_dirs[@]// /,})
           # changed_collections=$(echo ${document_keywords//[[:blank:]]/,})
