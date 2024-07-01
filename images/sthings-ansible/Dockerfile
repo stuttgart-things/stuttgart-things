@@ -42,5 +42,4 @@ RUN mkdir -p /home/nonroot/.ansible && chown -R ${USER_ID}:${GROUP_ID} /home/non
 ADD requirements.yaml /home/nonroot/requirements.yaml
 USER 65532
 RUN ansible-galaxy install -r /home/nonroot/requirements.yaml
-
 USER root

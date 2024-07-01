@@ -58,6 +58,8 @@ jobs:
 
           echo string is ${changed_contexts}
 
+          echo test echo ${changed_image_dirs[@]// /,}
+
 
           # SET CONTEXTS AS JSON
           contexts=$(echo "\"${changed_contexts}\"" | sed 's/,/", "/g')

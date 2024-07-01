@@ -42,5 +42,6 @@ ENV USER_HOME=/home/nonroot
 RUN addgroup -g $GROUP_ID $GROUP_NAME && \
      adduser --shell /bin/bash --disabled-password -h ${USER_HOME} \
      --uid $USER_ID --ingroup $GROUP_NAME $USER_NAME
+
 RUN mkdir -p /home/nonroot
 RUN chown -R ${USER_ID}:${GROUP_ID} ${USER_HOME}
