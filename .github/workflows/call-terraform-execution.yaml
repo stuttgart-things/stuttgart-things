@@ -208,7 +208,7 @@ jobs:
 
   Merge-Terraform-PR:
     name: Merge Terraform PR
-    if: ${{ (inputs.operation == 'destroy') && (inputs.delete-folder == true || inputs.delete-folder  == 'true') }}
+    if: ${{ (inputs.operation == 'destroy') && (inputs.delete-folder == true || inputs.delete-folder  == 'true') && (github.event.ref == 'refs/heads/main') }}
     uses: stuttgart-things/stuttgart-things/.github/workflows/call-pullrequest-merge.yaml@main
     needs:
       - Execute-Terraform
