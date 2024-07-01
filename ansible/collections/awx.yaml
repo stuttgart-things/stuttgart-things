@@ -302,7 +302,6 @@ playbooks:
     play: |
       ---
       - hosts: "{{ target_host | default('localhost') }}"
-
         vars_files:
           - "{{ path | default('.') }}/awx-local-env.yaml"
           - "{{ path | default('.') }}/organization-sthings.yaml"
