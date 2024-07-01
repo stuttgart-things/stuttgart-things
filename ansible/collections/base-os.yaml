@@ -1,6 +1,6 @@
 ---
 name: base_os
-version: 0.5.17
+version: 0.5.18
 namespace: sthings
 requirements: |
   roles:
@@ -99,85 +99,6 @@ playbooks:
             tags: notify
             ignore_errors: true
             when: send_to_msteams|bool
-
-  - name: get_execute_terraform
-    play: |
-      ---
-      - hosts: "{{ target_host | default('localhost') }}"
-        vars:
-          vault_approle_id: "{{ lookup('env', 'VAULT_ROLE_ID') }}"
-          vault_approle_secret: "{{ lookup('env', 'VAULT_SECRET_ID') }}"
-          vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
-          state: "present"
-          cloud: "vsphere"
-          tf_vars_file: "{{ tf_vars }}"
-          bucket_permission: [private]
-          path: "vars"
-          install_terraform: true
-
-          bin:
-            terraform:
-              bin_name: "terraform"
-              bin_version: "1.9.0"
-              check_bin_version_before_installing: true
-              source_url: "https://releases.hashicorp.com/terraform/1.9.0/terraform_1.9.0_linux_amd64.zip"
-              bin_to_copy: "terraform"
-              to_remove: "terraform"
-              bin_dir: "/usr/local/bin"
-              version_cmd: " --version"
-              target_version: v1.9.0
-
-        vars_files:
-          - "{{ path | default('.') }}/terraform-vars.yaml"
-          - "{{ path | default('.') }}/tf-vars-{{ cloud }}.yaml"
-
-        environment:
-          AWS_ACCESS_KEY_ID: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:accessKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
-          AWS_SECRET_ACCESS_KEY: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:secretKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
-
-        pre_tasks:
-          - name: call role and install terraform
-            ansible.builtin.include_role:
-              name: sthings.base_os.download_install_binary
-              apply:
-                become: true
-            when: install_terraform
-
-        tasks:
-          - name: Create terraform dir
-            ansible.builtin.file:
-              path: "{{ tf_project_path }}"
-              state: directory
-              mode: '1777'
-
-          - name: Create project_name dir
-            ansible.builtin.file:
-              path: "{{ tf_project_path }}/{{ project_name }}"
-              state: directory
-              mode: '1777'
-
-          - name: Get rendered vm config file f s3 bucket
-            amazon.aws.s3_object:
-              bucket: "{{ bucket_name }}"
-              object: "{{ object_name }}"
-              dest: "{{ tf_project_path }}/{{ project_name }}/{{ rendered_all }}"
-              mode: get
-              access_key: "{{ AWS_ACCESS_KEY_ID }}"
-              secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
-              validate_certs: false
-              encrypt: false
-              rgw: false
-              permission: "{{ bucket_permission }}"
-              endpoint_url: "{{ s3_endpoint }}"
-
-          - name: Init and apply terraform
-            community.general.terraform:
-              project_path: "{{ tf_project_path }}/{{ project_name }}"
-              state: "{{ state }}"
-              force_init: "{{ force_init }}"
-              init_reconfigure: "{{ init_reconfigure }}"
-              complex_vars: true
-              variables: "{{ tf_vars_file }}"
 
   - name: ansible
     play: |
@@ -416,7 +337,7 @@ playbooks:
             ansible.builtin.lineinfile:
               create: true
               path: "{{ rendered_all }}"
-              line: "{{ lookup('file', '{{ ansible_date_time.date }}-vm-{{ cloud }}.tf') }}\n\n{{ lookup('file', '{{ ansible_date_time.date }}-{{ cloud }}-backend.tf') }}"
+              line: "{{ lookup('file', '{{ ansible_date_time.date }}-vm-{{ cloud }}.tf') }}\n\n{{ lookup('file', '{{ ansible_date_time.date }}-backend.tf') }}"
 
           - name: Upload config to S3 Bucket
             amazon.aws.s3_object:
@@ -442,6 +363,85 @@ playbooks:
             ansible.builtin.file:
               path: "{{ rendered_all }}"
               state: absent
+
+  - name: get_execute_terraform
+    play: |
+      ---
+      - hosts: "{{ target_host | default('localhost') }}"
+        vars:
+          vault_approle_id: "{{ lookup('env', 'VAULT_ROLE_ID') }}"
+          vault_approle_secret: "{{ lookup('env', 'VAULT_SECRET_ID') }}"
+          vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
+          state: "present"
+          cloud: "vsphere"
+          tf_vars_file: "{{ tf_vars }}"
+          bucket_permission: [private]
+          path: "vars"
+          install_terraform: true
+
+          bin:
+            terraform:
+              bin_name: "terraform"
+              bin_version: "1.9.0"
+              check_bin_version_before_installing: true
+              source_url: "https://releases.hashicorp.com/terraform/1.9.0/terraform_1.9.0_linux_amd64.zip"
+              bin_to_copy: "terraform"
+              to_remove: "terraform"
+              bin_dir: "/usr/local/bin"
+              version_cmd: " --version"
+              target_version: v1.9.0
+
+        vars_files:
+          - "{{ path | default('.') }}/terraform-vars.yaml"
+          - "{{ path | default('.') }}/tf-vars-{{ cloud }}.yaml"
+
+        environment:
+          AWS_ACCESS_KEY_ID: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:accessKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+          AWS_SECRET_ACCESS_KEY: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:secretKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+
+        pre_tasks:
+          - name: call role and install terraform
+            ansible.builtin.include_role:
+              name: sthings.base_os.download_install_binary
+              apply:
+                become: true
+            when: install_terraform
+
+        tasks:
+          - name: Create terraform dir
+            ansible.builtin.file:
+              path: "{{ tf_project_path }}"
+              state: directory
+              mode: '1777'
+
+          - name: Create project_name dir
+            ansible.builtin.file:
+              path: "{{ tf_project_path }}/{{ project_name }}"
+              state: directory
+              mode: '1777'
+
+          - name: Get rendered vm config file f s3 bucket
+            amazon.aws.s3_object:
+              bucket: "{{ bucket_name }}"
+              object: "{{ object_name }}"
+              dest: "{{ tf_project_path }}/{{ project_name }}/{{ rendered_all }}"
+              mode: get
+              access_key: "{{ AWS_ACCESS_KEY_ID }}"
+              secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+              validate_certs: false
+              encrypt: false
+              rgw: false
+              permission: "{{ bucket_permission }}"
+              endpoint_url: "{{ s3_endpoint }}"
+
+          - name: Init and apply terraform
+            community.general.terraform:
+              project_path: "{{ tf_project_path }}/{{ project_name }}"
+              state: "{{ state }}"
+              force_init: "{{ force_init }}"
+              init_reconfigure: "{{ init_reconfigure }}"
+              complex_vars: true
+              variables: "{{ tf_vars_file }}"
 
 templates:
   - name: vm-vsphere
@@ -503,7 +503,58 @@ templates:
         value = [module.{{ vmName }}.ip]
       }
 
-  - name: vsphere-backend
+  - name: vm-proxmox
+    file: |
+      module "{{ vmName }}" {
+        source                  = "{{ tf_module_source }}"
+        vm_count                = {{ vmCount }}
+        vm_name                 = "{{ vmName }}"
+        vm_memory               = "{{ vm_memory }}"
+        vm_num_cpus             = "{{ vm_cpu }}"
+        vm_disk_size            = "{{ vm_disk }}G"
+        vm_template             = "{{ vm_template }}"
+        pve_cluster_node        = "{{ datacenter }}"
+        pve_datastore           = "{{ vm_datastores }}"
+        pve_folder_path         = "{{ folderpath }}"
+        pve_network             = "{{ vm_network }}"
+        vm_notes                = "VSPHERE-VM {{ vmName }} {{ vm_template }} BUILD w/ TERRAFORM FOR STUTTGART-THINGS"
+        pve_api_url             = var.pve_api_url
+        pve_api_user            = var.pve_api_user
+        pve_api_password        = var.pve_api_password
+        vm_ssh_user             = var.vm_ssh_user
+        vm_ssh_password         = var.vm_ssh_password
+      }
+
+      output "ip" {
+        value     = module.{{ vmName }}.ip
+      }
+
+      variable "pve_api_url" {
+        type        = string
+        description = "url of proxmox api. Example: https://server-example.sva.de:8006/api2/json"
+      }
+
+      variable "pve_api_user" {
+        type        = string
+        description = "username of proxmox api user"
+      }
+
+      variable "pve_api_password" {
+        type        = string
+        description = "password of proxmox api user"
+      }
+
+      variable "vm_ssh_user" {
+        type        = string
+        description = "desired username for ssh connection"
+      }
+
+      variable "vm_ssh_password" {
+        type        = string
+        description = "desired password for ssh connection"
+      }
+
+  - name: backend
     file: |
       terraform {
         backend "s3" {
@@ -548,6 +599,21 @@ vars:
             - "/LabUL/network/LAB-10.31.104"
           subfolderpath: "testing"
           bucket_name: "andre-vm-config"
+        proxmox:
+          template:
+            ubuntu22: "ubuntu22"
+            ubuntu24: "ubuntu24"
+            rocky9: "rocky9"
+          datastore:
+            - "v3700"
+            - "datastore"
+          network:
+            - "vmbr101"
+            - "vmbr102"
+            - "vmbr103"
+            - "vmbr104"
+          subfolderpath: "stuttgart-things"
+          bucket_name: "andre-vm-config"
 
   - name: vm-defaults
     file: |
@@ -571,7 +637,7 @@ vars:
 
       j2_template_name:
         backend:
-          name: "{{ cloud }}-backend"
+          name: "backend"
         main:
           name: "vm-{{ cloud }}"
 
@@ -582,13 +648,11 @@ vars:
       vmSize: "s"
       vmTemplate: "ubuntu24"
       s3_endpoint: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:console validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
-      tf_module_source: "github.com/stuttgart-things/vsphere-vm?ref=v1.7.5-2.7.0-1"
       vmFirmware: "bios"
       rootFolderpath: "stuttgart-things"
       resourcePool: "/LabUL/host/Cluster-V6.5/Resources"
       backend_host_url: "https://artifacts.app1.sthings-vsphere.labul.sva.de"
       s3region: "main"
-      datacenter: "/LabUL"
 
   - name: vsphere
     file: |
@@ -600,6 +664,21 @@ vars:
       vm_datastores: "{{ lab_values[cloud]['datastore'] | random }}"
       vm_network: "{{ lab_values[cloud]['network'] | random }}"
       folderpath: "{{ lab_values[cloud]['subfolderpath'] }}"
+      datacenter: "/LabUL"
+      tf_module_source: "github.com/stuttgart-things/vsphere-vm?ref=v1.7.5-2.7.0-1"
+
+  - name: proxmox
+    file: |
+      ---
+      vm_cpu: "{{ vm_size['cpu'][vmSize] }}"
+      vm_memory: "{{ vm_size['memory'][vmSize] }}"
+      vm_disk: "{{ vm_size['disk'][vmSize] }}"
+      vm_template: "{{ lab_values[cloud]['template'][vmTemplate] }}"
+      vm_datastores: "{{ lab_values[cloud]['datastore'] | random }}"
+      vm_network: "{{ lab_values[cloud]['network'] | random }}"
+      folderpath: "{{ lab_values[cloud]['subfolderpath'] }}"
+      tf_module_source: "github.com/stuttgart-things/proxmox-vm.git?ref=v2.9.14-1.5.5"
+      datacenter: "sthings-pve1"
 
   - name: tf-vars-vsphere
     file: |
@@ -610,6 +689,16 @@ vars:
         vsphere_password: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/vsphere:password validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
         vm_ssh_user: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/vsphere:vm_ssh_user validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
         vm_ssh_password: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/vsphere:vm_ssh_password validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+
+  - name: tf-vars-proxmox
+    file: |
+      ---
+      tf_vars:
+        pve_api_url: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/pve:api_url validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+        pve_api_user: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/pve:api_user validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+        pve_api_password: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/pve:api_password validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+        vm_ssh_user: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/pve:ssh_user validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+        vm_ssh_password: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/pve:ssh_password validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
 
   - name: terraform-vars
     file: |
