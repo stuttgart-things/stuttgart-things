@@ -53,6 +53,7 @@ jobs:
 
           # GET ALL CHANGED PATHS AS COMMA SEPERATED STRING
           changed_contexts=$(echo ${changed_image_dirs[@]// /,})
+          changed_contexts=$(echo ${changed_contexts//[[:blank:]]/,})
 
           # SET CONTEXTS AS JSON
           contexts=$(echo "\"${changed_contexts}\"" | sed 's/,/", "/g')

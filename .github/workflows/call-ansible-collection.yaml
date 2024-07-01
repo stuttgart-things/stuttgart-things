@@ -60,7 +60,6 @@ jobs:
             collections+=("$file")
           done
 
-          #repository='{ "repository": ["repo1","repo2","repo3","repo4"] }'
           echo hello $(jq -c -n '$ARGS.positional' --args "${collections[@]}" )
         shell: bash
 
