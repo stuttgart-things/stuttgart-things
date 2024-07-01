@@ -281,7 +281,6 @@ playbooks:
     play: |
       ---
       - hosts: "{{ target_host | default('localhost') }}"
-
         vars_files:
           - "{{ path | default('.') }}/awx-local-env.yaml"
           - "{{ path | default('.') }}/organization-sthings.yaml"
@@ -1511,7 +1510,7 @@ vars:
 
       object_name: "{{ ansible_date_time.date }}-{{ project_name }}.tf"
 
-      vmName: "test-{{ lookup('community.general.random_string', length=5, special=false) | lower }}" 
+      vmName: "test-{{ lookup('community.general.random_string', length=5, special=false) | lower }}"
       vmCount: "1"
       vmSize: "s"
       vmTemplate: "ubuntu24"
