@@ -210,11 +210,10 @@ playbooks:
           - ansible.builtin.import_tasks: check_connection.yaml
           - ansible.builtin.import_tasks: creation_tasks.yaml
 
-  - name: get-execute-terraform
+  - name: get_execute_terraform
     play: |
       ---
       - hosts: "{{ target_host | default('localhost') }}"
-
         vars_files:
           - "{{ path | default('.') }}/awx-local-env.yaml"
           - "{{ path | default('.') }}/organization-sthings.yaml"
