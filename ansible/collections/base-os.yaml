@@ -106,6 +106,7 @@ playbooks:
       - hosts: "{{ target_host | default('all') }}"
         become: true
         gather_facts: true
+
         vars:
           update_packages: true
           ansible_username: sthings
@@ -646,7 +647,7 @@ vars:
       vmName: "test-{{ lookup('community.general.random_string', length=5, special=false) | lower }}"
       vmCount: "1"
       vmSize: "s"
-      vmTemplate: "ubuntu24"
+      vmTemplate: ubuntu24
       s3_endpoint: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:console validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
       vmFirmware: "bios"
       rootFolderpath: "stuttgart-things"

@@ -1547,7 +1547,7 @@ vars:
     file: |
       ---
       tf_project_path: "./terraform"
-      state: "present"
+      state: present
       rendered_all: "tf-config-all.tf"
       s3_endpoint: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:console validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
       AWS_ACCESS_KEY_ID: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:accessKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
