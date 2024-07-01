@@ -5,13 +5,13 @@ ARG TAG=3.12.2-alpine3.19
 FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
 
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
-LABEL version=10.0.1
+LABEL version=10.1.0
 
 ARG YQ_VERSION=4.42.1
 
-ARG ANSIBLE_VERSION=10.0.1
+ARG ANSIBLE_VERSION=10.1.0
 ARG ANSIBLE_LINT_VERSION=24.6.0
-ARG MACHINE_SHOP_VERSION=v1.7.0
+ARG MACHINE_SHOP_VERSION=2.1.9
 
 ENV USER_ID=65532
 ENV GROUP_ID=65532
@@ -27,9 +27,9 @@ RUN wget -q https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_
     && rm -rf xvfz yq_linux_amd64.tar.gz
 
 # MACHINE-SHOP
-RUN wget -q https://github.com/stuttgart-things/machineShop/releases/download/${MACHINE_SHOP_VERSION}/machineShop_Linux_x86_64.tar.gz \
-    && tar -xvf machineShop_Linux_x86_64.tar.gz -C /usr/bin/ machineShop \
-    && rm -rf machineShop_Linux_x86_64.tar.gz
+RUN wget -q https://github.com/stuttgart-things/machineshop/releases/download/${MACHINE_SHOP_VERSION}/machineshop_Linux_x86_64.tar.gz \
+    && tar -xvf machineshop_Linux_x86_64.tar.gz -C /usr/bin/ machineshop \
+    && rm -rf machineshop_Linux_x86_64.tar.gz
 
 # GET RUST; NOTE: USING SH FOR BETTER COMPATIBILITY WITH OTHER BASE IMAGES
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
