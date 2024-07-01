@@ -1,6 +1,6 @@
 ---
 name: base_os
-version: 0.5.15
+version: 0.5.16
 namespace: sthings
 requirements: |
   roles:
@@ -578,7 +578,7 @@ vars:
 
       object_name: "{{ ansible_date_time.date }}-{{ project_name }}.tf"
 
-      vmName: "test-{{ lookup('community.general.random_string', length=5, special=false) | lower }}" 
+      vmName: "test-{{ lookup('community.general.random_string', length=5, special=false) | lower }}"
       vmCount: "1"
       vmSize: "s"
       vmTemplate: "ubuntu24"
