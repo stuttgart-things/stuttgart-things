@@ -41,7 +41,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Execute blog creation script  
+      - name: Execute blog creation script
         run: |
           ls -lta
           bash ${{ inputs.creation-script-path }} ${{ inputs.site-name }}
@@ -55,7 +55,7 @@ jobs:
   Sync-Hugo-Dev-Minio:
     name: Sync Minio Dev
     needs: Create-Hugo-Content
-    uses: stuttgart-things/stuttgart-things/.github/workflows/call-minio-sync.yaml@main
+    uses: stuttgart-things/stuttgart-things/.github/workflows/call-minio-sync.yaml@minio-sync-v1
     with:
       folder: hugo-dev
       endpoint: ${{ inputs.s3-endpoint }}
@@ -81,7 +81,7 @@ jobs:
           path: |-
             ${{ inputs.site-name }}
 
-      - name: Execute blog creation script  
+      - name: Execute blog creation script
         run: |
           ls -lta ${{ inputs.site-name }}
           cd ${{ inputs.site-name }} && hugo --logLevel info --destination ../public
@@ -94,7 +94,7 @@ jobs:
   Sync-Hugo-Public-Minio:
     name: Sync Minio Public
     needs: Build-Hugo-Site
-    uses: stuttgart-things/stuttgart-things/.github/workflows/call-minio-sync.yaml@main
+    uses: stuttgart-things/stuttgart-things/.github/workflows/call-minio-sync.yaml@minio-sync-v1
     with:
       folder: hugo-public
       endpoint: ${{ inputs.s3-endpoint }}
@@ -110,8 +110,8 @@ jobs:
     runs-on: ${{ inputs.runs-on }}
     needs: Build-Hugo-Site
     permissions:
-      pages: write      
-      id-token: write  
+      pages: write
+      id-token: write
     container:
       image: locietta/loia-dev-base:node
     environment: ${{ inputs.environment-name }}
