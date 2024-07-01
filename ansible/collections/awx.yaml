@@ -477,6 +477,27 @@ vars:
           "description": "",
           "spec": [
             {
+              "question_name": "Execute against which host?",
+              "question_description": "Enter host name",
+              "required": true,
+              "type": "text",
+              "variable": "target_host",
+              "min": null,
+              "max": null,
+              "default": ""
+            },
+            {
+              "question_name": "Do you want to install Terraform?",
+              "question_description": "Choose true or false",
+              "required": true,
+              "type": "multiplechoice",
+              "variable": "install_terraform",
+              "choices": ["true", "false"],
+              "min": null,
+              "max": null,
+              "default": ""
+            },
+            {
               "question_name": "What is the project name?",
               "question_description": "Enter project name",
               "required": true,
