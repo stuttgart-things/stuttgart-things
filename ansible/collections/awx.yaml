@@ -1,6 +1,6 @@
 ---
 name: awx
-version: 0.0.84
+version: 0.0.85
 namespace: sthings
 playbooks:
   - name: check_connection
@@ -1581,7 +1581,7 @@ vars:
         backend:
           name: "backend"
         main:
-          name: "{{ cloud }}"
+          name: "vm-{{ cloud }}"
 
       object_name: "{{ ansible_date_time.date }}-{{ project_name }}.tf"
 
