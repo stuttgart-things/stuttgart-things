@@ -348,14 +348,14 @@ ansible-playbook sthings.awx.render_upload_vm -vv -e lab=labul -e cloud=vsphere 
 ### INSTALLATION
 
 ```bash
-VERSION=1.29.4-6
+VERSION=1.28.10
 ansible-galaxy collection install -f \
 https://github.com/stuttgart-things/stuttgart-things/releases/download/${VERSION}/sthings-deploy_rke-${VERSION}.tar.gz
 ```
 
 ### PLAYBOOKS
 
-<details><summary>INSTALL SINGLE-NODE CLUSTER</summary>
+<details><summary>INSTALL MULTI-NODE CLUSTER</summary>
 
 Deploys a rke2 multi-node cluster.
 
@@ -492,6 +492,8 @@ ansible-playbook sthings.deploy_rke.deploy_to_k8s \
 -e deployment_vars=~/projects/rke2/cert-manager.yaml #ABSOLUTE PATH REQUIRED!
 -vv
 ```
+
+</details>
 
 <details><summary>DEPLOY RANCHER</summary>
 
