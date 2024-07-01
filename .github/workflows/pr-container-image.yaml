@@ -1,5 +1,5 @@
 ---
-name: Build Container Image w/ kaniko
+name: Build Container Image
 on:
   pull_request:
     types:
@@ -12,7 +12,7 @@ jobs:
   Get-Changed-Dockerfiles:
     runs-on: ghr-stuttgart-things-labda-test
     container:
-      image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2-2
+      image: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7:1.9.10
     environment: labul-vsphere #k8s
     outputs:
       contexts: ${{ steps.json.outputs.contexts }}
@@ -41,6 +41,7 @@ jobs:
           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
         run: |
           # LOOP OVER ALL CHANGED PATHS FOR GETTING CONTEXT DIRS
+
           changed_image_dirs=()
           for path in ${ALL_CHANGED_FILES}; do
             echo "$path was changed"
@@ -50,8 +51,13 @@ jobs:
             changed_image_dirs+=("$image_path")
           done
 
+          echo array is ${changed_image_dirs[@]}
+
           # GET ALL CHANGED PATHS AS COMMA SEPERATED STRING
           changed_contexts=$(echo ${changed_image_dirs// /,})
+
+          echo string is ${changed_contexts}
+
 
           # SET CONTEXTS AS JSON
           contexts=$(echo "\"${changed_contexts}\"" | sed 's/,/", "/g')
