@@ -295,6 +295,17 @@ jobs:
 
           machineshop push --target minio --source ${{ env.COLLECTION_PACKAGE_PATH }} --destination ${bucket}:$(ls -t *.gz | head -1)
 
+      - name: Update collection
+        id: update
+        run: |
+          package_name="sthings-awx"
+          new_version="0.0.99"
+          requirements_file="ansible/requirements-dev.yaml"
+
+          sed -i "s|\($package_name.*-\)[0-9]\+\.[0-9]\+\.[0-9]\+\(.tar.gz\)|\1$new_version\2|" $requirements_file
+
+          cat ansible/requirements-dev.yaml
+
       - name: Upload collection
         id: upload
         uses: actions/upload-artifact@v4.3.3
