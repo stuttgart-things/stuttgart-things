@@ -22,34 +22,6 @@ ansible-playbook sthings.base_os.setup -vv -i /tmp/inv
 
 </details>
 
-<details><summary>TERRAFORM</summary>
-
-deploys ansible + dependecies
-
-```bash
-# VSPHERE-TF-VARS PROFILE
-ansible-playbook sthings.base_os.terraform \
--e tf_project_path=/home/andre/Projects/ansible/awx/base-codehub/terraform/vsphere-andre-vm \
--e tf_vars_profile=vsphere-terraform -vv
-```
-```bash
-# PROXMOX-TF-VARS PROFILE
-ansible-playbook sthings.base_os.terraform \
--e tf_project_path=/home/andre/Projects/ansible/awx/base-codehub/terraform/proxmox-andre-vm \
--e tf_vars_profile=proxmox-terraform -vv
-```
-```bash
-# EXAMPLE GET TERRAFORM CONFIG FROM S3 BUCKET
-ansible-playbook sthings.base_os.terraform \
--e tf_project_path=/home/andre/Projects/ansible/awx/base-codehub/terraform/vsphere-andre-vm \
--e tf_vars_profile=vsphere-terraform \
--e download_config_s3=true \
--e bucket_name=example-bucket \
--e object_name=example-object -vv
-```
-
-</details>
-
 <details><summary>ANSIBLE</summary>
 
 deploys ansible + dependecies
@@ -112,7 +84,7 @@ ansible-playbook sthings.base_os.delete_proxmox -vv -e vmname_delete=example-nam
 
 </details>
 
-<details><summary>RENDER UPLOAD TEMPLATE/VM</summary>
+<details><summary>RENDER UPLOAD TEMPLATE/VM VSPHERE OR PROXMOX</summary>
 
 ## Render and upload rendered VM config to s3 bucket
 ```bash
@@ -145,22 +117,23 @@ ansible-playbook sthings.base_os.render_upload_vm -vv \
 ```
 </details>
 
-<details><summary>GET AND EXECUTE TERRAFORM</summary>
+<details><summary>GET AND EXECUTE TERRAFORM ON VSPHERE OR PROXMOX</summary>
 
 ## Get rendered VM config and execute terraform
 ```bash
 # Get vm config and execute terraform
-ansible-playbook sthings.base_os.get_execute_terraform -vv \
+ansible-playbook -i /path/to/inventory sthings.base_os.get_execute_terraform -vv \
 -e lab=labul \
 -e cloud=vsphere \
 -e project_name=martin \
 -e bucket_name=martin-vm-config \
--e object_name=2024-06-27-test-vnrqr.tf
+-e object_name=2024-06-27-test-vnrqr.tf \
+-e install_terraform=true
 ```
 
 ```bash
 # Destroy VM
-ansible-playbook sthings.base_os.render_upload_vm -vv \
+ansible-playbook -i /path/to/inventory sthings.base_os.render_upload_vm -vv \
 -e lab=labul \
 -e cloud=vsphere \
 -e project_name=martin \
@@ -325,7 +298,7 @@ ansible-playbook sthings.awx.hello_awx -vv -e test_host=example.labul.sva.de
 
 </details>
 
-<details><summary>!! WORK IN PROGRESS !! RENDER UPLOAD TEMPLATE/VM</summary>
+<details><summary>RENDER UPLOAD TEMPLATE - PULL AND CREATE/DESTROY VM</summary>
 
 Awx job template /w survey and play to render and upload templates for VMs
 
@@ -334,11 +307,15 @@ export CONTROLLER_HOST=https://awx.<DOMAIN>.sva.de #EXAMPLE!
 export CONTROLLER_USERNAME=admin #EXAMPLE!
 export CONTROLLER_PASSWORD=<PASSWORD>
 
-#create awx resource
-ansible-playbook sthings.awx.render_upload_template -vv -e lab=labul -e cloud=vsphere -e j2_template_name=<example-template>.tf.j2 -e bucket_name=<example-bucket-name>
+# Create awx resource to render and upload templates to s3
+ansible-playbook sthings.awx.render_upload_template -vv \
+-e lab=labul \
+-e cloud=vsphere \
 
-#use play to render and upload without awx
-ansible-playbook sthings.awx.render_upload_vm -vv -e lab=labul -e cloud=vsphere -e j2_template_name=<example-template>.tf.j2 -e bucket_name=<example-bucket-name>
+# Create awx resource to pull template from s3 and create/destroy VM
+ansible-playbook sthings.awx.get_execute_terraform -vv \
+-e lab=labul \
+-e cloud=vsphere
 ```
 
 </details>
