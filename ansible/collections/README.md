@@ -137,7 +137,7 @@ ansible-playbook -i /path/to/inventory sthings.base_os.get_execute_terraform -vv
 
 ```bash
 # Destroy VM
-ansible-playbook -i /path/to/inventory sthings.base_os.render_upload_vm -vv \
+ansible-playbook -i /path/to/inventory sthings.base_os.get_execute_terraform -vv \
 -e lab=labul \
 -e cloud=vsphere \
 -e project_name=martin \
