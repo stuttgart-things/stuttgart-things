@@ -378,7 +378,7 @@ playbooks:
           tf_vars_file: "{{ tf_vars }}"
           bucket_permission: [private]
           path: "vars"
-          install_terraform: true
+          install_terraform: "true"
 
           bin:
             terraform:
@@ -406,7 +406,7 @@ playbooks:
               name: sthings.base_os.download_install_binary
               apply:
                 become: true
-            when: install_terraform|bool
+            when: install_terraform|bool and state == present
 
         tasks:
           - name: Create terraform dir
@@ -642,7 +642,7 @@ vars:
         main:
           name: "vm-{{ cloud }}"
 
-      object_name: "{{ ansible_date_time.date }}-{{ project_name }}.tf"
+      object_name: "{{ ansible_date_time.date }}-{{ vmName }}.tf"
 
       vmName: "test-{{ lookup('community.general.random_string', length=5, special=false) | lower }}"
       vmCount: "1"

@@ -538,9 +538,8 @@ vars:
               "question_name": "Do you want to install Terraform?",
               "question_description": "Choose true or false",
               "required": true,
-              "type": "multiplechoice",
+              "type": "text",
               "variable": "install_terraform",
-              "choices": ["true", "false"],
               "min": null,
               "max": null,
               "default": "true"
@@ -722,7 +721,7 @@ vars:
             },
             {
               "question_name": "What lab?",
-              "question_description": "Enter labul or labda",
+              "question_description": "Choose labul or labda",
               "required": true,
               "type": "multiplechoice",
               "variable": "lab",
