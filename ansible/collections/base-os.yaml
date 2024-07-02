@@ -158,7 +158,8 @@ playbooks:
         become: true
         vars:
           golang_version: 1.22.4
-          golang_checksum: 5fb8b3ed4a78a8eab444dfcb472b8c07a06980dcaee62ce3645edd6d130004c6
+          golangci_lint_version: 1.58.1
+          #golang_checksum: 5fb8b3ed4a78a8eab444dfcb472b8c07a06980dcaee62ce3645edd6d130004c6
           source_url: "https://go.dev/dl/go{{ golang_version }}.linux-amd64.tar.gz"
           golang_install_dir: /usr/local
           go_checksum_type: "sha256"
@@ -171,14 +172,14 @@ playbooks:
           bin:
             golangci-lint:
               bin_name: golangci-lint
-              bin_version: 1.58.1
+              bin_version: "{{ golangci_lint_version }}"
               check_bin_version_before_installing: true
               source_url: "https://github.com/golangci/golangci-lint/releases/download/v1.58.1/golangci-lint-1.58.1-linux-amd64.tar.gz"
-              bin_to_copy: golangci-lint-1.58.1-linux-amd64/golangci-lint
-              to_remove: golangci-lint-1.58.1-linux-amd64.tar.gz
+              bin_to_copy: golangci-lint-{{ golangci_lint_version }}-linux-amd64/golangci-lint
+              to_remove: golangci-lint-{{ golangci_lint_version }}-linux-amd64.tar.gz
               bin_dir: "/usr/local/bin"
               version_cmd: "-- version"
-              target_version: 1.58.1
+              target_version: "{{ golangci_lint_version }}"
             goreleaser:
               bin_name: goreleaser
               bin_version: v1.26.1
