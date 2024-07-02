@@ -295,10 +295,9 @@ jobs:
             VAULT_PATH_PASSWORD=$(echo $instance | jq -r '.password' -)
             BUCKET=$(echo $instance | jq -r '.bucket' -)
 
-            echo "${ALIAS} ${URL} ${VAULT_PATH_USERNAME} ${VAULT_PATH_PASSWORD} ${BUCKET"
+            echo ${ALIAS} ${URL} ${VAULT_PATH_USERNAME} ${VAULT_PATH_PASSWORD} ${BUCKET}
 
           done
-
       - name: Push collection to s3
         id: push
         run: |
