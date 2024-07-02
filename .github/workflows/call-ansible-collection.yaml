@@ -19,8 +19,10 @@ on:
         required: true
         type: boolean
       collection-file:
-        default: "./collection.yaml"
-        required: false
+        required: true
+        type: string
+      s3-instance-profiles:
+        required: true
         type: string
 
 jobs:
@@ -282,6 +284,20 @@ jobs:
           echo "COLLECTION_PACKAGE_PATH=$PWD/$(ls -t *.gz | head -1)" >> $GITHUB_ENV
           # echo "artifact=$(ls -t *.gz | head -1)"  >> $GITHUB_OUTPUT
 
+      - name: Loop over instances
+        id: instances
+        run: |
+          for instance in $(yq eval -o=j source/${{ inputs.s3-instance-profiles }} | jq -cr '.instances[]'); do
+
+            ALIAS=$(echo $instance | jq -r '.name' -)
+            URL=$(echo $instance | jq -r '.url' -)
+            VAULT_PATH_USERNAME=$(echo $instance | jq -r '.username' -)
+            VAULT_PATH_PASSWORD=$(echo $instance | jq -r '.password' -)
+            BUCKET=$(echo $instance | jq -r '.bucket' -)
+
+            echo ${ALIAS} ${URL} ${VAULT_PATH_USERNAME} ${VAULT_PATH_PASSWORD} ${BUCKET}
+
+          done
       - name: Push collection to s3
         id: push
         run: |
