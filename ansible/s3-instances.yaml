@@ -4,5 +4,5 @@ instances:
     addr: artifacts.automation.sthings-vsphere.labul.sva.de
     accessKey: apps/data/artifacts:accessKey
     secretKey: apps/data/artifacts:secretKey
-    bucket: ansiblerun
+    bucket: collections
     secure: true
