@@ -4,3 +4,4 @@ instances:
     url: https://artifacts.automation.sthings-vsphere.labul.sva.de:443
     username: apps/data/artifacts:accessKey
     password: apps/data/artifacts:secretKey
+    bucket: ansiblerun

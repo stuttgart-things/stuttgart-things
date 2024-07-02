@@ -75,3 +75,4 @@ jobs:
       environment-name: k8s
       continue-error: false
       collection-file: ansible/collections/${{ matrix.collection-file }}.yaml
+      s3-instance-profiles: ansible/s3-instances.yaml
