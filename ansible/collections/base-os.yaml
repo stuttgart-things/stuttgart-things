@@ -406,7 +406,7 @@ playbooks:
               name: sthings.base_os.download_install_binary
               apply:
                 become: true
-            when: install_terraform|bool and state == present
+            when: install_terraform|bool and state == "present"
 
         tasks:
           - name: Create terraform dir
