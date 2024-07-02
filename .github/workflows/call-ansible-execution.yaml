@@ -70,7 +70,7 @@ jobs:
       - name: Get Private Key
         run: |
           mkdir ~/.ssh/
-          machineShop get --path "${{ inputs.private-key }}" --b64 true | tail -n +8 > ~/.ssh/id_rsa
+          machineshop get --path "${{ inputs.private-key }}" --b64 true | tail -n +8 > ~/.ssh/id_rsa
           chmod 0600 ~/.ssh/id_rsa
         shell: bash
 
