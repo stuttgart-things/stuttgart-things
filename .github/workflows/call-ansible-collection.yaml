@@ -297,7 +297,7 @@ jobs:
             VAULT_PATH_SECRETKEY=$(echo $instance | jq -r '.secretKey' -)
             BUCKET=$(echo $instance | jq -r '.bucket' -)
 
-            echo 'Pushing to ${BUCKET} on ${MINIO_ADDR}'
+            echo PUSHING COLLECTION TO BUCKET: ${BUCKET} ON ${MINIO_ADDR}
 
             export MINIO_SECURE=${SEURE}
             export MINIO_ADDR=${ADDR}

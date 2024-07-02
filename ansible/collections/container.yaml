@@ -258,15 +258,15 @@ vars:
           version_cmd: "version"
           target_version: "{{ kind_version }}"
         skopeo:
-          bin_name: "{{ skopeo_version }}"
-          bin_version: v1.14.4
+          bin_name: skopeo
+          bin_version: "v{{ skopeo_version }}"
           check_bin_version_before_installing: true
-          source_url: "https://github.com/lework/skopeo-binary/releases/download/{{ skopeo_version }}/skopeo-linux-amd64"
+          source_url: "https://github.com/lework/skopeo-binary/releases/download/v{{ skopeo_version }}/skopeo-linux-amd64"
           bin_to_copy: skopeo-linux-amd64
           to_remove: ""
           bin_dir: "/usr/bin/skopeo"
           version_cmd: "version"
-          target_version: "{{ skopeo_version }}"
+          target_version: "v{{ skopeo_version }}"
         helm:
           bin_name: "helm"
           bin_version: "{{ helm_version }}"
