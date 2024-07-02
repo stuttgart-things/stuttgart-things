@@ -283,7 +283,7 @@ jobs:
           echo "artifact=$(ls -t *.gz | head -1)"  >> $GITHUB_OUTPUT
 
           bucket=ansiblerun
-          machineshop push --target minio --source ${{ env.COLLECTION_PACKAGE_PATH }} --destination ${bucket}:${{ env.COLLECTION_PACKAGE }}
+          machineshop push --target minio --source ${{ env.COLLECTION_PACKAGE_PATH }} --destination ${bucket}:$(ls -t *.gz | head -1)
 
       - name: Upload collection
         id: upload
