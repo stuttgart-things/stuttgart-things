@@ -223,7 +223,7 @@ vars:
       velero_version: v1.14.0 # datasource=github-tags depName=vmware-tanzu/velero
       kubectl_slice_version: v1.3.1 # datasource=github-tags depName=patrickdappollonio/kubectl-slice
       helmfile_version: 0.166.0 # datasource=github-tags depName=helmfile/helmfile
-      argocd_version: v2.11.3 # datasource=github-tags depName=argoproj/argo-cd
+      argocd_version: 2.11.4 # datasource=github-tags depName=argoproj/argo-cd
       flux_version: 2.3.0 # datasource=github-tags depName=fluxcd/flux2
 
       bin:
