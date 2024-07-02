@@ -299,7 +299,6 @@ jobs:
 
           done
 
-
       - name: Push collection to s3
         id: push
         run: |

@@ -140,6 +140,17 @@ playbooks:
               ansible-galaxy install -r /tmp/requirements.yaml -f
             become_user: "{{ ansible_username }}"
 
+  - name: kcl
+    play: |
+      ---
+      - hosts: "{{ target_host | default('all') }}"
+        become: true
+
+        tasks:
+          - name: Install kcl-cli
+            ansible.builtin.shell: |
+              wget -q https://kcl-lang.io/script/install-cli.sh -O - | /bin/bash
+
   - name: golang
     play: |
       ---
