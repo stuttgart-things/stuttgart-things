@@ -6,7 +6,7 @@ playbooks:
   - name: check_connection
     play: |
       ---
-      - name: Pause play until a URL is reachable from the Ansible Controller
+      - name: Pause play until awx is reachable from the Ansible Controller
         ansible.builtin.uri:
           url: "{{ controller_host }}api/v2"
           method: GET
