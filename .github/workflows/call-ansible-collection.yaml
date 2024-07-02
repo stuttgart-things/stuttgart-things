@@ -11,7 +11,7 @@ on:
         required: true
         type: string
       ansible-image:
-        default: eu.gcr.io/stuttgart-things/sthings-ansible:9.3.0-1
+        default: eu.gcr.io/stuttgart-things/sthings-ansible:10.1.0
         type: string
         required: false
       continue-error:
@@ -275,6 +275,7 @@ jobs:
           echo "COLLECTION_PACKAGE=$(ls -t *.gz | head -1)" >> $GITHUB_ENV
           echo "COLLECTION_PACKAGE_PATH=$PWD/$(ls -t *.gz | head -1)" >> $GITHUB_ENV
           echo "artifact=$(ls -t *.gz | head -1)"  >> $GITHUB_OUTPUT
+          machineshop version
 
       - name: Upload collection
         id: upload
