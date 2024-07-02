@@ -282,8 +282,8 @@ jobs:
           echo "COLLECTION_PACKAGE_PATH=$PWD/$(ls -t *.gz | head -1)" >> $GITHUB_ENV
           echo "artifact=$(ls -t *.gz | head -1)"  >> $GITHUB_OUTPUT
 
-          machineshop push --target minio --source ${artifact} --destination ansiblerun:${{ env.COLLECTION_PACKAGE }}
-          machineshop version
+          bucket=ansiblerun
+          machineshop push --target minio --source ${{ env.COLLECTION_PACKAGE_PATH }} --destination ${bucket}:${{ env.COLLECTION_PACKAGE }}
 
       - name: Upload collection
         id: upload
