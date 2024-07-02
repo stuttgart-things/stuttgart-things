@@ -284,32 +284,32 @@ jobs:
           echo "COLLECTION_PACKAGE_PATH=$PWD/$(ls -t *.gz | head -1)" >> $GITHUB_ENV
           # echo "artifact=$(ls -t *.gz | head -1)"  >> $GITHUB_OUTPUT
 
-      - name: Loop over instances
+      - name: Push collection to s3
         id: instances
         run: |
+          ARTIFACT=$(ls -t *.gz | head -1)
+
           for instance in $(yq eval -o=j source/${{ inputs.s3-instance-profiles }} | jq -cr '.instances[]'); do
 
-            ALIAS=$(echo $instance | jq -r '.name' -)
-            URL=$(echo $instance | jq -r '.url' -)
-            VAULT_PATH_USERNAME=$(echo $instance | jq -r '.username' -)
-            VAULT_PATH_PASSWORD=$(echo $instance | jq -r '.password' -)
+            ADDR=$(echo $instance | jq -r '.addr' -)
+            SEURE=$(echo $instance | jq -r '.secure' -)
+            VAULT_PATH_ACCESSKEY=$(echo $instance | jq -r '.accessKey' -)
+            VAULT_PATH_SECRETKEY=$(echo $instance | jq -r '.secretKey' -)
             BUCKET=$(echo $instance | jq -r '.bucket' -)
 
-            echo ${ALIAS} ${URL} ${VAULT_PATH_USERNAME} ${VAULT_PATH_PASSWORD} ${BUCKET}
+            echo 'Pushing to ${BUCKET} on ${MINIO_ADDR}'
+
+            export MINIO_SECURE=${SEURE}
+            export MINIO_ADDR=${ADDR}
+            export MINIO_ACCESS_KEY=$(machineshop get --path ${VAULT_PATH_ACCESSKEY} | tail -n +8)
+            export MINIO_SECRET_KEY=$(machineshop get --path ${VAULT_PATH_SECRETKEY} | tail -n +8)
+
+            machineshop push \
+            --target minio \
+            --source ${{ env.COLLECTION_PACKAGE_PATH }} \
+            --destination ${BUCKET}:${ARTIFACT}
 
           done
-      - name: Push collection to s3
-        id: push
-        run: |
-          VAULTKEY_SECRETKEY=apps/data/artifacts:secretKey
-
-          export MINIO_SECRET_KEY=$(machineshop get --path ${VAULTKEY_SECRETKEY} | tail -n +8)
-          export MINIO_SECURE=true
-          export MINIO_ADDR=artifacts.automation.sthings-vsphere.labul.sva.de
-          export MINIO_ACCESS_KEY=sthings
-          bucket=ansiblerun
-
-          machineshop push --target minio --source ${{ env.COLLECTION_PACKAGE_PATH }} --destination ${bucket}:$(ls -t *.gz | head -1)
 
       - name: Update collection
         id: update

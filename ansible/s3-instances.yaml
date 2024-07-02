@@ -1,7 +1,8 @@
 ---
 instances:
   - name: labul-automation
-    url: https://artifacts.automation.sthings-vsphere.labul.sva.de:443
-    username: apps/data/artifacts:accessKey
-    password: apps/data/artifacts:secretKey
+    addr: artifacts.automation.sthings-vsphere.labul.sva.de
+    accessKey: apps/data/artifacts:accessKey
+    secretKey: apps/data/artifacts:secretKey
     bucket: ansiblerun
+    secure: true
