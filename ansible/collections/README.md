@@ -91,7 +91,8 @@ ansible-playbook sthings.base_os.delete_proxmox -vv -e vmname_delete=example-nam
 # Default render of vm templates
 ansible-playbook sthings.base_os.render_upload_vm -vv \
 -e lab=labul \
--e cloud=vsphere
+-e cloud=vsphere \
+-e s3=labul-automation
 ```
 
 ```bash
@@ -100,7 +101,8 @@ ansible-playbook sthings.base_os.render_upload_vm -vv \
 -e lab=labul \
 -e cloud=vsphere \
 -e vmSize=l \
--e vmName=martin
+-e vmName=martin \
+-e s3=labul-automation
 ```
 
 ```bash
@@ -113,7 +115,8 @@ ansible-playbook sthings.base_os.render_upload_vm -vv \
 -e vm_memory=4096 \
 -e vm_template=ubuntu24 \
 -e vm_disk=32 \
--e vm_cpu=2
+-e vm_cpu=2 \
+-e s3=labul-automation
 ```
 </details>
 
@@ -128,7 +131,8 @@ ansible-playbook -i /path/to/inventory sthings.base_os.get_execute_terraform -vv
 -e project_name=martin \
 -e bucket_name=martin-vm-config \
 -e object_name=2024-06-27-test-vnrqr.tf \
--e install_terraform=true
+-e install_terraform=true \
+-e s3=labul-automation
 ```
 
 ```bash
@@ -139,6 +143,7 @@ ansible-playbook -i /path/to/inventory sthings.base_os.render_upload_vm -vv \
 -e project_name=martin \
 -e bucket_name=martin-vm-config \
 -e object_name=2024-06-27-test-vnrqr.tf \
+-e s3=labul-automation \
 -e state=absent
 ```
 </details>
