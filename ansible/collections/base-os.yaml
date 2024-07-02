@@ -1,6 +1,6 @@
 ---
 name: base_os
-version: 0.5.29
+version: 0.5.30
 namespace: sthings
 requirements: |
   roles:
@@ -323,19 +323,20 @@ playbooks:
           vault_approle_id: "{{ lookup('env', 'VAULT_ROLE_ID') }}"
           vault_approle_secret: "{{ lookup('env', 'VAULT_SECRET_ID') }}"
           vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
-          AWS_ACCESS_KEY_ID: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:accessKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
-          AWS_SECRET_ACCESS_KEY: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:secretKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
-          s3_endpoint: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:console validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+          AWS_ACCESS_KEY_ID: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps/data/artifacts:accessKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+          AWS_SECRET_ACCESS_KEY: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps/data/artifacts:secretKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
           bucket_name: andre-vm-config
           rendered_all: "tf-config-all.tf"
           bucket_permission: [private]
           path: "vars"
+          s3: "andre-dev"
 
           #-e lab=labul -e cloud=vsphere -vv
 
         vars_files:
           - "{{ path | default('.') }}/{{ lab }}.yaml"
           - "{{ path | default('.') }}/{{ cloud }}.yaml"
+          - "{{ path | default('.') }}/s3-instances.yaml"
           - "{{ path | default('.') }}/vm-defaults.yaml"
 
         tasks:
@@ -363,7 +364,7 @@ playbooks:
               encrypt: false
               rgw: false
               permission: "{{ bucket_permission }}"
-              endpoint_url: "{{ s3_endpoint }}"
+              endpoint_url: "{{ s3 }}"
 
           - name: Remove rendered vm config
             ansible.builtin.file:
@@ -390,6 +391,7 @@ playbooks:
           bucket_permission: [private]
           path: "vars"
           install_terraform: "true"
+          s3: "andre-dev"
 
           bin:
             terraform:
@@ -405,11 +407,12 @@ playbooks:
 
         vars_files:
           - "{{ path | default('.') }}/terraform-vars.yaml"
+          - "{{ path | default('.') }}/s3-instances.yaml"
           - "{{ path | default('.') }}/tf-vars-{{ cloud }}.yaml"
 
         environment:
-          AWS_ACCESS_KEY_ID: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:accessKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
-          AWS_SECRET_ACCESS_KEY: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:secretKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+          AWS_ACCESS_KEY_ID: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps/data/artifacts:accessKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+          AWS_SECRET_ACCESS_KEY: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps/data/artifacts:secretKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
 
         pre_tasks:
           - name: call role and install terraform
@@ -444,7 +447,7 @@ playbooks:
               encrypt: false
               rgw: false
               permission: "{{ bucket_permission }}"
-              endpoint_url: "{{ s3_endpoint }}"
+              endpoint_url: "{{ s3 }}"
 
           - name: Init and apply terraform
             community.general.terraform:
@@ -659,7 +662,6 @@ vars:
       vmCount: "1"
       vmSize: "s"
       vmTemplate: ubuntu24
-      s3_endpoint: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:console validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
       vmFirmware: "bios"
       rootFolderpath: "stuttgart-things"
       resourcePool: "/LabUL/host/Cluster-V6.5/Resources"
@@ -718,7 +720,6 @@ vars:
       tf_project_path: "./terraform"
       state: "present"
       rendered_all: "tf-config-all.tf"
-      s3_endpoint: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:console validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
       AWS_ACCESS_KEY_ID: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:accessKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
       AWS_SECRET_ACCESS_KEY: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps2/data/s3:secretKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
       force_init: true
