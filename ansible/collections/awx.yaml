@@ -1,6 +1,6 @@
 ---
 name: awx
-version: 0.0.86
+version: 0.0.87
 namespace: sthings
 playbooks:
   - name: check_connection
@@ -204,6 +204,7 @@ playbooks:
           - "{{ path | default('.') }}/{{ cloud }}.yaml"
           - "{{ path | default('.') }}/{{ lab }}.yaml"
           - "{{ path | default('.') }}/vm-defaults.yaml"
+          - "{{ path | default('.') }}/s3-instances.yaml"
           - "{{ path | default('.') }}/job-render-upload-template.yaml"
 
         tasks:
@@ -227,6 +228,7 @@ playbooks:
           - "{{ path | default('.') }}/ee-sthings.yaml"
           - "{{ path | default('.') }}/terraform-vars.yaml"
           - "{{ path | default('.') }}/tf-vars-{{ cloud }}.yaml"
+          - "{{ path | default('.') }}/s3-instances.yaml"
           - "{{ path | default('.') }}/job-get-execute-terraform.yaml"
 
         tasks:
@@ -575,14 +577,15 @@ vars:
               "default": ""
             },
             {
-              "question_name": "What is the s3 endpoint?",
-              "question_description": "Enter s3 endpoint",
+              "question_name": "What is the s3 endpoint name?",
+              "question_description": "Enter s3 endpoint name",
               "required": true,
-              "type": "text",
-              "variable": "s3_endpoint",
+              "type": "multiplechoice",
+              "choices": ["labul-automation", "andre-dev"],
+              "variable": "s3",
               "min": null,
               "max": null,
-              "default": "https://artifacts.app1.sthings-vsphere.labul.sva.de"
+              "default": "andre-dev"
             },
             {
               "question_name": "Do you want to apply or destroy VM?",
@@ -698,6 +701,17 @@ vars:
               "min": null,
               "max": null,
               "default": ""
+            },
+            {
+              "question_name": "What is the s3 endpoint name?",
+              "question_description": "Enter s3 endpoint name",
+              "required": true,
+              "type": "multiplechoice",
+              "choices": ["labul-automation", "andre-dev"],
+              "variable": "s3",
+              "min": null,
+              "max": null,
+              "default": "andre-dev"
             },
             {
               "question_name": "What is the bucket name in s3?",
@@ -1667,11 +1681,11 @@ vars:
     file: |
       ---
       instances:
-        - name: labul-automation
+        labul-automation:
           url: https://artifacts.automation.sthings-vsphere.labul.sva.de:443
           username: apps/data/artifacts:accessKey
           password: apps/data/artifacts:secretKey
-        - name: andre-dev
+        andre-dev:
           url: https://artifacts.andre-dev.sthings-vsphere.labul.sva.de:443
           username: apps/data/artifacts:accessKey
           password: apps/data/artifacts:secretKey
