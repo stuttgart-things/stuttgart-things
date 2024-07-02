@@ -2,5 +2,5 @@
 instances:
   - name: labul-automation
     url: https://artifacts.automation.sthings-vsphere.labul.sva.de:443
-    username: apps/data/scr:adminUser
-    password: apps/data/scr:password
+    username: apps/data/artifacts:accessKey
+    password: apps/data/artifacts:secretKey
