@@ -6,3 +6,9 @@ instances:
     secretKey: apps/data/artifacts:secretKey
     bucket: collections
     secure: true
+  - name: andre-dev
+    addr: artifacts.andre-dev.sthings-vsphere.labul.sva.de
+    accessKey: apps/data/artifacts:accessKey
+    secretKey: apps/data/artifacts:secretKey
+    bucket: ansible-collections
+    secure: true
