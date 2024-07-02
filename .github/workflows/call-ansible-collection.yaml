@@ -31,6 +31,12 @@ jobs:
     runs-on: ${{ inputs.runs-on }}
     container:
       image: ${{ inputs.ansible-image }}
+    env:
+      VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
+      VAULT_AUTH_METHOD: ${{ secrets.VAULT_AUTH_METHOD }}
+      VAULT_NAMESPACE: ${{ secrets.VAULT_NAMESPACE }}
+      VAULT_ROLE_ID: ${{ secrets.VAULT_ROLE_ID }}
+      VAULT_SECRET_ID: ${{ secrets.VAULT_SECRET_ID }}
     environment: ${{ inputs.environment-name }}
     continue-on-error: ${{ inputs.continue-error }}
     steps:
@@ -275,6 +281,8 @@ jobs:
           echo "COLLECTION_PACKAGE=$(ls -t *.gz | head -1)" >> $GITHUB_ENV
           echo "COLLECTION_PACKAGE_PATH=$PWD/$(ls -t *.gz | head -1)" >> $GITHUB_ENV
           echo "artifact=$(ls -t *.gz | head -1)"  >> $GITHUB_OUTPUT
+
+          machineshop push --target minio --source ${artifact} --destination ansiblerun:${{ env.COLLECTION_PACKAGE }}
           machineshop version
 
       - name: Upload collection
