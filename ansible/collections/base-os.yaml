@@ -729,11 +729,11 @@ vars:
     file: |
       ---
       instances:
-        - name: labul-automation
+        labul-automation:
           url: https://artifacts.automation.sthings-vsphere.labul.sva.de:443
           username: apps/data/artifacts:accessKey
           password: apps/data/artifacts:secretKey
-        - name: andre-dev
+        andre-dev:
           url: https://artifacts.andre-dev.sthings-vsphere.labul.sva.de:443
           username: apps/data/artifacts:accessKey
           password: apps/data/artifacts:secretKey
