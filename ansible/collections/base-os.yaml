@@ -214,7 +214,7 @@ playbooks:
               path: "{{ golang_install_dir }}/go"
               checksum_type: "{{ go_checksum_type }}"
             register: checksum_existing
-            when: check_golang.stat.exists
+            when: check_golang.stat.exists or golang_checksum is defined
 
           - name: Create golang users
             ansible.builtin.include_role:
@@ -231,7 +231,7 @@ playbooks:
               mode: 0755
               validate_certs: false
               remote_src: true
-            when: checksum_existing.checksum_value is not defined or golang_checksum != checksum_existing.checksum_value
+            when: golang_checksum is not defined or checksum_existing.checksum_value is not defined or golang_checksum != checksum_existing.checksum_value
 
           - name: Add golang exports for existing users to bashrc
             ansible.builtin.blockinfile:
