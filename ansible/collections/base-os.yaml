@@ -162,7 +162,7 @@ playbooks:
           go_checksum_type: "sha256"
           source_url: "https://go.dev/dl/go{{ golang_version }}.linux-amd64.tar.gz"
           golang_install_dir: /usr/local
-          golangci_version: 1.59.1 # datasource=github-tags depName=golangci/golangci-lint
+          golangci_version: v1.59.1 # datasource=github-tags depName=golangci/golangci-lint
           goreleaser_version: 1.26.2 # datasource=github-tags depName=goreleaser/goreleaser
           ko_version: v0.15.4 # datasource=github-tags depName=ko-build/ko
 
@@ -769,8 +769,8 @@ vars:
       gh_version: 2.52.0 # datasource=github-tags depName=cli/cli
       task_version: v3.37.2 # datasource=github-tags depName=go-task/task
       hugo_version: 0.128.1 # datasource=github-tags depName=gohugoio/hugo
-      terraform_version: 1.9.1 # datasource=custom.hashicorp
-      packer_version: 1.11.1 # datasource=custom.hashicorp
+      terraform_version: 1.9.0 # datasource=custom.hashicorp
+      packer_version: 1.11.0 # datasource=custom.hashicorp
       yq_version: 4.44.2 # datasource=github-tags depName=mikefarah/yq
       machineshop_version: 2.1.9 # datasource=github-tags depName=stuttgart-things/machineshop
       jq_version: 1.7.1 # datasource=github-tags depName=jqlang/jq
