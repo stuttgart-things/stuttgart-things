@@ -10,7 +10,7 @@ jobs:
     if: contains(github.event.pull_request.labels.*.name, 'ansible')
     environment: k8s
     container:
-      image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2-2
+      image: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7:1.9.10
     outputs:
       tf_working_dir: ${{ steps.set.outputs.TF_WORKING_DIR }}
       environment: ${{ steps.set.outputs.ENVIRONMENT }}
@@ -61,7 +61,6 @@ jobs:
     with:
       playbook: ${{ needs.Get-Ansible-Config.outputs.playbook }}
       branch: ${{ github.event.pull_request.head.ref }}
-      working-image: eu.gcr.io/stuttgart-things/sthings-ansible:9.5.1
       runs-on: ghr-stuttgart-things-labda-test
       inventory: ${{ needs.Get-Ansible-Config.outputs.inventory }}
       environment-name: ${{ needs.Get-Ansible-Config.outputs.environment }}
