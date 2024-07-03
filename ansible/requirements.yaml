@@ -48,7 +48,7 @@ collections:
   - name: community.vmware
     version: 4.4.0
   - name: awx.awx
-    version: 24.6.0
+    version: 24.6.1
   - name: community.hashi_vault
     version: 6.2.0
   - name: https://github.com/stuttgart-things/stuttgart-things/releases/download/0.5.21/sthings-base_os-0.5.21.tar.gz
