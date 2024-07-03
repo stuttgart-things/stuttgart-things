@@ -162,7 +162,7 @@ playbooks:
           go_checksum_type: "sha256"
           source_url: "https://go.dev/dl/go{{ golang_version }}.linux-amd64.tar.gz"
           golang_install_dir: /usr/local
-          golangci_version: 1.59.2 # datasource=github-tags depName=golangci/golangci-lint
+          golangci_version: 1.59.1 # datasource=github-tags depName=golangci/golangci-lint
           goreleaser_version: 1.26.2 # datasource=github-tags depName=goreleaser/goreleaser
           ko_version: v0.15.4 # datasource=github-tags depName=ko-build/ko
 
@@ -172,16 +172,6 @@ playbooks:
           go_userhome: /home/sthings
 
           bin:
-            golangci-lint:
-              bin_name: golangci-lint
-              bin_version: "{{ golangci_version }}"
-              check_bin_version_before_installing: true
-              source_url: "https://github.com/golangci/golangci-lint/releases/download/v{{ golangci_version }}/golangci-lint-{{ golangci_version }}-linux-amd64.tar.gz"
-              bin_to_copy: golangci-lint-{{ golangci_version }}-linux-amd64/golangci-lint
-              to_remove: golangci-lint-{{ golangci_version }}-linux-amd64.tar.gz
-              bin_dir: "/usr/local/bin"
-              version_cmd: "-- version"
-              target_version: "{{ golangci_version }}"
             goreleaser:
               bin_name: goreleaser
               bin_version: "{{ goreleaser_version }}"
@@ -224,13 +214,20 @@ playbooks:
               groups_to_create: "{{ groups_golang }}"
             when: golang_users is defined
 
-          - name: Unarchive Golang
-            ansible.builtin.unarchive:
-              src: "{{ source_url }}"
-              dest: "{{ golang_install_dir }}/"
-              mode: 0755
-              validate_certs: false
-              remote_src: true
+          - name: Install golang
+            block:
+              - name: Delete existing Golang install
+                ansible.builtin.file:
+                  path: "{{ golang_install_dir }}/go"
+                  state: absent
+
+              - name: Unarchive Golang
+                ansible.builtin.unarchive:
+                  src: "{{ source_url }}"
+                  dest: "{{ golang_install_dir }}/"
+                  mode: 0755
+                  validate_certs: false
+                  remote_src: true
             when: golang_checksum is not defined or checksum_existing.checksum_value is not defined or golang_checksum != checksum_existing.checksum_value
 
           - name: Add golang exports for existing users to bashrc
@@ -253,6 +250,7 @@ playbooks:
           - name: Install addons
             ansible.builtin.shell: |
               ./go install github.com/spf13/cobra-cli@v1.3.0
+              ./go install github.com/golangci/golangci-lint/cmd/golangci-lint@{{ golangci_version }}
             args:
               chdir: "{{ golang_install_dir }}/go/bin/"
 
