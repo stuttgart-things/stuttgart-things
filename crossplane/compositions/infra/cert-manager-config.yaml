@@ -11,7 +11,7 @@ spec:
       patches:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.issuerName
-          toFieldPath: metadata.name
+          toFieldPath: spec.forProvider.manifest.metadata.name
     - name: provider
       patches:
         - type: FromCompositeFieldPath
