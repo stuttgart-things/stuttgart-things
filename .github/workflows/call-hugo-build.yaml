@@ -75,7 +75,7 @@ jobs:
     continue-on-error: false
     needs: Create-Hugo-Content
     steps:
-      - uses: actions/download-artifact@v4.1.7
+      - uses: actions/download-artifact@v4.1.8
         with:
           name: hugo-dev
           path: |-
@@ -119,7 +119,7 @@ jobs:
       MS_TEAMS_URL: ${{ secrets.MS_TEAMS_URL }}
     continue-on-error: false
     steps:
-      - uses: actions/download-artifact@v4.1.7
+      - uses: actions/download-artifact@v4.1.8
         with:
           name: hugo-public
 
