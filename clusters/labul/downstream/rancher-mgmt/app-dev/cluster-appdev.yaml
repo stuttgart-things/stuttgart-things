@@ -292,7 +292,7 @@ spec:
         controlPlaneRole: false
         workerRole: true
         # hostnamePrefix: 'aio'
-        quantity: 1
+        quantity: 2
         unhealthyNodeTimeout: 0m
         machineConfigRef:
           kind: VmwarevsphereConfig
