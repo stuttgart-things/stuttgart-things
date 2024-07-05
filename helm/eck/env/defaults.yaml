@@ -1,0 +1,9 @@
+---
+issuerKind: ClusterIssuer
+issuerName: vault-approle
+kibanaHostname: kibana
+
+# Elasticsearch-Cluster
+countElasticSearchNodes: 1
+elasticVersion: 8.14.2
+elasticStorageSize: 10Gi

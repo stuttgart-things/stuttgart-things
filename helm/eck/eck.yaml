@@ -1,0 +1,63 @@
+---
+environments:
+  app-dev:
+    values:
+      - env/defaults.yaml
+      - env/{{ .Environment.Name }}.yaml
+
+releases:
+  # - name: kibana-ingress
+  #   disableValidationOnInstall: true
+  #   installed: true
+  #   namespace: elastic-system
+  #   chart: stuttgart-things/sthings-cluster
+  #   version: 0.3.10
+  #   values:
+  #     - "values/kibana-ingress.values.yaml.gotmpl"
+
+  - name: eck-operator-deployment
+    disableValidationOnInstall: true
+    installed: true
+    namespace: elastic-system
+    chart: elastic/eck-operator
+    version: 2.13.0
+    # needs:
+    #   - elastic-system/kibana-ingress
+
+  - name: elasticsearch-cluster
+    disableValidationOnInstall: true
+    installed: true
+    namespace: elastic-system
+    chart: stuttgart-things/sthings-cluster
+    version: 0.3.10
+    values:
+      - "values/elasticsearch-cluster.values.yaml.gotmpl"
+    needs:
+      - elastic-system/eck-operator-deployment
+
+  - name: kibana
+    disableValidationOnInstall: true
+    installed: true
+    namespace: elastic-system
+    chart: stuttgart-things/sthings-cluster
+    version: 0.3.10
+    values:
+      - "values/kibana.values.yaml.gotmpl"
+    needs:
+      - elastic-system/eck-operator-deployment
+      - elastic-system/elasticsearch-cluster
+
+repositories:
+  - name: stuttgart-things
+    url: eu.gcr.io/stuttgart-things
+    oci: true
+  - name: elastic
+    url: https://helm.elastic.co
+    oci: false
+
+helmDefaults:
+  verify: false
+  wait: true
+  timeout: 600
+  recreatePods: false
+  force: true
