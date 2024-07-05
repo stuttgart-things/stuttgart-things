@@ -64,6 +64,7 @@ spec:
   ipPoolName: ip-pool-1
   ipRanges:
     - 10.31.103.7-10.31.103.7
+    - 10.31.103.9-10.31.103.9
   issuerName: vault-approle
   approle:
     secretName: certmanager-labul-vsphere
