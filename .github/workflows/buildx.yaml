@@ -1,5 +1,5 @@
 ---
-name: ci
+name: Dispatch buildx
 on:
   workflow_dispatch:
   
