@@ -1,30 +1,22 @@
-FROM docker.io/library/ubuntu:24.04@sha256:2a1e42397521001f21178a06e37ba1024481d3e8b6a754902ac5fb6a0861c7ac
+ARG REGISTRY=eu.gcr.io
+ARG REPOSITORY=stuttgart-things
+ARG IMAGE=sthings-alpine
+ARG TAG=3.12.2-alpine3.19
+FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
 
-LABEL version=1.8.5
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
+LABEL version=10.1.0
 
-# SWITCH TO ROOT FOR THE ABILITY TO PERFORM INSTALL
-USER root
 
 ARG DEBIAN_FRONTEND=noninteractive
 ARG TERRAFORM_VERSION=1.9.1 # datasource=custom.hashicorp
 ARG YQ_VERSION=4.43.1
 ARG MACHINE_SHOP_VERSION=2.1.9
 
-# INSTALL TOOLS NEEDED FOR YOUR REPO-SERVER TO RETRIEVE & DECRYPT SECRETS, RENDER MANIFESTS
-RUN apt-get update && \
-    apt-get install -y \
-        curl \
-        wget \
-        jq \
-        git \
-        gawk \
-        unzip \
-        awscli \
-        python3-pip \
-        gpg && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+# INSTALL OS PACKAGES
+RUN apk add --no-cache aws-cli \
+   && apk add --update bash \
+       && rm -rf /var/cache/apk/*
 
 # VAULT INSTANCES
 ARG VAULT_URL_LABUL=https://vault.labul.sva.de:8200
