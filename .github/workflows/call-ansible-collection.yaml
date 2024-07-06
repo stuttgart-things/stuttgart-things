@@ -318,7 +318,7 @@ jobs:
         id: update
         run: |
           collection_name=$(yq -r ".name" source/${{ inputs.collection-file }})
-          requirements_file="${{ inputs.requirements-file }}"
+          requirements_file="source/${{ inputs.requirements-file }}"
           new_version="0.0.98"
 
           sed -i "s|\($collection_name.*-\)[0-9]\+\.[0-9]\+\.[0-9]\+\(.tar.gz\)|\1$new_version\2|" $requirements_file
