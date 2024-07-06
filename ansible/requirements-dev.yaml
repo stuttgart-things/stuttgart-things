@@ -6,3 +6,4 @@ roles:
 
 collections:
   - name: https://artifacts.automation.sthings-vsphere.labul.sva.de/ansiblerun/sthings-awx-0.0.90.tar.gz
+  - name: https://artifacts.automation.sthings-vsphere.labul.sva.de/ansiblerun/base-os-240706.0538.18.tar.gz
