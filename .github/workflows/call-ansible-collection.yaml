@@ -24,7 +24,10 @@ on:
       s3-instance-profiles:
         required: true
         type: string
-
+      requirements-file:
+        required: true
+        type: string
+        
 jobs:
   Ansible-Collection-Build:
     outputs:
@@ -311,15 +314,15 @@ jobs:
 
           done
 
-      - name: Update collection
+      - name: Update requirements file
         id: update
         run: |
-          package_name="sthings-awx"
-          new_version="0.0.99"
-          requirements_file="source/ansible/requirements-dev.yaml"
+          collection_name=$(yq -r ".name" source/${{ inputs.collection-file }})
+          requirements_file="${{ inputs.requirements-file }}"
+          new_version="0.0.98"
 
-          sed -i "s|\($package_name.*-\)[0-9]\+\.[0-9]\+\.[0-9]\+\(.tar.gz\)|\1$new_version\2|" $requirements_file
-
+          sed -i "s|\($collection_name.*-\)[0-9]\+\.[0-9]\+\.[0-9]\+\(.tar.gz\)|\1$new_version\2|" $requirements_file
+          
           cat $requirements_file
 
       - name: Upload collection
