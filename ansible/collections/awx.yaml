@@ -1,6 +1,6 @@
 ---
 name: awx
-version: 0.0.90
+version: 0.0.91
 namespace: sthings
 playbooks:
   - name: check_connection
