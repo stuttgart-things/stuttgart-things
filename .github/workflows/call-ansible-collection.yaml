@@ -317,15 +317,14 @@ jobs:
       - name: Update requirements file
         id: update
         run: |
-          collection_name=$(yq -r ".name" source/${{ inputs.collection-file }})
+          COLLECTION_NAME=$(yq -r ".name" source/${{ inputs.collection-file }})
           requirements_file="source/${{ inputs.requirements-file }}"
-          new_version="0.0.98"
 
-          DATE_WITH_TIME=`date "+%y%m%d.%H%M.%S"`
-          echo ${DATE_WITH_TIME}
+          #new_version="0.0.98"
+          UPDATED_TAG=`date "+%y%m%d.%H%M.%S"` # DEV TAG
+          echo UPDATED VERSION: ${UPDATED_TAG}
 
-          sed -i "s|\($collection_name.*-\)[0-9]\+\.[0-9]\+\.[0-9]\+\(.tar.gz\)|\1$new_version\2|" $requirements_file
-
+          sed -i "s|\(${COLLECTION_NAME}.*-\)[0-9]\+\.[0-9]\+\.[0-9]\+\(.tar.gz\)|\1${UPDATED_TAG}\2|" $requirements_file
           cat $requirements_file
 
       - name: Upload collection
@@ -336,7 +335,7 @@ jobs:
           path: ${{ env.COLLECTION_PACKAGE_PATH }}
 
       - name: Release module
-        # if: ${{ github.ref == 'refs/heads/main' }}
+        if: ${{ github.ref == 'refs/heads/main' }}
         uses: ncipollo/release-action@v1.14.0
         with:
           name: "${{ env.COLLECTION_NAMESPACE }}.${{ env.COLLECTION_NAME }}-${{ env.COLLECTION_VERSION }}"
