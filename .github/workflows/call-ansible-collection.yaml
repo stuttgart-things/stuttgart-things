@@ -91,7 +91,7 @@ jobs:
           echo "COLLECTION_ROLES_DIR=$GITHUB_WORKSPACE/$(yq -r ".namespace" source/${{ inputs.collection-file }})/$(yq -r ".name" source/${{ inputs.collection-file }})/roles" >> $GITHUB_ENV
           echo "COLLECTION_DIR=$GITHUB_WORKSPACE/$(yq -r ".namespace" source/${{ inputs.collection-file }})/$(yq -r ".name" source/${{ inputs.collection-file }})" >> $GITHUB_ENV
 
-          UPDATED_TAG=`date "+%y%m%d.%H%M.%S"` #DEV TAG
+          UPDATED_TAG=`date "+%m%d.%H%M.%S"` #DEV TAG
           #echo "COLLECTION_VERSION=$(yq -r ".version" source/${{ inputs.collection-file }})" >> $GITHUB_ENV
           echo "COLLECTION_VERSION=$(echo ${UPDATED_TAG})" >> $GITHUB_ENV
 
