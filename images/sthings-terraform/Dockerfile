@@ -5,7 +5,7 @@ ARG TAG=3.12.2-alpine3.19
 FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
 
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
-LABEL version=10.1.0
+LABEL version=1.9.1
 
 
 ARG DEBIAN_FRONTEND=noninteractive
