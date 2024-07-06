@@ -93,7 +93,7 @@ jobs:
 
           UPDATED_TAG=`date "+%y.%d%M.%S"` #DEV TAG
           #echo "COLLECTION_VERSION=$(yq -r ".version" source/${{ inputs.collection-file }})" >> $GITHUB_ENV
-          echo "COLLECTION_VERSION=$(echo ${UPDATED_TAG})" >> $GITHUB_ENV
+          echo "COLLECTION_VERSION=$(echo ${UPDATED_TAG} | sed 's/\0//g')" >> $GITHUB_ENV
 
       - name: Install roles into collection
         id: roles
