@@ -403,18 +403,19 @@ playbooks:
           path: "vars"
           install_terraform: "true"
           s3: "andre-dev"
+          terraform_version: 1.9.1 # datasource=custom.hashicorp
 
           bin:
             terraform:
               bin_name: "terraform"
-              bin_version: "1.9.0"
+              bin_version: "{{ terraform_version }}"
               check_bin_version_before_installing: true
-              source_url: "https://releases.hashicorp.com/terraform/1.9.0/terraform_1.9.0_linux_amd64.zip"
+              source_url: "https://releases.hashicorp.com/terraform/{{ terraform_version }}/terraform_{{ terraform_version }}_linux_amd64.zip"
               bin_to_copy: "terraform"
               to_remove: "terraform"
               bin_dir: "/usr/local/bin"
               version_cmd: " --version"
-              target_version: v1.9.0
+              target_version: "{{ terraform_version }}"
 
         vars_files:
           - "{{ path | default('.') }}/terraform-vars.yaml"

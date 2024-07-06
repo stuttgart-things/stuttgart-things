@@ -7,7 +7,7 @@ LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 USER root
 
 ARG DEBIAN_FRONTEND=noninteractive
-ARG TERRAFORM_VERSION=1.8.5
+ARG TERRAFORM_VERSION=1.9.1 # datasource=custom.hashicorp
 ARG YQ_VERSION=4.43.1
 ARG MACHINE_SHOP_VERSION=2.1.9
 
