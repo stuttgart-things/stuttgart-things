@@ -339,8 +339,7 @@ jobs:
           --repository stuttgart-things \
           --group stuttgart-things \
           --files $requirements_file:${{ inputs.requirements-file }} \
-          --token $(echo ${{ github.head_ref || github.ref_name }}) \
-          --branch $(echo ${{ secrets.GH_TOKEN }}) \
+          --branch $(echo ${{ github.head_ref || github.ref_name }})
 
       - name: Upload collection
         id: upload
