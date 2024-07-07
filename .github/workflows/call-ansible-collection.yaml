@@ -336,11 +336,11 @@ jobs:
 
           machineshop create \
           --kind branch \
-          --token ${{ github.head_ref || github.ref_name }} \
-          --branch ${{ secrets.GH_TOKEN }} \
           --repository stuttgart-things \
           --group stuttgart-things \
-          --files $requirements_file:${{ inputs.requirements-file }}
+          --files $requirements_file:${{ inputs.requirements-file }} \
+          --token $(echo ${{ github.head_ref || github.ref_name }}) \
+          --branch $(echo ${{ secrets.GH_TOKEN }}) \
 
       - name: Upload collection
         id: upload
