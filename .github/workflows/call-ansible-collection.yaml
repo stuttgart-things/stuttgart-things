@@ -332,6 +332,7 @@ jobs:
 
           machineshop create \
           --kind branch \
+          --token ${{ secrets.GH_TOKEN }} \
           --branch ${{ github.head_ref || github.ref_name }}  \
           --repository stuttgart-things \
           --group stuttgart-things \
