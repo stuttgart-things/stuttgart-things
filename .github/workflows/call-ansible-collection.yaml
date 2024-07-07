@@ -329,14 +329,12 @@ jobs:
           sed -i "s|\(${COLLECTION_NAME}.*-\)[0-9]\+\.[0-9]\+\.[0-9]\+\(.tar.gz\)|\1${UPDATED_TAG}\2|" $requirements_file
           cat $requirements_file
 
-          echo ${{ github.head_ref || github.ref_name }} 
-          
-          #machineshop create \
-          #--kind branch \
-          #--branch hello \
-          #--repository stuttgart-things \
-          #--group stuttgart-things \
-          #--files "artifact.txt:Dockerfile" 
+          machineshop create \
+          --kind branch \
+          --branch ${{ github.head_ref || github.ref_name }}  \
+          --repository stuttgart-things \
+          --group stuttgart-things \
+          --files $requirements_file:$requirements_file
 
       - name: Upload collection
         id: upload
