@@ -1,7 +1,7 @@
 ---
 name: base_os
-# version: 0.5.36
 namespace: sthings
+# version: 0.5.36
 requirements: |
   roles:
     - src: https://github.com/stuttgart-things/download-install-binary.git
