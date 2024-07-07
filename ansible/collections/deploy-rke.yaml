@@ -1,7 +1,7 @@
 ---
 name: deploy_rke
-#version: 1.28.10-1
 namespace: sthings
+#version: 1.28.10-1
 requirements: |
   roles:
     - src: https://github.com/stuttgart-things/deploy-configure-rke.git
