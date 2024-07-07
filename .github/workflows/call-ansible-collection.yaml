@@ -330,13 +330,16 @@ jobs:
           sed -i "s|\(${COLLECTION_NAME}.*-\)[0-9]\+\.[0-9]\+\.[0-9]\+\(.tar.gz\)|\1${UPDATED_TAG}\2|" $requirements_file
           cat $requirements_file
 
+          branch=${{ github.head_ref || github.ref_name }}
+          token=${{ secrets.GH_TOKEN }}
+
           machineshop create \
           --kind branch \
-          --token ${{ secrets.GH_TOKEN }} \
-          --branch ${{ github.head_ref || github.ref_name }}  \
+          --token ${token} \
+          --branch ${branch} \
           --repository stuttgart-things \
           --group stuttgart-things \
-          --files $requirements_file:$requirements_file
+          --files $requirements_file:${{ inputs.requirements-file }}
 
       - name: Upload collection
         id: upload
