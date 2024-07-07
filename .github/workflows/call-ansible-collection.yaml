@@ -320,6 +320,7 @@ jobs:
 
       - name: Update requirements file
         id: update
+        shell: bash
         run: |
           COLLECTION_NAME=$(yq -r ".name" source/${{ inputs.collection-file }})
           requirements_file="source/${{ inputs.requirements-file }}"
