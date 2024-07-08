@@ -322,8 +322,6 @@ jobs:
 
       - name: Update requirements file
         id: update
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         shell: bash
         run: |
           COLLECTION_NAME=$(yq -r ".name" source/${{ inputs.collection-file }})
@@ -335,16 +333,15 @@ jobs:
           sed -i "s|\(${COLLECTION_NAME}.*-\)[0-9]\+\.[0-9]\+\.[0-9]\+\(.tar.gz\)|\1${UPDATED_TAG}\2|" $requirements_file
           cat $requirements_file
 
-          echo ${{ github.head_ref || github.ref_name }}
-          echo ${{ secrets.GH_TOKEN }}
+          branch=$(echo ${{ github.head_ref || github.ref_name }})
 
           machineshop create \
           --kind branch \
           --token $(machineshop get --path apps/data/github:token)
           --repository stuttgart-things \
           --group stuttgart-things \
-          --files $requirements_file:${{ inputs.requirements-file }} \
-          --branch $(echo ${{ github.head_ref || github.ref_name }})
+          --files "$requirements_file:${{ inputs.requirements-file }}" \
+          --branch ${branch}
 
       - name: Upload collection
         id: upload
