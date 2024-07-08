@@ -317,6 +317,8 @@ jobs:
 
           done
 
+          echo ${VAULT_ADDR}
+
       - name: Update requirements file
         id: update
         shell: bash
