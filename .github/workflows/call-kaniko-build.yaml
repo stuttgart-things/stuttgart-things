@@ -54,6 +54,15 @@ jobs:
           export GIT_USERNAME="kaniko-bot"
           export GIT_PASSWORD="${{ secrets.GITHUB_TOKEN }}"
 
+          # LOGIN INTO BUILD REGISTRY
+          url=$(yq -r ".build.reg.url" ${{ inputs.registry-config }})
+          username_path=$(yq -r ".build.reg.url" ${{ inputs.registry-config }})
+          password_path=$(yq -r ".build.reg.url" ${{ inputs.registry-config }})
+
+          skopeo login ${url} \
+          --username $(machineshop get --path ${username_path} | tail -n +8) \
+          --password $(machineshop get --path ${password_path} | tail -n +8)
+
           # BUILD AND CREATE IMAGE LOCAL
           /kaniko/executor \
           --dockerfile=${{ inputs.dockerfile }} \
