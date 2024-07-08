@@ -1,0 +1,27 @@
+---
+# Source: awx-operator/templates/awx-deploy.yaml
+apiVersion: awx.ansible.com/v1beta1
+kind: AWX
+metadata:
+  name: awx-dev
+  namespace: awx
+spec:
+  admin_user: admin
+  hostname: awx-dev.andre-dev.sthings-vsphere.labul.sva.de
+  ingress_class_name: nginx
+  ingress_tls_secret: awx-tls-dev
+  ingress_type: ingress
+  postgres_storage_class: nfs-csi
+  postgres_storage_requirements:
+    limits:
+      storage: 8Gi
+    requests:
+      storage: 1Gi
+  projects_persistence: false
+  projects_storage_access_mode: ReadWriteMany
+  projects_storage_class: nfs-csi
+  security_context_settings:
+    runAsGroup: 0
+    runAsUser: 0
+    fsGroup: 0
+    fsGroupChangePolicy: OnRootMismatch
