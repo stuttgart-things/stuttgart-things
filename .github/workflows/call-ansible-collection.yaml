@@ -337,11 +337,12 @@ jobs:
           echo BRANCH: $branch
           echo FILES: $requirements_file:${{ inputs.requirements-file }}
 
-          machineshop create --kind branch --branch ${{ env.BRANCH }} \
-          --token $(machineshop get --path apps/data/github:token)
+          export GITHUB_TOKEN=$(machineshop get --path apps/data/github:token)
+          machineshop create --kind branch --branch ${{ env.BRANCH }}
           --repository stuttgart-things \
           --group stuttgart-things \
-          --files "$requirements_file:${{ inputs.requirements-file }}"
+          --files ${FILES}
+        shell: bash
 
       - name: Upload collection
         id: upload

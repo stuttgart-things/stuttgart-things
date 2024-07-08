@@ -55,7 +55,7 @@ jobs:
           export GIT_PASSWORD="${{ secrets.GITHUB_TOKEN }}"
 
           # LOGIN INTO BUILD REGISTRY
-          url=$(yq -r ".build.reg.url" ${{ inputs.registry-config }})
+          REGSITRY_URL=$(yq -r ".build.reg.url" ${{ inputs.registry-config }})
           vault_username_path=$(yq -r ".build.reg.username" ${{ inputs.registry-config }})
           vault_password_path=$(yq -r ".build.reg.password" ${{ inputs.registry-config }})
 
@@ -64,12 +64,12 @@ jobs:
           --password $(machineshop get --path ${vault_password_path} | tail -n +8)
 
           # BUILD AND CREATE IMAGE LOCAL
+          BUILD_TAG=$(date "+%Y-%m-%d")
           /kaniko/executor \
           --dockerfile=${{ inputs.dockerfile }} \
           --context ${{ inputs.context }} \
           --context-sub-path ${{ inputs.context-sub-path }} \
-          --tar-path /tmp/$(echo ${{ inputs.context-sub-path }} | sed 's:.*/::').tar \
-          --no-push
+          --destination ${REGSITRY_URL}/${{ inputs.context-sub-path }}:${BUILD_TAG}
         shell: bash
 
       - name: Scan image w/ trivy
