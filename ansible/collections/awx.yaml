@@ -1657,9 +1657,9 @@ vars:
   - name: terraform-vars
     file: |
       ---
-      tf_project_path: "./terraform"
+      tf_project_path: ./terraform
       state: present
-      rendered_all: "tf-config-all.tf"
+      rendered_all: tf-config-all.tf
       AWS_ACCESS_KEY_ID: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps/data/artifacts:accessKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
       AWS_SECRET_ACCESS_KEY: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps/data/artifacts:secretKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
       force_init: true
