@@ -1,6 +1,7 @@
 ARG FROM_TAG=3.12.4-alpine3.19
 FROM python:${FROM_TAG}
 
+# META INFORMATION
 LABEL version=3.12.2-alpine3.19
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 
