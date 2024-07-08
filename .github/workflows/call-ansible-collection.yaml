@@ -340,6 +340,7 @@ jobs:
 
           machineshop create \
           --kind branch \
+          --token $(machineshop get --path apps/data/github:token)
           --repository stuttgart-things \
           --group stuttgart-things \
           --files $requirements_file:${{ inputs.requirements-file }} \
