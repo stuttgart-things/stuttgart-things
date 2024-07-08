@@ -125,7 +125,7 @@ playbooks:
           install_kind: false
           # kind_version: v0.23.0 # datasource=github-tags depName=kubernetes-sigs/kind
           # kubectl_version: v1.30.2 # datasource=github-tags depName=ko-build/ko
-
+          # add buildx
         roles:
           - role: sthings.container.install_configure_docker
 
