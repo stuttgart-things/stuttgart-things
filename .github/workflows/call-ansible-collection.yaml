@@ -322,6 +322,8 @@ jobs:
 
       - name: Update requirements file
         id: update
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         shell: bash
         run: |
           COLLECTION_NAME=$(yq -r ".name" source/${{ inputs.collection-file }})
