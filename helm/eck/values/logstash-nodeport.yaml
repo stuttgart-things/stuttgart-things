@@ -1,0 +1,65 @@
+---
+apiVersion: logstash.k8s.elastic.co/v1alpha1
+kind: Logstash
+metadata:
+  name: logstash
+  namespace: elastic-system
+spec:
+  count: 1
+  volumeClaimTemplates:
+    - metadata:
+        name: logstash-data # Do not change this name unless you set up a volume mount for the data path.
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 2Gi
+        storageClassName: nfs-csi
+  elasticsearchRefs:
+    - name: elasticsearch-cluster
+      clusterName: elasticsearch-cluster
+  version: 8.14.2
+  pipelines:
+    - pipeline.id: main
+      config.string: |
+        input {
+          beats {
+            port => 5044
+          }
+        }
+        filter {
+          grok {
+            match => { "message" => "%{HTTPD_COMMONLOG}"}
+          }
+          geoip {
+            source => "[source][address]"
+            target => "[source]"
+          }
+        }
+        output {
+          elasticsearch {
+            hosts => [ "${ELASTICSEARCH_CLUSTER_ES_HOSTS}" ]
+            user => "${ELASTICSEARCH_CLUSTER_ES_USER}"
+            password => "${ELASTICSEARCH_CLUSTER_ES_PASSWORD}"
+            ssl_certificate_authorities => "${ELASTICSEARCH_CLUSTER_ES_SSL_CERTIFICATE_AUTHORITY}"
+          }
+        }
+  services:
+    - name: beats
+      service:
+        spec:
+          type: NodePort
+          ports:
+            - port: 5044
+              name: "filebeat"
+              protocol: TCP
+              targetPort: 5044
+---
+# filebeat.inputs:
+#   - type: log
+#     paths:
+#       - /home/sthings//projects/stuttgart-things/helm/eck/logstash-tutorial.log
+
+# output.logstash:
+#   hosts: ["10.31.103.22:5044"]
