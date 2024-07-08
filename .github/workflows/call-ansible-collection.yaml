@@ -322,7 +322,6 @@ jobs:
 
       - name: Update requirements file
         id: update
-        shell: bash
         run: |
           COLLECTION_NAME=$(yq -r ".name" source/${{ inputs.collection-file }})
           requirements_file="source/${{ inputs.requirements-file }}"
@@ -334,14 +333,14 @@ jobs:
           cat $requirements_file
 
           branch=$(echo ${{ github.head_ref || github.ref_name }})
+          echo BRANCH: $branch
+          echo FILES: $requirements_file:${{ inputs.requirements-file }}
 
-          machineshop create \
-          --kind branch \
+          machineshop create --kind branch --branch ${branch} \
           --token $(machineshop get --path apps/data/github:token)
           --repository stuttgart-things \
           --group stuttgart-things \
-          --files "$requirements_file:${{ inputs.requirements-file }}" \
-          --branch ${branch}
+          --files "$requirements_file:${{ inputs.requirements-file }}"
 
       - name: Upload collection
         id: upload
