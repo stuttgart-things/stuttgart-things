@@ -6,14 +6,14 @@ environments:
       - env/{{ .Environment.Name }}.yaml
 
 releases:
-  - name: awx-configuration
+  - name: awx-certificates
     disableValidationOnInstall: true
     installed: true
     namespace: awx
     chart: stuttgart-things/sthings-cluster
     version: 0.3.10
     values:
-      - "values/awx-config.values.yaml.gotmpl"
+      - "values/awx-certificates.values.yaml.gotmpl"
 
   - name: awx-operator
     disableValidationOnInstall: true
@@ -22,9 +22,18 @@ releases:
     chart: awx/awx-operator
     version: 2.15.0
     needs:
-      - awx/awx-configuration
+      - awx/awx-certificates
     values:
-      - "values/awx.values.yaml.gotmpl"
+      - "values/awx-operator.values.yaml.gotmpl"
+
+  - name: awx-instances
+    disableValidationOnInstall: true
+    installed: true
+    namespace: awx
+    chart: stuttgart-things/sthings-cluster
+    version: 0.3.10
+    values:
+      - "values/awx-instances.values.yaml.gotmpl"
 
 repositories:
   - name: stuttgart-things

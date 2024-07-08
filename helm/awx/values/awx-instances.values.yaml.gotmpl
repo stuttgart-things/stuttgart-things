@@ -1,0 +1,56 @@
+---
+customresources:
+  awx-instance:
+    apiVersion: awx.ansible.com/v1beta1
+    kind: AWX
+    metadata:
+      name: {{ .Values.hostname }}
+      namespace: {{ .Release.Namespace }}
+    spec:
+      admin_user: {{ .Values.adminUser }}
+      admin_password_secret: {{ .Values.adminPassword }}
+      hostname: {{ .Values.hostname }}.{{ .Values.domain }}
+      ingress_class_name: {{ .Values.ingressClassName }}
+      ingress_tls_secret: {{ .Values.ingressSecret }}-tls
+      ingress_type: ingress
+      postgres_storage_class: {{ .Values.postgresStorageClass }}
+      postgres_storage_requirements:
+        limits:
+          storage: {{ .Values.postgresStorageLimits }}
+        requests:
+          storage: {{ .Values.postgresStorageRequest }}
+      projects_persistence: false
+      projects_storage_access_mode: ReadWriteMany
+      projects_storage_class: {{ .Values.projectStorageClass }}
+      security_context_settings:
+        runAsGroup: 0
+        runAsUser: 0
+        fsGroup: 0
+        fsGroupChangePolicy: OnRootMismatch
+  awx-dev-instance:
+    apiVersion: awx.ansible.com/v1beta1
+    kind: AWX
+    metadata:
+      name: {{ .Values.hostname }}-dev
+      namespace: {{ .Release.Namespace }}
+    spec:
+      admin_user: {{ .Values.adminUser }}
+      admin_password_secret: {{ .Values.adminPassword }}
+      hostname: {{ .Values.hostname }}-dev.{{ .Values.domain }}
+      ingress_class_name: {{ .Values.ingressClassName }}
+      ingress_tls_secret: {{ .Values.ingressSecret }}-dev-tls
+      ingress_type: ingress
+      postgres_storage_class: {{ .Values.postgresStorageClass }}
+      postgres_storage_requirements:
+        limits:
+          storage: {{ .Values.postgresStorageLimits }}
+        requests:
+          storage: {{ .Values.postgresStorageRequest }}
+      projects_persistence: false
+      projects_storage_access_mode: ReadWriteMany
+      projects_storage_class: {{ .Values.projectStorageClass }}
+      security_context_settings:
+        runAsGroup: 0
+        runAsUser: 0
+        fsGroup: 0
+        fsGroupChangePolicy: OnRootMismatch

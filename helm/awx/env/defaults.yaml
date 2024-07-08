@@ -1,7 +1,8 @@
 ---
 adminUser: admin
+adminPassword: Atlan7is2024
 ingressClassName: nginx
-ingressSecret: awx-tls
+ingressSecret: awx
 postgresStorageRequest: 1Gi
 postgresStorageLimits: 8Gi
 hostname: awx
