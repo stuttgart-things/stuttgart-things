@@ -1,4 +1,10 @@
 ---
+build:
+  reg:
+    url: registry.app-dev.sthings-vsphere.labul.sva.de
+    username: apps/data/build-reg:username
+    password: apps/data/build-reg:password
+
 registries:
   - name: scr-pve
     url: scr.cd43.sthings-pve.labul.sva.de
