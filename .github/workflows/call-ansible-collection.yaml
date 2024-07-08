@@ -317,7 +317,8 @@ jobs:
 
           done
 
-          echo ${VAULT_ADDR}
+          echo ${VAULT_ADDR} >> test.txt
+          cat test.txt
 
       - name: Update requirements file
         id: update
@@ -332,15 +333,15 @@ jobs:
           sed -i "s|\(${COLLECTION_NAME}.*-\)[0-9]\+\.[0-9]\+\.[0-9]\+\(.tar.gz\)|\1${UPDATED_TAG}\2|" $requirements_file
           cat $requirements_file
 
-          # echo ${{ github.head_ref || github.ref_name }}
-          # echo ${{ secrets.GH_TOKEN }}
+          echo ${{ github.head_ref || github.ref_name }}
+          echo ${{ secrets.GH_TOKEN }}
 
-          # machineshop create \
-          # --kind branch \
-          # --repository stuttgart-things \
-          # --group stuttgart-things \
-          # --files $requirements_file:${{ inputs.requirements-file }} \
-          # --branch $(echo ${{ github.head_ref || github.ref_name }})
+          machineshop create \
+          --kind branch \
+          --repository stuttgart-things \
+          --group stuttgart-things \
+          --files $requirements_file:${{ inputs.requirements-file }} \
+          --branch $(echo ${{ github.head_ref || github.ref_name }})
 
       - name: Upload collection
         id: upload
