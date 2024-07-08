@@ -3,7 +3,6 @@ FROM python:${FROM_TAG}
 
 # META INFORMATION
 LABEL version=3.12.2-alpine3.19
-
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 
 RUN apk update && apk add ca-certificates && rm -rf /var/cache/apk/* \
