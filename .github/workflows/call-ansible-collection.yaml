@@ -333,15 +333,15 @@ jobs:
           sed -i "s|\(${COLLECTION_NAME}.*-\)[0-9]\+\.[0-9]\+\.[0-9]\+\(.tar.gz\)|\1${UPDATED_TAG}\2|" $requirements_file
           cat $requirements_file
 
-          branch=$(echo ${{ github.head_ref || github.ref_name }})
-          echo BRANCH: $branch
-          echo FILES: $requirements_file:${{ inputs.requirements-file }}
+          # branch=$(echo ${{ github.head_ref || github.ref_name }})
+          # echo BRANCH: $branch
+          # echo FILES: $requirements_file:${{ inputs.requirements-file }}
 
-          export GITHUB_TOKEN=$(machineshop get --path apps/data/github:token)
-          machineshop create --kind branch --branch ${{ env.BRANCH }}
-          --repository stuttgart-things \
-          --group stuttgart-things \
-          --files ${FILES}
+          # export GITHUB_TOKEN=$(machineshop get --path apps/data/github:token)
+          # machineshop create --kind branch --branch ${{ env.BRANCH }}
+          # --repository stuttgart-things \
+          # --group stuttgart-things \
+          # --files ${FILES}
         shell: bash
 
       - name: Upload collection

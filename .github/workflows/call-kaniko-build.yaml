@@ -59,7 +59,7 @@ jobs:
           vault_username_path=$(yq -r ".build.reg.username" ${{ inputs.registry-config }})
           vault_password_path=$(yq -r ".build.reg.password" ${{ inputs.registry-config }})
 
-          skopeo login ${url} \
+          skopeo login ${REGSITRY_URL} \
           --username $(machineshop get --path ${vault_username_path} | tail -n +8) \
           --password $(machineshop get --path ${vault_password_path} | tail -n +8)
 
@@ -72,31 +72,31 @@ jobs:
           --destination ${REGSITRY_URL}/${{ inputs.context-sub-path }}:${BUILD_TAG}
         shell: bash
 
-      - name: Scan image w/ trivy
-        run: |
-          # SCAN LOCAL IMAGE FROM TARBALL
-          trivy image --input /tmp/$(echo ${{ inputs.context-sub-path }} | sed 's:.*/::').tar
-        shell: bash
+      # - name: Scan image w/ trivy
+      #   run: |
+      #     # SCAN LOCAL IMAGE FROM TARBALL
+      #     trivy image --input /tmp/$(echo ${{ inputs.context-sub-path }} | sed 's:.*/::').tar
+      #   shell: bash
 
-      - name: Push w/ skopeo to dev registries
-        run: |
-          # GENERATE TAG IF NONE IS GIVEN
-          if [ -z "${IMAGE_TAG}" ]
-          then
-            IMAGE_TAG=$(date '+%Y-%m-%d-%H-%M-%S')
-          fi
+      # - name: Push w/ skopeo to dev registries
+      #   run: |
+      #     # GENERATE TAG IF NONE IS GIVEN
+      #     if [ -z "${IMAGE_TAG}" ]
+      #     then
+      #       IMAGE_TAG=$(date '+%Y-%m-%d-%H-%M-%S')
+      #     fi
 
-          for registry in $(yq eval -o=j ${{ inputs.registry-config }} | jq -cr '.registries[]'); do
+      #     for registry in $(yq eval -o=j ${{ inputs.registry-config }} | jq -cr '.registries[]'); do
 
-            alias=$(echo $registry | jq -r '.name' -)
-            url=$(echo $registry | jq -r '.url' -)
-            vault_path_username=$(echo $registry | jq -r '.username' -)
-            vault_path_password=$(echo $registry | jq -r '.password' -)
+      #       alias=$(echo $registry | jq -r '.name' -)
+      #       url=$(echo $registry | jq -r '.url' -)
+      #       vault_path_username=$(echo $registry | jq -r '.username' -)
+      #       vault_path_password=$(echo $registry | jq -r '.password' -)
 
-            echo pushing to ${url}
+      #       echo pushing to ${url}
 
-            skopeo login ${url} --username $(machineshop get --path ${vault_path_username} | tail -n +8) --password $(machineshop get --path ${vault_path_password} | tail -n +8)
-            skopeo copy -f oci tarball:/tmp/$(echo ${{ inputs.context-sub-path }} | sed 's:.*/::').tar docker://${url}/$(echo ${{ inputs.context-sub-path }} | sed 's:.*/::')/$(echo ${{ inputs.context-sub-path }} | sed 's:.*/::'):${IMAGE_TAG}
+      #       skopeo login ${url} --username $(machineshop get --path ${vault_path_username} | tail -n +8) --password $(machineshop get --path ${vault_path_password} | tail -n +8)
+      #       skopeo copy -f oci tarball:/tmp/$(echo ${{ inputs.context-sub-path }} | sed 's:.*/::').tar docker://${url}/$(echo ${{ inputs.context-sub-path }} | sed 's:.*/::')/$(echo ${{ inputs.context-sub-path }} | sed 's:.*/::'):${IMAGE_TAG}
 
-          done
-        shell: bash
+      #     done
+      #   shell: bash
