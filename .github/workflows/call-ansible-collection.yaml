@@ -7,7 +7,6 @@ on:
         required: true
         type: string
       environment-name:
-        default: k8s
         required: true
         type: string
       ansible-image:
