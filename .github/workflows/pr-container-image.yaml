@@ -80,11 +80,15 @@ jobs:
 
   Scan-Image:
     needs: Build-Image
+    strategy:
+      fail-fast: false
+      matrix:
+        image: [python:3.4-alpine, nginx:latest]
     uses: stuttgart-things/stuttgart-things/.github/workflows/call-trivy-scan.yaml@main
     with:
       runs-on: ghr-stuttgart-things-labda-test
       environment-name: labul-vsphere
       kind: image
-      object: python:3.4-alpine
+      object: ${{ matrix.image }} 
       trivy-image: eu.gcr.io/stuttgart-things/sthings-container:v1.23.1-2
     secrets: inherit
