@@ -1,0 +1,99 @@
+---
+name: Trivy Scan
+on:
+  workflow_call:
+    inputs:
+      runs-on:
+        required: true
+        type: string
+      environment-name:
+        default: k8s
+        required: false
+        type: string
+      kind:
+        required: false
+        default: image
+        type: string
+      object:
+        required: true
+        type: string
+      trivy-image:
+        required: false
+        type: string
+        default: eu.gcr.io/stuttgart-things/sthings-container:v1.23.1-2
+
+jobs:
+  trivy-build-push:
+    runs-on: ${{ inputs.runs-on }}
+    environment: ${{ inputs.environment-name }}
+    container:
+      image: ${{ inputs.trivy-image }}
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_ACCESS_KEY }}
+      VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
+      VAULT_AUTH_METHOD: ${{ secrets.VAULT_AUTH_METHOD }}
+      VAULT_NAMESPACE: ${{ secrets.VAULT_NAMESPACE }}
+      VAULT_ROLE_ID: ${{ secrets.VAULT_ROLE_ID }}
+      VAULT_SECRET_ID: ${{ secrets.VAULT_SECRET_ID }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.1.7
+        with:
+          fetch-depth: '0'
+
+      - name: Scan image w/ trivy
+        run: |
+          # SCAN LOCAL IMAGE FROM TARBALL
+          trivy image ${{ inputs.object }}
+        if: ${{ inputs.object == 'image' }}
+        shell: bash
+
+      # - name: Build and push image w/ trivy
+      #   run: |
+      #     # LOGIN INTO BUILD REGISTRY
+      #     REGSITRY_URL=$(yq -r ".build.reg.url" ${{ inputs.registry-config }})
+      #     vault_username_path=$(yq -r ".build.reg.username" ${{ inputs.registry-config }})
+      #     vault_password_path=$(yq -r ".build.reg.password" ${{ inputs.registry-config }})
+
+      #     skopeo login ${REGSITRY_URL} \
+      #     --username $(machineshop get --path ${vault_username_path} | tail -n +8) \
+      #     --password $(machineshop get --path ${vault_password_path} | tail -n +8)
+
+      #     # BUILD AND CREATE IMAGE LOCAL
+      #     BUILD_TAG=$(date "+%Y-%m-%d")
+      #     /trivy/executor \
+      #     --dockerfile=${{ inputs.dockerfile }} \
+      #     --context ${{ inputs.context }} \
+      #     --context-sub-path ${{ inputs.context-sub-path }} \
+      #     --destination ${REGSITRY_URL}/${{ inputs.context-sub-path }}:${BUILD_TAG}
+      #   shell: bash
+
+      # - name: Scan image w/ trivy
+      #   run: |
+      #     # SCAN LOCAL IMAGE FROM TARBALL
+      #     trivy image --input /tmp/$(echo ${{ inputs.context-sub-path }} | sed 's:.*/::').tar
+      #   shell: bash
+
+      # - name: Push w/ skopeo to dev registries
+      #   run: |
+      #     # GENERATE TAG IF NONE IS GIVEN
+      #     if [ -z "${IMAGE_TAG}" ]
+      #     then
+      #       IMAGE_TAG=$(date '+%Y-%m-%d-%H-%M-%S')
+      #     fi
+
+      #     for registry in $(yq eval -o=j ${{ inputs.registry-config }} | jq -cr '.registries[]'); do
+
+      #       alias=$(echo $registry | jq -r '.name' -)
+      #       url=$(echo $registry | jq -r '.url' -)
+      #       vault_path_username=$(echo $registry | jq -r '.username' -)
+      #       vault_path_password=$(echo $registry | jq -r '.password' -)
+
+      #       echo pushing to ${url}
+
+      #       skopeo login ${url} --username $(machineshop get --path ${vault_path_username} | tail -n +8) --password $(machineshop get --path ${vault_path_password} | tail -n +8)
+      #       skopeo copy -f oci tarball:/tmp/$(echo ${{ inputs.context-sub-path }} | sed 's:.*/::').tar docker://${url}/$(echo ${{ inputs.context-sub-path }} | sed 's:.*/::')/$(echo ${{ inputs.context-sub-path }} | sed 's:.*/::'):${IMAGE_TAG}
+
+      #     done
+      #   shell: bash

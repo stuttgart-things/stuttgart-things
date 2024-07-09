@@ -77,3 +77,4 @@ jobs:
       collection-file: ansible/collections/${{ matrix.collection-file }}.yaml
       s3-instance-profiles: ansible/s3-instances.yaml
       requirements-file: ansible/requirements-dev.yaml
+    secrets: inherit
