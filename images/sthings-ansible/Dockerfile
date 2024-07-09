@@ -6,6 +6,7 @@ FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
 
 # SET META INFORMATION
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
+
 LABEL version=10.1.0
 
 # SW VERSIONS
