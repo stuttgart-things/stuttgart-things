@@ -83,7 +83,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        image: [python:3.4-alpine, nginx:latest]
+        image: ["python:3.4-alpine", "nginx:latest"]
     uses: stuttgart-things/stuttgart-things/.github/workflows/call-trivy-scan.yaml@main
     with:
       runs-on: ghr-stuttgart-things-labda-test
