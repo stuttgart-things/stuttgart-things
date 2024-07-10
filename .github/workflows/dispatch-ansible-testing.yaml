@@ -32,5 +32,5 @@ jobs:
       runs-on: ${{ inputs.runner }}
       environment-name: ${{ inputs.environment-name }}
       ansible-image: ${{ inputs.working-image }}
-      collection-package: ${{ inputs.runner }}
+      collection-package: ${{ inputs.collection-package }}
     secrets: inherit
