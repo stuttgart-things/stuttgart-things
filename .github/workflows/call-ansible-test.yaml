@@ -15,7 +15,7 @@ on:
         required: false
       continue-error:
         default: false
-        required: true
+        required: false
         type: boolean
       collection-package:
         required: true
