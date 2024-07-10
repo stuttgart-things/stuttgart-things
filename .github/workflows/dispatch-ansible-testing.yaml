@@ -6,7 +6,7 @@ on:
       collection-package:
         description: COLLECTION PACKAGE (ARTIFACT)
         type: string
-        default: sthings-base_os-24.144.22.tar.gz
+        default: https://artifacts.andre-dev.sthings-vsphere.labul.sva.de/ansible-collections/sthings-base_os-24.144.22.tar.gz
       sync-from:
         type: choice
         description: SYNC FROM
