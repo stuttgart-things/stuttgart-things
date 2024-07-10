@@ -39,5 +39,5 @@ jobs:
       environment-name: ${{ inputs.environment-name }}
       ansible-image: ${{ inputs.working-image }}
       collection-package: ${{ inputs.collection-package }}
-      sync-from: ${{ inputs.collection-package }}
+      sync-from: ${{ inputs.sync-from }}
     secrets: inherit
