@@ -1,5 +1,5 @@
 ---
-name: Dispatch Ansible Execution
+name: Dispatch Ansible Testing
 on:
   workflow_dispatch:
     inputs:
