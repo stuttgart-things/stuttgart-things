@@ -47,11 +47,11 @@ jobs:
             /tmp/ansible
         if: ${{ inputs.sync-from == 'artifact' }}
 
-      - name: Get collection from url
+      - name: Get collection from web
         run: |
           wget ${{ inputs.collection-package }}
         shell: bash
-        if: ${{ inputs.sync-from == 'artifact' }}
+        if: ${{ inputs.sync-from == 'web' }}
 
       - name: Extract collection
         run: |

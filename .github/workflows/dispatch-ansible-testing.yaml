@@ -11,7 +11,7 @@ on:
         type: choice
         description: SYNC FROM
         options:
-          - url
+          - web
           - artifact
       environment-name:
         type: choice
