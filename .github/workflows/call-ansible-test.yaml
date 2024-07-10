@@ -36,7 +36,7 @@ jobs:
     environment: ${{ inputs.environment-name }}
     continue-on-error: ${{ inputs.continue-error }}
     steps:
-      - name:
+      - name: Download artifact
         uses: actions/download-artifact@v4.1.8
         with:
           name: ${{ inputs.collection-package }}
