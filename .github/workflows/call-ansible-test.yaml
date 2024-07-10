@@ -46,7 +46,6 @@ jobs:
           path: |-
             /tmp/ansible
         if: ${{ inputs.sync-from == 'artifact' }}
-        shell: bash
 
       - name: Get collection from url
         run: |
