@@ -7,6 +7,12 @@ on:
         description: COLLECTION PACKAGE (ARTIFACT)
         type: string
         default: sthings-base_os-24.144.22.tar.gz
+      sync-from:
+        type: choice
+        description: SYNC FROM
+        options:
+          - url
+          - artifact
       environment-name:
         type: choice
         description: ENVIRONMENT NAME
@@ -33,4 +39,5 @@ jobs:
       environment-name: ${{ inputs.environment-name }}
       ansible-image: ${{ inputs.working-image }}
       collection-package: ${{ inputs.collection-package }}
+      sync-from: ${{ inputs.collection-package }}
     secrets: inherit

@@ -11,7 +11,7 @@ vars:
   DATE:
     sh: date +"%y.%m%d.%H%M"
   BRANCH:
-    sh: if [ $(git rev-parse --abbrev-ref HEAD) != "main" ]; then echo $(git rev-parse --abbrev-ref HEAD) ; fi
+    sh: if [ $(git rev-parse --abbrev-ref HEAD) != "main" ]; then echo $(git rev-parse --abbrev-ref HEAD); else echo main ; fi
 
 tasks:
   branch:

@@ -17,6 +17,9 @@ on:
         default: false
         required: false
         type: boolean
+      sync-from:
+        required: true
+        type: string
       collection-package:
         required: true
         type: string
@@ -32,17 +35,27 @@ jobs:
     #   VAULT_NAMESPACE: ${{ secrets.VAULT_NAMESPACE }}
     #   VAULT_ROLE_ID: ${{ secrets.VAULT_ROLE_ID }}
     #   VAULT_SECRET_ID: ${{ secrets.VAULT_SECRET_ID }}
-    #   GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+    #   # GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
     environment: ${{ inputs.environment-name }}
     continue-on-error: ${{ inputs.continue-error }}
     steps:
-      - name: Download artifact
+      - name: Get collection from artifact
         uses: actions/download-artifact@v4.1.8
         with:
           name: ${{ inputs.collection-package }}
           path: |-
             /tmp/ansible
+        if: ${{ inputs.sync-from == 'artifact' }}
+        shell: bash
 
-      - name: Checkout code
+      - name: Get collection from url
         run: |
-          ls -lta /tmp/
+          wget ${{ inputs.collection-package }}
+        shell: bash
+        if: ${{ inputs.sync-from == 'artifact' }}
+
+      - name: Extract collection
+        run: |
+          tar xvfz $(ls -t *.gz | head -1)
+          ls -lta
+        shell: bash
