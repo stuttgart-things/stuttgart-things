@@ -1,7 +1,7 @@
 ---
 name: container
-namespace: sthings
 #version: 0.0.30
+namespace: sthings
 requirements: |
   roles:
     - src: https://github.com/stuttgart-things/install-configure-docker.git
