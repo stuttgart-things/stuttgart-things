@@ -58,3 +58,15 @@ jobs:
           tar xvfz $(ls -t *.gz | head -1)
           ls -lta
         shell: bash
+
+      - name: Lint playbooks
+        run: |
+          cd playbooks
+          ansible-lint --offline -p *.yaml || true
+          cd ..
+        shell: bash
+
+      - name: Lint roles
+        run: |
+          ansible-lint --offline -p roles || true
+        shell: bash
