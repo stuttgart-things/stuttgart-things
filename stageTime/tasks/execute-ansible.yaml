@@ -84,11 +84,11 @@ spec:
     - name: RUN-PRIVILEGED
       description: run in privileged mode
       type: boolean
-      default: "false"
+      default: false
     - name: RUN-AS-NONROOT
       description: run as user
       type: boolean
-      default: "true"
+      default: true
     - name: RUN-AS-USER
       description: run as user
       type: string
