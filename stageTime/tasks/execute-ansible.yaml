@@ -81,16 +81,17 @@ spec:
       description: name of the vault secret
       type: string
       default: "vault"
+  stepTemplate:
+    workingDir: $(workspaces.source.path)/$(params.SUB_DIRECTORY)
+    image: "$(params.WORKING_IMAGE)"
+    securityContext:
+      privileged: false
+      runAsNonRoot: true
+      runAsUser: 65532
   steps:
     - name: create-inventory-vars
-      workingDir: $(workspaces.source.path)/$(params.SUB_DIRECTORY)
       args:
         - $(params.INVENTORY_VARS[*])
-      image: "$(params.WORKING_IMAGE)"
-      securityContext:
-        privileged: false
-        runAsNonRoot: true
-        runAsUser: 65532
       script: |
         #!/usr/bin/env sh
 
@@ -117,14 +118,8 @@ spec:
 
         cat ./vars.yaml
     - name: create-vars-file
-      workingDir: $(workspaces.source.path)/$(params.SUB_DIRECTORY)
       args:
         - $(params.EXTRA_VARS[*])
-      image: "$(params.WORKING_IMAGE)"
-      securityContext:
-        privileged: false
-        runAsNonRoot: true
-        runAsUser: 65532
       script: |
         #!/usr/bin/env sh
         set -eu
@@ -133,14 +128,8 @@ spec:
 
         cat ./vars.yaml
     - name: install-roles
-      workingDir: $(workspaces.source.path)/$(params.SUB_DIRECTORY)
       args:
         - $(params.EXTRA_ROLES[*])
-      image: "$(params.WORKING_IMAGE)"
-      securityContext:
-        privileged: false
-        runAsNonRoot: true
-        runAsUser: 65532
       script: |
         #!/usr/bin/env sh
         set -eu
@@ -158,14 +147,8 @@ spec:
           echo "skipped installing additional roles"
         fi
     - name: install-collections
-      workingDir: $(workspaces.source.path)/$(params.SUB_DIRECTORY)
       args:
         - $(params.EXTRA_COLLECTIONS[*])
-      image: "$(params.WORKING_IMAGE)"
-      securityContext:
-        privileged: false
-        runAsNonRoot: true
-        runAsUser: 65532
       script: |
         #!/usr/bin/env sh
         set -eu
@@ -183,10 +166,8 @@ spec:
           echo "skipped installing additional collections"
         fi
     - name: run-ansible-playbook
-      workingDir: $(workspaces.source.path)/$(params.SUB_DIRECTORY)
       args:
         - $(params.PLAYBOOKS[*])
-      image: "$(params.WORKING_IMAGE)"
       env:
         - name: ANSIBLE_HOST_KEY_CHECKING
           value: "False"
@@ -212,10 +193,6 @@ spec:
             secretKeyRef:
               key: $(params.vault-secret-key-approleSecret)
               name: $(params.vault-secret-name)
-      securityContext:
-        privileged: false
-        runAsNonRoot: true
-        runAsUser: 65532
       script: |-
         #!/usr/bin/env sh
         set -eu

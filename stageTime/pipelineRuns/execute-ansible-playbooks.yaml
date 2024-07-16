@@ -3,7 +3,7 @@ kind: PipelineRun
 metadata:
   labels:
     tekton.dev/pipeline: execute-ansible-playbooks
-  name: baseos-dev17-9-4
+  name: baseos-dev17-9-7
   namespace: tektoncd
 spec:
   taskRunTemplate:
