@@ -81,18 +81,6 @@ spec:
       description: name of the vault secret
       type: string
       default: "vault"
-    - name: RUN-PRIVILEGED
-      description: run in privileged mode
-      type: boolean
-      default: false
-    - name: RUN-AS-NONROOT
-      description: run as user
-      type: boolean
-      default: true
-    - name: RUN-AS-USER
-      description: run as user
-      type: string
-      default: "65532"
   steps:
     - name: create-inventory-vars
       workingDir: $(workspaces.source.path)/$(params.SUB_DIRECTORY)
@@ -100,9 +88,9 @@ spec:
         - $(params.INVENTORY_VARS[*])
       image: "$(params.WORKING_IMAGE)"
       securityContext:
-        privileged: $(params.RUN-PRIVILEGED)
-        runAsNonRoot: $(params.RUN-AS-NONROOT)
-        runAsUser: $(params.RUN-AS-USER)
+        privileged: false
+        runAsNonRoot: true
+        runAsUser: 65532
       script: |
         #!/usr/bin/env sh
         set -eu
