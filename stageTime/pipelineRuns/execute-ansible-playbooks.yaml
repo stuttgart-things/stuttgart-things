@@ -50,7 +50,7 @@ spec:
     value:
     - https://github.com/stuttgart-things/stuttgart-things/releases/download/0.5.0/sthings-base_os-0.5.0.tar.gz
     - community.crypto:2.10.0
-  - naxme: installExtraCollections
+  - name: installExtraCollections
     value: "true"
   pipelineRef:
     params:
@@ -77,334 +77,334 @@ spec:
           requests:
             storage: 20Mi
         storageClassName: openebs-hostpath
----
-apiVersion: tekton.dev/v1
-kind: PipelineRun
-metadata:
-  name: deploy-downstreamcluster-tekton-dev-1
-  namespace: tektoncd
-spec:
-  pipelineRef:
-    resolver: git
-    params:
-      - name: url
-        value: https://github.com/stuttgart-things/stuttgart-things.git
-      - name: revision
-        value: main
-      - name: pathInRepo
-        value: stageTime/pipelines/execute-ansible-playbooks.yaml
-  workspaces:
-    - name: shared-workspace
-      volumeClaimTemplate:
-        spec:
-          storageClassName: openebs-hostpath
-          accessModes:
-            - ReadWriteOnce
-          resources:
-            requests:
-              storage: 1Gi
-  params:
-    - name: ansibleWorkingImage
-      value: "eu.gcr.io/stuttgart-things/sthings-ansible:8.5.0"
-    - name: createInventory
-      value: "true"
-    - name: gitRepoUrl
-      value: https://github.com/stuttgart-things/stuttgart-things.git
-    - name: gitRevision
-      value: "main"
-    - name: gitWorkspaceSubdirectory
-      value: "/ansible/base-os"
-    - name: vaultSecretName
-      value: vault-in-cluster
-    - name: installExtraRoles
-      value: "true"
-    - name: ansibleExtraRoles
-      value:
-        - "https://github.com/stuttgart-things/install-requirements.git"
-        - "https://github.com/stuttgart-things/manage-filesystem.git"
-        - "https://github.com/stuttgart-things/install-configure-vault.git"
-    - name: ansiblePlaybooks
-      value:
-        - "ansible/playbooks/prepare-env.yaml"
-        - "ansible/playbooks/base-os.yaml"
-        - "ansible/playbooks/configure-rke-node"
-        - "ansible/playbooks/create-downstream-cluster.yaml"
-    - name: ansibleVarsFile
-      value:
-        - "manage_filesystem+-true"
-        - "update_packages+-true"
-        - "install_requirements+-true"
-        - "install_motd+-true"
-        - "username+-sthings"
-        - "lvm_home_sizing+-'15%'"
-        - "lvm_root_sizing+-'35%'"
-        - "lvm_var_sizing+-'50%'"
-        - "send_to_msteams+-true"
-        - "reboot_all+-false"
-        - "roles+-pve-tekton-dev:all"
-        - "roles+-pve-tekton-dev-2:all"
-        - "roles+-pve-tekton-dev-3:all"
-        - "cluster_name+-tekton-dev"
-    - name: ansibleVarsInventory
-      value:
-        - "all+[\"pve-tekton-dev.labul.sva.de\"]"
-        - "all+[\"pve-tekton-dev-2.labul.sva.de\"]"
-        - "all+[\"pve-tekton-dev-3.labul.sva.de\"]"
----
-apiVersion: tekton.dev/v1
-kind: PipelineRun
-metadata:
-  name: create-pdns-entry-pve-app8-1
-  namespace: ansible
-spec:
-  pipelineRef:
-    resolver: git
-    params:
-      - name: url
-        value: https://github.com/stuttgart-things/stuttgart-things.git
-      - name: revision
-        value: main
-      - name: pathInRepo
-        value: stageTime/pipelines/execute-ansible-playbooks.yaml
-  workspaces:
-    - name: shared-workspace
-      volumeClaimTemplate:
-        spec:
-          storageClassName: nfs3-csi2
-          accessModes:
-            - ReadWriteMany
-          resources:
-            requests:
-              storage: 1Gi
-  params:
-    - name: ansibleWorkingImage
-      value: "eu.gcr.io/stuttgart-things/sthings-ansible:8.3.0-6"
-    - name: createInventory
-      value: "false"
-    - name: gitRepoUrl
-      value: "https://github.com/stuttgart-things/stuttgart-things.git"
-    - name: gitRevision
-      value: "main"
-    - name: gitWorkspaceSubdirectory
-      value: "/ansible/pdns"
-    - name: vaultSecretName
-      value: vault
-    - name: installExtraRoles
-      value: "true"
-    - name: ansibleExtraRoles
-      value:
-        - "https://github.com/stuttgart-things/install-configure-powerdns.git"
-    - name: ansiblePlaybooks
-      value:
-        - "ansible/playbooks/pdns-ingress-entry.yaml"
-    - name: ansibleVarsFile
-      value:
-        - "pdns_url+-https://pdns-pve.labul.sva.de:8443"
-        - "entry_zone+-sthings-pve.labul.sva.de."
-        - "ip_address+-10.31.101.18"
-        - "hostname+-app8"
-    - name: ansibleVarsInventory
-      value:
-        - "localhost"
----
-apiVersion: tekton.dev/v1
-kind: PipelineRun
-metadata:
-  name: deploy-rke2-app-pve-16
-  namespace: ansible
-spec:
-  pipelineRef:
-    resolver: git
-    params:
-      - name: url
-        value: https://github.com/stuttgart-things/stuttgart-things.git
-      - name: revision
-        value: main
-      - name: pathInRepo
-        value: stageTime/pipelines/execute-ansible-playbooks.yaml
-  workspaces:
-    - name: shared-workspace
-      volumeClaimTemplate:
-        spec:
-          storageClassName: nfs3-csi2
-          accessModes:
-            - ReadWriteMany
-          resources:
-            requests:
-              storage: 1Gi
-  params:
-    - name: ansibleWorkingImage
-      value: "eu.gcr.io/stuttgart-things/sthings-ansible:8.3.0-6"
-    - name: createInventory
-      value: "true"
-    - name: gitRepoUrl
-      value: "https://github.com/stuttgart-things/stuttgart-things.git"
-    - name: gitRevision
-      value: "main"
-    - name: gitWorkspaceSubdirectory
-      value: "/ansible/rke2"
-    - name: vaultSecretName
-      value: vault
-    - name: installExtraRoles
-      value: "true"
-    - name: ansibleExtraRoles
-      value:
-        - "https://github.com/stuttgart-things/deploy-configure-rke.git"
-        - "https://github.com/stuttgart-things/manage-filesystem.git"
-    - name: ansiblePlaybooks
-      value:
-        - "ansible/playbooks/prepare-env.yaml"
-        # - "ansible/playbooks/base-os.yaml"
-        - "ansible/playbooks/deploy-rke2.yaml"
-    - name: ansibleVarsFile
-      value:
-        - "manage_filesystem+-true"
-        - "update_packages+-true"
-        - "install_requirements+-true"
-        - "install_motd+-true"
-        - "username+-sthings"
-        - "lvm_home_sizing+-'15%'"
-        - "lvm_root_sizing+-'35%'"
-        - "lvm_var_sizing+-'50%'"
-        - "send_to_msteams+-true"
-        - "reboot_all+-false"
-    - name: ansibleVarsInventory
-      value:
-        - "initial_master_node+[\"pve-app-master.labul.sva.de\"]"
-        - "additional_master_nodes+[\"pve-app-master-2.labul.sva.de\"]"
-        - "additional_master_nodes+[\"pve-app-master-3.labul.sva.de\"]"
-        - "additional_master_nodes+[\"pve-app-worker.labul.sva.de\"]"
-        - "additional_master_nodes+[\"pve-app-worker-2.labul.sva.de\"]"
-        - "additional_master_nodes+[\"pve-app-worker-3.labul.sva.de\"]"
----
-apiVersion: tekton.dev/v1
-kind: PipelineRun
-metadata:
-  name: deploy-rke1-mhering-3
-  namespace: ansible
-spec:
-  pipelineRef:
-    resolver: git
-    params:
-      - name: url
-        value: https://github.com/stuttgart-things/stuttgart-things.git
-      - name: revision
-        value: main
-      - name: pathInRepo
-        value: stageTime/pipelines/execute-ansible-playbooks.yaml
-  workspaces:
-    - name: shared-workspace
-      volumeClaimTemplate:
-        spec:
-          storageClassName: nfs3-csi2
-          accessModes:
-            - ReadWriteMany
-          resources:
-            requests:
-              storage: 1Gi
-  params:
-    - name: ansibleWorkingImage
-      value: "eu.gcr.io/stuttgart-things/sthings-ansible:8.3.0-6"
-    - name: createInventory
-      value: "true"
-    - name: gitRepoUrl
-      value: "https://github.com/stuttgart-things/stuttgart-things.git"
-    - name: gitRevision
-      value: "main"
-    - name: gitWorkspaceSubdirectory
-      value: "/ansible/rke1"
-    - name: vaultSecretName
-      value: vault
-    - name: installExtraRoles
-      value: "true"
-    - name: ansibleExtraRoles
-      value:
-        - "https://github.com/stuttgart-things/deploy-configure-rke.git"
-        - "https://github.com/stuttgart-things/manage-filesystem.git"
-    - name: ansiblePlaybooks
-      value:
-        - "ansible/playbooks/prepare-env.yaml"
-        - "ansible/playbooks/base-os.yaml"
-        - "ansible/playbooks/deploy-rke1.yaml"
-    - name: ansibleVarsFile
-      value:
-        - "manage_filesystem+-true"
-        - "update_packages+-true"
-        - "install_requirements+-true"
-        - "install_motd+-true"
-        - "username+-sthings"
-        - "lvm_home_sizing+-'15%'"
-        - "lvm_root_sizing+-'35%'"
-        - "lvm_var_sizing+-'50%'"
-        - "send_to_msteams+-true"
-        - "reboot_all+-false"
-    - name: ansibleVarsInventory
-      value:
-        - "initial_master_node+[\"rke1-mhering.labul.sva.de\"]"
-        - "additional_master_nodes+[\"rke1-mhering-2.labul.sva.de\"]"
----
-apiVersion: tekton.dev/v1
-kind: PipelineRun
-metadata:
-  name: execute-baseos-pve-eda-server
-  namespace: ansible
-spec:
-  pipelineRef:
-    resolver: git
-    params:
-      - name: url
-        value: https://github.com/stuttgart-things/stuttgart-things.git
-      - name: revision
-        value: main
-      - name: pathInRepo
-        value: stageTime/pipelines/execute-ansible-playbooks.yaml
-  workspaces:
-    - name: shared-workspace
-      volumeClaimTemplate:
-        spec:
-          storageClassName: nfs3-csi2
-          accessModes:
-            - ReadWriteMany
-          resources:
-            requests:
-              storage: 1Gi
-  params:
-    - name: ansibleWorkingImage
-      value: "eu.gcr.io/stuttgart-things/sthings-ansible:8.3.0-6"
-    - name: createInventory
-      value: "true"
-    - name: gitRepoUrl
-      value: https://github.com/stuttgart-things/stuttgart-things.git
-    - name: gitRevision
-      value: "main"
-    - name: gitWorkspaceSubdirectory
-      value: "/ansible/base-os"
-    - name: vaultSecretName
-      value: vault
-    - name: installExtraRoles
-      value: "true"
-    - name: ansibleExtraRoles
-      value:
-        - "https://github.com/stuttgart-things/install-requirements.git"
-        - "https://github.com/stuttgart-things/manage-filesystem.git"
-        - "https://github.com/stuttgart-things/install-configure-vault.git"
-    - name: ansiblePlaybooks
-      value:
-        - "ansible/playbooks/prepare-env.yaml"
-        - "ansible/playbooks/base-os.yaml"
-        # - "ansible/playbooks/install-docker.yaml"
-    - name: ansibleVarsFile
-      value:
-        - "manage_filesystem+-true"
-        - "update_packages+-true"
-        - "install_requirements+-true"
-        - "install_motd+-true"
-        - "username+-sthings"
-        - "lvm_home_sizing+-'15%'"
-        - "lvm_root_sizing+-'35%'"
-        - "lvm_var_sizing+-'50%'"
-        - "send_to_msteams+-true"
-        - "reboot_all+-false"
-    - name: ansibleVarsInventory
-      value:
-        - "all+[\"pve-eda-server.labul.sva.de\"]"
+# ---
+# apiVersion: tekton.dev/v1
+# kind: PipelineRun
+# metadata:
+#   name: deploy-downstreamcluster-tekton-dev-1
+#   namespace: tektoncd
+# spec:
+#   pipelineRef:
+#     resolver: git
+#     params:
+#       - name: url
+#         value: https://github.com/stuttgart-things/stuttgart-things.git
+#       - name: revision
+#         value: main
+#       - name: pathInRepo
+#         value: stageTime/pipelines/execute-ansible-playbooks.yaml
+#   workspaces:
+#     - name: shared-workspace
+#       volumeClaimTemplate:
+#         spec:
+#           storageClassName: openebs-hostpath
+#           accessModes:
+#             - ReadWriteOnce
+#           resources:
+#             requests:
+#               storage: 1Gi
+#   params:
+#     - name: ansibleWorkingImage
+#       value: "eu.gcr.io/stuttgart-things/sthings-ansible:8.5.0"
+#     - name: createInventory
+#       value: "true"
+#     - name: gitRepoUrl
+#       value: https://github.com/stuttgart-things/stuttgart-things.git
+#     - name: gitRevision
+#       value: "main"
+#     - name: gitWorkspaceSubdirectory
+#       value: "/ansible/base-os"
+#     - name: vaultSecretName
+#       value: vault-in-cluster
+#     - name: installExtraRoles
+#       value: "true"
+#     - name: ansibleExtraRoles
+#       value:
+#         - "https://github.com/stuttgart-things/install-requirements.git"
+#         - "https://github.com/stuttgart-things/manage-filesystem.git"
+#         - "https://github.com/stuttgart-things/install-configure-vault.git"
+#     - name: ansiblePlaybooks
+#       value:
+#         - "ansible/playbooks/prepare-env.yaml"
+#         - "ansible/playbooks/base-os.yaml"
+#         - "ansible/playbooks/configure-rke-node"
+#         - "ansible/playbooks/create-downstream-cluster.yaml"
+#     - name: ansibleVarsFile
+#       value:
+#         - "manage_filesystem+-true"
+#         - "update_packages+-true"
+#         - "install_requirements+-true"
+#         - "install_motd+-true"
+#         - "username+-sthings"
+#         - "lvm_home_sizing+-'15%'"
+#         - "lvm_root_sizing+-'35%'"
+#         - "lvm_var_sizing+-'50%'"
+#         - "send_to_msteams+-true"
+#         - "reboot_all+-false"
+#         - "roles+-pve-tekton-dev:all"
+#         - "roles+-pve-tekton-dev-2:all"
+#         - "roles+-pve-tekton-dev-3:all"
+#         - "cluster_name+-tekton-dev"
+#     - name: ansibleVarsInventory
+#       value:
+#         - "all+[\"pve-tekton-dev.labul.sva.de\"]"
+#         - "all+[\"pve-tekton-dev-2.labul.sva.de\"]"
+#         - "all+[\"pve-tekton-dev-3.labul.sva.de\"]"
+# ---
+# apiVersion: tekton.dev/v1
+# kind: PipelineRun
+# metadata:
+#   name: create-pdns-entry-pve-app8-1
+#   namespace: ansible
+# spec:
+#   pipelineRef:
+#     resolver: git
+#     params:
+#       - name: url
+#         value: https://github.com/stuttgart-things/stuttgart-things.git
+#       - name: revision
+#         value: main
+#       - name: pathInRepo
+#         value: stageTime/pipelines/execute-ansible-playbooks.yaml
+#   workspaces:
+#     - name: shared-workspace
+#       volumeClaimTemplate:
+#         spec:
+#           storageClassName: nfs3-csi2
+#           accessModes:
+#             - ReadWriteMany
+#           resources:
+#             requests:
+#               storage: 1Gi
+#   params:
+#     - name: ansibleWorkingImage
+#       value: "eu.gcr.io/stuttgart-things/sthings-ansible:8.3.0-6"
+#     - name: createInventory
+#       value: "false"
+#     - name: gitRepoUrl
+#       value: "https://github.com/stuttgart-things/stuttgart-things.git"
+#     - name: gitRevision
+#       value: "main"
+#     - name: gitWorkspaceSubdirectory
+#       value: "/ansible/pdns"
+#     - name: vaultSecretName
+#       value: vault
+#     - name: installExtraRoles
+#       value: "true"
+#     - name: ansibleExtraRoles
+#       value:
+#         - "https://github.com/stuttgart-things/install-configure-powerdns.git"
+#     - name: ansiblePlaybooks
+#       value:
+#         - "ansible/playbooks/pdns-ingress-entry.yaml"
+#     - name: ansibleVarsFile
+#       value:
+#         - "pdns_url+-https://pdns-pve.labul.sva.de:8443"
+#         - "entry_zone+-sthings-pve.labul.sva.de."
+#         - "ip_address+-10.31.101.18"
+#         - "hostname+-app8"
+#     - name: ansibleVarsInventory
+#       value:
+#         - "localhost"
+# ---
+# apiVersion: tekton.dev/v1
+# kind: PipelineRun
+# metadata:
+#   name: deploy-rke2-app-pve-16
+#   namespace: ansible
+# spec:
+#   pipelineRef:
+#     resolver: git
+#     params:
+#       - name: url
+#         value: https://github.com/stuttgart-things/stuttgart-things.git
+#       - name: revision
+#         value: main
+#       - name: pathInRepo
+#         value: stageTime/pipelines/execute-ansible-playbooks.yaml
+#   workspaces:
+#     - name: shared-workspace
+#       volumeClaimTemplate:
+#         spec:
+#           storageClassName: nfs3-csi2
+#           accessModes:
+#             - ReadWriteMany
+#           resources:
+#             requests:
+#               storage: 1Gi
+#   params:
+#     - name: ansibleWorkingImage
+#       value: "eu.gcr.io/stuttgart-things/sthings-ansible:8.3.0-6"
+#     - name: createInventory
+#       value: "true"
+#     - name: gitRepoUrl
+#       value: "https://github.com/stuttgart-things/stuttgart-things.git"
+#     - name: gitRevision
+#       value: "main"
+#     - name: gitWorkspaceSubdirectory
+#       value: "/ansible/rke2"
+#     - name: vaultSecretName
+#       value: vault
+#     - name: installExtraRoles
+#       value: "true"
+#     - name: ansibleExtraRoles
+#       value:
+#         - "https://github.com/stuttgart-things/deploy-configure-rke.git"
+#         - "https://github.com/stuttgart-things/manage-filesystem.git"
+#     - name: ansiblePlaybooks
+#       value:
+#         - "ansible/playbooks/prepare-env.yaml"
+#         # - "ansible/playbooks/base-os.yaml"
+#         - "ansible/playbooks/deploy-rke2.yaml"
+#     - name: ansibleVarsFile
+#       value:
+#         - "manage_filesystem+-true"
+#         - "update_packages+-true"
+#         - "install_requirements+-true"
+#         - "install_motd+-true"
+#         - "username+-sthings"
+#         - "lvm_home_sizing+-'15%'"
+#         - "lvm_root_sizing+-'35%'"
+#         - "lvm_var_sizing+-'50%'"
+#         - "send_to_msteams+-true"
+#         - "reboot_all+-false"
+#     - name: ansibleVarsInventory
+#       value:
+#         - "initial_master_node+[\"pve-app-master.labul.sva.de\"]"
+#         - "additional_master_nodes+[\"pve-app-master-2.labul.sva.de\"]"
+#         - "additional_master_nodes+[\"pve-app-master-3.labul.sva.de\"]"
+#         - "additional_master_nodes+[\"pve-app-worker.labul.sva.de\"]"
+#         - "additional_master_nodes+[\"pve-app-worker-2.labul.sva.de\"]"
+#         - "additional_master_nodes+[\"pve-app-worker-3.labul.sva.de\"]"
+# ---
+# apiVersion: tekton.dev/v1
+# kind: PipelineRun
+# metadata:
+#   name: deploy-rke1-mhering-3
+#   namespace: ansible
+# spec:
+#   pipelineRef:
+#     resolver: git
+#     params:
+#       - name: url
+#         value: https://github.com/stuttgart-things/stuttgart-things.git
+#       - name: revision
+#         value: main
+#       - name: pathInRepo
+#         value: stageTime/pipelines/execute-ansible-playbooks.yaml
+#   workspaces:
+#     - name: shared-workspace
+#       volumeClaimTemplate:
+#         spec:
+#           storageClassName: nfs3-csi2
+#           accessModes:
+#             - ReadWriteMany
+#           resources:
+#             requests:
+#               storage: 1Gi
+#   params:
+#     - name: ansibleWorkingImage
+#       value: "eu.gcr.io/stuttgart-things/sthings-ansible:8.3.0-6"
+#     - name: createInventory
+#       value: "true"
+#     - name: gitRepoUrl
+#       value: "https://github.com/stuttgart-things/stuttgart-things.git"
+#     - name: gitRevision
+#       value: "main"
+#     - name: gitWorkspaceSubdirectory
+#       value: "/ansible/rke1"
+#     - name: vaultSecretName
+#       value: vault
+#     - name: installExtraRoles
+#       value: "true"
+#     - name: ansibleExtraRoles
+#       value:
+#         - "https://github.com/stuttgart-things/deploy-configure-rke.git"
+#         - "https://github.com/stuttgart-things/manage-filesystem.git"
+#     - name: ansiblePlaybooks
+#       value:
+#         - "ansible/playbooks/prepare-env.yaml"
+#         - "ansible/playbooks/base-os.yaml"
+#         - "ansible/playbooks/deploy-rke1.yaml"
+#     - name: ansibleVarsFile
+#       value:
+#         - "manage_filesystem+-true"
+#         - "update_packages+-true"
+#         - "install_requirements+-true"
+#         - "install_motd+-true"
+#         - "username+-sthings"
+#         - "lvm_home_sizing+-'15%'"
+#         - "lvm_root_sizing+-'35%'"
+#         - "lvm_var_sizing+-'50%'"
+#         - "send_to_msteams+-true"
+#         - "reboot_all+-false"
+#     - name: ansibleVarsInventory
+#       value:
+#         - "initial_master_node+[\"rke1-mhering.labul.sva.de\"]"
+#         - "additional_master_nodes+[\"rke1-mhering-2.labul.sva.de\"]"
+# ---
+# apiVersion: tekton.dev/v1
+# kind: PipelineRun
+# metadata:
+#   name: execute-baseos-pve-eda-server
+#   namespace: ansible
+# spec:
+#   pipelineRef:
+#     resolver: git
+#     params:
+#       - name: url
+#         value: https://github.com/stuttgart-things/stuttgart-things.git
+#       - name: revision
+#         value: main
+#       - name: pathInRepo
+#         value: stageTime/pipelines/execute-ansible-playbooks.yaml
+#   workspaces:
+#     - name: shared-workspace
+#       volumeClaimTemplate:
+#         spec:
+#           storageClassName: nfs3-csi2
+#           accessModes:
+#             - ReadWriteMany
+#           resources:
+#             requests:
+#               storage: 1Gi
+#   params:
+#     - name: ansibleWorkingImage
+#       value: "eu.gcr.io/stuttgart-things/sthings-ansible:8.3.0-6"
+#     - name: createInventory
+#       value: "true"
+#     - name: gitRepoUrl
+#       value: https://github.com/stuttgart-things/stuttgart-things.git
+#     - name: gitRevision
+#       value: "main"
+#     - name: gitWorkspaceSubdirectory
+#       value: "/ansible/base-os"
+#     - name: vaultSecretName
+#       value: vault
+#     - name: installExtraRoles
+#       value: "true"
+#     - name: ansibleExtraRoles
+#       value:
+#         - "https://github.com/stuttgart-things/install-requirements.git"
+#         - "https://github.com/stuttgart-things/manage-filesystem.git"
+#         - "https://github.com/stuttgart-things/install-configure-vault.git"
+#     - name: ansiblePlaybooks
+#       value:
+#         - "ansible/playbooks/prepare-env.yaml"
+#         - "ansible/playbooks/base-os.yaml"
+#         # - "ansible/playbooks/install-docker.yaml"
+#     - name: ansibleVarsFile
+#       value:
+#         - "manage_filesystem+-true"
+#         - "update_packages+-true"
+#         - "install_requirements+-true"
+#         - "install_motd+-true"
+#         - "username+-sthings"
+#         - "lvm_home_sizing+-'15%'"
+#         - "lvm_root_sizing+-'35%'"
+#         - "lvm_var_sizing+-'50%'"
+#         - "send_to_msteams+-true"
+#         - "reboot_all+-false"
+#     - name: ansibleVarsInventory
+#       value:
+#         - "all+[\"pve-eda-server.labul.sva.de\"]"

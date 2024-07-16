@@ -83,11 +83,11 @@ spec:
       default: "vault"
     - name: RUN-PRIVILEGED
       description: run in privileged mode
-      type: string
+      type: boolean
       default: "false"
     - name: RUN-AS-NONROOT
       description: run as user
-      type: string
+      type: boolean
       default: "true"
     - name: RUN-AS-USER
       description: run as user
