@@ -93,6 +93,9 @@ spec:
         runAsUser: 65532
       script: |
         #!/usr/bin/env sh
+
+        whoami
+
         set -eu
 
         echo "creating vars file"
