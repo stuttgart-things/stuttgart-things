@@ -1,0 +1,29 @@
+---
+persistence:
+  accessMode: {{ .Values.accessMode }}
+  enabled: {{ .Values.persistenceEnabled }}
+  size: {{ .Values.size }}
+  storageClass: {{ .Values.projectStorageClass }}
+
+ingress:
+  enabled: {{ .Values.ingressEnabled }}
+  className: {{ .Values.ingressClassName }}
+  path: /
+  hosts:
+    - {{ .Values.hostname }}.{{ .Values.domain }}
+  annotations:
+    nginx.ingress.kubernetes.io/secure-backends: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: 500m
+  tls:
+    - secretName: {{ .Values.hostname }}-tls
+      hosts:
+        - {{ .Values.hostname }}.{{ .Values.domain }}
+
+secrets:
+  haSharedSecret: ""
+  htpasswd: |-
+    {{ .Values.htpasswd }}
+
+# helm repo add twuni https://helm.twun.io
+# helm repo update
+# helm upgrade --install registry twuni/docker-registry --version 2.2.3 --values registry/values.yaml -n registry --create-namespace
