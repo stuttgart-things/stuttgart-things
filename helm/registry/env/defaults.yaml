@@ -9,3 +9,4 @@ size: 10Gi
 ingressEnabled: true
 ingressClassName: nginx
 ingressSecret: registry
+secureBackends: 500m

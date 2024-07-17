@@ -1,4 +1,4 @@
 ---
-domain: app-dev.sthings-vsphere.labul.sva.de
+domain: andre-dev.sthings-vsphere.labul.sva.de
 projectStorageClass: nfs-csi
 clusterIssuer: vault-approle

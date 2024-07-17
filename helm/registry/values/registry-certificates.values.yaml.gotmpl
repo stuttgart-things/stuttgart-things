@@ -14,17 +14,3 @@ customresources:
         name: {{ .Values.clusterIssuer }}
         kind: ClusterIssuer
       secretName: {{ .Values.ingressSecret }}-tls
-  registry-dev-certificate:
-    apiVersion: cert-manager.io/v1
-    kind: Certificate
-    metadata:
-      name: {{ .Values.hostname }}-dev-ingress
-      namespace: {{ .Release.Namespace }}
-    spec:
-      commonName: {{ .Values.hostname }}-dev.{{ .Values.domain }}
-      dnsNames:
-        - {{ .Values.hostname }}-dev.{{ .Values.domain }}
-      issuerRef:
-        name: {{ .Values.clusterIssuer }}
-        kind: ClusterIssuer
-      secretName: {{ .Values.ingressSecret }}-dev-tls
