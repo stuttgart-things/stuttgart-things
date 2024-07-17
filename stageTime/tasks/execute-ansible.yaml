@@ -64,7 +64,7 @@ spec:
     - name: WORKING_IMAGE
       description: the image on which ansible will run
       type: string
-      default: "eu.gcr.io/stuttgart-things/sthings-ansible:8.2.0-3"
+      default: "eu.gcr.io/stuttgart-things/sthings-ansible:10.1.0-1"
     - name: vault-secret-key-addr
       description: vaul addr key in the secret
       type: string
@@ -89,12 +89,12 @@ spec:
     workingDir: $(workspaces.source.path)/$(params.SUB_DIRECTORY)
     image: "$(params.WORKING_IMAGE)"
     securityContext:
-      privileged: true
+      # privileged: true
+      # runAsNonRoot: false
+      # runAsUser: 0
+      privileged: false
       runAsNonRoot: true
       runAsUser: 65532
-      # privileged: false
-      # runAsNonRoot: true
-      # runAsUser: 65532
   steps:
     - name: create-inventory-vars
       args:
