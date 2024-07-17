@@ -89,12 +89,12 @@ spec:
     workingDir: $(workspaces.source.path)/$(params.SUB_DIRECTORY)
     image: "$(params.WORKING_IMAGE)"
     securityContext:
-      privileged: true
-      runAsNonRoot: false
-      runAsUser: 0
-      # privileged: false
-      # runAsNonRoot: true
-      # runAsUser: 65532
+      # privileged: true
+      # runAsNonRoot: false
+      # runAsUser: 0
+      privileged: false
+      runAsNonRoot: true
+      runAsUser: 65532
   steps:
     - name: create-inventory-vars
       args:

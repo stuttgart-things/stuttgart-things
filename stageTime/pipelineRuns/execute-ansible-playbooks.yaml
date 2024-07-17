@@ -63,12 +63,6 @@ spec:
     - name: pathInRepo
       value: stageTime/pipelines/execute-ansible-playbooks.yaml
     resolver: git
-  taskRunTemplate:
-    podTemplate:
-      securityContext:
-        privileged: false
-        runAsNonRoot: false
-        runAsUser: 0
   timeouts:
     pipeline: 1h0m0s
   workspaces:
