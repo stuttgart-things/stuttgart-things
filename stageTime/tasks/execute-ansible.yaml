@@ -57,6 +57,10 @@ spec:
       description: absolute path to the user's home directory
       type: string
       default: "/home/nonroot"
+    - name: TARGET_HOST
+      description: ansible variable for target host/group
+      type: string
+      default: "all"
     - name: WORKING_IMAGE
       description: the image on which ansible will run
       type: string
@@ -212,6 +216,7 @@ spec:
           ansible-playbook -vv \
           -i $(workspaces.source.path)/$(params.SUB_DIRECTORY)/inventory \
           -e inv_path=$(workspaces.source.path)/$(params.SUB_DIRECTORY)/inventory \
+          -e target_host=$(params.TARGET_HOST) \
           -e path_to_vars_file=$(workspaces.source.path)/$(params.SUB_DIRECTORY)/vars \
           $playbook
         done

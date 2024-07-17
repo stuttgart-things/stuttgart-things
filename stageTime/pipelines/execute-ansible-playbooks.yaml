@@ -26,6 +26,10 @@ spec:
       type: array
       default: []
       description: playbooks to execute
+    - name: ansibleTargetHost
+      type: string
+      default: "all"
+      description: ansible variable for target host/group
     - name: ansibleVarsFile
       type: array
       default: []
@@ -103,6 +107,8 @@ spec:
           value: $(params.ansibleVarsInventory[*])
         - name: PLAYBOOKS
           value: $(params.ansiblePlaybooks[*])
+        - name: TARGET_HOST
+          value: $(params.ansibleTargetHost)
         - name: SUB_DIRECTORY
           value: $(params.gitWorkspaceSubdirectory)
         - name: USER_HOME

@@ -3,7 +3,7 @@ kind: PipelineRun
 metadata:
   labels:
     tekton.dev/pipeline: execute-ansible-playbooks
-  name: baseos-dev17-9-14
+  name: baseos-dev17-9-21
   namespace: tektoncd
 spec:
   params:
@@ -21,11 +21,6 @@ spec:
     value: vault
   - name: installExtraRoles
     value: "true"
-  - name: installExtraCollections
-    value: "true"
-  - name: ansibleExtraCollections
-    value:
-    - community.crypto:2.10.0
   - name: ansibleExtraRoles
     value:
     - https://github.com/stuttgart-things/install-requirements.git,2024.05.11
@@ -34,8 +29,8 @@ spec:
     - https://github.com/stuttgart-things/create-send-webhook.git,2024-06-06
   - name: ansiblePlaybooks
     value:
-    - ansible/playbooks/prepare-env.yaml
-    - ansible/playbooks/base-os.yaml
+    # - ansible/playbooks/prepare-env.yaml
+    - sthings.base_os.binaries
   - name: ansibleVarsFile
     value:
     - manage_filesystem+-true
@@ -50,10 +45,12 @@ spec:
     - reboot_all+-false
   - name: ansibleVarsInventory
     value:
-    - all+["topspin.labul.sva.de"]
+    - all+["localhost"]
+  - name: ansibleTargetHost
+    value: "localhost"
   - name: ansibleExtraCollections
     value:
-    - https://github.com/stuttgart-things/stuttgart-things/releases/download/0.5.0/sthings-base_os-0.5.0.tar.gz
+    - https://github.com/stuttgart-things/stuttgart-things/releases/download/0.5.33/sthings-base_os-0.5.33.tar.gz
     - community.crypto:2.10.0
   - name: installExtraCollections
     value: "true"
