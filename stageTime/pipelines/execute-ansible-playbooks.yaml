@@ -98,7 +98,7 @@ spec:
         - name: INSTALL_EXTRA_ROLES
           value: $(params.installExtraRoles)
         - name: INSTALL_EXTRA_COLLECTIONS
-          value: $(params.installExtraRoles)
+          value: $(params.installExtraCollections)
         - name: INVENTORY_VARS
           value: $(params.ansibleVarsInventory[*])
         - name: PLAYBOOKS
