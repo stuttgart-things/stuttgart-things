@@ -1,9 +1,9 @@
 apiVersion: v2
-version: 0.3.10
-appVersion: 0.3.10
+version: 0.3.11
+appVersion: 0.3.11
 dependencies:
   - name: sthings-helm-toolkit
-    version: 2.4.60
+    version: 2.4.61
     repository: file://../sthings-helm-toolkit
     #repository: oci://eu.gcr.io/stuttgart-things
 description: A Helm chart for Kubernetes
