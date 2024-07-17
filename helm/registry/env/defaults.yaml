@@ -1,0 +1,12 @@
+---
+hostname: registry
+htpasswd: sthings:$2y$05$CrDbu7Cb7R9ZwF4HGmlFcOWIpW/W4OruCU.qbZYN2T/ZhTC0YW/ei
+
+accessMode: ReadWriteOnce
+persistenceEnabled: false
+size: 10Gi
+
+ingressEnabled: true
+ingressClassName: nginx
+ingressSecret: registry
+secureBackends: 500m

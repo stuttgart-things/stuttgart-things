@@ -1,0 +1,39 @@
+environments:
+  andre-dev:
+    values:
+      - env/defaults.yaml
+      - env/{{ .Environment.Name }}.yaml
+
+releases:
+  - name: registry-certificates
+    disableValidationOnInstall: true
+    installed: true
+    namespace: registry
+    chart: stuttgart-things/sthings-cluster
+    version: 0.3.10
+    values:
+      - "values/registry-certificates.values.yaml.gotmpl"
+
+  - name: registry-instances
+    disableValidationOnInstall: true
+    installed: true
+    namespace: registry
+    chart: twuni/docker-registry
+    version: 2.2.3
+    values:
+      - "values/registry-values.values.yaml.gotmpl"
+
+repositories:
+  - name: stuttgart-things
+    url: eu.gcr.io/stuttgart-things
+    oci: true
+  - name: twuni
+    url: https://helm.twun.io
+
+
+helmDefaults:
+  verify: false
+  wait: true
+  timeout: 600
+  recreatePods: false
+  force: true
