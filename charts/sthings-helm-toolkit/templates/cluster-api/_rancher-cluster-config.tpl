@@ -172,4 +172,4 @@ examples:
                 - controlPlane
                 - etcd
                 - worker
-{{/*
+*/}}

@@ -58,9 +58,6 @@ vcenterPort: "443"
 
 {{/*
 stuttgart-things/patrick.hermann@sva.de/2022
-*/}}
-
-{{/*
 # exampleValues:
 examples:
   - name: vsphere-machine-pool
@@ -119,4 +116,4 @@ examples:
               - wget -O /usr/local/share/ca-certificates/labul-ca.crt https://vault.labul.sva.de:8200/v1/pki/ca/pem --no-check-certificate
               - wget -O /usr/local/share/ca-certificates/labda-ca.crt https://vault.tiab.labda.sva.de:8200/v1/pki/ca/pem --no-check-certificate
               - update-ca-certificates
-{{/*
+*/}}
