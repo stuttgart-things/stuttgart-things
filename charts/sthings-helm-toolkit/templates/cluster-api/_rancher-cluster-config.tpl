@@ -8,15 +8,22 @@ kind: Cluster
 metadata:
   name: {{ $rancherClusterConfig }}
   namespace: {{ default $envVar.Values.namespace | default "fleet-default" }}
-  finalizers:
-  {{- range $rancherCluster.finalizers }}
-    - {{ . }}{{- end }}
+  annotations:
+    field.cattle.io/description: {{ $rancherClusterConfig }} cluster
+    created: helm
+  labels:
+    cluster: {{ $rancherClusterConfig }}
 spec:
   kubernetesVersion: {{ $rancherCluster.kubernetesVersion }}
-  localClusterAuthEndpoint: {{ $rancherCluster.localClusterAuthEndpoint }}
+  localClusterAuthEndpoint:
+    caCerts: ''
+    enabled: false
+    fqdn: ''
   {{- if $rancherCluster.cloudCredentialSecretName }}
   cloudCredentialSecretName: {{ $rancherCluster.cloudCredentialSecretName }}
   {{- end }}
+  defaultPodSecurityAdmissionConfigurationTemplateName: ''
+  defaultPodSecurityPolicyTemplateName: ''
   rkeConfig:
     chartValues:
       rke2-{{ $rancherCluster.cniPlugin | default "calico" }}: {}
@@ -35,8 +42,17 @@ spec:
           password: {{ $rancherCluster.vsphereCsi.password }}
      {{- end }}
     etcd:
-      snapshotRetention: {{ $rancherCluster.etcd.snapshotRetention }}
-      snapshotScheduleCron: {{ $rancherCluster.etcd.snapshotScheduleCron }}
+      disableSnapshots: false
+      s3:
+#        bucket: string
+#        cloudCredentialName: string
+#        endpoint: string
+#        endpointCA: string
+#        folder: string
+#        region: string
+#        skipSSLVerify: boolean
+      snapshotRetention: 5
+      snapshotScheduleCron: 0 */5 * * *
     machineGlobalConfig:
       cni: {{ $rancherCluster.cniPlugin | default "calico" }}
       {{- if $rancherCluster.disable }}
@@ -49,30 +65,111 @@ spec:
     machineSelectorConfig:
       - config:
           protect-kernel-defaults: {{ $rancherCluster.protectKernelDefaults }}
-          {{- if $rancherCluster.cloudProviderName }}
-          cloud-provider-name: {{ $rancherCluster.cloudProviderName }}{{- end }}
-      {{- if $rancherCluster.cloudProviderName }}
+      {{- if $rancherCluster.machinePools }}
     machinePools:
       {{- range $k, $v := $rancherCluster.machinePools }}
       - name: {{ $k | lower}}
-        displayName: {{ $k | lower}}
         controlPlaneRole: {{ if has "controlPlane" $v.roles }}true{{ else }}false{{ end }}
         etcdRole: {{ if has "etcd" $v.roles }}true{{ else }}false{{ end }}
         workerRole: {{ if has "worker" $v.roles }}true{{ else }}false{{ end }}
+        quantity: {{ $v.quantity }}
+        unhealthyNodeTimeout: 0m
+        drainBeforeDelete: true
+        machineOS: linux
+        labels: {}
         machineConfigRef:
           kind: {{ $v.kind }}
-          name: {{ $k | lower }}
+          name: {{ $v.machineConfigRef }}
         paused: {{ $v.paused | default false }}{{ end }}{{- end }}
-    registries: {{ $rancherCluster.registries }}
+    registries:
+      configs:
+        {}
+      mirrors:
+        {}
     upgradeStrategy:
       controlPlaneConcurrency: {{ $rancherCluster.upgradeStrategy.controlPlaneConcurrency }}
       controlPlaneDrainOptions:
         timeout: {{ $rancherCluster.upgradeStrategy.controlPlaneDrainOptionsTimeout }}
+        deleteEmptyDirData: true
+        disableEviction: false
+        enabled: false
+        force: false
+        gracePeriod: -1
+        ignoreDaemonSets: true
+        skipWaitForDeleteTimeoutSeconds: 0
       workerConcurrency: {{ $rancherCluster.upgradeStrategy.workerConcurrency }}
       workerDrainOptions:
         timeout: {{ $rancherCluster.upgradeStrategy.workerDrainOptionsTimeout }}
+        deleteEmptyDirData: true
+        disableEviction: false
+        enabled: false
+        force: false
+        gracePeriod: -1
+        ignoreDaemonSets: true
+        skipWaitForDeleteTimeoutSeconds: 0
 {{- end }}
 
 {{/*
 stuttgart-things/patrick.hermann@sva.de/2022
 */}}
+
+{{/*
+# exampleValues:
+examples:
+  - name: custom-downstream-cluster
+    values: |
+      downstreamClusters:
+        test-upi:
+          namespace: cattle-system
+          kubernetesVersion: v1.28.8+rke2r1
+          cniPlugin: cilium
+          etcd:
+            snapshotRetention: 5
+            snapshotScheduleCron: 0 */5 * * *
+          disable:
+            - rke2-ingress-nginx
+          disableKubeProxy: false
+          etcdExposeMetrics: false
+          profile: "null"
+          protectKernelDefaults: false
+          registries: "{}"
+          upgradeStrategy:
+            controlPlaneConcurrency: 10%
+            controlPlaneDrainOptionsTimeout: 0
+            workerConcurrency: 10%
+            workerDrainOptionsTimeout: 0
+  - name: vsphere-downstream-cluster
+    values: |
+      downstreamClusters:
+        master-aio:
+          namespace: cattle-system
+          kubernetesVersion: v1.28.8+rke2r1
+          cniPlugin: cilium
+          etcd:
+            snapshotRetention: 5
+            snapshotScheduleCron: 0 */5 * * *
+          disable:
+            - rke2-ingress-nginx
+          disableKubeProxy: false
+          etcdExposeMetrics: false
+          profile: "null"
+          protectKernelDefaults: false
+          registries: "{}"
+          upgradeStrategy:
+            controlPlaneConcurrency: 10%
+            controlPlaneDrainOptionsTimeout: 0
+            workerConcurrency: 10%
+            workerDrainOptionsTimeout: 0
+          cloudProviderName: vsphere
+          cloudCredentialSecretName: cattle-global-data:labul-vsphere
+          machinePools:
+            master-aio:
+              name: control-plane
+              quantity: 1
+              machineConfigRef: master-aio
+              kind: VmwarevsphereConfig
+              roles:
+                - controlPlane
+                - etcd
+                - worker
+{{/*

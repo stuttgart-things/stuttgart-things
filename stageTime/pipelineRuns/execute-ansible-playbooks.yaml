@@ -1,9 +1,10 @@
+---
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
   labels:
     tekton.dev/pipeline: execute-ansible-playbooks
-  name: baseos-dev17-9-25
+  name: baseos-dev17-9-28
   namespace: tektoncd
 spec:
   params:
@@ -31,6 +32,8 @@ spec:
     value:
     # - ansible/playbooks/prepare-env.yaml
     - sthings.base_os.binaries
+    - sthings.base_os.kcl
+    - sthings.base_os.golang
   - name: ansibleVarsFile
     value:
     - manage_filesystem+-true
@@ -59,7 +62,7 @@ spec:
     - name: url
       value: https://github.com/stuttgart-things/stuttgart-things.git
     - name: revision
-      value: main
+      value: tekton-ansible-10.1-rootful #main
     - name: pathInRepo
       value: stageTime/pipelines/execute-ansible-playbooks.yaml
     resolver: git

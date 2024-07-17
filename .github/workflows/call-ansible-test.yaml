@@ -70,3 +70,17 @@ jobs:
         run: |
           ansible-lint --offline -p roles || true
         shell: bash
+
+      # - name: Test against container
+      #   run: |
+      #     piplinerun_name=baseos-dev17-9-28
+
+      #     duration=$(tkn pr list -n tektoncd | grep ${piplinerun_name} |  awk '{ print $5 }')
+      #     status=$(tkn pr list -n tektoncd | grep ${piplinerun_name} |  awk '{ print $6 }')
+
+      #     until [[ ! $status =~ ^(Failed|Succeeded)$ ]]; do
+      #       echo $status
+      #       echo $duration
+      #       echo "pipeline still running..." && sleep 30
+      #     done
+      #   shell: bash
