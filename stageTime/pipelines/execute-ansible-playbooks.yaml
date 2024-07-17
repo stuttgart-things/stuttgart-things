@@ -5,6 +5,11 @@ kind: Pipeline
 metadata:
   name: execute-ansible-playbooks
 spec:
+  podTemplate:
+    securityContext:
+      privileged: true
+      runAsNonRoot: false
+      runAsUser: 0
   workspaces:
     - name: shared-workspace
     - name: sshCredentials
