@@ -1,0 +1,59 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: xranchercustomclusters.resources.stuttgart-things.com
+spec:
+  connectionSecretKeys:
+    - kubeconfig
+  group: resources.stuttgart-things.com
+  names:
+    kind: XRancherCustomCluster
+    plural: xranchercustomclusters
+  claimNames:
+    kind: RancherCustomCluster
+    plural: ranchercustomclusters
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          description: A RancherCustomCluster is a composite resource that represents a rancher custom cluster
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                deploymentNamespace:
+                  type: string
+                  default: kube-system
+                  description: namespace for nginx-ingress
+                clusterName:
+                  type: string
+                  default: in-cluster
+                  description: cluster name/helm provider name
+                chartUrl:
+                  type: string
+                  default: https://github.com/stuttgart-things/stuttgart-things/releases/download/sthings-cluster-0.3.15/sthings-cluster-0.3.15.tgz
+                  description: url to helm chart
+                name:
+                  type: string
+                  description: name of rancher cluster
+                kubernetesVersion:
+                  type: string
+                  description: name of rancher cluster
+                cni:
+                  type: string
+                  description: name of rancher cluster
+              required:
+                - clusterName
+                - name
+            status:
+              description: A Status represents the observed state
+              properties:
+                share:
+                  description: Freeform field containing status information
+                  type: object
+                  x-kubernetes-preserve-unknown-fields: true
+              type: object

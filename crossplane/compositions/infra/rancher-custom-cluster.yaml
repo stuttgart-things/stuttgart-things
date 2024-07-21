@@ -1,0 +1,76 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: rancher-cluster
+  labels:
+    crossplane.io/xrd: xrancher-clusters.resources.stuttgart-things.com
+spec:
+  writeConnectionSecretsToNamespace: crossplane-system
+  compositeTypeRef:
+    apiVersion: resources.stuttgart-things.com/v1alpha1
+    kind: XRancherCustomCluster
+  resources:
+    - base:
+        apiVersion: helm.crossplane.io/v1beta1
+        kind: Release
+        metadata:
+          name: rancher-cluster
+          annotations:
+            crossplane.io/external-name: rancher-cluster
+        spec:
+          providerConfigRef:
+            name: in-cluster
+          forProvider:
+            chart:
+              name: sthings-cluster
+              url: "https://github.com/stuttgart-things/stuttgart-things/releases/download/sthings-cluster-0.3.15/sthings-cluster-0.3.15.tgz"
+              #version: 0.3.15
+            namespace: rancher-cluster
+            insecureSkipTLSVerify: true
+            skipCreateNamespace: false
+            wait: true
+            skipCRDs: false
+            values:
+              downstreamClusters:
+                cluster:
+                  clusterName: test
+                  namespace: cattle-system
+                  kubernetesVersion: v1.28.8+rke2r1
+                  cniPlugin: cilium
+                  etcd:
+                    snapshotRetention: 5
+                    snapshotScheduleCron: 0 */5 * * *
+                  disable:
+                    - rke2-ingress-nginx
+                  disableKubeProxy: false
+                  etcdExposeMetrics: false
+                  profile: "null"
+                  protectKernelDefaults: false
+                  registries: "{}"
+                  upgradeStrategy:
+                    controlPlaneConcurrency: 10%
+                    controlPlaneDrainOptionsTimeout: 0
+                    workerConcurrency: 10%
+                    workerDrainOptionsTimeout: 0
+      patches:
+        - type: CombineFromComposite
+          combine:
+            variables:
+              - fromFieldPath: spec.clusterName
+            strategy: string
+            string:
+              fmt: "rancher-custom-cluster-%s"
+          toFieldPath: metadata.name
+        - fromFieldPath: spec.deploymentNamespace
+          toFieldPath: spec.forProvider.namespace
+        - fromFieldPath: spec.clusterName
+          toFieldPath: spec.providerConfigRef.name
+        - fromFieldPath: spec.chartUrl
+          toFieldPath: spec.forProvider.chart.url
+        - fromFieldPath: spec.name
+          toFieldPath: spec.forProvider.values.downstreamClusters.cluster.clusterName
+        - fromFieldPath: spec.kubernetesVersion
+          toFieldPath: spec.forProvider.values.downstreamClusters.cluster.kubernetesVersion
+        - fromFieldPath: spec.cni
+          toFieldPath: spec.forProvider.values.downstreamClusters.cluster.cniPlugin

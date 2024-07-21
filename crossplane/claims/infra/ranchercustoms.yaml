@@ -1,0 +1,11 @@
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: RancherCustomCluster
+metadata:
+  name: test
+  namespace: crossplane-system
+spec:
+  clusterName: rancher-mgmt
+  name: test
+  kubernetesVersion: v1.28.8+rke2r1
+  cni: cilium
