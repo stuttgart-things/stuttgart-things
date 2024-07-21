@@ -6,13 +6,13 @@
 apiVersion: provisioning.cattle.io/v1
 kind: Cluster
 metadata:
-  name: {{ $rancherClusterConfig }}
+  name: {{ $rancherCluster.clusterName }}
   namespace: {{ default $envVar.Values.namespace | default "fleet-default" }}
   annotations:
-    field.cattle.io/description: {{ $rancherClusterConfig }} cluster
+    field.cattle.io/description: {{ $rancherCluster.clusterName }} cluster
     created: helm
   labels:
-    cluster: {{ $rancherClusterConfig }}
+    cluster: {{ $rancherCluster.clusterName }}
 spec:
   kubernetesVersion: {{ $rancherCluster.kubernetesVersion }}
   localClusterAuthEndpoint:
