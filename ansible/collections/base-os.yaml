@@ -150,6 +150,7 @@ playbooks:
           - name: Install kcl-cli
             ansible.builtin.shell: |
               wget -q https://kcl-lang.io/script/install-cli.sh -O - | /bin/bash
+              wget -q https://kcl-lang.io/script/install-kcl-lsp.sh -O - | /bin/bash
 
   - name: golang
     play: |
