@@ -442,9 +442,9 @@ playbooks:
               state: directory
               mode: '1777'
 
-          - name: Create project_name dir
+          - name: Create vmName dir
             ansible.builtin.file:
-              path: "{{ tf_project_path }}/{{ project_name }}"
+              path: "{{ tf_project_path }}/{{ vmName }}"
               state: directory
               mode: '1777'
 
@@ -452,7 +452,7 @@ playbooks:
             amazon.aws.s3_object:
               bucket: "{{ bucket_name }}"
               object: "{{ object_name }}"
-              dest: "{{ tf_project_path }}/{{ project_name }}/{{ rendered_all }}"
+              dest: "{{ tf_project_path }}/{{ vmName }}/{{ rendered_all }}"
               mode: get
               access_key: "{{ AWS_ACCESS_KEY_ID }}"
               secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
@@ -464,7 +464,7 @@ playbooks:
 
           - name: Init and apply terraform
             community.general.terraform:
-              project_path: "{{ tf_project_path }}/{{ project_name }}"
+              project_path: "{{ tf_project_path }}/{{ vmName }}"
               state: "{{ state }}"
               force_init: "{{ force_init }}"
               init_reconfigure: "{{ init_reconfigure }}"
