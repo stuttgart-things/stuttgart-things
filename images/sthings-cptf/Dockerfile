@@ -1,4 +1,4 @@
-FROM xpkg.upbound.io/upbound/provider-terraform:v0.16.0
+FROM xpkg.upbound.io/upbound/provider-terraform:v0.17.0
 USER root
 
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
