@@ -843,7 +843,7 @@ vars:
       ---
       workflow_job_templates:
         stuttgartThings:
-          name: testing-workflow
+          name: create-vm-workflow
           organization: stuttgart-things
           inventory: dynamic-inventory-vsphere
           credentials:
