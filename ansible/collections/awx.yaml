@@ -313,7 +313,7 @@ playbooks:
           - ansible.builtin.import_tasks: check_connection.yaml
           - ansible.builtin.import_tasks: creation_tasks.yaml
 
-  - name: create-vm-workflow
+  - name: create_vm_workflow
     play: |
       ---
       - hosts: "{{ target_host | default('localhost') }}"
@@ -852,8 +852,7 @@ vars:
           executionenv: sthings-ee
           state: present
           survey_enabled: true
-          survey_spec: "{{ lookup('file', 'vars/survey-workflow.yaml') }}"
-          #extra_vars: {'target_host': 'andre-dev-u22', 'vmName': 'awx-test-{{ lookup("community.general.random_string", length=5, special=false) | lower }}', 'vmSize': 's', 'vmCount': '1', 'vmTemplate': 'ubuntu24', 'bucket_name': 'andre-vm-config', 'subfolderpath': 'testing', 'lab': 'labul', 'cloud': 'vsphere', 'install_terraform': 'true', 'project_name': 'awx-test', 'object_name': '{{ ansible_date_time.date }}-awx-test.tf', 's3_endpoint': 'https://artifacts.andre-dev.sthings-vsphere.labul.sva.de', 'state': 'present'}
+          survey_spec: "{{ lookup('file', 'vars/survey-create-vm-workflow.yaml') }}"
           extra_data_render: "{'target_host': 'localhost', 'bucket_name': 'andre-vm-config'}"
           extra_data_execute: "{'target_host': 'andre-dev-u22', 'bucket_name': 'andre-vm-config'}"
 
