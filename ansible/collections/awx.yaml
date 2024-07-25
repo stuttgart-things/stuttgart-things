@@ -18,6 +18,46 @@ playbooks:
   - name: creation_tasks
     play: |
       ---
+      - name: Delete default resources
+        block:
+          - name: Delete Demo job template
+            awx.awx.job_template:
+              name: "Demo Job Template"
+              state: "absent"
+              organization: Default
+              validate_certs: false
+          - name: Delete Demo credentials
+            awx.awx.credential:
+              name: "Demo Credential"
+              state: "absent"
+              credential_type: "Machine"
+              validate_certs: false
+          - name: Delete Demo Host
+            awx.awx.host:
+              name: "localhost"
+              state: "absent"
+              inventory: "Demo Inventory"
+              validate_certs: false
+          - name: Delete Demo inventory
+            awx.awx.inventory:
+              name: "Demo Inventory"
+              state: "absent"
+              organization: "Default"
+              validate_certs: false
+          - name: Delete Demo Project
+            awx.awx.project:
+              name: "Demo Project"
+              state: "absent"
+              organization: Default
+              validate_certs: false
+          - name: Delete Demo organization
+            awx.awx.organization:
+              name: "Default"
+              state: "absent"
+              validate_certs: false
+        tags: [ 'init' ]
+        when: "'init' in ansible_run_tags"
+
       - name: Create organizations
         awx.awx.organization:
           name: "{{ item.value.name }}"
@@ -178,12 +218,50 @@ playbooks:
         loop: "{{ lookup('dict', scheduler, wantlist=True) }}"
         when: scheduler is defined and target_host != 'localhost'
 
-      - name: Update project
-        awx.awx.project:
+      - name: Create workflow job template
+        awx.awx.workflow_job_template:
           name: "{{ item.value.name }}"
-          update_project: true
-        loop: "{{ lookup('dict', projects, wantlist=True) }}"
-        when: projects is defined
+          inventory: "{{ item.value.inventory }}"
+          state: "{{ item.value.state }}"
+          survey_enabled: "{{ item.value.survey_enabled | default(omit) }}"
+          survey_spec: "{{ item.value.survey_spec | default(omit) }}"
+          extra_vars: "{{ item.value.extra_vars | default(omit) }}"
+          workflow_nodes:
+            - identifier: render-upload-template
+              unified_job_template:
+                organization:
+                  name: "{{ item.value.organization }}"
+                name: render-upload-template
+                type: job_template
+              credentials: "{{ item.value.credentials }}"
+              extra_data: "{{ item.value.extra_data_render }}"
+              related:
+                success_nodes:
+                  - identifier: get-execute-terraform
+                failure_nodes: []
+                always_nodes: []
+            - identifier: get-execute-terraform
+              unified_job_template:
+                organization:
+                  name: "{{ item.value.organization }}"
+                name: get-execute-terraform
+                type: job_template
+              credentials: "{{ item.value.credentials }}"
+              extra_data: "{{ item.value.extra_data_execute }}"
+              related:
+                success_nodes:
+                  - identifier: inventory-sync
+                failure_nodes: []
+                always_nodes: []
+            - identifier: inventory-sync
+              unified_job_template:
+                name: source-dynamic-inventory
+                inventory:
+                  organization:
+                    name: "{{ item.value.organization }}"
+                type: inventory_source
+        loop: "{{ lookup('dict', workflow_job_templates, wantlist=True) }}"
+        when: workflow_job_templates is defined
 
   - name: render_upload_template
     play: |
@@ -230,6 +308,28 @@ playbooks:
           - "{{ path | default('.') }}/tf-vars-{{ cloud }}.yaml"
           - "{{ path | default('.') }}/s3-instances.yaml"
           - "{{ path | default('.') }}/job-get-execute-terraform.yaml"
+
+        tasks:
+          - ansible.builtin.import_tasks: check_connection.yaml
+          - ansible.builtin.import_tasks: creation_tasks.yaml
+
+  - name: create-vm-workflow
+    play: |
+      ---
+      - hosts: "{{ target_host | default('localhost') }}"
+
+        vars_files:
+          - "{{ path | default('.') }}/awx-local-env.yaml"
+          - "{{ path | default('.') }}/organization-sthings.yaml"
+          - "{{ path | default('.') }}/scm-creds-sthings.yaml"
+          - "{{ path | default('.') }}/projects-sthings.yaml"
+          - "{{ path | default('.') }}/machine-creds-sthings.yaml"
+          - "{{ path | default('.') }}/custom-credentials.yaml"
+          - "{{ path | default('.') }}/custom-credential-type.yaml"
+          - "{{ path | default('.') }}/dynamic-inventory-vsphere.yaml"
+          - "{{ path | default('.') }}/inventory-source.yaml"
+          - "{{ path | default('.') }}/ee-sthings.yaml"
+          - "{{ path | default('.') }}/job-create-vm-workflow.yaml"
 
         tasks:
           - ansible.builtin.import_tasks: check_connection.yaml
@@ -734,6 +834,140 @@ vars:
               "min": null,
               "max": null,
               "default": "vsphere"
+            }
+          ]
+        }
+
+  - name: job-create-vm-workflow
+    file: |
+      ---
+      workflow_job_templates:
+        stuttgartThings:
+          name: testing-workflow
+          organization: stuttgart-things
+          inventory: dynamic-inventory-vsphere
+          credentials:
+            - sthings-ssh
+            - labul-vault
+          executionenv: sthings-ee
+          state: present
+          survey_enabled: true
+          survey_spec: "{{ lookup('file', 'vars/survey-workflow.yaml') }}"
+          #extra_vars: {'target_host': 'andre-dev-u22', 'vmName': 'awx-test-{{ lookup("community.general.random_string", length=5, special=false) | lower }}', 'vmSize': 's', 'vmCount': '1', 'vmTemplate': 'ubuntu24', 'bucket_name': 'andre-vm-config', 'subfolderpath': 'testing', 'lab': 'labul', 'cloud': 'vsphere', 'install_terraform': 'true', 'project_name': 'awx-test', 'object_name': '{{ ansible_date_time.date }}-awx-test.tf', 's3_endpoint': 'https://artifacts.andre-dev.sthings-vsphere.labul.sva.de', 'state': 'present'}
+          extra_data_render: "{'target_host': 'localhost', 'bucket_name': 'andre-vm-config'}"
+          extra_data_execute: "{'target_host': 'andre-dev-u22', 'bucket_name': 'andre-vm-config'}"
+
+  - name: survey-create-vm-workflow
+    file: |
+      {
+          "name": "",
+          "description": "",
+          "spec": [
+            {
+              "question_name": "Enter VM name",
+              "question_description": "Enter VM name",
+              "required": false,
+              "type": "text",
+              "variable": "vmName",
+              "min": null,
+              "max": null,
+              "default": ""
+            },
+            {
+              "question_name": "Select VM size",
+              "question_description": "Enter VM sizes S,M,L or XL",
+              "required": false,
+              "type": "multiplechoice",
+              "variable": "vmSize",
+              "choices": ["S", "M", "L", "XL"],
+              "min": null,
+              "max": null,
+              "default": "S"
+            },
+            {
+              "question_name": "Select VM count",
+              "question_description": "Choose VM count",
+              "required": false,
+              "type": "multiplechoice",
+              "variable": "vmCount",
+              "choices": ["1", "2", "3", "4", "5"],
+              "min": null,
+              "max": null,
+              "default": "1"
+            },
+            {
+              "question_name": "Select VM template",
+              "question_description": "Choose OS",
+              "required": false,
+              "type": "multiplechoice",
+              "variable": "vmTemplate",
+              "choices": ["ubuntu22", "ubuntu24", "rocky9"],
+              "min": null,
+              "max": null,
+              "default": "ubuntu24"
+            },
+            {
+              "question_name": "Enter folderpath",
+              "question_description": "Enter subfolderpath of vsphere (testing)/ proxmox (stuttgart-things)",
+              "required": false,
+              "type": "text",
+              "variable": "subfolderpath",
+              "min": null,
+              "max": null,
+              "default": "testing"
+            },
+            {
+              "question_name": "Select lab",
+              "question_description": "Choose labul or labda",
+              "required": false,
+              "type": "multiplechoice",
+              "variable": "lab",
+              "choices": ["labul", "labda"],
+              "min": null,
+              "max": null,
+              "default": "labul"
+            },
+            {
+              "question_name": "Select cloud",
+              "question_description": "Choose cloud",
+              "required": false,
+              "type": "multiplechoice",
+              "variable": "cloud",
+              "choices": ["vsphere", "proxmox"],
+              "min": null,
+              "max": null,
+              "default": "vsphere"
+            },
+            {
+              "question_name": "Install Terraform?",
+              "question_description": "Choose true or false",
+              "required": false,
+              "type": "text",
+              "variable": "install_terraform",
+              "min": null,
+              "max": null,
+              "default": "true"
+            },
+            {
+              "question_name": "Enter s3 endpoint",
+              "question_description": "Enter s3 endpoint",
+              "required": false,
+              "type": "text",
+              "variable": "s3_endpoint",
+              "min": null,
+              "max": null,
+              "default": "https://artifacts.andre-dev.sthings-vsphere.labul.sva.de"
+            },
+            {
+              "question_name": "Do you want to apply or destroy VM?",
+              "question_description": "Enter state of terrform VM",
+              "required": false,
+              "type": "multiplechoice",
+              "variable": "state",
+              "choices": ["present", "absent"],
+              "min": null,
+              "max": null,
+              "default": "present"
             }
           ]
         }
