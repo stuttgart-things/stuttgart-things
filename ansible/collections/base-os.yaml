@@ -648,20 +648,20 @@ vars:
       ---
       vm_size:
         cpu:
-          s: 2
-          m: 4
-          l: 6
-          xl: 8
+          S: 2
+          M: 4
+          L: 6
+          XL: 8
         memory:
-          s: 4096
-          m: 6144
-          l: 8192
-          xl: 12288
+          S: 4096
+          M: 6144
+          L: 8192
+          XL: 12288
         disk:
-          s: 32
-          m: 64
-          l: 96
-          xl: 128
+          S: 32
+          M: 64
+          L: 96
+          XL: 128
 
       j2_template_name:
         backend:
