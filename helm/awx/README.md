@@ -37,6 +37,7 @@ export CONTROLLER_USERNAME=admin
 
 # Provision all awx ressources
 ```bash
+arr=("baseos" "golang" "nerdctl" "docker" "render_upload_template" "get_execute_terraform" "workflow")
 for i in ${!arr[@]};
 do
   echo $i "${arr[i]}";
