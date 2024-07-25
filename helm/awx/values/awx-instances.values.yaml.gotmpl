@@ -34,6 +34,7 @@ customresources:
       name: {{ .Values.hostname }}-dev
       namespace: {{ .Release.Namespace }}
     spec:
+      bundle_cacert_secret: sthings-custom-certs
       admin_user: {{ .Values.adminUser }}
       admin_password_secret: {{ .Values.adminPassword }}
       hostname: {{ .Values.hostname }}-dev.{{ .Values.domain }}
