@@ -448,7 +448,7 @@ playbooks:
               state: directory
               mode: '1777'
 
-          - name: Get rendered vm config file f s3 bucket
+          - name: Get rendered vm config file of s3 bucket
             amazon.aws.s3_object:
               bucket: "{{ bucket_name }}"
               object: "{{ ansible_date_time.date }}-{{ vmName }}.tf"
