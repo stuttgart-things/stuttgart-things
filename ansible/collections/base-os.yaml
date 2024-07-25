@@ -451,7 +451,7 @@ playbooks:
           - name: Get rendered vm config file f s3 bucket
             amazon.aws.s3_object:
               bucket: "{{ bucket_name }}"
-              object: "{{ object_name }}"
+              object: "{{ ansible_date_time.date }}-{{ vmName }}.tf""
               dest: "{{ tf_project_path }}/{{ vmName }}/{{ rendered_all }}"
               mode: get
               access_key: "{{ AWS_ACCESS_KEY_ID }}"

@@ -547,16 +547,6 @@ vars:
               "default": "true"
             },
             {
-              "question_name": "What is the project name?",
-              "question_description": "Enter project name (name of vm)",
-              "required": true,
-              "type": "text",
-              "variable": "project_name",
-              "min": null,
-              "max": null,
-              "default": ""
-            },
-            {
               "question_name": "What is the bucket name in s3?",
               "question_description": "Enter bucket name to PUT templates",
               "required": true,
@@ -564,17 +554,7 @@ vars:
               "variable": "bucket_name",
               "min": null,
               "max": null,
-              "default": ""
-            },
-            {
-              "question_name": "What is the object name in s3?",
-              "question_description": "Enter object name to GET config",
-              "required": true,
-              "type": "text",
-              "variable": "object_name",
-              "min": null,
-              "max": null,
-              "default": ""
+              "default": "andre-vm-config"
             },
             {
               "question_name": "What is the s3 endpoint name?",
