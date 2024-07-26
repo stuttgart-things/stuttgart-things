@@ -3,6 +3,266 @@ name: awx_main
 #version: 0.0.94
 namespace: sthings
 playbooks:
+  - name: check_connection
+    play: |
+      ---
+      - name: Pause play until awx is reachable from the Ansible Controller
+        ansible.builtin.uri:
+          url: "{{ controller_host }}api/v2"
+          method: GET
+        register: _result
+        until: _result.status == 200
+        retries: 10
+        delay: 120
+
+  - name: creation_tasks
+    play: |
+      ---
+      - name: Delete default resources
+        block:
+          - name: Delete Demo job template
+            awx.awx.job_template:
+              name: "Demo Job Template"
+              state: "absent"
+              organization: Default
+              validate_certs: false
+          - name: Delete Demo credentials
+            awx.awx.credential:
+              name: "Demo Credential"
+              state: "absent"
+              credential_type: "Machine"
+              validate_certs: false
+          - name: Delete Demo Host
+            awx.awx.host:
+              name: "localhost"
+              state: "absent"
+              inventory: "Demo Inventory"
+              validate_certs: false
+          - name: Delete Demo inventory
+            awx.awx.inventory:
+              name: "Demo Inventory"
+              state: "absent"
+              organization: "Default"
+              validate_certs: false
+          - name: Delete Demo Project
+            awx.awx.project:
+              name: "Demo Project"
+              state: "absent"
+              organization: Default
+              validate_certs: false
+          - name: Delete Demo organization
+            awx.awx.organization:
+              name: "Default"
+              state: "absent"
+              validate_certs: false
+        tags: [ 'init' ]
+        when: "'init' in ansible_run_tags"
+
+      - name: Create organizations
+        awx.awx.organization:
+          name: "{{ item.value.name }}"
+          description: "{{ item.value.description }}"
+          state: "{{ item.value.state }}"
+          galaxy_credentials:
+            - Ansible Galaxy
+          validate_certs: false
+        loop: "{{ lookup('dict', organizations, wantlist=True) }}"
+        when: organizations is defined
+
+      - name: Add machine credential
+        awx.awx.credential:
+          name: "{{ item.value.name }}"
+          description: "{{ item.value.description }}"
+          organization: "{{ item.value.organization }}"
+          credential_type: "{{ item.value.credential_type }}"
+          state: "{{ item.value.state }}"
+          inputs:
+            username: "{{ item.value.username | default (omit) }}"
+            password: "{{ item.value.password | default (omit) }}"
+            ssh_key_data: "{{ item.value.awx_ssh_key | default (omit) }}"
+            host: "{{ item.value.host | default (omit) }}"
+          validate_certs: false
+        loop: "{{ lookup('dict', machineCredentials, wantlist=True) }}"
+        when: machineCredentials is defined
+
+      - name: Create a valid SCM credential from a private_key file
+        awx.awx.credential:
+          name: "{{ item.value.name }}"
+          organization: "{{ item.value.organization }}"
+          state: "{{ item.value.state }}"
+          credential_type: Source Control
+          inputs:
+            ssh_key_data: "{{ item.value.awx_ssh_key }}"
+          validate_certs: false
+        loop: "{{ lookup('dict', scmCredentials, wantlist=True) }}"
+        when: scmCredentials is defined
+
+      - name: Create custom credential type
+        awx.awx.tower_credential_type:
+          name: "{{ item.value.name }}"
+          kind: "{{ item.value.kind }}"
+          state: "{{ item.value.state }}"
+          inputs: "{{ item.value.inputs }}"
+          injectors: "{{ item.value.injectors }}"
+          validate_certs: false
+        loop: "{{ lookup('dict', custom_credential_types, wantlist=True) }}"
+        when: custom_credential_types is defined
+
+      - name: Create custom credential from custom credential type
+        awx.awx.tower_credential:
+          name: "{{ item.value.name }}"
+          organization: "{{ item.value.organization }}"
+          credential_type: "{{ item.value.credential_type }}"
+          description: "{{ item.value.description }}"
+          state: "{{ item.value.state }}"
+          inputs: "{{ item.value.inputs }}"
+          validate_certs: false
+        loop: "{{ lookup('dict', custom_credentials, wantlist=True) }}"
+        when: custom_credentials is defined
+
+      - name: Add inventory
+        awx.awx.inventory:
+          name: "{{ item.value.name }}"
+          description: "{{ item.value.description | default (omit) }}"
+          organization: "{{ item.value.organization }}"
+          state: "{{ item.value.state }}"
+          validate_certs: false
+        loop: "{{ lookup('dict', inventories, wantlist=True) }}"
+        when: inventories is defined
+
+      - name: Add an inventory source
+        awx.awx.inventory_source:
+          name: "{{ item.value.name }}"
+          description: "{{ item.value.description }}"
+          inventory: "{{ item.value.inventory }}"
+          credential: "{{ item.value.credential }}"
+          overwrite: true
+          update_on_launch: true
+          source: "{{ item.value.source }}"
+          organization: "{{ item.value.organization }}"
+          source_vars: "{{ item.value.source_vars }}"
+        loop: "{{ lookup('dict', inventorySource, wantlist=True) }}"
+        when: inventorySource is defined
+
+      - name: Update a single inventory source
+        awx.awx.inventory_source_update:
+          name: "{{ item.value.name }}"
+          inventory: "{{ item.value.inventory }}"
+          organization: "{{ item.value.organization }}"
+        loop: "{{ lookup('dict', inventorySource, wantlist=True) }}"
+        when: inventorySource is defined
+
+      - name: Add host
+        awx.awx.host:
+          name: "{{ item.value.name }}"
+          description: "{{ item.value.description | default (omit) }}"
+          inventory: "{{ item.value.inventory }}"
+          state: "{{ item.value.state }}"
+          variables: "{{ item.value.vmVariables | default (omit) }}"
+          validate_certs: false
+        loop: "{{ lookup('dict', hosts, wantlist=True) }}"
+        when: hosts is defined
+
+      - name: Create projects
+        awx.awx.project:
+          name: "{{ item.value.name }}"
+          description: "{{ item.value.description }}"
+          organization: "{{ item.value.organization }}"
+          scm_url: "{{ item.value.scm_url }}"
+          scm_type: "{{ item.value.scm_type }}"
+          credential: "{{ item.value.credential }}"
+          state: "{{ item.value.state }}"
+          scm_update_on_launch: "{{ item.value.scm_update_on_launch | default(omit) }}"
+          scm_update_cache_timeout: "{{ item.value.scm_update_cache_timeout | default(omit) }}"
+          validate_certs: false
+        loop: "{{ lookup('dict', projects, wantlist=True) }}"
+        when: projects is defined
+
+      - name: Add EE to the controller instance
+        awx.awx.execution_environment:
+          name: "{{ item.value.name }}"
+          image: "{{ item.value.image }}"
+          pull: "{{ item.value.pull }}"
+          credential: "{{ item.value.credential }}"
+          validate_certs: false
+        loop: "{{ lookup('dict', execution_environment, wantlist=True) }}"
+        when: execution_environment is defined
+
+      - name: Create job templates
+        awx.awx.job_template:
+          name: "{{ item.value.name }}"
+          job_type: "run"
+          organization: "{{ item.value.organization }}"
+          inventory: "{{ item.value.inventory }}"
+          project: "{{ item.value.project }}"
+          playbook: "{{ item.value.playbook }}"
+          credentials: "{{ item.value.credentials }}"
+          execution_environment: "{{ item.value.executionenv }}"
+          state: "{{ item.value.state }}"
+          ask_verbosity_on_launch: "{{ item.value.ask_verbosity_on_launch }}"
+          validate_certs: true
+          survey_enabled: "{{ item.value.survey_enabled | default(omit) }}"
+          survey_spec: "{{ item.value.survey_spec | default(omit) }}"
+          extra_vars: "{{ item.value.extraVars | default(omit) }}"
+        loop: "{{ lookup('dict', job_templates, wantlist=True) }}"
+        when: job_templates is defined
+
+      - name: Build a schedule for every day except saturday and sunday using the rruleset plugin
+        awx.awx.schedule:
+          name: "{{ item.value.name }}"
+          state: "{{ item.value.state }}"
+          job_type: "{{ item.value.job_type }}"
+          extra_data: "{{ item.value.extra_data }}"
+          unified_job_template: "{{ item.value.unified_job_template }}"
+          rrule: "{{ query('awx.awx.schedule_rruleset',  '{{ start_date }} {{ cron_time }}', rules=rrules, timezone='Europe/Berlin') }}"
+        loop: "{{ lookup('dict', scheduler, wantlist=True) }}"
+        when: scheduler is defined and target_host != 'localhost'
+
+      - name: Create workflow job template
+        awx.awx.workflow_job_template:
+          name: "{{ item.value.name }}"
+          inventory: "{{ item.value.inventory }}"
+          state: "{{ item.value.state }}"
+          survey_enabled: "{{ item.value.survey_enabled | default(omit) }}"
+          survey_spec: "{{ item.value.survey_spec | default(omit) }}"
+          extra_vars: "{{ item.value.extra_vars | default(omit) }}"
+          workflow_nodes:
+            - identifier: render-upload-template
+              unified_job_template:
+                organization:
+                  name: "{{ item.value.organization }}"
+                name: render-upload-template
+                type: job_template
+              credentials: "{{ item.value.credentials }}"
+              extra_data: "{{ item.value.extra_data_render }}"
+              related:
+                success_nodes:
+                  - identifier: get-execute-terraform
+                failure_nodes: []
+                always_nodes: []
+            - identifier: get-execute-terraform
+              unified_job_template:
+                organization:
+                  name: "{{ item.value.organization }}"
+                name: get-execute-terraform
+                type: job_template
+              credentials: "{{ item.value.credentials }}"
+              extra_data: "{{ item.value.extra_data_execute }}"
+              related:
+                success_nodes:
+                  - identifier: inventory-sync
+                failure_nodes: []
+                always_nodes: []
+            - identifier: inventory-sync
+              unified_job_template:
+                name: source-dynamic-inventory
+                inventory:
+                  organization:
+                    name: "{{ item.value.organization }}"
+                type: inventory_source
+        loop: "{{ lookup('dict', workflow_job_templates, wantlist=True) }}"
+        when: workflow_job_templates is defined
+
   - name: docker
     play: |
       ---
@@ -14,18 +274,14 @@ playbooks:
           - "{{ path | default('.') }}/scm-creds-sthings.yaml"
           - "{{ path | default('.') }}/projects-sthings.yaml"
           - "{{ path | default('.') }}/machine-creds-sthings.yaml"
-          - "{{ path | default('.') }}/custom-credentials.yaml"
-          - "{{ path | default('.') }}/custom-credential-type.yaml"
           - "{{ path | default('.') }}/dynamic-inventory-vsphere.yaml"
           - "{{ path | default('.') }}/inventory-source.yaml"
           - "{{ path | default('.') }}/ee-sthings.yaml"
           - "{{ path | default('.') }}/job-docker.yaml"
 
         tasks:
-          - name: Include check_connection
-            ansible.builtin.import_playbook: sthings.awx_vm.check_connection
-          - name: Include creation_tasks
-            ansible.builtin.import_playbook: sthings.awx_vm.creation_tasks
+          - ansible.builtin.import_tasks: check_connection.yaml
+          - ansible.builtin.import_tasks: creation_tasks.yaml
  
   - name: nerdctl
     play: |
@@ -38,54 +294,46 @@ playbooks:
           - "{{ path | default('.') }}/scm-creds-sthings.yaml"
           - "{{ path | default('.') }}/projects-sthings.yaml"
           - "{{ path | default('.') }}/machine-creds-sthings.yaml"
-          - "{{ path | default('.') }}/custom-credentials.yaml"
-          - "{{ path | default('.') }}/custom-credential-type.yaml"
           - "{{ path | default('.') }}/dynamic-inventory-vsphere.yaml"
           - "{{ path | default('.') }}/inventory-source.yaml"
           - "{{ path | default('.') }}/ee-sthings.yaml"
           - "{{ path | default('.') }}/job-nerdctl.yaml"
 
         tasks:
-          - name: Include check_connection
-            ansible.builtin.import_playbook: sthings.awx_vm.check_connection
-          - name: Include creation_tasks
-            ansible.builtin.import_playbook: sthings.awx_vm.creation_tasks
+          - ansible.builtin.import_tasks: check_connection.yaml
+          - ansible.builtin.import_tasks: creation_tasks.yaml
 
   - name: golang
     play: |
       ---
       - hosts: "{{ target_host | default('localhost') }}"
+
         vars_files:
           - "{{ path | default('.') }}/awx-local-env.yaml"
           - "{{ path | default('.') }}/organization-sthings.yaml"
           - "{{ path | default('.') }}/scm-creds-sthings.yaml"
           - "{{ path | default('.') }}/projects-sthings.yaml"
           - "{{ path | default('.') }}/machine-creds-sthings.yaml"
-          - "{{ path | default('.') }}/custom-credentials.yaml"
-          - "{{ path | default('.') }}/custom-credential-type.yaml"
           - "{{ path | default('.') }}/dynamic-inventory-vsphere.yaml"
           - "{{ path | default('.') }}/inventory-source.yaml"
           - "{{ path | default('.') }}/ee-sthings.yaml"
           - "{{ path | default('.') }}/job-golang.yaml"
 
         tasks:
-          - name: Include check_connection
-            ansible.builtin.import_playbook: sthings.awx_vm.check_connection
-          - name: Include creation_tasks
-            ansible.builtin.import_playbook: sthings.awx_vm.creation_tasks
+          - ansible.builtin.import_tasks: check_connection.yaml
+          - ansible.builtin.import_tasks: creation_tasks.yaml
 
   - name: baseos
     play: |
       ---
       - hosts: "{{ target_host | default('localhost') }}"
+
         vars_files:
           - "{{ path | default('.') }}/awx-local-env.yaml"
           - "{{ path | default('.') }}/organization-sthings.yaml"
           - "{{ path | default('.') }}/scm-creds-sthings.yaml"
           - "{{ path | default('.') }}/projects-sthings.yaml"
           - "{{ path | default('.') }}/machine-creds-sthings.yaml"
-          - "{{ path | default('.') }}/custom-credentials.yaml"
-          - "{{ path | default('.') }}/custom-credential-type.yaml"
           - "{{ path | default('.') }}/dynamic-inventory-vsphere.yaml"
           - "{{ path | default('.') }}/inventory-source.yaml"
           - "{{ path | default('.') }}/ee-sthings.yaml"
@@ -93,10 +341,8 @@ playbooks:
           - "{{ path | default('.') }}/job-baseos.yaml"
 
         tasks:
-          - name: Include check_connection
-            ansible.builtin.import_playbook: sthings.awx_vm.check_connection
-          - name: Include creation_tasks
-            ansible.builtin.import_playbook: sthings.awx_vm.creation_tasks
+          - ansible.builtin.import_tasks: check_connection.yaml
+          - ansible.builtin.import_tasks: creation_tasks.yaml
 
   - name: schedule_baseos
     play: |
@@ -109,8 +355,6 @@ playbooks:
           - "{{ path | default('.') }}/scm-creds-sthings.yaml"
           - "{{ path | default('.') }}/projects-sthings.yaml"
           - "{{ path | default('.') }}/machine-creds-sthings.yaml"
-          - "{{ path | default('.') }}/custom-credentials.yaml"
-          - "{{ path | default('.') }}/custom-credential-type.yaml"
           - "{{ path | default('.') }}/dynamic-inventory-vsphere.yaml"
           - "{{ path | default('.') }}/inventory-source.yaml"
           - "{{ path | default('.') }}/ee-sthings.yaml"
@@ -118,10 +362,8 @@ playbooks:
           - "{{ path | default('.') }}/job-schedule.yaml"
 
         tasks:
-          - name: Include check_connection
-            ansible.builtin.import_playbook: sthings.awx_vm.check_connection
-          - name: Include creation_tasks
-            ansible.builtin.import_playbook: sthings.awx_vm.creation_tasks
+          - ansible.builtin.import_tasks: check_connection.yaml
+          - ansible.builtin.import_tasks: creation_tasks.yaml
 
   - name: hello_awx
     play: |
@@ -134,8 +376,6 @@ playbooks:
           - "{{ path | default('.') }}/scm-creds-sthings.yaml"
           - "{{ path | default('.') }}/projects-sthings.yaml"
           - "{{ path | default('.') }}/machine-creds-sthings.yaml"
-          - "{{ path | default('.') }}/custom-credentials.yaml"
-          - "{{ path | default('.') }}/custom-credential-type.yaml"
           - "{{ path | default('.') }}/inventory-source.yaml"
           - "{{ path | default('.') }}/hosts-test.yaml"
           - "{{ path | default('.') }}/ee-sthings.yaml"
@@ -143,10 +383,8 @@ playbooks:
           - "{{ path | default('.') }}/job-awx.yaml"
 
         tasks:
-          - name: Include check_connection
-            ansible.builtin.import_playbook: sthings.awx_vm.check_connection
-          - name: Include creation_tasks
-            ansible.builtin.import_playbook: sthings.awx_vm.creation_tasks
+          - ansible.builtin.import_tasks: check_connection.yaml
+          - ansible.builtin.import_tasks: creation_tasks.yaml
 
 vars:
   - name: job-golang
@@ -813,68 +1051,6 @@ vars:
           state: present
           username: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps/data/harbor:user validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
           password: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps/data/harbor:password validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
-
-  - name: vault-injector
-    file: |
-      {
-          "env": {
-            "VAULT_ADDR": "{{ vault_url }}",
-            "VAULT_ROLE_ID": "{{ vault_approle_id }}",
-            "VAULT_SECRET_ID": "{{ vault_approle_secret }}",
-          },
-          "extra_vars": {}
-      }
-
-  - name: vault-input
-    file: |
-      {
-          "fields": [
-            {
-                "id": "vault_url",
-                "type": "string",
-                "label": "vault_url"
-            },
-            {
-                "id": "vault_approle_id",
-                "type": "string",
-                "label": "vault_approle_id"
-            },
-            {
-                "id": "vault_approle_secret",
-                "type": "string",
-                "label": "vault_approle_secret"
-            }
-          ],
-          "required": [
-            "vault_url",
-          ]
-      }
-
-  - name: custom-credential-type
-    file: |
-      ---
-      custom_credential_types:
-        vault:
-          name: vault-custom
-          state: present
-          kind: cloud
-          inputs: "{{ lookup('file', 'vars/vault-input.yaml') }}"
-          injectors: "{{ lookup('file', 'vars/vault-injector.yaml') }}"
-
-  - name: custom-credentials
-    file: |
-      ---
-      custom_credentials:
-        vault_custom:
-          name: labul-vault
-          description: labul vault credentials
-          credential_type: vault-custom
-          organization: stuttgart-things
-          state: present
-          inputs:
-            vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
-            vault_approle_id: "{{ lookup('env', 'VAULT_ROLE_ID') }}"
-            vault_approle_secret: "{{ lookup('env', 'VAULT_SECRET_ID') }}"
 
   - name: ee-sthings
     file: |
