@@ -1,9 +1,56 @@
 ---
 roles:
+  - src: https://github.com/stuttgart-things/deploy-configure-rke.git
+    scm: git
+  - src: https://github.com/stuttgart-things/install-configure-powerdns.git
+    scm: git
+  - src: https://github.com/stuttgart-things/configure-rke-node.git
+    scm: git
+  - src: https://github.com/stuttgart-things/install-requirements.git
+    scm: git
+  - src: https://github.com/stuttgart-things/create-send-webhook.git
+    version: 2024.06.06
+    scm: git
+  - src: https://github.com/stuttgart-things/install-configure-vault.git
+    scm: git
+  - src: https://github.com/stuttgart-things/install-configure-nfs.git
+    scm: git
+  - src: https://github.com/stuttgart-things/manage-filesystem.git
+    version: 2024.06.07
+    scm: git
   - src: https://github.com/stuttgart-things/download-install-binary.git
     scm: git
     version: 2024.05.24
+  - src: https://github.com/stuttgart-things/create-os-user.git
+    scm: git
+    version: 2024.05.03
+  - src: https://github.com/stuttgart-things/install-configure-docker.git
+    scm: git
+    version: 2024.04.30
+  - src: https://github.com/stuttgart-things/install-configure-podman.git
+    scm: git
+    version: 2024.05.08
+  - src: https://github.com/stuttgart-things/manage-proxmox-resources.git
+    scm: git
+    version: 2024.05.27
 
 collections:
-  - name: https://artifacts.automation.sthings-vsphere.labul.sva.de/ansiblerun/sthings-awx-0.0.90.tar.gz
-  - name: https://artifacts.automation.sthings-vsphere.labul.sva.de/ansiblerun/base-os-240706.0538.18.tar.gz
+  - name: community.crypto
+    version: 2.20.0
+  - name: community.general
+    version: 9.1.0
+  - name: ansible.posix
+    version: 1.5.4
+  - name: kubernetes.core
+    version: 5.0.0
+  - name: community.docker
+    version: 3.10.4
+  - name: community.vmware
+    version: 4.4.0
+  - name: awx.awx
+    version: 24.6.0
+  - name: community.hashi_vault
+    version: 6.2.0
+  - name: https://artifacts.andre-dev.sthings-vsphere.labul.sva.de/ansible-collections/sthings-awx_main-24.2655.5.tar.gz
+  - name: https://artifacts.andre-dev.sthings-vsphere.labul.sva.de/ansible-collections/sthings-awx_vm-24.2655.5.tar.gz
+  - name: https://artifacts.andre-dev.sthings-vsphere.labul.sva.de/ansible-collections/sthings-base_os-24.2552.45.tar.gz
