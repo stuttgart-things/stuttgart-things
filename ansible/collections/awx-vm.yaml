@@ -262,6 +262,16 @@ vars:
               "default": ""
             },
             {
+              "question_name": "Enter VM name?",
+              "question_description": "Enter vm name",
+              "required": true,
+              "type": "text",
+              "variable": "vmName",
+              "min": null,
+              "max": null,
+              "default": ""
+            },
+            {
               "question_name": "Do you want to install Terraform?",
               "question_description": "Choose true or false",
               "required": true,
