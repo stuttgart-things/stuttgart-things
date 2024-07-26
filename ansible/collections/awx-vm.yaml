@@ -380,10 +380,10 @@ vars:
               "required": true,
               "type": "multiplechoice",
               "variable": "vmSize",
-              "choices": ["s", "m", "l", "xl"],
+              "choices": ["S", "M", "L", "XL"],
               "min": null,
               "max": null,
-              "default": "s"
+              "default": "S"
             },
             {
               "question_name": "How many VMs?",
@@ -652,32 +652,26 @@ vars:
       ---
       vm_size:
         cpu:
-          s: 2
-          m: 4
-          l: 6
-          xl: 8
+          S: 2
+          M: 4
+          L: 6
+          XL: 8
         memory:
-          s: 4096
-          m: 6144
-          l: 8192
-          xl: 12288
+          S: 4096
+          M: 6144
+          L: 8192
+          XL: 12288
         disk:
-          s: 32
-          m: 64
-          l: 96
-          xl: 128
-
-      j2_template_name:
-        backend:
-          name: "backend"
-        main:
-          name: "vm-{{ cloud }}"
+          S: 32
+          M: 64
+          L: 96
+          XL: 128
 
       object_name: "{{ ansible_date_time.date }}-{{ project_name }}.tf"
 
       vmName: "test-{{ lookup('community.general.random_string', length=5, special=false) | lower }}"
       vmCount: "1"
-      vmSize: "s"
+      vmSize: "S"
       vmTemplate: "ubuntu24"
       vmFirmware: "bios"
       rootFolderpath: "stuttgart-things"
