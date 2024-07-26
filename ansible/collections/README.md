@@ -478,6 +478,22 @@ ansible-playbook sthings.awx_vm.get_execute_terraform -vv \
 
 </details>
 
+<details><summary>CREATE VM WORKFLOW JOB TEMPLATE</summary>
+
+Awx job template /w survey to create a workflow for vm creation in awx controller
+
+```bash
+export CONTROLLER_HOST=https://awx.<DOMAIN>.sva.de #EXAMPLE!
+export CONTROLLER_USERNAME=admin #EXAMPLE!
+export CONTROLLER_PASSWORD=<PASSWORD>
+
+# Create awx resource to pull template from s3 and create/destroy VM
+ansible-playbook sthings.awx_vm.create_vm_workflow -vv \
+```
+
+</details>
+
+
 ## DEPLOY_RKE
 
 ### INSTALLATION
