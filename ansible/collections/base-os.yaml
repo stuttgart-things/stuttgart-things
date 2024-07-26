@@ -205,7 +205,7 @@ playbooks:
               path: "{{ golang_install_dir }}/go"
               checksum_type: "{{ go_checksum_type }}"
             register: checksum_existing
-            when: check_golang.stat.exists or golang_checksum is defined
+            when: check_golang.stat.exists != "false" and golang_checksum is defined
 
           - name: Create golang users
             ansible.builtin.include_role:
@@ -673,7 +673,7 @@ vars:
 
       vmName: "test-{{ lookup('community.general.random_string', length=5, special=false) | lower }}"
       vmCount: "1"
-      vmSize: "s"
+      vmSize: "S"
       vmTemplate: ubuntu24
       vmFirmware: "bios"
       rootFolderpath: "stuttgart-things"
