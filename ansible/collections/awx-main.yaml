@@ -1,5 +1,5 @@
 ---
-name: awx-dev
+name: awx_main
 #version: 0.0.94
 namespace: sthings
 playbooks:
