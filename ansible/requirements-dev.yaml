@@ -51,6 +51,6 @@ collections:
     version: 24.6.0
   - name: community.hashi_vault
     version: 6.2.0
-  - name: https://artifacts.andre-dev.sthings-vsphere.labul.sva.de/ansible-collections/sthings-awx_main-24.2655.5.tar.gz
-  - name: https://artifacts.andre-dev.sthings-vsphere.labul.sva.de/ansible-collections/sthings-awx_vm-24.2655.5.tar.gz
-  - name: https://artifacts.andre-dev.sthings-vsphere.labul.sva.de/ansible-collections/sthings-base_os-24.2552.45.tar.gz
+  - name: https://artifacts.andre-dev.sthings-vsphere.labul.sva.de/ansible-collections/sthings-awx_main-24.26.51.tar.gz
+  - name: https://artifacts.andre-dev.sthings-vsphere.labul.sva.de/ansible-collections/sthings-awx_vm-24.261.16.tar.gz
+  - name: https://artifacts.andre-dev.sthings-vsphere.labul.sva.de/ansible-collections/sthings-base_os-24.26.5.tar.gz
