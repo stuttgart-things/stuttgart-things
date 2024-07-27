@@ -25,8 +25,8 @@ spec:
           forProvider:
             chart:
               name: metallb
-              repository: https://metallb.github.io/metallb #https://charts.bitnami.com/bitnami
-              version: 0.14.8
+              repository: https://charts.bitnami.com/bitnami
+              version: 5.0.3
             namespace: metallb-system
             insecureSkipTLSVerify: true
             skipCreateNamespace: false
