@@ -1,0 +1,92 @@
+---
+apiVersion: tf.upbound.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: incluster-homerun-dev
+  namespace: crossplane-system
+spec:
+  configuration: |
+    terraform {
+      backend "kubernetes" {
+        secret_suffix     = "homerun-dev"
+        namespace         = "crossplane-system"
+        in_cluster_config = true
+      }
+    }
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: VsphereVMAnsible
+metadata:
+  name: homerun-dev
+  namespace: crossplane-system
+spec:
+  providerRef:
+    name: incluster-homerun-dev
+  vm:
+    count: "5"
+    name: homerun-dev
+    cpu: "8"
+    ram: "8192"
+    disk: "96"
+    firmware: bios
+    folderPath: stuttgart-things/dev
+    datacenter: /LabUL
+    datastore: /LabUL/datastore/UL-V5010-01-LUN2
+    resourcePool: /LabUL/host/Cluster-V6.5/Resources
+    network: /LabUL/network/LAB-10.31.103
+    template: /LabUL/vm/stuttgart-things/vm-templates/sthings-u24
+    bootstrap: '["echo STUTTGART-THINGS"]'
+    annotation: VSPHERE-VM BUILD w/ CROSSPLANE FOR STUTTGART-THINGS
+    unverifiedSsl: "true"
+  ansible:
+    inventory:
+      - "master+[\"homerun.labul.sva.de\"]"
+      - "worker+[\"homerun-2.labul.sva.de\"]"
+      - "worker+[\"homerun-3.labul.sva.de\"]"
+      - "worker+[\"homerun-4.labul.sva.de\"]"
+      - "worker+[\"homerun-5.labul.sva.de\"]"
+    k8sProviderRef: kubernetes-incluster
+    vaultSecretName: vault
+    pipelineNamespace: tektoncd
+    gitRepoUrl: https://github.com/stuttgart-things/stuttgart-things.git
+    gitRevision: main
+    playbooks:
+      - "ansible/playbooks/prepare-env.yaml"
+      - "ansible/playbooks/base-os.yaml"
+      - "ansible/playbooks/rancher-custom-cluster.yaml"
+    ansibleVarsFile:
+      - "prepare_rke_nodes+-true"
+      - "template_creation_setup+-true"
+      - "cluster_name+-homerun-dev"   
+      - "manage_filesystem+-true"
+      - "update_packages+-true"
+      - "install_requirements+-true"
+      - "install_motd+-true"
+      - "username+-sthings"
+      - "lvm_home_sizing+-'15%'"
+      - "lvm_root_sizing+-'35%'"
+      - "lvm_var_sizing+-'50%'"
+      - "send_to_msteams+-true"
+      - "reboot_all+-false"
+    roles:
+      - "https://github.com/stuttgart-things/install-requirements.git"
+  tfvars:
+    secretName: vsphere-tfvars
+    secretNamespace: crossplane-system
+    secretKey: terraform.tfvars
+  connectionSecret:
+    name: homerun-dev
+    namespace: crossplane-system
+  compositionRef:
+    name: vsphere-vm-ansible
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: RancherCustomCluster
+metadata:
+  name: homerun-dev
+  namespace: crossplane-system
+spec:
+  clusterName: rancher-mgmt
+  name: homerun-dev
+  kubernetesVersion: v1.28.8+rke2r1
+  cni: cilium
