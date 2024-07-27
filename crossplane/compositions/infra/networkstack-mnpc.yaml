@@ -47,6 +47,9 @@ spec:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.ipPoolName
           toFieldPath: spec.ipPoolName
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.version
+          toFieldPath: spec.version
     - name: ingress-nginx-deployment
       base:
         apiVersion: resources.stuttgart-things.com/v1alpha1

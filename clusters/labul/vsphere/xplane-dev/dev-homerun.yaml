@@ -37,6 +37,7 @@ spec:
     - 10.31.103.15-10.31.103.16
     - 10.31.103.17-10.31.103.18
   issuerName: vault-approle
+  version: 6.3.9
   approle:
     secretName: certmanager-labul-vsphere
     secretNamespace: crossplane-system
