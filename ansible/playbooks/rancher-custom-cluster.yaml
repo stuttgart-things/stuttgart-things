@@ -1,0 +1,75 @@
+- hosts: "{{ target_host | default('all') }}"
+  become: true
+  vars:
+    # GENERAL
+    #cluster_name: replace-me
+    prepare_rke_nodes: true
+    rancher_cluster_cmd: "{% if 'master' in groups and inventory_hostname in groups['master'] %}--controlplane --etcd{% elif 'worker' in groups and inventory_hostname in groups['worker'] %}--worker{% else %}--controlplane --etcd --worker{% endif %}"
+    template_creation_setup: true # only set for not rebooting
+    
+    # VAULT LOOKUPS / RANCHER
+    vault_approle_id: "{{ lookup('env', 'VAULT_ROLE_ID') }}"
+    vault_approle_secret: "{{ lookup('env', 'VAULT_SECRET_ID') }}"
+    vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
+    rancher_api_secret_path: apps/data/rancher:apiUrl
+    rancher_api_accesskey_path: apps/data/rancher:accessKey
+    rancher_api_secretkey_path: apps/data/rancher:secretKey
+    rancher_api_url: "{{ lookup('community.hashi_vault.hashi_vault', 'secret={{ rancher_api_secret_path }} validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+    rancher_access_key: "{{ lookup('community.hashi_vault.hashi_vault', 'secret={{ rancher_api_accesskey_path }} validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+    rancher_secret_key: "{{ lookup('community.hashi_vault.hashi_vault', 'secret={{ rancher_api_secretkey_path }} validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+
+  pre_tasks:
+    - name: Prepare rancher nodes
+      ansible.builtin.include_role:
+        name: configure-rke-node
+      vars:
+        install_docker: false
+        cloudinit: false
+      when: prepare_rke_nodes|bool
+
+  tasks:
+    - debug:
+        var: rancher_cluster_cmd
+
+    - name: Get cluster information
+      ansible.builtin.uri:
+        validate_certs: false
+        url: "{{ rancher_api_url }}/clusters?name={{ cluster_name }}"
+        user: "{{ rancher_access_key }}"
+        password: "{{ rancher_secret_key }}"
+        body_format: json
+        method: GET
+        force_basic_auth: yes
+        headers:
+          Content-Type: "application/json"
+      register: cluster_info
+
+    - name: Show clusterid
+      ansible.builtin.debug:
+        var:
+          cluster_info.json.data[0].id
+
+    - name: Set clusterid
+      ansible.builtin.set_fact:
+        cluster_id: "{{ cluster_info.json.data[0].id }}"
+
+    - name: Get cluster registration tokens
+      ansible.builtin.uri:
+        validate_certs: false
+        url: "{{ rancher_api_url }}/clusters/{{ cluster_id }}/clusterregistrationtokens?sort=insecureCommand"
+        user: "{{ rancher_access_key }}"
+        password: "{{ rancher_secret_key }}"
+        body_format: json
+        method: GET
+        force_basic_auth: yes
+        headers:
+            Content-Type: "application/json"
+      register: cluster_registration_tokens
+
+    - name: Set nodeCommand
+      ansible.builtin.set_fact:
+        nodeCommand: "{{ cluster_registration_tokens.json.data[0].nodeCommand }}"
+
+    - name: Create Cluster w/ node command
+      ansible.builtin.shell: |
+        {{ nodeCommand }} {{ rancher_cluster_cmd }}
