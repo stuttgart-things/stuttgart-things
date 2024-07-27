@@ -1,4 +1,116 @@
 ---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: AnsibleRun
+metadata:
+  name: pdns-entry-labul-vsphere-homerun-dev
+  namespace: default
+spec:
+  pipelineRunName: pdns-entry-labul-vsphere-homerun-dev
+  inventory:
+    - "all+[\"localhost\"]"
+  playbooks:
+    - "ansible/playbooks/pdns-ingress-entry.yaml"
+  ansibleVarsFile:
+    - pdns_url+-https://pdns-vsphere.labul.sva.de:8443
+    - entry_zone+-sthings-vsphere.labul.sva.de.
+    - ip_address+-10.31.103.15
+    - hostname+-homerun-dev
+  gitRepoUrl: https://github.com/stuttgart-things/stuttgart-things.git
+  gitRevision: main
+  providerRef:
+    name: kubernetes-incluster
+  vaultSecretName: vault
+  pipelineNamespace: tektoncd
+  workingImage: eu.gcr.io/stuttgart-things/sthings-ansible:10.1.0-1
+  roles:
+    - "https://github.com/stuttgart-things/install-configure-powerdns.git"
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: NetworkStackMNPC
+metadata:
+  name: homerun-dev
+  namespace: crossplane-system
+spec:
+  clusterName: homerun-dev
+  ipPoolName: ip-pool-1
+  ipRanges:
+    - 10.31.103.15-10.31.103.16
+    - 10.31.103.17-10.31.103.18
+  issuerName: vault-approle
+  approle:
+    secretName: certmanager-labul-vsphere
+    secretNamespace: crossplane-system
+    pkiPath: pki/sign/sthings-vsphere.labul.sva.de
+    vaultAddr: https://vault-vsphere.labul.sva.de:8200
+    approleID: 1d42d7e7-8c14-e5f9-801d-b3ecef416616
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: NfsCsiConfig
+metadata:
+  name: homerun-dev
+  namespace: crossplane-system
+spec:
+  clusterName: homerun-dev
+  storageClass:
+    name: nfs-csi
+    server: 10.31.101.26
+    share: /data/col1/sthings
+    reclaimPolicy: Delete
+    volumeBindingMode: Immediate
+---
+apiVersion: kubernetes.crossplane.io/v1alpha1
+kind: ProviderConfig
+metadata:
+  name: homerun-dev
+spec:
+  credentials:
+    source: Secret
+    secretRef:
+      namespace: crossplane-system
+      name: homerun-dev
+      key: kubeconfig
+---
+apiVersion: helm.crossplane.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: homerun-dev
+spec:
+  credentials:
+    source: Secret
+    secretRef:
+      namespace: crossplane-system
+      name: homerun-dev
+      key: kubeconfig
+---
+apiVersion: v1
+kind: Secret
+data:
+    kubeconfig: ENC[AES256_GCM,data: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,iv:UR3VjR82ZKwABemqVqenx+cLBGF7vJU9WKpAc0STL4I=,tag:NkrcBnjU+6tNckcqd86BTA==,type:str]
+metadata:
+    name: homerun-dev
+    namespace: crossplane-system
+type: Opaque
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age1g438n4lx6h7x7u42q652e9ygzrkkwlul49e8zsmsrfmxm9k3tvcsykhff4
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBwQ28rOVJoOUlzdkZQYm1W
+            ck9MMWZVYW9RMXd4WTF0eU9OWk9DdGEwN2owClB5L21ubDVDRGtsYk82b0xaN2Vx
+            dkIrYkw0eC9saERjeXNKMUZKZmdYY3cKLS0tIGI2OVhZLzZxclVLemNybUxHa1hy
+            UE1CY1VSZ2Y0d1pxZjZEQ0dxWWtXWTAKeoHoyiLqaRNxX4+D9SxHSveAEKIqi6vB
+            YY0Lf6FRCsj9+gyUx4DPAuFBLwY0SF38aMh6S6S/FBQgVT2so25L3A==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2024-07-27T20:21:25Z"
+    mac: ENC[AES256_GCM,data:fSKCzP+V4sdSIYPzYRIfnDiBnjnszvNn7Yw7dUl4AWlu6x8JMj19dNBDdJobQOlt/XDAsCleHCLfNcDbmE2KthaPmxI1PSxHhUAnlH1rHjlhDadhBobdHrzr2xsLkYV8C2zxAYhN4FO/+lG357/7hu5Bc7LCHp9irrDFGA3EPqc=,iv:mk24qaFZo0b2YhlG3bMBtbAvkNwq06ok+LxKg8UHGI0=,tag:KXIXUoZIU9NiSqfvL2O0Iw==,type:str]
+    pgp: []
+    encrypted_regex: ^(data|stringData)$
+    version: 3.8.1
+---
 apiVersion: tf.upbound.io/v1beta1
 kind: ProviderConfig
 metadata:
@@ -57,7 +169,7 @@ spec:
     ansibleVarsFile:
       - "prepare_rke_nodes+-true"
       - "template_creation_setup+-true"
-      - "cluster_name+-homerun-dev"   
+      - "cluster_name+-homerun-dev"
       - "manage_filesystem+-true"
       - "update_packages+-true"
       - "install_requirements+-true"
