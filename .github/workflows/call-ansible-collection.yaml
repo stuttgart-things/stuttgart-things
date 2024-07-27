@@ -61,19 +61,6 @@ jobs:
           files: |
             ansible/collections/**.yaml
 
-      - name: List all changed files
-        env:
-          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-        run: |
-          collections=()
-          for file in ${ALL_CHANGED_FILES}; do
-            echo "$file was changed"
-            collections+=("$file")
-          done
-
-          echo hello $(jq -c -n '$ARGS.positional' --args "${collections[@]}" )
-        shell: bash
-
       - name: Init collection
         id: init
         run: |
