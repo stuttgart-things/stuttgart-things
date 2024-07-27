@@ -70,6 +70,8 @@ spec:
       - "reboot_all+-false"
     roles:
       - "https://github.com/stuttgart-things/install-requirements.git"
+      - "https://github.com/stuttgart-things/manage-filesystem.git"
+      - "https://github.com/stuttgart-things/install-configure-vault.git"
   tfvars:
     secretName: vsphere-tfvars
     secretNamespace: crossplane-system
