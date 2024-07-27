@@ -19,6 +19,10 @@
     rancher_secret_key: "{{ lookup('community.hashi_vault.hashi_vault', 'secret={{ rancher_api_secretkey_path }} validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
 
   pre_tasks:
+    - name: Include vars
+      ansible.builtin.include_vars: "{{ path_to_vars_file }}.yaml"
+      when: path_to_vars_file is defined
+  
     - name: Prepare rancher nodes
       ansible.builtin.include_role:
         name: configure-rke-node
