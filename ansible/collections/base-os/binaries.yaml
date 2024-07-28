@@ -13,3 +13,99 @@ playbooks:
 
         roles:
           - role: sthings.base_os.download_install_binary
+
+vars:
+  - name: binaries
+    file: |
+      ---
+      gh_version: 2.52.0 # datasource=github-tags depName=cli/cli
+      task_version: 3.38.0 # datasource=github-tags depName=go-task/task
+      hugo_version: 0.128.2 # datasource=github-tags depName=gohugoio/hugo
+      terraform_version: 1.9.1 # datasource=custom.hashicorp
+      packer_version: 1.11.1 # datasource=custom.hashicorp
+      yq_version: 4.44.2 # datasource=github-tags depName=mikefarah/yq
+      machineshop_version: 2.1.9 # datasource=github-tags depName=stuttgart-things/machineshop
+      jq_version: 1.7.1 # datasource=github-tags depName=jqlang/jq
+
+      bin:
+        gh:
+          bin_name: gh
+          bin_version: "{{ gh_version }}"
+          check_bin_version_before_installing: true
+          source_url: "https://github.com/cli/cli/releases/download/v{{ gh_version }}/gh_{{ gh_version }}_linux_amd64.tar.gz"
+          bin_to_copy: gh_{{ gh_version }}_linux_amd64/bin/gh
+          to_remove: gh_{{ gh_version }}_linux_amd64.tar.gz
+          bin_dir: "/usr/local/bin"
+          version_cmd: "-- version"
+          target_version: "{{ gh_version }}"
+        task:
+          bin_name: task
+          bin_version: "{{ task_version }}"
+          check_bin_version_before_installing: true
+          source_url: "https://github.com/go-task/task/releases/download/v{{ task_version }}/task_linux_amd64.tar.gz"
+          bin_to_copy: task
+          to_remove: task_linux_amd64.tar.gz
+          bin_dir: "/usr/local/bin"
+          version_cmd: "-- version"
+          target_version: "{{ task_version }}"
+        hugo:
+          bin_name: hugo
+          bin_version: "v{{ hugo_version }}"
+          check_bin_version_before_installing: true
+          source_url: "https://github.com/gohugoio/hugo/releases/download/v{{ hugo_version }}/hugo_{{ hugo_version }}_linux-amd64.tar.gz"
+          bin_to_copy: "hugo"
+          to_remove: "hugo"
+          bin_dir: "/usr/local/bin"
+          version_cmd: " --version"
+          target_version: v{{ hugo_version }}
+        terraform:
+          bin_name: "terraform"
+          bin_version: "{{ terraform_version }}"
+          check_bin_version_before_installing: true
+          source_url: "https://releases.hashicorp.com/terraform/{{ terraform_version }}/terraform_{{ terraform_version }}_linux_amd64.zip"
+          bin_to_copy: "terraform"
+          to_remove: "terraform"
+          bin_dir: "/usr/local/bin"
+          version_cmd: " --version"
+          target_version: "{{ terraform_version }}"
+        packer:
+          bin_name: "packer"
+          bin_version: "v{{ packer_version }}"
+          check_bin_version_before_installing: true
+          source_url: "https://releases.hashicorp.com/packer/{{ packer_version }}/packer_{{ packer_version }}_linux_amd64.zip"
+          bin_to_copy: "packer"
+          to_remove: "packer"
+          bin_dir: "/usr/local/bin"
+          version_cmd: " --version"
+          target_version: v{{ packer_version }}
+          #md5_checksum: "374f22185f1f8cb25bc53187a2154ef0"
+        yq:
+          bin_name: yq
+          bin_version: "v{{ yq_version }}"
+          check_bin_version_before_installing: true
+          source_url: "https://github.com/mikefarah/yq/releases/download/v{{ yq_version }}/yq_linux_amd64.tar.gz"
+          bin_to_copy: yq_linux_amd64
+          to_remove: ""
+          bin_dir: "/usr/bin/yq"
+          version_cmd: " version"
+          target_version: "v{{ yq_version }}"
+        machineshop:
+          bin_name: machineshop
+          bin_version: "{{ machineshop_version }}"
+          check_bin_version_before_installing: true
+          source_url: https://github.com/stuttgart-things/machineshop/releases/download/{{ machineshop_version }}/machineshop_Linux_x86_64.tar.gz
+          bin_to_copy: machineshop
+          to_remove: ""
+          bin_dir: "/usr/bin"
+          version_cmd: " version"
+          target_version: "{{ machineshop_version }}"
+        jq:
+          bin_name: jq
+          bin_version: "v{{ jq_version }}"
+          check_bin_version_before_installing: true
+          source_url: "https://github.com/jqlang/jq/releases/download/jq-{{ jq_version }}/jq-linux-amd64"
+          bin_to_copy: jq-linux-amd64
+          to_remove: ""
+          bin_dir: "/usr/bin/jq"
+          version_cmd: " version"
+          target_version: "v{{ jq_version }}"
