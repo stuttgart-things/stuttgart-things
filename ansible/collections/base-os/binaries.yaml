@@ -1,1 +1,15 @@
 ---
+playbooks:
+  - name: binaries
+    play: |
+      ---
+      - hosts: "{{ target_host | default('all') }}"
+        become: true
+        vars:
+          download_dir: "/tmp/downloads"
+
+        vars_files:
+          - "{{ path | default('.') }}/{{ profile | default('binaries') }}.yaml"
+
+        roles:
+          - role: sthings.base_os.download_install_binary
