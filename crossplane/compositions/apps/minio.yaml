@@ -11,17 +11,47 @@ spec:
     apiVersion: resources.stuttgart-things.com/v1alpha1
     kind: XMinio
   resources:
-    - name: minio-namespace
+    - name: minio-release
       base:
-        apiVersion: resources.stuttgart-things.com/v1alpha1
-        kind: XNamespace
-      patches:
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.deploymentNamespace
-          toFieldPath: spec.name
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.clusterName
-          toFieldPath: spec.clusterName
+        apiVersion: helm.crossplane.io/v1beta1
+        kind: Release
+        metadata:
+          name: minio
+          annotations:
+            crossplane.io/external-name: minio
+        spec:
+          providerConfigRef:
+            name: in-cluster
+          forProvider:
+            chart:
+              name: minio
+              repository: https://helm.releases.hashicorp.com
+              version: 0.28.0
+            namespace: minio
+            insecureSkipTLSVerify: false
+            skipCreateNamespace: false
+            wait: true
+            skipCRDs: false
+            values:
+              injector:
+                enabled: false
+              server:
+                enabled: true
+                dataStorage:
+                  enabled: true
+                  storageClass: nfs-csi
+                  size: 1Gi
+                ingress:
+                  enabled: true
+                  hosts:
+                    - host: minio.andre-dev.sthings-vsphere.labul.sva.de
+                  tls:
+                    - hosts:
+                        - minio.andre-dev.sthings-vsphere.labul.sva.de
+                      secretName: minio-ingress-tls
+                  ingressClassName: nginx
+              csi:
+                enabled: true
     - name: minio-ingresscert
       base:
         apiVersion: resources.stuttgart-things.com/v1alpha1
