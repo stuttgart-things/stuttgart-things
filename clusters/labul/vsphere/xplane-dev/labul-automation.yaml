@@ -56,7 +56,7 @@ spec:
     source: Secret
     secretRef:
       namespace: crossplane-system
-      name: labul-automation
+      name: kubeconfig-labul-automation
       key: labul-automation
 ---
 apiVersion: helm.crossplane.io/v1beta1
@@ -68,6 +68,6 @@ spec:
     source: Secret
     secretRef:
       namespace: crossplane-system
-      name: labul-automation
+      name: kubeconfig-labul-automation
       key: labul-automation
 ---
