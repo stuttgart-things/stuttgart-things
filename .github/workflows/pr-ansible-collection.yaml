@@ -6,7 +6,8 @@ on:
       - opened
       - reopened
     paths:
-      - 'ansible/collections/*'
+      #- 'ansible/collections/*'
+      - 'ansible/collections/*/*.yaml'
 
 jobs:
   Get-Changed-Collectionfiles:
