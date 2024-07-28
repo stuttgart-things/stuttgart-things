@@ -66,7 +66,7 @@ on:
         description: RUNNER NAME
         required: true
         type: string
-        default: ghr-stuttgart-things-labda-test
+        default: ghr-stuttgart-things-labul-automation
 jobs:
   Create-VM-Config:
     permissions:

@@ -15,18 +15,18 @@ jobs:
     uses: stuttgart-things/stuttgart-things/.github/workflows/call-markdown-lint.yaml@main
     with:
       environment-name: k8s
-      runs-on: ghr-stuttgart-things-labda-test
+      runs-on: ghr-stuttgart-things-labul-automation
       continue-error: true
       alpine-version: 3.19.0
       lintprofile-path: .markdownlint.rb
       artifact-name: md-lint
-      
+
   yaml-lint:
     name: Lint yaml files
     uses: stuttgart-things/stuttgart-things/.github/workflows/call-yaml-lint.yaml@main
     with:
       environment-name: k8s
-      runs-on: ghr-stuttgart-things-labda-test
+      runs-on: ghr-stuttgart-things-labul-automation
       continue-error: true
       yamllint-version: 1
       lintprofile-path: .yamllint
@@ -40,7 +40,7 @@ jobs:
       - yaml-lint
     with:
       environment-name: labul-vsphere
-      runs-on: ghr-stuttgart-things-labda-test
+      runs-on: ghr-stuttgart-things-labul-automation
       image: floryn90/hugo:0.126.1-ext-ubuntu-ci
       creation-script-path: hugo/create-sthings.sh
       site-name: sthings

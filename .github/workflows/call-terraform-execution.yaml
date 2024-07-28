@@ -62,7 +62,7 @@ jobs:
             echo "DIR_EXISTS=false" >> "$GITHUB_OUTPUT"
           fi
         shell: bash
-          
+
   Execute-Terraform:
     needs: Check-Directory
     if: ${{ needs.Check-Directory.outputs.dir_exists == 'true' }}
@@ -134,11 +134,11 @@ jobs:
       - name: Terraform init
         run: |
           if test -d "${{ inputs.folder }}"; then
-          
+
             ls -lta ${{ inputs.folder }}
             terraform --version
             terraform -chdir=${{ inputs.folder }} init
-            
+
           fi
         shell: bash
 
@@ -214,7 +214,7 @@ jobs:
       - Execute-Terraform
       - Delete-Terraform-Config
     with:
-      runs-on: ghr-stuttgart-things-labda-test
+      runs-on: ghr-stuttgart-things-labul-automation
       environment-name: k8s
       branch-name: ${{ inputs.folder }}
       pr-id: ${{ needs.Delete-Terraform-Config.outputs.pullrequest-id }}

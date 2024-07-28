@@ -36,7 +36,7 @@ on:
       runner:
         description: RUNNER NAME
         type: string
-        default: ghr-stuttgart-things-labda-test
+        default: ghr-stuttgart-things-labul-automation
       working-image:
         description: WORKING IMAGE
         type: string
