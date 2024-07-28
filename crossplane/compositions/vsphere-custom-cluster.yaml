@@ -1,0 +1,90 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: rancher-cluster
+  labels:
+    crossplane.io/xrd: xvspherecustomclusters.resources.stuttgart-things.com
+spec:
+  writeConnectionSecretsToNamespace: crossplane-system
+  compositeTypeRef:
+    apiVersion: resources.stuttgart-things.com/v1alpha1
+    kind: XVsphereCustomCluster
+  resources:
+    - base:
+        apiVersion: kubernetes.crossplane.io/v1alpha2
+        kind: Object
+        spec:
+          providerConfigRef:
+            name: kubernetes
+          forProvider:
+            manifest:
+              apiVersion: resources.stuttgart-things.com/v1alpha1
+              kind: VsphereVMAnsible
+              # metadata:
+              #   name: miami
+              #   namespace: crossplane-system
+              spec:
+                providerRef:
+                  name: incluster-miami
+                vm:
+                  count: "1"
+                  name: miami
+                  cpu: "8"
+                  ram: "8192"
+                  disk: "64"
+                  firmware: bios
+                  folderPath: stuttgart-things/dev
+                  datacenter: /LabUL
+                  datastore: /LabUL/datastore/UL-V5010-01-LUN2
+                  resourcePool: /LabUL/host/Cluster-V6.5/Resources
+                  network: /LabUL/network/LAB-10.31.103
+                  template: /LabUL/vm/stuttgart-things/vm-templates/sthings-u24
+                  bootstrap: '["echo STUTTGART-THINGS"]'
+                  annotation: VSPHERE-VM BUILD w/ CROSSPLANE FOR STUTTGART-THINGS
+                  unverifiedSsl: "true"
+                ansible:
+                  inventory:
+                    - "all+[\"miami.labul.sva.de\"]"
+                  k8sProviderRef: kubernetes-incluster
+                  vaultSecretName: vault
+                  pipelineNamespace: tektoncd
+                  gitRepoUrl: https://github.com/stuttgart-things/stuttgart-things.git
+                  gitRevision: main
+                  playbooks:
+                    - "ansible/playbooks/prepare-env.yaml"
+                    - "ansible/playbooks/base-os.yaml"
+                  ansibleVarsFile:
+                    - "manage_filesystem+-true"
+                    - "update_packages+-true"
+                    - "install_requirements+-true"
+                    - "install_motd+-true"
+                    - "username+-sthings"
+                    - "lvm_home_sizing+-'15%'"
+                    - "lvm_root_sizing+-'35%'"
+                    - "lvm_var_sizing+-'50%'"
+                    - "send_to_msteams+-true"
+                    - "reboot_all+-false"
+                  roles:
+                    - "https://github.com/stuttgart-things/install-requirements.git"
+                    - "https://github.com/stuttgart-things/manage-filesystem.git"
+                    - "https://github.com/stuttgart-things/install-configure-vault.git"
+                tfvars:
+                  secretName: vsphere-tfvars
+                  secretNamespace: crossplane-system
+                  secretKey: terraform.tfvars
+                connectionSecret:
+                  name: miami
+                  namespace: crossplane-system
+                compositionRef:
+                  name: vsphere-custom-cluster
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.vm.name
+          toFieldPath: spec.forProvider.manifest.metadata.name
+        - type: FromCompositeFieldPath
+          fromFieldPath: metadata.namespace
+          toFieldPath: spec.forProvider.manifest.metadata.namespae
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.providerRef.name
+          toFieldPath: spec.providerConfigRef.name
