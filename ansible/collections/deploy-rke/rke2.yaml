@@ -1,0 +1,286 @@
+---
+playbooks:
+  - name: rke2
+    play: |
+      - hosts: all
+        become: true
+        vars:
+          rke_version: 2
+          rke2_k8s_version: 1.28.10
+          rke2_airgapped_installation: true
+          rke2_release_kind: rke2r1
+          disable_rke2_components:
+            - rke2-ingress-nginx
+            - rke-snapshot-controller
+          cluster_setup: multinode
+
+        roles:
+          - role: sthings.deploy_rke.deploy_configure_rke
+
+
+
+  - name: helm
+    play: |
+      ---
+      - name: Create values on disk
+        ansible.builtin.copy:
+          content: "{{ item.value.release_values }}" #().0
+          dest: "/tmp/{{ item.key }}-values.yaml.j2"
+        when: state == "present" and item.value.values is defined
+
+      - name: Deploy helm charts
+        kubernetes.core.helm:
+          kubeconfig: "{{ path_to_kubeconfig }}"
+          name: "{{ item.key }}"
+          chart_ref: "{{ item.value.ref }}"
+          chart_version: "{{ item.value.version | default('latest') }}"
+          release_namespace: "{{ item.value.namespace }}"
+          create_namespace: true
+          state: "{{ state | default('present') }}"
+          values: "{{ lookup('template', '/tmp/{{ item.key }}-values.yaml.j2') | from_yaml | default(omit) }}"
+          wait: "{{ item.values.wait | default(omit) }}"
+        when: helm_releases is defined
+        ignore_errors: "{{ item.value.ignore | default(omit) }}"
+
+      - name: Wait until pods are running
+        kubernetes.core.k8s_info:
+          kubeconfig: "{{ path_to_kubeconfig }}"
+          api_version: v1
+          kind: Pod
+          namespace: "{{ item.value.namespace }}"
+          wait_sleep: 30
+          wait_timeout: 360
+        register: pod_list
+        retries: "{{ item.values.wait_retries | default(15) }}"
+        delay: "{{ item.values.wait_delay | default(30) }}"
+        until: pod_list|json_query('resources[*].status.phase')|unique == ["Running"]
+        when: state == "present" and item.value.values is defined
+
+      - name: Wait for webhooks beeing ready
+        ansible.builtin.wait_for:
+          timeout: "{{ webhook_wait | default(0) }}"
+
+  - name: manifests
+    play: |
+      ---
+      - name: Create template on disk
+        ansible.builtin.copy:
+          content: "{{ item.value }}"
+          dest: "/tmp/{{ item.key }}.yaml.j2"
+        when: state == "present"
+
+      - name: Deploy additional manifests
+        kubernetes.core.k8s:
+          kubeconfig: "{{ path_to_kubeconfig }}"
+          state: "{{ state | default('present') }}"
+          definition: "{{ lookup('template', '/tmp/{{ item.key }}.yaml.j2') | from_yaml }}"
+
+
+  - name: helm_config
+    play: |
+      ---
+      - name: Add helm chart repositories
+        kubernetes.core.helm_repository:
+          name: "{{ item.key }}"
+          repo_url: "{{ item.value.url }}"
+          force_update: true
+        loop: "{{ q('ansible.builtin.dict', helm_repositories) }}"
+        when: helm_repositories is defined and state == "present"
+
+      - name: Install Helm Diff
+        kubernetes.core.helm_plugin:
+          plugin_path: "https://github.com/databus23/helm-diff"
+          state: present
+        when: state == "present"
+
+  - name: api_token
+    play: |
+      ---
+      - hosts: "{{ target_host | default('localhost') }}"
+        vars:
+          token_name: admin
+          token_description: admin token
+          token_ttl: 0
+          state: present
+          output_token_creds: true
+
+          manifests:
+            token: |
+              {
+                "apiVersion": "management.cattle.io/v3",
+                "authProvider": "local",
+                "current": false,
+                "description": "{{ token_description }}",
+                "expired": false,
+                "expiresAt": "",
+                "isDerived": true,
+                "kind": "Token",
+                "metadata": {
+                  "labels": {
+                    "authn.management.cattle.io/token-userId": "{{ token_user_id }}",
+                    "cattle.io/creator": "kubectl"
+                  },
+                  "name": "{{ token_name }}"
+                },
+                "token": "{{ token_password }}",
+                "ttl": {{ token_ttl }},
+                "userId": "{{ token_user_id }}"
+              }
+
+        pre_tasks:
+          - name: set user password
+            ansible.builtin.set_fact:
+              token_password: "{{ lookup('community.general.random_string', length=16, special=false) }}"
+            when: token_password is not defined
+
+          - name: Get admin user id
+            block:
+              - name: Get admin user
+                kubernetes.core.k8s_info:
+                  api_version: management.cattle.io/v3
+                  kind: users
+                  namespace: cattle-system
+                  kubeconfig: "{{ path_to_kubeconfig }}"
+                  label_selectors:
+                    - authz.management.cattle.io/bootstrapping = admin-user
+                register: admin_user
+
+              - name: output
+                ansible.builtin.debug:
+                  var: admin_user.resources[0].metadata.name
+
+              - name: set userid
+                ansible.builtin.set_fact:
+                  token_user_id: "{{ admin_user.resources[0].metadata.name }}"
+            when: token_user_id is not defined
+
+        tasks:
+          - name: Create api token
+            ansible.builtin.include_tasks: manifests.yaml
+            loop: "{{ q('ansible.builtin.dict', manifests) }}"
+            when: manifests is defined
+
+        post_tasks:
+          - name: Output credentials
+            ansible.builtin.debug:
+              var: token_password
+
+          - name: Output credentials
+            ansible.builtin.debug:
+              msg: "token {{ token_name }} created w/ password {{ token_password }}. Bearer is {{ token_name }}:{{ token_password }}"
+
+vars:
+  - name: ingress-nginx
+    file: |
+      ---
+      ingress_nginx_version: 4.10.1
+      deployment_namespace: ingress-nginx
+      helm_repositories:
+        ingress-nginx:
+          url: https://kubernetes.github.io/ingress-nginx
+
+      post_manifests: {}
+
+      helm_releases:
+        ingress-nginx:
+          ref: ingress-nginx/ingress-nginx
+          version: "{{ ingress_nginx_version }}"
+          namespace: "{{ deployment_namespace }}"
+          ignore: false
+          wait: true
+          release_values: {}
+
+  - name: metallb
+    file: |
+      ---
+      name_ip_pool: ip-pool
+      deployment_namespace: metallb-system
+      metallb_version: 6.1.4
+
+      helm_repositories:
+        bitnami:
+          url: https://charts.bitnami.com/bitnami
+
+      helm_releases:
+        metallb:
+          ref: bitnami/metallb
+          version: "{{ metallb_version }}"
+          namespace: "{{ deployment_namespace }}"
+          ignore: true
+          wait: true
+          release_values: {}
+
+      post_manifests:
+        ip_pool: |
+          apiVersion: metallb.io/v1beta1
+          kind: IPAddressPool
+          metadata:
+            name: {{ name_ip_pool | default('ip-pool') }}
+            namespace: {{ deployment_namespace }}
+            labels:
+              app: metallb
+          spec:
+            addresses:
+              - {{ ip_range }}
+        poolAdvertisement: |
+          apiVersion: metallb.io/v1beta1
+          kind: L2Advertisement
+          metadata:
+            name: pool-advertisement
+            namespace: {{ deployment_namespace }}
+            labels:
+              app: metallb
+          spec:
+            ipAddressPools:
+              - {{ name_ip_pool | default('ip-pool') }}
+
+  - name: rancher
+    file: |
+      ---
+      rancher_version: 2.8.5
+      deployment_namespace: cattle-system
+      helm_repositories:
+        rancher-stable:
+          url: https://releases.rancher.com/server-charts/latest
+
+      helm_releases:
+        rancher:
+          ref: rancher-stable/rancher
+          version: "{{ rancher_version }}"
+          namespace: "{{ deployment_namespace }}"
+          ignore: false
+          wait: true
+          release_values: |
+            ---
+            global:
+              cattle:
+                psp:
+                  enabled: false
+            bootstrapPassword: {{ password }}
+            hostname: {{ hostname }}.{{ domain }}
+            privateCA: true
+            ingress:
+              enabled: true
+              ingressClassName: nginx
+              servicePort: 80
+              tls:
+                source: secret
+                secretName: {{ hostname }}-tls
+
+  - name: cert-manager
+    file: |
+      ---
+      deployment_namespace: cert-manager
+      helm_repositories:
+        cert-manager:
+          url: https://charts.jetstack.io
+
+      helm_releases:
+        cert-manager:
+          ref: cert-manager/cert-manager
+          version: v1.14.4
+          namespace: "{{ deployment_namespace }}"
+          ignore: false
+          wait: true
+          release_values: |
+            installCRDs: true
