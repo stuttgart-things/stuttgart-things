@@ -24,8 +24,8 @@ vars:
       terraform_version: 1.9.1 # datasource=custom.hashicorp
       packer_version: 1.11.1 # datasource=custom.hashicorp
       yq_version: 4.44.2 # datasource=github-tags depName=mikefarah/yq
-      machineshop_version: 2.1.9 # datasource=github-tags depName=stuttgart-things/machineshop
       jq_version: 1.7.1 # datasource=github-tags depName=jqlang/jq
+      machineshop_version: 2.1.9 # datasource=github-tags depName=stuttgart-things/machineshop
 
       bin:
         gh:
