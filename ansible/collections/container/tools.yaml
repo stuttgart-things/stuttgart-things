@@ -14,6 +14,195 @@ playbookss:
         roles:
           - role: sthings.container.download_install_binary
 
+playbooks:
+  - name: rancher_kubeconfig
+    play: |
+      ---
+      - hosts: "{{ target_host | default('localhost') }}"
+        become: false
+        gather_facts: false
+
+        vars:
+          vault_approle_id: "{{ lookup('env', 'VAULT_ROLE_ID') }}"
+          vault_approle_secret: "{{ lookup('env', 'VAULT_SECRET_ID') }}"
+          vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
+          rancher_api_secret_path: apps/data/rancher:apiUrl
+          rancher_api_accesskey_path: apps/data/rancher:accessKey
+          rancher_api_secretkey_path: apps/data/rancher:secretKey
+          rancher_api_url: "{{ lookup('community.hashi_vault.hashi_vault', 'secret={{ rancher_api_secret_path }} validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+          rancher_access_key: "{{ lookup('community.hashi_vault.hashi_vault', 'secret={{ rancher_api_accesskey_path }} validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+          rancher_secret_key: "{{ lookup('community.hashi_vault.hashi_vault', 'secret={{ rancher_api_secretkey_path }} validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+          secret_path_kubeconfig: kubeconfigs
+
+          upload_vault: true
+          check_kubeconfig: true
+          # cluster_name: app-dev-master
+          kubeconfig_destination: "/tmp/kubeconfig-{{ cluster_name }}"
+
+        tasks:
+          - name: Get cluster information
+            ansible.builtin.uri:
+              validate_certs: false
+              url: "{{ rancher_api_url }}/clusters?name={{ cluster_name }}"
+              user: "{{ rancher_access_key }}"
+              password: "{{ rancher_secret_key }}"
+              body_format: json
+              method: GET
+              force_basic_auth: yes
+              headers:
+                Content-Type: "application/json"
+            register: cluster_info
+
+          - name: Show clusterid
+            ansible.builtin.debug:
+              var:
+                cluster_info.json.data[0].id
+
+          - name: Get kubeconfig
+            ansible.builtin.uri:
+              validate_certs: false
+              url: "{{ rancher_api_url }}/clusters/{{ cluster_info.json.data[0].id }}?action=generateKubeconfig"
+              user: "{{ rancher_access_key }}"
+              password: "{{ rancher_secret_key }}"
+              body_format: json
+              method: POST
+              force_basic_auth: yes
+            register: kubeconfig
+
+          - name: Store kubeconfig to disk
+            ansible.builtin.copy:
+              content: "{{ kubeconfig.json.config  }}"
+              dest: "{{ kubeconfig_destination }}"
+
+          - name: Test if kubeconfig is valid
+            ansible.builtin.shell: |
+              kubectl get nodes --kubeconfig {{ kubeconfig_destination }}
+            register: cmd_result
+            retries: 20
+            delay: 30
+            until: ("NotReady" not in cmd_result.stdout)
+            when: check_kubeconfig|bool
+
+          - name: Write kubeconfig to vault using key value V2 engine
+            community.hashi_vault.vault_write:
+              auth_method: approle
+              url: "{{ vault_url }}"
+              role_id: "{{ vault_approle_id }}"
+              secret_id: "{{ vault_approle_secret }}"
+              validate_certs: false
+              path: "{{ secret_path_kubeconfig }}/data/{{ cluster_name }}"
+              data:
+                data:
+                  kubeconfig: "{{ lookup('ansible.builtin.file', kubeconfig_destination)|b64encode }}"
+            delegate_to: localhost
+            when: upload_vault|bool
+
+  - name: podman
+    play: |
+      ---
+      - hosts: "{{ target_host | default('all') }}"
+        become: true
+
+        roles:
+          - role: sthings.container.install_configure_podman
+
+  - name: docker
+    play: |
+      ---
+      - hosts: "{{ target_host | default('all') }}"
+        become: true
+        vars:
+          docker_install_compose: true
+          install_kind: false
+          # kind_version: v0.23.0 # datasource=github-tags depName=kubernetes-sigs/kind
+          # kubectl_version: v1.30.2 # datasource=github-tags depName=ko-build/ko
+
+        roles:
+          - role: sthings.container.install_configure_docker
+
+  - name: nerdctl
+    play: |
+      ---
+      - hosts: "{{ target_host | default('all') }}"
+        become: true
+        vars:
+          nerdctl_version: 1.7.6 # datasource=github-tags depName=containerd/nerdctl
+          bin:
+            nerdctl:
+              bin_name: "nerdctl"
+              bin_version: "{{ nerdctl_version }}"
+              check_bin_version_before_installing: true
+              source_url: "https://github.com/containerd/nerdctl/releases/download/v{{ nerdctl_version }}/nerdctl-full-{{ nerdctl_version }}-linux-amd64.tar.gz"
+              bin_to_copy: "."
+              bin_dir: "/usr/local"
+              to_remove: "*"
+              version_cmd: " version"
+              target_version: v{{ nerdctl_version }}
+              md5_checksum: "044b60cec5341a3cde7a091cc2f12aa7"
+
+          systemd_services:
+            - containerd
+            - buildkit
+        roles:
+          - role: sthings.container.download_install_binary
+
+        post_tasks:
+          - name: Create a directory if it does not exist
+            ansible.builtin.file:
+              path: $HOME/bin
+              state: directory
+              mode: 0700
+
+          - name: Copy nerdctl
+            ansible.builtin.copy:
+              src: "/usr/local/bin/nerdctl"
+              dest: "/usr/local/bin"
+              mode: 0755
+              remote_src: true
+              owner: root
+            become: true
+
+          - name: give root permissions to nerdctl + export path
+            ansible.builtin.shell: |
+              chmod +s /usr/local/bin/nerdctl
+              export PATH=/usr/local/bin:$PATH
+
+          - name: Put SELinux in permissive mode
+            ansible.posix.selinux:
+              policy: targeted
+              state: permissive
+            when: ansible_os_family == 'RedHat'
+
+          - name: Enable systemd services
+            ansible.builtin.systemd_service:
+              name: "{{ item }}"
+              enabled: true
+              daemon_reload: true
+              state: started
+            become: true
+            with_items:
+              - "{{ systemd_services }}"
+
+          - name: Put SELinux in enforcing mode
+            ansible.posix.selinux:
+              policy: targeted
+              state: enforcing
+            when: ansible_os_family == 'RedHat'
+
+  - name: tools
+    play: |
+      ---
+      - hosts: "{{ target_host | default('all') }}"
+        become: true
+        vars:
+          download_dir: "/tmp/downloads"
+
+        vars_files:
+          - "{{ profile | default('tools') }}.yaml"
+
+        roles:
+          - role: sthings.container.download_install_binary
+
 vars:
   - name: tools
     file: |
