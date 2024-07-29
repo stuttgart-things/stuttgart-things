@@ -320,7 +320,7 @@ templates:
         }
       }
 
-  vars:
+vars:
   - name: labul
     file: |
       ---
