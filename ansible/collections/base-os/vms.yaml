@@ -82,6 +82,111 @@ playbooks:
               complex_vars: true
               variables: "{{ tf_vars_file }}"
 
+  - name: rename_proxmox_vm
+    play: |
+      ---
+      - hosts: "{{ target_host | default('all') }}"
+        vars:
+          vault_approle_id: "{{ lookup('env', 'VAULT_ROLE_ID') }}"
+          vault_approle_secret: "{{ lookup('env', 'VAULT_SECRET_ID') }}"
+          vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
+
+          pve_cluster_url: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/pve:cluster_url validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+          pve_api_user: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/pve:api_user validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+          pve_api_password: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/pve:api_password validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+          pve_node: sthings-pve1
+
+          pve_bulk_rename_vms:
+            - current_vm_name: "{{ vmname_old }}"
+              expected_vm_name: "{{ vmname_new }}"
+              node: "{{ pve_node }}"
+
+        roles:
+          - role: sthings.base_os.manage_proxmox_resources
+
+  - name: delete_proxmox_vm
+    play: |
+      ---
+      - hosts: "{{ target_host | default('all') }}"
+        vars:
+          vault_approle_id: "{{ lookup('env', 'VAULT_ROLE_ID') }}"
+          vault_approle_secret: "{{ lookup('env', 'VAULT_SECRET_ID') }}"
+          vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
+
+          pve_cluster_url: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/pve:cluster_url validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+          pve_api_user: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/pve:api_user validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+          pve_api_password: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/pve:api_password validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+          pve_node: sthings-pve1
+
+          pve_bulk_delete_vms:
+            - name: "{{ vmname_delete }}"
+              node: "{{ pve_node }}"
+
+        roles:
+          - role: sthings.base_os.manage_proxmox_resources
+
+  - name: render_upload_vm
+    play: |
+      ---
+      - hosts: "{{ target_host | default('localhost') }}"
+        vars:
+          vault_approle_id: "{{ lookup('env', 'VAULT_ROLE_ID') }}"
+          vault_approle_secret: "{{ lookup('env', 'VAULT_SECRET_ID') }}"
+          vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
+          AWS_ACCESS_KEY_ID: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps/data/artifacts:accessKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+          AWS_SECRET_ACCESS_KEY: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps/data/artifacts:secretKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+          bucket_name: andre-vm-config
+          rendered_all: "tf-config-all.tf"
+          bucket_permission: [private]
+          path: "vars"
+          s3: "andre-dev"
+
+          #-e lab=labul -e cloud=vsphere -vv
+
+        vars_files:
+          - "{{ path | default('.') }}/{{ lab }}.yaml"
+          - "{{ path | default('.') }}/{{ cloud }}.yaml"
+          - "{{ path | default('.') }}/s3-instances.yaml"
+          - "{{ path | default('.') }}/vm-defaults.yaml"
+
+        tasks:
+          - name: Create a config file from a j2 template
+            ansible.builtin.template:
+              src: "{{ item.value.name }}.yaml"
+              dest: "{{ ansible_date_time.date }}-{{ item.value.name }}.tf"
+            loop: "{{ lookup('dict', j2_template_name, wantlist=True) }}"
+
+          - name: Concat template files
+            ansible.builtin.lineinfile:
+              create: true
+              path: "{{ rendered_all }}"
+              line: "{{ lookup('file', '{{ ansible_date_time.date }}-vm-{{ cloud }}.tf') }}\n\n{{ lookup('file', '{{ ansible_date_time.date }}-backend.tf') }}"
+
+          - name: Upload config to S3 Bucket
+            amazon.aws.s3_object:
+              bucket: "{{ bucket_name }}"
+              object: "{{ ansible_date_time.date }}-{{ vmName }}.tf"
+              src: "{{ rendered_all }}"
+              mode: put
+              access_key: "{{ AWS_ACCESS_KEY_ID }}"
+              secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+              validate_certs: false
+              encrypt: false
+              rgw: false
+              permission: "{{ bucket_permission }}"
+              endpoint_url: "{{ instances[s3]['url'] }}"
+
+          - name: Remove rendered vm config
+            ansible.builtin.file:
+              path: "{{ ansible_date_time.date }}-{{ item.value.name }}.tf"
+              state: absent
+            loop: "{{ lookup('dict', j2_template_name, wantlist=True) }}"
+
+          - name: Remove concatenated template file
+            ansible.builtin.file:
+              path: "{{ rendered_all }}"
+              state: absent
+
 templates:
   - name: vm-vsphere
     file: |
@@ -141,3 +246,223 @@ templates:
       output "ip" {
         value = [module.{{ vmName }}.ip]
       }
+
+ - name: vm-proxmox
+    file: |
+      module "{{ vmName }}" {
+        source                  = "{{ tf_module_source }}"
+        vm_count                = {{ vmCount }}
+        vm_name                 = "{{ vmName }}"
+        vm_memory               = "{{ vm_memory }}"
+        vm_num_cpus             = "{{ vm_cpu }}"
+        vm_disk_size            = "{{ vm_disk }}G"
+        vm_template             = "{{ vm_template }}"
+        pve_cluster_node        = "{{ datacenter }}"
+        pve_datastore           = "{{ vm_datastores }}"
+        pve_folder_path         = "{{ folderpath }}"
+        pve_network             = "{{ vm_network }}"
+        vm_notes                = "VSPHERE-VM {{ vmName }} {{ vm_template }} BUILD w/ TERRAFORM FOR STUTTGART-THINGS"
+        pve_api_url             = var.pve_api_url
+        pve_api_user            = var.pve_api_user
+        pve_api_password        = var.pve_api_password
+        vm_ssh_user             = var.vm_ssh_user
+        vm_ssh_password         = var.vm_ssh_password
+      }
+
+      output "ip" {
+        value     = module.{{ vmName }}.ip
+      }
+
+      variable "pve_api_url" {
+        type        = string
+        description = "url of proxmox api. Example: https://server-example.sva.de:8006/api2/json"
+      }
+
+      variable "pve_api_user" {
+        type        = string
+        description = "username of proxmox api user"
+      }
+
+      variable "pve_api_password" {
+        type        = string
+        description = "password of proxmox api user"
+      }
+
+      variable "vm_ssh_user" {
+        type        = string
+        description = "desired username for ssh connection"
+      }
+
+      variable "vm_ssh_password" {
+        type        = string
+        description = "desired password for ssh connection"
+      }
+
+  - name: backend
+    file: |
+      terraform {
+        backend "s3" {
+
+          endpoints = {
+            s3 = "{{ backend_host_url }}"
+          }
+
+          skip_requesting_account_id = true
+          skip_s3_checksum = true
+          key = "{{ vmName }}.tfstate"
+          bucket = "{{ bucket_name }}"
+          region = "main"
+          skip_credentials_validation = true
+          skip_metadata_api_check = true
+          skip_region_validation = true
+          force_path_style = true
+          workspace_key_prefix = "{{ vmName }}"
+        }
+      }
+
+  vars:
+  - name: labul
+    file: |
+      ---
+      lab_values:
+        vsphere:
+          template:
+            ubuntu22: "sthings-u22"
+            ubuntu24: "sthings-u24"
+            rocky9: "sthings-r9"
+          datastore:
+            - "/LabUL/datastore/UL-ESX-SAS-01"
+            - "/LabUL/datastore/UL-ESX-SAS-02"
+            - "/LabUL/datastore/UL-V5010-01-LUN1"
+            - "/LabUL/datastore/UL-V5010-01-LUN2"
+            - "/LabUL/datastore/UL-V5010-01-LUN3"
+          network:
+            - "/LabUL/network/MGMT-10.31.101"
+            - "/LabUL/network/LAB-10.31.102"
+            - "/LabUL/network/LAB-10.31.103"
+            - "/LabUL/network/LAB-10.31.104"
+          subfolderpath: "testing"
+          bucket_name: "andre-vm-config"
+        proxmox:
+          template:
+            ubuntu22: "ubuntu22"
+            ubuntu24: "ubuntu24"
+            rocky9: "rocky9"
+          datastore:
+            - "v3700"
+            - "datastore"
+          network:
+            - "vmbr101"
+            - "vmbr102"
+            - "vmbr103"
+            - "vmbr104"
+          subfolderpath: "stuttgart-things"
+          bucket_name: "andre-vm-config"
+
+  - name: vm-defaults
+    file: |
+      ---
+      vm_size:
+        cpu:
+          S: 2
+          M: 4
+          L: 6
+          XL: 8
+        memory:
+          S: 4096
+          M: 6144
+          L: 8192
+          XL: 12288
+        disk:
+          S: 32
+          M: 64
+          L: 96
+          XL: 128
+
+      j2_template_name:
+        backend:
+          name: "backend"
+        main:
+          name: "vm-{{ cloud }}"
+
+      object_name: "{{ ansible_date_time.date }}-{{ vmName }}.tf"
+
+      vmName: "test-{{ lookup('community.general.random_string', length=5, special=false) | lower }}"
+      vmCount: "1"
+      vmSize: "S"
+      vmTemplate: ubuntu24
+      vmFirmware: "bios"
+      rootFolderpath: "stuttgart-things"
+      resourcePool: "/LabUL/host/Cluster-V6.5/Resources"
+      backend_host_url: "https://artifacts.app1.sthings-vsphere.labul.sva.de"
+      s3region: "main"
+
+  - name: vsphere
+    file: |
+      ---
+      vm_cpu: "{{ vm_size['cpu'][vmSize] }}"
+      vm_memory: "{{ vm_size['memory'][vmSize] }}"
+      vm_disk: "{{ vm_size['disk'][vmSize] }}"
+      vm_template: "{{ lab_values[cloud]['template'][vmTemplate] }}"
+      vm_datastores: "{{ lab_values[cloud]['datastore'] | random }}"
+      vm_network: "{{ lab_values[cloud]['network'] | random }}"
+      folderpath: "{{ lab_values[cloud]['subfolderpath'] }}"
+      datacenter: "/LabUL"
+      tf_module_source: "github.com/stuttgart-things/vsphere-vm?ref=v1.7.5-2.7.0-1"
+
+  - name: proxmox
+    file: |
+      ---
+      vm_cpu: "{{ vm_size['cpu'][vmSize] }}"
+      vm_memory: "{{ vm_size['memory'][vmSize] }}"
+      vm_disk: "{{ vm_size['disk'][vmSize] }}"
+      vm_template: "{{ lab_values[cloud]['template'][vmTemplate] }}"
+      vm_datastores: "{{ lab_values[cloud]['datastore'] | random }}"
+      vm_network: "{{ lab_values[cloud]['network'] | random }}"
+      folderpath: "{{ lab_values[cloud]['subfolderpath'] }}"
+      tf_module_source: "github.com/stuttgart-things/proxmox-vm.git?ref=v2.9.14-1.5.5"
+      datacenter: "sthings-pve1"
+
+  - name: tf-vars-vsphere
+    file: |
+      ---
+      tf_vars:
+        vsphere_server: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/vsphere:ip validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+        vsphere_user: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/vsphere:username validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+        vsphere_password: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/vsphere:password validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+        vm_ssh_user: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/vsphere:vm_ssh_user validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+        vm_ssh_password: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/vsphere:vm_ssh_password validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+
+  - name: tf-vars-proxmox
+    file: |
+      ---
+      tf_vars:
+        pve_api_url: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/pve:api_url validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+        pve_api_user: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/pve:api_user validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+        pve_api_password: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/pve:api_password validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+        vm_ssh_user: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/pve:ssh_user validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+        vm_ssh_password: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/pve:ssh_password validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+
+  - name: terraform-vars
+    file: |
+      ---
+      tf_project_path: "./terraform"
+      state: "present"
+      rendered_all: "tf-config-all.tf"
+      AWS_ACCESS_KEY_ID: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps/data/artifacts:accessKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+      AWS_SECRET_ACCESS_KEY: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps/data/artifacts:secretKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+      force_init: true
+      init_reconfigure: true
+
+  - name: s3-instances
+    file: |
+      ---
+      instances:
+        labul-automation:
+          url: https://artifacts.automation.sthings-vsphere.labul.sva.de:443
+          username: apps/data/artifacts:accessKey
+          password: apps/data/artifacts:secretKey
+        andre-dev:
+          url: https://artifacts.andre-dev.sthings-vsphere.labul.sva.de:443
+          username: apps/data/artifacts:accessKey
+          password: apps/data/artifacts:secretKey
