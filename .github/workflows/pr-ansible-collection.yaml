@@ -76,7 +76,7 @@ jobs:
       runs-on: ghr-stuttgart-things-labul-automation
       environment-name: labul-vsphere #k8s
       continue-error: false
-      collection-file: ansible/collections/${{ matrix.collection-file }}.yaml
+      collection-file: ansible/collections/${{ matrix.collection-file }} #.yaml
       s3-instance-profiles: ansible/s3-instances.yaml
       requirements-file: ansible/requirements-dev.yaml
     secrets: inherit
