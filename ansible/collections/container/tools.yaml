@@ -1,5 +1,5 @@
 ---
-playbookss:
+playbooks:
   - name: tools
     play: |
       ---
@@ -14,7 +14,6 @@ playbookss:
         roles:
           - role: sthings.container.download_install_binary
 
-playbooks:
   - name: rancher_kubeconfig
     play: |
       ---
