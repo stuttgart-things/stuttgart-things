@@ -17,7 +17,7 @@ on:
         default: false
         required: true
         type: boolean
-      collection-file:
+      collection-directory:
         required: true
         type: string
       s3-instance-profiles:
