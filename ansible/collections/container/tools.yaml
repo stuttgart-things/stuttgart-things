@@ -13,3 +13,120 @@ playbookss:
 
         roles:
           - role: sthings.container.download_install_binary
+
+vars:
+  - name: tools
+    file: |
+      ---
+      kind_version: v0.23.0 # datasource=github-tags depName=kubernetes-sigs/kind
+      skopeo_version: 1.14.4 # datasource=github-tags depName=lework/skopeo-binary
+      helm_version: v3.15.2 # datasource=github-tags depName=helm/helm
+      kubectl_version: v1.30.2 # datasource=github-tags depName=ko-build/ko
+      k9s_version: v0.32.5 # datasource=github-tags depName=kubernetes/kubectl
+      velero_version: v1.14.0 # datasource=github-tags depName=vmware-tanzu/velero
+      kubectl_slice_version: v1.3.1 # datasource=github-tags depName=patrickdappollonio/kubectl-slice
+      helmfile_version: 0.166.0 # datasource=github-tags depName=helmfile/helmfile
+      argocd_version: 2.11.4 # datasource=github-tags depName=argoproj/argo-cd
+      flux_version: 2.3.0 # datasource=github-tags depName=fluxcd/flux2
+
+      bin:
+        flux:
+          bin_name: flux
+          bin_version: "{{ flux_version }}"
+          check_bin_version_before_installing: true
+          source_url: "https://github.com/fluxcd/flux2/releases/download/v{{ flux_version }}/flux_{{ flux_version }}_linux_amd64.tar.gz"
+          bin_to_copy: flux
+          to_remove: ""
+          bin_dir: "/usr/bin/flux"
+          version_cmd: "version"
+          target_version: "{{ flux_version }}"
+        argocd:
+          bin_name: argocd
+          bin_version: "{{ argocd_version }}"
+          check_bin_version_before_installing: true
+          source_url: "https://github.com/argoproj/argo-cd/releases/download/v{{ argocd_version }}/argocd-linux-amd64"
+          bin_to_copy: argocd-linux-amd64
+          to_remove: ""
+          bin_dir: "/usr/bin/argocd"
+          version_cmd: "version"
+          target_version: "{{ argocd_version }}"
+        kind:
+          bin_name: kind
+          bin_version: "{{ kind_version }}"
+          check_bin_version_before_installing: true
+          source_url: "https://github.com/kubernetes-sigs/kind/releases/download/{{ kind_version }}/kind-linux-amd64"
+          bin_to_copy: kind-linux-amd64
+          to_remove: ""
+          bin_dir: "/usr/bin/kind"
+          version_cmd: "version"
+          target_version: "{{ kind_version }}"
+        skopeo:
+          bin_name: skopeo
+          bin_version: "v{{ skopeo_version }}"
+          check_bin_version_before_installing: true
+          source_url: "https://github.com/lework/skopeo-binary/releases/download/v{{ skopeo_version }}/skopeo-linux-amd64"
+          bin_to_copy: skopeo-linux-amd64
+          to_remove: ""
+          bin_dir: "/usr/bin/skopeo"
+          version_cmd: "version"
+          target_version: "v{{ skopeo_version }}"
+        helm:
+          bin_name: "helm"
+          bin_version: "{{ helm_version }}"
+          check_bin_version_before_installing: true
+          source_url: "https://get.helm.sh/helm-{{ helm_version }}-linux-amd64.tar.gz"
+          bin_to_copy: "linux-amd64/helm"
+          to_remove: "linux-amd64"
+          bin_dir: "/usr/local/bin"
+          version_cmd: " version"
+          target_version: "{{ helm_version }}"
+        kubectl:
+          bin_name: "kubectl"
+          bin_version: "{{ kubectl_version }}"
+          check_bin_version_before_installing: true
+          source_url: "https://dl.k8s.io/{{ kubectl_version }}/bin/linux/amd64/kubectl"
+          bin_to_copy: "kubectl"
+          to_remove: "kubectl"
+          bin_dir: "/usr/local/bin"
+          version_cmd: " version --client"
+          target_version: "{{ kubectl_version }}"
+        k9s:
+          bin_name: "k9s"
+          bin_version: "{{ k9s_version }}"
+          check_bin_version_before_installing: true
+          source_url: "https://github.com/derailed/k9s/releases/download/{{ k9s_version }}/k9s_Linux_amd64.tar.gz"
+          bin_to_copy: "k9s"
+          to_remove: "k9s"
+          bin_dir: "/usr/local/bin"
+          version_cmd: " version --short"
+          target_version: "{{ k9s_version }}"
+        velero:
+          bin_name: velero
+          bin_version: "{{ velero_version }}"
+          check_bin_version_before_installing: true
+          source_url: "https://github.com/vmware-tanzu/velero/releases/download/{{ velero_version }}/velero-{{ velero_version }}-linux-amd64.tar.gz"
+          bin_to_copy: "velero-{{ velero_version }}-linux-amd64/velero"
+          to_remove: "velero-{{ velero_version }}-linux-amd64"
+          bin_dir: "/usr/local/bin"
+          version_cmd: " version --client-only"
+          target_version: "{{ velero_version }}"
+        kubectl_slice:
+          bin_name: kubectl-slice
+          bin_version: "{{ kubectl_slice_version }}"
+          check_bin_version_before_installing: true
+          source_url: "https://github.com/patrickdappollonio/kubectl-slice/releases/download/{{ kubectl_slice_version }}/kubectl-slice_linux_x86_64.tar.gz"
+          bin_to_copy: kubectl-slice
+          to_remove: kubectl-slice
+          bin_dir: "/usr/bin"
+          version_cmd: " --version"
+          target_version: "{{ kubectl_slice_version }}"
+        helmfile:
+          bin_name: helmfile
+          bin_version: "v{{ helmfile_version }}"
+          check_bin_version_before_installing: true
+          source_url: "https://github.com/helmfile/helmfile/releases/download/v{{ helmfile_version }}/helmfile_{{ helmfile_version }}_linux_amd64.tar.gz"
+          bin_to_copy: helmfile
+          to_remove: helmfile
+          bin_dir: "/usr/bin"
+          version_cmd: " --version"
+          target_version: "v{{ helmfile_version }}"
