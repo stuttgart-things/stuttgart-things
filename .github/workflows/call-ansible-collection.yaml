@@ -186,22 +186,29 @@ jobs:
           vars_dir=${{ env.COLLECTION_DIR }}/playbooks/vars
           mkdir -p ${vars_dir}
 
-          # GET COUNT OF ALL KEYS OF SUBKEY VARS
-          count_vars_files=$(yq '.vars | keys' ${{ env.COLLECTION_FILEPATH }} | wc -l)
-          echo FOUND $count_vars_files VARS FILES FOR THIS COLLECTION
+          directory="source/${{ inputs.collection-file }}"
 
-          COUNTER=0
-          while [ $COUNTER != $count_vars_files ]; do
-             echo PROCESS VARS FILE: $COUNTER
+          for file in "$directory"/*.yaml "$directory"/*.yaml; do
+            if [ -f "$file" ]; then
 
-             # GET VARS FILE NAME AND CONTENT
-             yq ".vars[$COUNTER].name" ${{ env.COLLECTION_FILEPATH }}
-             filename=$(yq ".vars[$COUNTER].name" ${{ env.COLLECTION_FILEPATH }})
-             vars_file_content=$(yq ".vars[$COUNTER].file" ${{ env.COLLECTION_FILEPATH }})
+              # GET COUNT OF ALL KEYS OF SUBKEY VARS
+              count_vars_files=$(yq '.vars | keys' ${{ env.COLLECTION_FILEPATH }} | wc -l)
+              echo FOUND $count_vars_files VARS FILES FOR THIS COLLECTION
 
-             # CREATE VARS FILE ON FS
-             echo "$vars_file_content" > "${vars_dir}/${filename}.yaml"
-             let COUNTER=COUNTER+1
+              COUNTER=0
+              while [ $COUNTER != $count_vars_files ]; do
+                echo PROCESS VARS FILE: $COUNTER
+
+                # GET VARS FILE NAME AND CONTENT
+                yq ".vars[$COUNTER].name" ${{ env.COLLECTION_FILEPATH }}
+                filename=$(yq ".vars[$COUNTER].name" ${{ env.COLLECTION_FILEPATH }})
+                vars_file_content=$(yq ".vars[$COUNTER].file" ${{ env.COLLECTION_FILEPATH }})
+
+                # CREATE VARS FILE ON FS
+                echo "$vars_file_content" > "${vars_dir}/${filename}.yaml"
+                let COUNTER=COUNTER+1
+              done
+            fi
           done
 
           # LIST CREATED VARS FILES
