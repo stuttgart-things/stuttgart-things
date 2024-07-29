@@ -89,16 +89,6 @@ vars:
           bin_dir: "/usr/bin/yq"
           version_cmd: " version"
           target_version: "v{{ yq_version }}"
-        machineshop:
-          bin_name: machineshop
-          bin_version: "{{ machineshop_version }}"
-          check_bin_version_before_installing: true
-          source_url: https://github.com/stuttgart-things/machineshop/releases/download/{{ machineshop_version }}/machineshop_Linux_x86_64.tar.gz
-          bin_to_copy: machineshop
-          to_remove: ""
-          bin_dir: "/usr/bin"
-          version_cmd: " version"
-          target_version: "{{ machineshop_version }}"
         jq:
           bin_name: jq
           bin_version: "v{{ jq_version }}"
@@ -109,3 +99,13 @@ vars:
           bin_dir: "/usr/bin/jq"
           version_cmd: " version"
           target_version: "v{{ jq_version }}"
+        machineshop:
+          bin_name: machineshop
+          bin_version: "{{ machineshop_version }}"
+          check_bin_version_before_installing: true
+          source_url: https://github.com/stuttgart-things/machineshop/releases/download/{{ machineshop_version }}/machineshop_Linux_x86_64.tar.gz
+          bin_to_copy: machineshop
+          to_remove: ""
+          bin_dir: "/usr/bin"
+          version_cmd: " version"
+          target_version: "{{ machineshop_version }}"
