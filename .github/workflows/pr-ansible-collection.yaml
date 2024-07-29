@@ -58,7 +58,7 @@ jobs:
 
           # SET COLLECTIONS AS JSON
           collections=$(echo "\"${changed_collections}\"" | sed 's/,/", "/g')
-          JSON_COLLECTIONS='{ "collection-file": ['"${collections}"'] }'
+          JSON_COLLECTIONS='{ "collection-directory": ['"${collections}"'] }'
           echo $JSON_COLLECTIONS
           echo "collections=$JSON_COLLECTIONS" >> "$GITHUB_OUTPUT"
         shell: bash
@@ -70,13 +70,13 @@ jobs:
       fail-fast: false
       matrix: ${{ fromJson(needs.Get-Changed-Collectionfiles.outputs.collections) }}
       # matrix:
-      #   collection-file: [base-os, container, awx]
+      #   collection-directory: [base-os, container, awx]
     uses: stuttgart-things/stuttgart-things/.github/workflows/call-ansible-collection.yaml@main
     with:
       runs-on: ghr-stuttgart-things-labul-automation
       environment-name: labul-vsphere #k8s
       continue-error: false
-      collection-file: ansible/collections/${{ matrix.collection-file }} #.yaml
+      collection-directory: ansible/collections/${{ matrix.collection-directory }} #.yaml
       s3-instance-profiles: ansible/s3-instances.yaml
       requirements-file: ansible/requirements-dev.yaml
     secrets: inherit

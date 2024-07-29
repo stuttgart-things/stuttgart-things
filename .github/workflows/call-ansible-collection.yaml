@@ -56,36 +56,36 @@ jobs:
         id: init
         run: |
           echo 'READ COLLECTION FILE'
-          cat source/${{ inputs.collection-file }}/collection.yaml
-          yq -r ".requirements" source/${{ inputs.collection-file }}/collection.yaml > ./roles.yaml
+          cat source/${{ inputs.collection-directory }}/collection.yaml
+          yq -r ".requirements" source/${{ inputs.collection-directory }}/collection.yaml > ./roles.yaml
 
           echo 'INIT COLLECTION'
-          ansible-galaxy collection init $(yq -r ".namespace" source/${{ inputs.collection-file }}/collection.yaml).$(yq -r ".name" source/${{ inputs.collection-file }}/collection.yaml)
+          ansible-galaxy collection init $(yq -r ".namespace" source/${{ inputs.collection-directory }}/collection.yaml).$(yq -r ".name" source/${{ inputs.collection-directory }}/collection.yaml)
 
           # SET WORKING DIRS AS ENV-VARS
-          echo "COLLECTION_NAME=$(yq -r ".name" source/${{ inputs.collection-file }}/collection.yaml)" >> $GITHUB_ENV
-          echo "COLLECTION_NAMESPACE=$(yq -r ".namespace" source/${{ inputs.collection-file }}/collection.yaml)" >> $GITHUB_ENV
-          echo "COLLECTION_FILEPATH=source/${{ inputs.collection-file }}/collection.yaml" >> $GITHUB_ENV
-          echo "COLLECTION_ROLES_DIR=$GITHUB_WORKSPACE/$(yq -r ".namespace" source/${{ inputs.collection-file }}/collection.yaml)/$(yq -r ".name" source/${{ inputs.collection-file }}/collection.yaml)/roles" >> $GITHUB_ENV
-          echo "COLLECTION_DIR=$GITHUB_WORKSPACE/$(yq -r ".namespace" source/${{ inputs.collection-file }}/collection.yaml)/$(yq -r ".name" source/${{ inputs.collection-file }}/collection.yaml)" >> $GITHUB_ENV
+          echo "COLLECTION_NAME=$(yq -r ".name" source/${{ inputs.collection-directory }}/collection.yaml)" >> $GITHUB_ENV
+          echo "COLLECTION_NAMESPACE=$(yq -r ".namespace" source/${{ inputs.collection-directory }}/collection.yaml)" >> $GITHUB_ENV
+          echo "COLLECTION_FILEPATH=source/${{ inputs.collection-directory }}/collection.yaml" >> $GITHUB_ENV
+          echo "COLLECTION_ROLES_DIR=$GITHUB_WORKSPACE/$(yq -r ".namespace" source/${{ inputs.collection-directory }}/collection.yaml)/$(yq -r ".name" source/${{ inputs.collection-directory }}/collection.yaml)/roles" >> $GITHUB_ENV
+          echo "COLLECTION_DIR=$GITHUB_WORKSPACE/$(yq -r ".namespace" source/${{ inputs.collection-directory }}/collection.yaml)/$(yq -r ".name" source/${{ inputs.collection-directory }}/collection.yaml)" >> $GITHUB_ENV
           echo "BRANCH=${{ github.head_ref || github.ref_name }}" >> $GITHUB_ENV
 
           UPDATED_TAG=`date "+%y.%d%M.%S"` #DEV TAG
-          #echo "COLLECTION_VERSION=$(yq -r ".version" source/${{ inputs.collection-file }}/collection.yaml)" >> $GITHUB_ENV
+          #echo "COLLECTION_VERSION=$(yq -r ".version" source/${{ inputs.collection-directory }}/collection.yaml)" >> $GITHUB_ENV
           echo "COLLECTION_VERSION=$(echo ${UPDATED_TAG} | sed 's/\0//g')" >> $GITHUB_ENV
 
       - name: Install roles into collection
         id: roles
         run: |
-          if [ "$(yq -r ".requirements" source/${{ inputs.collection-file }}/collection.yaml)" = "null" ]; then
+          if [ "$(yq -r ".requirements" source/${{ inputs.collection-directory }}/collection.yaml)" = "null" ]; then
             echo 'NO ROLES FOUND IN COLLECTION FILE'
             echo "ROLES_INCLUDED=FALSE" >> $GITHUB_ENV
 
           else
             echo 'INSTALL ROLES INTO COLLECTION'
-            yq -r ".requirements" source/${{ inputs.collection-file }}/collection.yaml > ./roles.yaml
+            yq -r ".requirements" source/${{ inputs.collection-directory }}/collection.yaml > ./roles.yaml
             ansible-galaxy install -r ./roles.yaml -p ${{ env.COLLECTION_ROLES_DIR }}
-            echo "COLLECTION_FILEPATH=source/${{ inputs.collection-file }}/collection.yaml" >> $GITHUB_ENV
+            echo "COLLECTION_FILEPATH=source/${{ inputs.collection-directory }}/collection.yaml" >> $GITHUB_ENV
             echo "ROLES_INCLUDED=TRUE" >> $GITHUB_ENV
 
           fi
@@ -152,7 +152,7 @@ jobs:
           play_dir=${{ env.COLLECTION_DIR }}/playbooks
           mkdir -p ${play_dir}
 
-          directory="source/${{ inputs.collection-file }}"
+          directory="source/${{ inputs.collection-directory }}"
 
           for file in "$directory"/*.yaml "$directory"/*.yaml; do
             if [ -f "$file" ]; then
@@ -186,7 +186,7 @@ jobs:
           vars_dir=${{ env.COLLECTION_DIR }}/playbooks/vars
           mkdir -p ${vars_dir}
 
-          directory="source/${{ inputs.collection-file }}"
+          directory="source/${{ inputs.collection-directory }}"
 
           for file in "$directory"/*.yaml "$directory"/*.yaml; do
             if [ -f "$file" ]; then
@@ -220,7 +220,7 @@ jobs:
           templates_dir=${{ env.COLLECTION_DIR }}/playbooks/templates
           mkdir -p ${templates_dir}
 
-          directory="source/${{ inputs.collection-file }}"
+          directory="source/${{ inputs.collection-directory }}"
 
           for file in "$directory"/*.yaml "$directory"/*.yaml; do
             if [ -f "$file" ]; then
@@ -254,7 +254,7 @@ jobs:
           modules_dir=${{ env.COLLECTION_DIR }}/plugins/modules
           mkdir -p ${modules_dir}
 
-          directory="source/${{ inputs.collection-file }}"
+          directory="source/${{ inputs.collection-directory }}"
 
           for file in "$directory"/*.yaml "$directory"/*.yaml; do
             if [ -f "$file" ]; then
@@ -330,7 +330,7 @@ jobs:
       - name: Update requirements file
         id: update
         run: |
-          COLLECTION_NAME=$(yq -r ".name" source/${{ inputs.collection-file }}/collection.yaml)
+          COLLECTION_NAME=$(yq -r ".name" source/${{ inputs.collection-directory }}/collection.yaml)
           requirements_file="source/${{ inputs.requirements-file }}"
 
           UPDATED_TAG=`date "+%y%m%d.%H%M.%S"` # DEV TAG
