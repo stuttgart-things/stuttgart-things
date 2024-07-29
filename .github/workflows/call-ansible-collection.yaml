@@ -52,21 +52,12 @@ jobs:
           path: source
           fetch-depth: '0'
 
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v44
-        with:
-          since_last_remote_commit: true
-          path: source
-          files: |
-            ansible/collections/**.yaml
-
       - name: Init collection
         id: init
         run: |
           echo 'READ COLLECTION FILE'
-          cat source/${{ inputs.collection-file }}
-          yq -r ".requirements" source/${{ inputs.collection-file }} > ./roles.yaml
+          cat source/${{ inputs.collection-file }}/collection.yaml
+          yq -r ".requirements" source/${{ inputs.collection-file }}/collection.yaml > ./roles.yaml
 
           echo 'INIT COLLECTION'
           ansible-galaxy collection init $(yq -r ".namespace" source/${{ inputs.collection-file }}).$(yq -r ".name" source/${{ inputs.collection-file }})
