@@ -1,1 +1,143 @@
 ---
+playbooks:
+  - name: get_execute_terraform
+    play: |
+      ---
+      - hosts: "{{ target_host | default('localhost') }}"
+        vars:
+          vault_approle_id: "{{ lookup('env', 'VAULT_ROLE_ID') }}"
+          vault_approle_secret: "{{ lookup('env', 'VAULT_SECRET_ID') }}"
+          vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
+          state: "present"
+          cloud: "vsphere"
+          tf_vars_file: "{{ tf_vars }}"
+          bucket_permission: [private]
+          path: "vars"
+          install_terraform: "true"
+          s3: "andre-dev"
+          terraform_version: 1.9.1 # datasource=custom.hashicorp
+
+          bin:
+            terraform:
+              bin_name: "terraform"
+              bin_version: "{{ terraform_version }}"
+              check_bin_version_before_installing: true
+              source_url: "https://releases.hashicorp.com/terraform/{{ terraform_version }}/terraform_{{ terraform_version }}_linux_amd64.zip"
+              bin_to_copy: "terraform"
+              to_remove: "terraform"
+              bin_dir: "/usr/local/bin"
+              version_cmd: " --version"
+              target_version: "{{ terraform_version }}"
+
+        vars_files:
+          - "{{ path | default('.') }}/terraform-vars.yaml"
+          - "{{ path | default('.') }}/s3-instances.yaml"
+          - "{{ path | default('.') }}/tf-vars-{{ cloud }}.yaml"
+
+        environment:
+          AWS_ACCESS_KEY_ID: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps/data/artifacts:accessKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+          AWS_SECRET_ACCESS_KEY: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps/data/artifacts:secretKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+
+        pre_tasks:
+          - name: call role and install terraform
+            ansible.builtin.include_role:
+              name: sthings.base_os.download_install_binary
+              apply:
+                become: true
+            when: install_terraform|bool and state == "present"
+
+        tasks:
+          - name: Create terraform dir
+            ansible.builtin.file:
+              path: "{{ tf_project_path }}"
+              state: directory
+              mode: '1777'
+
+          - name: Create vmName dir
+            ansible.builtin.file:
+              path: "{{ tf_project_path }}/{{ vmName }}"
+              state: directory
+              mode: '1777'
+
+          - name: Get rendered vm config file of s3 bucket
+            amazon.aws.s3_object:
+              bucket: "{{ bucket_name }}"
+              object: "{{ ansible_date_time.date }}-{{ vmName }}.tf"
+              dest: "{{ tf_project_path }}/{{ vmName }}/{{ rendered_all }}"
+              mode: get
+              access_key: "{{ AWS_ACCESS_KEY_ID }}"
+              secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+              validate_certs: false
+              encrypt: false
+              rgw: false
+              permission: "{{ bucket_permission }}"
+              endpoint_url: "{{ instances[s3]['url'] }}"
+
+          - name: Init and apply terraform
+            community.general.terraform:
+              project_path: "{{ tf_project_path }}/{{ vmName }}"
+              state: "{{ state }}"
+              force_init: "{{ force_init }}"
+              init_reconfigure: "{{ init_reconfigure }}"
+              complex_vars: true
+              variables: "{{ tf_vars_file }}"
+
+templates:
+  - name: vm-vsphere
+    file: |
+      module {{ vmName }} {
+        source                 = "{{ tf_module_source }}"
+        vm_count               = {{ vmCount }}
+        vsphere_vm_name        = "{{ vmName }}"
+        vm_memory              = {{ vm_memory }}
+        vsphere_vm_template    = "{{ vm_template }}"
+        vm_disk_size           = "{{ vm_disk }}"
+        vm_num_cpus            = {{ vm_cpu }}
+        firmware               = "{{ vmFirmware }}"
+        vsphere_vm_folder_path = "{{ rootFolderpath }}/{{ folderpath }}"
+        vsphere_datacenter     = "{{ datacenter }}"
+        vsphere_datastore      = "{{ vm_datastores }}"
+        vsphere_resource_pool  = "{{ resourcePool }}"
+        vsphere_network        = "{{ vm_network }}"
+        bootstrap              = ["echo STUTTGART-THINGS"]
+        annotation             = "VSPHERE-VM {{ vmName }} {{ vmTemplate }} BUILD w/ TERRAFORM FOR STUTTGART-THINGS"
+        vsphere_server         = var.vsphere_server
+        vsphere_user           = var.vsphere_user
+        vsphere_password       = var.vsphere_password
+        vm_ssh_user            = var.vm_ssh_user
+        vm_ssh_password        = var.vm_ssh_password
+      }
+
+      variable "vsphere_server" {
+        default     = false
+        type        = string
+        description = "name of vsphere vm server"
+      }
+
+      variable "vm_ssh_user" {
+        default     = false
+        type        = string
+        description = "username of ssh user for vm"
+      }
+
+      variable "vm_ssh_password" {
+        default     = false
+        type        = string
+        description = "password of ssh user"
+        }
+
+      variable "vsphere_user" {
+        default     = false
+        type        = string
+        description = "password of vsphere user"
+      }
+
+      variable "vsphere_password" {
+        default     = false
+        type        = string
+        description = "password of vsphere user"
+      }
+
+      output "ip" {
+        value = [module.{{ vmName }}.ip]
+      }
