@@ -1,0 +1,45 @@
+---
+playbooks:
+  - name: docker
+      play: |
+        ---
+        - hosts: "{{ target_host | default('localhost') }}"
+
+          vars_files:
+            - "{{ path | default('.') }}/awx-local-env.yaml"
+            - "{{ path | default('.') }}/organization-sthings.yaml"
+            - "{{ path | default('.') }}/scm-creds-sthings.yaml"
+            - "{{ path | default('.') }}/projects-sthings.yaml"
+            - "{{ path | default('.') }}/machine-creds-sthings.yaml"
+            - "{{ path | default('.') }}/custom-credentials.yaml"
+            - "{{ path | default('.') }}/custom-credential-type.yaml"
+            - "{{ path | default('.') }}/dynamic-inventory-vsphere.yaml"
+            - "{{ path | default('.') }}/inventory-source.yaml"
+            - "{{ path | default('.') }}/ee-sthings.yaml"
+            - "{{ path | default('.') }}/job-docker.yaml"
+
+          tasks:
+            - ansible.builtin.import_tasks: check_connection.yaml
+            - ansible.builtin.import_tasks: creation_tasks.yaml
+
+    - name: nerdctl
+      play: |
+        ---
+        - hosts: "{{ target_host | default('localhost') }}"
+
+          vars_files:
+            - "{{ path | default('.') }}/awx-local-env.yaml"
+            - "{{ path | default('.') }}/organization-sthings.yaml"
+            - "{{ path | default('.') }}/scm-creds-sthings.yaml"
+            - "{{ path | default('.') }}/projects-sthings.yaml"
+            - "{{ path | default('.') }}/machine-creds-sthings.yaml"
+            - "{{ path | default('.') }}/custom-credentials.yaml"
+            - "{{ path | default('.') }}/custom-credential-type.yaml"
+            - "{{ path | default('.') }}/dynamic-inventory-vsphere.yaml"
+            - "{{ path | default('.') }}/inventory-source.yaml"
+            - "{{ path | default('.') }}/ee-sthings.yaml"
+            - "{{ path | default('.') }}/job-nerdctl.yaml"
+
+          tasks:
+            - ansible.builtin.import_tasks: check_connection.yaml
+            - ansible.builtin.import_tasks: creation_tasks.yaml
