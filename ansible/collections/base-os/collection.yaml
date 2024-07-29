@@ -1,6 +1,6 @@
 ---
-name: base_os
 namespace: sthings
+name: base_os
 requirements: |
   roles:
     - src: https://github.com/stuttgart-things/download-install-binary.git
