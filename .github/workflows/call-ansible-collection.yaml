@@ -309,7 +309,7 @@ jobs:
       - name: Update requirements file
         id: update
         run: |
-          COLLECTION_NAME=$(yq -r ".name" source/${{ inputs.collection-file }})
+          COLLECTION_NAME=$(yq -r ".name" source/${{ inputs.collection-file }}/collection.yaml)
           requirements_file="source/${{ inputs.requirements-file }}"
 
           UPDATED_TAG=`date "+%y%m%d.%H%M.%S"` # DEV TAG
