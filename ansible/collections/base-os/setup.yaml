@@ -1,0 +1,153 @@
+---
+playbooks:
+  - name: setup
+    play: |
+      ---
+      - hosts: "{{ target_host | default('all') }}"
+        become: true
+        gather_facts: true
+
+        vars:
+          manage_filesystem: true
+          update_packages: true
+          install_requirements: true
+          install_motd: true
+          reboot_all: false
+          username: sthings
+          lvm_home_sizing: "15%"
+          lvm_root_sizing: "35%"
+          lvm_var_sizing: "50%"
+          send_to_msteams: true
+          msteams_webhook_url: "https://365sva.webhook.office.com/webhookb2/2f14a9f8-4736-46dd-9c8c-31547ec37180@0a65cb1e-37d5-41ff-980a-647d9d0e4f0b/IncomingWebhook/37a805a0a2624dc2ac1aedd7dec6ad49/dc3a27ed-396c-40b7-a9b2-f1a2b6b44efe"
+          vault_instances:
+            - https://vault.tiab.labda.sva.de:8200
+            - https://vault.labul.sva.de:8200
+            - https://vault-vsphere.labul.sva.de:8200
+            - https://vault-pve.labul.sva.de:8200
+            - https://vault-vsphere.tiab.labda.sva.de:8200
+          python_modules:
+            - name: boto3
+              version: 1.34.119
+
+        roles:
+          - role: sthings.base_os.manage_filesystem
+            when: manage_filesystem|bool
+
+          - role: sthings.base_os.install_requirements
+            when: install_requirements|bool
+
+        pre_tasks:
+          - name: Include vars
+            ansible.builtin.include_vars: "{{ path_to_vars_file }}.yaml"
+            when: path_to_vars_file is defined
+
+          - ansible.builtin.reboot:
+            when: reboot_all|bool
+
+        tasks:
+          - name: Install vault ca certificate to local system from multiple instances
+            ansible.builtin.include_role:
+              name: sthings.base_os.install_configure_vault
+              tasks_from: install-ca-auth
+            vars:
+              vault_url: "{{ vault_instance }}"
+            loop: "{{ vault_instances }}"
+            loop_control:
+              loop_var: vault_instance
+            when: vault_instances is defined
+
+          - name: Send webhook to msteams
+            ansible.builtin.include_role:
+              name: sthings.base_os.create_send_webhook
+            vars:
+              summary_text: base-os-setup was executed
+              msteams_url: "https://365sva.webhook.office.com/webhookb2/2f14a9f8-4736-46dd-9c8c-31547ec37180@0a65cb1e-37d5-41ff-980a-647d9d0e4f0b/IncomingWebhook/37a805a0a2624dc2ac1aedd7dec6ad49/dc3a27ed-396c-40b7-a9b2-f1a2b6b44efe"
+              card_title: base-os-setup was executed
+              act_image: "{{ logo_pic }}"
+              act_title: "{{ quotes | random }}"
+              act_text: "{{ quotes | random }}"
+              os_facts: |
+                base-os-setup was executed on "{{ ansible_fqdn }}"
+              ms_teams_notification_type: "simple"
+            tags: notify
+            ignore_errors: true
+            when: send_to_msteams|bool
+
+  - name: ansible
+    play: |
+      ---
+      - hosts: "{{ target_host | default('all') }}"
+        become: true
+        gather_facts: true
+
+        vars:
+          update_packages: true
+          ansible_username: sthings
+          os_packages:
+            - sshpass
+
+          python_modules:
+            - name: ansible
+              version: 9.6.0
+            - name: kubernetes
+              version: 29.0.0
+            - name: openshift
+              version: 0.13.2
+            - name: hvac[parser]
+              version: 2.2.0
+            - name: pyvmomi
+              version: 8.0.2.0.1
+
+        roles:
+          - install-requirements
+
+        post_tasks:
+          - name: Download requirements file from git
+            uri:
+              url: https://raw.githubusercontent.com/stuttgart-things/stuttgart-things/main/ansible/requirements.yaml
+              dest: /tmp/requirements.yaml
+
+          - name: Install requirements
+            ansible.builtin.shell: |
+              ansible --version
+              ansible-galaxy install -r /tmp/requirements.yaml -f
+            become_user: "{{ ansible_username }}"
+
+  - name: kcl
+    play: |
+      ---
+      - hosts: "{{ target_host | default('all') }}"
+        become: true
+
+        tasks:
+          - name: Install kcl-cli
+            ansible.builtin.shell: |
+              wget -q https://kcl-lang.io/script/install-cli.sh -O - | /bin/bash
+              wget -q https://kcl-lang.io/script/install-kcl-lsp.sh -O - | /bin/bash
+
+  - name: users
+      play: |
+        ---
+        - hosts: "{{ target_host | default('all') }}"
+          gather_facts: true
+          become: true
+          vars_files:
+            - "{{ profile | default('users') }}.yaml"
+
+          roles:
+            - role: sthings.base_os.create_os_user
+
+vars:
+  - name: users
+    file: |
+      ---
+      users:
+        - username: rke
+          name: rke user
+          groups: ['{{ admin_group }}']
+          uid: 1005
+          home: /home/rke
+          profile: |
+            alias ll='ls -ahl'
+          generate_ssh_key: true
+          enable_ssh_tcp_forwarding: true
