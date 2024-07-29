@@ -60,32 +60,32 @@ jobs:
           yq -r ".requirements" source/${{ inputs.collection-file }}/collection.yaml > ./roles.yaml
 
           echo 'INIT COLLECTION'
-          ansible-galaxy collection init $(yq -r ".namespace" source/${{ inputs.collection-file }}).$(yq -r ".name" source/${{ inputs.collection-file }})
+          ansible-galaxy collection init $(yq -r ".namespace" source/${{ inputs.collection-file }}/collection.yaml).$(yq -r ".name" source/${{ inputs.collection-file }}/collection.yaml)
 
           # SET WORKING DIRS AS ENV-VARS
-          echo "COLLECTION_NAME=$(yq -r ".name" source/${{ inputs.collection-file }})" >> $GITHUB_ENV
-          echo "COLLECTION_NAMESPACE=$(yq -r ".namespace" source/${{ inputs.collection-file }})" >> $GITHUB_ENV
-          echo "COLLECTION_FILEPATH=source/${{ inputs.collection-file }}" >> $GITHUB_ENV
-          echo "COLLECTION_ROLES_DIR=$GITHUB_WORKSPACE/$(yq -r ".namespace" source/${{ inputs.collection-file }})/$(yq -r ".name" source/${{ inputs.collection-file }})/roles" >> $GITHUB_ENV
-          echo "COLLECTION_DIR=$GITHUB_WORKSPACE/$(yq -r ".namespace" source/${{ inputs.collection-file }})/$(yq -r ".name" source/${{ inputs.collection-file }})" >> $GITHUB_ENV
+          echo "COLLECTION_NAME=$(yq -r ".name" source/${{ inputs.collection-file }}/collection.yaml)" >> $GITHUB_ENV
+          echo "COLLECTION_NAMESPACE=$(yq -r ".namespace" source/${{ inputs.collection-file }}/collection.yaml)" >> $GITHUB_ENV
+          echo "COLLECTION_FILEPATH=source/${{ inputs.collection-file }}/collection.yaml" >> $GITHUB_ENV
+          echo "COLLECTION_ROLES_DIR=$GITHUB_WORKSPACE/$(yq -r ".namespace" source/${{ inputs.collection-file }}/collection.yaml)/$(yq -r ".name" source/${{ inputs.collection-file }}/collection.yaml)/roles" >> $GITHUB_ENV
+          echo "COLLECTION_DIR=$GITHUB_WORKSPACE/$(yq -r ".namespace" source/${{ inputs.collection-file }}/collection.yaml)/$(yq -r ".name" source/${{ inputs.collection-file }}/collection.yaml)" >> $GITHUB_ENV
           echo "BRANCH=${{ github.head_ref || github.ref_name }}" >> $GITHUB_ENV
 
           UPDATED_TAG=`date "+%y.%d%M.%S"` #DEV TAG
-          #echo "COLLECTION_VERSION=$(yq -r ".version" source/${{ inputs.collection-file }})" >> $GITHUB_ENV
+          #echo "COLLECTION_VERSION=$(yq -r ".version" source/${{ inputs.collection-file }}/collection.yaml)" >> $GITHUB_ENV
           echo "COLLECTION_VERSION=$(echo ${UPDATED_TAG} | sed 's/\0//g')" >> $GITHUB_ENV
 
       - name: Install roles into collection
         id: roles
         run: |
-          if [ "$(yq -r ".requirements" source/${{ inputs.collection-file }})" = "null" ]; then
+          if [ "$(yq -r ".requirements" source/${{ inputs.collection-file }}/collection.yaml)" = "null" ]; then
             echo 'NO ROLES FOUND IN COLLECTION FILE'
             echo "ROLES_INCLUDED=FALSE" >> $GITHUB_ENV
 
           else
             echo 'INSTALL ROLES INTO COLLECTION'
-            yq -r ".requirements" source/${{ inputs.collection-file }} > ./roles.yaml
+            yq -r ".requirements" source/${{ inputs.collection-file }}/collection.yaml > ./roles.yaml
             ansible-galaxy install -r ./roles.yaml -p ${{ env.COLLECTION_ROLES_DIR }}
-            echo "COLLECTION_FILEPATH=source/${{ inputs.collection-file }}" >> $GITHUB_ENV
+            echo "COLLECTION_FILEPATH=source/${{ inputs.collection-file }}/collection.yaml" >> $GITHUB_ENV
             echo "ROLES_INCLUDED=TRUE" >> $GITHUB_ENV
 
           fi
