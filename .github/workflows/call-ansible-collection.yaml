@@ -173,10 +173,8 @@ jobs:
                 # CREATE PLAYBOOK ON FS
                 echo "$play_content" > "${play_dir}/${filename}.yaml"
                 let COUNTER=COUNTER+1
-
-              fi
-            done
-
+              done
+            fi
           done
 
           # LIST CREATED PLAYS
