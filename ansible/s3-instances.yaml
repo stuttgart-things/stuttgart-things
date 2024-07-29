@@ -12,3 +12,9 @@ instances:
     secretKey: apps/data/artifacts:secretKey
     bucket: ansible-collections
     secure: true
+  - name: homerun-dev
+    addr: artifacts.homerun-dev.sthings-vsphere.labul.sva.de
+    accessKey: apps/data/artifacts:accessKey
+    secretKey: apps/data/artifacts:secretKey
+    bucket: ansible-collections
+    secure: true
