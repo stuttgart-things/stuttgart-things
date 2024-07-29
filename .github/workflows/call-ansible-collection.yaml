@@ -220,22 +220,29 @@ jobs:
           templates_dir=${{ env.COLLECTION_DIR }}/playbooks/templates
           mkdir -p ${templates_dir}
 
-          # GET COUNT OF ALL KEYS OF SUBKEY TEMPLATES
-          count_template_files=$(yq '.templates | keys' ${{ env.COLLECTION_FILEPATH }} | wc -l)
-          echo FOUND $count_template_files TEMPLATE FILES FOR THIS COLLECTION
+          directory="source/${{ inputs.collection-file }}"
 
-          COUNTER=0
-          while [ $COUNTER != $count_template_files ]; do
-              echo PROCESS TEMPLATE FILE: $COUNTER
+          for file in "$directory"/*.yaml "$directory"/*.yaml; do
+            if [ -f "$file" ]; then
 
-              # GET TEMPLATE FILE NAME AND CONTENT
-              yq ".templates[$COUNTER].name" ${{ env.COLLECTION_FILEPATH }}
-              filename=$(yq ".templates[$COUNTER].name" ${{ env.COLLECTION_FILEPATH }})
-              template_file_content=$(yq ".templates[$COUNTER].file" ${{ env.COLLECTION_FILEPATH }})
+              # GET COUNT OF ALL KEYS OF SUBKEY TEMPLATES
+              count_template_files=$(yq '.templates | keys' $file| wc -l)
+              echo FOUND $count_template_files TEMPLATE FILES FOR THIS COLLECTION
 
-              # CREATE VARS FILE ON FS
-              echo "$template_file_content" > "${templates_dir}/${filename}.yaml"
-              let COUNTER=COUNTER+1
+              COUNTER=0
+              while [ $COUNTER != $count_template_files ]; do
+                echo PROCESS TEMPLATE FILE: $COUNTER
+
+                # GET TEMPLATE FILE NAME AND CONTENT
+                yq ".templates[$COUNTER].name" $file
+                filename=$(yq ".templates[$COUNTER].name" $file)
+                template_file_content=$(yq ".templates[$COUNTER].file" $file)
+
+                # CREATE VARS FILE ON FS
+                echo "$template_file_content" > "${templates_dir}/${filename}.yaml"
+                let COUNTER=COUNTER+1
+              done
+            fi
           done
 
           # LIST CREATED TEMPLATE FILES
