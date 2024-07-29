@@ -1,0 +1,73 @@
+---
+playbooks:
+  - name: render_upload_template
+    play: |
+      ---
+      - hosts: "{{ target_host | default('localhost') }}"
+
+        vars_files:
+          - "{{ path | default('.') }}/awx-local-env.yaml"
+          - "{{ path | default('.') }}/organization-sthings.yaml"
+          - "{{ path | default('.') }}/scm-creds-sthings.yaml"
+          - "{{ path | default('.') }}/projects-sthings.yaml"
+          - "{{ path | default('.') }}/machine-creds-sthings.yaml"
+          - "{{ path | default('.') }}/custom-credentials.yaml"
+          - "{{ path | default('.') }}/custom-credential-type.yaml"
+          - "{{ path | default('.') }}/dynamic-inventory-vsphere.yaml"
+          - "{{ path | default('.') }}/inventory-source.yaml"
+          - "{{ path | default('.') }}/ee-sthings.yaml"
+          - "{{ path | default('.') }}/{{ cloud }}.yaml"
+          - "{{ path | default('.') }}/{{ lab }}.yaml"
+          - "{{ path | default('.') }}/vm-defaults.yaml"
+          - "{{ path | default('.') }}/s3-instances.yaml"
+          - "{{ path | default('.') }}/job-render-upload-template.yaml"
+
+        tasks:
+          - ansible.builtin.import_tasks: check_connection.yaml
+          - ansible.builtin.import_tasks: creation_tasks.yaml
+
+  - name: get_execute_terraform
+    play: |
+      ---
+      - hosts: "{{ target_host | default('localhost') }}"
+        vars_files:
+          - "{{ path | default('.') }}/awx-local-env.yaml"
+          - "{{ path | default('.') }}/organization-sthings.yaml"
+          - "{{ path | default('.') }}/scm-creds-sthings.yaml"
+          - "{{ path | default('.') }}/projects-sthings.yaml"
+          - "{{ path | default('.') }}/machine-creds-sthings.yaml"
+          - "{{ path | default('.') }}/custom-credentials.yaml"
+          - "{{ path | default('.') }}/custom-credential-type.yaml"
+          - "{{ path | default('.') }}/dynamic-inventory-vsphere.yaml"
+          - "{{ path | default('.') }}/inventory-source.yaml"
+          - "{{ path | default('.') }}/ee-sthings.yaml"
+          - "{{ path | default('.') }}/terraform-vars.yaml"
+          - "{{ path | default('.') }}/tf-vars-{{ cloud }}.yaml"
+          - "{{ path | default('.') }}/s3-instances.yaml"
+          - "{{ path | default('.') }}/job-get-execute-terraform.yaml"
+
+        tasks:
+          - ansible.builtin.import_tasks: check_connection.yaml
+          - ansible.builtin.import_tasks: creation_tasks.yaml
+
+  - name: create_vm_workflow
+    play: |
+      ---
+      - hosts: "{{ target_host | default('localhost') }}"
+
+        vars_files:
+          - "{{ path | default('.') }}/awx-local-env.yaml"
+          - "{{ path | default('.') }}/organization-sthings.yaml"
+          - "{{ path | default('.') }}/scm-creds-sthings.yaml"
+          - "{{ path | default('.') }}/projects-sthings.yaml"
+          - "{{ path | default('.') }}/machine-creds-sthings.yaml"
+          - "{{ path | default('.') }}/custom-credentials.yaml"
+          - "{{ path | default('.') }}/custom-credential-type.yaml"
+          - "{{ path | default('.') }}/dynamic-inventory-vsphere.yaml"
+          - "{{ path | default('.') }}/inventory-source.yaml"
+          - "{{ path | default('.') }}/ee-sthings.yaml"
+          - "{{ path | default('.') }}/job-create-vm-workflow.yaml"
+
+        tasks:
+          - ansible.builtin.import_tasks: check_connection.yaml
+          - ansible.builtin.import_tasks: creation_tasks.yaml
