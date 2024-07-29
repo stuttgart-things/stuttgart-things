@@ -35,7 +35,7 @@ jobs:
           files: |
             #ansible/collections/*.yaml
             ansible/collections/*/*.yaml
-          dir_names: false
+          dir_names: true
 
       - name: Get all changed collections
         id: json
