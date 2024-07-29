@@ -1,3 +1,4 @@
+---
 playbooks:
   - name: check_connection
     play: |
