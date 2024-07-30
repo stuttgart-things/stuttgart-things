@@ -1,0 +1,21 @@
+---
+playbooks:
+  - name: golang
+    play: |
+      ---
+      - hosts: "{{ target_host | default('localhost') }}"
+
+        vars_files:
+          - "{{ path | default('.') }}/awx-local-env.yaml"
+          - "{{ path | default('.') }}/organization-sthings.yaml"
+          - "{{ path | default('.') }}/scm-creds-sthings.yaml"
+          - "{{ path | default('.') }}/projects-sthings.yaml"
+          - "{{ path | default('.') }}/machine-creds-sthings.yaml"
+          - "{{ path | default('.') }}/dynamic-inventory-vsphere.yaml"
+          - "{{ path | default('.') }}/inventory-source.yaml"
+          - "{{ path | default('.') }}/ee-sthings.yaml"
+          - "{{ path | default('.') }}/job-golang.yaml"
+
+        tasks:
+          - ansible.builtin.import_tasks: check_connection.yaml
+          - ansible.builtin.import_tasks: creation_tasks.yaml
