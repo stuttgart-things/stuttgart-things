@@ -12,7 +12,7 @@ customresources:
       dnsNames:
         - {{ $v.hostname }}.{{ $v.domain }}
       issuerRef:
-        name: {{ $v.clusterIssuer }}
+        name: {{ $.Values.clusterIssuer }}
         kind: ClusterIssuer
       secretName: {{ $v.ingressSecret }}-tls
 {{- end }}

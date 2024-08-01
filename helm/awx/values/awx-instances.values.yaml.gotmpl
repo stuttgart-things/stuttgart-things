@@ -8,14 +8,14 @@ customresources:
       name: {{ $v.name }}
       namespace: {{ $v.namespace }}
     spec:
-      admin_user: {{ $v.adminUser  }}
-      admin_password_secret: {{ $v.adminPassword }}
-      bundle_cacert_secret: {{ $v.caBundle }}
+      admin_user: {{ $v.adminUser  | fetchSecretValue }}
+      admin_password_secret: {{ $v.adminPassword | fetchSecretValue }}
+      bundle_cacert_secret: {{ $.Values.certName }}
       hostname: {{ $v.hostname }}.{{ $v.domain }}
       ingress_class_name: {{ $v.ingressClassName }}
       ingress_tls_secret: {{ $v.ingressSecret }}-tls
-      ingress_type: {{ $v.ingressType }}
-      postgres_storage_class: {{ $v.postgresStorageClass }}
+      ingress_type: {{ $.Values.ingressType }}
+      postgres_storage_class: {{ $.Values.postgresStorageClass }}
       postgres_storage_requirements:
         limits:
           storage: {{ $v.postgresStorageLimits }}
@@ -23,7 +23,7 @@ customresources:
           storage: {{ $v.postgresStorageRequest }}
       projects_persistence: {{ $v.projectPersistence }}
       projects_storage_access_mode: {{ $v.projectsStorageAccessMode }}
-      projects_storage_class: {{ $v.projectStorageClass }}
+      projects_storage_class: {{ $.Values.projectStorageClass }}
       security_context_settings:
         runAsGroup: 0
         runAsUser: 0
