@@ -1,8 +1,41 @@
 ---
-adminUser: admin
-adminPassword: Atlan7is2024
-ingressClassName: nginx
-ingressSecret: awx
-postgresStorageRequest: 1Gi
-postgresStorageLimits: 8Gi
-hostname: awx
+instances:
+  dev:
+    name: awx-dev
+    namespace: awx
+    adminUser: admin
+    adminPassword: Atlan7is2024
+    caBundle: sthings-custom-certs
+    hostname: awx-dev
+    domain: homerun-dev.sthings-vsphere.labul.sva.de
+    ingressClassName: nginx
+    ingressSecret: awx-dev
+    ingressType: ingress
+    postgresStorageClass: nfs-csi
+    postgresStorageLimits: 8Gi
+    postgresStorageRequest: 1Gi
+    projectPersistence: false
+    projectsStorageAccessMode: ReadWriteMany
+    projectStorageClass: nfs-csi
+    fsGroupChangePolicy: OnRootMismatch
+    clusterIssuer: vault-approle
+  prod:
+    name: awx
+    namespace: awx
+    adminUser: sthings
+    adminPassword: Atlan7is2024
+    caBundle: sthings-custom-certs
+    hostname: awx
+    domain: homerun.sthings-vsphere.labul.sva.de
+    ingressClassName: nginx
+    ingressSecret: awx
+    ingressType: ingress
+    postgresStorageClass: nfs-csi
+    postgresStorageLimits: 8Gi
+    postgresStorageRequest: 1Gi
+    projectPersistence: false
+    projectsStorageAccessMode: ReadWriteMany
+    projectStorageClass: nfs-csi
+    fsGroupChangePolicy: OnRootMismatch
+    clusterIssuer: vault-approle
+
