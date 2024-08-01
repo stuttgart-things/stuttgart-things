@@ -1,0 +1,4 @@
+---
+domain: homerun-dev.sthings-vsphere.labul.sva.de
+projectStorageClass: nfs-csi
+clusterIssuer: vault-approle
