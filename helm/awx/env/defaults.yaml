@@ -26,7 +26,7 @@ instances:
     adminPassword: Atlan7is2024
     caBundle: sthings-custom-certs
     hostname: awx
-    domain: homerun.sthings-vsphere.labul.sva.de
+    domain: homerun-dev.sthings-vsphere.labul.sva.de
     ingressClassName: nginx
     ingressSecret: awx
     ingressType: ingress
