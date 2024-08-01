@@ -1,57 +1,32 @@
 ---
 customresources:
-  awx-instance:
+{{- range $k, $v := .Values.instances }}
+  {{ $k }}:
     apiVersion: awx.ansible.com/v1beta1
     kind: AWX
     metadata:
-      name: {{ .Values.hostname }}
-      namespace: {{ .Release.Namespace }}
+      name: {{ $v.name }}
+      namespace: {{ $v.namespace }}
     spec:
-      admin_user: {{ .Values.adminUser }}
-      admin_password_secret: {{ .Values.adminPassword }}
-      hostname: {{ .Values.hostname }}.{{ .Values.domain }}
-      ingress_class_name: {{ .Values.ingressClassName }}
-      ingress_tls_secret: {{ .Values.ingressSecret }}-tls
-      ingress_type: ingress
-      postgres_storage_class: {{ .Values.postgresStorageClass }}
+      admin_user: {{ $v.adminUser  }}
+      admin_password_secret: {{ $v.adminPassword }}
+      bundle_cacert_secret: {{ $v.caBundle }}
+      hostname: {{ $v.hostname }}.{{ $v.domain }}
+      ingress_class_name: {{ $v.ingressClassName }}
+      ingress_tls_secret: {{ $v.ingressSecret }}-tls
+      ingress_type: {{ $v.ingressType }}
+      postgres_storage_class: {{ $v.postgresStorageClass }}
       postgres_storage_requirements:
         limits:
-          storage: {{ .Values.postgresStorageLimits }}
+          storage: {{ $v.postgresStorageLimits }}
         requests:
-          storage: {{ .Values.postgresStorageRequest }}
-      projects_persistence: false
-      projects_storage_access_mode: ReadWriteMany
-      projects_storage_class: {{ .Values.projectStorageClass }}
+          storage: {{ $v.postgresStorageRequest }}
+      projects_persistence: {{ $v.projectPersistence }}
+      projects_storage_access_mode: {{ $v.projectsStorageAccessMode }}
+      projects_storage_class: {{ $v.projectStorageClass }}
       security_context_settings:
         runAsGroup: 0
         runAsUser: 0
         fsGroup: 0
-        fsGroupChangePolicy: OnRootMismatch
-  awx-dev-instance:
-    apiVersion: awx.ansible.com/v1beta1
-    kind: AWX
-    metadata:
-      name: {{ .Values.hostname }}-dev
-      namespace: {{ .Release.Namespace }}
-    spec:
-      bundle_cacert_secret: sthings-custom-certs
-      admin_user: {{ .Values.adminUser }}
-      admin_password_secret: {{ .Values.adminPassword }}
-      hostname: {{ .Values.hostname }}-dev.{{ .Values.domain }}
-      ingress_class_name: {{ .Values.ingressClassName }}
-      ingress_tls_secret: {{ .Values.ingressSecret }}-dev-tls
-      ingress_type: ingress
-      postgres_storage_class: {{ .Values.postgresStorageClass }}
-      postgres_storage_requirements:
-        limits:
-          storage: {{ .Values.postgresStorageLimits }}
-        requests:
-          storage: {{ .Values.postgresStorageRequest }}
-      projects_persistence: false
-      projects_storage_access_mode: ReadWriteMany
-      projects_storage_class: {{ .Values.projectStorageClass }}
-      security_context_settings:
-        runAsGroup: 0
-        runAsUser: 0
-        fsGroup: 0
-        fsGroupChangePolicy: OnRootMismatch
+        fsGroupChangePolicy: {{ $v.fsGroupChangePolicy }}
+{{- end }}
