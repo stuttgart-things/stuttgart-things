@@ -1,0 +1,12 @@
+---
+customresources:
+  ca-bundle:
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: {{ .Values.certName }}
+      namespace: {{ .Values.namespace }}
+    type: Opaque
+    data:
+      bundle-ca.crt: |-
+        {{ (.Values.secret | fetchSecretValue) | b64enc }}

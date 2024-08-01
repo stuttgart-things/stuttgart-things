@@ -1,0 +1,16 @@
+---
+instances:
+  prod:
+    name: awx
+    namespace: awx
+    adminUser: ref+vault://apps/awx/user-prod
+    adminPassword: ref+vault://apps/awx/password-prod
+    hostname: awx
+    domain: homerun-dev.sthings-vsphere.labul.sva.de
+    ingressClassName: nginx
+    ingressSecret: awx
+    postgresStorageLimits: 8Gi
+    postgresStorageRequest: 1Gi
+    projectPersistence: false
+    projectsStorageAccessMode: ReadWriteMany
+    fsGroupChangePolicy: OnRootMismatch

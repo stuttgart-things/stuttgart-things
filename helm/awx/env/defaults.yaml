@@ -1,41 +1,9 @@
 ---
-instances:
-  dev:
-    name: awx-dev
-    namespace: awx
-    adminUser: admin
-    adminPassword: Atlan7is2024
-    caBundle: sthings-custom-certs
-    hostname: awx-dev
-    domain: homerun-dev.sthings-vsphere.labul.sva.de
-    ingressClassName: nginx
-    ingressSecret: awx-dev
-    ingressType: ingress
-    postgresStorageClass: nfs-csi
-    postgresStorageLimits: 8Gi
-    postgresStorageRequest: 1Gi
-    projectPersistence: false
-    projectsStorageAccessMode: ReadWriteMany
-    projectStorageClass: nfs-csi
-    fsGroupChangePolicy: OnRootMismatch
-    clusterIssuer: vault-approle
-  prod:
-    name: awx
-    namespace: awx
-    adminUser: sthings
-    adminPassword: Atlan7is2024
-    caBundle: sthings-custom-certs
-    hostname: awx
-    domain: homerun-dev.sthings-vsphere.labul.sva.de
-    ingressClassName: nginx
-    ingressSecret: awx
-    ingressType: ingress
-    postgresStorageClass: nfs-csi
-    postgresStorageLimits: 8Gi
-    postgresStorageRequest: 1Gi
-    projectPersistence: false
-    projectsStorageAccessMode: ReadWriteMany
-    projectStorageClass: nfs-csi
-    fsGroupChangePolicy: OnRootMismatch
-    clusterIssuer: vault-approle
+ingressType: ingress
+postgresStorageClass: nfs-csi
+projectStorageClass: nfs-csi
+clusterIssuer: vault-approle
 
+certName: sthings-custom-certs
+namespace: awx
+secret: ref+vault://apps/awx/cabundle

@@ -1,7 +1,8 @@
 ---
 environments:
-  defaults:
+  homerun-dev:
     values:
+      - env/defaults.yaml
       - env/{{ .Environment.Name }}.yaml
 
 releases:
@@ -13,6 +14,15 @@ releases:
     version: 0.3.10
     values:
       - "values/awx-certificates.values.yaml.gotmpl"
+
+  - name: awx-ca-bundle
+    disableValidationOnInstall: true
+    installed: true
+    namespace: awx
+    chart: stuttgart-things/sthings-cluster
+    version: 0.3.10
+    values:
+      - "values/awx-ca-bundle.values.yaml.gotmpl"
 
   - name: awx-operator
     disableValidationOnInstall: true
