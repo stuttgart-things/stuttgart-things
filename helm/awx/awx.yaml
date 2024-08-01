@@ -1,8 +1,7 @@
 ---
 environments:
-  andre-dev:
+  defaults:
     values:
-      - env/defaults.yaml
       - env/{{ .Environment.Name }}.yaml
 
 releases:
