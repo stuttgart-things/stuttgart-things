@@ -21,6 +21,7 @@ playbooks:
           - "{{ path | default('.') }}/vm-defaults.yaml"
           - "{{ path | default('.') }}/s3-instances.yaml"
           - "{{ path | default('.') }}/job-render-upload-template.yaml"
+          - "{{ path | default('.') }}/survey-render-upload-template.yaml"
 
         tasks:
           - ansible.builtin.import_tasks: check_connection.yaml
@@ -46,6 +47,7 @@ playbooks:
           - "{{ path | default('.') }}/tf-vars-{{ cloud }}.yaml"
           - "{{ path | default('.') }}/s3-instances.yaml"
           - "{{ path | default('.') }}/job-get-execute-terraform.yaml"
+          - "{{ path | default('.') }}/survey-get-execute-terraform.yaml"
 
         tasks:
           - ansible.builtin.import_tasks: check_connection.yaml
@@ -69,6 +71,7 @@ playbooks:
           - "{{ path | default('.') }}/inventory-source.yaml"
           - "{{ path | default('.') }}/ee-sthings.yaml"
           - "{{ path | default('.') }}/job-create-vm-workflow.yaml"
+          - "{{ path | default('.') }}/survey-create-vm-workflow.yaml"
 
         tasks:
           - ansible.builtin.import_tasks: check_connection.yaml

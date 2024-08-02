@@ -15,6 +15,7 @@ playbooks:
           - "{{ path | default('.') }}/inventory-source.yaml"
           - "{{ path | default('.') }}/ee-sthings.yaml"
           - "{{ path | default('.') }}/job-golang.yaml"
+          - "{{ path | default('.') }}/survey-golang.yaml"
 
         tasks:
           - ansible.builtin.import_tasks: check_connection.yaml
