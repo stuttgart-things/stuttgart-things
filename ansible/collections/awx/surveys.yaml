@@ -487,7 +487,7 @@ vars:
           choices: '["true", "false"]'
           default: "false"
         username:
-          name: Which username (default: sthings)?
+          name: "Which username (default: sthings)?"
           description: Enter username
           required: true
           type: text
@@ -576,7 +576,7 @@ vars:
           max: "null"
           default: ""
         cron_time:
-          name: At which time do you want the job to run? (Format: 05:00:00)
+          name: "At which time do you want the job to run? (Format: 05:00:00)"
           description: Enter cron time
           required: true
           type: text
