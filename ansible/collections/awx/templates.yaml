@@ -139,7 +139,7 @@ templates:
           "name": "",
           "description": "",
           "spec": [
-          {% for key, question in questions.values() %}
+          {% for key, question in questions.items() %}
           {
               "question_name": "{{ question.name }}",
               "question_description": "{{ question.description }}",
@@ -155,4 +155,3 @@ templates:
           }{% if not loop.last %},{% endif %}{% endfor %}
           ]
       }
-
