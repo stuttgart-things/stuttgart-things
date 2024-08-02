@@ -1,0 +1,754 @@
+---
+vars:
+  - name: survey-get-execute-terraform
+    file: |
+      {
+          "name": "",
+          "description": "",
+          "spec": [
+            {
+              "question_name": "Execute against which host?",
+              "question_description": "Enter host name",
+              "required": true,
+              "type": "text",
+              "variable": "target_host",
+              "min": null,
+              "max": null,
+              "default": ""
+            },
+            {
+              "question_name": "Do you want to install Terraform?",
+              "question_description": "Choose true or false",
+              "required": true,
+              "type": "text",
+              "variable": "install_terraform",
+              "min": null,
+              "max": null,
+              "default": "true"
+            },
+            {
+              "question_name": "What is the bucket name in s3?",
+              "question_description": "Enter bucket name to PUT templates",
+              "required": true,
+              "type": "text",
+              "variable": "bucket_name",
+              "min": null,
+              "max": null,
+              "default": "andre-vm-config"
+            },
+            {
+              "question_name": "What is the s3 endpoint name?",
+              "question_description": "Enter s3 endpoint name",
+              "required": true,
+              "type": "multiplechoice",
+              "choices": ["labul-automation", "andre-dev"],
+              "variable": "s3",
+              "min": null,
+              "max": null,
+              "default": "andre-dev"
+            },
+            {
+              "question_name": "Do you want to apply or destroy VM?",
+              "question_description": "Enter state of terrform VM",
+              "required": true,
+              "type": "multiplechoice",
+              "variable": "state",
+              "choices": ["present", "absent"],
+              "min": null,
+              "max": null,
+              "default": "present"
+            },
+            {
+              "question_name": "What lab?",
+              "question_description": "Enter labul or labda",
+              "required": true,
+              "type": "multiplechoice",
+              "variable": "lab",
+              "choices": ["labul", "labda"],
+              "min": null,
+              "max": null,
+              "default": "labul"
+            },
+            {
+              "question_name": "What cloud for the VM?",
+              "question_description": "Choose cloud",
+              "required": true,
+              "type": "multiplechoice",
+              "variable": "cloud",
+              "choices": ["vsphere", "proxmox"],
+              "min": null,
+              "max": null,
+              "default": "vsphere"
+            }
+          ]
+        }
+
+  - name: survey-render-upload-template
+    file: |
+      {
+          "name": "",
+          "description": "",
+          "spec": [
+            {
+              "question_name": "Execute against which host?",
+              "question_description": "Enter host name",
+              "required": true,
+              "type": "text",
+              "variable": "target_host",
+              "min": null,
+              "max": null,
+              "default": "localhost"
+            },
+            {
+              "question_name": "What is the VM name?",
+              "question_description": "Enter VM name",
+              "required": true,
+              "type": "text",
+              "variable": "vmName",
+              "min": null,
+              "max": null,
+              "default": ""
+            },
+            {
+              "question_name": "What is the VM size?",
+              "question_description": "Enter VM sizes s,m,l or xl",
+              "required": true,
+              "type": "multiplechoice",
+              "variable": "vmSize",
+              "choices": ["s", "m", "l", "xl"],
+              "min": null,
+              "max": null,
+              "default": "s"
+            },
+            {
+              "question_name": "How many VMs?",
+              "question_description": "Enter VM count",
+              "required": true,
+              "type": "multiplechoice",
+              "variable": "vmCount",
+              "choices": ["1", "2", "3", "4", "5"],
+              "min": null,
+              "max": null,
+              "default": "1"
+            },
+            {
+              "question_name": "Which VM template do you want to use? (see description)",
+              "question_description": "Choose os",
+              "required": true,
+              "type": "multiplechoice",
+              "variable": "vmTemplate",
+              "choices": ["ubuntu22", "ubuntu24", "rocky9"],
+              "min": null,
+              "max": null,
+              "default": ""
+            },
+            {
+              "question_name": "What is the s3 endpoint name?",
+              "question_description": "Enter s3 endpoint name",
+              "required": true,
+              "type": "multiplechoice",
+              "choices": ["labul-automation", "andre-dev"],
+              "variable": "s3",
+              "min": null,
+              "max": null,
+              "default": "andre-dev"
+            },
+            {
+              "question_name": "What is the bucket name in s3?",
+              "question_description": "Enter bucket name to PUT templates",
+              "required": true,
+              "type": "text",
+              "variable": "bucket_name",
+              "min": null,
+              "max": null,
+              "default": ""
+            },
+            {
+              "question_name": "What is the platform subfolderpath?",
+              "question_description": "Enter subfolderpath of vsphere (testing)/ proxmox (stuttgart-things)",
+              "required": true,
+              "type": "text",
+              "variable": "subfolderpath",
+              "min": null,
+              "max": null,
+              "default": "testing"
+            },
+            {
+              "question_name": "What lab?",
+              "question_description": "Choose labul or labda",
+              "required": true,
+              "type": "multiplechoice",
+              "variable": "lab",
+              "choices": ["labul", "labda"],
+              "min": null,
+              "max": null,
+              "default": "labul"
+            },
+            {
+              "question_name": "What cloud for the VM?",
+              "question_description": "Choose cloud",
+              "required": true,
+              "type": "multiplechoice",
+              "variable": "cloud",
+              "choices": ["vsphere", "proxmox"],
+              "min": null,
+              "max": null,
+              "default": "vsphere"
+            }
+          ]
+        }
+
+  - name: survey-create-vm-workflow
+    file: |
+      {
+          "name": "",
+          "description": "",
+          "spec": [
+            {
+              "question_name": "Enter VM name",
+              "question_description": "Enter VM name",
+              "required": false,
+              "type": "text",
+              "variable": "vmName",
+              "min": null,
+              "max": null,
+              "default": ""
+            },
+            {
+              "question_name": "Select VM size",
+              "question_description": "Enter VM sizes S,M,L or XL",
+              "required": false,
+              "type": "multiplechoice",
+              "variable": "vmSize",
+              "choices": ["S", "M", "L", "XL"],
+              "min": null,
+              "max": null,
+              "default": "S"
+            },
+            {
+              "question_name": "Select VM count",
+              "question_description": "Choose VM count",
+              "required": false,
+              "type": "multiplechoice",
+              "variable": "vmCount",
+              "choices": ["1", "2", "3", "4", "5"],
+              "min": null,
+              "max": null,
+              "default": "1"
+            },
+            {
+              "question_name": "Select VM template",
+              "question_description": "Choose OS",
+              "required": false,
+              "type": "multiplechoice",
+              "variable": "vmTemplate",
+              "choices": ["ubuntu22", "ubuntu24", "rocky9"],
+              "min": null,
+              "max": null,
+              "default": "ubuntu24"
+            },
+            {
+              "question_name": "Enter folderpath",
+              "question_description": "Enter subfolderpath of vsphere (testing)/ proxmox (stuttgart-things)",
+              "required": false,
+              "type": "text",
+              "variable": "subfolderpath",
+              "min": null,
+              "max": null,
+              "default": "testing"
+            },
+            {
+              "question_name": "Select lab",
+              "question_description": "Choose labul or labda",
+              "required": false,
+              "type": "multiplechoice",
+              "variable": "lab",
+              "choices": ["labul", "labda"],
+              "min": null,
+              "max": null,
+              "default": "labul"
+            },
+            {
+              "question_name": "Select cloud",
+              "question_description": "Choose cloud",
+              "required": false,
+              "type": "multiplechoice",
+              "variable": "cloud",
+              "choices": ["vsphere", "proxmox"],
+              "min": null,
+              "max": null,
+              "default": "vsphere"
+            },
+            {
+              "question_name": "Install Terraform?",
+              "question_description": "Choose true or false",
+              "required": false,
+              "type": "text",
+              "variable": "install_terraform",
+              "min": null,
+              "max": null,
+              "default": "true"
+            },
+            {
+              "question_name": "Enter s3 endpoint",
+              "question_description": "Enter s3 endpoint",
+              "required": false,
+              "type": "text",
+              "variable": "s3_endpoint",
+              "min": null,
+              "max": null,
+              "default": "https://artifacts.andre-dev.sthings-vsphere.labul.sva.de"
+            },
+            {
+              "question_name": "Do you want to apply or destroy VM?",
+              "question_description": "Enter state of terrform VM",
+              "required": false,
+              "type": "multiplechoice",
+              "variable": "state",
+              "choices": ["present", "absent"],
+              "min": null,
+              "max": null,
+              "default": "present"
+            }
+          ]
+        }
+
+  - name: survey-golang
+    file: |
+      {
+          "name": "",
+          "description": "",
+          "spec": [
+            {
+              "question_name": "Execute against which host?",
+              "question_description": "Enter host name",
+              "required": true,
+              "type": "text",
+              "variable": "target_host",
+              "min": null,
+              "max": null,
+              "default": ""
+            },
+            {
+              "question_name": "Install which Golang version?",
+              "question_description": "Enter version",
+              "required": true,
+              "type": "text",
+              "variable": "golang_version",
+              "min": null,
+              "max": null,
+              "default": "1.22.3"
+            },
+            {
+              "question_name": "Which checksum belongs to your target version?",
+              "question_description": "Enter checksum",
+              "required": true,
+              "type": "text",
+              "variable": "golang_checksum",
+              "min": null,
+              "max": null,
+              "default": "5fb8b3ed4a78a8eab444dfcb472b8c07a06980dcaee62ce3645edd6d130004c6"
+            },
+            {
+              "question_name": "What is the source url of Golang?",
+              "question_description": "Enter URL",
+              "required": true,
+              "type": "text",
+              "variable": "source_url",
+              "min": null,
+              "max": null,
+              "default": "https://go.dev/dl/go1.22.3.linux-amd64.tar.gz"
+            },
+            {
+              "question_name": "Which user do you want to use?",
+              "question_description": "Enter user name",
+              "required": true,
+              "type": "text",
+              "variable": "go_username",
+              "min": null,
+              "max": null,
+              "default": "sthings"
+            },
+            {
+              "question_name": "To which group does the user belong to?",
+              "question_description": "Enter user group",
+              "required": true,
+              "type": "text",
+              "variable": "go_usergroup",
+              "min": null,
+              "max": null,
+              "default": "sthings"
+            },
+            {
+              "question_name": "Change user homedir?",
+              "question_description": "Enter user home directory",
+              "required": true,
+              "type": "text",
+              "variable": "go_userhome",
+              "min": null,
+              "max": null,
+              "default": "/home/sthings"
+            }
+          ]
+        }
+
+  - name: survey-nerdctl
+    file: |
+      {
+          "name": "",
+          "description": "",
+          "spec": [
+            {
+              "question_name": "Execute against which host?",
+              "question_description": "Enter host name",
+              "required": true,
+              "type": "text",
+              "variable": "target_host",
+              "min": null,
+              "max": null,
+              "default": ""
+            },
+            {
+              "question_name": "nerdctl version?",
+              "question_description": "choose nerdctl version",
+              "required": true,
+              "type": "multiplechoice",
+              "variable": "nerdctl_version",
+              "choices": ["1.7.5", "1.7.6", "2.0.0-beta.5"],
+              "min": null,
+              "max": null,
+              "default": "1.7.6"
+            }
+          ]
+        }
+
+  - name: survey-docker
+    file: |
+      {
+          "name": "",
+          "description": "",
+          "spec": [
+            {
+              "question_name": "Execute against which host?",
+              "question_description": "Enter host name",
+              "required": true,
+              "type": "text",
+              "variable": "target_host",
+              "min": null,
+              "max": null,
+              "default": ""
+            },
+            {
+              "question_name": "install docker compose?",
+              "question_description": "choose true or false",
+              "required": true,
+              "type": "multiplechoice",
+              "variable": "docker_install_compose",
+              "choices": ["true", "false"],
+              "min": null,
+              "max": null,
+              "default": "true"
+            },
+            {
+              "question_name": "install kind?",
+              "question_description": "choose true or false",
+              "required": true,
+              "type": "multiplechoice",
+              "variable": "install_kind",
+              "choices": ["true", "false"],
+              "min": null,
+              "max": null,
+              "default": "false"
+            },
+            {
+              "question_name": "kind version?",
+              "question_description": "choose kind version",
+              "required": true,
+              "type": "multiplechoice",
+              "variable": "kind_version",
+              "choices": ["0.23.0", "0.22.0", "0.21.0", "0.20.0"],
+              "min": null,
+              "max": null,
+              "default": "0.22.0"
+            },
+            {
+              "question_name": "kubectl version?",
+              "question_description": "choose kubectl version",
+              "required": true,
+              "type": "multiplechoice",
+              "variable": "kubectl_version",
+              "choices": ["1.30.0", "1.29.0", "1.28.0", "1.27.0"],
+              "min": null,
+              "max": null,
+              "default": "1.30.0"
+            }
+          ]
+        }
+
+  - name: survey-baseos
+    file: |
+      {
+          "name": "",
+          "description": "",
+          "spec": [
+            {
+              "question_name": "Execute against which host?",
+              "question_description": "Enter host name",
+              "required": true,
+              "type": "text",
+              "variable": "target_host",
+              "min": null,
+              "max": null,
+              "default": ""
+            },
+            {
+              "question_name": "Run manage filesystem role?",
+              "question_description": "choose true or false",
+              "required": true,
+              "type": "multiplechoice",
+              "variable": "manage_filesystem",
+              "choices": ["true", "false"],
+              "min": null,
+              "max": null,
+              "default": "true"
+            },
+            {
+              "question_name": "Update packages?",
+              "question_description": "choose true or false",
+              "required": true,
+              "type": "multiplechoice",
+              "variable": "update_packages",
+              "choices": ["true", "false"],
+              "min": null,
+              "max": null,
+              "default": "true"
+            },
+            {
+              "question_name": "Run install requirements role?",
+              "question_description": "choose true or false",
+              "required": true,
+              "type": "multiplechoice",
+              "variable": "install_requirements",
+              "choices": ["true", "false"],
+              "min": null,
+              "max": null,
+              "default": "true"
+            },
+            {
+              "question_name": "Install Message of the day?",
+              "question_description": "choose true or false",
+              "required": true,
+              "type": "multiplechoice",
+              "variable": "install_motd",
+              "choices": ["true", "false"],
+              "min": null,
+              "max": null,
+              "default": "true"
+            },
+            {
+              "question_name": "Do reboot?",
+              "question_description": "choose true or false",
+              "required": true,
+              "type": "multiplechoice",
+              "variable": "reboot_all",
+              "choices": ["true", "false"],
+              "min": null,
+              "max": null,
+              "default": "false"
+            },
+            {
+              "question_name": "Enter username (default: sthings)?",
+              "question_description": "choose username",
+              "required": true,
+              "type": "text",
+              "variable": "username",
+              "min": null,
+              "max": null,
+              "default": "sthings"
+            },
+            {
+              "question_name": "Choose sizing for lvm_home",
+              "question_description": "Choose sizing for lvm_home",
+              "required": true,
+              "type": "multiplechoice",
+              "variable": "lvm_home_sizing",
+              "choices": ["10%", "15%", "20%", "25%", "30%"],
+              "min": null,
+              "max": null,
+              "default": "15%"
+            },
+            {
+              "question_name": "Choose sizing for lvm_root",
+              "question_description": "Choose sizing for lvm_root",
+              "required": true,
+              "type": "multiplechoice",
+              "variable": "lvm_root_sizing",
+              "choices": ["25%", "30%", "35%", "40%", "45"],
+              "min": null,
+              "max": null,
+              "default": "35%"
+            },
+            {
+              "question_name": "Choose sizing for lvm_var",
+              "question_description": "Choose sizing for lvm_var",
+              "required": true,
+              "type": "multiplechoice",
+              "variable": "lvm_var_sizing",
+              "choices": ["40%", "45%", "50%", "55%", "60"],
+              "min": null,
+              "max": null,
+              "default": "50%"
+            },
+            {
+              "question_name": "Send webhook to msteams",
+              "question_description": "Send webhook to msteams",
+              "required": true,
+              "type": "multiplechoice",
+              "variable": "send_to_msteams",
+              "choices": ["true", "false"],
+              "min": null,
+              "max": null,
+              "default": "true"
+            },
+            {
+              "question_name": "Change ms teams webhook url?",
+              "question_description": "Change ms teams webhook url",
+              "required": true,
+              "type": "text",
+              "variable": "msteams_webhook_url",
+              "min": null,
+              "max": null,
+              "default": "https://365sva.webhook.office.com/webhookb2/2f14a9f8-4736-46dd-9c8c-31547ec37180@0a65cb1e-37d5-41ff-980a-647d9d0e4f0b/IncomingWebhook/37a805a0a2624dc2ac1aedd7dec6ad49/dc3a27ed-396c-40b7-a9b2-f1a2b6b44efe"
+            }
+          ]
+        }
+
+  - name: survey-schedule
+    file: |
+      {
+         "name": "",
+         "description": "",
+         "spec": [
+            {
+              "question_name": "Execute against which host?",
+              "question_description": "Enter host name",
+              "required": true,
+              "type": "text",
+              "variable": "target_host",
+              "min": null,
+              "max": null,
+              "default": ""
+            },
+            {
+              "question_name": "What job to run?",
+              "question_description": "Enter job template name",
+              "required": true,
+              "type": "text",
+              "variable": "target_job",
+              "min": null,
+              "max": null,
+              "default": "baseos"
+            },
+            {
+              "question_name": "On which date should this job run? (Format: 2024-06-30)",
+              "question_description": "Enter first day to schedule",
+              "required": true,
+              "type": "text",
+              "variable": "start_date",
+              "min": null,
+              "max": null,
+              "default": ""
+            },
+            {
+              "question_name": "At which time do you want the job to run? (Format: 05:00:00)",
+              "question_description": "Enter cron time",
+              "required": true,
+              "type": "text",
+              "variable": "cron_time",
+              "min": null,
+              "max": null,
+              "default": ""
+            },
+            {
+              "question_name": "With what frequency do you want your job to run?",
+              "question_description": "Choose frequency",
+              "required": true,
+              "type": "multiplechoice",
+              "variable": "frequency_rule",
+              "choices": ["none", "minute", "hour", "day", "week", "month"],
+              "min": null,
+              "max": null,
+              "default": "day"
+            },
+            {
+              "question_name": "With what interval do you want your job to run? (example in description)",
+              "question_description": "frequency=day + interval=1 == daily scheduled run",
+              "required": true,
+              "type": "text",
+              "variable": "interval_rule",
+              "min": null,
+              "max": null,
+              "default": "1"
+            },
+            {
+              "question_name": "What name for the schedule?",
+              "question_description": "Enter name",
+              "required": true,
+              "type": "text",
+              "variable": "schedule_name",
+              "min": null,
+              "max": null,
+              "default": "schedule-base-os"
+            },
+            {
+              "question_name": "Do you want the ressource to be created or deleted?",
+              "question_description": "create=present or delete=absent",
+              "required": true,
+              "type": "multiplechoice",
+              "variable": "schedule_state",
+              "choices": ["present", "absent"],
+              "min": null,
+              "max": null,
+              "default": "present"
+            }
+          ]
+        }
+
+  - name: survey-job-awx
+    file: |
+      {
+          "name": "",
+          "description": "",
+          "spec": [
+            {
+              "question_name": "Execute against which host?",
+              "question_description": "Enter host name",
+              "required": true,
+              "type": "text",
+              "variable": "target_host",
+              "min": null,
+              "max": null,
+              "default": ""
+            },
+            {
+              "question_name": "Curl against which host?",
+              "question_description": "Enter host name",
+              "required": true,
+              "type": "text",
+              "variable": "test_host",
+              "min": null,
+              "max": null,
+              "default": ""
+            },
+            {
+              "question_name": "Which homepage to curl?",
+              "question_description": "Enter homepage",
+              "required": true,
+              "type": "text",
+              "variable": "page",
+              "min": null,
+              "max": null,
+              "default": "https://www.google.com"
+            }
+          ]
+        }

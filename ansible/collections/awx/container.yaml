@@ -43,3 +43,38 @@ playbooks:
           tasks:
             - ansible.builtin.import_tasks: check_connection.yaml
             - ansible.builtin.import_tasks: creation_tasks.yaml
+
+vars:
+  - name: job-nerdctl
+    file: |
+      ---
+      job_templates:
+        stuttgartThings:
+          name: install-nerdctl
+          organization: stuttgart-things
+          inventory: dynamic-inventory-vsphere
+          project: stuttgart-things
+          playbook: plays/install-nerdctl.yaml
+          credentials: sthings-ssh
+          executionenv: sthings-ee
+          state: present
+          ask_verbosity_on_launch: true
+          survey_enabled: true
+          survey_spec: "{{ lookup('file', 'vars/survey-nerdctl.yaml') }}"
+
+  - name: job-docker
+    file: |
+      ---
+      job_templates:
+        stuttgartThings:
+          name: install-docker
+          organization: stuttgart-things
+          inventory: dynamic-inventory-vsphere
+          project: stuttgart-things
+          playbook: plays/install-docker.yaml
+          credentials: sthings-ssh
+          executionenv: sthings-ee
+          state: present
+          ask_verbosity_on_launch: true
+          survey_enabled: true
+          survey_spec: "{{ lookup('file', 'vars/survey-docker.yaml') }}"
