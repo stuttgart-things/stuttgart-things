@@ -17,6 +17,7 @@ playbooks:
           - "{{ path | default('.') }}/inventory-source.yaml"
           - "{{ path | default('.') }}/ee-sthings.yaml"
           - "{{ path | default('.') }}/job-docker.yaml"
+          - "{{ path | default('.') }}/survey-docker.yaml"
 
         tasks:
           - ansible.builtin.import_tasks: check_connection.yaml
@@ -40,6 +41,7 @@ playbooks:
           - "{{ path | default('.') }}/inventory-source.yaml"
           - "{{ path | default('.') }}/ee-sthings.yaml"
           - "{{ path | default('.') }}/job-nerdctl.yaml"
+          - "{{ path | default('.') }}/survey-nerdctl.yaml"
 
         tasks:
           - ansible.builtin.import_tasks: check_connection.yaml
