@@ -54,7 +54,7 @@ jobs:
 
 
       - name: Add please-review label on command in issue comment
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+        uses: actions/github-script@35b1cdd1b2c1fc704b1cd9758d10f67e833fcb02
         with:
           github-token: ${{ steps.generate-token.outputs.token }}
           script: |
@@ -66,7 +66,7 @@ jobs:
             })
 
       - name: Remove label
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+        uses: actions/github-script@35b1cdd1b2c1fc704b1cd9758d10f67e833fcb02
         with:
           github-token: ${{ steps.generate-token.outputs.token }}
           script: |
