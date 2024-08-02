@@ -14,3 +14,4 @@ instances:
     projectPersistence: false
     projectsStorageAccessMode: ReadWriteMany
     fsGroupChangePolicy: OnRootMismatch
+    secret: ref+vault://apps/awx/cabundle

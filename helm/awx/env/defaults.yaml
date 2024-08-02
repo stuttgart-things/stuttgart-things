@@ -6,4 +6,3 @@ clusterIssuer: vault-approle
 
 certName: sthings-custom-certs
 namespace: awx
-secret: ref+vault://apps/awx/cabundle
