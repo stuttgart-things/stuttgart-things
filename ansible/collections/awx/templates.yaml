@@ -139,7 +139,7 @@ templates:
           "name": "",
           "description": "",
           "spec": [
-          {% for question in questions.values() %}
+          {% for key, question in questions.values() %}
           {
               "question_name": "{{ question.name }}",
               "question_description": "{{ question.description }}",
