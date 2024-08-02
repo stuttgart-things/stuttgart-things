@@ -132,3 +132,27 @@ templates:
           workspace_key_prefix = "{{ vmName }}"
         }
       }
+
+  - name: survey.json.j2
+    file: |
+      {
+          "name": "",
+          "description": "",
+          "spec": [
+          {% for question in questions.values() %}
+          {
+              "question_name": "{{ question.name }}",
+              "question_description": "{{ question.description }}",
+              "required": {{ question.required | lower }},
+              "type": "{{ question.type }}",
+              "variable": "{{ question.variable }}",
+              "min": {{ question.min }},
+              "max": {{ question.max }},
+              {% if question.choices is defined %}
+              "choices": {{ question.choices }},
+              {% endif %}
+              "default": "{{ question.default }}"
+          }{% if not loop.last %},{% endif %}{% endfor %}
+          ]
+      }
+

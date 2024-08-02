@@ -12,6 +12,16 @@ playbooks:
         retries: 10
         delay: 120
 
+  - name: render_survey
+    play: |
+      ---
+      - name: Render survey template
+        template:
+          src: "{{ item.src }}"
+          dest: "{{ item.dest }}"
+        with_items:
+          - { src: "survey.json.j2.yaml", dest: "vars/rendered.json" }
+
   - name: creation_tasks
     play: |
       ---
@@ -279,6 +289,7 @@ playbooks:
 
         tasks:
           - ansible.builtin.import_tasks: check_connection.yaml
+          - ansible.builtin.import_tasks: render_survey.yaml
           - ansible.builtin.import_tasks: creation_tasks.yaml
 
   - name: baseos
@@ -300,6 +311,7 @@ playbooks:
 
         tasks:
           - ansible.builtin.import_tasks: check_connection.yaml
+          - ansible.builtin.import_tasks: render_survey.yaml
           - ansible.builtin.import_tasks: creation_tasks.yaml
 
   - name: schedule_baseos
@@ -321,6 +333,7 @@ playbooks:
 
         tasks:
           - ansible.builtin.import_tasks: check_connection.yaml
+          - ansible.builtin.import_tasks: render_survey.yaml
           - ansible.builtin.import_tasks: creation_tasks.yaml
 
 vars:
@@ -339,7 +352,7 @@ vars:
           state: present
           ask_verbosity_on_launch: true
           survey_enabled: true
-          survey_spec: "{{ lookup('file', 'vars/survey-baseos.yaml') }}"
+          survey_spec: "{{ lookup('file', 'vars/rendered.json') }}"
 
   - name: job-schedule
     file: |
@@ -356,7 +369,7 @@ vars:
           state: present
           ask_verbosity_on_launch: true
           survey_enabled: true
-          survey_spec: "{{ lookup('file', 'vars/survey-schedule.yaml') }}"
+          survey_spec: "{{ lookup('file', 'vars/rendered.json') }}"
 
   - name: job-awx
     file: |
@@ -373,7 +386,7 @@ vars:
           state: present
           ask_verbosity_on_launch: true
           survey_enabled: true
-          survey_spec: "{{ lookup('file', 'vars/survey-job-awx.yaml') }}"
+          survey_spec: "{{ lookup('file', 'vars/rendered.json') }}"
 
 
   - name: dynamic-inventory-vsphere

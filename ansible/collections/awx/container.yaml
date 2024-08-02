@@ -20,6 +20,7 @@ playbooks:
 
           tasks:
             - ansible.builtin.import_tasks: check_connection.yaml
+            - ansible.builtin.import_tasks: render_survey.yaml
             - ansible.builtin.import_tasks: creation_tasks.yaml
 
     - name: nerdctl
@@ -42,6 +43,7 @@ playbooks:
 
           tasks:
             - ansible.builtin.import_tasks: check_connection.yaml
+            - ansible.builtin.import_tasks: render_survey.yaml
             - ansible.builtin.import_tasks: creation_tasks.yaml
 
 vars:
@@ -60,7 +62,7 @@ vars:
           state: present
           ask_verbosity_on_launch: true
           survey_enabled: true
-          survey_spec: "{{ lookup('file', 'vars/survey-nerdctl.yaml') }}"
+          survey_spec: "{{ lookup('file', 'vars/rendered.json') }}"
 
   - name: job-docker
     file: |
@@ -77,4 +79,4 @@ vars:
           state: present
           ask_verbosity_on_launch: true
           survey_enabled: true
-          survey_spec: "{{ lookup('file', 'vars/survey-docker.yaml') }}"
+          survey_spec: "{{ lookup('file', 'vars/rendered.json') }}"
