@@ -1,0 +1,134 @@
+
+---
+templates:
+  - name: vm-vsphere
+    file: |
+      module {{ vmName }} {
+        source                 = "{{ tf_module_source }}"
+        vm_count               = {{ vmCount }}
+        vsphere_vm_name        = "{{ vmName }}"
+        vm_memory              = {{ vm_memory }}
+        vsphere_vm_template    = "{{ vm_template }}"
+        vm_disk_size           = "{{ vm_disk }}"
+        vm_num_cpus            = {{ vm_cpu }}
+        firmware               = "{{ vmFirmware }}"
+        vsphere_vm_folder_path = "{{ rootFolderpath }}/{{ folderpath }}"
+        vsphere_datacenter     = "{{ datacenter }}"
+        vsphere_datastore      = "{{ vm_datastores }}"
+        vsphere_resource_pool  = "{{ resourcePool }}"
+        vsphere_network        = "{{ vm_network }}"
+        bootstrap              = ["echo STUTTGART-THINGS"]
+        annotation             = "VSPHERE-VM {{ vmName }} {{ vmTemplate }} BUILD w/ TERRAFORM FOR STUTTGART-THINGS"
+        vsphere_server         = var.vsphere_server
+        vsphere_user           = var.vsphere_user
+        vsphere_password       = var.vsphere_password
+        vm_ssh_user            = var.vm_ssh_user
+        vm_ssh_password        = var.vm_ssh_password
+      }
+
+      variable "vsphere_server" {
+        default     = false
+        type        = string
+        description = "name of vsphere vm server"
+      }
+
+      variable "vm_ssh_user" {
+        default     = false
+        type        = string
+        description = "username of ssh user for vm"
+      }
+
+      variable "vm_ssh_password" {
+        default     = false
+        type        = string
+        description = "password of ssh user"
+        }
+
+      variable "vsphere_user" {
+        default     = false
+        type        = string
+        description = "password of vsphere user"
+      }
+
+      variable "vsphere_password" {
+        default     = false
+        type        = string
+        description = "password of vsphere user"
+      }
+
+      output "ip" {
+        value = [module.{{ vmName }}.ip]
+      }
+
+  - name: vm-proxmox
+    file: |
+      module "{{ vmName }}" {
+        source                  = "{{ tf_module_source }}"
+        vm_count                = {{ vmCount }}
+        vm_name                 = "{{ vmName }}"
+        vm_memory               = "{{ vm_memory }}"
+        vm_num_cpus             = "{{ vm_cpu }}"
+        vm_disk_size            = "{{ vm_disk }}G"
+        vm_template             = "{{ vm_template }}"
+        pve_cluster_node        = "{{ datacenter }}"
+        pve_datastore           = "{{ vm_datastores }}"
+        pve_folder_path         = "{{ folderpath }}"
+        pve_network             = "{{ vm_network }}"
+        vm_notes                = "VSPHERE-VM {{ vmName }} {{ vm_template }} BUILD w/ TERRAFORM FOR STUTTGART-THINGS"
+        pve_api_url             = var.pve_api_url
+        pve_api_user            = var.pve_api_user
+        pve_api_password        = var.pve_api_password
+        vm_ssh_user             = var.vm_ssh_user
+        vm_ssh_password         = var.vm_ssh_password
+      }
+
+      output "ip" {
+        value     = module.{{ vmName }}.ip
+      }
+
+      variable "pve_api_url" {
+        type        = string
+        description = "url of proxmox api. Example: https://server-example.sva.de:8006/api2/json"
+      }
+
+      variable "pve_api_user" {
+        type        = string
+        description = "username of proxmox api user"
+      }
+
+      variable "pve_api_password" {
+        type        = string
+        description = "password of proxmox api user"
+      }
+
+      variable "vm_ssh_user" {
+        type        = string
+        description = "desired username for ssh connection"
+      }
+
+      variable "vm_ssh_password" {
+        type        = string
+        description = "desired password for ssh connection"
+      }
+
+  - name: backend
+    file: |
+      terraform {
+        backend "s3" {
+
+          endpoints = {
+            s3 = "{{ backend_host_url }}"
+          }
+
+          skip_requesting_account_id = true
+          skip_s3_checksum = true
+          key = "{{ vmName }}.tfstate"
+          bucket = "{{ bucket_name }}"
+          region = "main"
+          skip_credentials_validation = true
+          skip_metadata_api_check = true
+          skip_region_validation = true
+          force_path_style = true
+          workspace_key_prefix = "{{ vmName }}"
+        }
+      }

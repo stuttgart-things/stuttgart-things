@@ -19,3 +19,21 @@ playbooks:
         tasks:
           - ansible.builtin.import_tasks: check_connection.yaml
           - ansible.builtin.import_tasks: creation_tasks.yaml
+
+vars:
+  - name: job-golang
+    file: |
+      ---
+      job_templates:
+        stuttgartThings:
+          name: install-golang
+          organization: stuttgart-things
+          inventory: dynamic-inventory-vsphere
+          project: stuttgart-things
+          playbook: plays/install-golang.yaml
+          credentials: sthings-ssh
+          executionenv: sthings-ee
+          state: present
+          ask_verbosity_on_launch: true
+          survey_enabled: true
+          survey_spec: "{{ lookup('file', 'vars/survey-golang.yaml') }}"

@@ -322,3 +322,311 @@ playbooks:
         tasks:
           - ansible.builtin.import_tasks: check_connection.yaml
           - ansible.builtin.import_tasks: creation_tasks.yaml
+
+vars:
+  - name: job-baseos
+    file: |
+      ---
+      job_templates:
+        stuttgartThings:
+          name: baseos
+          organization: stuttgart-things
+          inventory: dynamic-inventory-vsphere
+          project: stuttgart-things
+          playbook: plays/import-base-os-play.yaml
+          credentials: sthings-ssh
+          executionenv: sthings-ee
+          state: present
+          ask_verbosity_on_launch: true
+          survey_enabled: true
+          survey_spec: "{{ lookup('file', 'vars/survey-baseos.yaml') }}"
+
+  - name: job-schedule
+    file: |
+      ---
+      job_templates:
+        stuttgartThings:
+          name: schedule-baseos
+          organization: stuttgart-things
+          inventory: dynamic-inventory-vsphere
+          project: stuttgart-things
+          playbook: plays/schedule-baseos.yaml
+          credentials: sthings-ssh
+          executionenv: sthings-ee
+          state: present
+          ask_verbosity_on_launch: true
+          survey_enabled: true
+          survey_spec: "{{ lookup('file', 'vars/survey-schedule.yaml') }}"
+
+  - name: job-awx
+    file: |
+      ---
+      job_templates:
+        stuttgartThings:
+          name: hello-awx
+          organization: stuttgart-things
+          inventory: dynamic-inventory-vsphere
+          project: stuttgart-things
+          playbook: plays/hello-awx.yaml
+          credentials: sthings-ssh
+          executionenv: sthings-ee
+          state: present
+          ask_verbosity_on_launch: true
+          survey_enabled: true
+          survey_spec: "{{ lookup('file', 'vars/survey-job-awx.yaml') }}"
+
+
+  - name: dynamic-inventory-vsphere
+    file: |
+      ---
+      inventories:
+        dynamicInventory:
+          name: dynamic-inventory-vsphere
+          description: stuttgart-things organization
+          organization: stuttgart-things
+          state: present
+
+  - name: inventory-source
+    file: |
+      ---
+      inventorySource:
+        dynamicInventory:
+          name: source-dynamic-inventory
+          description: Source for inventory dynamic-inventory-vsphere
+          organization: stuttgart-things
+          inventory: dynamic-inventory-vsphere
+          credential: sthings-labul
+          source: vmware
+          source_vars:
+            hostnames:
+              - config.name
+            properties:
+              - name
+              - network
+              - overallStatus
+              - value
+              - capability
+              - config
+              - guest
+              - runtime
+              - summary
+            with_nested_properties: true
+            with_tags: true
+            resources:
+              - datacenter:
+                  - LabUL
+                resources:
+                  - folder:
+                    - stuttgart-things
+
+  - name: hosts-test
+    file: |
+      ---
+      hosts:
+        localhost:
+          name: localhost
+          description: stuttgart-things organization
+          inventory: dynamic-inventory-vsphere
+          state: present
+          vmVariables: {ansible_connection: local}
+        vsphere:
+          name: "{{ test_host }}"
+          description: stuttgart-things organization
+          inventory: dynamic-inventory-vsphere
+          state: present
+
+  - name: organization-sthings
+    file: |
+      ---
+      organizations:
+        stuttgartThings:
+          name: stuttgart-things
+          description: stuttgart-things organization
+          state: present
+
+  - name: scm-creds-sthings
+    file: |
+      ---
+      scmCredentials:
+        sthingsSCM:
+          name: sthings-scm
+          organization: stuttgart-things
+          state: present
+          awx_ssh_key: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=ssh/data/sthings:privateKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') | b64decode }}"
+
+  - name: projects-sthings
+    file: |
+      ---
+      projects:
+        stuttgartThings:
+          name: stuttgart-things
+          description:
+          organization: stuttgart-things
+          scm_url: git@codehub.sva.de:Lab/stuttgart-things/stuttgart-things.git
+          scm_type: git
+          credential: sthings-scm
+          state: present
+          scm_update_on_launch: true
+          scm_update_cache_timeout: 60
+
+  - name: machine-creds-sthings
+    file: |
+      ---
+      machineCredentials:
+        sthingsSSH:
+          name: sthings-ssh
+          description: stuttgart-things organization
+          organization: stuttgart-things
+          credential_type: Machine
+          state: present
+          username: sthings
+          awx_ssh_key: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=ssh/data/sthings:privateKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') | b64decode }}"
+        vcenterCredentials:
+          name: sthings-labul
+          description: stuttgart-things organization
+          organization: stuttgart-things
+          credential_type: VMware vCenter
+          state: present
+          host: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/vsphere:ip validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+          username: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/vsphere:username validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+          password: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=cloud/data/vsphere:password validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+        containerRegistryCredentials:
+          name: sthings-registry
+          description: stuttgart-things organization
+          organization: stuttgart-things
+          credential_type: Container Registry
+          state: present
+          username: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps/data/harbor:user validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+          password: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps/data/harbor:password validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+
+  - name: vault-injector
+    file: |
+      {
+          "env": {
+            "VAULT_ADDR": "{{ vault_url }}",
+            "VAULT_ROLE_ID": "{{ vault_approle_id }}",
+            "VAULT_SECRET_ID": "{{ vault_approle_secret }}",
+          },
+          "extra_vars": {}
+      }
+
+  - name: vault-input
+    file: |
+      {
+          "fields": [
+            {
+                "id": "vault_url",
+                "type": "string",
+                "label": "vault_url"
+            },
+            {
+                "id": "vault_approle_id",
+                "type": "string",
+                "label": "vault_approle_id"
+            },
+            {
+                "id": "vault_approle_secret",
+                "type": "string",
+                "label": "vault_approle_secret"
+            }
+          ],
+          "required": [
+            "vault_url",
+          ]
+      }
+
+  - name: custom-credential-type
+    file: |
+      ---
+      custom_credential_types:
+        vault:
+          name: vault-custom
+          state: present
+          kind: cloud
+          inputs: "{{ lookup('file', 'vars/vault-input.yaml') }}"
+          injectors: "{{ lookup('file', 'vars/vault-injector.yaml') }}"
+
+  - name: custom-credentials
+    file: |
+      ---
+      custom_credentials:
+        vault_custom:
+          name: labul-vault
+          description: labul vault credentials
+          credential_type: vault-custom
+          organization: stuttgart-things
+          state: present
+          inputs:
+            vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
+            vault_approle_id: "{{ lookup('env', 'VAULT_ROLE_ID') }}"
+            vault_approle_secret: "{{ lookup('env', 'VAULT_SECRET_ID') }}"
+
+  - name: ee-sthings
+    file: |
+      ---
+      execution_environment:
+        sthings-ee:
+          name: sthings-ee
+          image: scr.cd43.sthings-pve.labul.sva.de/ansible-ee/ee:v4
+          pull: always
+          credential: sthings-registry
+
+  - name: schedule-baseos
+    file: |
+      ---
+      start_date: "2024-06-30"
+      cron_time: "05:00:00"
+      frequency_rule: "day"
+      interval_rule: 1
+      target_host: localhost
+
+      scheduler:
+        schedule_base_os:
+          name: schedule-base-os
+          state: present
+          unified_job_template: "baseos"
+          job_type: "run"
+          extra_data:
+            target_host: "{{ target_host }}"
+            manage_filesystem: "true"
+            update_packages: "true"
+            install_requirements: "true"
+            install_motd: "true"
+            reboot_all: "false"
+            username: "sthings"
+            lvm_home_sizing: "15%"
+            lvm_root_sizing: "35%"
+            lvm_var_sizing: "50%"
+            send_to_msteams: "true"
+            msteams_webhook_url: "https://365sva.webhook.office.com/webhookb2/2f14a9f8-4736-46dd-9c8c-31547ec37180@0a65cb1e-37d5-41ff-980a-647d9d0e4f0b/IncomingWebhook/37a805a0a2624dc2ac1aedd7dec6ad49/dc3a27ed-396c-40b7-a9b2-f1a2b6b44efe"
+
+      rrules:
+        - frequency: '{{ frequency_rule }}'
+          interval: "{{ interval_rule }}"
+        - frequency: 'day'
+          interval: 1
+          byweekday: [ 'saturday', 'sunday' ]
+          include: False
+
+  - name: awx-local-env
+    file: |
+      ---
+      controller_host: "{{ lookup('env', 'CONTROLLER_HOST') }}"
+      controller_username: "{{ lookup('env', 'CONTROLLER_USERNAME') }}"
+      controller_password: "{{ lookup('env', 'CONTROLLER_PASSWORD') }}"
+      vault_approle_id: "{{ lookup('env', 'VAULT_ROLE_ID') }}"
+      vault_approle_secret: "{{ lookup('env', 'VAULT_SECRET_ID') }}"
+      vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
+
+  - name: s3-instances
+    file: |
+      ---
+      instances:
+        labul-automation:
+          url: https://artifacts.automation.sthings-vsphere.labul.sva.de:443
+          username: apps/data/artifacts:accessKey
+          password: apps/data/artifacts:secretKey
+        andre-dev:
+          url: https://artifacts.andre-dev.sthings-vsphere.labul.sva.de:443
+          username: apps/data/artifacts:accessKey
+          password: apps/data/artifacts:secretKey
