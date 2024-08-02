@@ -24,6 +24,7 @@ playbooks:
 
         tasks:
           - ansible.builtin.import_tasks: check_connection.yaml
+          - ansible.builtin.import_tasks: render_survey.yaml
           - ansible.builtin.import_tasks: creation_tasks.yaml
 
   - name: get_execute_terraform
@@ -48,6 +49,7 @@ playbooks:
 
         tasks:
           - ansible.builtin.import_tasks: check_connection.yaml
+          - ansible.builtin.import_tasks: render_survey.yaml
           - ansible.builtin.import_tasks: creation_tasks.yaml
 
   - name: create_vm_workflow
@@ -70,6 +72,7 @@ playbooks:
 
         tasks:
           - ansible.builtin.import_tasks: check_connection.yaml
+          - ansible.builtin.import_tasks: render_survey.yaml
           - ansible.builtin.import_tasks: creation_tasks.yaml
 
 vars:
@@ -91,7 +94,7 @@ vars:
           ask_verbosity_on_launch: true
           extra_vars: "{{ extra_vars | default(omit) }}"
           survey_enabled: true
-          survey_spec: "{{ lookup('file', 'vars/survey-get-execute-terraform.yaml') }}"
+          survey_spec: "{{ lookup('file', 'vars/rendered.json') }}"
 
   - name: job-render-upload-template
     file: |
@@ -111,7 +114,7 @@ vars:
           ask_verbosity_on_launch: true
           extra_vars: "{{ extra_vars | default(omit) }}"
           survey_enabled: true
-          survey_spec: "{{ lookup('file', 'vars/survey-render-upload-template.yaml') }}"
+          survey_spec: "{{ lookup('file', 'vars/rendered.json') }}"
 
   - name: job-create-vm-workflow
     file: |
@@ -127,7 +130,7 @@ vars:
           executionenv: sthings-ee
           state: present
           survey_enabled: true
-          survey_spec: "{{ lookup('file', 'vars/survey-create-vm-workflow.yaml') }}"
+          survey_spec: "{{ lookup('file', 'vars/rendered.json') }}"
           extra_data_render: "{'target_host': 'localhost', 'bucket_name': 'andre-vm-config'}"
           extra_data_execute: "{'target_host': 'andre-dev-u22', 'bucket_name': 'andre-vm-config'}"
 
