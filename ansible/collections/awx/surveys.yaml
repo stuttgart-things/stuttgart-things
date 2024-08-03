@@ -164,7 +164,7 @@ vars:
           description: Choose labul or labda
           required: true
           type: multiplechoice
-          variable: state
+          variable: lab
           min: "null"
           max: "null"
           choices: '["labul", "labda"]'
