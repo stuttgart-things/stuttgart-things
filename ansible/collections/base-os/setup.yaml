@@ -126,16 +126,16 @@ playbooks:
               wget -q https://kcl-lang.io/script/install-kcl-lsp.sh -O - | /bin/bash
 
   - name: users
-      play: |
-        ---
-        - hosts: "{{ target_host | default('all') }}"
-          gather_facts: true
-          become: true
-          vars_files:
-            - "{{ profile | default('users') }}.yaml"
+    play: |
+      ---
+      - hosts: "{{ target_host | default('all') }}"
+        gather_facts: true
+        become: true
+        vars_files:
+          - "{{ profile | default('users') }}.yaml"
 
-          roles:
-            - role: sthings.base_os.create_os_user
+        roles:
+          - role: sthings.base_os.create_os_user
 
 vars:
   - name: users
