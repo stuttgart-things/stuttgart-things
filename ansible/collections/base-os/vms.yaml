@@ -14,7 +14,7 @@ playbooks:
           rendered_all: "tf-config-all.tf"
           bucket_permission: [private]
           path: "vars"
-          s3: "andre-dev"
+          s3: "homerun-dev"
 
           #-e lab=labul -e cloud=vsphere -vv
 
@@ -76,7 +76,7 @@ playbooks:
           bucket_permission: [private]
           path: "vars"
           install_terraform: "true"
-          s3: "andre-dev"
+          s3: "homerun-dev"
           terraform_version: 1.9.1 # datasource=custom.hashicorp
 
           bin:
@@ -462,7 +462,7 @@ vars:
           url: https://artifacts.automation.sthings-vsphere.labul.sva.de:443
           username: apps/data/artifacts:accessKey
           password: apps/data/artifacts:secretKey
-        andre-dev:
-          url: https://artifacts.andre-dev.sthings-vsphere.labul.sva.de:443
+        homerun-dev:
+          url: https://artifacts.homerun-dev.sthings-vsphere.labul.sva.de:443
           username: apps/data/artifacts:accessKey
           password: apps/data/artifacts:secretKey
