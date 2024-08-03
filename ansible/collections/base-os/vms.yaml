@@ -1,5 +1,67 @@
 ---
 playbooks:
+  - name: render_upload_vm
+    play: |
+      ---
+      - hosts: "{{ target_host | default('localhost') }}"
+        vars:
+          vault_approle_id: "{{ lookup('env', 'VAULT_ROLE_ID') }}"
+          vault_approle_secret: "{{ lookup('env', 'VAULT_SECRET_ID') }}"
+          vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
+          AWS_ACCESS_KEY_ID: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps/data/artifacts:accessKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+          AWS_SECRET_ACCESS_KEY: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps/data/artifacts:secretKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
+          bucket_name: andre-vm-config
+          rendered_all: "tf-config-all.tf"
+          bucket_permission: [private]
+          path: "vars"
+          s3: "andre-dev"
+
+          #-e lab=labul -e cloud=vsphere -vv
+
+        vars_files:
+          - "{{ path | default('.') }}/{{ lab }}.yaml"
+          - "{{ path | default('.') }}/{{ cloud }}.yaml"
+          - "{{ path | default('.') }}/s3-instances.yaml"
+          - "{{ path | default('.') }}/vm-defaults.yaml"
+
+        tasks:
+          - name: Create a config file from a j2 template
+            ansible.builtin.template:
+              src: "{{ item.value.name }}.yaml"
+              dest: "{{ ansible_date_time.date }}-{{ item.value.name }}.tf"
+            loop: "{{ lookup('dict', j2_template_name, wantlist=True) }}"
+
+          - name: Concat template files
+            ansible.builtin.lineinfile:
+              create: true
+              path: "{{ rendered_all }}"
+              line: "{{ lookup('file', '{{ ansible_date_time.date }}-vm-{{ cloud }}.tf') }}\n\n{{ lookup('file', '{{ ansible_date_time.date }}-backend.tf') }}"
+
+          - name: Upload config to S3 Bucket
+            amazon.aws.s3_object:
+              bucket: "{{ bucket_name }}"
+              object: "{{ ansible_date_time.date }}-{{ vmName }}.tf"
+              src: "{{ rendered_all }}"
+              mode: put
+              access_key: "{{ AWS_ACCESS_KEY_ID }}"
+              secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+              validate_certs: false
+              encrypt: false
+              rgw: false
+              permission: "{{ bucket_permission }}"
+              endpoint_url: "{{ instances[s3]['url'] }}"
+
+          - name: Remove rendered vm config
+            ansible.builtin.file:
+              path: "{{ ansible_date_time.date }}-{{ item.value.name }}.tf"
+              state: absent
+            loop: "{{ lookup('dict', j2_template_name, wantlist=True) }}"
+
+          - name: Remove concatenated template file
+            ansible.builtin.file:
+              path: "{{ rendered_all }}"
+              state: absent
+
   - name: get_execute_terraform
     play: |
       ---
@@ -124,68 +186,6 @@ playbooks:
 
         roles:
           - role: sthings.base_os.manage_proxmox_resources
-
-  - name: render_upload_vm
-    play: |
-      ---
-      - hosts: "{{ target_host | default('localhost') }}"
-        vars:
-          vault_approle_id: "{{ lookup('env', 'VAULT_ROLE_ID') }}"
-          vault_approle_secret: "{{ lookup('env', 'VAULT_SECRET_ID') }}"
-          vault_url: "{{ lookup('env', 'VAULT_ADDR') }}"
-          AWS_ACCESS_KEY_ID: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps/data/artifacts:accessKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
-          AWS_SECRET_ACCESS_KEY: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=apps/data/artifacts:secretKey validate_certs=false auth_method=approle role_id={{ vault_approle_id }} secret_id={{ vault_approle_secret }} url={{ vault_url }}') }}"
-          bucket_name: andre-vm-config
-          rendered_all: "tf-config-all.tf"
-          bucket_permission: [private]
-          path: "vars"
-          s3: "andre-dev"
-
-          #-e lab=labul -e cloud=vsphere -vv
-
-        vars_files:
-          - "{{ path | default('.') }}/{{ lab }}.yaml"
-          - "{{ path | default('.') }}/{{ cloud }}.yaml"
-          - "{{ path | default('.') }}/s3-instances.yaml"
-          - "{{ path | default('.') }}/vm-defaults.yaml"
-
-        tasks:
-          - name: Create a config file from a j2 template
-            ansible.builtin.template:
-              src: "{{ item.value.name }}.yaml"
-              dest: "{{ ansible_date_time.date }}-{{ item.value.name }}.tf"
-            loop: "{{ lookup('dict', j2_template_name, wantlist=True) }}"
-
-          - name: Concat template files
-            ansible.builtin.lineinfile:
-              create: true
-              path: "{{ rendered_all }}"
-              line: "{{ lookup('file', '{{ ansible_date_time.date }}-vm-{{ cloud }}.tf') }}\n\n{{ lookup('file', '{{ ansible_date_time.date }}-backend.tf') }}"
-
-          - name: Upload config to S3 Bucket
-            amazon.aws.s3_object:
-              bucket: "{{ bucket_name }}"
-              object: "{{ ansible_date_time.date }}-{{ vmName }}.tf"
-              src: "{{ rendered_all }}"
-              mode: put
-              access_key: "{{ AWS_ACCESS_KEY_ID }}"
-              secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
-              validate_certs: false
-              encrypt: false
-              rgw: false
-              permission: "{{ bucket_permission }}"
-              endpoint_url: "{{ instances[s3]['url'] }}"
-
-          - name: Remove rendered vm config
-            ansible.builtin.file:
-              path: "{{ ansible_date_time.date }}-{{ item.value.name }}.tf"
-              state: absent
-            loop: "{{ lookup('dict', j2_template_name, wantlist=True) }}"
-
-          - name: Remove concatenated template file
-            ansible.builtin.file:
-              path: "{{ rendered_all }}"
-              state: absent
 
 templates:
   - name: vm-vsphere
