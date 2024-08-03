@@ -36,7 +36,7 @@ vars:
           description: Choose VM count
           required: true
           type: multiplechoice
-          variable: vmSize
+          variable: vmCount
           min: "null"
           max: "null"
           choices: '["1", "2", "3", "4", "5"]'
@@ -236,7 +236,7 @@ vars:
           description: Choose labul or labda
           required: false
           type: multiplechoice
-          variable: state
+          variable: lab
           min: "null"
           max: "null"
           choices: '["labul", "labda"]'
