@@ -27,7 +27,7 @@ RUN wget -q https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_
     && chmod +x /usr/bin/yq \
     && rm -rf xvfz yq_linux_amd64.tar.gz
 
-# MACHINE-SHOP
+# MACHINESHOP
 RUN wget -q https://github.com/stuttgart-things/machineshop/releases/download/${MACHINE_SHOP_VERSION}/machineshop_Linux_x86_64.tar.gz \
     && tar -xvf machineshop_Linux_x86_64.tar.gz -C /usr/bin/ machineshop \
     && rm -rf machineshop_Linux_x86_64.tar.gz
