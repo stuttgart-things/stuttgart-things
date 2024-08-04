@@ -5,6 +5,10 @@ ARG TAG=3.12.2-alpine3.19
 
 FROM gcr.io/kaniko-project/executor:v1.23.1 AS kaniko
 
+# SET META INFORMATION
+LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
+LABEL version=10.2.0
+
 FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
 ARG SKOPEO_VERSION=1.14.4 # datasource=github-tags depName=lework/skopeo-binary
 ARG TRIVY_VERSION=0.52.2
