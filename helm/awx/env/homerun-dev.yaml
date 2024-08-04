@@ -1,15 +1,24 @@
 ---
-caBundle:
-  create: true
-  secretName: sthings-custom-certs
-  path: ref+vault://apps/awx/cabundle
+secrets:
+  sthings-admin-password:
+    namespace: awx
+    kvs:
+      password: ref+vault://apps/awx/password-dev
+  sthings-custom-certs:
+    namespace: awx
+    kvs:
+      bundle-ca.crt: ref+vault://apps/awx/cabundle
+
+  # caBundle:
+  #   create: true
+  #   secretName: sthings-custom-certs
 
 instances:
   dev:
     name: awx-dev
     namespace: awx
     adminUser: ref+vault://apps/awx/user-dev
-    adminPassword: ref+vault://apps/awx/password-dev
+    adminPassword: sthings-admin-password
     hostname: awx-dev
     domain: homerun-dev.sthings-vsphere.labul.sva.de
     ingressClassName: nginx
