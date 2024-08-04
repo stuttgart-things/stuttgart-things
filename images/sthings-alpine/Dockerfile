@@ -5,6 +5,7 @@ FROM python:${FROM_TAG}
 LABEL version=alpine3.20
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 
+# INSTALL CA CERTIFICATES
 RUN apk update && apk add ca-certificates && rm -rf /var/cache/apk/* \
   mkdir /usr/local/share/ca-certificates/extra
 
