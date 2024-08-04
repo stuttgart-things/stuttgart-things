@@ -3,16 +3,16 @@ ARG REPOSITORY=stuttgart-things
 ARG IMAGE=sthings-alpine
 ARG TAG=3.12.2-alpine3.19
 
-FROM gcr.io/kaniko-project/executor:v1.23.1 AS kaniko
+FROM gcr.io/kaniko-project/executor:v1.23.2 AS kaniko
 
 # SET META INFORMATION
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
-LABEL version=10.2.0
+LABEL version=1.23.2
 
 FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
 ARG SKOPEO_VERSION=1.14.4 # datasource=github-tags depName=lework/skopeo-binary
 ARG TRIVY_VERSION=0.52.2
-ARG YQ_VERSION=4.43.1
+ARG YQ_VERSION=4.44.2
 ARG MACHINE_SHOP_VERSION=2.2.9
 ARG JQ_VERSION=1.7.1
 

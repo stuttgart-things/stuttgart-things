@@ -74,7 +74,7 @@ jobs:
       registry-config: images/dev-registries.yaml
       dockerfile: Dockerfile
       context: git://github.com/stuttgart-things/stuttgart-things
-      kaniko-image: eu.gcr.io/stuttgart-things/sthings-container:v1.23.1-2
+      kaniko-image: eu.gcr.io/stuttgart-things/sthings-container:1.23.2
       context-sub-path: images/${{ matrix.context-path }}
     secrets: inherit
 
@@ -90,5 +90,5 @@ jobs:
       environment-name: labul-vsphere
       kind: image
       object: ${{ matrix.image }}
-      trivy-image: eu.gcr.io/stuttgart-things/sthings-container:v1.23.1-2
+      trivy-image: eu.gcr.io/stuttgart-things/sthings-container:1.23.2
     secrets: inherit
