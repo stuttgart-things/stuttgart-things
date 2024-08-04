@@ -1,8 +1,8 @@
-ARG FROM_TAG=3.12.4-alpine3.19
+ARG FROM_TAG=alpine3.20
 FROM python:${FROM_TAG}
 
 # SET META INFORMATION
-LABEL version=3.12.2-alpine3.19
+LABEL version=alpine3.20
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 
 RUN apk update && apk add ca-certificates && rm -rf /var/cache/apk/* \
