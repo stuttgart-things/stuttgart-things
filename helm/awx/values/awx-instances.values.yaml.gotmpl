@@ -9,7 +9,9 @@ customresources:
       namespace: {{ $v.namespace }}
     spec:
       admin_user: {{ $v.adminUser }}
-      admin_password_secret: {{ $v.adminPassword }}
+      {{ if $v.adminPasswordSecret }}
+      admin_password_secret: {{ $v.adminPasswordSecret }}
+      {{ end }}
       {{ if $v.bundleCacertSecret }}
       bundle_cacert_secret: {{ $v.bundleCacertSecret }}
       {{ end }}
