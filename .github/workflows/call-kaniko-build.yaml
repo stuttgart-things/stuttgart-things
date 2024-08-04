@@ -75,6 +75,14 @@ jobs:
           echo "BUILD_IMAGE=${REGISTRY_URL}/${{ inputs.context-sub-path }}:${BUILD_TAG}" >> $GITHUB_ENV
           echo "BUILD_TAG=${BUILD_TAG}" >> $GITHUB_ENV
 
+          machineshop push \
+          --destination https://homerun.homerun-dev.sthings-vsphere.labul.sva.de/generic \
+          --target homerun \
+          --title "whatever" \
+          --title "test" \
+          --info "blabla" \
+          --tags "bla,bllaa"
+
       - name: Push w/ skopeo to registries
         run: |
           for registry in $(yq eval -o=j ${{ inputs.registry-config }} | jq -cr '.registries[]'); do
