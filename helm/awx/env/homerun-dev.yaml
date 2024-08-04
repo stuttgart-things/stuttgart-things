@@ -1,5 +1,8 @@
 ---
-caBundle: ref+vault://apps/awx/cabundle
+caBundle:
+  create: true
+  secretName: sthings-custom-certs
+  path: ref+vault://apps/awx/cabundle
 
 instances:
   dev:
@@ -16,6 +19,7 @@ instances:
     projectPersistence: false
     projectsStorageAccessMode: ReadWriteMany
     fsGroupChangePolicy: OnRootMismatch
+    bundleCacertSecret: sthings-custom-certs
   # prod:
   #   name: awx
   #   namespace: awx
@@ -30,3 +34,4 @@ instances:
   #   projectPersistence: false
   #   projectsStorageAccessMode: ReadWriteMany
   #   fsGroupChangePolicy: OnRootMismatch
+  #   bundleCacertSecret: sthings-custom-certs

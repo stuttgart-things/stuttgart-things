@@ -8,9 +8,11 @@ customresources:
       name: {{ $v.name }}
       namespace: {{ $v.namespace }}
     spec:
-      admin_user: {{ $v.adminUser  | fetchSecretValue }}
-      admin_password_secret: {{ $v.adminPassword | fetchSecretValue }}
-      bundle_cacert_secret: {{ $.Values.certName }}
+      admin_user: {{ $v.adminUser }}
+      admin_password_secret: {{ $v.adminPassword }}
+      {{ if $v.bundleCacertSecret }}
+      bundle_cacert_secret: {{ $v.bundleCacertSecret }}
+      {{ end }}
       hostname: {{ $v.hostname }}.{{ $v.domain }}
       ingress_class_name: {{ $v.ingressClassName }}
       ingress_tls_secret: {{ $v.ingressSecret }}-tls

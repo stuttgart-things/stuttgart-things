@@ -1,8 +1,15 @@
 # AWX
 
 ## INIT
+
 ```bash
 helmfile init # install helmfile plugins
+```
+
+## UPDATE DEPENDENCIES
+
+```bash
+helmfile deps -f awx.yaml
 ```
 
 ## TEMPLATE

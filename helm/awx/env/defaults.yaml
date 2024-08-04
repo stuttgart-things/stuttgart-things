@@ -1,8 +1,7 @@
 ---
+app: awx
+namespace: awx
 ingressType: ingress
 postgresStorageClass: nfs-csi
 projectStorageClass: nfs-csi
 clusterIssuer: vault-approle
-
-certName: sthings-custom-certs
-namespace: awx

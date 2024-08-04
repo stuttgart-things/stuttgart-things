@@ -1,19 +1,12 @@
 ---
-customresources:
-  ca-bundle:
-    apiVersion: v1
-    kind: Secret
-    metadata:
-      name: {{ .Values.certName }}
-      namespace: {{ .Values.namespace }}
-    annotations:
-      meta.helm.sh/release-name: awx-ca-bundle
-      meta.helm.sh/release-namespace: awx
+{{ if .Values.caBundle.create }}
+secrets:
+  sthings-custom-certs:
+    name: {{ .Values.caBundle.secretName }}
+    namespace: {{ .Values.namespace }}
     labels:
-      app.kubernetes.io/managed-by: Helm
-    type: Opaque
-    data:
-    {{- range $k, $v := .Values.instances }}
-      bundle-ca.crt: |-
-        {{ ($v.secret | fetchSecretValue) | b64enc }}
-    {{- end }}
+      app: {{ .Values.app }}
+    dataType: stringData
+    secretKVs:
+      bundle-ca.crt: {{ .Values.caBundle.path }}
+{{ end }}
