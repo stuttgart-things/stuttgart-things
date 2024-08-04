@@ -15,15 +15,6 @@ releases:
     values:
       - "values/awx-certificates.values.yaml.gotmpl"
 
-  - name: awx-ca-bundle
-    disableValidationOnInstall: true
-    installed: false
-    namespace: awx
-    chart: stuttgart-things/sthings-cluster
-    version: 0.3.10
-    values:
-      - "values/awx-ca-bundle.values.yaml.gotmpl"
-
   - name: awx-secrets
     disableValidationOnInstall: true
     installed: true

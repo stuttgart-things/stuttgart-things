@@ -25,18 +25,18 @@ instances:
     projectPersistence: false
     projectsStorageAccessMode: ReadWriteMany
     fsGroupChangePolicy: OnRootMismatch
-  prod:
-    name: awx
-    namespace: awx
-    adminUser: sthings
-    adminPasswordSecret: sthings-admin-password
-    bundleCacertSecret: sthings-custom-certs
-    hostname: awx-dev
-    domain: homerun-dev.sthings-vsphere.labul.sva.de
-    ingressClassName: nginx
-    ingressSecret: awx
-    postgresStorageLimits: 8Gi
-    postgresStorageRequest: 1Gi
-    projectPersistence: false
-    projectsStorageAccessMode: ReadWriteMany
-    fsGroupChangePolicy: OnRootMismatch
+  # prod:
+  #   name: awx
+  #   namespace: awx
+  #   adminUser: sthings
+  #   adminPasswordSecret: sthings-admin-password
+  #   bundleCacertSecret: sthings-custom-certs
+  #   hostname: awx-dev
+  #   domain: homerun-dev.sthings-vsphere.labul.sva.de
+  #   ingressClassName: nginx
+  #   ingressSecret: awx
+  #   postgresStorageLimits: 8Gi
+  #   postgresStorageRequest: 1Gi
+  #   projectPersistence: false
+  #   projectsStorageAccessMode: ReadWriteMany
+  #   fsGroupChangePolicy: OnRootMismatch

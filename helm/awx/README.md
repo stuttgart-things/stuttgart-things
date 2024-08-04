@@ -42,7 +42,7 @@ export CONTROLLER_PASSWORD=$(kubectl -n awx get secret awx-admin-password -o jso
 export CONTROLLER_USERNAME=admin
 ```
 
-# Provision all awx ressources
+# PROVISION ALL AWX RESSOURCES
 ```bash
 arr=("baseos" "golang" "nerdctl" "docker" "render_upload_template" "get_execute_terraform" "workflow")
 for i in ${!arr[@]};
@@ -50,4 +50,12 @@ do
   echo $i "${arr[i]}";
   ansible-playbook sthings.awx."${arr[i]}" -vv;
 done
+```
+
+Author Information
+------------------
+
+```bash
+Andre Ebert, stuttgart-things 03/2024
+Patrick Hermann, stuttgart-things 03/2024
 ```

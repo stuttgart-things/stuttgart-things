@@ -1,28 +1,17 @@
 ---
 environments:
-  app-dev:
+  homerun-dev:
     values:
       - env/defaults.yaml
       - env/{{ .Environment.Name }}.yaml
 
 releases:
-  # - name: kibana-ingress
-  #   disableValidationOnInstall: true
-  #   installed: true
-  #   namespace: elastic-system
-  #   chart: stuttgart-things/sthings-cluster
-  #   version: 0.3.10
-  #   values:
-  #     - "values/kibana-ingress.values.yaml.gotmpl"
-
   - name: eck-operator-deployment
     disableValidationOnInstall: true
     installed: true
     namespace: elastic-system
     chart: elastic/eck-operator
     version: 2.13.0
-    # needs:
-    #   - elastic-system/kibana-ingress
 
   - name: elasticsearch-cluster
     disableValidationOnInstall: true
