@@ -2,9 +2,9 @@ version: 0.166.0
 dependencies:
 - name: awx-operator
   repository: https://ansible.github.io/awx-operator
-  version: 2.19.1
+  version: 2.17.0
 - name: sthings-cluster
   repository: oci://eu.gcr.io/stuttgart-things
   version: 0.3.10
-digest: sha256:8f4b78424a7999888558da431277cd1f53f76bd694fe94fe0acb667767650bc5
-generated: "2024-08-04T05:25:05.663438441Z"
+digest: sha256:f2984e75cf1f75b21e04631f2c837ae26a3a56991626df5ba5b7e165e732adc2
+generated: "2024-08-04T05:48:00.390835669Z"
