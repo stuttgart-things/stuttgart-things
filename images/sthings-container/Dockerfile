@@ -6,10 +6,10 @@ ARG TAG=3.12.2-alpine3.19
 FROM gcr.io/kaniko-project/executor:v1.23.1 AS kaniko
 
 FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
-ARG SKOPEO_VERSION=1.14.4
+ARG SKOPEO_VERSION=1.14.4 # datasource=github-tags depName=lework/skopeo-binary
 ARG TRIVY_VERSION=0.52.2
 ARG YQ_VERSION=4.43.1
-ARG MACHINE_SHOP_VERSION=2.1.9
+ARG MACHINE_SHOP_VERSION=2.2.9
 ARG JQ_VERSION=1.7.1
 
 COPY --from=kaniko /kaniko/ /kaniko/
