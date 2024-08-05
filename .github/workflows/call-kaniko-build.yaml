@@ -78,9 +78,9 @@ jobs:
           machineshop push \
           --destination https://homerun.homerun-dev.sthings-vsphere.labul.sva.de/generic \
           --target homerun \
-          --title image was build w/ kaniko on github workflows ${REGISTRY_URL}/${{ inputs.context-sub-path }}:${BUILD_TAG} \
+          --title 'image was build w/ kaniko on github workflows ${REGISTRY_URL}/${{ inputs.context-sub-path }}:${BUILD_TAG}' \
           --system "kaniko" \
-          --info kaniko \
+          --info ${REGISTRY_URL}/${{ inputs.context-sub-path }}:${BUILD_TAG} \
           --tags "kaniko,ghWorkflow"
 
       - name: Push w/ skopeo to registries
