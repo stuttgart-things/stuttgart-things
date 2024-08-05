@@ -24,7 +24,7 @@ RUN rm -rf /usr/local/share/ca-certificates/* \
     && wget -O /usr/local/share/ca-certificates/labul-pve.crt ${VAULT_URL_LABUL_PVE}/v1/pki/ca/pem --no-check-certificate \
     && update-ca-certificates
 
-# INSTALL OS PACKAGES
+# INSTALL OS PACKAGES W/ APK
 RUN apk add --no-cache build-base sudo gawk libc6-compat openssl libffi-dev openssl-dev openssh sshpass tar unzip jq curl ca-certificates wget \
    && apk add --update bash \
        && rm -rf /var/cache/apk/*
