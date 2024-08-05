@@ -1,7 +1,7 @@
 ARG FROM_TAG=alpine3.20
 FROM python:${FROM_TAG}
 
-# SET META INFORMATION
+# META INFORMATION
 LABEL version=alpine-3.20
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 
