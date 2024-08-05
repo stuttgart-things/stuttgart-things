@@ -35,7 +35,7 @@ RUN wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/s
        && apk add --force-overwrite glibc-2.35-r0.apk \
        && rm -rf glibc-2.35-r0.apk
 
-# CREATE NON ROOT USER
+# CREATE NONROOT USER
 ENV USER_ID=65532
 ENV GROUP_ID=65532
 ENV USER_NAME=nonroot
