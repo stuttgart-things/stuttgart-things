@@ -92,7 +92,6 @@ jobs:
           done
         shell: bash
 
-
       - name: Send build info to homerun
         if: always() && true
         run: |
