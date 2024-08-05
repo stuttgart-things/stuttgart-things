@@ -1,10 +1,10 @@
 ARG FROM_TAG=alpine3.19
 FROM python:${FROM_TAG}
 
-LABEL version=3.12.3-alpine3.19-5.19.1
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
+LABEL version=3.12.3-alpine3.19-5.20.0
 
-ARG PLUTO_VERSION=5.19.1
+ARG PLUTO_VERSION=5.20.0
 
 # APT INSTALL
 RUN apk add --no-cache build-base sudo gawk libc6-compat openssl libffi-dev openssl-dev openssh unzip jq curl ca-certificates wget \
