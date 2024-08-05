@@ -1,0 +1,10 @@
+---
+persistence:
+  enabled: false
+
+service:
+  type: LoadBalancer
+
+authentication:
+  passwordEntries: |-
+    sthings:$7$101$Yym6JfAaMaweeGMB$0AsoRjDinIg9e3hg0ZChgomNqkM0abV0jmmuPAMUeXj9cPmwNdgPBqdW1vLRDAI6tuFr4o6/oxa57W9drpfN8g==

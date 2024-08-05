@@ -5,7 +5,7 @@ ARG TAG=3.12.2-alpine3.19
 
 FROM gcr.io/kaniko-project/executor:v1.23.2 AS kaniko
 
-# SET META INFORMATION
+# META INFORMATION
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 LABEL version=1.23.2
 
