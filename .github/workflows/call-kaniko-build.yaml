@@ -97,6 +97,10 @@ jobs:
         run: |
           env
 
+          MESSAGE=${REGISTRY_URL}/${{ inputs.context-sub-path }}:${BUILD_TAG}
+
+          echo ${MESSAGE}
+
           machineshop push \
           --destination https://homerun.homerun-dev.sthings-vsphere.labul.sva.de/generic \
           --target homerun \
