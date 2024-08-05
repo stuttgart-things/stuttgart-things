@@ -95,7 +95,7 @@ jobs:
       - name: Send build info to homerun
         if: always() && true
         run: |
-          echo ${{ failure() }}
+          env
 
           machineshop push \
           --destination https://homerun.homerun-dev.sthings-vsphere.labul.sva.de/generic \
