@@ -75,14 +75,6 @@ jobs:
           echo "BUILD_IMAGE=${REGISTRY_URL}/${{ inputs.context-sub-path }}:${BUILD_TAG}" >> $GITHUB_ENV
           echo "BUILD_TAG=${BUILD_TAG}" >> $GITHUB_ENV
 
-          machineshop push \
-          --destination https://homerun.homerun-dev.sthings-vsphere.labul.sva.de/generic \
-          --target homerun \
-          --title 'image was build w/ kaniko on github workflows ${REGISTRY_URL}/${{ inputs.context-sub-path }}:${BUILD_TAG}' \
-          --system "kaniko" \
-          --info ${REGISTRY_URL}/${{ inputs.context-sub-path }}:${BUILD_TAG} \
-          --tags "kaniko,ghWorkflow"
-
       - name: Push w/ skopeo to registries
         run: |
           for registry in $(yq eval -o=j ${{ inputs.registry-config }} | jq -cr '.registries[]'); do
@@ -98,4 +90,17 @@ jobs:
             skopeo copy docker://${{ env.BUILD_IMAGE }} docker://${url}/$(echo ${{ inputs.context-sub-path }} | sed 's:.*/::')/$(echo ${{ inputs.context-sub-path }} | sed 's:.*/::'):${{ env.BUILD_TAG }}
 
           done
+        shell: bash
+
+
+      - name: Send build info to homerun
+        if: always() && true
+        run: |
+          machineshop push \
+          --destination https://homerun.homerun-dev.sthings-vsphere.labul.sva.de/generic \
+          --target homerun \
+          --title "image was build w/ kaniko on github workflows ${REGISTRY_URL}/${{ inputs.context-sub-path }}:${BUILD_TAG}" \
+          --system "kaniko" \
+          --info ${REGISTRY_URL}/${{ inputs.context-sub-path }}:${BUILD_TAG} \
+          --tags "kaniko,ghWorkflow"
         shell: bash
