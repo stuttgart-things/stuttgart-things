@@ -102,6 +102,7 @@ jobs:
           if [ -z "${BUILD_ARTIFACT}" ]; then
             SEVERITY="ERROR"
             TITLE="image was not build w/ kaniko on github workflows"
+            BUILD_ARTIFACT="no artifact"
           else
             SEVERITY="SUCCESS"
             TITLE="image was build w/ kaniko on github workflows"
@@ -110,7 +111,7 @@ jobs:
           machineshop push \
           --destination https://homerun.homerun-dev.sthings-vsphere.labul.sva.de/generic \
           --target homerun \
-          --title ${TITLE} \
+          --title "${TITLE}" \
           --system "kaniko" \
           --info ${BUILD_ARTIFACT} \
           --tags "kaniko,ghWorkflow" \
