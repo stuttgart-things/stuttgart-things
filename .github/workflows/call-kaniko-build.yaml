@@ -95,7 +95,6 @@ jobs:
       - name: Send build info to homerun
         if: always() && true
         run: |
-
           BUILD_ARTIFACT=${REGISTRY_URL}/${{ inputs.context-sub-path }}:${BUILD_TAG}
           SEVERITY=""
           TITLE=""
