@@ -46,7 +46,7 @@ jobs:
           ls -lta
           bash ${{ inputs.creation-script-path }} ${{ inputs.site-name }}
 
-      - uses: actions/upload-artifact@v4.3.4
+      - uses: actions/upload-artifact@v4.3.6
         with:
           name: hugo-dev
           path: |-
@@ -86,7 +86,7 @@ jobs:
           ls -lta ${{ inputs.site-name }}
           cd ${{ inputs.site-name }} && hugo --logLevel info --destination ../public
 
-      - uses: actions/upload-artifact@v4.3.4
+      - uses: actions/upload-artifact@v4.3.6
         with:
           name: hugo-public
           path: public

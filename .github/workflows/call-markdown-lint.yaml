@@ -44,7 +44,7 @@ jobs:
           mdl . -s ${{ inputs.lintprofile-path }} | tee ./${{ inputs.artifact-name }}.txt
 
       - name: Upload linting results
-        uses: actions/upload-artifact@v4.3.4
+        uses: actions/upload-artifact@v4.3.6
         with:
           name: ${{ inputs.artifact-name }}
           path: ${{ inputs.artifact-name }}.txt
