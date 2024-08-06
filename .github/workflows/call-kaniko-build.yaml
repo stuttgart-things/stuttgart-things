@@ -95,18 +95,25 @@ jobs:
       - name: Send build info to homerun
         if: always() && true
         run: |
-          env
 
-          MESSAGE=${REGISTRY_URL}/${{ inputs.context-sub-path }}:${BUILD_TAG}
+          BUILD_ARTIFACT=${REGISTRY_URL}/${{ inputs.context-sub-path }}:${BUILD_TAG}
+          SEVERITY=""
+          TITLE=""
 
-          echo ${MESSAGE}
+          if [ -z "${BUILD_ARTIFACT}" ]; then
+            SEVERITY="ERROR"
+            TITLE="image was not build w/ kaniko on github workflows"
+          else
+            SEVERITY="SUCCESS"
+            TITLE="image was build w/ kaniko on github workflows"
+          fi
 
           machineshop push \
           --destination https://homerun.homerun-dev.sthings-vsphere.labul.sva.de/generic \
           --target homerun \
-          --title "image was build w/ kaniko on github workflows ${REGISTRY_URL}/${{ inputs.context-sub-path }}:${BUILD_TAG}" \
+          --title ${TITLE} \
           --system "kaniko" \
-          --info ${REGISTRY_URL}/${{ inputs.context-sub-path }}:${BUILD_TAG} \
+          --info ${BUILD_ARTIFACT} \
           --tags "kaniko,ghWorkflow" \
-          --severity "info"
+          --severity ${SEVERITY}
         shell: bash
