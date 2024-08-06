@@ -5,7 +5,7 @@ FROM python:${FROM_TAG}
 LABEL version=alpine-3.20
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 
-# ENVIRONMENT VARIABLES
+# ENV VARIABLES
 ARG VAULT_URL_LABUL=https://vault.labul.sva.de:8200
 ARG VAULT_URL_LABDA=https://vault.tiab.labda.sva.de:8200
 ARG VAULT_URL_LABUL_VSPHERE=https://vault-vsphere.labul.sva.de:8200
