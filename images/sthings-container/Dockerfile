@@ -16,6 +16,7 @@ ARG YQ_VERSION=4.44.2
 ARG MACHINE_SHOP_VERSION=2.2.9
 ARG JQ_VERSION=1.7.1
 
+# COPY KANIKO BINARY
 COPY --from=kaniko /kaniko/ /kaniko/
 
 ENV PATH $PATH:/usr/local/bin:/kaniko
