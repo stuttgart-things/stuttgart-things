@@ -44,7 +44,7 @@ playbooks:
           - "{{ path | default('.') }}/inventory-source.yaml"
           - "{{ path | default('.') }}/ee-sthings.yaml"
           - "{{ path | default('.') }}/terraform-vars.yaml"
-          - "{{ path | default('.') }}/tf-vars-{{ cloud }}.yaml"
+          - "{{ path | default('.') }}/tf-vars-{{ cloud | default('vsphere') }}.yaml"
           - "{{ path | default('.') }}/s3-instances.yaml"
           - "{{ path | default('.') }}/job-get-execute-terraform.yaml"
           - "{{ path | default('.') }}/survey-get-execute-terraform.yaml"
