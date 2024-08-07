@@ -207,15 +207,14 @@ ansible-playbook sthings.container.tools -i /tmp/inv -vv
 
 </details>
 
-## AWX - old
-<details>
+## AWX
 
 ### INSTALLATION
 
 ```bash
-VERSION=0.0.57
+binary=sthings-awx-24.74.56.tar.gz
 ansible-galaxy collection install -f \
-https://github.com/stuttgart-things/stuttgart-things/releases/download/${VERSION}/sthings-awx-${VERSION}.tar.gz
+https://artifacts.homerun-dev.sthings-vsphere.labul.sva.de/ansible-collections/${binary}
 ```
 
 ### VARIABLES
@@ -225,11 +224,51 @@ https://github.com/stuttgart-things/stuttgart-things/releases/download/${VERSION
 * name:         Name of the job-template
 * inventory:    Name of the inventory to use
 * project:      Name of the Project the job-template should belong to
-* state:        'present' to create job-template, 'absent' to delete job-template
+* state:        'present' to create job-template, 'absent' to delete
+* cloud:        choose between vsphere and proxmox
+* lab:          Choose between labul and labda
 
 </details>
 
 ### PLAYBOOKS
+
+<details><summary>DEPLOY JOBS SCRIPT</summary>
+
+Replace/Add/Remove job names inside arr-Variable if you want to deploy specific jobs
+
+```bash
+export CONTROLLER_HOST=https://awx.<DOMAIN>.sva.de #EXAMPLE!
+export CONTROLLER_USERNAME=admin #EXAMPLE!
+export CONTROLLER_PASSWORD=<PASSWORD>
+
+arr=("baseos" "golang" "nerdctl" "docker")
+for i in ${!arr[@]};
+do
+  echo $i "${arr[i]}";
+  ansible-playbook sthings.awx."${arr[i]}" -vv;
+done
+```
+
+
+```bash
+export CONTROLLER_HOST=https://awx.<DOMAIN>.sva.de #EXAMPLE!
+export CONTROLLER_USERNAME=admin #EXAMPLE!
+export CONTROLLER_PASSWORD=<PASSWORD>
+
+arr=("render_upload_template" "get_execute_terraform" "create_vm_workflow")
+for i in ${!arr[@]};
+do
+  addition="-vv";
+  if [[ ($i -eq 0) ]] || [[ ($i -eq 1) ]]
+  then 
+    addition="-e cloud=vsphere -e lab=labul -vv"
+  fi
+  echo $i "${arr[i]}";
+  ansible-playbook sthings.awx."${arr[i]}" "${addition}";
+done
+```
+
+</details>
 
 <details><summary>DOCKER</summary>
 
@@ -286,7 +325,7 @@ base-os deployment awx job template w/ survey AND scheduler
 export CONTROLLER_HOST=https://awx.<DOMAIN>.sva.de #EXAMPLE!
 export CONTROLLER_USERNAME=admin #EXAMPLE!
 export CONTROLLER_PASSWORD=<PASSWORD>
-ansible-playbook sthings.awx.baseos -vv -e target_host=example.labul.sva.de
+ansible-playbook sthings.awx.schedule_baseos -vv
 ```
 
 </details>
@@ -299,150 +338,10 @@ Awx job template to test Host w/ survey (without dynamic inventory)
 export CONTROLLER_HOST=https://awx.<DOMAIN>.sva.de #EXAMPLE!
 export CONTROLLER_USERNAME=admin #EXAMPLE!
 export CONTROLLER_PASSWORD=<PASSWORD>
-ansible-playbook sthings.awx.hello_awx -vv -e test_host=example.labul.sva.de
+ansible-playbook sthings.awx.hello_awx -vv
 ```
 
 </details>
-
-<details><summary>RENDER UPLOAD TEMPLATE - PULL AND CREATE/DESTROY VM</summary>
-
-Awx job template /w survey and play to render and upload templates for VMs
-
-```bash
-export CONTROLLER_HOST=https://awx.<DOMAIN>.sva.de #EXAMPLE!
-export CONTROLLER_USERNAME=admin #EXAMPLE!
-export CONTROLLER_PASSWORD=<PASSWORD>
-
-# Create awx resource to render and upload templates to s3
-ansible-playbook sthings.awx.render_upload_template -vv \
--e lab=labul \
--e cloud=vsphere \
-
-# Create awx resource to pull template from s3 and create/destroy VM
-ansible-playbook sthings.awx.get_execute_terraform -vv \
--e lab=labul \
--e cloud=vsphere
-```
-
-</details>
-
-</details>
-
-
-## AWX - new
-
-### INSTALLATION
-
-```bash
-binary_main=sthings-awx_main-24.2655.5.tar.gz
-binary_vm=sthings-awx_vm-24.2655.5.tar.gz
-ansible-galaxy collection install -f \
-https://artifacts.andre-dev.sthings-vsphere.labul.sva.de/ansible-collections/${binary_main}
-ansible-galaxy collection install -f \
-https://artifacts.andre-dev.sthings-vsphere.labul.sva.de/ansible-collections/${binary_vm}
-```
-
-## PLAYBOOKS awx_main
-
-### Rollout all awx_main playbooks on awx controller
-```bash
-export CONTROLLER_HOST=https://awx.<DOMAIN>.sva.de #EXAMPLE!
-export CONTROLLER_USERNAME=admin #EXAMPLE!
-export CONTROLLER_PASSWORD=<PASSWORD>
-
-arr=("baseos" "golang" "nerdctl" "docker")
-for i in ${!arr[@]};
-do
-  echo $i "${arr[i]}";
-  ansible-playbook sthings.awx_main."${arr[i]}" -vv;
-done
-```
-
-<details><summary>DOCKER</summary>
-
-docker deployment awx job template w/ survey
-
-```bash
-export CONTROLLER_HOST=https://awx.<DOMAIN>.sva.de #EXAMPLE!
-export CONTROLLER_USERNAME=admin #EXAMPLE!
-export CONTROLLER_PASSWORD=<PASSWORD>
-ansible-playbook sthings.awx_main.docker -vv
-```
-
-</details>
-
-<details><summary>NERDCTL</summary>
-
-nerdctl deployment awx job template w/ survey
-
-```bash
-export CONTROLLER_HOST=https://awx.<DOMAIN>.sva.de #EXAMPLE!
-export CONTROLLER_USERNAME=admin #EXAMPLE!
-export CONTROLLER_PASSWORD=<PASSWORD>
-ansible-playbook sthings.awx_main.nerdctl -vv
-```
-
-</details>
-
-<details><summary>GOLANG</summary>
-
-golang deployment awx job template w/ survey
-
-```bash
-export CONTROLLER_HOST=https://awx.<DOMAIN>.sva.de #EXAMPLE!
-export CONTROLLER_USERNAME=admin #EXAMPLE!
-export CONTROLLER_PASSWORD=<PASSWORD>
-ansible-playbook sthings.awx_main.golang -vv
-```
-
-</details>
-
-<details><summary>BASE-OS</summary>
-
-base-os deployment awx job template w/ survey
-
-```bash
-export CONTROLLER_HOST=https://awx.<DOMAIN>.sva.de #EXAMPLE!
-export CONTROLLER_USERNAME=admin #EXAMPLE!
-export CONTROLLER_PASSWORD=<PASSWORD>
-ansible-playbook sthings.awx_main.baseos -vv
-```
-
-</details>
-
-<details><summary>Hello-AWX</summary>
-
-Awx job template to test Host w/ survey (without dynamic inventory)
-
-```bash
-export CONTROLLER_HOST=https://awx.<DOMAIN>.sva.de #EXAMPLE!
-export CONTROLLER_USERNAME=admin #EXAMPLE!
-export CONTROLLER_PASSWORD=<PASSWORD>
-ansible-playbook sthings.awx_main.hello_awx -vv -e test_host=example.labul.sva.de
-```
-
-</details>
-
-## PLAYBOOKS awx_vm
-
-### Rollout all awx_vm playbooks on awx controller
-```bash
-export CONTROLLER_HOST=https://awx.<DOMAIN>.sva.de #EXAMPLE!
-export CONTROLLER_USERNAME=admin #EXAMPLE!
-export CONTROLLER_PASSWORD=<PASSWORD>
-
-arr=("render_upload_template" "get_execute_terraform" "create_vm_workflow")
-for i in ${!arr[@]};
-do
-  addition="-vv";
-  if [[ ($i -eq 0) ]] || [[ ($i -eq 1) ]]
-  then 
-    addition="-e cloud=vsphere -e lab=labul -vv"
-  fi
-  echo $i "${arr[i]}";
-  ansible-playbook sthings.awx_vm."${arr[i]}" "${addition}";
-done
-```
 
 <details><summary>RENDER UPLOAD TEMPLATE</summary>
 
@@ -454,9 +353,9 @@ export CONTROLLER_USERNAME=admin #EXAMPLE!
 export CONTROLLER_PASSWORD=<PASSWORD>
 
 # Create awx resource to render and upload templates to s3
-ansible-playbook sthings.awx_vm.render_upload_template -vv \
+ansible-playbook sthings.awx.render_upload_template -vv \
 -e lab=labul \
--e cloud=vsphere
+-e cloud=vsphere # example
 ```
 
 </details>
@@ -471,9 +370,9 @@ export CONTROLLER_USERNAME=admin #EXAMPLE!
 export CONTROLLER_PASSWORD=<PASSWORD>
 
 # Create awx resource to pull template from s3 and create/destroy VM
-ansible-playbook sthings.awx_vm.get_execute_terraform -vv \
+ansible-playbook sthings.awx.get_execute_terraform -vv \
 -e lab=labul \
--e cloud=vsphere
+-e cloud=vsphere # example
 ```
 
 </details>
@@ -488,11 +387,9 @@ export CONTROLLER_USERNAME=admin #EXAMPLE!
 export CONTROLLER_PASSWORD=<PASSWORD>
 
 # Create awx resource to pull template from s3 and create/destroy VM
-ansible-playbook sthings.awx_vm.create_vm_workflow -vv \
+ansible-playbook sthings.awx.create_vm_workflow -vv \
 ```
-
 </details>
-
 
 ## DEPLOY_RKE
 
