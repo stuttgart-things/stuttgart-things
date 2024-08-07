@@ -74,3 +74,5 @@ Patrick Hermann, stuttgart-things 03/2024
 # remove golang url from survey
 
 # docker kind: install not working no permissions
+
+# ansible-playbook sthings.awx.render_upload_template -vv "Failed to update survey: 'variable' 'vmSize' duplicated in survey question 3."} cloud and lab needs to be commented out

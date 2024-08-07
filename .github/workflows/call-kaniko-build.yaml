@@ -94,7 +94,7 @@ jobs:
         shell: bash
 
       - name: Send build info to homerun
-        if: ${{ failure() && steps.build.conclusion == 'failure' }}
+        if: ${{ failure() && steps.build.conclusion == 'failure' || success() && steps.build.conclusion == 'success' }}
         run: |
           set -x
 
