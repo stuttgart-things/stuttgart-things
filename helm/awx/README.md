@@ -1,15 +1,10 @@
 # AWX
 
-## INIT
+## INIT/UPDATE DEPENDENCIES
 
 ```bash
 helmfile init # install helmfile plugins
-```
-
-## UPDATE DEPENDENCIES
-
-```bash
-helmfile deps -f awx.yaml
+helmfile deps -f awx.yaml # update helm dependencies
 ```
 
 ## TEMPLATE
@@ -30,19 +25,25 @@ kubectl delete pvc postgres-15-awx-postgres-15-0 -n awx #EXAMPLE PVC DELETION
 
 ## AWX Configuration
 
-# GET secret password for awx
+### GET secret password for awx
 ```bash
 kubectl -n awx get secret awx-admin-password -o jsonpath='{.data.password}' | base64 -d
 ```
 
-# EXPORT AWX Controller credentials
+### INSTALL AWX COLLECTION
+```bash
+AWX_COLLECTION=https://artifacts.homerun-dev.sthings-vsphere.labul.sva.de/ansible-collections/sthings-awx-24.338.16.tar.gz
+ansible-galaxy collection install ${AWX_COLLECTION} -f
+```
+
+### SET AWX Controller credentials
 ```bash
 export CONTROLLER_HOST=https://$(kubectl get ingress -n awx |awk '{print $3 }' | grep -v HOSTS)
 export CONTROLLER_PASSWORD=$(kubectl -n awx get secret awx-admin-password -o jsonpath='{.data.password}' | base64 -d)
-export CONTROLLER_USERNAME=admin
+export CONTROLLER_USERNAME=sthings
 ```
 
-# PROVISION ALL AWX RESSOURCES
+### PROVISION ALL AWX RESSOURCES
 ```bash
 arr=("baseos" "golang" "nerdctl" "docker" "render_upload_template" "get_execute_terraform" "workflow")
 for i in ${!arr[@]};
