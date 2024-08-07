@@ -7,6 +7,12 @@ metadata:
 spec:
   type: filebeat
   version: 8.14.2
+  elasticsearchRef:
+    name: elasticsearch-cluster
+    namespace: elastic-system
+  kibanaRef:
+    name: kibana
+    namespace: elastic-system
   config:
     filebeat.inputs:
       - type: log
@@ -48,7 +54,8 @@ spec:
   count: 1
   version: 8.14.2
   elasticsearchRefs:
-    - clusterName: elasticsearch-cluster
+    - name: elasticsearch-cluster
+      clusterName: elasticsearch-cluster
   pipelines:
     - pipeline.id: main
       config.string: |
@@ -68,10 +75,10 @@ spec:
         }
         output {
           elasticsearch {
-            hosts => [ "${ECK_ES_HOSTS}" ]
-            user => "${ECK_ES_USER}"
-            password => "${ECK_ES_PASSWORD}"
-            ssl_certificate_authorities => "${ECK_ES_SSL_CERTIFICATE_AUTHORITY}"
+            hosts => [ "${ELASTICSEARCH_CLUSTER_ES_HOSTS}" ]
+            user => "${ELASTICSEARCH_CLUSTER_ES_USER}"
+            password => "${ELASTICSEARCH_CLUSTER_ES_PASSWORD}"
+            ssl_certificate_authorities => "${ELASTICSEARCH_CLUSTER_ES_SSL_CERTIFICATE_AUTHORITY}"
           }
         }
   services:
@@ -84,6 +91,16 @@ spec:
               name: "filebeat"
               protocol: TCP
               targetPort: 5044
+  volumeClaimTemplates:
+    - metadata:
+        name: logstash-data # Do not change this name unless you set up a volume mount for the data path.
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 2Gi
+        storageClassName: nfs-csi
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
