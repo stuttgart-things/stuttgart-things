@@ -16,8 +16,8 @@ playbooks:
           - "{{ path | default('.') }}/dynamic-inventory-vsphere.yaml"
           - "{{ path | default('.') }}/inventory-source.yaml"
           - "{{ path | default('.') }}/ee-sthings.yaml"
-          - "{{ path | default('.') }}/{{ cloud }}.yaml"
-          - "{{ path | default('.') }}/{{ lab }}.yaml"
+          - "{{ path | default('.') }}/{{ cloud | default('vsphere') }}.yaml"
+          - "{{ path | default('.') }}/{{ lab | default('labul') }}.yaml"
           - "{{ path | default('.') }}/vm-defaults.yaml"
           - "{{ path | default('.') }}/s3-instances.yaml"
           - "{{ path | default('.') }}/job-render-upload-template.yaml"
@@ -195,14 +195,7 @@ vars:
           l: 96
           xl: 128
 
-      j2_template_name:
-        backend:
-          name: "backend"
-        main:
-          name: "vm-{{ cloud }}"
-
       object_name: "{{ ansible_date_time.date }}-{{ project_name }}.tf"
-
       vmName: "test-{{ lookup('community.general.random_string', length=5, special=false) | lower }}"
       vmCount: "1"
       vmSize: "s"
