@@ -27,20 +27,22 @@ kubectl delete pvc postgres-15-awx-postgres-15-0 -n awx #EXAMPLE PVC DELETION
 
 ### GET secret password for awx
 ```bash
+# if not set previously
 kubectl -n awx get secret awx-admin-password -o jsonpath='{.data.password}' | base64 -d
 ```
 
 ### INSTALL AWX COLLECTION
 ```bash
-AWX_COLLECTION=https://artifacts.homerun-dev.sthings-vsphere.labul.sva.de/ansible-collections/sthings-awx-24.338.16.tar.gz
+AWX_COLLECTION=https://artifacts.homerun-dev.sthings-vsphere.labul.sva.de/ansible-collections/sthings-awx-24.338.16.tar.gz #example
 ansible-galaxy collection install ${AWX_COLLECTION} -f
 ```
 
-### SET AWX Controller credentials
+### SET AWX Controller credentials (example)
 ```bash
+# example
 export CONTROLLER_HOST=https://$(kubectl get ingress -n awx |awk '{print $3 }' | grep -v HOSTS)
-export CONTROLLER_PASSWORD=$(kubectl -n awx get secret awx-admin-password -o jsonpath='{.data.password}' | base64 -d)
 export CONTROLLER_USERNAME=sthings
+export CONTROLLER_PASSWORD=$(kubectl -n awx get secret awx-admin-password -o jsonpath='{.data.password}' | base64 -d)
 ```
 
 ### PROVISION ALL AWX RESSOURCES

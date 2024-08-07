@@ -97,9 +97,7 @@ jobs:
         run: |
           set -x
 
-          cat /etc/os-release
-
-          BUILD_ARTIFACT=${REGISTRY_URL}/${{ inputs.context-sub-path }}:${BUILD_TAG}
+          BUILD_ARTIFACT={{ env.BUILD_IMAGE }}
           SEVERITY=""
           TITLE=""
 
