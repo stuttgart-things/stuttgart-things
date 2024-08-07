@@ -51,5 +51,5 @@ collections:
     version: 24.6.0
   - name: community.hashi_vault
     version: 6.2.0
-  - name: https://artifacts.homerun-dev.sthings-vsphere.labul.sva.de/ansible-collections/sthings-awx-24.74.56.tar.gz
+  - name: https://artifacts.homerun-dev.sthings-vsphere.labul.sva.de/ansible-collections/sthings-awx-24.737.27.tar.gz
   - name: https://artifacts.homerun-dev.sthings-vsphere.labul.sva.de/ansible-collections/sthings-base_os-24.26.5.tar.gz
