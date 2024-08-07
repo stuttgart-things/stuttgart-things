@@ -258,13 +258,8 @@ export CONTROLLER_PASSWORD=<PASSWORD>
 arr=("render_upload_template" "get_execute_terraform" "create_vm_workflow")
 for i in ${!arr[@]};
 do
-  addition="-vv";
-  if [[ ($i -eq 0) ]] || [[ ($i -eq 1) ]]
-  then 
-    addition="-e cloud=vsphere -e lab=labul -vv"
-  fi
   echo $i "${arr[i]}";
-  ansible-playbook sthings.awx."${arr[i]}" "${addition}";
+  ansible-playbook sthings.awx."${arr[i]}" -vv;
 done
 ```
 
