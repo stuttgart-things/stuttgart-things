@@ -97,6 +97,9 @@ jobs:
         run: |
           set -x
 
+          machineshop version
+          which machineshop
+
           BUILD_ARTIFACT=${{ env.BUILD_IMAGE }}
           SEVERITY=""
           TITLE=""
