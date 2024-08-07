@@ -97,7 +97,7 @@ jobs:
         run: |
           set -x
 
-          BUILD_ARTIFACT={{ env.BUILD_IMAGE }}
+          BUILD_ARTIFACT=${{ env.BUILD_IMAGE }}
           SEVERITY=""
           TITLE=""
 

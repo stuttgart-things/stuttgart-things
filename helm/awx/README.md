@@ -1,4 +1,4 @@
-# AWX
+# stuttgart-things/helm/awx
 
 ## INIT/UPDATE DEPENDENCIES
 
@@ -39,8 +39,7 @@ ansible-galaxy collection install ${AWX_COLLECTION} -f
 
 ### SET AWX Controller credentials (example)
 ```bash
-# example
-export CONTROLLER_HOST=https://$(kubectl get ingress -n awx |awk '{print $3 }' | grep -v HOSTS)
+export CONTROLLER_HOST=https://$(kubectl get ingress -n awx |awk '{print $3 }' | grep -v HOSTS) # ADD WITHOUT TRAILING SLASH
 export CONTROLLER_USERNAME=sthings
 export CONTROLLER_PASSWORD=$(kubectl -n awx get secret awx-admin-password -o jsonpath='{.data.password}' | base64 -d)
 ```
@@ -62,3 +61,7 @@ Author Information
 Andre Ebert, stuttgart-things 03/2024
 Patrick Hermann, stuttgart-things 03/2024
 ```
+
+
+# /home/sthings/.ansible/collections/ansible_collections/sthings/awx/playbooks/check_connection.yaml : add slash
+# ansible-playbook sthings.awx.baseos -vv --tags init : cannot run twice
