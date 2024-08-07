@@ -195,14 +195,9 @@ vars:
           l: 96
           xl: 128
 
-      j2_template_name:
-        backend:
-          name: "backend"
-        main:
-          name: "vm-{{ cloud }}"
-
       object_name: "{{ ansible_date_time.date }}-{{ project_name }}.tf"
-
+      cloud: "vsphere"
+      lab: "labul"
       vmName: "test-{{ lookup('community.general.random_string', length=5, special=false) | lower }}"
       vmCount: "1"
       vmSize: "s"
