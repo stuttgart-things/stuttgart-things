@@ -28,7 +28,7 @@ kubectl delete pvc postgres-15-awx-postgres-15-0 -n awx #EXAMPLE PVC DELETION
 ### GET secret password for awx
 ```bash
 # if not set previously
-kubectl -n awx get secret awx-admin-password -o jsonpath='{.data.password}' | base64 -d
+kubectl -n awx get secret sthings-admin-password -o jsonpath='{.data.password}' | base64 -d
 ```
 
 ### INSTALL AWX COLLECTION
