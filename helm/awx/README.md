@@ -65,3 +65,12 @@ Patrick Hermann, stuttgart-things 03/2024
 
 # /home/sthings/.ansible/collections/ansible_collections/sthings/awx/playbooks/check_connection.yaml : add slash
 # ansible-playbook sthings.awx.baseos -vv --tags init : cannot run twice
+
+# baseos survery: Enter host name : add hint without domain name
+# Run manage filesystem role? = ist not a role
+# baseos job template : run-baseos-setup
+
+# golang survey : update to 1.22.6
+# remove golang url from survey
+
+# docker kind: install not working no permissions
