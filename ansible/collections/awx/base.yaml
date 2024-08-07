@@ -5,7 +5,7 @@ playbooks:
       ---
       - name: Pause play until awx is reachable from the Ansible Controller
         ansible.builtin.uri:
-          url: "{{ controller_host }}api/v2"
+          url: "{{ controller_host }}/api/v2"
           method: GET
         register: _result
         until: _result.status == 200
