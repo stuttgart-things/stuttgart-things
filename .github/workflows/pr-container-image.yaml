@@ -92,3 +92,16 @@ jobs:
       object: ${{ matrix.image }}
       trivy-image: eu.gcr.io/stuttgart-things/sthings-container:1.23.2
     secrets: inherit
+
+  # Send-Homerun-Notification:
+  #   if: ${{ always() }}
+  #   needs: Scan-Image
+  #     runs-on: ghr-stuttgart-things-labul-automation
+  #   environment-name: labul-vsphere
+  #   container:
+  #     image: hashicorp/terraform:1.6
+  #   steps:
+  #   - name: Checkout code
+  #     uses: actions/checkout@v4
+  #     with:
+  #       path: "./tests"
