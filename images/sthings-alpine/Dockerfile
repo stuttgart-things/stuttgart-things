@@ -2,8 +2,8 @@ ARG FROM_TAG=alpine3.20
 FROM python:${FROM_TAG}
 
 # META INFORMATION
-LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 LABEL version=alpine-3.20
+LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 
 # ENV VARIABLES
 ARG VAULT_URL_LABUL=https://vault.labul.sva.de:8200
