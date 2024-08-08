@@ -97,7 +97,7 @@ jobs:
     if: ${{ always() }}
     needs: Scan-Image
     runs-on: ghr-stuttgart-things-labul-automation
-    environment-name: labul-vsphere
+    environment: labul-vsphere
     container:
       image: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:0ad6c357fe973a7395bdfbe3ac803b2358381ed68b4790f8257fafc27e5ea987
     steps:
