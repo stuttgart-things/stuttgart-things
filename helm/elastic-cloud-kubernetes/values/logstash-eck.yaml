@@ -75,6 +75,7 @@ spec:
         }
         output {
           elasticsearch {
+            index => "logs"
             hosts => [ "${ELASTICSEARCH_CLUSTER_ES_HOSTS}" ]
             user => "${ELASTICSEARCH_CLUSTER_ES_USER}"
             password => "${ELASTICSEARCH_CLUSTER_ES_PASSWORD}"
