@@ -247,7 +247,7 @@ templates:
         value = [module.{{ vmName }}.ip]
       }
 
- - name: vm-proxmox
+  - name: vm-proxmox
     file: |
       module "{{ vmName }}" {
         source                  = "{{ tf_module_source }}"
