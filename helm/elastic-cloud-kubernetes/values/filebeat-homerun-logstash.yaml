@@ -125,6 +125,11 @@ spec:
           grok {
             match => { "message" => "\{%{WORD:username} %{DATE_US:date} %{TIME:time} %{GREEDYDATA:event_message} %{WORD:log_level}\}"}
           }
+          # GITLAB-PITCHER
+          grok {
+            match => { "message" => "MESSAGE: \{%{USERNAME:username} %{TIMESTAMP_ISO8601:timestamp} (?<event_type>%{WORD} %{WORD}) (?<repository>%{WORD}-%{WORD}-%{WORD}) %{WORD:system} %{WORD:severity}"}
+          }
+
         }
 
         output {
