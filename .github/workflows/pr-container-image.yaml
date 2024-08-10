@@ -105,9 +105,7 @@ jobs:
         shell: bash
         run: |
 
-          env
-
-          echo ${{ !failure() }}
+          printenv
 
           machineshop push \
           --destination https://homerun.homerun-dev.sthings-vsphere.labul.sva.de/generic \
