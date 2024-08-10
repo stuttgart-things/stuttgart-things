@@ -48,6 +48,27 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Send start information to homerun
+        run: |
+
+          printenv
+
+          BUILD_ARTIFACT=${{ env.BUILD_IMAGE }}
+          SEVERITY=INFO
+          TITLE="Started Kaniko Build for ${{ inputs.kaniko-image }} on github Worklows"
+          BODY="Started Kaniko Build for ${{ inputs.kaniko-image }}"
+
+          machineshop push \
+          --destination https://homerun.homerun-dev.sthings-vsphere.labul.sva.de/generic \
+          --target homerun \
+          --title "${TITLE}" \
+          --system "kaniko" \
+          --info ${BODY} \
+          --tags "kaniko,ghWorkflow" \
+          --severity ${SEVERITY}
+        shell: bash
+
+
       - name: Build and push image w/ kaniko
         shell: bash
         run: |
@@ -92,34 +113,3 @@ jobs:
 
           done
         shell: bash
-
-      # - name: Send build info to homerun
-      #   if: ${{ failure() && steps.build.conclusion == 'failure' || success() && steps.build.conclusion == 'success' }}
-      #   run: |
-      #     set -x
-
-      #     machineshop version
-      #     which machineshop
-
-      #     BUILD_ARTIFACT=${{ env.BUILD_IMAGE }}
-      #     SEVERITY=""
-      #     TITLE=""
-
-      #     if [ -z "${BUILD_ARTIFACT}" ]; then
-      #       SEVERITY="ERROR"
-      #       TITLE="image was not build w/ kaniko on github workflows"
-      #       BUILD_ARTIFACT="no artifact"
-      #     else
-      #       SEVERITY="SUCCESS"
-      #       TITLE="image was build w/ kaniko on github workflows"
-      #     fi
-
-      #     machineshop push \
-      #     --destination https://homerun.homerun-dev.sthings-vsphere.labul.sva.de/generic \
-      #     --target homerun \
-      #     --title "${TITLE}" \
-      #     --system "kaniko" \
-      #     --info ${BUILD_ARTIFACT} \
-      #     --tags "kaniko,ghWorkflow" \
-      #     --severity ${SEVERITY}
-      #   shell: bash

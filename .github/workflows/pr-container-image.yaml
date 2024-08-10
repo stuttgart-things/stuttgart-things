@@ -104,6 +104,11 @@ jobs:
       - name: Test machineshop
         shell: bash
         run: |
+
+          env
+
+          echo ${{ !failure() }}
+
           machineshop push \
           --destination https://homerun.homerun-dev.sthings-vsphere.labul.sva.de/generic \
           --target homerun \
