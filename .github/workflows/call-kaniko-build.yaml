@@ -54,7 +54,7 @@ jobs:
           printenv
 
           SEVERITY=INFO
-          TITLE="Start of building a container image for ${{ inputs.kaniko-image }} w/ kaniko on github actions"
+          TITLE="Start of building a container image for ${{ inputs.context-sub-path }} w/ kaniko on github actions"
           BODY="IMAGE: ${{ inputs.kaniko-image }} REPOSITORY: ${{ env.GITHUB_REPOSITORY }} WORKFLOW: ${{ env.GITHUB_WORKFLOW }} RUNNER_NAME: ${{ env.RUNNER_NAME }} KANIKO-IMAGE: ${{ inputs.kaniko-image }}"
           SYSTEM="github-actions"
           TAGS="kaniko,github-actions"
@@ -64,9 +64,9 @@ jobs:
           --target homerun \
           --title "${TITLE}" \
           --system "${SYSTEM}" \
-          --info ${BODY} \
+          --info "${BODY}" \
           --tags "${TAGS}" \
-          --severity ${SEVERITY}
+          --severity "${SEVERITY}"
         shell: bash
 
 
