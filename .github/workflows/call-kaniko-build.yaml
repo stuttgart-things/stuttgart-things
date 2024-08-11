@@ -57,7 +57,7 @@ jobs:
           TITLE="Start of building a container image for ${{ inputs.context-sub-path }} w/ kaniko on github actions"
           BODY="REPOSITORY: ${GITHUB_REPOSITORY} WORKFLOW: ${GITHUB_WORKFLOW} RUNNER_NAME: ${RUNNER_NAME} KANIKO-IMAGE: ${{ inputs.kaniko-image }}"
           SYSTEM="github-actions"
-          TAGS="TAGS: kaniko,github-actions"
+          TAGS="kaniko,github-actions"
 
           machineshop push \
           --destination https://homerun.homerun-dev.sthings-vsphere.labul.sva.de/generic \
@@ -70,6 +70,15 @@ jobs:
           --severity "${SEVERITY}"
         shell: bash
 
+# filter {
+#   grok {
+#     match => { "message" => "tags: %{DATA:tags}" }
+#   }
+
+#   mutate {
+#     split => { "tags" => "," }
+#   }
+# }
 
       - name: Build and push image w/ kaniko
         shell: bash
