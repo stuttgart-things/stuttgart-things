@@ -105,9 +105,8 @@ jobs:
         shell: bash
         run: |
 
-          printenv
-
-          echo "${{ job.status }} ${{ join(needs.*.result, ' ')}}"
+          echo JOBSTATUS: ${{ job.status }}
+          echo JOBSTATUSES: ${{ join(needs.*.result, ' ')}}
 
           machineshop push \
           --destination https://homerun.homerun-dev.sthings-vsphere.labul.sva.de/generic \
