@@ -105,11 +105,11 @@ jobs:
         shell: bash
         run: |
 
-          echo JOBSTATUS: ${{ job.status }}
-          echo JOBSTATUSES: ${{ join(needs.*.result, ' ')}}
+          echo RESULT-BUILD: ${{ needs.Build-Image.result }}
+          echo RESULT-SCAN: ${{ needs.Scan-Image.result }}
 
           TITLE="Finished Building a container image for ${{ inputs.context-sub-path }} w/ kaniko on github actions"
-          TAGS="kaniko, github-actions"
+          TAGS="kaniko,github-actions"
 
           machineshop push \
           --destination https://homerun.homerun-dev.sthings-vsphere.labul.sva.de/generic \
@@ -117,6 +117,6 @@ jobs:
           --title "${TITLE}" \
           --system kaniko \
           --info no artifact \
-          --tags kaniko, github \
+          --tags kaniko,github \
           --author "${GITHUB_ACTOR}" \
           --severity INFO
