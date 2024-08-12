@@ -6,8 +6,8 @@ ARG TAG=3.12.2-alpine3.19
 FROM gcr.io/kaniko-project/executor:v1.23.2 AS kaniko
 
 # META INFORMATION
-LABEL version=1.23.2
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
+LABEL version=1.23.2
 
 FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
 ARG SKOPEO_VERSION=1.14.4 # datasource=github-tags depName=lework/skopeo-binary
@@ -19,8 +19,8 @@ ARG JQ_VERSION=1.7.1
 # COPY KANIKO BINARY TO TARGET IMAGE
 COPY --from=kaniko /kaniko/ /kaniko/
 
-ENV PATH $PATH:/usr/local/bin:/kaniko
 ENV DOCKER_CONFIG /kaniko/.docker/
+ENV PATH $PATH:/usr/local/bin:/kaniko
 ENV DOCKER_CREDENTIAL_GCR_CONFIG /kaniko/.config/gcloud/docker_credential_gcr_config.json
 ENV SSL_CERT_DIR /kaniko/ssl/certs
 

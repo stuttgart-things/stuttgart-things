@@ -122,9 +122,15 @@ spec:
         }
 
         filter {
+          # GENERIC-PITCHER (GITHUB-ACTIONS)
           grok {
-            match => { "message" => "\{%{WORD:username} %{DATE_US:date} %{TIME:time} %{GREEDYDATA:event_message} %{WORD:log_level}\}"}
+            match => { "message" => "\{%{GREEDYDATA:username} %{DATE_US:date} %{TIME:time} %{GREEDYDATA:event_title} REPOSITORY: %{DATA:github_repository} WORKFLOW: %{DATA:github_workflow} RUNNER_NAME: %{DATA:github_runner} WORKFLOW-IMAGE: %{DATA:kaniko_image} %{GREEDYDATA:event_tags} %{WORD:event_severity}\}"}
           }
+
+          mutate {
+            split => { "event_tags" => "," }
+          }
+
           # GITLAB-PITCHER
           grok {
             match => { "message" => "MESSAGE: \{%{USERNAME:username} %{TIMESTAMP_ISO8601:timestamp} (?<event_type>%{WORD} %{WORD}) (?<repository>%{WORD}-%{WORD}-%{WORD}) %{WORD:system} %{WORD:severity}"}
