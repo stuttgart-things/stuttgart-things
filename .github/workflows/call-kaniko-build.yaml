@@ -88,7 +88,7 @@ jobs:
 
           # ADD DELTE STEP FOR ALL EXISTING IMAGES
           curl --user $(machineshop get --path ${vault_username_path} | tail -n +8):$(machineshop get --path ${vault_password_path} | tail -n +8) https://${REGISTRY_URL}/v2/_catalog | jq -r '.repositories[]' | while read repo; do
-            echo $repo
+            echo ${repo}
           #   curl --user $(machineshop get --path ${vault_username_path} | tail -n +8):$(machineshop get --path ${vault_password_path} | tail -n +8) https://registry.homerun-dev.sthings-vsphere.labul.sva.de/v2/${repo}/tags/list | jq -r '.tags[]' | while read tag; do
           #     echo "Deleting ${repo}:${tag}"
           #     curl -X DELETE --user $(machineshop get --path ${vault_username_path} | tail -n +8):$(machineshop get --path ${vault_password_path} | tail -n +8) https://registry.homerun-dev.sthings-vsphere.labul.sva.de/v2/${repo}/manifests/${tag}
