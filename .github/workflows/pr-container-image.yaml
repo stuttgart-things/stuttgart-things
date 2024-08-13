@@ -116,7 +116,7 @@ jobs:
           WORKFLOW_SEVERITY="SUCCESS"
           BODY="artifact was build"
 
-          if [ "${{ needs.Build-Image.result }}" != "success" ] || [ "${{ needs.Scan-Image.result }}" != "success" ]; then
+          if [ "${{ needs.Scan-Image.result }}" != "success" ]; then
             WORKFLOW_RESULT="failed"
             WORKFLOW_SEVERITY="ERROR"
             BODY="no artifact was build"
