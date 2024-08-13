@@ -109,28 +109,27 @@ jobs:
       - name: Send notification to homerun w/ machineshop
         shell: bash
         run: |
-
-          echo RESULT-BUILD: ${{ needs.Build-Image.result }}
-          echo RESULT-SCAN: ${{ needs.Scan-Image.result }}
-
+          TITLE_PREFIX="Build of container image ${{ inputs.context-sub-path }} w/ kaniko on github actions"
+          SYSTEM="github-actions"
+          TAGS="kaniko,github-actions"
           WORKFLOW_RESULT="succeded"
+          WORKFLOW_SEVERITY="SUCCESS"
+          BODY="artifact was build"
 
-          if [ "${{ needs.Scan-Image.result }}" != "success" ] || [ "${{ needs.Scan-Image.result }}" != "success" ]; then
+          if [ "${{ needs.Build-Image.result }}" != "success" ] || [ "${{ needs.Scan-Image.result }}" != "success" ]; then
             WORKFLOW_RESULT="failed"
+            WORKFLOW_SEVERITY="ERROR"
+            BODY="no artifact was build"
           fi
 
-          echo WORKFLOW_RESULT: ${WORKFLOW_RESULT}
-
-
-          TITLE="Finished Building a container image for ${{ inputs.context-sub-path }} w/ kaniko on github actions"
-          TAGS="kaniko,github-actions"
+          TITLE="${TITLE_PREFIX} ${WORKFLOW_RESULT}"
 
           machineshop push \
           --destination https://homerun.homerun-dev.sthings-vsphere.labul.sva.de/generic \
           --target homerun \
           --title "${TITLE}" \
-          --system kaniko \
-          --info no artifact \
-          --tags kaniko,github \
+          --system "${SYSTEM}" \
+          --info "${BODY}" \
+          --tags "${TAGS}" \
           --author "${GITHUB_ACTOR}" \
-          --severity INFO
+          --severity "${WORKFLOW_SEVERITY}"
