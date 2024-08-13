@@ -4,8 +4,8 @@ ARG IMAGE=sthings-alpine
 ARG TAG=3.12.2-alpine3.19
 FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
 
-LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 LABEL version=1.9.4
+LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 
 ARG TERRAFORM_VERSION=1.9.4 # datasource=custom.hashicorp
 ARG YQ_VERSION=4.44.2
