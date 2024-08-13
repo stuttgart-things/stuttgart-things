@@ -124,7 +124,7 @@ spec:
         filter {
           # GENERIC-PITCHER (GITHUB-ACTIONS)
           grok {
-            match => { "message" => "\{%{GREEDYDATA:username} %{DATE_US:date} %{TIME:time} %{GREEDYDATA:event_title} REPOSITORY: %{DATA:github_repository} WORKFLOW: %{DATA:github_workflow} RUNNER_NAME: %{DATA:github_runner} WORKFLOW-IMAGE: %{DATA:kaniko_image} %{GREEDYDATA:event_tags} %{WORD:event_severity}\}"}
+            match => { "message" => "\{%{GREEDYDATA:username} %{DATE_US:date} %{TIME:time} %{GREEDYDATA:event_title} REPOSITORY: %{DATA:github_repository} WORKFLOW: %{DATA:github_workflow} RUNNER_NAME: %{DATA:github_runner} WORKFLOW-IMAGE: %{DATA:workflow_image} %{GREEDYDATA:event_tags} %{WORD:event_severity}\}"}
           }
 
           mutate {

@@ -55,7 +55,7 @@ jobs:
           changed_contexts=$(echo ${changed_image_dirs[@]// /,})
           changed_contexts=$(echo ${changed_contexts//[[:blank:]]/,})
 
-          # SET CONTEXTS AS JSON
+          # SET CONTEXTS AS MATRIX JSON
           contexts=$(echo "\"${changed_contexts}\"" | sed 's/,/", "/g')
           JSON_CONTEXTS='{ "context-path": ['"${contexts}"'] }'
           echo $JSON_CONTEXTS
@@ -77,6 +77,11 @@ jobs:
       kaniko-image: eu.gcr.io/stuttgart-things/sthings-container:1.23.2
       context-sub-path: images/${{ matrix.context-path }}
     secrets: inherit
+
+  #Get-Build-DevImages:
+  # ask build reg for recently build images
+  # get as json
+  # matrix is used for following job
 
   Scan-Image:
     needs: Build-Image
@@ -101,7 +106,7 @@ jobs:
     container:
       image: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:0ad6c357fe973a7395bdfbe3ac803b2358381ed68b4790f8257fafc27e5ea987
     steps:
-      - name: Test machineshop
+      - name: Send notification to homerun w/ machineshop
         shell: bash
         run: |
 
