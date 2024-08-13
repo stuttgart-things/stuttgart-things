@@ -2,3 +2,5 @@
 domain: homerun-dev.sthings-vsphere.labul.sva.de
 projectStorageClass: nfs-csi
 clusterIssuer: vault-approle
+persistenceEnabled: true
+htpasswd: sthings:$2y$05$CrDbu7Cb7R9ZwF4HGmlFcOWIpW/W4OruCU.qbZYN2T/ZhTC0YW/ei

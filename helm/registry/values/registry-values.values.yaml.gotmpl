@@ -4,6 +4,7 @@ persistence:
   enabled: {{ .Values.persistenceEnabled }}
   size: {{ .Values.size }}
   storageClass: {{ .Values.projectStorageClass }}
+  deleteEnabled: {{ .Values.deleteEnabled }}
 
 ingress:
   enabled: {{ .Values.ingressEnabled }}
@@ -25,6 +26,13 @@ secrets:
   htpasswd: |-
     {{ .Values.htpasswd }}
 
-# helm repo add twuni https://helm.twun.io
-# helm repo update
-# helm upgrade --install registry twuni/docker-registry --version 2.2.3 --values registry/values.yaml -n registry --create-namespace
+configData:
+  storage:
+    cache:
+      blobdescriptor: {{ .Values.blobdescriptor }}
+
+garbageCollect:
+  enabled: {{ .Values.enableGarbageCollect }}
+  deleteUntagged: true
+  schedule: "0 1 * * *"
+  resources: {}

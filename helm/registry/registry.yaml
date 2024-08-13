@@ -6,7 +6,7 @@ environments:
       - env/{{ .Environment.Name }}.yaml
 
 releases:
-  - name: registry-certificates
+  - name: certificates
     disableValidationOnInstall: true
     installed: true
     namespace: registry
@@ -15,7 +15,7 @@ releases:
     values:
       - "values/registry-certificates.values.yaml.gotmpl"
 
-  - name: registry-deployment
+  - name: registry
     disableValidationOnInstall: true
     installed: true
     namespace: registry

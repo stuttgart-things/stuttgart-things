@@ -10,3 +10,7 @@ ingressEnabled: true
 ingressClassName: nginx
 ingressSecret: registry
 secureBackends: 500m
+deleteEnabled: true
+
+blobdescriptor: disabled #filesystem
+enableGarbageCollect: true

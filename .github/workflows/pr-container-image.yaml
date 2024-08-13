@@ -113,6 +113,15 @@ jobs:
           echo RESULT-BUILD: ${{ needs.Build-Image.result }}
           echo RESULT-SCAN: ${{ needs.Scan-Image.result }}
 
+          WORKFLOW_RESULT="succeded"
+
+          if [ "${{ needs.Scan-Image.result }}" != "success" ] || [ "${{ needs.Scan-Image.result }}" != "success" ]; then
+            WORKFLOW_RESULT="failed"
+          fi
+
+          echo WORKFLOW_RESULT: ${WORKFLOW_RESULT}
+
+
           TITLE="Finished Building a container image for ${{ inputs.context-sub-path }} w/ kaniko on github actions"
           TAGS="kaniko,github-actions"
 
