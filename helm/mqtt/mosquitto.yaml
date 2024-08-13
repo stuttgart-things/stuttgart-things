@@ -4,9 +4,54 @@ environments:
     values:
       - env/{{ .Environment.Name }}.yaml
 
----
+releases:
+  - name: mosquitto-cm
+    disableValidationOnInstall: true
+    installed: true
+    namespace: mosquitto
+    chart: stuttgart-things/sthings-cluster
+    version: 0.3.10
+    values:
+      - "values/mosquitto-cm.values.yaml.gotmpl"
 
-release:
+  - name: mosquitto-secret
+    disableValidationOnInstall: true
+    installed: true
+    namespace: mosquitto
+    chart: stuttgart-things/sthings-cluster
+    version: 0.3.10
+    values:
+      - "values/mosquitto-secret.values.yaml.gotmpl"
+
+  - name: mosquitto-service
+    disableValidationOnInstall: true
+    installed: true
+    namespace: mosquitto
+    chart: stuttgart-things/sthings-cluster
+    version: 0.3.10
+    values:
+      - "values/mosquitto-service.values.yaml.gotmpl"
+
+  - name: mosquitto-service-account
+    disableValidationOnInstall: true
+    installed: true
+    namespace: mosquitto
+    chart: stuttgart-things/sthings-cluster
+    version: 0.3.10
+    needs:
+      - mosquitto/mosquitto-service
+    values:
+      - "values/mosquitto-serviceaccount.values.yaml.gotmpl"
+
+  - name: mosquitto-deployment
+    disableValidationOnInstall: true
+    installed: true
+    namespace: mosquitto
+    chart: stuttgart-things/sthings-cluster
+    version: 0.3.10
+    values:
+      - "values/mosquitto-deployment.values.yaml.gotmpl"
+
   - name: mosquitto
     disableValidationOnInstall: true
     installed: true

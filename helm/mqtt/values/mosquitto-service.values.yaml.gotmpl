@@ -1,0 +1,42 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    # field.cattle.io/publicEndpoints: '[{"addresses":["10.31.103.17"],"port":1883,"protocol":"TCP","serviceName":"mosquitto:mosquitto","allNodes":false},{"addresses":["10.31.103.17"],"port":9090,"protocol":"TCP","serviceName":"mosquitto:mosquitto","allNodes":false}]'
+    meta.helm.sh/release-name: {{ .Values.appName }}
+    meta.helm.sh/release-namespace: {{ .Values.appName }}
+    # metallb.universe.tf/ip-allocated-from-pool: ip-pool-1
+  labels:
+    app.kubernetes.io/instance: {{ .Values.appName }}
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: {{ .Values.appName }}
+    helm.sh/chart: {{ .Values.chartVersion }}
+  name: {{ .Values.appName }}
+  namespace: {{ .Values.appName }}
+spec:
+  allocateLoadBalancerNodePorts: true
+  clusterIP: 10.43.235.97
+  clusterIPs:
+  - 10.43.235.97
+  externalTrafficPolicy: Cluster
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: mqtt
+    nodePort: 32291
+    port: 1883
+    protocol: TCP
+    targetPort: mqtt
+  - name: websocket
+    nodePort: 30797
+    port: 9090
+    protocol: TCP
+    targetPort: websocket
+  selector:
+    app.kubernetes.io/instance: {{ .Values.appName }}
+    app.kubernetes.io/name: {{ .Values.appName }}
+  sessionAffinity: None
+  type: LoadBalancer
