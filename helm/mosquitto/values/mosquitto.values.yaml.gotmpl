@@ -34,7 +34,7 @@ ports:
     protocol: TCP
 
 persistence:
-  enabled: false
+  enabled: true
   accessMode: ReadWriteOnce
   existingClaim: ""
   mountPath: /mosquitto/data
@@ -46,7 +46,7 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  # storageClass: "-"
+  storageClass: {{ .Values.storageClass }}
   size: 1Gi
 
 resources: {}
@@ -106,7 +106,9 @@ existingConfigMap: ""
 config: |
   persistence true
   persistence_location /mosquitto/data/
+  persistence_file mosquitto.db
   log_dest stdout
+  log_dest file /mosquitto/log/mosquitto.log
   listener 1883
   listener 9090
   protocol websockets
