@@ -435,7 +435,7 @@ jobs:
         uses: peter-evans/create-pull-request@v6.1.0
         with:
           commit-message: '[CI][${{ inputs.build-engine }}] - Created template config for vm ${{ inputs.vm-name }} ${{ inputs.os-version }}-${{ env.LAB }}-${{ env.CLOUD }}'
-          title: Created VM Config ${{ inputs.os-version }}-${{ env.LAB }}-${{ env.CLOUD }} w/ ${{ inputs.build-engine }}
+          title: ${{ inputs.build-engine }}VM Config ${{ inputs.count-vm }}x{{ inputs.vm-name }}-${{ inputs.os-version }}-${{ env.LAB }}-${{ env.CLOUD }}
           branch: ${{ env.destination }}
           delete-branch: true
           token: ${{ steps.generate-token.outputs.token }}
@@ -448,3 +448,39 @@ jobs:
           pr_number: ${{ steps.pr.outputs.pull-request-number }}"
           message: |
             :wave: post: ${{ inputs.ansible-provisioning }}
+
+  Send-Homerun-Notification:
+    if: ${{ always() }}
+    needs: Create-VM-Config
+    runs-on: ghr-stuttgart-things-labul-automation
+    environment: labul-vsphere
+    container:
+      image: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:0ad6c357fe973a7395bdfbe3ac803b2358381ed68b4790f8257fafc27e5ea987
+    steps:
+      - name: Send notification to homerun w/ machineshop
+        shell: bash
+        run: |
+          TITLE_PREFIX="Creation of virtual machine ${{ inputs.count-vm }}x{{ inputs.vm-name }} w/ ${{ inputs.build-engine }} on github actions"
+          SYSTEM="${{ inputs.build-engine }}"
+          TAGS="${{ inputs.build-engine }},github-actions"
+          WORKFLOW_RESULT="succeded"
+          WORKFLOW_SEVERITY="SUCCESS"
+          BODY="pull rewuest was created"
+
+          if [ "${{ needs.Create-VM-Config.result }}" != "success" ]; then
+            WORKFLOW_RESULT="failed"
+            WORKFLOW_SEVERITY="ERROR"
+            BODY="no artifact was build"
+          fi
+
+          TITLE="${TITLE_PREFIX} ${WORKFLOW_RESULT}"
+
+          machineshop push \
+          --destination https://homerun.homerun-dev.sthings-vsphere.labul.sva.de/generic \
+          --target homerun \
+          --title "${TITLE}" \
+          --system "${SYSTEM}" \
+          --info "${BODY}" \
+          --tags "${TAGS}" \
+          --author "${GITHUB_ACTOR}" \
+          --severity "${WORKFLOW_SEVERITY}"
