@@ -1,11 +1,11 @@
 ARG REGISTRY=eu.gcr.io
 ARG REPOSITORY=stuttgart-things
 ARG IMAGE=sthings-alpine
-ARG TAG=3.12.2-alpine3.19
+ARG TAG=alpine-3.20
 FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
 
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
-LABEL version=1.9.4
+LABEL version=1.9.4-1
 
 # VERSIONS
 ARG TERRAFORM_VERSION=1.9.4 # datasource=custom.hashicorp
