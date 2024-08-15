@@ -11,3 +11,4 @@ pkiCA: ref+vault://apps/mosquitto/ca-bundle
 adminUser: ref+vault://apps/mosquitto/user
 adminPassword: ref+vault://apps/mosquitto/password
 bundleCacertSecret: sthings-custom-certs
+storageClass: nfs-csi
