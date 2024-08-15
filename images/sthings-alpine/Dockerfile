@@ -2,7 +2,7 @@ ARG FROM_TAG=alpine3.20
 FROM python:${FROM_TAG}
 
 # META INFORMATION
-LABEL version=alpine-3.20
+LABEL version=alpine-3.20-1
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 
 # ENV VARIABLES
@@ -25,7 +25,7 @@ RUN rm -rf /usr/local/share/ca-certificates/* \
     && update-ca-certificates
 
 # INSTALL OS PACKAGES W/ APK
-RUN apk add --no-cache build-base sudo gawk libc6-compat openssl libffi-dev openssl-dev openssh sshpass tar unzip jq curl ca-certificates wget \
+RUN apk add --no-cache build-base sudo git gawk libc6-compat openssl libffi-dev openssl-dev openssh sshpass tar unzip jq curl ca-certificates wget \
    && apk add --update bash \
        && rm -rf /var/cache/apk/*
 

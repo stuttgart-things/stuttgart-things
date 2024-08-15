@@ -23,7 +23,7 @@ playbooks:
             - https://vault.tiab.labda.sva.de:8200
             - https://vault.labul.sva.de:8200
             - https://vault-vsphere.labul.sva.de:8200
-            - https://vault-pve.labul.sva.de:8200
+            # - https://vault-pve.labul.sva.de:8200
             - https://vault-vsphere.tiab.labda.sva.de:8200
           python_modules:
             - name: boto3
