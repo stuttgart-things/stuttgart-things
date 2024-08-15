@@ -455,7 +455,7 @@ jobs:
     runs-on: ghr-stuttgart-things-labul-automation
     environment: labul-vsphere
     container:
-      image: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:0ad6c357fe973a7395bdfbe3ac803b2358381ed68b4790f8257fafc27e5ea987
+      image: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:be37b4c98b9fcc03ad21e030a9eadaf85d1eb46d5807d1e07aba205cd6106703
     steps:
       - name: Send notification to homerun w/ machineshop
         shell: bash
