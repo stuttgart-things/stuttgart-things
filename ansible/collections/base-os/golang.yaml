@@ -13,7 +13,7 @@ playbooks:
           golang_install_dir: /usr/local
           golangci_version: 1.60.1 # datasource=github-tags depName=golangci/golangci-lint
           goreleaser_version: 1.26.2 # datasource=github-tags depName=goreleaser/goreleaser
-          ko_version: v0.15.4 # datasource=github-tags depName=ko-build/ko
+          ko_version: 0.16.0 # datasource=github-tags depName=ko-build/ko
 
           # USE WITH EXISTING USER
           go_username: sthings
