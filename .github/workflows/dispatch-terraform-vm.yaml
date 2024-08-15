@@ -435,7 +435,7 @@ jobs:
         uses: peter-evans/create-pull-request@v6.1.0
         with:
           commit-message: '[CI][${{ inputs.build-engine }}] - Created template config for vm ${{ inputs.vm-name }} ${{ inputs.os-version }}-${{ env.LAB }}-${{ env.CLOUD }}'
-          title: ${{ inputs.build-engine }}VM Config ${{ inputs.count-vm }}x{{ inputs.vm-name }}-${{ inputs.os-version }}-${{ env.LAB }}-${{ env.CLOUD }}
+          title: ${{ inputs.build-engine }}VM ${{ inputs.count-vm }}x${{ inputs.vm-name }}-${{ inputs.os-version }}-${{ env.LAB }}-${{ env.CLOUD }}
           branch: ${{ env.destination }}
           delete-branch: true
           token: ${{ steps.generate-token.outputs.token }}
@@ -460,17 +460,17 @@ jobs:
       - name: Send notification to homerun w/ machineshop
         shell: bash
         run: |
-          TITLE_PREFIX="Creation of virtual machine ${{ inputs.count-vm }}x{{ inputs.vm-name }} w/ ${{ inputs.build-engine }} on github actions"
+          TITLE_PREFIX="PullRequest for creation of ${{ inputs.build-engine }}VM ${{ inputs.count-vm }}x{{ inputs.vm-name }} on github actions"
           SYSTEM="${{ inputs.build-engine }}"
           TAGS="${{ inputs.build-engine }},github-actions"
-          WORKFLOW_RESULT="succeded"
+          WORKFLOW_RESULT="created"
           WORKFLOW_SEVERITY="SUCCESS"
-          BODY="pull rewuest was created"
+          BODY="REPOSITORY: ${GITHUB_REPOSITORY} WORKFLOW: ${GITHUB_WORKFLOW} RUNNER_NAME: ${RUNNER_NAME} WORKFLOW-IMAGE: ${{ inputs.kaniko-image }}"
 
           if [ "${{ needs.Create-VM-Config.result }}" != "success" ]; then
             WORKFLOW_RESULT="failed"
             WORKFLOW_SEVERITY="ERROR"
-            BODY="no artifact was build"
+            BODY="no PullRequest was created"
           fi
 
           TITLE="${TITLE_PREFIX} ${WORKFLOW_RESULT}"
