@@ -1,7 +1,7 @@
 ARG REGISTRY=eu.gcr.io
 ARG REPOSITORY=stuttgart-things
 ARG IMAGE=sthings-ansible
-ARG TAG=10.1.0
+ARG TAG=10.3.0
 
 FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
 
