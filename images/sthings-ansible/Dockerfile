@@ -5,8 +5,8 @@ ARG TAG=alpine-3.20-1
 FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
 
 # SET META INFORMATION
-LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 LABEL version=10.3.0
+LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 
 # SW VERSIONS
 ARG YQ_VERSION=4.44.2
