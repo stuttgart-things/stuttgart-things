@@ -46,7 +46,7 @@ jobs:
     runs-on: ${{ inputs.runner }}
     environment: k8s
     container:
-      image: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7:1.9.10
+      image: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:be37b4c98b9fcc03ad21e030a9eadaf85d1eb46d5807d1e07aba205cd6106703
     continue-on-error: false
     permissions:
       contents: write
