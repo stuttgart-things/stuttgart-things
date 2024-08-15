@@ -221,7 +221,7 @@ jobs:
                     'secretKey' : 'terraform.tfvars',
                     's3_region' : 'main',
                     's3_bucket' : 'vspherevm-labul',
-                    's3_endpoint' : 'https://artifacts.app1.sthings-vsphere.labul.sva.de',
+                    's3_endpoint' : 'https://artifacts.homerun-dev.sthings-vsphere.labul.sva.de',
                 },
                 'labul-proxmox' : {
                     'namespace' : 'crossplane-system',
