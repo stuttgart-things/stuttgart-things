@@ -8,11 +8,11 @@ spec:
   pipelineRunName: baseos-losangeles
   inventory:
     - "all+[\"losangeles.labul.sva.de\"]"
-    
+
   playbooks:
     - "ansible/playbooks/prepare-env.yaml"
     - "ansible/playbooks/base-os.yaml"
-    
+
   ansibleVarsFile:
     - "manage_filesystem+-true"
     - "update_packages+-true"
@@ -30,9 +30,8 @@ spec:
     name: kubernetes-incluster
   vaultSecretName: vault
   pipelineNamespace: tektoncd
-  workingImage: eu.gcr.io/stuttgart-things/sthings-ansible:9.3.0
+  workingImage: eu.gcr.io/stuttgart-things/sthings-ansible:10.3.0
   roles:
     - "https://github.com/stuttgart-things/install-requirements.git"
     - "https://github.com/stuttgart-things/manage-filesystem.git"
     - "https://github.com/stuttgart-things/install-configure-vault.git"
-    

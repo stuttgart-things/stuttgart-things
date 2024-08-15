@@ -12,7 +12,7 @@ on:
     - feature/*
     - fix/*
   workflow_dispatch:
-  
+
 jobs:
   yaml-lint:
     name: Lint yaml files
@@ -32,6 +32,6 @@ jobs:
       runs-on: [[ .runsOn ]]
       environment-name: [[ .environmentName ]]
       continue-error: true
-      ansible-image: eu.gcr.io/stuttgart-things/sthings-ansible:9.3.0-1
+      ansible-image: eu.gcr.io/stuttgart-things/sthings-ansible:10.3.0
       playbook: tests/test.yml
     needs: yaml-lint

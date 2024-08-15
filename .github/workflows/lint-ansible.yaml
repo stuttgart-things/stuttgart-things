@@ -11,7 +11,7 @@ on:
         required: true
         type: string
       ansible-image:
-        default: eu.gcr.io/stuttgart-things/sthings-ansible:9.3.0-1
+        default: eu.gcr.io/stuttgart-things/sthings-ansible:10.3.0
         type: string
         required: false
       continue-error:

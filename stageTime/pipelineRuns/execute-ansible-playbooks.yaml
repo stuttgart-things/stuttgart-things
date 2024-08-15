@@ -9,7 +9,7 @@ metadata:
 spec:
   params:
   - name: ansibleWorkingImage
-    value: eu.gcr.io/stuttgart-things/sthings-ansible:10.1.0-1
+    value: eu.gcr.io/stuttgart-things/sthings-ansible:10.3.0
   - name: createInventory
     value: "true"
   - name: gitRepoUrl
@@ -108,7 +108,7 @@ spec:
 #               storage: 1Gi
 #   params:
 #     - name: ansibleWorkingImage
-#       value: "eu.gcr.io/stuttgart-things/sthings-ansible:8.5.0"
+#       value: "eu.gcr.io/stuttgart-things/sthings-ansible:10.3.0"
 #     - name: createInventory
 #       value: "true"
 #     - name: gitRepoUrl

@@ -30,7 +30,7 @@ template: |
                 storage: 250Mi
     params:
       - name: ansibleWorkingImage
-        value: "eu.gcr.io/stuttgart-things/sthings-ansible:8.5.0"
+        value: "eu.gcr.io/stuttgart-things/sthings-ansible:10.3.0"
       - name: createInventory
         value: "true"
       - name: gitRepoUrl

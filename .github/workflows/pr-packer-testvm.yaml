@@ -94,7 +94,7 @@ jobs:
     with:
       playbook: ansible/playbooks/base-os.yaml
       branch: main #${{ needs.Get-Packer-Config.outputs.branch }}
-      working-image: eu.gcr.io/stuttgart-things/sthings-ansible:9.5.1
+      working-image: eu.gcr.io/stuttgart-things/sthings-ansible:10.3.0
       runs-on: ${{ needs.Get-Packer-Config.outputs.runs-on }}
       inventory: ${{ needs.Create-Test-VM.outputs.tf-output }}
       environment-name: ${{ needs.Get-Packer-Config.outputs.environment }}

@@ -34,7 +34,7 @@ spec:
     name: kubernetes-incluster
   vaultSecretName: vault
   pipelineNamespace: tektoncd
-  workingImage: eu.gcr.io/stuttgart-things/sthings-ansible:10.1.0-1
+  workingImage: eu.gcr.io/stuttgart-things/sthings-ansible:10.3.0
   roles:
     - "https://github.com/stuttgart-things/install-requirements.git,2024.05.11"
     - "https://github.com/stuttgart-things/manage-filesystem.git,2024.05.15"
@@ -75,7 +75,7 @@ spec:
 #     name: kubernetes-incluster
 #   vaultSecretName: vault
 #   pipelineNamespace: tektoncd
-#   workingImage: eu.gcr.io/stuttgart-things/sthings-ansible:10.1.0-1
+#   workingImage: eu.gcr.io/stuttgart-things/sthings-ansible:10.3.0
 #   roles:
 #     - "https://github.com/stuttgart-things/install-requirements.git,2024.05.11"
 #     - "https://github.com/stuttgart-things/manage-filesystem.git,2024.05.15"
