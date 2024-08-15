@@ -4,6 +4,7 @@ ARG IMAGE=sthings-alpine
 ARG TAG=alpine-3.20-1
 FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
 
+# META INFORMATION
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 LABEL version=1.9.4-2
 
