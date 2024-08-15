@@ -1,7 +1,7 @@
 ARG REGISTRY=eu.gcr.io
 ARG REPOSITORY=stuttgart-things
 ARG IMAGE=sthings-alpine
-ARG TAG=alpine-3.20
+ARG TAG=alpine-3.20-1
 FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
 
 # SET META INFORMATION
