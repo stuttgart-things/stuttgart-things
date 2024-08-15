@@ -1,0 +1,39 @@
+---
+environments:
+  homerun-dev:
+    values:
+      - env/{{ .Environment.Name }}.yaml
+
+releases:
+  - name: mosquitto-credentials
+    disableValidationOnInstall: true
+    installed: true
+    namespace: mosquitto
+    chart: stuttgart-things/sthings-cluster
+    version: 0.3.10
+    values:
+      - "values/mosquitto-credentials.values.yaml.gotmpl"
+
+  - name: mosquitto
+    disableValidationOnInstall: true
+    installed: true
+    namespace: mosquitto
+    chart: k8sonlab/mosquitto
+    version: 2.5.1
+    values:
+      - "values/mosquitto.values.yaml.gotmpl"
+
+repositories:
+  - name: stuttgart-things
+    url: eu.gcr.io/stuttgart-things
+    oci: true
+  - name: k8sonlab
+    url: https://charts.ar80.eu
+    oci: false
+
+helmDefaults:
+  verify: false
+  wait: true
+  timeout: 600
+  recreatePods: false
+  force: true
