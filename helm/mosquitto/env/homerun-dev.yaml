@@ -12,7 +12,7 @@ service:
   type: LoadBalancer
 
 authentication:
-  dminUser: ref+vault://apps/mosquitto/user
+  adminUser: ref+vault://apps/mosquitto/user
   adminPassword: ref+vault://apps/mosquitto/password
   passwordFilePath: /etc/mosquitto/passwordfile
 

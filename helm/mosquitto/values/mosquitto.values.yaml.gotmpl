@@ -12,7 +12,7 @@ persistence:
 authentication:
   passwordFilePath: {{ .Values.authentication.passwordFilePath }}
   passwordEntries: |-
-    sthings:{{ .Values.authentication.adminPassword }}
+    {{ .Values.authentication.adminUser }} : {{ .Values.authentication.adminPassword }}
 
 config:
-{{- toYaml .Values.config | nindent 1 }}
+{{- toYaml .Values.config | nindent 2 }}
