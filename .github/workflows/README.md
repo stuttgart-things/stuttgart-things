@@ -42,9 +42,9 @@
 
 | NAME              | DESCRIPTION               | EXAMPLES                                                                            |
 |-------------------|---------------------------|-------------------------------------------------------------------------------------|
-| INVENTORY         | inventory file as string  | [initial_master_node]+sandiego2.labul.sva.de+   |
-| PLAYBOOK NAME     | name/path of playbook     | ansible/playbooks/upload-kubeconfig-vault.yaml                                                             |
-| EXTRA VARS        | ansible vars (extra vars) | -e kubeconfig_path=/etc/rancher/rke2/rke2.yaml -e secret_path_kubeconfig=kubeconfigs -e cluster_name=sandiego2 |
+| INVENTORY         | inventory file as string  | [initial_master_node]+sandiego2.labul.sva.de+ |
+| PLAYBOOK NAME     | name/path of playbook     | ansible/playbooks/upload-kubeconfig-vault.yaml |
+| EXTRA VARS        | ansible vars (extra vars) | -e kubeconfig_path=/etc/rancher/rke2/rke2.yaml -e secret_path_kubeconfig=kubeconfigs -e cluster_name=sandiego2 -e target_host=sandiego2 |
 | Private Key       | vault secret path         | ssh/data/sthings:privateKey                                                         |
 | Requirements File | path to requirements file | ansible/requirements.yaml                                                           |
 
