@@ -74,7 +74,7 @@ jobs:
           TAGS="ansible,github-actions"
           WORKFLOW_RESULT="successfully"
           WORKFLOW_SEVERITY="SUCCESS"
-          BODY="REPOSITORY: ${GITHUB_REPOSITORY} WORKFLOW: ${GITHUB_WORKFLOW} ARTIFACT: ${{ inputs.playbook }} on ${{ inputs.inventory }} w/ ${{ inputs.extra-vars }} RUNNER_NAME: ${RUNNER_NAME} WORKFLOW-IMAGE: ${{ inputs.working-image}} ENV: ${{ inputs.environment-name }}"
+          BODY="REPOSITORY: ${GITHUB_REPOSITORY} WORKFLOW: ${GITHUB_WORKFLOW} ARTIFACT: ${{ inputs.inventory }} BUILD-PARAMETER: ${{ inputs.playbook }} w/ ${{ inputs.extra-vars }} RUNNER_NAME: ${RUNNER_NAME} WORKFLOW-IMAGE: ${{ inputs.working-image}} ENV: ${{ inputs.environment-name }}"
 
           if [ "${{ needs.execute-ansible.result }}" != "success" ]; then
             WORKFLOW_RESULT="with errors"
