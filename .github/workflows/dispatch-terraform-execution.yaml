@@ -44,3 +44,39 @@ jobs:
       environment-name: ${{ inputs.environment-name }}
       runs-on: ${{ inputs.runner }}
     secrets: inherit
+
+  Send-Homerun-Notification:
+    if: ${{ always() }}
+    needs: execute-terraform
+    runs-on: ${{ inputs.runner }}
+    environment: ${{ inputs.environment-name }}
+    container:
+      image: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:be37b4c98b9fcc03ad21e030a9eadaf85d1eb46d5807d1e07aba205cd6106703
+    steps:
+      - name: Send notification to homerun w/ machineshop
+        shell: bash
+        run: |
+          TITLE_PREFIX="Terraform execution ${{ inputs.operation }} for ${{ inputs.folder }} on github actions"
+          SYSTEM="terraform"
+          TAGS="terraform,github-actions"
+          WORKFLOW_RESULT="succeded"
+          WORKFLOW_SEVERITY="SUCCESS"
+          BODY="REPOSITORY: ${GITHUB_REPOSITORY} WORKFLOW: ${GITHUB_WORKFLOW} ARTIFACT: ${{ inputs.folder }}@${{ inputs.branch-name }} RUNNER_NAME: ${RUNNER_NAME} WORKFLOW-IMAGE: ${{ inputs.kaniko-image }} ENV: ${{ inputs.environment-name }}"
+
+          if [ "${{ needs.Create-VM-Config.result }}" != "success" ]; then
+            WORKFLOW_RESULT="failed"
+            WORKFLOW_SEVERITY="ERROR"
+            BODY="no PullRequest was created"
+          fi
+
+          TITLE="${TITLE_PREFIX} ${WORKFLOW_RESULT}"
+
+          machineshop push \
+          --destination https://homerun.homerun-dev.sthings-vsphere.labul.sva.de/generic \
+          --target homerun \
+          --title "${TITLE}" \
+          --system "${SYSTEM}" \
+          --info "${BODY}" \
+          --tags "${TAGS}" \
+          --author "${GITHUB_ACTOR}" \
+          --severity "${WORKFLOW_SEVERITY}"
