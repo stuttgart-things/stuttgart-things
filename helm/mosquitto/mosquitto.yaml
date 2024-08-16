@@ -5,15 +5,6 @@ environments:
       - env/{{ .Environment.Name }}.yaml
 
 releases:
-  - name: mosquitto-credentials
-    disableValidationOnInstall: true
-    installed: true
-    namespace: mosquitto
-    chart: stuttgart-things/sthings-cluster
-    version: 0.3.10
-    values:
-      - "values/mosquitto-credentials.values.yaml.gotmpl"
-
   - name: mosquitto
     disableValidationOnInstall: true
     installed: true
@@ -24,9 +15,6 @@ releases:
       - "values/mosquitto.values.yaml.gotmpl"
 
 repositories:
-  - name: stuttgart-things
-    url: eu.gcr.io/stuttgart-things
-    oci: true
   - name: k8sonlab
     url: https://charts.ar80.eu
     oci: false
