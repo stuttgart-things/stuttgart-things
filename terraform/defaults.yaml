@@ -1,0 +1,11 @@
+---
+# FLUX
+#lab: labul
+#cloud: vsphere
+githubRepository: stuttgart-things
+githubOrg: stuttgart-things
+keepNamespace: true
+clustersPath: clusters
+kubeconfigPath: /tmp/kubeonfig
+tfModuleSource: github.com/stuttgart-things/flux2-cluster-bootstrap?ref=2024.06.16
+fluxNamespace: flux-system
