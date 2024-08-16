@@ -453,7 +453,7 @@ jobs:
     if: ${{ always() }}
     needs: Create-VM-Config
     runs-on: ghr-stuttgart-things-labul-automation
-    environment: labul-vsphere
+    environment: k8s
     container:
       image: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:be37b4c98b9fcc03ad21e030a9eadaf85d1eb46d5807d1e07aba205cd6106703
     steps:
@@ -465,12 +465,11 @@ jobs:
           TAGS="${{ inputs.build-engine }},github-actions"
           WORKFLOW_RESULT="created"
           WORKFLOW_SEVERITY="SUCCESS"
-          BODY="REPOSITORY: ${GITHUB_REPOSITORY} WORKFLOW: ${GITHUB_WORKFLOW} RUNNER_NAME: ${RUNNER_NAME} WORKFLOW-IMAGE: ${{ inputs.kaniko-image }}"
+          BODY="REPOSITORY: ${GITHUB_REPOSITORY} WORKFLOW: ${GITHUB_WORKFLOW} ARTIFACT: ${{ inputs.count-vm }}x{{ inputs.vm-name }} {{ inputs.lab-cloud }} RUNNER_NAME: ${RUNNER_NAME} WORKFLOW-IMAGE: ${{ inputs.kaniko-image }} ENV: k8s"
 
           if [ "${{ needs.Create-VM-Config.result }}" != "success" ]; then
             WORKFLOW_RESULT="failed"
             WORKFLOW_SEVERITY="ERROR"
-            BODY="no PullRequest was created"
           fi
 
           TITLE="${TITLE_PREFIX} ${WORKFLOW_RESULT}"
