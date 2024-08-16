@@ -63,10 +63,9 @@ jobs:
           WORKFLOW_SEVERITY="SUCCESS"
           BODY="REPOSITORY: ${GITHUB_REPOSITORY} WORKFLOW: ${GITHUB_WORKFLOW} ARTIFACT: ${{ inputs.folder }}@${{ inputs.branch-name }} RUNNER_NAME: ${RUNNER_NAME} WORKFLOW-IMAGE: ${{ inputs.kaniko-image }} ENV: ${{ inputs.environment-name }}"
 
-          if [ "${{ needs.Create-VM-Config.result }}" != "success" ]; then
+          if [ "${{ needs.execute-terraform.result }}" != "success" ]; then
             WORKFLOW_RESULT="failed"
             WORKFLOW_SEVERITY="ERROR"
-            BODY="no PullRequest was created"
           fi
 
           TITLE="${TITLE_PREFIX} ${WORKFLOW_RESULT}"
