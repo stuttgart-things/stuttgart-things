@@ -96,6 +96,7 @@ jobs:
 
       - name: Create branch for flux config
         id: renderStateConfig
+        run: |
           machineshop create \
           --kind branch \
           --branch ${{ env.TF_PROJECT_DIR }} \
