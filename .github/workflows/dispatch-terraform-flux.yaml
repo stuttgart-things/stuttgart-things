@@ -97,7 +97,7 @@ jobs:
     runs-on: ghr-stuttgart-things-labul-automation
     environment: k8s
     container:
-      image: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:be37b4c98b9fcc03ad21e030a9eadaf85d1eb46d5807d1e07aba205cd6106703
+      image: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:ed963d740cac75c683a483a95b29f1a60b30bca96b25026b7e1573e07d8ec437
     steps:
       - name: Send notification to homerun w/ machineshop
         shell: bash
