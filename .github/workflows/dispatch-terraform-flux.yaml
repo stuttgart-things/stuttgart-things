@@ -65,7 +65,7 @@ jobs:
           --source local \
           --template ${FLUX_BOOTSTRAP_TEMPLATE} \
           --defaults ${FLUX_DEFAULTS_CONFIG} \
-          --values lab="${{ inputs.lab }}, cloud=lab="${{ inputs.cloud }}" \
+          --values lab="${{ inputs.lab }}, cloud=lab=${{ inputs.cloud }}" \
           --output file \
           --destination ${TF_PROJECT_DIR}/flux.tf
 
