@@ -87,24 +87,34 @@ jobs:
           --output file \
           --destination ${{ env.TF_PROJECT_DIR }}/state.tf
 
-      - name: Get token for creating pull request
-        uses: tibdex/github-app-token@v2
-        id: generate-token
-        with:
-          app_id: ${{ secrets.PULLREQUESTER_APP_ID }}
-          private_key: ${{ secrets.PULLREQUESTER_APP_KEY }}
+      # - name: Get token for creating pull request
+      #   uses: tibdex/github-app-token@v2
+      #   id: generate-token
+      #   with:
+      #     app_id: ${{ secrets.PULLREQUESTER_APP_ID }}
+      #     private_key: ${{ secrets.PULLREQUESTER_APP_KEY }}
 
-      - name: Create Pull Request for flux config
-        id: pr
-        uses: peter-evans/create-pull-request@v6.1.0
-        with:
-          commit-message: '[CI][Created cluster configuration for flux ${{ inputs.cluster-name }}'
-          title: flux cluster configuration ${{ inputs.cluster-name }} created
-          branch: ${{ env.TF_PROJECT_DIR }}
-          delete-branch: true
-          token: ${{ steps.generate-token.outputs.token }}
-          labels: |
-            flux
+      - name: Create branch for flux config
+        id: renderStateConfig
+          machineshop create \
+          --kind branch \
+          --branch ${{ env.TF_PROJECT_DIR }} \
+          --repository stuttgart-things \
+          --group stuttgart-things \
+          --files "${{ env.TF_PROJECT_DIR }}/flux.tf:flux.tf" \
+
+
+      # - name: Create Pull Request for flux config
+      #   id: pr
+      #   uses: peter-evans/create-pull-request@v6.1.0
+      #   with:
+      #     commit-message: '[CI][Created cluster configuration for flux ${{ inputs.cluster-name }}'
+      #     title: flux cluster configuration ${{ inputs.cluster-name }} created
+      #     branch: ${{ env.TF_PROJECT_DIR }}
+      #     delete-branch: true
+      #     token: ${{ steps.generate-token.outputs.token }}
+      #     labels: |
+      #       flux
 
       # - name: Comment ansible provisioning to PR as post-label
       #   uses: thollander/actions-comment-pull-request@v2
@@ -124,12 +134,12 @@ jobs:
       - name: Send notification to homerun w/ machineshop
         shell: bash
         run: |
-          TITLE_PREFIX="PullRequest for flux-bootstrap w/ ${{ inputs.build-engine }} ${{ inputs.count-flux }}x${{ inputs.cluster-name }} on github"
+          TITLE_PREFIX="PullRequest for bootstrap cluster: ${{ inputs.cluster-name }} w/ flux on github"
           SYSTEM="terraform"
-          TAGS="flux, terraform ,github-actions"
+          TAGS="flux, terraform, github-actions"
           WORKFLOW_RESULT="created successfully"
           WORKFLOW_SEVERITY="SUCCESS"
-          BODY="REPOSITORY: ${GITHUB_REPOSITORY} WORKFLOW: ${GITHUB_WORKFLOW} ARTIFACT: ${{ inputs.cluster-name }} ${{ inputs.lab-cloud }} RUNNER_NAME: ${RUNNER_NAME} WORKFLOW-IMAGE: ${{ inputs.kaniko-image }} ENV: ${{ inputs.environment-name }}"
+          BODY="REPOSITORY: ${GITHUB_REPOSITORY} WORKFLOW: ${GITHUB_WORKFLOW} ARTIFACT: ${{ inputs.cluster-name }} ${{ inputs.lab-cloud }} RUNNER_NAME: ${RUNNER_NAME} WORKFLOW-IMAGE: ${{ inputs.working-image }} ENV: ${{ inputs.environment-name }}"
 
           if [ "${{ needs.Create-Flux-Config.result }}" != "success" ]; then
             WORKFLOW_RESULT="failed to create"
