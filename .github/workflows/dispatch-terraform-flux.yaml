@@ -1,0 +1,127 @@
+---
+name: Dispatch Terraform Flux
+on:
+  workflow_dispatch:
+    inputs:
+      lab:
+        type: choice
+        description: LAB
+        options:
+          - labul
+          - labda
+          - labul
+      cloud:
+        type: choice
+        description: CLOUD
+        options:
+          - vsphere
+          - proxmox
+      cluster-name:
+        required: true
+        type: string
+      environment-name:
+        type: choice
+        description: ENVIRONMENT
+        options:
+          - k8s
+          - labul-vsphere
+          - labda-vsphere
+          - labul-proxmox
+      working-image:
+        description: WORKING IMAGE
+        type: string
+        default: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:f6aa598d0bc5d8eca08c9049546975021086343e0c44243b01076467af2a9e12
+      runner:
+        description: RUNNER NAME
+        required: true
+        type: string
+        default: ghr-stuttgart-things-labul-automation
+jobs:
+  Create-Flux-Config:
+    permissions:
+      contents: write
+      pull-requests: write
+    runs-on: ${{ inputs.runner }}
+    environment: ${{ inputs.environment-name }}
+    container:
+      image: ${{ inputs.working-image }}
+    continue-on-error: false
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.1.7
+        with:
+          fetch-depth: '0'
+
+      - name: Create Flux config
+        id: renderConfig
+        run: |
+          machineshop version
+
+          # machineshop render \
+          # --source local \
+          # --template flux/flux.yaml.tpl \
+          # --defaults flux/defaults.yaml \
+          # --output file \
+          # --destination flux/flux-system/${LAB}/${CLOUD}/${CLUSTER_NAME}/flux.yaml
+
+
+      # - name: Get token for creating pull request
+      #   uses: tibdex/github-app-token@v2
+      #   id: generate-token
+      #   with:
+      #     app_id: ${{ secrets.PULLREQUESTER_APP_ID }}
+      #     private_key: ${{ secrets.PULLREQUESTER_APP_KEY }}
+
+      # - name: Create Pull Request for VM config
+      #   id: pr
+      #   uses: peter-evans/create-pull-request@v6.1.0
+      #   with:
+      #     commit-message: '[CI][${{ inputs.build-engine }}] - Created template config for vm ${{ inputs.cluster-name }} ${{ inputs.os-version }}-${{ env.LAB }}-${{ env.CLOUD }}'
+      #     title: ${{ inputs.build-engine }}VM ${{ inputs.count-vm }}x-${{ inputs.vm-size }}-${{ inputs.cluster-name }}-${{ inputs.os-version }}-${{ env.LAB }}-${{ env.CLOUD }}
+      #     branch: ${{ env.destination }}
+      #     delete-branch: true
+      #     token: ${{ steps.generate-token.outputs.token }}
+      #     labels: |
+      #       ${{ inputs.build-engine }}
+
+      # - name: Comment ansible provisioning to PR as post-label
+      #   uses: thollander/actions-comment-pull-request@v2
+      #   with:
+      #     pr_number: ${{ steps.pr.outputs.pull-request-number }}"
+      #     message: |
+      #       :wave: post: ${{ inputs.ansible-provisioning }}
+
+  Send-Homerun-Notification:
+    if: ${{ always() }}
+    needs: Create-Flux-Config
+    runs-on: ghr-stuttgart-things-labul-automation
+    environment: k8s
+    container:
+      image: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:be37b4c98b9fcc03ad21e030a9eadaf85d1eb46d5807d1e07aba205cd6106703
+    steps:
+      - name: Send notification to homerun w/ machineshop
+        shell: bash
+        run: |
+          TITLE_PREFIX="PullRequest for flux-bootstrap w/ ${{ inputs.build-engine }} ${{ inputs.count-vm }}x${{ inputs.cluster-name }} on github"
+          SYSTEM="${{ inputs.build-engine }}"
+          TAGS="${{ inputs.build-engine }},github-actions"
+          WORKFLOW_RESULT="created successfully"
+          WORKFLOW_SEVERITY="SUCCESS"
+          BODY="REPOSITORY: ${GITHUB_REPOSITORY} WORKFLOW: ${GITHUB_WORKFLOW} ARTIFACT: ${{ inputs.cluster-name }} ${{ inputs.lab-cloud }} RUNNER_NAME: ${RUNNER_NAME} WORKFLOW-IMAGE: ${{ inputs.kaniko-image }} ENV: ${{ inputs.environment-name }}"
+
+          if [ "${{ needs.Create-Flux-Config.result }}" != "success" ]; then
+            WORKFLOW_RESULT="failed to create"
+            WORKFLOW_SEVERITY="ERROR"
+          fi
+
+          TITLE="${TITLE_PREFIX} ${WORKFLOW_RESULT}"
+
+          machineshop push \
+          --destination https://homerun.homerun-dev.sthings-vsphere.labul.sva.de/generic \
+          --target homerun \
+          --title "${TITLE}" \
+          --system "${SYSTEM}" \
+          --info "${BODY}" \
+          --tags "${TAGS}" \
+          --author "${GITHUB_ACTOR}" \
+          --severity "${WORKFLOW_SEVERITY}"
