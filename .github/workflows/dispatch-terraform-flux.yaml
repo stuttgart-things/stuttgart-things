@@ -60,16 +60,31 @@ jobs:
           TF_PROJECT_DIR="terraform/flux/${{ inputs.lab }}-${{ inputs.cloud }}-${{ inputs.cluster-name }}"
           FLUX_DEFAULTS_CONFIG="terraform/defaults.yaml"
           FLUX_BOOTSTRAP_TEMPLATE="terraform/flux.tf.tpl"
+          FLUX_STATE_TEMPLATE="terraform/state-provider.tf.tpl"
 
           mkdir -p ${TF_PROJECT_DIR}
 
+          # RENDER FLUX CONFIG
           machineshop render \
           --source local \
           --template ${FLUX_BOOTSTRAP_TEMPLATE} \
           --defaults ${FLUX_DEFAULTS_CONFIG} \
-          --values lab="${{ inputs.lab }}, cloud=lab=${{ inputs.cloud }}, clusterName=lab=${{ inputs.cluster-name }}" \
+          --values lab="${{ inputs.lab }}, cloud=lab=${{ inputs.cloud }}, clusterName=${{ inputs.cluster-name }}" \
           --output file \
           --destination ${TF_PROJECT_DIR}/flux.tf
+
+          cat ${TF_PROJECT_DIR}/flux.tf
+
+          # RENDER STATE PROVIDER
+          machineshop render \
+          --source local \
+          --template ${FLUX_STATE_TEMPLATE} \
+          --defaults ${FLUX_DEFAULTS_CONFIG} \
+          --values lab="stateKey=${{ inputs.cluster-name }}" \
+          --output file \
+          --destination ${TF_PROJECT_DIR}/state.tf
+
+          cat ${TF_PROJECT_DIR}/state.tf
 
       # - name: Get token for creating pull request
       #   uses: tibdex/github-app-token@v2
