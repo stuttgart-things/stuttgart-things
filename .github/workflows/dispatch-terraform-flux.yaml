@@ -80,7 +80,7 @@ jobs:
           --source local \
           --template ${FLUX_STATE_TEMPLATE} \
           --defaults ${FLUX_DEFAULTS_CONFIG} \
-          --values lab="stateKey=${{ inputs.cluster-name }}" \
+          --values "stateKey=${{ inputs.cluster-name }}" \
           --output file \
           --destination ${TF_PROJECT_DIR}/state.tf
 
@@ -115,10 +115,10 @@ jobs:
   Send-Homerun-Notification:
     if: ${{ always() }}
     needs: Create-Flux-Config
-    runs-on: ghr-stuttgart-things-labul-automation
-    environment: k8s
+    runs-on: ${{ inputs.runner }}
+    environment: ${{ inputs.environment-name }}
     container:
-      image: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:be37b4c98b9fcc03ad21e030a9eadaf85d1eb46d5807d1e07aba205cd6106703
+      image: ${{ inputs.working-image }}
     steps:
       - name: Send notification to homerun w/ machineshop
         shell: bash
