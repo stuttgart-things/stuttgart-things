@@ -52,58 +52,59 @@ jobs:
         with:
           fetch-depth: '0'
 
-      - name: Create Flux config
-        id: renderConfig
+      - name: Set config variables
+        id: set
         run: |
-          machineshop version
+          echo TF_PROJECT_DIR="terraform/flux/${{ inputs.lab }}-${{ inputs.cloud }}-${{ inputs.cluster-name }}" >> $GITHUB_ENV
+          echo FLUX_DEFAULTS_CONFIG="terraform/defaults.yaml" >> $GITHUB_ENV
+          echo FLUX_BOOTSTRAP_TEMPLATE="terraform/flux.tf.tpl" >> $GITHUB_ENV
+          echo FLUX_STATE_TEMPLATE="terraform/state-provider.tf.tpl" >> $GITHUB_ENV
 
-          TF_PROJECT_DIR="terraform/flux/${{ inputs.lab }}-${{ inputs.cloud }}-${{ inputs.cluster-name }}"
-          FLUX_DEFAULTS_CONFIG="terraform/defaults.yaml"
-          FLUX_BOOTSTRAP_TEMPLATE="terraform/flux.tf.tpl"
-          FLUX_STATE_TEMPLATE="terraform/state-provider.tf.tpl"
+      - name: Create Flux config dir
+        id: configDir
+        run: |
+          mkdir -p ${{ env.TF_PROJECT_DIR }}
 
-          mkdir -p ${TF_PROJECT_DIR}
-
-          # RENDER FLUX CONFIG
+      - name: Render Flux bootstrap config
+        id: renderBootstrapConfig
+        run: |
           machineshop render \
           --source local \
-          --template ${FLUX_BOOTSTRAP_TEMPLATE} \
-          --defaults ${FLUX_DEFAULTS_CONFIG} \
-          --values lab="${{ inputs.lab }}, cloud=lab=${{ inputs.cloud }}, clusterName=${{ inputs.cluster-name }}" \
+          --template ${{ env.FLUX_BOOTSTRAP_TEMPLATE }} \
+          --defaults ${{ env.FLUX_DEFAULTS_CONFIG }} \
+          --values lab="${{ inputs.lab }}, cloud=${{ inputs.cloud }}, clusterName=${{ inputs.cluster-name }}" \
           --output file \
-          --destination ${TF_PROJECT_DIR}/flux.tf
+          --destination ${{ env.TF_PROJECT_DIR }}/flux.tf
 
-          cat ${TF_PROJECT_DIR}/flux.tf
-
-          # RENDER STATE PROVIDER
+      - name: Render Flux bootstrap config
+        id: renderStateConfig
+        run: |
           machineshop render \
           --source local \
-          --template ${FLUX_STATE_TEMPLATE} \
-          --defaults ${FLUX_DEFAULTS_CONFIG} \
+          --template ${{ env.FLUX_STATE_TEMPLATE }} \
+          --defaults ${{ env.FLUX_DEFAULTS_CONFIG }} \
           --values "stateKey=${{ inputs.cluster-name }}" \
           --output file \
-          --destination ${TF_PROJECT_DIR}/state.tf
+          --destination ${{ env.TF_PROJECT_DIR }}/state.tf
 
-          cat ${TF_PROJECT_DIR}/state.tf
+      - name: Get token for creating pull request
+        uses: tibdex/github-app-token@v2
+        id: generate-token
+        with:
+          app_id: ${{ secrets.PULLREQUESTER_APP_ID }}
+          private_key: ${{ secrets.PULLREQUESTER_APP_KEY }}
 
-      # - name: Get token for creating pull request
-      #   uses: tibdex/github-app-token@v2
-      #   id: generate-token
-      #   with:
-      #     app_id: ${{ secrets.PULLREQUESTER_APP_ID }}
-      #     private_key: ${{ secrets.PULLREQUESTER_APP_KEY }}
-
-      # - name: Create Pull Request for VM config
-      #   id: pr
-      #   uses: peter-evans/create-pull-request@v6.1.0
-      #   with:
-      #     commit-message: '[CI][${{ inputs.build-engine }}] - Created template config for vm ${{ inputs.cluster-name }} ${{ inputs.os-version }}-${{ env.LAB }}-${{ env.CLOUD }}'
-      #     title: ${{ inputs.build-engine }}VM ${{ inputs.count-vm }}x-${{ inputs.vm-size }}-${{ inputs.cluster-name }}-${{ inputs.os-version }}-${{ env.LAB }}-${{ env.CLOUD }}
-      #     branch: ${{ env.destination }}
-      #     delete-branch: true
-      #     token: ${{ steps.generate-token.outputs.token }}
-      #     labels: |
-      #       ${{ inputs.build-engine }}
+      - name: Create Pull Request for flux config
+        id: pr
+        uses: peter-evans/create-pull-request@v6.1.0
+        with:
+          commit-message: '[CI][Created cluster configuration for flux ${{ inputs.cluster-name }}'
+          title: flux cluster configuration ${{ inputs.cluster-name }} created
+          branch: ${{ env.TF_PROJECT_DIR }}
+          delete-branch: true
+          token: ${{ steps.generate-token.outputs.token }}
+          labels: |
+            flux
 
       # - name: Comment ansible provisioning to PR as post-label
       #   uses: thollander/actions-comment-pull-request@v2
@@ -123,7 +124,7 @@ jobs:
       - name: Send notification to homerun w/ machineshop
         shell: bash
         run: |
-          TITLE_PREFIX="PullRequest for flux-bootstrap w/ ${{ inputs.build-engine }} ${{ inputs.count-vm }}x${{ inputs.cluster-name }} on github"
+          TITLE_PREFIX="PullRequest for flux-bootstrap w/ ${{ inputs.build-engine }} ${{ inputs.count-flux }}x${{ inputs.cluster-name }} on github"
           SYSTEM="terraform"
           TAGS="flux, terraform ,github-actions"
           WORKFLOW_RESULT="created successfully"
