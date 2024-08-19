@@ -57,13 +57,17 @@ jobs:
         run: |
           machineshop version
 
-          # machineshop render \
-          # --source local \
-          # --template flux/flux.yaml.tpl \
-          # --defaults flux/defaults.yaml \
-          # --output file \
-          # --destination flux/flux-system/${LAB}/${CLOUD}/${CLUSTER_NAME}/flux.yaml
+          TF_PROJECT_DIR="terraform/flux/${{ inputs.lab }}-${{ inputs.cloud }}-${{ inputs.cluster-name }}"
+          FLUX_DEFAULTS_CONFIG="terraform/defaults.yaml"
+          FLUX_BOOTSTRAP_TEMPLATE="terraform/flux.tf.tpl"
 
+          machineshop render \
+          --source local \
+          --template ${FLUX_BOOTSTRAP_TEMPLATE} \
+          --defaults ${FLUX_DEFAULTS_CONFIG} \
+          --values lab="${{ inputs.lab }}, cloud=lab="${{ inputs.cloud }}" \
+          --output file \
+          --destination ${TF_PROJECT_DIR}/flux.tf
 
       # - name: Get token for creating pull request
       #   uses: tibdex/github-app-token@v2
@@ -103,8 +107,8 @@ jobs:
         shell: bash
         run: |
           TITLE_PREFIX="PullRequest for flux-bootstrap w/ ${{ inputs.build-engine }} ${{ inputs.count-vm }}x${{ inputs.cluster-name }} on github"
-          SYSTEM="${{ inputs.build-engine }}"
-          TAGS="${{ inputs.build-engine }},github-actions"
+          SYSTEM="terraform"
+          TAGS="flux, terraform ,github-actions"
           WORKFLOW_RESULT="created successfully"
           WORKFLOW_SEVERITY="SUCCESS"
           BODY="REPOSITORY: ${GITHUB_REPOSITORY} WORKFLOW: ${GITHUB_WORKFLOW} ARTIFACT: ${{ inputs.cluster-name }} ${{ inputs.lab-cloud }} RUNNER_NAME: ${RUNNER_NAME} WORKFLOW-IMAGE: ${{ inputs.kaniko-image }} ENV: ${{ inputs.environment-name }}"
