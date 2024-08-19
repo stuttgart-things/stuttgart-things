@@ -45,6 +45,8 @@ jobs:
     environment: ${{ inputs.environment-name }}
     container:
       image: ${{ inputs.working-image }}
+    env:
+      GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
     continue-on-error: false
     steps:
       - name: Checkout code
@@ -103,7 +105,6 @@ jobs:
           --repository stuttgart-things \
           --group stuttgart-things \
           --files "${{ env.TF_PROJECT_DIR }}/flux.tf:flux.tf" \
-
 
       # - name: Create Pull Request for flux config
       #   id: pr
