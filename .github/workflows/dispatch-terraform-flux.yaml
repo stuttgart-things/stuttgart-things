@@ -95,7 +95,7 @@ jobs:
       #     private_key: ${{ secrets.PULLREQUESTER_APP_KEY }}
 
       - name: Create branch for flux config
-        id: renderStateConfig
+        id: createBranch
         run: |
           machineshop create \
           --kind branch \
