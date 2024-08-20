@@ -116,7 +116,7 @@ jobs:
           --repository stuttgart-things \
           --group stuttgart-things \
           --branch ${{ env.TF_PROJECT_DIR }} \
-          --lables test
+          --labels test
 
 
       # - name: Create Pull Request for flux config
