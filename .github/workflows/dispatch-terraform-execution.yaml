@@ -51,7 +51,7 @@ jobs:
     runs-on: ${{ inputs.runner }}
     environment: ${{ inputs.environment-name }}
     container:
-      image: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:ed963d740cac75c683a483a95b29f1a60b30bca96b25026b7e1573e07d8ec437
+      image: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:fff62c5ad6d02db52f0525519cddcf1833cf59201e44e3f5c77befbd492cc60a
     steps:
       - name: Send notification to homerun w/ machineshop
         shell: bash
