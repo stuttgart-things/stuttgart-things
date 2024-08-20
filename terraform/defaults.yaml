@@ -11,3 +11,8 @@ fluxNamespace: flux-system
 s3Endpoint: https://artifacts.homerun-dev.sthings-vsphere.labul.sva.de
 s3Bucket: flux
 s3Region: main
+
+vaultSecretPath: kubeconfigs/data/
+vaultSecretKey: kubeconfig
+secretTargetPath: /tmp
+secretFileBase64: true
