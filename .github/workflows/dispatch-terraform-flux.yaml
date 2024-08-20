@@ -30,7 +30,7 @@ on:
       working-image:
         description: WORKING IMAGE
         type: string
-        default: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:ed963d740cac75c683a483a95b29f1a60b30bca96b25026b7e1573e07d8ec437
+        default: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:fff62c5ad6d02db52f0525519cddcf1833cf59201e44e3f5c77befbd492cc60a
       runner:
         description: RUNNER NAME
         required: true
@@ -74,7 +74,7 @@ jobs:
           --source local \
           --template ${{ env.FLUX_BOOTSTRAP_TEMPLATE }} \
           --defaults ${{ env.FLUX_DEFAULTS_CONFIG }} \
-          --values lab="${{ inputs.lab }}, cloud=${{ inputs.cloud }}, clusterName=${{ inputs.cluster-name }}" \
+          --values "lab=${{ inputs.lab }}, cloud=${{ inputs.cloud }}, clusterName=${{ inputs.cluster-name }}" \
           --output file \
           --destination ${{ env.TF_PROJECT_DIR }}/flux.tf
 
@@ -104,7 +104,20 @@ jobs:
           --branch ${{ env.TF_PROJECT_DIR }} \
           --repository stuttgart-things \
           --group stuttgart-things \
-          --files "${{ env.TF_PROJECT_DIR }}/flux.tf:flux.tf" \
+          --files "${{ env.TF_PROJECT_DIR }}/flux.tf:${{ env.TF_PROJECT_DIR }}/flux.tf,${{ env.TF_PROJECT_DIR }}/state.tf:${{ env.TF_PROJECT_DIR }}/state.tf" \
+
+      - name: Create pr for (newly created) flux branch into main
+        id: createPR
+        run: |
+          machineshop create \
+          --kind pr \
+          --title "flux bootstrap terraform code for cluster ${{ inputs.cluster-name }} on lab ${{ inputs.lab }}-${{ inputs.cloud }} created" \
+          --branch ${{ env.TF_PROJECT_DIR }} \
+          --repository stuttgart-things \
+          --group stuttgart-things \
+          --branch ${{ env.TF_PROJECT_DIR }} \
+          --tags test
+
 
       # - name: Create Pull Request for flux config
       #   id: pr
