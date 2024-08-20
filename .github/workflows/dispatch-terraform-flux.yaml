@@ -61,6 +61,7 @@ jobs:
           echo FLUX_DEFAULTS_CONFIG="terraform/defaults.yaml" >> $GITHUB_ENV
           echo FLUX_BOOTSTRAP_TEMPLATE="terraform/flux.tf.tpl" >> $GITHUB_ENV
           echo FLUX_STATE_TEMPLATE="terraform/state-provider.tf.tpl" >> $GITHUB_ENV
+          echo FLUX_TFVARS_TEMPLATE="terraform/flux-tfvars.tf.tpl" >> $GITHUB_ENV
 
       - name: Create Flux config dir
         id: configDir
@@ -76,7 +77,7 @@ jobs:
           --defaults ${{ env.FLUX_DEFAULTS_CONFIG }} \
           --values "lab=${{ inputs.lab }}, cloud=${{ inputs.cloud }}, clusterName=${{ inputs.cluster-name }}" \
           --output file \
-          --destination ${{ env.TF_PROJECT_DIR }}/flux.tf
+          --destination ./flux.tf
 
       - name: Render Flux bootstrap config
         id: renderStateConfig
@@ -87,7 +88,17 @@ jobs:
           --defaults ${{ env.FLUX_DEFAULTS_CONFIG }} \
           --values "stateKey=${{ inputs.cluster-name }}" \
           --output file \
-          --destination ${{ env.TF_PROJECT_DIR }}/state.tf
+          --destination ./state.tf
+
+      - name: Render terraform tfvars
+        id: renderTfvars
+        run: |
+          machineshop render \
+          --source local \
+          --brackets square \
+          --template ${{ env.FLUX_TFVARS_TEMPLATE }} \
+          --output file \
+          --destination ./terraform.tfvars
 
       - name: Create branch for flux config
         id: createBranch
@@ -97,7 +108,7 @@ jobs:
           --branch ${{ env.TF_PROJECT_DIR }} \
           --repository stuttgart-things \
           --group stuttgart-things \
-          --files "${{ env.TF_PROJECT_DIR }}/flux.tf:${{ env.TF_PROJECT_DIR }}/flux.tf,${{ env.TF_PROJECT_DIR }}/state.tf:${{ env.TF_PROJECT_DIR }}/state.tf" \
+          --files "flux.tf:${{ env.TF_PROJECT_DIR }}/flux.tf,state.tf:${{ env.TF_PROJECT_DIR }}/state.tf,terraform.tfvars:${{ env.TF_PROJECT_DIR }}/terraform.tfvars" \
 
       - name: Create pr for (newly created) flux branch into main
         id: createPR
