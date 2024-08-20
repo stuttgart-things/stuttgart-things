@@ -17,7 +17,7 @@ vars:
   - name: binaries
     file: |
       ---
-      gh_version: 2.54.0 # datasource=github-tags depName=cli/cli
+      gh_version: 2.55.0 # datasource=github-tags depName=cli/cli
       task_version: 3.38.0 # datasource=github-tags depName=go-task/task
       hugo_version: 0.133.0 # datasource=github-tags depName=gohugoio/hugo
       terraform_version: 1.9.4 # datasource=custom.hashicorp
