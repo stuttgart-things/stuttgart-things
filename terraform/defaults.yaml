@@ -12,7 +12,7 @@ s3Endpoint: https://artifacts.homerun-dev.sthings-vsphere.labul.sva.de
 s3Bucket: flux
 s3Region: main
 
-vaultSecretPath: kubeconfigs/data/
+vaultSecretPath: kubeconfigs/data
 vaultSecretKey: kubeconfig
 kubeconfigTargetPath: /tmp
 secretFileBase64: true
