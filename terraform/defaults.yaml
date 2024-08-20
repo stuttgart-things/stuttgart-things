@@ -14,5 +14,5 @@ s3Region: main
 
 vaultSecretPath: kubeconfigs/data/
 vaultSecretKey: kubeconfig
-secretTargetPath: /tmp
+kubeconfigTargetPath: /tmp
 secretFileBase64: true

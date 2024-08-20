@@ -1,6 +1,6 @@
 module "{{ .lab }}-{{ .cloud }}-{{ .clusterName }}" {
   source            = "{{ .tfModuleSource }}"
-  kubeconfig_path   = "{{ .kubeconfigPath }}"
+  kubeconfig_path   = "{{ .kubeconfigTargetPath }}/{{ .clusterName }}"
   github_token      = var.github_token
   github_org        = "{{ .githubOrg }}"
   github_repository = "{{ .githubRepository }}"

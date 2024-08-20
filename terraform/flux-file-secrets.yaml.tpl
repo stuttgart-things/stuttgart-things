@@ -1,5 +1,5 @@
 ---
 secrets:
   - path: {{ .vaultSecretPath }}/{{ .clusterName }}:{{ .vaultSecretKey }}
-    target: {{ .secretTargetPath }}/{{ .clusterName }}
+    target: {{ .kubeconfigTargetPath }}/{{ .clusterName }}
     b64: {{ .secretFileBase64 }}
