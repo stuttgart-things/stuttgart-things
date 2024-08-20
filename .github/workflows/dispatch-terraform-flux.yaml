@@ -101,16 +101,6 @@ jobs:
           --output file \
           --destination ./terraform.tfvars
 
-      - name: Render terraform tfvars
-        id: renderTfvars
-        run: |
-          machineshop render \
-          --source local \
-          --brackets square \
-          --template ${{ env.FLUX_TFVARS_TEMPLATE }} \
-          --output file \
-          --destination ./terraform.tfvars
-
       - name: Render file secrets
         id: renderFileSecrets
         run: |
