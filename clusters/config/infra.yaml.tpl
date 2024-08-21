@@ -1,6 +1,33 @@
 ---
 template:
+  openebs: |
+    ---
+    apiVersion: {{ .apiVersion }}
+    kind: {{ .kind }}
+    metadata:
+      name: {{ .openebsName }}
+      namespace: {{ .namespace }}
+    spec:
+      interval: {{ .interval }}
+      retryInterval: {{ .retryInterval }}
+      timeout: {{ .timeout }}
+      sourceRef:
+        kind: GitRepository
+        name: {{ .namespace }}
+      path: {{ .infraPath }}/{{ .openebsName }}
+      prune: {{ .prune }}
+      wait: {{ .wait }}
+      patches:
+        - patch: |-
+            - op: replace
+              path: /spec/chart/spec/version
+              value: {{ .openebsVersion }}
+          target:
+            kind: HelmRelease
+            name: {{ .openebsName }}
+            namespace: {{ .openebsNamespace }}
   nfs-csi: |
+    ---
     apiVersion: {{ .apiVersion }}
     kind: {{ .kind }}
     metadata:
@@ -12,7 +39,7 @@ template:
       timeout: {{ .timeout }}
       sourceRef:
         kind: GitRepository
-        name: flux-system
+        name: {{ .namespace }}
       path: {{ .infraPath }}/{{ .nfsCsiName }}
       prune: {{ .prune }}
       wait: {{ .wait }}
@@ -30,7 +57,16 @@ template:
             kind: HelmRelease
             name: {{ .nfsCsiName }}
             namespace: {{ .nfsNamespace }}
+        - patch: |-
+            - op: replace
+              path: /spec/values/externalSnapshotter/customResourceDefinitions/enabled
+              value: false
+          target:
+            kind: HelmRelease
+            name: nfs-csi
+            namespace: flux-system
   longhorn: |
+    ---
     apiVersion: {{ .apiVersion }}
     kind: {{ .kind }}
     metadata:
@@ -53,8 +89,8 @@ template:
         - patch: |-
             - op: replace
               path: /spec/chart/spec/version
-              value: {{ .longhornName }}
+              value: {{ .longhornVersion }}
           target:
             kind: HelmRelease
             name: {{ .longhornName }}
-            namespace: {{ .longhornVersion }}
+            namespace: {{ .longhornNamespace }}

@@ -11,7 +11,7 @@ infraPath: ./infra
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 
-
+# INFRA
 longhornName: longhorn
 longhornNamespace: longhorn-system
 longhornVersion: 1.7.0
@@ -20,4 +20,8 @@ nfsCsiName: nfs-csi
 nfsServer: 10.31.101.26
 nfsServerSharePath: /data/col1/sthings
 nfsNamespace: kube-system
-nfsCsiVersion: v4.6.0
+nfsCsiVersion: v4.8.0
+
+openebsName: openebs
+openebsNamespace: openebs
+openebsVersion: 4.1.0
