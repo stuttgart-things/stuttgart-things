@@ -101,6 +101,7 @@ jobs:
       - name: Render infra apps
         id: findRenderedApps
         shell: bash
+        run: |
           find "${{ env.FLUX_TMP_DIR }}" -type f -name "*.yaml" -exec cat {} \;
 
 
