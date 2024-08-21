@@ -97,7 +97,7 @@ spec:
   timeout: 5m
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: august2024
   path: ./infra/nfs-csi
   prune: true
   wait: true
@@ -170,4 +170,3 @@ spec:
     name: flux-system
   path: ./infra/loki-stack
 ---
-
