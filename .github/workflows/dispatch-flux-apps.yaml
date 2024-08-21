@@ -74,7 +74,6 @@ jobs:
           mkdir -p /tmp/flux
           echo FLUX_TMP_DIR="/tmp/flux" >> $GITHUB_ENV
 
-
       - name: Render infra apps
         id: renderInfraApps
         if: github.event.inputs.infra-apps != ''
@@ -93,13 +92,15 @@ jobs:
             --values "${{ inputs.infra-values }}" \
             --kind multikey \
             --key ${infra} \
+            --output file \
             --destination "${{ env.FLUX_TMP_DIR }}/${infra}.yaml"
 
             cat ${{ env.FLUX_TMP_DIR }}/${infra}.yaml
           done
 
+#       find "${{ env.FLUX_TMP_DIR }}" -type f -name "*.yaml" -exec cat {} \;
 
-      # find "${{ env.FLUX_TMP_DIR }}" -type f -name "*.yaml" -exec cat {} \;
+
       # - name: Create branch for flux config
       #   id: createBranch
       #   run: |
