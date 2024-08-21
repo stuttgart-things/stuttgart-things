@@ -98,7 +98,10 @@ jobs:
             cat ${{ env.FLUX_TMP_DIR }}/${infra}.yaml
           done
 
-#       find "${{ env.FLUX_TMP_DIR }}" -type f -name "*.yaml" -exec cat {} \;
+      - name: Render infra apps
+        id: findRenderedApps
+        shell: bash
+          find "${{ env.FLUX_TMP_DIR }}" -type f -name "*.yaml" -exec cat {} \;
 
 
       # - name: Create branch for flux config
