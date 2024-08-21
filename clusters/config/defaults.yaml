@@ -1,0 +1,17 @@
+---
+namespace: flux-system
+interval: 1h
+retryInterval: 1m
+timeout: 5m
+sourceKind: GitRepository
+sourceName: flux-system
+prune: true
+wait: true
+infraPath: ./infra
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+
+
+longhornName: longhorn
+longhornNamespace: longhorn-system
+longhornVersion: 1.7.0

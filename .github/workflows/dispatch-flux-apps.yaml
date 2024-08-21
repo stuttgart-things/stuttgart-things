@@ -1,0 +1,78 @@
+---
+name: Dispatch Flux Apps
+on:
+  workflow_dispatch:
+    inputs:
+      lab:
+        type: choice
+        description: LAB
+        options:
+          - labul
+          - labda
+          - labul
+      cloud:
+        type: choice
+        description: CLOUD
+        options:
+          - vsphere
+          - proxmox
+      cluster-name:
+        required: true
+        type: string
+      infra-apps:
+        description: INFRA-APP NAMES - AS DELMITED STRING BY SEMICOLON
+        required: false
+        type: string
+        default: ""
+      infra-values:
+        description: INFRA-VALUE PARAMETES - AS DELMITED STRING BY SEMICOLON
+        required: false
+        type: string
+        default: ""
+      environment-name:
+        type: choice
+        description: ENVIRONMENT
+        options:
+          - k8s
+          - labul-vsphere
+          - labda-vsphere
+          - labul-proxmox
+      working-image:
+        description: WORKING IMAGE
+        type: string
+        default: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:0aa1134306ca79c47141f05ede01afb373dcea3aab76175ac897b6b89ce4342c
+      runner:
+        description: RUNNER NAME
+        required: true
+        type: string
+        default: ghr-stuttgart-things-labul-automation
+
+jobs:
+  Create-Flux-Apps:
+    permissions:
+      contents: write
+      pull-requests: write
+    runs-on: ${{ inputs.runner }}
+    environment: ${{ inputs.environment-name }}
+    container:
+      image: ${{ inputs.working-image }}
+    continue-on-error: false
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.1.7
+        with:
+          fetch-depth: '0'
+
+      - name: Set config variables
+        id: set
+        run: |
+          echo FLUX_CLUSTER_FOLDER="clusters/${{ inputs.lab }}/${{ inputs.cloud }}/${{ inputs.cluster-name }}" >> $GITHUB_ENV
+          echo FLUX_TEMPLATE_DIR="clusters/config" >> $GITHUB_ENV
+          echo FLUX_INFRA_TEMPLATE="infra.yaml.tpl" >> $GITHUB_ENV
+          echo FLUX_APPS_TEMPLATE="apps.yaml.tpl" >> $GITHUB_ENV
+          echo FLUX_DEFAULTS="defaults.yaml" >> $GITHUB_ENV
+
+      - name: Render infra apps
+        id: infra
+        run: |
+          cat ${{ env.FLUX_TEMPLATE_DIR }}/${{ env.FLUX_INFRA_TEMPLATE }}
