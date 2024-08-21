@@ -99,7 +99,7 @@ jobs:
           done
 
 
-          find "${{ env.FLUX_TMP_DIR }}" -type f -name "*.yaml" -exec cat {} \;
+      # find "${{ env.FLUX_TMP_DIR }}" -type f -name "*.yaml" -exec cat {} \;
       # - name: Create branch for flux config
       #   id: createBranch
       #   run: |
