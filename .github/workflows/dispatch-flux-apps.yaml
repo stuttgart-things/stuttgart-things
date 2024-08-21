@@ -114,7 +114,7 @@ jobs:
             echo ${file}
 
             var=$(echo "$file:${{ env.FLUX_CLUSTER_FOLDER }}/$(basename $file)")
-            COMMIT_STRING="${NEWMOUNTPOINTS}${var},"
+            COMMIT_STRING="${COMMIT_STRING}${var},"
 
           done
 
