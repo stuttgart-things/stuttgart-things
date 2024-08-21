@@ -91,7 +91,7 @@ jobs:
             --source local \
             --template ${{ env.FLUX_TEMPLATE_DIR }}/${{ env.FLUX_INFRA_TEMPLATE }} \
             --defaults ${{ env.FLUX_TEMPLATE_DIR }}/${{ env.FLUX_DEFAULTS }} \
-            --values "${{ inputs.infra-values }}" \
+            --values "${{ inputs.infra-values }}, clusterName=${{ inputs.cluster-name }}" \
             --kind multikey \
             --key ${infra} \
             --output file \
@@ -127,7 +127,13 @@ jobs:
       - name: Create branch for flux config
         id: createBranch
         run: |
-          printenv
+
+          # SPLIT VAR INTO ARRAY
+          read -ra GITHUB_OWNER_REPO <<< "$GITHUB_REPOSITORY"
+          IFS='/'
+
+          echo "Organisation: ${GITHUB_OWNER_REPO[0]}"
+          echo "Repository: ${GITHUB_OWNER_REPO[1]}"
 
           machineshop create \
           --kind branch \

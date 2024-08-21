@@ -1,35 +1,35 @@
 ---
 template:
-  nfsCsi: |
-    apiVersion: kustomize.toolkit.fluxcd.io/v1
-    kind: Kustomization
+  nfs-sci: |
+    apiVersion: {{ .apiVersion }}
+    kind: {{ .kind }}
     metadata:
-      name: nfs-csi
+      name: {{ .nfsCsiName }}
       namespace: {{ .namespace }}
     spec:
-      interval: 1h
-      retryInterval: 1m
-      timeout: 5m
+      interval: {{ .interval }}
+      retryInterval: {{ .retryInterval }}
+      timeout: {{ .timeout }}
       sourceRef:
         kind: GitRepository
         name: flux-system
-      path: ./infra/nfs-csi
-      prune: true
-      wait: true
+      path: {{ .infraPath }}/{{ .nfsCsiName }}
+      prune: {{ .prune }}
+      wait: {{ .wait }}
       postBuild:
         substitute:
-          NFS_SERVER_FQDN: 10.31.101.26
-          NFS_SHARE_PATH: /data/col1/sthings
-          CLUSTER_NAME: texas
+          NFS_SERVER_FQDN: {{ .nfsServer }}
+          NFS_SHARE_PATH: {{ .nfsServerSharePath }}
+          CLUSTER_NAME: {{ .clusterName }}
       patches:
         - patch: |-
             - op: replace
               path: /spec/chart/spec/version
-              value: v4.6.0
+              value: {{ .nfsCsiVersion }}
           target:
             kind: HelmRelease
-            name: nfs-csi
-            namespace: kube-system
+            name: {{ .nfsCsiName }}
+            namespace: {{ .nfsNamespace }}
   longhorn: |
     apiVersion: {{ .apiVersion }}
     kind: {{ .kind }}
