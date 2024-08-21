@@ -75,6 +75,7 @@ jobs:
       - name: Render infra apps
         id: renderInfraApps
         if: github.event.inputs.infra-apps != ''
+        shell: bash
         run: |
           infra_apps=$(echo "${{ inputs.infra-apps }}" | tr -d ' ')
           added_infra_apps=""
