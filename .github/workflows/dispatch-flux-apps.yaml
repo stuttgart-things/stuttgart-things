@@ -68,11 +68,19 @@ jobs:
         run: |
           echo FLUX_CLUSTER_FOLDER="clusters/${{ inputs.lab }}/${{ inputs.cloud }}/${{ inputs.cluster-name }}" >> $GITHUB_ENV
           echo FLUX_TEMPLATE_DIR="clusters/config" >> $GITHUB_ENV
-          echo FLUX_INFRA_TEMPLATE="infra.yaml.tpl" >> $GITHUB_ENV
           echo FLUX_APPS_TEMPLATE="apps.yaml.tpl" >> $GITHUB_ENV
+          echo FLUX_INFRA_TEMPLATE="infra.yaml.tpl" >> $GITHUB_ENV
           echo FLUX_DEFAULTS="defaults.yaml" >> $GITHUB_ENV
 
       - name: Render infra apps
         id: infra
         run: |
-          cat ${{ env.FLUX_TEMPLATE_DIR }}/${{ env.FLUX_INFRA_TEMPLATE }}
+          machineshop render \
+          --source local \
+          --template ${{ env.FLUX_TEMPLATE_DIR }}/${{ env.FLUX_INFRA_TEMPLATE }} \
+          --defaults ${{ env.FLUX_TEMPLATE_DIR }}/${{ env.FLUX_DEFAULTS }} \
+          --values "clusterName=${{ inputs.cluster-name }}" \
+          # --output file \
+          # --destination ./flux.yaml \
+          --kind multikey \
+          --key longhorn
