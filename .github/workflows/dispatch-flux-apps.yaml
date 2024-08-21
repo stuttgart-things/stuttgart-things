@@ -73,26 +73,20 @@ jobs:
           echo FLUX_DEFAULTS="defaults.yaml" >> $GITHUB_ENV
 
       - name: Render infra apps
-        id: test
+        id: renderInfraApps
         if: github.event.inputs.infra-apps != ''
         run: |
           infra_apps="${{ inputs.infra-apps }}"
           IFS=';'
 
-          for app in $infra_apps; do
-            echo "Infra-app: $app"
+          for infra in $infra_apps; do
+            echo "RENDERING INFRA-APP: $infra"
+
+            machineshop render \
+            --source local \
+            --template ${{ env.FLUX_TEMPLATE_DIR }}/${{ env.FLUX_INFRA_TEMPLATE }} \
+            --defaults ${{ env.FLUX_TEMPLATE_DIR }}/${{ env.FLUX_DEFAULTS }} \
+            --values "clusterName=${{ inputs.cluster-name }}" \
+            --kind multikey \
+            --key $infra
           done
-
-      - name: Render infra apps
-        id: infra
-        run: |
-          machineshop render \
-          --source local \
-          --template ${{ env.FLUX_TEMPLATE_DIR }}/${{ env.FLUX_INFRA_TEMPLATE }} \
-          --defaults ${{ env.FLUX_TEMPLATE_DIR }}/${{ env.FLUX_DEFAULTS }} \
-          --values "clusterName=${{ inputs.cluster-name }}" \
-          --kind multikey \
-          --key longhorn
-
-          # --output file \
-          # --destination ./flux.yaml \
