@@ -80,7 +80,8 @@ jobs:
           --template ${{ env.FLUX_TEMPLATE_DIR }}/${{ env.FLUX_INFRA_TEMPLATE }} \
           --defaults ${{ env.FLUX_TEMPLATE_DIR }}/${{ env.FLUX_DEFAULTS }} \
           --values "clusterName=${{ inputs.cluster-name }}" \
-          # --output file \
-          # --destination ./flux.yaml \
           --kind multikey \
           --key longhorn
+
+          # --output file \
+          # --destination ./flux.yaml \
