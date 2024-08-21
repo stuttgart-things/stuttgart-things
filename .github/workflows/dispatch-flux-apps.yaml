@@ -73,6 +73,23 @@ jobs:
           echo FLUX_DEFAULTS="defaults.yaml" >> $GITHUB_ENV
 
       - name: Render infra apps
+        id: test
+        run: |
+          string="app1;app2;app3;app4"
+
+          # Setze den IFS auf Semikolon
+          IFS=';'
+
+          # Schleife über die durch Semikolon getrennten Werte
+          for app in $string; do
+            echo "App: $app"
+          done
+
+          # Setze den IFS zurück auf den Standardwert
+          unset IFS
+
+
+      - name: Render infra apps
         id: infra
         run: |
           machineshop render \
