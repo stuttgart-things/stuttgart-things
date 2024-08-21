@@ -20,12 +20,12 @@ on:
         required: true
         type: string
       infra-apps:
-        description: INFRA-APP NAMES - AS DELMITED STRING BY SEMICOLON
+        description: INFRA (APP) NAMES - AS DELMITED STRING BY SEMICOLON
         required: false
         type: string
         default: ""
       infra-values:
-        description: INFRA-VALUE PARAMETES - AS DELMITED STRING BY SEMICOLON
+        description: INFRA VALUES
         required: false
         type: string
         default: ""
@@ -76,17 +76,18 @@ jobs:
         id: renderInfraApps
         if: github.event.inputs.infra-apps != ''
         run: |
-          infra_apps=$(echo ${{ inputs.infra-apps }} | tr -d ' ')
+          infra_apps=$(echo "${{ inputs.infra-apps }}" | tr -d ' ')
           IFS=';'
 
           for infra in $infra_apps; do
+
             echo "RENDERING INFRA-APP: $infra"
 
             machineshop render \
             --source local \
             --template ${{ env.FLUX_TEMPLATE_DIR }}/${{ env.FLUX_INFRA_TEMPLATE }} \
             --defaults ${{ env.FLUX_TEMPLATE_DIR }}/${{ env.FLUX_DEFAULTS }} \
-            --values "clusterName=${{ inputs.cluster-name }}" \
+            --values "${{ inputs.infra-values }}" \
             --kind multikey \
             --key $infra
           done
