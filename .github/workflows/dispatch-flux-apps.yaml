@@ -102,7 +102,12 @@ jobs:
         shell: bash
         run: |
           find "${{ env.FLUX_TMP_DIR }}" -type f -name "*.yaml" -exec cat {} \;
-          find "${{ env.FLUX_TMP_DIR }}" -type f -name "*.yaml" -type f -printf "%f,"
+
+          all=$(find ${TMP} -type f -name "*.yaml")
+
+          for file in $all; do
+            echo ${filevar}
+          done
 
       # - name: Create branch for flux config
       #   id: createBranch
