@@ -85,15 +85,26 @@ jobs:
           infra_apps=$(echo "${{ inputs.infra-apps }}" | tr -d ' ')
           IFS=';'
 
+          VALUES=""
+
+          if [ -n "${{ inputs.infra-values }}" ]; then
+            VALUES="${{ inputs.infra-values }}, clusterName=${{ inputs.cluster-name }}"
+          else
+            VALUES="clusterName=${{ inputs.cluster-name }}"
+          fi
+
+
           for infra in $infra_apps; do
 
             echo "RENDERING INFRA-APP: ${infra}"
+
+            values=${{ inputs.infra-values }},
 
             machineshop render \
             --source local \
             --template ${{ env.FLUX_TEMPLATE_DIR }}/${{ env.FLUX_INFRA_TEMPLATE }} \
             --defaults ${{ env.FLUX_TEMPLATE_DIR }}/${{ env.FLUX_DEFAULTS }} \
-            --values "${{ inputs.infra-values }}, clusterName=${{ inputs.cluster-name }}" \
+            --values "${VALUES}" \
             --kind multikey \
             --key ${infra} \
             --output file \

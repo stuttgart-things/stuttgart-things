@@ -1,6 +1,6 @@
 ---
 template:
-  nfs-sci: |
+  nfs-csi: |
     apiVersion: {{ .apiVersion }}
     kind: {{ .kind }}
     metadata:
