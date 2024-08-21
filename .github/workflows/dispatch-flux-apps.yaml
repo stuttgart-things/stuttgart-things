@@ -74,6 +74,7 @@ jobs:
 
       - name: Render infra apps
         id: test
+        if: github.event.inputs.infra-apps != ''
         run: |
           infra_apps="${{ inputs.infra-apps }}"
           IFS=';'
