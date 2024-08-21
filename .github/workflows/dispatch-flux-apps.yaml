@@ -81,7 +81,7 @@ jobs:
 
           for infra in $infra_apps; do
 
-            echo "RENDERING INFRA-APP: $infra"
+            echo "RENDERING INFRA-APP: ${infra}"
 
             machineshop render \
             --source local \
@@ -89,5 +89,8 @@ jobs:
             --defaults ${{ env.FLUX_TEMPLATE_DIR }}/${{ env.FLUX_DEFAULTS }} \
             --values "${{ inputs.infra-values }}" \
             --kind multikey \
-            --key $infra
+            --key ${infra} \
+            --destination "${{ env.FLUX_CLUSTER_FOLDER }}/${infra}.yaml"
+
+            cat ${{ env.FLUX_CLUSTER_FOLDER }}/${infra}.yaml
           done
