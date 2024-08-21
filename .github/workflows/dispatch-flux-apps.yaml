@@ -131,7 +131,7 @@ jobs:
 
           machineshop create \
           --kind branch \
-          --branch "flux-updated-cluster-${{ inputs.lab }}-${{ inputs.cloud }}/-{{ inputs.cluster-name }" \
+          --branch "flux-updated-cluster-${{ inputs.lab }}-${{ inputs.cloud }}/-{{ inputs.cluster-name }}" \
           --repository stuttgart-things \
           --group stuttgart-things \
           --files "${{ env.FLUX_CLUSTER_FOLDER }}"
