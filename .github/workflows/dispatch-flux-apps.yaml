@@ -101,13 +101,24 @@ jobs:
         id: findRenderedApps
         shell: bash
         run: |
+          # OUTPUT ALL FILE RENDERED FILE CONTENTS
           find "${{ env.FLUX_TMP_DIR }}" -type f -name "*.yaml" -exec cat {} \;
 
-          all=$(find ${{ env.FLUX_TMP_DIR }} -type f -name "*.yaml")
+          # GET ALL FILENAMES
+          all_rendered_files=$(find ${{ env.FLUX_TMP_DIR }} -type f -name "*.yaml")
 
-          for file in $all; do
-            echo ${filevar}
+          COMMIT_STRING=""
+
+          for file in $all_rendered_files; do
+
+            echo ${file}
+
+            var=$(echo "$file:${{ env.FLUX_CLUSTER_FOLDER }}/$(basename $file)")
+            COMMIT_STRING="${NEWMOUNTPOINTS}${var},"
+
           done
+
+          echo ${COMMIT_STRING}
 
       # - name: Create branch for flux config
       #   id: createBranch
