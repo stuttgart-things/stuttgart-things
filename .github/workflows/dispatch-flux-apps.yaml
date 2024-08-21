@@ -71,15 +71,15 @@ jobs:
           echo FLUX_APPS_TEMPLATE="apps.yaml.tpl" >> $GITHUB_ENV
           echo FLUX_INFRA_TEMPLATE="infra.yaml.tpl" >> $GITHUB_ENV
           echo FLUX_DEFAULTS="defaults.yaml" >> $GITHUB_ENV
+          mkdir -p /tmp/flux
+          echo FLUX_TMP_DIR="/tmp/flux" >> $GITHUB_ENV
+
 
       - name: Render infra apps
         id: renderInfraApps
         if: github.event.inputs.infra-apps != ''
-        #shell: bash
         run: |
           infra_apps=$(echo "${{ inputs.infra-apps }}" | tr -d ' ')
-          added_infra_apps=""
-
           IFS=';'
 
           for infra in $infra_apps; do
@@ -93,14 +93,13 @@ jobs:
             --values "${{ inputs.infra-values }}" \
             --kind multikey \
             --key ${infra} \
-            --destination "${{ env.FLUX_CLUSTER_FOLDER }}/${infra}.yaml"
+            --destination "${{ env.FLUX_TMP_DIR }}/${infra}.yaml"
 
-            added_infra_apps+=${{ env.FLUX_CLUSTER_FOLDER }}/${infra}.yaml:${{ env.FLUX_CLUSTER_FOLDER }}/${infra}.yaml,
-
-            cat ${{ env.FLUX_CLUSTER_FOLDER }}/${infra}.yaml
+            cat ${{ env.FLUX_TMP_DIR }}/${infra}.yaml
           done
 
-          echo ${added_infra_apps}
+
+          find "${{ env.FLUX_TMP_DIR }}" -type f -name "*.yaml" -exec cat {} \;
       # - name: Create branch for flux config
       #   id: createBranch
       #   run: |
