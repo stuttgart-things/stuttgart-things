@@ -95,15 +95,14 @@ jobs:
             --output file \
             --destination "${{ env.FLUX_TMP_DIR }}/${infra}.yaml"
 
-            cat ${{ env.FLUX_TMP_DIR }}/${infra}.yaml
           done
 
-      - name: Render infra apps
+      - name: Output all rendered apps
         id: findRenderedApps
         shell: bash
         run: |
           find "${{ env.FLUX_TMP_DIR }}" -type f -name "*.yaml" -exec cat {} \;
-
+          find "${{ env.FLUX_TMP_DIR }}" -type f -name "*.yaml" -type f -printf "%f,"
 
       # - name: Create branch for flux config
       #   id: createBranch
