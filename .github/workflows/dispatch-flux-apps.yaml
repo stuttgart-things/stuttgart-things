@@ -77,6 +77,8 @@ jobs:
         if: github.event.inputs.infra-apps != ''
         run: |
           infra_apps=$(echo "${{ inputs.infra-apps }}" | tr -d ' ')
+          added_infra_apps=""
+
           IFS=';'
 
           for infra in $infra_apps; do
@@ -92,5 +94,18 @@ jobs:
             --key ${infra} \
             --destination "${{ env.FLUX_CLUSTER_FOLDER }}/${infra}.yaml"
 
+            added_infra_apps+="${{ env.FLUX_CLUSTER_FOLDER }}/${infra}.yaml:${{ env.FLUX_CLUSTER_FOLDER }}/${infra}.yaml,"
+
             cat ${{ env.FLUX_CLUSTER_FOLDER }}/${infra}.yaml
           done
+
+          echo ${added_infra_apps}
+      # - name: Create branch for flux config
+      #   id: createBranch
+      #   run: |
+      #     machineshop create \
+      #     --kind branch \
+      #     --branch ${{ env.TF_PROJECT_DIR }} \
+      #     --repository stuttgart-things \
+      #     --group stuttgart-things \
+      #     --files "flux.tf:${{ env.TF_PROJECT_DIR }}/flux.tf,state.tf:${{ env.TF_PROJECT_DIR }}/state.tf,file-secrets.yaml:${{ env.TF_PROJECT_DIR }}/file-secrets.yaml,terraform.tfvars:${{ env.TF_PROJECT_DIR }}/terraform.tfvars" \
