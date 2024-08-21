@@ -30,7 +30,7 @@ spec:
         namespace: kube-system
     - patch: |-
         - op: replace
-          path: /spec/values/externalSnapshotter.customResourceDefinitions/enabled
+          path: /spec/values/externalSnapshotter/customResourceDefinitions/enabled
           value: false
       target:
         kind: HelmRelease
