@@ -122,6 +122,18 @@ jobs:
 
           echo INFRA_COMMIT_STRING="echo ${COMMIT_STRING} | rev | cut -c2- | rev" >> $GITHUB_ENV
 
+      - name: Create branch for flux config
+        id: createBranch
+        run: |
+          printenv
+
+          machineshop create \
+          --kind branch \
+          --branch "flux-updated-cluster-${{ inputs.lab }}-${{ inputs.cloud }}/-{{ inputs.cluster-name }" \
+          --repository stuttgart-things \
+          --group stuttgart-things \
+          --files "${{ env.FLUX_CLUSTER_FOLDER }}"
+
 
       # - name: Create branch for flux config
       #   id: createBranch
