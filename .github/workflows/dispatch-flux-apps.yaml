@@ -127,28 +127,9 @@ jobs:
       - name: Create branch for flux config
         id: createBranch
         run: |
-
-          # SPLIT VAR INTO ARRAY
-          read -ra GITHUB_OWNER_REPO <<< "$GITHUB_REPOSITORY"
-          IFS='/'
-
-          echo "Organisation: ${GITHUB_OWNER_REPO[0]}"
-          echo "Repository: ${GITHUB_OWNER_REPO[1]}"
-
           machineshop create \
           --kind branch \
           --branch "flux-updated-cluster-${{ inputs.lab }}-${{ inputs.cloud }}-${{ inputs.cluster-name }}" \
           --repository stuttgart-things \
           --group stuttgart-things \
           --files "${{ env.INFRA_COMMIT_STRING }}"
-
-
-      # - name: Create branch for flux config
-      #   id: createBranch
-      #   run: |
-      #     machineshop create \
-      #     --kind branch \
-      #     --branch ${{ env.TF_PROJECT_DIR }} \
-      #     --repository stuttgart-things \
-      #     --group stuttgart-things \
-      #     --files "flux.tf:${{ env.TF_PROJECT_DIR }}/flux.tf,state.tf:${{ env.TF_PROJECT_DIR }}/state.tf,file-secrets.yaml:${{ env.TF_PROJECT_DIR }}/file-secrets.yaml,terraform.tfvars:${{ env.TF_PROJECT_DIR }}/terraform.tfvars" \
