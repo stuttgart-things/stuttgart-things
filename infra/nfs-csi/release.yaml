@@ -31,3 +31,5 @@ spec:
     kubeletDir: /var/lib/kubelet
     externalSnapshotter:
       enabled: true
+      customResourceDefinitions:
+        enabled: false   #if set true, VolumeSnapshot, VolumeSnapshotContent and VolumeSnapshotClass CRDs will be created. Set it false, If they already exist in cluster.
