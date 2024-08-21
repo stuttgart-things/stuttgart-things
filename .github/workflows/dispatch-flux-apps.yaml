@@ -118,7 +118,10 @@ jobs:
 
           done
 
-          echo ${COMMIT_STRING}
+          echo ${COMMIT_STRING} | rev | cut -c2- | rev
+
+          echo INFRA_COMMIT_STRING="echo ${COMMIT_STRING} | rev | cut -c2- | rev" >> $GITHUB_ENV
+
 
       # - name: Create branch for flux config
       #   id: createBranch
