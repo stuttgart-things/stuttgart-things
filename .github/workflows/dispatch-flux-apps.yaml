@@ -75,19 +75,12 @@ jobs:
       - name: Render infra apps
         id: test
         run: |
-          string="app1;app2;app3;app4"
-
-          # Setze den IFS auf Semikolon
+          infra_apps="${{ inputs.infra-apps }}"
           IFS=';'
 
-          # Schleife über die durch Semikolon getrennten Werte
-          for app in $string; do
-            echo "App: $app"
+          for app in $infra_apps; do
+            echo "Infra-app: $app"
           done
-
-          # Setze den IFS zurück auf den Standardwert
-          unset IFS
-
 
       - name: Render infra apps
         id: infra
