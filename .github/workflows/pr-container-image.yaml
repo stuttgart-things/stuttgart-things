@@ -12,7 +12,7 @@ jobs:
   Get-Changed-Dockerfiles:
     runs-on: ghr-stuttgart-things-labul-automation
     container:
-      image: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:fff62c5ad6d02db52f0525519cddcf1833cf59201e44e3f5c77befbd492cc60a
+      image: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:0aa1134306ca79c47141f05ede01afb373dcea3aab76175ac897b6b89ce4342c
     environment: labul-vsphere #k8s
     outputs:
       contexts: ${{ steps.json.outputs.contexts }}
@@ -104,7 +104,7 @@ jobs:
     runs-on: ghr-stuttgart-things-labul-automation
     environment: labul-vsphere
     container:
-      image: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:fff62c5ad6d02db52f0525519cddcf1833cf59201e44e3f5c77befbd492cc60a
+      image: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:0aa1134306ca79c47141f05ede01afb373dcea3aab76175ac897b6b89ce4342c
     steps:
       - name: Send notification to homerun w/ machineshop
         shell: bash
