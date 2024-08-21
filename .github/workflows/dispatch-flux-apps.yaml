@@ -76,7 +76,7 @@ jobs:
         id: renderInfraApps
         if: github.event.inputs.infra-apps != ''
         run: |
-          infra_apps="${{ inputs.infra-apps }}"
+          infra_apps=$(echo ${{ inputs.infra-apps }} | tr -d ' ')
           IFS=';'
 
           for infra in $infra_apps; do
