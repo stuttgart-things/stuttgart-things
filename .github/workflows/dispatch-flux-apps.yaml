@@ -73,6 +73,8 @@ jobs:
           echo FLUX_APPS_TEMPLATE="apps.yaml.tpl" >> $GITHUB_ENV
           echo FLUX_INFRA_TEMPLATE="infra.yaml.tpl" >> $GITHUB_ENV
           echo FLUX_DEFAULTS="defaults.yaml" >> $GITHUB_ENV
+          echo BRANCH_NAME="flux-updated-cluster-${{ inputs.lab }}-${{ inputs.cloud }}-${{ inputs.cluster-name }}" >> $GITHUB_ENV
+
           mkdir -p /tmp/flux
           echo FLUX_TMP_DIR="/tmp/flux" >> $GITHUB_ENV
 
@@ -129,7 +131,18 @@ jobs:
         run: |
           machineshop create \
           --kind branch \
-          --branch "flux-updated-cluster-${{ inputs.lab }}-${{ inputs.cloud }}-${{ inputs.cluster-name }}" \
+          --branch "${{ env.BRANCH_NAME }}" \
           --repository stuttgart-things \
           --group stuttgart-things \
           --files "${{ env.INFRA_COMMIT_STRING }}"
+
+      - name: Create pr for (newly created) flux branch into main
+        id: createPR
+        run: |
+          machineshop create \
+          --kind pr \
+          --title "flux applications for cluster ${{ inputs.cluster-name }} on lab ${{ inputs.lab }}-${{ inputs.cloud }} created" \
+          --branch ${{ env.BRANCH_NAME }} \
+          --repository stuttgart-things \
+          --group stuttgart-things \
+          --labels "flux, k8s"

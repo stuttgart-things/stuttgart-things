@@ -131,7 +131,6 @@ jobs:
           --branch ${{ env.TF_PROJECT_DIR }} \
           --repository stuttgart-things \
           --group stuttgart-things \
-          --branch ${{ env.TF_PROJECT_DIR }} \
           --labels terraform
 
   Send-Homerun-Notification:
