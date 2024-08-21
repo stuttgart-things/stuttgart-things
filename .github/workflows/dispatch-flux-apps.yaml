@@ -94,7 +94,7 @@ jobs:
             --key ${infra} \
             --destination "${{ env.FLUX_CLUSTER_FOLDER }}/${infra}.yaml"
 
-            added_infra_apps+="${{ env.FLUX_CLUSTER_FOLDER }}/${infra}.yaml:${{ env.FLUX_CLUSTER_FOLDER }}/${infra}.yaml,"
+            added_infra_apps+=${{ env.FLUX_CLUSTER_FOLDER }}/${infra}.yaml:${{ env.FLUX_CLUSTER_FOLDER }}/${infra}.yaml,
 
             cat ${{ env.FLUX_CLUSTER_FOLDER }}/${infra}.yaml
           done
