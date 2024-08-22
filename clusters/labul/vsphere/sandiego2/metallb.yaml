@@ -17,16 +17,5 @@ spec:
   postBuild:
     substitute:
       METALLB_NAMESPACE: metallb-system
+      METALLB_CHART_VERSION: 6.3.10
       IP_RANGE: 10.31.103.9-10.31.103.10
-  postRenderers:
-    - kustomize:
-        patches:
-          - target:
-              version: helm.toolkit.fluxcd.io/v2
-              kind: HelmRelease
-              name: metallb
-              namespace: metallb-system
-            patch: |
-              - op: replace
-                path: /spec/chart/spec/version
-                value: 6.3.10
