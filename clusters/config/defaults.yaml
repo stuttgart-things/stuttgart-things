@@ -12,6 +12,10 @@ kustomizationApiVersion: kustomize.toolkit.fluxcd.io/v1
 kustomizationKind: Kustomization
 
 # INFRA
+ingressNginxName: ingress-nginx
+ingressNginxNamespace: ingress-nginx
+ingressNginxVersion: 4.11.2
+
 metallbName: metallb
 metallbNamespace: metallb-system
 metallbVersion: 6.3.10

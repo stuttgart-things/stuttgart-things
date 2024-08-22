@@ -1,6 +1,28 @@
 ---
 template:
+  ingress-nginx: |
+    ---
+    apiVersion: {{ .kustomizationApiVersion }}
+    kind: {{ .kustomizationKind  }}
+    metadata:
+      name: {{ .ingressNginxName }}
+      namespace: {{ .fluxNamespace }}
+    spec:
+      interval: {{ .interval }}
+      retryInterval: {{ .retryInterval }}
+      timeout: {{ .timeout }}
+      sourceRef:
+        kind: {{ .fluxSourceKind }}
+        name: {{ .fluxGitRepository }}
+      path: {{ .infraPath }}/{{ .ingressNginxName }}
+      prune: {{ .prune }}
+      wait: {{ .wait }}
+      postBuild:
+        substitute:
+          INGRESS_NGINX_NAMESPACE: {{ .ingressNginxNamespace }}
+          INGRESS_NGINX_CHART_VERSION: {{ .ingressNginxVersion }}
   metallb: |
+    ---
     apiVersion: {{ .kustomizationApiVersion }}
     kind: {{ .kustomizationKind  }}
     metadata:
@@ -20,17 +42,9 @@ template:
         substitute:
           METALLB_NAMESPACE: {{ .metallbNamespace }}
           IP_RANGE: {{ .metallbIPRange }}
-      patches:
-        - patch: |-
-            - op: replace
-              path: /spec/chart/spec/version
-              value: {{ .metallbVersion }}
-          target:
-            kind: HelmRelease
-            name: {{ .metallbName }}
-            namespace: {{ .metallbNamespace }}
-
+          METALLB_CHART_VERSION: {{ .metallbVersion }}
   cert-manager: |
+    ---
     apiVersion: {{ .kustomizationApiVersion }}
     kind: {{ .kustomizationKind  }}
     metadata:
