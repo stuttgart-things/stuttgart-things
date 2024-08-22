@@ -12,6 +12,11 @@ kustomizationApiVersion: kustomize.toolkit.fluxcd.io/v1
 kustomizationKind: Kustomization
 
 # INFRA
+metallbName: metallb
+metallbNamespace: metallb-system
+metallbVersion: 6.3.10
+#metallbIPRange: #10.31.103.13-10.31.103.14
+
 certManagerName: cert-manager
 certManagerNamespace: cert-manager
 certManagerVersion: 1.15.3

@@ -1,5 +1,35 @@
 ---
 template:
+  metallb: |
+    apiVersion: {{ .kustomizationApiVersion }}
+    kind: {{ .kustomizationKind  }}
+    metadata:
+      name: {{ .metallbName }}
+      namespace: {{ .fluxNamespace }}
+    spec:
+      interval: {{ .interval }}
+      retryInterval: {{ .retryInterval }}
+      timeout: {{ .timeout }}
+      sourceRef:
+        kind: {{ .fluxSourceKind }}
+        name: {{ .fluxGitRepository }}
+      path: {{ .infraPath }}/{{ .metallbName }}
+      prune: {{ .prune }}
+      wait: {{ .wait }}
+      postBuild:
+        substitute:
+          METALLB_NAMESPACE: {{ .metallbNamespace }}
+          IP_RANGE: {{ .metallbIPRange }}
+      patches:
+        - patch: |-
+            - op: replace
+              path: /spec/chart/spec/version
+              value: {{ .metallbVersion }}
+          target:
+            kind: HelmRelease
+            name: {{ .metallbName }}
+            namespace: {{ .metallbNamespace }}
+
   cert-manager: |
     apiVersion: {{ .kustomizationApiVersion }}
     kind: {{ .kustomizationKind  }}
