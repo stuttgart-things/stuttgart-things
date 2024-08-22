@@ -1,7 +1,7 @@
 ---
 secrets:
   cert-manager:
-    - vault:certManagerSecretName
+    - vault:secretName=cert-manager-secret, secretNamespace=flux-system
 
 template:
   vault: |
@@ -9,8 +9,8 @@ template:
     apiVersion: v1
     kind: Secret
     metadata:
-        name: {{ .vaultSecretName }}
-        namespace: {{ .fluxNamespace }}
+        name: {{ .secretName }}
+        namespace: {{ .secretNamespace }}
     type: Opaque
     stringData:
         VAULT_TOKEN: ENC[AES256_GCM,data:DG5THyVHN82unrU7t0H1Q9IvL4HdNgUtyGN4Dg==,iv:1dDT+dHgCHp9QgO78cIfJgAsFxcqzTC4M7OvBsfUKrk=,tag:/AvGWly2eRZrqcB1RcisKw==,type:str]

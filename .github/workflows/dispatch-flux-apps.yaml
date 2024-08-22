@@ -126,6 +126,26 @@ jobs:
               echo "Secret key(s) for '${infra}' found"
               secret_keys=$(yq e ".secrets.\"${infra}\"[]" ${{ env.FLUX_TEMPLATE_DIR }}/${{ env.FLUX_SOPS_TEMPLATE }})
               echo "SECRET KEYS: ${secret_keys}"
+
+              for key in $secret_keys; do
+
+                echo "RENDERING SECRET: ${key} for INFRA-APP: ${infra}"
+
+                VALUES=$(echo "$key" | cut -d':' -f2-)
+                SECRET_KEY=$(echo "$key" | cut -d':' -f1)
+
+                machineshop render \
+                --source local \
+                --template ${{ env.FLUX_TEMPLATE_DIR }}/${{ env.FLUX_SOPS_TEMPLATE }} \
+                --defaults ${{ env.FLUX_TEMPLATE_DIR }}/${{ env.FLUX_DEFAULTS }} \
+                --values "${VALUES}" \
+                --kind multikey \
+                --key ${SECRET_KEY} \
+                --output file \
+                --destination "${{ env.FLUX_TMP_DIR }}/${infra}-${SECRET_KEY}-secret.yaml"
+
+              done
+
             else
               echo "No secret keys for '${infra}' found."
             fi
