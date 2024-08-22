@@ -112,6 +112,23 @@ jobs:
 
           done
 
+      - name: Render sops secrets
+        id: renderSopsInfraSecrets
+        if: github.event.inputs.infra-apps != ''
+        run: |
+          infra_apps=$(echo "${{ inputs.infra-apps }}" | tr -d ' ')
+          IFS=';'
+
+          for infra in $infra_apps; do
+
+            if yq e '.secrets | has("${infra}")' defaults.yaml; then
+              echo "Der Schlüssel '${infra}' existiert in defaults.yaml."
+            else
+              echo "Der Schlüssel '${infra}' existiert nicht in defaults.yaml."
+            fi
+
+          done
+
       - name: Output all rendered apps
         id: findRenderedApps
         shell: bash
@@ -137,23 +154,23 @@ jobs:
 
           echo INFRA_COMMIT_STRING="$(echo ${COMMIT_STRING} | rev | cut -c2- | rev)" >> $GITHUB_ENV
 
-      - name: Create branch for flux config
-        id: createBranch
-        run: |
-          machineshop create \
-          --kind branch \
-          --branch "${{ env.BRANCH_NAME }}" \
-          --repository stuttgart-things \
-          --group stuttgart-things \
-          --files "${{ env.INFRA_COMMIT_STRING }}"
+      # - name: Create branch for flux config
+      #   id: createBranch
+      #   run: |
+      #     machineshop create \
+      #     --kind branch \
+      #     --branch "${{ env.BRANCH_NAME }}" \
+      #     --repository stuttgart-things \
+      #     --group stuttgart-things \
+      #     --files "${{ env.INFRA_COMMIT_STRING }}"
 
-      - name: Create pr for (newly created) flux branch into main
-        id: createPR
-        run: |
-          machineshop create \
-          --kind pr \
-          --title "flux applications for cluster ${{ inputs.cluster-name }} on lab ${{ inputs.lab }}-${{ inputs.cloud }} created" \
-          --branch ${{ env.BRANCH_NAME }} \
-          --repository stuttgart-things \
-          --group stuttgart-things \
-          --labels "flux, k8s"
+      # - name: Create pr for (newly created) flux branch into main
+      #   id: createPR
+      #   run: |
+      #     machineshop create \
+      #     --kind pr \
+      #     --title "flux applications for cluster ${{ inputs.cluster-name }} on lab ${{ inputs.lab }}-${{ inputs.cloud }} created" \
+      #     --branch ${{ env.BRANCH_NAME }} \
+      #     --repository stuttgart-things \
+      #     --group stuttgart-things \
+      #     --labels "flux, k8s"
