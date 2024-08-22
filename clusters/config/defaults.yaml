@@ -15,7 +15,7 @@ kustomizationKind: Kustomization
 certManagerName: cert-manager
 certManagerNamespace: cert-manager
 certManagerVersion: 1.15.3
-certManagerSecretName: vault-flux-secrets
+certManagerSecretName: cert-manager-secret
 
 longhornName: longhorn
 longhornNamespace: longhorn-system
