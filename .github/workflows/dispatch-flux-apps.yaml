@@ -123,9 +123,11 @@ jobs:
           for infra in $infra_apps; do
 
             if yq e '.secrets | has("${infra}")' ${{ env.FLUX_TEMPLATE_DIR }}/${{ env.FLUX_SOPS_TEMPLATE }}; then
-              echo "Der Schlüssel '${infra}' existiert in defaults.yaml."
+              echo "Secret key(s) for '${infra}' found"
+              secret_keys=$(yq e '.secrets."${infra}"[]' ${{ env.FLUX_TEMPLATE_DIR }}/${{ env.FLUX_SOPS_TEMPLATE }})
+              echo "SECRET KEYS: ${secret_keys}"
             else
-              echo "Der Schlüssel '${infra}' existiert nicht in defaults.yaml."
+              echo "No secret keys for '${infra}' found."
             fi
 
           done
