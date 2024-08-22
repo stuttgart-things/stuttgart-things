@@ -124,7 +124,7 @@ jobs:
 
             if yq e '.secrets | has("${infra}")' ${{ env.FLUX_TEMPLATE_DIR }}/${{ env.FLUX_SOPS_TEMPLATE }}; then
               echo "Secret key(s) for '${infra}' found"
-              secret_keys=$(yq e '.secrets."${infra}"[]' ${{ env.FLUX_TEMPLATE_DIR }}/${{ env.FLUX_SOPS_TEMPLATE }})
+              secret_keys=$(yq e '.secrets.\"${infra}\"[]' ${{ env.FLUX_TEMPLATE_DIR }}/${{ env.FLUX_SOPS_TEMPLATE }})
               echo "SECRET KEYS: ${secret_keys}"
             else
               echo "No secret keys for '${infra}' found."
