@@ -1,3 +1,4 @@
+---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
@@ -17,12 +18,15 @@ spec:
     substitute:
       METALLB_NAMESPACE: metallb-system
       IP_RANGE: 10.31.103.9-10.31.103.10
-  patches:
-    - patch: |-
-        - op: replace
-          path: /spec/chart/spec/version
-          value: 6.3.10
-      target:
-        kind: HelmRelease
-        name: metallb
-        namespace: metallb-system
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              version: helm.toolkit.fluxcd.io/v2
+              kind: HelmRelease
+              name: metallb
+              namespace: metallb-system
+            patch: |
+              - op: replace
+                path: /spec/chart/spec/version
+                value: 6.3.10
