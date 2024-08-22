@@ -72,6 +72,7 @@ jobs:
           echo FLUX_TEMPLATE_DIR="clusters/config" >> $GITHUB_ENV
           echo FLUX_APPS_TEMPLATE="apps.yaml.tpl" >> $GITHUB_ENV
           echo FLUX_INFRA_TEMPLATE="infra.yaml.tpl" >> $GITHUB_ENV
+          echo FLUX_SOPS_TEMPLATE="secrets-${{ inputs.lab }}-${{ inputs.cloud }}.yaml.tpl" >> $GITHUB_ENV
           echo FLUX_DEFAULTS="defaults.yaml" >> $GITHUB_ENV
           echo BRANCH_NAME="flux-updated-cluster-${{ inputs.lab }}-${{ inputs.cloud }}-${{ inputs.cluster-name }}" >> $GITHUB_ENV
 
@@ -121,7 +122,7 @@ jobs:
 
           for infra in $infra_apps; do
 
-            if yq e '.secrets | has("${infra}")' defaults.yaml; then
+            if yq e '.secrets | has("${infra}")' ${{ env.FLUX_TEMPLATE_DIR }}/${{ env.FLUX_SOPS_TEMPLATE }}; then
               echo "Der Schlüssel '${infra}' existiert in defaults.yaml."
             else
               echo "Der Schlüssel '${infra}' existiert nicht in defaults.yaml."

@@ -33,7 +33,3 @@ openebsVersion: 4.1.0
 
 vaultSecretName: vault-secrets
 secretNamespace: flux-system
-
-secrets:
-  cert-manager:
-    - vault:certManagerSecretName

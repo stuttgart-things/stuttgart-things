@@ -1,4 +1,8 @@
 ---
+secrets:
+  cert-manager:
+    - vault:certManagerSecretName
+
 template:
   vault: |
     ---
