@@ -14,7 +14,7 @@ kustomizationKind: Kustomization
 
 
 # CLUSTER RELATED VALUES
-clusterIngressDomain: maverick.sthings-pve.labul.sva.de
+clusterIngressDomain: sandiego2.sthings-vsphere.labul.sva.de
 clusterCertIssuerKind: ClusterIssuer
 clusterCertIssuerName: cluster-issuer-approle
 
