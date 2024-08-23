@@ -22,3 +22,12 @@ spec:
       csi:
         volumeSnapshots:
           enabled: ${OPENEBS_VOLUMESNAPSHOT_CRDS:=false}
+    engines:
+      local:
+        lvm:
+          enabled: true
+        zfs:
+          enabled: true
+      replicated:
+        mayastor:
+          enabled: ${OPENEBS_ENABLE_MAYASTOR:=false}

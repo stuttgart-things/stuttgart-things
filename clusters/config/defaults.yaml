@@ -59,6 +59,8 @@ openebsNamespace: openebs
 openebsVersion: 4.1.0
 openebsInstallVolumeSnapshotCRDS: false
 openebsEnableMayaStor: false
+openebsEnableLVM: false
+openebsEnableZFS: false
 
 vaultSecretName: vault-secrets
 secretNamespace: flux-system
