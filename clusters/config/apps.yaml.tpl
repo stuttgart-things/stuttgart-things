@@ -21,7 +21,7 @@ template:
         substitute:
           ZOT_NAMESPACE: {{ .zotNamespace }}
           ZOT_CHART_VERSION: {{ .zotVersion }}
-          ZOT_PERSISTENCE: {{ .zotPersistence }}
+          ZOT_PERSISTENCE: "{{ .zotPersistence }}"
           ZOT_STORAGE_SIZE: {{ .zotStorageSite }}
           INGRESS_HOSTNAME: {{ .zotIngressName }}
           INGRESS_SECRET_NAME: {{ .zotIngressSecret }}
@@ -124,8 +124,8 @@ template:
         substitute:
           OPENEBS_NAMESPACE: {{ .openebsNamespace }}
           OPENEBS_CHART_VERSION: {{ .openebsVersion }}
-          OPENEBS_VOLUMESNAPSHOT_CRDS: {{ .openebsInstallVolumeSnapshotCRDS }}
-          OPENEBS_ENABLE_MAYASTOR: {{ .openebsEnableMayaStor }}
+          OPENEBS_VOLUMESNAPSHOT_CRDS: "{{ .openebsInstallVolumeSnapshotCRDS }}"
+          OPENEBS_ENABLE_MAYASTOR: "{{ .openebsEnableMayaStor }}"
   nfs-csi: |
     ---
     apiVersion: {{ .kustomizationApiVersion }}
