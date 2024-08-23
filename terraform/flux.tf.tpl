@@ -5,6 +5,7 @@ module "{{ .lab }}-{{ .cloud }}-{{ .clusterName }}" {
   github_org        = "{{ .githubOrg }}"
   github_repository = "{{ .githubRepository }}"
   keep_namespace    = "{{ .keepNamespace }}"
+  components_extra  = []
   target_path       = "{{ .clustersPath }}/{{ .lab }}/{{ .cloud }}/{{ .clusterName }}"
   secrets = [
     {
