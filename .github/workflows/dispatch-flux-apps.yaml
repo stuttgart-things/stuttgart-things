@@ -18,14 +18,15 @@ on:
           - proxmox
       cluster-name:
         required: true
+        description: CLUSTER-NAME
         type: string
       apps:
-        description: (APP) NAMES - AS DELMITED STRING BY SEMICOLON
+        description: APPS (DELMITED BY SEMICOLON)
         required: false
         type: string
         default: ""
       app-values:
-        description: VALUES
+        description: APP VALUES (DELMITED BY COMMA)
         required: false
         type: string
         default: ""
