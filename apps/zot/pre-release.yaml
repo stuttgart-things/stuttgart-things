@@ -13,7 +13,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: stuttgart-things
-        namespace: zot
+        namespace: ${ZOT_NAMESPACE:-zot}
       interval: 12h
   values:
     customresources:
@@ -22,7 +22,7 @@ spec:
         kind: Certificate
         metadata:
           name: zot-ingress-console
-          namespace: zot
+          namespace: ${ZOT_NAMESPACE:-zot}
         spec:
           commonName: ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}
           dnsNames:

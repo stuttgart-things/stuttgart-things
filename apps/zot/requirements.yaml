@@ -10,7 +10,7 @@ apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: HelmRepository
 metadata:
   name: zotregistry
-  namespace: zot
+  namespace: ${ZOT_NAMESPACE:-zot}
 spec:
   interval: 24h
   url: https://zotregistry.dev/helm-charts/

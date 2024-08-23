@@ -7,7 +7,7 @@ metadata:
 spec:
   dependsOn:
     - name: zot-certificate-configuration
-      namespace: zot
+      namespace: ${ZOT_NAMESPACE:-zot}
   interval: 30m
   chart:
     spec:
