@@ -17,15 +17,17 @@ kustomizationKind: Kustomization
 #clusterIngressDomain: sandiego2.sthings-vsphere.labul.sva.de
 clusterCertIssuerKind: ClusterIssuer
 clusterCertIssuerName: cluster-issuer-approle
-
+clusterStorageClass: nfs4-csi
+clusterIngressClass: nginx
 
 # APPS
 zotName: zot
 zotIngressName: zot
-#zotIngressDomain: maverick.sthings-pve.labul.sva.de
 zotIngressSecret: zot-ingress-tls
 zotNamespace: zot
 zotVersion: 0.1.60
+zotStorageSite: 4Gi
+zotPersistence: true
 
 # INFRA
 ingressNginxName: ingress-nginx

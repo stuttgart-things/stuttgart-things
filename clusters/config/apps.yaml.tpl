@@ -21,9 +21,12 @@ template:
         substitute:
           ZOT_NAMESPACE: {{ .zotNamespace }}
           ZOT_CHART_VERSION: {{ .zotVersion }}
+          ZOT_PERSISTENCE: {{ .zotPersistence }}
+          ZOT_STORAGE_SIZE: {{ .zotStorageSite }}
           INGRESS_HOSTNAME: {{ .zotIngressName }}
-          INGRESS_DOMAIN: {{ .clusterIngressDomain }}
           INGRESS_SECRET_NAME: {{ .zotIngressSecret }}
+          INGRESS_DOMAIN: {{ .clusterIngressDomain }}
+          ZOT_STORAGE_CLASS: {{ .clusterStorageClass }}
           ISSUER_NAME: {{ .clusterCertIssuerName }}
           ISSUER_KIND: {{ .clusterCertIssuerKind }}
   ingress-nginx: |

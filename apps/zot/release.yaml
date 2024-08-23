@@ -19,9 +19,15 @@ spec:
         namespace: ${ZOT_NAMESPACE:-zot}
       interval: 12h
   values:
+    persistence: ${ZOT_PERSISTENCE:-true}
+    pvc:
+      create: ${ZOT_PERSISTENCE:-true}
+      name: ${ZOT_NAMESPACE:-zot}
+      storage: ${ZOT_STORAGE_SIZE:-8Gi}
+      storageClassName: ${ZOT_STORAGE_CLASS}
     ingress:
       enabled: true
-      className: nginx
+      className: ${ZOT_INGRESS_CLASS:-nginx}
       hosts:
         - host: ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}
           paths:
