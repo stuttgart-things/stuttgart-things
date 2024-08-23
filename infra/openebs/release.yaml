@@ -16,6 +16,8 @@ spec:
         namespace: ${OPENEBS_NAMESPACE:=openebs}
       interval: 12h
   values:
+    mayastor:
+      enabled: ${OPENEBS_ENABLE_MAYASTOR:=false}
     openebs-crds:
       csi:
         volumeSnapshots:

@@ -29,6 +29,7 @@ template:
           ZOT_STORAGE_CLASS: {{ .clusterStorageClass }}
           ISSUER_NAME: {{ .clusterCertIssuerName }}
           ISSUER_KIND: {{ .clusterCertIssuerKind }}
+          ZOT_INGRESS_CLASS: {{ .clusterIngressClass }}
   ingress-nginx: |
     ---
     apiVersion: {{ .kustomizationApiVersion }}

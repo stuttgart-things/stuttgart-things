@@ -69,7 +69,7 @@
 | NAME              | DESCRIPTION               | EXAMPLES                                                                            |
 |-------------------|---------------------------|-------------------------------------------------------------------------------------|
 | CLUSTER-NAME      | name of target flux cluster | sandiego2 |
-| APP-NAMES         | name of flux apps | zot |
-| VALUES            | app/cluster specific values | clusterIngressDomain=sandiego2.sthings-vsphere.labul.sva.de |
+| APP-NAMES         | name of flux apps | zot; openebs |
+| VALUES            | app/cluster specific values | clusterIngressDomain=sandiego2.sthings-vsphere.labul.sva.de, clusterStorageClass=nfs4-csi|
 
 </details>
