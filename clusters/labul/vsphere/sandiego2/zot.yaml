@@ -16,6 +16,8 @@ spec:
   wait: true
   postBuild:
     substitute:
+      ZOT_NAMESPACE: zot
+      ZOT_CHART_VERSION: 0.1.60
       INGRESS_HOSTNAME: zot
       INGRESS_DOMAIN: sandiego2.sthings-vsphere.labul.sva.de
       INGRESS_SECRET_NAME: zot-ingress-tls

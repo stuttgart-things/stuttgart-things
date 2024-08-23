@@ -14,12 +14,7 @@ spec:
   path: ./infra/openebs
   prune: true
   wait: true
-  patches:
-    - patch: |-
-        - op: replace
-          path: /spec/chart/spec/version
-          value: 4.1.0
-      target:
-        kind: HelmRelease
-        name: openebs
-        namespace: openebs
+  postBuild:
+    substitute:
+      OPENEBS_NAMESPACE: openebs
+      OPENEBS_CHART_VERSION: 4.1.0
