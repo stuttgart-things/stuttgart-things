@@ -11,7 +11,7 @@ module "losangeles4" {
   vsphere_datacenter     = "/LabUL"
   vsphere_datastore      = "/LabUL/datastore/UL-ESX-SAS-01"
   vsphere_resource_pool  = "/LabUL/host/Cluster-V6.5/Resources"
-  vsphere_network        = "/LabUL/network/LAB-10.31.104"
+  vsphere_network        = "/LabUL/network/LAB-10.31.102"
   bootstrap              = ["echo STUTTGART-THINGS"]
   annotation             = "VSPHERE-VM losangeles4 sthings-u24 BUILD w/ TERRAFORM FOR STUTTGART-THINGS"
   vsphere_server         = var.vsphere_server
