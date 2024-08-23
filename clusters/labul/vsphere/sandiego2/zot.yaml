@@ -26,3 +26,4 @@ spec:
       ZOT_STORAGE_CLASS: nfs4-csi
       ISSUER_NAME: cluster-issuer-approle
       ISSUER_KIND: ClusterIssuer
+      ZOT_INGRESS_CLASS: nginx
