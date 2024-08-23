@@ -20,3 +20,5 @@ spec:
       OPENEBS_CHART_VERSION: 4.1.0
       OPENEBS_VOLUMESNAPSHOT_CRDS: "false"
       OPENEBS_ENABLE_MAYASTOR: "false"
+      OPENEBS_ENABLE_LVM: "false"
+      OPENEBS_ENABLE_ZFS: "false"
