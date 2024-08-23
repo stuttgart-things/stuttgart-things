@@ -25,9 +25,9 @@ spec:
     engines:
       local:
         lvm:
-          enabled: true
+          enabled: ${OPENEBS_ENABLE_LVM:=false}
         zfs:
-          enabled: true
+          enabled: ${OPENEBS_ENABLE_ZFS:=false}
       replicated:
         mayastor:
           enabled: ${OPENEBS_ENABLE_MAYASTOR:=false}
