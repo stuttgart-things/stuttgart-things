@@ -125,6 +125,7 @@ template:
           OPENEBS_NAMESPACE: {{ .openebsNamespace }}
           OPENEBS_CHART_VERSION: {{ .openebsVersion }}
           OPENEBS_VOLUMESNAPSHOT_CRDS: {{ .openebsInstallVolumeSnapshotCRDS }}
+          OPENEBS_ENABLE_MAYASTOR: {{ .openebsEnableMayaStor }}
   nfs-csi: |
     ---
     apiVersion: {{ .kustomizationApiVersion }}
