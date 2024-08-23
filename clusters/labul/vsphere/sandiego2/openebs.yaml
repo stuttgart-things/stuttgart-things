@@ -18,3 +18,4 @@ spec:
     substitute:
       OPENEBS_NAMESPACE: openebs
       OPENEBS_CHART_VERSION: 4.1.0
+      OPENEBS_VOLUMESNAPSHOT_CRDS: false
