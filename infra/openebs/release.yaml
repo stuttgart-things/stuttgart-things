@@ -16,6 +16,7 @@ spec:
         namespace: ${OPENEBS_NAMESPACE:=openebs}
       interval: 12h
   values:
-    cstor:
-      enabled: false
-      #https://openebs.io/docs/user-guides/cstor
+    openebs-crds:
+      csi:
+        volumeSnapshots:
+          enabled: ${OPENEBS_VOLUMESNAPSHOT_CRDS:=false}

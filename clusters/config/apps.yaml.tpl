@@ -120,6 +120,7 @@ template:
         substitute:
           OPENEBS_NAMESPACE: {{ .openebsNamespace }}
           OPENEBS_CHART_VERSION: {{ .openebsVersion }}
+          OPENEBS_VOLUMESNAPSHOT_CRDS: {{ .openebsInstallVolumeSnapshotCRDS }}
   nfs-csi: |
     ---
     apiVersion: {{ .kustomizationApiVersion }}
