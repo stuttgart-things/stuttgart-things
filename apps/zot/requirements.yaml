@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: zot
+  name: ${ZOT_NAMESPACE:-zot}
   labels:
     toolkit.fluxcd.io/tenant: sthings-team
 ---
@@ -13,13 +13,13 @@ metadata:
   namespace: zot
 spec:
   interval: 24h
-  url: https://zotregistry.io/helm-charts/
+  url: https://zotregistry.dev/helm-charts/
 ---
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: HelmRepository
 metadata:
   name: stuttgart-things
-  namespace: zot
+  namespace: ${ZOT_NAMESPACE:-zot}
 spec:
   type: oci
   interval: 1h

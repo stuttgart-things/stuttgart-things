@@ -3,7 +3,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: zot-certificate-configuration
-  namespace: zot
+  namespace: ${ZOT_NAMESPACE:-zot}
 spec:
   interval: 30m
   chart:

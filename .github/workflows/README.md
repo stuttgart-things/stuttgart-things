@@ -62,5 +62,14 @@
 
 </details>
 
+## DISPATCH FLUX APPS
 
-## DISPATCH PACKER TEMPLATE
+<details><summary><b>DEPLOY APP</b></summary>
+
+| NAME              | DESCRIPTION               | EXAMPLES                                                                            |
+|-------------------|---------------------------|-------------------------------------------------------------------------------------|
+| CLUSTER-NAME      | name of target flux cluster | sandiego2 |
+| APP-NAMES         | name of flux apps | zot |
+| VALUES            | app/cluster specific values | clusterIngressDomain=sandiego2.sthings-vsphere.labul.sva.de |
+
+</details>

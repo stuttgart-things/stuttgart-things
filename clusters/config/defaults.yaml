@@ -24,8 +24,8 @@ zotName: zot
 zotIngressName: zot
 #zotIngressDomain: maverick.sthings-pve.labul.sva.de
 zotIngressSecret: zot-ingress-tls
-
-
+zotNamespace: zot
+zotVersion: 0.1.60
 
 # INFRA
 ingressNginxName: ingress-nginx

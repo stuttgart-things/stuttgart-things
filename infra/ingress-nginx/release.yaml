@@ -2,8 +2,8 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: ${INGRESS_NGINX_NAMESPACE:-ingress-nginx}
-  namespace: ingress-nginx
+  name: ingress-nginx
+  namespace: ${INGRESS_NGINX_NAMESPACE:-ingress-nginx}
 spec:
   interval: 30m
   dependsOn:

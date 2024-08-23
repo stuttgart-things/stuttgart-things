@@ -19,6 +19,8 @@ template:
       wait: {{ .wait }}
       postBuild:
         substitute:
+          ZOT_NAMESPACE: {{ .zotNamespace }}
+          ZOT_CHART_VERSION: {{ .zotVersion }}
           INGRESS_HOSTNAME: {{ .zotIngressName }}
           INGRESS_DOMAIN: {{ .clusterIngressDomain }}
           INGRESS_SECRET_NAME: {{ .zotIngressSecret }}
@@ -114,15 +116,10 @@ template:
       path: {{ .infraPath }}/{{ .openebsName }}
       prune: {{ .prune }}
       wait: {{ .wait }}
-      patches:
-        - patch: |-
-            - op: replace
-              path: /spec/chart/spec/version
-              value: {{ .openebsVersion }}
-          target:
-            kind: HelmRelease
-            name: {{ .openebsName }}
-            namespace: {{ .openebsNamespace }}
+      postBuild:
+        substitute:
+          OPENEBS_NAMESPACE: {{ .openebsNamespace }}
+          OPENEBS_CHART_VERSION: {{ .openebsVersion }}
   nfs-csi: |
     ---
     apiVersion: {{ .kustomizationApiVersion }}

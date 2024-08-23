@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: openebs
+  name: ${OPENEBS_NAMESPACE:=openebs}
   labels:
     toolkit.fluxcd.io/tenant: sthings-team
 ---
@@ -10,7 +10,7 @@ apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: HelmRepository
 metadata:
   name: openebs
-  namespace: openebs
+  namespace: ${OPENEBS_NAMESPACE:=openebs}
 spec:
   interval: 24h
-  url: https://openebs.github.io/charts
+  url: https://openebs.github.io/openebs

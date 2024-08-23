@@ -2,8 +2,8 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: zot-deployment
-  namespace: zot
+  name: zot
+  namespace: ${ZOT_NAMESPACE:-zot}
 spec:
   dependsOn:
     - name: zot-certificate-configuration
@@ -12,11 +12,11 @@ spec:
   chart:
     spec:
       chart: zot
-      version: 0.1.34
+      version: ${ZOT_CHART_VERSION:=0.1.60}
       sourceRef:
         kind: HelmRepository
         name: zotregistry
-        namespace: zot
+        namespace: ${ZOT_NAMESPACE:-zot}
       interval: 12h
   values:
     ingress:
