@@ -56,7 +56,7 @@
 |-------------------|---------------------------|-------------------------------------------------------------------------------------|
 | INVENTORY         | inventory file as string  | localhost |
 | PLAYBOOK NAME     | name/path of playbook     | ansible/playbooks/pdns-ingress-entry.yaml |
-| EXTRA VARS        | ansible vars (extra vars) | -e hostname=sandiego2 -e ip_address=10.31.103.9 -e entry_zone=sthings-vsphere.labul.sva.de -e pdns_url=https://pdns-vsphere.labul.sva.de:8443 |
+| EXTRA VARS        | ansible vars (extra vars) | -e hostname=sandiego2 -e ip_address=10.31.103.9 -e entry_zone=sthings-vsphere.labul.sva.de. -e pdns_url=https://pdns-vsphere.labul.sva.de:8443 |
 | Private Key       | vault secret path         | ssh/data/sthings:privateKey                                                         |
 | Requirements File | path to requirements file | ansible/requirements.yaml                                                           |
 
