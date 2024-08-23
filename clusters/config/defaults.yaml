@@ -8,8 +8,24 @@ fluxGitRepository: flux-system
 prune: true
 wait: true
 infraPath: ./infra
+appsPath: ./apps
 kustomizationApiVersion: kustomize.toolkit.fluxcd.io/v1
 kustomizationKind: Kustomization
+
+
+# CLUSTER RELATED VALUES
+clusterIngressDomain: maverick.sthings-pve.labul.sva.de
+clusterCertIssuerKind: ClusterIssuer
+clusterCertIssuerName: cluster-issuer-approle
+
+
+# APPS
+zotName: zot
+zotIngressName: zot
+#zotIngressDomain: maverick.sthings-pve.labul.sva.de
+zotIngressSecret: zot-ingress-tls
+
+
 
 # INFRA
 ingressNginxName: ingress-nginx

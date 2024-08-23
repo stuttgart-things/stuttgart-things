@@ -19,13 +19,13 @@ on:
       cluster-name:
         required: true
         type: string
-      infra-apps:
-        description: INFRA (APP) NAMES - AS DELMITED STRING BY SEMICOLON
+      apps:
+        description: (APP) NAMES - AS DELMITED STRING BY SEMICOLON
         required: false
         type: string
         default: ""
-      infra-values:
-        description: INFRA VALUES
+      app-values:
+        description: VALUES
         required: false
         type: string
         default: ""
@@ -71,7 +71,6 @@ jobs:
           echo FLUX_CLUSTER_FOLDER="clusters/${{ inputs.lab }}/${{ inputs.cloud }}/${{ inputs.cluster-name }}" >> $GITHUB_ENV
           echo FLUX_TEMPLATE_DIR="clusters/config" >> $GITHUB_ENV
           echo FLUX_APPS_TEMPLATE="apps.yaml.tpl" >> $GITHUB_ENV
-          echo FLUX_INFRA_TEMPLATE="infra.yaml.tpl" >> $GITHUB_ENV
           echo FLUX_SOPS_TEMPLATE="secrets-${{ inputs.lab }}-${{ inputs.cloud }}.yaml.tpl" >> $GITHUB_ENV
           echo FLUX_DEFAULTS="defaults.yaml" >> $GITHUB_ENV
           echo BRANCH_NAME="flux-updated-cluster-${{ inputs.lab }}-${{ inputs.cloud }}-${{ inputs.cluster-name }}" >> $GITHUB_ENV
@@ -79,57 +78,57 @@ jobs:
           mkdir -p /tmp/flux
           echo FLUX_TMP_DIR="/tmp/flux" >> $GITHUB_ENV
 
-      - name: Render infra apps
-        id: renderInfraApps
-        if: github.event.inputs.infra-apps != ''
+      - name: Render apps
+        id: renderFluxApps
+        #if: github.event.inputs.apps != ''
         run: |
-          infra_apps=$(echo "${{ inputs.infra-apps }}" | tr -d ' ')
+          apps=$(echo "${{ inputs.apps }}" | tr -d ' ')
           IFS=';'
 
           VALUES=""
 
-          if [ -n "${{ inputs.infra-values }}" ]; then
-            VALUES="${{ inputs.infra-values }}, clusterName=${{ inputs.cluster-name }}"
+          if [ -n "${{ inputs.app-values }}" ]; then
+            VALUES="${{ inputs.app-values }}, clusterName=${{ inputs.cluster-name }}"
           else
             VALUES="clusterName=${{ inputs.cluster-name }}"
           fi
 
 
-          for infra in $infra_apps; do
+          for app in $apps; do
 
-            echo "RENDERING INFRA-APP: ${infra}"
+            echo "RENDERING APP: ${app}"
 
-            values=${{ inputs.infra-values }},
+            values=${{ inputs.app-values }},
 
             machineshop render \
             --source local \
-            --template ${{ env.FLUX_TEMPLATE_DIR }}/${{ env.FLUX_INFRA_TEMPLATE }} \
+            --template ${{ env.FLUX_TEMPLATE_DIR }}/${{ env.FLUX_APPS_TEMPLATE }} \
             --defaults ${{ env.FLUX_TEMPLATE_DIR }}/${{ env.FLUX_DEFAULTS }} \
             --values "${VALUES}" \
             --kind multikey \
-            --key ${infra} \
+            --key ${app} \
             --output file \
-            --destination "${{ env.FLUX_TMP_DIR }}/${infra}.yaml"
+            --destination "${{ env.FLUX_TMP_DIR }}/${app}.yaml"
 
           done
 
       - name: Render sops secrets
-        id: renderSopsInfraSecrets
-        if: github.event.inputs.infra-apps != ''
+        id: renderSopsSecrets
+        #if: github.event.inputs.apps != ''
         run: |
-          infra_apps=$(echo "${{ inputs.infra-apps }}" | tr -d ' ')
+          apps=$(echo "${{ inputs.apps }}" | tr -d ' ')
           IFS=';'
 
-          for infra in $infra_apps; do
+          for app in $apps; do
 
-            if yq e '.secrets | has("${infra}")' ${{ env.FLUX_TEMPLATE_DIR }}/${{ env.FLUX_SOPS_TEMPLATE }}; then
-              echo "Secret key(s) for '${infra}' found"
-              secret_keys=$(yq e ".secrets.\"${infra}\"[]" ${{ env.FLUX_TEMPLATE_DIR }}/${{ env.FLUX_SOPS_TEMPLATE }})
+            if yq e '.secrets | has("${app}")' ${{ env.FLUX_TEMPLATE_DIR }}/${{ env.FLUX_SOPS_TEMPLATE }}; then
+              echo "Secret key(s) for '${app}' found"
+              secret_keys=$(yq e ".secrets.\"${app}\"[]" ${{ env.FLUX_TEMPLATE_DIR }}/${{ env.FLUX_SOPS_TEMPLATE }})
               echo "SECRET KEYS: ${secret_keys}"
 
               for key in $secret_keys; do
 
-                echo "RENDERING SECRET: ${key} for INFRA-APP: ${infra}"
+                echo "RENDERING SECRET: ${key} for APP: ${app}"
 
                 VALUES=$(echo "$key" | cut -d':' -f2-)
                 SECRET_KEY=$(echo "$key" | cut -d':' -f1)
@@ -142,12 +141,12 @@ jobs:
                 --kind multikey \
                 --key ${SECRET_KEY} \
                 --output file \
-                --destination "${{ env.FLUX_TMP_DIR }}/${infra}-${SECRET_KEY}-secret.yaml"
+                --destination "${{ env.FLUX_TMP_DIR }}/${app}-${SECRET_KEY}-secret.yaml"
 
               done
 
             else
-              echo "No secret keys for '${infra}' found."
+              echo "No secret keys for '${app}' found."
             fi
 
           done
@@ -175,7 +174,7 @@ jobs:
 
           echo ${COMMIT_STRING} | rev | cut -c2- | rev
 
-          echo INFRA_COMMIT_STRING="$(echo ${COMMIT_STRING} | rev | cut -c2- | rev)" >> $GITHUB_ENV
+          echo BRANCH_COMMIT_STRING="$(echo ${COMMIT_STRING} | rev | cut -c2- | rev)" >> $GITHUB_ENV
 
       - name: Create branch for flux config
         id: createBranch
@@ -185,7 +184,7 @@ jobs:
           --branch "${{ env.BRANCH_NAME }}" \
           --repository stuttgart-things \
           --group stuttgart-things \
-          --files "${{ env.INFRA_COMMIT_STRING }}"
+          --files "${{ env.BRANCH_COMMIT_STRING }}"
 
       - name: Create pr for (newly created) flux branch into main
         id: createPR
