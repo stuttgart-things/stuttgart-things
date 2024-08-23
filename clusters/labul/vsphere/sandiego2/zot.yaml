@@ -18,8 +18,11 @@ spec:
     substitute:
       ZOT_NAMESPACE: zot
       ZOT_CHART_VERSION: 0.1.60
+      ZOT_PERSISTENCE: true
+      ZOT_STORAGE_SIZE: 4Gi
       INGRESS_HOSTNAME: zot
-      INGRESS_DOMAIN: sandiego2.sthings-vsphere.labul.sva.de
       INGRESS_SECRET_NAME: zot-ingress-tls
+      INGRESS_DOMAIN: sandiego2.sthings-vsphere.labul.sva.de
+      ZOT_STORAGE_CLASS: nfs4-csi
       ISSUER_NAME: cluster-issuer-approle
       ISSUER_KIND: ClusterIssuer
