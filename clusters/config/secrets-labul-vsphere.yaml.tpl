@@ -2,6 +2,8 @@
 secrets:
   cert-manager:
     - vault:secretName=cert-manager-secret, secretNamespace=flux-system
+  tekton:
+    - vault:secretName=tekton-vault-secret, secretNamespace=flux-system
 
 template:
   vault: |

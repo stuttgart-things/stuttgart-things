@@ -1,5 +1,31 @@
 ---
 template:
+  tekton: |
+    ---
+    apiVersion: {{ .kustomizationApiVersion }}
+    kind: {{ .kustomizationKind  }}
+    metadata:
+      name: {{ .tektonName }}
+      namespace: {{ .fluxNamespace }}
+    spec:
+      interval: {{ .interval }}
+      retryInterval: {{ .retryInterval }}
+      timeout: {{ .timeout }}
+      sourceRef:
+        kind: {{ .fluxSourceKind }}
+        name: {{ .fluxGitRepository }}
+      path: {{ .appsPath }}/{{ .tektonName }}
+      prune: {{ .prune }}
+      wait: {{ .wait }}
+      postBuild:
+        substitute:
+          TEKTON_NAMESPACE: {{ .tektonNamespace }}
+          TEKTON_PIPELINE_NAMESPACE: {{ .tektonPipelineNamespace }}
+          TEKTON_VERSION: {{ .tektonVersion: v0.60.4 }}
+        substituteFrom:
+          - kind: Secret
+            name: {{ .tektonSecretName }}
+
   zot: |
     ---
     apiVersion: {{ .kustomizationApiVersion }}
