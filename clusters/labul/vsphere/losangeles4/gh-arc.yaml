@@ -18,6 +18,3 @@ spec:
     substitute:
       GH_ARC_NAMESPACE: arc-systems
       GH_ARC_VERSION: 0.9.3
-    substituteFrom:
-      - kind: Secret
-        name: tekton-vault-secret
