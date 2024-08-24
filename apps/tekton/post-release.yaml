@@ -18,7 +18,8 @@ spec:
   values:
     secrets:
       vault:
-        name: vault
+        name: ${TEKTON_VAULT_SECRET:-vault-in-cluster}
+        namespace: ${TEKTON_PIPELINE_NAMESPACE:-tektoncd}
         dataType: stringData
         secretKVs:
           VAULT_ADDR: ${VAULT_ADDR}
