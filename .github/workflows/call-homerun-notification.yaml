@@ -33,4 +33,13 @@ jobs:
           printenv
           machineshop version
 
-          echo RESULT: ${{ needs.*.result }}
+          echo ${{ needs.*.result }}
+
+          # SET DEFAULTS
+          BODY="REPOSITORY: ${GITHUB_REPOSITORY} WORKFLOW: ${GITHUB_WORKFLOW} ARTIFACT: ? BUILD-PARAMETER: ? w/ RUNNER_NAME: ${RUNNER_NAME} WORKFLOW-IMAGE: ? ENV: ${{ inputs.environment-name }}"
+
+          SYSTEM="github-actions"
+
+          echo BODY: ${BODY}
+          echo SYSTEM: ${SYSTEM}
+          echo AUTHOR: ${GITHUB_ACTOR}

@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: arc-systems
+  name: ${GH_ARC_NAMESPACE:-arc-systems}
   labels:
     toolkit.fluxcd.io/tenant: sthings-team
 ---
@@ -10,7 +10,7 @@ apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: HelmRepository
 metadata:
   name: actions-runner-controller-charts
-  namespace: arc-systems
+  namespace: ${GH_ARC_NAMESPACE:-arc-systems}
 spec:
   type: oci
   interval: 5m0s

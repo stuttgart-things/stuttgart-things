@@ -1,5 +1,29 @@
 ---
 template:
+  gh-arc: |
+    ---
+    apiVersion: {{ .kustomizationApiVersion }}
+    kind: {{ .kustomizationKind  }}
+    metadata:
+      name: {{ .ghARCName }}
+      namespace: {{ .fluxNamespace }}
+    spec:
+      interval: {{ .interval }}
+      retryInterval: {{ .retryInterval }}
+      timeout: {{ .timeout }}
+      sourceRef:
+        kind: {{ .fluxSourceKind }}
+        name: {{ .fluxGitRepository }}
+      path: {{ .appsPath }}/{{ .ghARCName }}
+      prune: {{ .prune }}
+      wait: {{ .wait }}
+      postBuild:
+        substitute:
+          GH_ARC_NAMESPACE: {{ .ghARCNamespace }}
+          GH_ARC_VERSION: {{ .ghARCVersion }}
+        substituteFrom:
+          - kind: Secret
+            name: {{ .tektonSecretName }}
   tekton: |
     ---
     apiVersion: {{ .kustomizationApiVersion }}
@@ -26,7 +50,6 @@ template:
         substituteFrom:
           - kind: Secret
             name: {{ .tektonSecretName }}
-
   zot: |
     ---
     apiVersion: {{ .kustomizationApiVersion }}
