@@ -18,7 +18,7 @@ spec:
     substitute:
       GH_RSS_NAMESPACE: arc-runners
       GH_RSS_VERSION: 0.9.3
-      GH_RSS_RUNNER_VERSION:2.319.1
+      GH_RSS_RUNNER_VERSION: 2.319.1
       GH_RSS_STORAGE_CLASS: openebs-hostpath
       GH_RSS_STORAGE_REQUEST: 50Mi
       GH_RSS_GITHUB_URL: https://github.com/stuttgart-things/kaeffken
