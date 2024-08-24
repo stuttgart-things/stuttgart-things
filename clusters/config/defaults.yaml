@@ -21,7 +21,7 @@ clusterStorageClass: nfs4-csi
 clusterIngressClass: nginx
 
 # APPS
-tektonName: tekton-pipelines
+tektonName: tekton
 tektonNamespace: tekton-pipelines
 tektonVersion: v0.60.4
 tektonPipelineNamespace: tektoncd
