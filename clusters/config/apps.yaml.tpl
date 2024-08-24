@@ -21,7 +21,7 @@ template:
         substitute:
           GH_RSS_NAMESPACE: {{ .ghRSSNamespace }}
           GH_RSS_VERSION: {{ .ghRSSVersion }}
-          GH_RSS_RUNNER_VERSION:{{ .ghRSSRunnerVersion }}
+          GH_RSS_RUNNER_VERSION: {{ .ghRSSRunnerVersion }}
           GH_RSS_STORAGE_CLASS: {{ .ghRSSStorageClass }}
           GH_RSS_STORAGE_REQUEST: {{ .ghRSSStorageRequest }}
           GH_RSS_GITHUB_URL: {{ .ghRSSGitHubURL }}

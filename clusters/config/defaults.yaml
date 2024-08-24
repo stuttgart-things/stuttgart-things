@@ -21,7 +21,9 @@ clusterStorageClass: nfs4-csi
 clusterIngressClass: nginx
 
 # APPS
-ghRSSRepository: stuttgart
+#ghRSSRepository: kaeffken
+#ghRSSGitHubURL: https://github.com/stuttgart-things/kaeffken
+
 ghRSSClusterName: losangeles4
 ghRSSName: github-rss
 ghRSSNamespace: arc-runners
@@ -29,8 +31,7 @@ ghRSSVersion: 0.9.3
 ghRSSRunnerVersion: 2.319.1
 ghRSSStorageClass: openebs-hostpath
 ghRSSStorageRequest: 50Mi
-#ghRSSGitHubURL: https://github.com/stuttgart-things/kaeffken
-ghRSSSecretName: github-rss-secrets
+ghRSSSecretName: rss-github-secret
 
 ghARCName: github-arc
 ghARCNamespace: arc-systems
