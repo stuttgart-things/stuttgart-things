@@ -22,6 +22,7 @@ clusterIngressClass: nginx
 
 # APPS
 tektonName: tekton
+tektonVaultSecret: vault-in-cluster
 tektonNamespace: tekton-pipelines
 tektonVersion: v0.60.4
 tektonPipelineNamespace: tektoncd

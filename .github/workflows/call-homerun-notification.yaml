@@ -30,4 +30,7 @@ jobs:
     steps:
       - name: Get machineshop version
         run: |
+          printenv
           machineshop version
+
+          echo RESULT: ${{ needs.*.result }}
