@@ -2,36 +2,36 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: ghr-${REPOSIORY_NAME}-${CLUSTER_NAME}
-  namespace: arc-runners
+  name: ghr-${GH_RSS_REPOSIORY_NAME}-${GH_RSS_CLUSTER_NAME}
+  namespace: ${GH_RSS_NAMESPACE:-arc-runners}
 spec:
   interval: 30m
   chart:
     spec:
       chart: gha-runner-scale-set
-      version: 0.8.0
+      version: ${GH_RSS_VERSION:-0.9.3}
       sourceRef:
         kind: HelmRepository
         name: actions-runner-controller-charts
-        namespace: arc-systems
+        namespace: ${GH_RSS_NAMESPACE:-arc-runners}
       interval: 12h
   values:
-    githubConfigUrl: ${GITHUB_URL}
+    githubConfigUrl: ${GH_RSS_GITHUB_URL}
     githubConfigSecret:
       github_token: ${GITHUB_TOKEN}
     containerMode:
       type: kubernetes
       kubernetesModeWorkVolumeClaim:
         accessModes: ["ReadWriteOnce"]
-        storageClassName: ${STORAGE_CLASS}
+        storageClassName: ${GH_RSS_STORAGE_CLASS}
         resources:
           requests:
-            storage: ${STORAGE_REQUEST:-100Mi}
+            storage: ${GH_RSS_STORAGE_REQUEST:-50Mi}
     template:
       spec:
         containers:
         - name: runner
-          image: ghcr.io/actions/actions-runner:${RUNNER_VERSION:-2.311.0}
+          image: ghcr.io/actions/actions-runner:${GH_RSS_RUNNER_VERSION:-2.319.1}
           command: ["/home/runner/run.sh"]
           env:
             - name: ACTIONS_RUNNER_REQUIRE_JOB_CONTAINER
@@ -42,11 +42,11 @@ spec:
                   fieldPath: metadata.name
         initContainers:
           - name: kube-init
-            image: ghcr.io/actions/actions-runner:${RUNNER_VERSION:-2.311.0}
+            image: ghcr.io/actions/actions-runner:${GH_RSS_RUNNER_VERSION:-2.319.1}
             command: ["/bin/sh", "-c"]
             args:
               - |
-                ${INIT_COMMAND:-whoami}
+                ${GH_RSS_INIT_COMMAND:-whoami}
             volumeMounts:
               - name: work
                 mountPath: /home/runner/_work
