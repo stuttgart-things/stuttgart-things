@@ -26,4 +26,4 @@ spec:
       GH_RSS_CLUSTER_NAME: losangeles4
     substituteFrom:
       - kind: Secret
-        name: github-rss-secrets
+        name: rss-github-secret
