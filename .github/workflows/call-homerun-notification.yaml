@@ -1,0 +1,33 @@
+---
+name: Send homerun notification
+on:
+  workflow_call:
+    inputs:
+      runs-on:
+        type: string
+        default: ghr-stuttgart-things-labul-automation
+        required: false
+      environment-name:
+        default: k8s
+        type: string
+        required: false
+      machineshop-image:
+        default: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:0aa1134306ca79c47141f05ede01afb373dcea3aab76175ac897b6b89ce4342c
+        type: string
+        required: false
+      continue-on-error:
+        default: true
+        type: boolean
+        required: false
+
+jobs:
+  Send-Homerun-Notification:
+    runs-on: ${{ inputs.runs-on }}
+    container:
+      image: ${{ inputs.machineshop-image }}
+    environment: ${{ inputs.environment-name }}
+    continue-on-error: ${{ inputs.environment-name }}
+    steps:
+      - name: Test
+        run: |
+          machineshop version

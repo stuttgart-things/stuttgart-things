@@ -197,3 +197,16 @@ jobs:
           --repository stuttgart-things \
           --group stuttgart-things \
           --labels "flux, k8s"
+
+  Send-Homerun-Notification:
+    if: ${{ always() }}
+    name: Send-Homerun-Notification
+    uses: stuttgart-things/stuttgart-things/.github/workflows/call-homerun-notification.yaml@main
+    needs:
+      - Create-Flux-Apps
+    with:
+      runs-on: ${{ inputs.runner }}
+      environment-name: ${{ inputs.environment-name }}
+      machineshop-image: ${{ inputs.working-image }}
+      continue-on-error: true
+    secrets: inherit
