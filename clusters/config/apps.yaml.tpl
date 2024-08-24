@@ -21,7 +21,7 @@ template:
         substitute:
           TEKTON_NAMESPACE: {{ .tektonNamespace }}
           TEKTON_PIPELINE_NAMESPACE: {{ .tektonPipelineNamespace }}
-          TEKTON_VERSION: {{ .tektonVersion: v0.60.4 }}
+          TEKTON_VERSION: {{ .tektonVersion }}
         substituteFrom:
           - kind: Secret
             name: {{ .tektonSecretName }}
