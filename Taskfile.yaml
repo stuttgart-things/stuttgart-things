@@ -31,6 +31,7 @@ tasks:
   commit:
     desc: Commit + push code into branch
     cmds:
+      - git status | grep -q "modified" && echo "Code changes detected" || echo "No code changes detected"
       - git branch --set-upstream-to=origin/{{ .BRANCH }}
       - git pull
       - |
