@@ -70,7 +70,6 @@ jobs:
 
           TITLE="Workflow ${GITHUB_WORKFLOW} on ${SYSTEM} was ${WORKFLOW_RESULT}"
 
-
           if [ "${{ inputs.notification-title }}" != "unset" ]; then
             TITLE="${{ inputs.notification-title }}"
           fi
