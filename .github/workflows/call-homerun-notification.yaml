@@ -48,3 +48,15 @@ jobs:
           echo BODY: ${BODY}
           echo SYSTEM: ${SYSTEM}
           echo AUTHOR: ${GITHUB_ACTOR}
+
+      - name: Show needs
+        run: |
+          echo "${{ toJson(needs) }}"
+
+      - name: Check status of all jobs
+        if: >-
+          ${{
+            contains(needs.*.result, 'failure') ||
+            contains(needs.*.result, 'cancelled')
+          }}
+        run: exit 1

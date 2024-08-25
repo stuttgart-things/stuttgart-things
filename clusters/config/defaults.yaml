@@ -21,9 +21,13 @@ clusterStorageClass: nfs4-csi
 clusterIngressClass: nginx
 
 # APPS
+fluxGHNotificationProvider: github-flux-system
+#fluxRepoURL: https://github.com/stuttgart-things/stuttgart-things
+fluxGHSecret: github-notification
+fluxSecret: flux-github-secret
+
 #ghRSSRepository: kaeffken
 #ghRSSGitHubURL: https://github.com/stuttgart-things/kaeffken
-
 ghRSSClusterName: losangeles4
 ghRSSName: github-rss
 ghRSSNamespace: arc-runners

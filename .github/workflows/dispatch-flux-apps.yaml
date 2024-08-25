@@ -115,7 +115,6 @@ jobs:
 
       - name: Render sops secrets
         id: renderSopsSecrets
-        #if: github.event.inputs.apps != ''
         run: |
           apps=$(echo "${{ inputs.apps }}" | tr -d ' ')
           IFS=';'

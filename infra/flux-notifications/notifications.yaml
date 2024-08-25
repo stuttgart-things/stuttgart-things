@@ -1,52 +1,53 @@
+# ---
+# apiVersion: notification.toolkit.fluxcd.io/v1beta2
+# kind: Provider
+# metadata:
+#   name: msteams
+#   namespace: flux-system
+# spec:
+#   type: msteams
+#   channel: stuttgart-things
+#   secretRef:
+#     name: msteams
+# ---
+# apiVersion: notification.toolkit.fluxcd.io/v1beta2
+# kind: Alert
+# metadata:
+#   name: ${CLUSTER_NAME}
+#   namespace: flux-system
+# spec:
+#   summary: ${CLUSTER_DESCRIPTION}
+#   providerRef:
+#     name: msteams
+#   eventSeverity: info
+#   eventSources:
+#     - kind: Kustomization
+#       name: '*'
+#     - kind: HelmRelease
+#       name: '*'
+#       matchLabels:
+#         alerting: flux2
+# ---
 ---
-apiVersion: notification.toolkit.fluxcd.io/v1beta2
+apiVersion: notification.toolkit.fluxcd.io/v1beta3
 kind: Provider
 metadata:
-  name: msteams
-  namespace: flux-system
-spec:
-  type: msteams
-  channel: stuttgart-things
-  secretRef:
-    name: msteams
----
-apiVersion: notification.toolkit.fluxcd.io/v1beta2
-kind: Alert
-metadata:
-  name: ${CLUSTER_NAME}
-  namespace: flux-system
-spec:
-  summary: ${CLUSTER_DESCRIPTION}
-  providerRef:
-    name: msteams
-  eventSeverity: info
-  eventSources:
-    - kind: Kustomization
-      name: '*'
-    - kind: HelmRelease
-      name: '*'
-      matchLabels:
-        alerting: flux2
----
-apiVersion: notification.toolkit.fluxcd.io/v1beta2
-kind: Provider
-metadata:
-  name: flux-system
-  namespace: flux-system
+  name: ${FLUX_GH_NOTIFICATION_PROVIDER:-github-flux-system}
+  namespace: ${FLUX_NAMESPACE:-flux-system}
 spec:
   type: github
-  address: ${GIT_REPO_URL}
+  address: ${FLUX_REPO_URL}
   secretRef:
-    name: github
+    name: ${FLUX_GH_SECRET:-github-notification}
 ---
-apiVersion: notification.toolkit.fluxcd.io/v1beta2
+apiVersion: notification.toolkit.fluxcd.io/v1beta3
 kind: Alert
 metadata:
-  name: stuttgart-things
-  namespace: flux-system
+  name: ${FLUX_GH_NOTIFICATION_PROVIDER:-github-flux-system}
+  namespace: ${FLUX_NAMESPACE:-flux-system}
 spec:
   providerRef:
-    name: flux-system
+    name: ${FLUX_GH_NOTIFICATION_PROVIDER:-github-flux-system}
   eventSeverity: info
   eventSources:
     - kind: GitRepository

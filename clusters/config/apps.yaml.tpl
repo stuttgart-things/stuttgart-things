@@ -1,5 +1,32 @@
 ---
 template:
+  flux-alerts: |
+    ---
+    apiVersion: {{ .kustomizationApiVersion }}
+    kind: {{ .kustomizationKind  }}
+    metadata:
+      name: {{ .ghRSSName }}
+      namespace: {{ .fluxNamespace }}
+    spec:
+      interval: {{ .interval }}
+      retryInterval: {{ .retryInterval }}
+      timeout: {{ .timeout }}
+      sourceRef:
+        kind: {{ .fluxSourceKind }}
+        name: {{ .fluxGitRepository }}
+      path: {{ .appsPath }}/{{ .ghRSSName }}
+      prune: {{ .prune }}
+      wait: {{ .wait }}
+      postBuild:
+        substitute:
+          FLUX_NAMESPACE: {{ .fluxNamespace }}
+          FLUX_GH_NOTIFICATION_PROVIDER: {{ .fluxGHNotificationProvider }}
+          FLUX_REPO_URL: {{ .fluxRepoURL }}
+          FLUX_GH_SECRET: {{ .fluxGHSecret }}
+        substituteFrom:
+          - kind: Secret
+            name: {{ .fluxSecret }}
+
   gh-rss: |
     ---
     apiVersion: {{ .kustomizationApiVersion }}
