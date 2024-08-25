@@ -1,6 +1,6 @@
 ---
 template:
-  flux-alerts: |
+  flux-notifications: |
     ---
     apiVersion: {{ .kustomizationApiVersion }}
     kind: {{ .kustomizationKind  }}
