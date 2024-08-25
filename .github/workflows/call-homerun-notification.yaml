@@ -52,20 +52,21 @@ jobs:
     environment: ${{ inputs.environment-name }}
     continue-on-error: ${{ inputs.continue-on-error }}
     steps:
-      - name: Set workflow result
+      - name: Send notification to homerun
         run: |
           printenv
-          machineshop version
 
           SYSTEM="github"
           WORKFLOW_RESULT="failed"
           WORKFLOW_SEVERITY="ERROR"
           AUTHOR="${GITHUB_ACTOR}"
           TAGS="github-actions"
+          MESSAGE_BODY="REPOSITORY: ${GITHUB_REPOSITORY} WORKFLOW: ${GITHUB_WORKFLOW} ARTIFACT: ? BUILD-PARAMETER: ? w/ RUNNER_NAME: ${RUNNER_NAME} ENV: ?"
 
           if [ "${{ inputs.notification-info }}" != "unset" ]; then
             WORKFLOW_RESULT="successful"
             WORKFLOW_SEVERITY="SUCCESS"
+            MESSAGE_BODY="${{ inputs.notification-info }}"
           fi
 
           TITLE="Workflow ${GITHUB_WORKFLOW} on ${SYSTEM} was ${WORKFLOW_RESULT}"
@@ -89,17 +90,12 @@ jobs:
           echo AUTHOR: ${AUTHOR}
           echo TAGS: ${TAGS}
 
-          # SET DEFAULTS
-          BODY="REPOSITORY: ${GITHUB_REPOSITORY} WORKFLOW: ${GITHUB_WORKFLOW} ARTIFACT: ? BUILD-PARAMETER: ? w/ RUNNER_NAME: ${RUNNER_NAME} WORKFLOW-IMAGE: ? ENV: ${{ inputs.environment-name }}"
-          TITLE=" ?"
-          SYSTEM="github-actions"
-
-          # machineshop push \
-          # --destination https://homerun.homerun-dev.sthings-vsphere.labul.sva.de/generic \
-          # --target homerun \
-          # --title "${TITLE}" \
-          # --system "${SYSTEM}" \
-          # --info "${BODY}" \
-          # --tags "${TAGS}" \
-          # --author "${GITHUB_ACTOR}" \
-          # --severity "${WORKFLOW_SEVERITY}"
+          machineshop push \
+          --destination ${{ inputs.notification-url }} \
+          --target homerun \
+          --title "${TITLE}" \
+          --system "${SYSTEM}" \
+          --info "${MESSAGE_BODY}" \
+          --tags "${TAGS}" \
+          --author "${AUTHOR}" \
+          --severity "${WORKFLOW_SEVERITY}"
