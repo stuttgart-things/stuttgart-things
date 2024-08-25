@@ -32,17 +32,25 @@ jobs:
     environment: ${{ inputs.environment-name }}
     continue-on-error: ${{ inputs.continue-on-error }}
     steps:
-      - name: Get machineshop version
+      - name: Set workflow result
         run: |
           printenv
           machineshop version
 
           echo "MESSAGE: ${{ inputs.message-body }}"
 
-          echo RESULT: ${{ needs.Create-Flux-Apps.result }}
-          echo SEVERITY: ??
+          if [ "${{ inputs.message-body }}" != "unset" ]; then
+            WORKFLOW_RESULT="successful"
+            WORKFLOW_SEVERITY="SUCCESS"
+          else
+            WORKFLOW_RESULT="failed"
+            WORKFLOW_SEVERITY="ERROR"
+          fi
+
+
+          echo SEVERITY: ${WORKFLOW_SEVERITY}
           echo TAGS: ??
-          echo STATUS: ??
+          echo RESULT: ${WORKFLOW_RESULT}
 
 
           # SET DEFAULTS

@@ -21,6 +21,7 @@ clusterStorageClass: nfs4-csi
 clusterIngressClass: nginx
 
 # APPS
+fluxAlertName: flux-alert
 fluxGHNotificationProvider: github-flux-system
 #fluxRepoURL: https://github.com/stuttgart-things/stuttgart-things
 fluxGHSecret: github-notification

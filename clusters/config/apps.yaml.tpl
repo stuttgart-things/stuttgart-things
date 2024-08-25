@@ -5,7 +5,7 @@ template:
     apiVersion: {{ .kustomizationApiVersion }}
     kind: {{ .kustomizationKind  }}
     metadata:
-      name: {{ .ghRSSName }}
+      name: {{ .fluxAlertName }}
       namespace: {{ .fluxNamespace }}
     spec:
       interval: {{ .interval }}
@@ -14,7 +14,7 @@ template:
       sourceRef:
         kind: {{ .fluxSourceKind }}
         name: {{ .fluxGitRepository }}
-      path: {{ .appsPath }}/{{ .ghRSSName }}
+      path: {{ .appsPath }}/{{ .fluxAlertName }}
       prune: {{ .prune }}
       wait: {{ .wait }}
       postBuild:
