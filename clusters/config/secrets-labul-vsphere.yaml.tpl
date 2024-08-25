@@ -6,7 +6,7 @@ secrets:
     - vault:secretName=tekton-vault-secret, secretNamespace=flux-system
   gh-rss:
     - github:secretName=rss-github-secret, secretNamespace=flux-system
-  flux-alerts:
+  flux-notifications:
     - github:secretName=flux-github-secret, secretNamespace=flux-system
 
 template:
