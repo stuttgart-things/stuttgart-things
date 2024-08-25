@@ -55,6 +55,8 @@ jobs:
       pull-requests: write
     runs-on: ${{ inputs.runner }}
     environment: ${{ inputs.environment-name }}
+    outputs:
+      rendered_apps: ${{ steps.renderFluxApps.outputs.APPS }}
     container:
       image: ${{ inputs.working-image }}
     env:
@@ -112,6 +114,8 @@ jobs:
             --destination "${{ env.FLUX_TMP_DIR }}/${app}.yaml"
 
           done
+
+          echo "APPS=${apps}" >> $GITHUB_OUTPUT
 
       - name: Render sops secrets
         id: renderSopsSecrets
@@ -204,6 +208,7 @@ jobs:
     needs:
       - Create-Flux-Apps
     with:
+      message-body: ${{ needs.Create-Flux-Apps.outputs.rendered_apps }}
       runs-on: ${{ inputs.runner }}
       environment-name: ${{ inputs.environment-name }}
       machineshop-image: ${{ inputs.working-image }}

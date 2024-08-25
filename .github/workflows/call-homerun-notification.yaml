@@ -3,6 +3,10 @@ name: Send homerun notification
 on:
   workflow_call:
     inputs:
+      message-body:
+        default: "unset"
+        type: string
+        required: false
       runs-on:
         type: string
         default: ghr-stuttgart-things-labul-automation
@@ -33,6 +37,8 @@ jobs:
           printenv
           machineshop version
 
+          echo "MESSAGE: ${{ inputs.message-body }}"
+
           echo RESULT: ${{ needs.Create-Flux-Apps.result }}
           echo SEVERITY: ??
           echo TAGS: ??
@@ -48,15 +54,3 @@ jobs:
           echo BODY: ${BODY}
           echo SYSTEM: ${SYSTEM}
           echo AUTHOR: ${GITHUB_ACTOR}
-
-      - name: Show needs
-        run: |
-          echo "${{ toJson(needs) }}"
-
-      - name: Check status of all jobs
-        if: >-
-          ${{
-            contains(needs.*.result, 'failure') ||
-            contains(needs.*.result, 'cancelled')
-          }}
-        run: exit 1
