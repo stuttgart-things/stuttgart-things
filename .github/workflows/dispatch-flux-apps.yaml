@@ -208,7 +208,7 @@ jobs:
     needs:
       - Create-Flux-Apps
     with:
-      message-body: ${{ needs.Create-Flux-Apps.outputs.rendered_apps }}
+      message-info: ${{ needs.Create-Flux-Apps.outputs.rendered_apps }}
       runs-on: ${{ inputs.runner }}
       environment-name: ${{ inputs.environment-name }}
       machineshop-image: ${{ inputs.working-image }}
