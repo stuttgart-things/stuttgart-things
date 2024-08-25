@@ -11,7 +11,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./apps/flux-notifications
+  path: ./infra/flux-notifications
   prune: true
   wait: true
   postBuild:
