@@ -3,7 +3,27 @@ name: Send homerun notification
 on:
   workflow_call:
     inputs:
-      message-body:
+      notification-title:
+        default: "unset"
+        type: string
+        required: false
+      notification-severity:
+        default: "unset"
+        type: string
+        required: false
+      notification-info:
+        default: "unset"
+        type: string
+        required: false
+      notification-url:
+        default: "https://homerun.homerun-dev.sthings-vsphere.labul.sva.de/generic"
+        type: string
+        required: false
+      notification-tags:
+        default: "unset"
+        type: string
+        required: false
+      notification-author:
         default: "unset"
         type: string
         required: false
@@ -37,28 +57,50 @@ jobs:
           printenv
           machineshop version
 
-          echo "MESSAGE: ${{ inputs.message-body }}"
+          SYSTEM="github"
+          WORKFLOW_RESULT="failed"
+          WORKFLOW_SEVERITY="ERROR"
+          AUTHOR="${GITHUB_ACTOR}"
+          TAGS="github-actions"
 
-          if [ "${{ inputs.message-body }}" != "unset" ]; then
+          if [ "${{ inputs.notification-info }}" != "unset" ]; then
             WORKFLOW_RESULT="successful"
             WORKFLOW_SEVERITY="SUCCESS"
-          else
-            WORKFLOW_RESULT="failed"
-            WORKFLOW_SEVERITY="ERROR"
           fi
 
+          TITLE="Workflow ${GITHUB_WORKFLOW} on ${SYSTEM} was ${WORKFLOW_RESULT}"
 
+
+          if [ "${{ inputs.notification-title }}" != "unset" ]; then
+            TITLE="${{ inputs.notification-title }}"
+          fi
+
+          if [ "${{ inputs.notification-author }}" != "unset" ]; then
+            AUTHOR="${{ inputs.notification-author }}"
+          fi
+
+          if [ "${{ inputs.notification-tags }}" != "unset" ]; then
+            TAGS="${{ inputs.notification-tags }}"
+          fi
+
+          echo TITLE: ${TITLE}
+          echo SYSTEM: ${SYSTEM}
           echo SEVERITY: ${WORKFLOW_SEVERITY}
-          echo TAGS: ??
           echo RESULT: ${WORKFLOW_RESULT}
-
+          echo AUTHOR: ${AUTHOR}
+          echo TAGS: ${TAGS}
 
           # SET DEFAULTS
           BODY="REPOSITORY: ${GITHUB_REPOSITORY} WORKFLOW: ${GITHUB_WORKFLOW} ARTIFACT: ? BUILD-PARAMETER: ? w/ RUNNER_NAME: ${RUNNER_NAME} WORKFLOW-IMAGE: ? ENV: ${{ inputs.environment-name }}"
-          TITLE="Workflow ${GITHUB_WORKFLOW} ?"
+          TITLE=" ?"
           SYSTEM="github-actions"
 
-          echo TITLE: ${TITLE}
-          echo BODY: ${BODY}
-          echo SYSTEM: ${SYSTEM}
-          echo AUTHOR: ${GITHUB_ACTOR}
+          # machineshop push \
+          # --destination https://homerun.homerun-dev.sthings-vsphere.labul.sva.de/generic \
+          # --target homerun \
+          # --title "${TITLE}" \
+          # --system "${SYSTEM}" \
+          # --info "${BODY}" \
+          # --tags "${TAGS}" \
+          # --author "${GITHUB_ACTOR}" \
+          # --severity "${WORKFLOW_SEVERITY}"

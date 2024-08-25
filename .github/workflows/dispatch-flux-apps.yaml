@@ -195,7 +195,7 @@ jobs:
         run: |
           machineshop create \
           --kind pr \
-          --title "flux applications for cluster ${{ inputs.cluster-name }} on lab ${{ inputs.lab }}-${{ inputs.cloud }} created" \
+          --title "flux applications ${{ inputs.apps }} for cluster ${{ inputs.cluster-name }} on lab ${{ inputs.lab }}-${{ inputs.cloud }} created" \
           --branch ${{ env.BRANCH_NAME }} \
           --repository stuttgart-things \
           --group stuttgart-things \
