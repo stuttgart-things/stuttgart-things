@@ -8,7 +8,7 @@ secrets:
     - github:secretName=rss-github-secret, secretNamespace=flux-system
   flux-notifications:
     - github:secretName=flux-github-secret, secretNamespace=flux-system
-  gitlab:
+  gitlab-runner:
     - gitlab:secretName=gitlab-runner-secret, secretNamespace=flux-system
 
 template:
@@ -83,7 +83,7 @@ template:
         pgp: []
         encrypted_regex: ^(data|stringData)$
         version: 3.8.1
-  gitlab: |
+  gitlab-runner: |
     ---
     apiVersion: v1
     kind: Secret
