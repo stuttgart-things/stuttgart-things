@@ -1,0 +1,35 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: gitlab-${GITLAB_CLUSTER_NAME}
+  namespace: ${GITLAB_RUNNER_NAMESPACE:-gitlab}
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: gitlab-runner
+      version: ${GITLAB_CHART_VERSION:-0.68.1}
+      sourceRef:
+        kind: HelmRepository
+        name: gitlab-runner
+        namespace: ${GITLAB_RUNNER_NAMESPACE:-gitlab}
+      interval: 12h
+  values:
+    runnerToken: ${GITLAB_RUNNER_TOKEN}
+    rbac:
+      concurrent: ${GITLAB_CONCURRENT_JOBS}        10
+      checkInterval: ${GITLAB_CHECK_INTERVAL}       15
+      gitlabUrl: ${GITLAB_RUNNER_URL}          https://codehub.sva.de
+      runnerToken: ${GITLAB_RUNNER_TOKEN}    "TOBE DEFINED"
+      create: true
+      rules:
+        - apiGroups: [""]
+          resources: ["pods", "secrets", "configmaps"]
+          verbs: ["get", "list", "watch", "create", "patch", "delete", "update"]
+        - apiGroups: [""]
+          resources: ["pods/exec", "pods/attach"]
+          verbs: ["create", "patch", "delete"]
+        - apiGroups: [""]
+          resources: ["pods/log"]
+          verbs: ["get"]

@@ -8,6 +8,8 @@ secrets:
     - github:secretName=rss-github-secret, secretNamespace=flux-system
   flux-notifications:
     - github:secretName=flux-github-secret, secretNamespace=flux-system
+  gitlab:
+    - gitlab:secretName=gitlab-runner-secret, secretNamespace=flux-system
 
 template:
   github: |
@@ -78,6 +80,36 @@ template:
                 -----END AGE ENCRYPTED FILE-----
         lastmodified: "2024-02-27T16:07:43Z"
         mac: ENC[AES256_GCM,data:LzPz6SjdAGEkoo/I5Zm1F7NyqRUp3tQKtMnoIzKx3AL3Ym/9ejFAwLzktU8BWBmt4zSyPCpNKy7eMQSP59c2I/7k2wLUcnUMJTF9lFSkeHNBzGYH2IAFxXC7gkHp79kfDgiCxmh4oHnWitXEhJrWII6pWQ12SQE9RS6DZrx+RHg=,iv:pdC27VtFuTanMx8Cj2E0od3uIpofrOrZFBmaeLQpfhg=,tag:kkiqjlpDoRbLrDsXqYYi8g==,type:str]
+        pgp: []
+        encrypted_regex: ^(data|stringData)$
+        version: 3.8.1
+  gitlab: |
+    ---
+    apiVersion: v1
+    kind: Secret
+    metadata:
+        name: {{ .secretName }}
+        namespace: {{ .secretNamespace }}
+    data:
+        RUNNER_TOKEN: ENC[AES256_GCM,data:8Bp6ebSkeQmgh1mZTOGItIZrgmlF6C8im5V7KRjzDRT8Cpni,iv:EQ4IkBSz3Z2iIBLrfd8lW4RcTcXBpGYOyiZ3Fs/+TSg=,tag:4ur2l/Np+V9Mo5igzuUVDA==,type:str]
+    type: Opaque
+    sops:
+        kms: []
+        gcp_kms: []
+        azure_kv: []
+        hc_vault: []
+        age:
+            - recipient: age1g438n4lx6h7x7u42q652e9ygzrkkwlul49e8zsmsrfmxm9k3tvcsykhff4
+              enc: |
+                -----BEGIN AGE ENCRYPTED FILE-----
+                YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBvRnNrTS9WRDRPU2JaVnNW
+                WXNSZGxkZis0ODNSSmdKSGFjQVY0V1ZqZ2s0CkhZbTQvaHJMRnpxNVd4RjkrcmlJ
+                d1lqWEo4dEZ2cTlIR0lET25PYzQ1QWcKLS0tIHpDbk9TZ1FPeEFyUWl5RlEyVjEr
+                L0xUeDN0allNSmEzaHluUWQrZXc3SlUKcMU1dgBegaminMwIm3BGLVU4RqS1iMa5
+                fd7TUvxBgksZdBBOQQtMyjxv/ievJNVyrwZ7hn5jA3hKszd1FVe5pg==
+                -----END AGE ENCRYPTED FILE-----
+        lastmodified: "2024-06-19T17:08:47Z"
+        mac: ENC[AES256_GCM,data:d2jwKI4KQAN/laTvMeUGxgJQ1WqUHnlD69CyWFEtYPrn1L922TvmFuIvYTHEDJ8KAlZ6F6s2N+qb6/LurBAux6U/kXTPAzZ/C0uNqj+8j7zeexhdSi/sAZy3aSVw4uYNIiy5oNJcaIsV71kSYflQ7Vpx/4IQUHFURO+/pKLysqE=,iv:RTtlSgV70O/oIwFz1qt4bVaWV4A+yuiw6HVJlSoaFgc=,tag:WXTdo7XFJ3E3nRsTdmHXIg==,type:str]
         pgp: []
         encrypted_regex: ^(data|stringData)$
         version: 3.8.1

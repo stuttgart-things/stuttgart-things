@@ -1,5 +1,34 @@
 ---
 template:
+  gitlab-runner: |
+    ---
+    apiVersion: {{ .kustomizationApiVersion }}
+    kind: {{ .kustomizationKind  }}
+    metadata:
+      name: {{ .gitlabRunnerName }}
+      namespace: {{ .fluxNamespace }}
+    spec:
+      interval: {{ .interval }}
+      retryInterval: {{ .retryInterval }}
+      timeout: {{ .timeout }}
+      sourceRef:
+        kind: {{ .fluxSourceKind }}
+        name: {{ .fluxGitRepository }}
+      path: {{ .infraPath }}/{{ .gitlabRunnerName }}
+      prune: {{ .prune }}
+      wait: {{ .wait }}
+      postBuild:
+        substitute:
+          GITLAB_CLUSTER_NAME: {{ .clusterName }}
+          GITLAB_RUNNER_NAMESPACE: {{ .gitlabRunnerNamespace }}
+          GITLAB_CHART_VERSION: {{ .gitlabRunnerChartVersion }}
+          GITLAB_CONCURRENT_JOBS: {{ .gitlabRunnerConcurrentJobs }}
+          GITLAB_CHECK_INTERVAL: {{ .gitlabRunnerCheckInterval }}
+          GITLAB_RUNNER_URL: {{ .gitlabRunnerUrl }}
+        substituteFrom:
+          - kind: Secret
+            name: {{ .gitlabRunnerSecretName }}
+
   flux-notifications: |
     ---
     apiVersion: {{ .kustomizationApiVersion }}

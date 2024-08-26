@@ -1,0 +1,16 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ${GITLAB_RUNNER_NAMESPACE:-gitlab}
+  labels:
+    toolkit.fluxcd.io/tenant: sthings-team
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: gitlab-charts
+  namespace: ${GITLAB_RUNNER_NAMESPACE:-gitlab}
+spec:
+  interval: 5m0s
+  url: http://charts.gitlab.io/
