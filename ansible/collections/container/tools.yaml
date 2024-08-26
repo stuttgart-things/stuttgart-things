@@ -211,7 +211,7 @@ vars:
       helm_version: 3.15.4 # datasource=github-tags depName=helm/helm
       kubectl_version: v1.30.2 # datasource=github-tags depName=ko-build/ko
       k9s_version: v0.32.5 # datasource=github-tags depName=kubernetes/kubectl
-      velero_version: v1.14.0 # datasource=github-tags depName=vmware-tanzu/velero
+      velero_version: 1.14.1 # datasource=github-tags depName=vmware-tanzu/velero
       kubectl_slice_version: v1.3.1 # datasource=github-tags depName=patrickdappollonio/kubectl-slice
       helmfile_version: 0.166.0 # datasource=github-tags depName=helmfile/helmfile
       argocd_version: 2.12.2 # datasource=github-tags depName=argoproj/argo-cd
