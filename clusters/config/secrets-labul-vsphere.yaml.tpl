@@ -83,7 +83,7 @@ template:
         pgp: []
         encrypted_regex: ^(data|stringData)$
         version: 3.8.1
-  gitlab-runner: |
+  gitlab: |
     ---
     apiVersion: v1
     kind: Secret
