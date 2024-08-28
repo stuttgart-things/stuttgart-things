@@ -18,10 +18,10 @@ spec:
   values:
     runnerToken: ${GITLAB_RUNNER_TOKEN}
     rbac:
-      concurrent: ${GITLAB_CONCURRENT_JOBS}        10
-      checkInterval: ${GITLAB_CHECK_INTERVAL}       15
-      gitlabUrl: ${GITLAB_RUNNER_URL}          https://codehub.sva.de
-      runnerToken: ${GITLAB_RUNNER_TOKEN}    "TOBE DEFINED"
+      concurrent: ${GITLAB_CONCURRENT_JOBS}
+      checkInterval: ${GITLAB_CHECK_INTERVAL}
+      gitlabUrl: ${GITLAB_RUNNER_URL}
+      runnerToken: ${GITLAB_RUNNER_TOKEN}
       create: true
       rules:
         - apiGroups: [""]
