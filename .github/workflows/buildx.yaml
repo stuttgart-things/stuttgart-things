@@ -27,5 +27,5 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: images/sthings-alpine
-          push: false
-          tags: sthings-alpine:latest
+          push: true
+          tags: ghcr.io/${{ github.repository }}-sthings-alpine:latest
