@@ -8,11 +8,9 @@ on:
         required: true
         type: string
       push:
-        type: choice
         description: PUSH/LOGIN TO REGISTRY
-        options:
-          - "true"
-          - "false"
+        type: boolean
+        default: true
       image-destination:
         description: IMAGE DESTINATION (e.g. ghcr.io/sthings-alpine)
         required: true
