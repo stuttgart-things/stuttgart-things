@@ -1,5 +1,5 @@
 ---
-name: Dispatch buildx
+name: Dispatch buildx build
 on:
   workflow_dispatch:
     inputs:
@@ -11,14 +11,14 @@ on:
         type: choice
         description: PUSH/LOGIN TO REGISTRY
         options:
-          - true
-          - false
+          - "true"
+          - "false"
       image-destination:
-        description: IMAGE DESTINATION (e.g. sthings-alpine)
+        description: IMAGE DESTINATION (e.g. ghcr.io/sthings-alpine)
         required: true
         type: string
       image-tag:
-        description: IMAGE TAG (e.g. 123)
+        description: IMAGE TAG (e.g. 1.23)
         required: false
         type: string
         default: latest
