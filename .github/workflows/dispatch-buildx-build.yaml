@@ -12,7 +12,7 @@ on:
         type: boolean
         default: true
       image-destination:
-        description: IMAGE DESTINATION (e.g. ghcr.io/sthings-alpine)
+        description: IMAGE DESTINATION (e.g. ghcr.io/stuttgart-things/sthings-alpine)
         required: true
         type: string
       image-tag:
