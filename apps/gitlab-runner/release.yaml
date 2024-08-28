@@ -18,10 +18,9 @@ spec:
   values:
     gitlabUrl: ${GITLAB_RUNNER_URL}
     runnerToken: ${GITLAB_RUNNER_TOKEN}
+    concurrent: ${GITLAB_CONCURRENT_JOBS}
+    checkInterval: ${GITLAB_CHECK_INTERVAL}
     rbac:
-      concurrent: ${GITLAB_CONCURRENT_JOBS}
-      checkInterval: ${GITLAB_CHECK_INTERVAL}
-      runnerToken: ${GITLAB_RUNNER_TOKEN}
       create: true
       rules:
         - apiGroups: [""]
