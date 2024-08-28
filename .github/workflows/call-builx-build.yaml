@@ -68,4 +68,4 @@ jobs:
         with:
           context: ${{ inputs.context-path }}
           push: ${{ inputs.push }}
-          tags: ${{ inputs.image-destination }}:${{ inputs.image-tags }}
+          tags: ${{ inputs.image-destination }}:${{ inputs.image-tag }}
