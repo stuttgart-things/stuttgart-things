@@ -14,7 +14,7 @@ template:
       sourceRef:
         kind: {{ .fluxSourceKind }}
         name: {{ .fluxGitRepository }}
-      path: {{ .infraPath }}/{{ .gitlabRunnerName }}
+      path: {{ .appsPath }}/{{ .gitlabRunnerName }}
       prune: {{ .prune }}
       wait: {{ .wait }}
       postBuild:
@@ -22,8 +22,8 @@ template:
           GITLAB_CLUSTER_NAME: {{ .clusterName }}
           GITLAB_RUNNER_NAMESPACE: {{ .gitlabRunnerNamespace }}
           GITLAB_CHART_VERSION: {{ .gitlabRunnerChartVersion }}
-          GITLAB_CONCURRENT_JOBS: {{ .gitlabRunnerConcurrentJobs }}
-          GITLAB_CHECK_INTERVAL: {{ .gitlabRunnerCheckInterval }}
+          GITLAB_CONCURRENT_JOBS: "{{ .gitlabRunnerConcurrentJobs }}"
+          GITLAB_CHECK_INTERVAL: "{{ .gitlabRunnerCheckInterval }}"
           GITLAB_RUNNER_URL: {{ .gitlabRunnerUrl }}
         substituteFrom:
           - kind: Secret

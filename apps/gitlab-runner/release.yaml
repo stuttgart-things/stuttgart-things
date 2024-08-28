@@ -12,7 +12,7 @@ spec:
       version: ${GITLAB_CHART_VERSION:-0.68.1}
       sourceRef:
         kind: HelmRepository
-        name: gitlab-runner
+        name: gitlab-charts
         namespace: ${GITLAB_RUNNER_NAMESPACE:-gitlab}
       interval: 12h
   values:
