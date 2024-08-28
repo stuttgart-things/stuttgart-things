@@ -16,11 +16,11 @@ spec:
         namespace: ${GITLAB_RUNNER_NAMESPACE:-gitlab}
       interval: 12h
   values:
+    gitlabUrl: ${GITLAB_RUNNER_URL}
     runnerToken: ${GITLAB_RUNNER_TOKEN}
     rbac:
       concurrent: ${GITLAB_CONCURRENT_JOBS}
       checkInterval: ${GITLAB_CHECK_INTERVAL}
-      gitlabUrl: ${GITLAB_RUNNER_URL}
       runnerToken: ${GITLAB_RUNNER_TOKEN}
       create: true
       rules:
