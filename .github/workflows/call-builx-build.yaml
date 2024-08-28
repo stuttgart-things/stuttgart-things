@@ -1,0 +1,48 @@
+---
+name: Docker Buildx Build
+on:
+  workflow_call:
+    inputs:
+      runs-on:
+        required: true
+        type: string
+      environment-name:
+        default: k8s
+        required: false
+        type: string
+      # dockerfile:
+      #   required: false
+      #   default: Dockerfile
+      #   type: string
+      # context:
+      #   required: false
+      #   default: git://github.com/stuttgart-things/stuttgart-things
+      #   type: string
+      # kaniko-image:
+      #   required: false
+      #   type: string
+      #   default: eu.gcr.io/stuttgart-things/sthings-container:1.23.2
+      # context-sub-path:
+      #   required: true
+      #   type: string
+      # registry-config:
+      #   required: false
+      #   default: images/dev-registries.yaml
+      #   type: string
+
+jobs:
+  buildx-build-push:
+    runs-on: ${{ inputs.runs-on }}
+    environment: ${{ inputs.environment-name }}
+    env:
+      VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
+      VAULT_AUTH_METHOD: ${{ secrets.VAULT_AUTH_METHOD }}
+      VAULT_NAMESPACE: ${{ secrets.VAULT_NAMESPACE }}
+      VAULT_ROLE_ID: ${{ secrets.VAULT_ROLE_ID }}
+      VAULT_SECRET_ID: ${{ secrets.VAULT_SECRET_ID }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3

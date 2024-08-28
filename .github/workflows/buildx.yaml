@@ -2,30 +2,53 @@
 name: Dispatch buildx
 on:
   workflow_dispatch:
+    inputs:
+      environment-name:
+        type: choice
+        description: ENVIRONMENT
+        options:
+          - k8s
+          - labul-vsphere
+          - labda-vsphere
+          - labul-proxmox
+      runner:
+        description: RUNNER NAME
+        required: true
+        type: string
+        default: docker
 
 jobs:
-  docker:
-    runs-on: docker
-    steps:
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+  docker-buildx-push:
+    name: Docker Buildx Build
+    uses: stuttgart-things/stuttgart-things/.github/workflows/call-builx-build.yaml@main
+    with:
+      runs-on: ${{ inputs.runner }}
+      environment-name: ${{ inputs.environment-name }}
+    secrets: inherit
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+# jobs:
+#   docker:
+#     runs-on: docker
+#     steps:
+#       - name: Set up QEMU
+#         uses: docker/setup-qemu-action@v3
 
-      - name: Checkout
-        uses: actions/checkout@v4
+#       - name: Set up Docker Buildx
+#         uses: docker/setup-buildx-action@v3
 
-      - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }} ## GitHub organization or username
-          password: ${{ secrets.GITHUB_TOKEN }}
+#       - name: Checkout
+#         uses: actions/checkout@v4
 
-      - name: Build and push
-        uses: docker/build-push-action@v6
-        with:
-          context: images/sthings-alpine
-          push: true
-          tags: ghcr.io/${{ github.repository }}-sthings-alpine:latest
+#       - name: Log in to GitHub Container Registry
+#         uses: docker/login-action@v2
+#         with:
+#           registry: ghcr.io
+#           username: ${{ github.actor }} ## GitHub organization or username
+#           password: ${{ secrets.GITHUB_TOKEN }}
+
+#       - name: Build and push
+#         uses: docker/build-push-action@v6
+#         with:
+#           context: images/sthings-alpine
+#           push: true
+#           tags: ghcr.io/${{ github.repository }}-sthings-alpine:latest
