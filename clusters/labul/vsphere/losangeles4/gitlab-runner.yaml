@@ -11,7 +11,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./infra/gitlab
+  path: ./apps/gitlab-runner
   prune: true
   wait: true
   postBuild:
