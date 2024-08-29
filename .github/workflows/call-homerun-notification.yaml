@@ -63,7 +63,7 @@ jobs:
           TAGS="github-actions"
           MESSAGE_BODY="REPOSITORY: ${GITHUB_REPOSITORY} WORKFLOW: ${GITHUB_WORKFLOW} ARTIFACT: ? BUILD-PARAMETER: ? w/ RUNNER_NAME: ${RUNNER_NAME} ENV: ?"
 
-          if [ "${{ inputs.notification-info }}" != "unset" ]; then
+          if [ "${{ inputs.notification-info }}" != "unset" ] && [ -n "${{ inputs.notification-info }}" ]; then
             WORKFLOW_RESULT="successful"
             WORKFLOW_SEVERITY="SUCCESS"
             MESSAGE_BODY="${{ inputs.notification-info }}"
@@ -71,15 +71,15 @@ jobs:
 
           TITLE="Workflow ${GITHUB_WORKFLOW} on ${SYSTEM} was ${WORKFLOW_RESULT}"
 
-          if [ "${{ inputs.notification-title }}" != "unset" ]; then
+          if [ "${{ inputs.notification-title }}" != "unset" ] && [ -n "${{ inputs.notification-title }}" ]; then
             TITLE="${{ inputs.notification-title }}"
           fi
 
-          if [ "${{ inputs.notification-author }}" != "unset" ]; then
+          if [ "${{ inputs.notification-author }}" != "unset" ] && [ -n "${{ inputs.notification-author }}" ]; then
             AUTHOR="${{ inputs.notification-author }}"
           fi
 
-          if [ "${{ inputs.notification-tags }}" != "unset" ]; then
+          if [ "${{ inputs.notification-tags }}" != "unset" ] && [ -n "${{ inputs.notification-tags }}" ]; then
             TAGS="${{ inputs.notification-tags }}"
           fi
 

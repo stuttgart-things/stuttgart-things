@@ -77,12 +77,23 @@
 
 ## DISPATCH FLUX APPS
 
+<details><summary><b>DEPLOY BASE INFRA</b></summary>
+
+| NAME              | DESCRIPTION               | EXAMPLES                                                                            |
+|-------------------|---------------------------|-------------------------------------------------------------------------------------|
+| CLUSTER-NAME      | name of target flux cluster | sandiego2 |
+| APPS              | name of flux apps           | longhorn; nfs-csi; metallb; ingress-nginx; cert-manager |
+| VALUES            | app/cluster specific values | metallbIPRange=10.31.103.19-10.31.103.20 |
+
+</details>
+
+
 <details><summary><b>DEPLOY APP</b></summary>
 
 | NAME              | DESCRIPTION               | EXAMPLES                                                                            |
 |-------------------|---------------------------|-------------------------------------------------------------------------------------|
 | CLUSTER-NAME      | name of target flux cluster | sandiego2 |
 | APP-NAMES         | name of flux apps | zot; openebs |
-| VALUES            | app/cluster specific values | clusterIngressDomain=sandiego2.sthings-vsphere.labul.sva.de, clusterStorageClass=nfs4-csi|
+| VALUES            | app/cluster specific values | clusterIngressDomain=sandiego2.sthings-vsphere.labul.sva.de, clusterStorageClass=nfs4-csi |
 
 </details>
