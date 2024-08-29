@@ -22,4 +22,5 @@ spec:
       NFS_CSI_NAMESPACE: kube-system
       NFS_CSI_VERSION: v4.8.0
       NFS_CSI_ENABLE_CRDS: "false"
-      NFS_CSI_ENABLE_SNAPSHOTTER: true
+      NFS_CSI_ENABLE_SNAPSHOTTER: "true"
+      LONGHORN_DEFAULT_STORAECLASS: "false"
