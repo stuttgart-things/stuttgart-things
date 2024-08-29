@@ -22,7 +22,7 @@ spec:
     injector:
       enabled: ${VAULT_INJECTOR_ENABLED:=false}
     server:
-      enabled: ${VAULT_SERVER_ENABLED:=false}
+      enabled: ${VAULT_SERVER_ENABLED:=true}
       dataStorage:
         enabled: ${VAULT_STORAGE_ENABLED:=true}
         storageClass: ${VAULT_STORAGE_CLASS}
@@ -38,3 +38,8 @@ spec:
         ingressClassName: ${VAULT_INGRESS_CLASS:=nginx}
     csi:
       enabled: ${VAULT_CSI_ENABLED:=true}
+    ui:
+      enabled: true
+      serviceType: "ClusterIP"
+      serviceNodePort: null
+      externalPort: 8200
