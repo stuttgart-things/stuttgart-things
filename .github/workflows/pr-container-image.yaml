@@ -110,7 +110,7 @@ jobs:
         shell: bash
         run: |
           TITLE_PREFIX="Build of container image ${{ inputs.context-sub-path }} w/ kaniko on github actions"
-          SYSTEM="github-actions"
+          SYSTEM="github"
           TAGS="kaniko,github-actions"
           WORKFLOW_RESULT="succeded"
           WORKFLOW_SEVERITY="SUCCESS"
