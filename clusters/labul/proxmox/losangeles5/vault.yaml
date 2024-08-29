@@ -1,30 +1,30 @@
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: vault
-  namespace: flux-system
-spec:
-  interval: 1h
-  retryInterval: 1m
-  timeout: 5m
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: ./infra/vault
-  prune: true
-  wait: true
-  postBuild:
-    substitute:
-      VAULT_NAMESPACE: vault
-      VAULT_VERSION: 1.4.18
-      VAULT_INJECTOR_ENABLED: "true"
-      VAULT_SERVER_ENABLED: "true"
-      VAULT_STORAGE_ENABLED: "true"
-      VAULT_INGRESS_ENABLED: "true"
-      VAULT_STORAGE_CLASS: longhorn
-      VAULT_INGRESS_HOSTNAME: vault
-      VAULT_INGRESS_DOMAIN: losangeles5.sthings-vsphere.labul.sva.de
-      VAULT_CSI_ENABLED: "true"
-      ISSUER_NAME: cluster-issuer-approle
-      ISSUER_KIND: ClusterIssuer
+# ---
+# apiVersion: kustomize.toolkit.fluxcd.io/v1
+# kind: Kustomization
+# metadata:
+#   name: vault
+#   namespace: flux-system
+# spec:
+#   interval: 1h
+#   retryInterval: 1m
+#   timeout: 5m
+#   sourceRef:
+#     kind: GitRepository
+#     name: flux-system
+#   path: ./infra/vault
+#   prune: true
+#   wait: true
+#   postBuild:
+#     substitute:
+#       VAULT_NAMESPACE: vault
+#       VAULT_VERSION: 1.4.18
+#       VAULT_INJECTOR_ENABLED: "true"
+#       VAULT_SERVER_ENABLED: "true"
+#       VAULT_STORAGE_ENABLED: "true"
+#       VAULT_INGRESS_ENABLED: "true"
+#       VAULT_STORAGE_CLASS: longhorn
+#       VAULT_INGRESS_HOSTNAME: vault
+#       VAULT_INGRESS_DOMAIN: losangeles5.sthings-vsphere.labul.sva.de
+#       VAULT_CSI_ENABLED: "true"
+#       ISSUER_NAME: cluster-issuer-approle
+#       ISSUER_KIND: ClusterIssuer
