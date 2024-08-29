@@ -20,7 +20,7 @@ spec:
       interval: 12h
   values:
     global:
-      storageClass: nfs-csi
+      storageClass: nfs4-csi
     injector:
       enabled: ${VAULT_INJECTOR_ENABLED:=false}
     server:
