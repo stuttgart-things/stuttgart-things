@@ -232,7 +232,7 @@ template:
         substitute:
           CERT_MANAGER_VERSION: {{ .certManagerVersion }}
           CERT_MANAGER_NAMESPACE: {{ .certManagerNamespace }}
-          CERT_MANAGER_INSTALL_CRDS: {{ .certManagerInstallCRDs }}
+          CERT_MANAGER_INSTALL_CRDS: "{{ .certManagerInstallCRDs }}"
         substituteFrom:
           - kind: Secret
             name: {{ .certManagerSecretName }}

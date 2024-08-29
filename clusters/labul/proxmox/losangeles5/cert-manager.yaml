@@ -18,7 +18,7 @@ spec:
     substitute:
       CERT_MANAGER_VERSION: 1.15.3
       CERT_MANAGER_NAMESPACE: cert-manager
-      CERT_MANAGER_INSTALL_CRDS: true
+      CERT_MANAGER_INSTALL_CRDS: "true"
     substituteFrom:
       - kind: Secret
         name: cert-manager-secret
