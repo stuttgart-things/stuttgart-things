@@ -311,6 +311,6 @@ template:
         substitute:
           LONGHORN_NAMESPACE: {{ .longhornNamespace }}
           LONGHORN_VERSION: {{ .longhornVersion }}
-          LONGHORN_DEFAULT_STORAECLASS: {{ .longhornDefaultStorageClass }}
+          LONGHORN_DEFAULT_STORAGECLASS: "{{ .longhornDefaultStorageClass }}"
           LONGHORN_DEFAULT_FSTYPE: {{ .longhornDefaultFsType }}
           LONGHORN_RECLAIM_POLICY: {{ .longhornReclaimPolicy }}

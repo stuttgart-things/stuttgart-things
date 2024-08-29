@@ -18,6 +18,6 @@ spec:
     substitute:
       LONGHORN_NAMESPACE: longhorn-system
       LONGHORN_VERSION: 1.7.0
-      LONGHORN_DEFAULT_STORAECLASS: false
+      LONGHORN_DEFAULT_STORAGECLASS: "false"
       LONGHORN_DEFAULT_FSTYPE: ext4
       LONGHORN_RECLAIM_POLICY: Delete
