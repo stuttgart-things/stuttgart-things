@@ -57,7 +57,7 @@ jobs:
         shell: bash
         run: |
           TITLE_PREFIX="Terraform execution ${{ inputs.operation }} for ${{ inputs.folder }} on github actions"
-          SYSTEM="terraform"
+          SYSTEM="github"
           TAGS="terraform,github-actions"
           WORKFLOW_RESULT="succeded"
           WORKFLOW_SEVERITY="SUCCESS"

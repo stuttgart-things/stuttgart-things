@@ -70,7 +70,7 @@ jobs:
         shell: bash
         run: |
           TITLE_PREFIX="ansible playbook ${{ inputs.playbook }} was executed on github actions"
-          SYSTEM="github-actions"
+          SYSTEM="github"
           TAGS="ansible,github-actions"
           WORKFLOW_RESULT="successfully"
           WORKFLOW_SEVERITY="SUCCESS"
