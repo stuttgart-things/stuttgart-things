@@ -22,9 +22,7 @@ spec:
     injector:
       enabled: ${VAULT_INJECTOR_ENABLED:=false}
     server:
-      ha:
-        enabled: true
-        replicas: 3
+      enabled: ${VAULT_SERVER_ENABLED:=true}
       dataStorage:
         enabled: ${VAULT_STORAGE_ENABLED:=true}
         storageClass: ${VAULT_STORAGE_CLASS}
