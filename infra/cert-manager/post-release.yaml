@@ -3,12 +3,12 @@ apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: cert-manager-configuration
-  namespace: cert-manager
+  namespace: ${CERT_MANAGER_NAMESPACE:-cert-manager}
 spec:
   interval: 30m
   dependsOn:
     - name: cert-manager
-      namespace: cert-manager
+      namespace: ${CERT_MANAGER_NAMESPACE:-cert-manager}
   chart:
     spec:
       chart: sthings-cluster
@@ -16,14 +16,14 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: stuttgart-things
-        namespace: cert-manager
+        namespace: ${CERT_MANAGER_NAMESPACE:-cert-manager}
       interval: 12h
   values:
     installCRDs: true
     secrets:
       cert-approle:
         name: cert-manager-vault-approle
-        namespace: cert-manager
+        namespace: ${CERT_MANAGER_NAMESPACE:-cert-manager}
         secretKVs:
           approle: ${VAULT_SECRET_ID}
     customresources:
@@ -32,7 +32,7 @@ spec:
         kind: ClusterIssuer
         metadata:
           name: cluster-issuer-approle
-          namespace: cert-manager
+          namespace: ${CERT_MANAGER_NAMESPACE:-cert-manager}
         spec:
           vault:
             path: pki/sign/${VAULT_PKI_PATH}

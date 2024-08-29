@@ -165,6 +165,7 @@ template:
           ISSUER_NAME: {{ .clusterCertIssuerName }}
           ISSUER_KIND: {{ .clusterCertIssuerKind }}
           ZOT_INGRESS_CLASS: {{ .clusterIngressClass }}
+
   ingress-nginx: |
     ---
     apiVersion: {{ .kustomizationApiVersion }}
@@ -186,6 +187,7 @@ template:
         substitute:
           INGRESS_NGINX_NAMESPACE: {{ .ingressNginxNamespace }}
           INGRESS_NGINX_CHART_VERSION: {{ .ingressNginxVersion }}
+
   metallb: |
     ---
     apiVersion: {{ .kustomizationApiVersion }}
@@ -206,8 +208,9 @@ template:
       postBuild:
         substitute:
           METALLB_NAMESPACE: {{ .metallbNamespace }}
-          IP_RANGE: {{ .metallbIPRange }}
+          METALLB_IP_RANGE: {{ .metallbIPRange }}
           METALLB_CHART_VERSION: {{ .metallbVersion }}
+
   cert-manager: |
     ---
     apiVersion: {{ .kustomizationApiVersion }}
@@ -226,18 +229,14 @@ template:
       prune: {{ .prune }}
       wait: {{ .wait }}
       postBuild:
+        substitute:
+          CERT_MANAGER_VERSION: {{ .certManagerVersion }}
+          CERT_MANAGER_NAMESPACE: {{ .certManagerNamespace }}
+          CERT_MANAGER_INSTALL_CRDS: {{ .certManagerInstallCRDs }}
         substituteFrom:
           - kind: Secret
             name: {{ .certManagerSecretName }}
-      patches:
-        - patch: |-
-            - op: replace
-              path: /spec/chart/spec/version
-              value: {{ .certManagerVersion }}
-          target:
-            kind: HelmRelease
-            name: {{ .certManagerName }}
-            namespace: {{ .certManagerNamespace }}
+
   openebs: |
     ---
     apiVersion: {{ .kustomizationApiVersion }}

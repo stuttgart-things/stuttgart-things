@@ -80,6 +80,7 @@ certManagerName: cert-manager
 certManagerNamespace: cert-manager
 certManagerVersion: 1.15.3
 certManagerSecretName: cert-manager-secret
+certManagerInstallCRDs: true
 
 longhornName: longhorn
 longhornNamespace: longhorn-system
@@ -96,7 +97,6 @@ nfsNamespace: kube-system
 nfsCsiVersion: v4.8.0
 nfsCsiEnableCRDs: false
 nfsCsiEnableSnapshotter: true
-
 
 openebsName: openebs
 openebsNamespace: openebs
