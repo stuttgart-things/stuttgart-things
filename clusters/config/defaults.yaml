@@ -95,6 +95,8 @@ nfsServerSharePath: /data/col1/sthings
 nfsNamespace: kube-system
 nfsCsiVersion: v4.8.0
 nfsCsiEnableCRDs: false
+nfsCsiEnableSnapshotter: true
+
 
 openebsName: openebs
 openebsNamespace: openebs
