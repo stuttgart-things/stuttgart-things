@@ -18,7 +18,7 @@ spec:
     substitute:
       VAULT_NAMESPACE: vault
       VAULT_VERSION: 0.28.1
-      VAULT_INJECTOR_ENABLED: "false"
+      VAULT_INJECTOR_ENABLED: "true"
       VAULT_SERVER_ENABLED: "true"
       VAULT_STORAGE_ENABLED: "true"
       VAULT_INGRESS_ENABLED: "true"
