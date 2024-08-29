@@ -115,7 +115,7 @@ jobs:
 
           done
 
-          echo "APPS=${apps}" >> $GITHUB_OUTPUT
+          echo "APPS=FLUX-APPS: ${apps}" >> $GITHUB_OUTPUT
 
       - name: Render sops secrets
         id: renderSopsSecrets
@@ -208,6 +208,7 @@ jobs:
     needs:
       - Create-Flux-Apps
     with:
+      notification-tags: "flux, github-actions"
       notification-info: ${{ needs.Create-Flux-Apps.outputs.rendered_apps }}
       runs-on: ${{ inputs.runner }}
       environment-name: ${{ inputs.environment-name }}

@@ -66,7 +66,7 @@ jobs:
           if [ "${{ inputs.notification-info }}" != "unset" ] && [ -n "${{ inputs.notification-info }}" ]; then
             WORKFLOW_RESULT="successful"
             WORKFLOW_SEVERITY="SUCCESS"
-            MESSAGE_BODY="${{ inputs.notification-info }}"
+            MESSAGE_BODY="${MESSAGE_BODY} ${{ inputs.notification-info }}"
           fi
 
           TITLE="Workflow ${GITHUB_WORKFLOW} on ${SYSTEM} was ${WORKFLOW_RESULT}"
