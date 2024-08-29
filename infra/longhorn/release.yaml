@@ -9,17 +9,15 @@ spec:
   chart:
     spec:
       chart: longhorn
-      version: 1.5.3
+      version: ${LONGHORN_VERSION:=1.5.3}
       sourceRef:
         kind: HelmRepository
         name: longhorn
         namespace: ${LONGHORN_NAMESPACE:-longhorn-system}
       interval: 12h
   values:
-    installCRDs: true
+    installCRDs: ${LONGHORN_INSTALL_CRDS:=true}
     persistence:
-      defaultClass: true
-      defaultFsType: ext4
-      defaultMkfsParams: ""
-      defaultDataLocality: disabled
-      reclaimPolicy: Delete
+      defaultClass: ${LONGHORN_DEFAULT_STORAECLASS:=true}
+      defaultFsType: ${LONGHORN_DEFAULT_FSTYPE:=ext4}
+      reclaimPolicy: ${LONGHORN_RECLAIM_POLICY:=Delete}

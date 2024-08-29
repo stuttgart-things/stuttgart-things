@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: csi-driver-nfs
-      version: v4.8.0
+      version: ${NFS_CSI_VERSION:=v4.8.0}
       sourceRef:
         kind: HelmRepository
         name: csi-driver-nfs
@@ -30,6 +30,6 @@ spec:
       enableInlineVolume: false
     kubeletDir: /var/lib/kubelet
     externalSnapshotter:
-      enabled: true
+      enabled: ${NFS_CSI_ENABLE_SNAPSHOTTER:=true}
       customResourceDefinitions:
-        enabled: false   #if set true, VolumeSnapshot, VolumeSnapshotContent and VolumeSnapshotClass CRDs will be created. Set it false, If they already exist in cluster.
+        enabled: ${NFS_CSI_ENABLE_CRDS:=false}    #if set true, VolumeSnapshot, VolumeSnapshotContent and VolumeSnapshotClass CRDs will be created. Set it false, If they already exist in cluster.

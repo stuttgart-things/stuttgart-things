@@ -84,12 +84,17 @@ certManagerSecretName: cert-manager-secret
 longhornName: longhorn
 longhornNamespace: longhorn-system
 longhornVersion: 1.7.0
+longhornDefaultStorageClass: false
+longhornDefaultFsType: ext4
+longhornReclaimPolicy: Delete
 
 nfsCsiName: nfs-csi
+nfsCsiNamespace: kube-system
 nfsServer: 10.31.101.26
 nfsServerSharePath: /data/col1/sthings
 nfsNamespace: kube-system
 nfsCsiVersion: v4.8.0
+nfsCsiEnableCRDs: false
 
 openebsName: openebs
 openebsNamespace: openebs
