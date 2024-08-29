@@ -287,7 +287,7 @@ template:
           CLUSTER_NAME: {{ .clusterName }}
           NFS_CSI_NAMESPACE: {{ .nfsCsiNamespace }}
           NFS_CSI_VERSION: {{ .nfsCsiVersion }}
-          NFS_CSI_ENABLE_CRDS: {{ .nfsCsiEnableCRDs }}
+          NFS_CSI_ENABLE_CRDS: "{{ .nfsCsiEnableCRDs }}"
           NFS_CSI_ENABLE_SNAPSHOTTER: {{ .nfsCsiEnableSnapshotter }}
 
   longhorn: |
