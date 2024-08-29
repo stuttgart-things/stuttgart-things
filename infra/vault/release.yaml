@@ -19,6 +19,8 @@ spec:
         namespace: ${VAULT_NAMESPACE:=vault}
       interval: 12h
   values:
+    global:
+      storageClass: nfs-csi
     injector:
       enabled: ${VAULT_INJECTOR_ENABLED:=false}
     server:
