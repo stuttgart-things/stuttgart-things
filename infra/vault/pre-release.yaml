@@ -30,4 +30,4 @@ spec:
           issuerRef:
             name: ${ISSUER_NAME}
             kind: ${ISSUER_KIND}
-          secretName: ${VAULT_INGRESS_HOSTNAME}-ingress-tls
+          secretName: ${VAULT_INGRESS_HOSTNAME}.${VAULT_INGRESS_DOMAIN}
