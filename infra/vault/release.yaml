@@ -12,7 +12,7 @@ spec:
   chart:
     spec:
       chart: vault
-      version: ${VAULT_VERSION:=0.25.0}
+      version: ${VAULT_VERSION:=0.28.1}
       sourceRef:
         kind: HelmRepository
         name: hashicorp
