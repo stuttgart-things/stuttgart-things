@@ -28,6 +28,6 @@ spec:
           dnsNames:
             - ${VAULT_INGRESS_HOSTNAME}.${VAULT_INGRESS_DOMAIN}
           issuerRef:
-            name: ${CLUSTER_ISSUER}
-            kind: ClusterIssuer
+            name: ${ISSUER_NAME}
+            kind: ${ISSUER_KIND}
           secretName: ${VAULT_INGRESS_HOSTNAME}-ingress-tls

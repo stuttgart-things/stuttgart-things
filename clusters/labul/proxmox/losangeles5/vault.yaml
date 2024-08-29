@@ -26,3 +26,5 @@ spec:
       VAULT_INGRESS_HOSTNAME: vault
       VAULT_INGRESS_DOMAIN: losangeles5.sthings-vsphere.labul.sva.de
       VAULT_CSI_ENABLED: "true"
+      ISSUER_NAME: cluster-issuer-approle
+      ISSUER_KIND: ClusterIssuer

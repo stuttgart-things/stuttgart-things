@@ -29,6 +29,8 @@ template:
           VAULT_INGRESS_HOSTNAME: {{ .vaultHostname }}
           VAULT_INGRESS_DOMAIN: {{ .clusterIngressDomain }}
           VAULT_CSI_ENABLED: "{{ .vaultCsiEnabled }}"
+          ISSUER_NAME: {{ .clusterCertIssuerName }}
+          ISSUER_KIND: {{ .clusterCertIssuerKind }}
 
   gitlab-runner: |
     ---
