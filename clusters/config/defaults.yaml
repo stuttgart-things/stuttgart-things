@@ -21,6 +21,17 @@ clusterStorageClass: nfs4-csi
 clusterIngressClass: nginx
 
 # APPS
+vaultName: vault
+vaultNamespace: vault
+vaultVersion: 0.28.1
+vaultInjectorEnabled: false
+vaultServerEnabled: true
+vaultStorageEnabled: true
+vaultIngressEnabled: true
+vaultCsiEnabled: true
+vaultStorageClass: nfs4-csi
+vaultHostname: vault
+
 gitlabRunnerName: gitlab-runner
 gitlabRunnerNamespace: gitlab
 gitlabRunnerChartVersion: 0.68.1

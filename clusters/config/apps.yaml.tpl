@@ -1,5 +1,35 @@
 ---
 template:
+  vault: |
+    ---
+    apiVersion: {{ .kustomizationApiVersion }}
+    kind: {{ .kustomizationKind  }}
+    metadata:
+      name: {{ .vaultName }}
+      namespace: {{ .fluxNamespace }}
+    spec:
+      interval: {{ .interval }}
+      retryInterval: {{ .retryInterval }}
+      timeout: {{ .timeout }}
+      sourceRef:
+        kind: {{ .fluxSourceKind }}
+        name: {{ .fluxGitRepository }}
+      path: {{ .infraPath }}/{{ .vaultName }}
+      prune: {{ .prune }}
+      wait: {{ .wait }}
+      postBuild:
+        substitute:
+          VAULT_NAMESPACE: {{ .vaultNamespace }}
+          VAULT_VERSION: {{ .vaultVersion }}
+          VAULT_INJECTOR_ENABLED: "{{ .vaultInjectorEnabled }}"
+          VAULT_SERVER_ENABLED: "{{ .vaultServerEnabled }}"
+          VAULT_STORAGE_ENABLED: "{{ .vaultStorageEnabled }}"
+          VAULT_INGRESS_ENABLED: "{{ .vaultIngressEnabled }}"
+          VAULT_STORAGE_CLASS: "{{ .vaultStorageClass }}"
+          VAULT_INGRESS_HOSTNAME: {{ .vaultHostname }}
+          VAULT_INGRESS_DOMAIN: {{ .clusterIngressDomain }}
+          VAULT_CSI_ENABLED: "{{ .vaultCsiEnabled }}"
+
   gitlab-runner: |
     ---
     apiVersion: {{ .kustomizationApiVersion }}
