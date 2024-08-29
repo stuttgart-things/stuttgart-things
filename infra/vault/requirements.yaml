@@ -9,11 +9,11 @@ metadata:
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: HelmRepository
 metadata:
-  name: hashicorp
+  name: bitnami
   namespace: ${VAULT_NAMESPACE:=vault}
 spec:
   interval: 24h
-  url: https://helm.releases.hashicorp.com
+  url: https://charts.bitnami.com/bitnami
 ---
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: HelmRepository

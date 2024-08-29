@@ -12,10 +12,10 @@ spec:
   chart:
     spec:
       chart: vault
-      version: ${VAULT_VERSION:=0.28.1}
+      version: ${VAULT_VERSION:=1.4.18}
       sourceRef:
         kind: HelmRepository
-        name: hashicorp
+        name: bitnami
         namespace: ${VAULT_NAMESPACE:=vault}
       interval: 12h
   values:
@@ -38,8 +38,3 @@ spec:
         ingressClassName: ${VAULT_INGRESS_CLASS:=nginx}
     csi:
       enabled: ${VAULT_CSI_ENABLED:=true}
-    ui:
-      enabled: true
-      serviceType: "ClusterIP"
-      serviceNodePort: null
-      externalPort: 8200
