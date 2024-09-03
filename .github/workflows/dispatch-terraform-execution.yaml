@@ -60,8 +60,6 @@ jobs:
       continue-on-error: true
     secrets: inherit
 
-
-
     # run: |
     #   TITLE_PREFIX="Terraform execution ${{ inputs.operation }} for ${{ inputs.folder }} on github actions"
     #   SYSTEM="github"
