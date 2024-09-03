@@ -96,9 +96,13 @@
 | APP-NAMES         | name of flux apps | zot; openebs |
 | VALUES            | app/cluster specific values | clusterIngressDomain=sandiego2.sthings-vsphere.labul.sva.de, clusterStorageClass=nfs4-csi |
 
+# CICD CLUSTER
+
+| NAME              | DESCRIPTION               | EXAMPLES                                                                            |
+|-------------------|---------------------------|-------------------------------------------------------------------------------------|
+| CLUSTER-NAME      | name of target flux cluster | sandiego2 |
+| APP-NAMES         | name of flux apps | tekton; openebs; nfs-csi; gitlab-runner; flux-notifications; gh-arc |
+| VALUES            | app/cluster specific values | fluxRepoURL=https://github.com/stuttgart-things/stuttgart-things, ghRSSRepository=kaeffken, ghRSSGitHubURL=https://github.com/stuttgart-things/kaeffken |
+
+
 </details>
-
-
-tekton; openebs; nfs-csi; gitlab-runner; flux-notifications; gh-arc
-
-fluxRepoURL=https://github.com/stuttgart-things/stuttgart-things
