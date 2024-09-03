@@ -9,7 +9,7 @@ module "skyami" {
   pve_cluster_node        = "sthings-pve1"
   pve_datastore           = "v3700"
   pve_folder_path         = "stuttgart-things"
-  pve_network             = "vmbr104"
+  pve_network             = "vmbr102"
   vm_notes                = "VSPHERE-VM skyami ubuntu24 BUILD w/ TERRAFORM FOR STUTTGART-THINGS"
   pve_api_url             = var.pve_api_url
   pve_api_user            = var.pve_api_user
