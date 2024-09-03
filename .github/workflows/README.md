@@ -97,3 +97,8 @@
 | VALUES            | app/cluster specific values | clusterIngressDomain=sandiego2.sthings-vsphere.labul.sva.de, clusterStorageClass=nfs4-csi |
 
 </details>
+
+
+tekton; openebs; nfs-csi; gitlab-runner; flux-notifications; gh-arc
+
+fluxRepoURL=https://github.com/stuttgart-things/stuttgart-things
