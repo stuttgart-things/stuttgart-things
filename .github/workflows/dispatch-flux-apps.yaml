@@ -209,7 +209,7 @@ jobs:
       - Create-Flux-Apps
     with:
       notification-tags: "flux, github-actions"
-      notification-info: ${{ needs.Create-Flux-Apps.outputs.rendered_apps }}
+      notification-message: ${{ needs.Create-Flux-Apps.outputs.rendered_apps }}
       runs-on: ${{ inputs.runner }}
       environment-name: ${{ inputs.environment-name }}
       machineshop-image: ${{ inputs.working-image }}

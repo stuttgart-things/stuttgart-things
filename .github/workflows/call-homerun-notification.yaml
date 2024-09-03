@@ -11,7 +11,7 @@ on:
         default: "unset"
         type: string
         required: false
-      notification-info:
+      notification-message:
         default: "unset"
         type: string
         required: false
@@ -63,10 +63,10 @@ jobs:
           TAGS="github-actions"
           MESSAGE_BODY="REPOSITORY: ${GITHUB_REPOSITORY} WORKFLOW: ${GITHUB_WORKFLOW} ARTIFACT: ? BUILD-PARAMETER: ? w/ RUNNER_NAME: ${RUNNER_NAME} ENV: ?"
 
-          if [ "${{ inputs.notification-info }}" != "unset" ] && [ -n "${{ inputs.notification-info }}" ]; then
+          if [ "${{ inputs.notification-message }}" != "unset" ] && [ -n "${{ inputs.notification-message }}" ]; then
             WORKFLOW_RESULT="successful"
             WORKFLOW_SEVERITY="SUCCESS"
-            MESSAGE_BODY="${MESSAGE_BODY} ${{ inputs.notification-info }}"
+            MESSAGE_BODY="${MESSAGE_BODY} ${{ inputs.notification-message }}"
           fi
 
           TITLE="Workflow ${GITHUB_WORKFLOW} on ${SYSTEM} was ${WORKFLOW_RESULT}"

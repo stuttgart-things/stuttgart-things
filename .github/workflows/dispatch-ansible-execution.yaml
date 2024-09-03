@@ -41,9 +41,13 @@ on:
         description: WORKING IMAGE
         type: string
         default: eu.gcr.io/stuttgart-things/sthings-ansible:10.3.0
+     machineshop-image:
+        description: MACHINESHOP IMAGE
+        type: string
+        default: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:a460d6349913bbe0902a18eee32aa1aca9d575633da9ab1ab52519ee1a437cdb
 
 jobs:
-  execute-ansible:
+  Execute-Ansible:
     name: Execute Ansible
     uses: stuttgart-things/stuttgart-things/.github/workflows/call-ansible-execution.yaml@main
     with:
@@ -60,35 +64,50 @@ jobs:
 
   Send-Homerun-Notification:
     if: ${{ always() }}
-    needs: execute-ansible
-    runs-on: ${{ inputs.runner }}
-    environment: ${{ inputs.environment-name }}
-    container:
-      image: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:a460d6349913bbe0902a18eee32aa1aca9d575633da9ab1ab52519ee1a437cdb
-    steps:
-      - name: Send notification to homerun w/ machineshop
-        shell: bash
-        run: |
-          TITLE_PREFIX="ansible playbook ${{ inputs.playbook }} was executed on github actions"
-          SYSTEM="github"
-          TAGS="ansible,github-actions"
-          WORKFLOW_RESULT="successfully"
-          WORKFLOW_SEVERITY="SUCCESS"
-          BODY="REPOSITORY: ${GITHUB_REPOSITORY} WORKFLOW: ${GITHUB_WORKFLOW} ARTIFACT: ${{ inputs.inventory }} BUILD-PARAMETER: ${{ inputs.playbook }} w/ ${{ inputs.extra-vars }} RUNNER_NAME: ${RUNNER_NAME} WORKFLOW-IMAGE: ${{ inputs.working-image}} ENV: ${{ inputs.environment-name }}"
+    name: Send-Homerun-Notification
+    uses: stuttgart-things/stuttgart-things/.github/workflows/call-homerun-notification.yaml@main
+    needs:
+      -  Execute-Ansible
+    with:
+      notification-tags: "ansible, github-actions"
+      notification-message: "test"
+      runs-on: ${{ inputs.runner }}
+      environment-name: ${{ inputs.environment-name }}
+      machineshop-image: ${{ inputs.machineshop-image }}
+      continue-on-error: true
+    secrets: inherit
 
-          if [ "${{ needs.execute-ansible.result }}" != "success" ]; then
-            WORKFLOW_RESULT="with errors"
-            WORKFLOW_SEVERITY="ERROR"
-          fi
+  # Send-Homerun-Notification:
+  #   if: ${{ always() }}
+  #   needs: execute-ansible
+  #   runs-on: ${{ inputs.runner }}
+  #   environment: ${{ inputs.environment-name }}
+  #   container:
+  #     image: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:a460d6349913bbe0902a18eee32aa1aca9d575633da9ab1ab52519ee1a437cdb
+  #   steps:
+  #     - name: Send notification to homerun w/ machineshop
+  #       shell: bash
+  #       run: |
+  #         TITLE_PREFIX="ansible playbook ${{ inputs.playbook }} was executed on github actions"
+  #         SYSTEM="github"
+  #         TAGS="ansible,github-actions"
+  #         WORKFLOW_RESULT="successfully"
+  #         WORKFLOW_SEVERITY="SUCCESS"
+  #         BODY="REPOSITORY: ${GITHUB_REPOSITORY} WORKFLOW: ${GITHUB_WORKFLOW} ARTIFACT: ${{ inputs.inventory }} BUILD-PARAMETER: ${{ inputs.playbook }} w/ ${{ inputs.extra-vars }} RUNNER_NAME: ${RUNNER_NAME} WORKFLOW-IMAGE: ${{ inputs.working-image}} ENV: ${{ inputs.environment-name }}"
 
-          TITLE="${TITLE_PREFIX} ${WORKFLOW_RESULT}"
+  #         if [ "${{ needs.execute-ansible.result }}" != "success" ]; then
+  #           WORKFLOW_RESULT="with errors"
+  #           WORKFLOW_SEVERITY="ERROR"
+  #         fi
 
-          machineshop push \
-          --destination https://homerun.homerun-dev.sthings-vsphere.labul.sva.de/generic \
-          --target homerun \
-          --title "${TITLE}" \
-          --system "${SYSTEM}" \
-          --info "${BODY}" \
-          --tags "${TAGS}" \
-          --author "${GITHUB_ACTOR}" \
-          --severity "${WORKFLOW_SEVERITY}"
+  #         TITLE="${TITLE_PREFIX} ${WORKFLOW_RESULT}"
+
+  #         machineshop push \
+  #         --destination https://homerun.homerun-dev.sthings-vsphere.labul.sva.de/generic \
+  #         --target homerun \
+  #         --title "${TITLE}" \
+  #         --system "${SYSTEM}" \
+  #         --info "${BODY}" \
+  #         --tags "${TAGS}" \
+  #         --author "${GITHUB_ACTOR}" \
+  #         --severity "${WORKFLOW_SEVERITY}"
