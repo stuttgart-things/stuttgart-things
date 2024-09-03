@@ -36,6 +36,11 @@ on:
         required: true
         type: string
         default: ghr-stuttgart-things-labul-automation
+     machineshop-image:
+        description: MACHINESHOP IMAGE
+        type: string
+        default: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:a460d6349913bbe0902a18eee32aa1aca9d575633da9ab1ab52519ee1a437cdb
+
 jobs:
   Create-Flux-Config:
     permissions:
@@ -135,35 +140,51 @@ jobs:
 
   Send-Homerun-Notification:
     if: ${{ always() }}
-    needs: Create-Flux-Config
-    runs-on: ${{ inputs.runner }}
-    environment: ${{ inputs.environment-name }}
-    container:
-      image: ${{ inputs.working-image }}
-    steps:
-      - name: Send notification to homerun w/ machineshop
-        shell: bash
-        run: |
-          TITLE_PREFIX="PullRequest for bootstrap cluster: ${{ inputs.cluster-name }} w/ flux on github"
-          SYSTEM="github"
-          TAGS="flux, terraform, github-actions"
-          WORKFLOW_RESULT="created successfully"
-          WORKFLOW_SEVERITY="SUCCESS"
-          BODY="REPOSITORY: ${GITHUB_REPOSITORY} WORKFLOW: ${GITHUB_WORKFLOW} ARTIFACT: ${{ inputs.cluster-name }} ${{ inputs.lab-cloud }} RUNNER_NAME: ${RUNNER_NAME} WORKFLOW-IMAGE: ${{ inputs.working-image }} ENV: ${{ inputs.environment-name }}"
+    name: Send-Homerun-Notification
+    uses: stuttgart-things/stuttgart-things/.github/workflows/call-homerun-notification.yaml@main
+    needs:
+      -  Create-Flux-Config
+    with:
+      notification-tags: "flux, k8s, github-actions"
+      notification-message: "flux"
+      runs-on: ${{ inputs.runner }}
+      environment-name: ${{ inputs.environment-name }}
+      machineshop-image: ${{ inputs.machineshop-image }}
+      continue-on-error: true
+    secrets: inherit
 
-          if [ "${{ needs.Create-Flux-Config.result }}" != "success" ]; then
-            WORKFLOW_RESULT="failed to create"
-            WORKFLOW_SEVERITY="ERROR"
-          fi
 
-          TITLE="${TITLE_PREFIX} ${WORKFLOW_RESULT}"
+  # Send-Homerun-Notification:
+  #   if: ${{ always() }}
+  #   needs: Create-Flux-Config
+  #   runs-on: ${{ inputs.runner }}
+  #   environment: ${{ inputs.environment-name }}
+  #   container:
+  #     image: ${{ inputs.working-image }}
+  #   steps:
+  #     - name: Send notification to homerun w/ machineshop
+  #       shell: bash
+  #       run: |
+  #         TITLE_PREFIX="PullRequest for bootstrap cluster: ${{ inputs.cluster-name }} w/ flux on github"
+  #         SYSTEM="github"
+  #         TAGS="flux, terraform, github-actions"
+  #         WORKFLOW_RESULT="created successfully"
+  #         WORKFLOW_SEVERITY="SUCCESS"
+  #         BODY="REPOSITORY: ${GITHUB_REPOSITORY} WORKFLOW: ${GITHUB_WORKFLOW} ARTIFACT: ${{ inputs.cluster-name }} ${{ inputs.lab-cloud }} RUNNER_NAME: ${RUNNER_NAME} WORKFLOW-IMAGE: ${{ inputs.working-image }} ENV: ${{ inputs.environment-name }}"
 
-          machineshop push \
-          --destination https://homerun.homerun-dev.sthings-vsphere.labul.sva.de/generic \
-          --target homerun \
-          --title "${TITLE}" \
-          --system "${SYSTEM}" \
-          --info "${BODY}" \
-          --tags "${TAGS}" \
-          --author "${GITHUB_ACTOR}" \
-          --severity "${WORKFLOW_SEVERITY}"
+  #         if [ "${{ needs.Create-Flux-Config.result }}" != "success" ]; then
+  #           WORKFLOW_RESULT="failed to create"
+  #           WORKFLOW_SEVERITY="ERROR"
+  #         fi
+
+  #         TITLE="${TITLE_PREFIX} ${WORKFLOW_RESULT}"
+
+  #         machineshop push \
+  #         --destination https://homerun.homerun-dev.sthings-vsphere.labul.sva.de/generic \
+  #         --target homerun \
+  #         --title "${TITLE}" \
+  #         --system "${SYSTEM}" \
+  #         --info "${BODY}" \
+  #         --tags "${TAGS}" \
+  #         --author "${GITHUB_ACTOR}" \
+  #         --severity "${WORKFLOW_SEVERITY}"
