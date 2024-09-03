@@ -28,6 +28,10 @@ on:
         description: WORKING IMAGE
         type: string
         default: eu.gcr.io/stuttgart-things/sthings-terraform:1.9.4-2
+      machineshop-image:
+        description: MACHINESHOP IMAGE
+        type: string
+        default: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:a460d6349913bbe0902a18eee32aa1aca9d575633da9ab1ab52519ee1a437cdb
       runner:
         description: RUNNER NAME
         type: string
@@ -57,7 +61,7 @@ jobs:
       notification-info: ${{ needs.Execute-Terraform.outputs.tf-output }}
       runs-on: ${{ inputs.runner }}
       environment-name: ${{ inputs.environment-name }}
-      machineshop-image: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:a460d6349913bbe0902a18eee32aa1aca9d575633da9ab1ab
+      machineshop-image: ${{ inputs.machineshop-image }}
       continue-on-error: true
     secrets: inherit
 
