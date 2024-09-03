@@ -30,16 +30,12 @@ on:
       working-image:
         description: WORKING IMAGE
         type: string
-        default: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:fff62c5ad6d02db52f0525519cddcf1833cf59201e44e3f5c77befbd492cc60a
+        default: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:a460d6349913bbe0902a18eee32aa1aca9d575633da9ab1ab52519ee1a437cdb
       runner:
         description: RUNNER NAME
         required: true
         type: string
         default: ghr-stuttgart-things-labul-automation
-      machineshop-image:
-          description: MACHINESHOP IMAGE
-          type: string
-          default: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:a460d6349913bbe0902a18eee32aa1aca9d575633da9ab1ab52519ee1a437cdb
 
 jobs:
   Create-Flux-Config:
@@ -149,7 +145,7 @@ jobs:
       notification-message: "flux"
       runs-on: ${{ inputs.runner }}
       environment-name: ${{ inputs.environment-name }}
-      machineshop-image: ${{ inputs.machineshop-image }}
+      machineshop-image: ${{ inputs.working-image }}
       continue-on-error: true
     secrets: inherit
 
