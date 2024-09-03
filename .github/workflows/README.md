@@ -101,7 +101,7 @@
 | NAME              | DESCRIPTION               | EXAMPLES                                                                            |
 |-------------------|---------------------------|-------------------------------------------------------------------------------------|
 | CLUSTER-NAME      | name of target flux cluster | sandiego2 |
-| APP-NAMES         | name of flux apps | tekton; openebs; nfs-csi; gitlab-runner; flux-notifications; gh-arc |
+| APP-NAMES         | name of flux apps | tekton; openebs; nfs-csi; gitlab-runner; flux-notifications; gh-arc; gh-arc; gh-rss |
 | VALUES            | app/cluster specific values | fluxRepoURL=https://github.com/stuttgart-things/stuttgart-things, ghRSSRepository=kaeffken, ghRSSGitHubURL=https://github.com/stuttgart-things/kaeffken |
 
 
