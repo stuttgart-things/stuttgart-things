@@ -178,7 +178,7 @@ jobs:
             networks = {
                 'labul-vsphere': ['/LabUL/network/MGMT-10.31.101', '/LabUL/network/LAB-10.31.102', '/LabUL/network/LAB-10.31.103', '/LabUL/network/LAB-10.31.104'],
                 'labda-vsphere': ['/NetApp-HCI-Datacenter/network/tiab-prod'],
-                'labul-proxmox': ['vmbr101', 'vmbr102', 'vmbr103', 'vmbr104',],
+                'labul-proxmox': ['vmbr101', 'vmbr102', 'vmbr103'], #'vmbr104
             }
 
             env = {
