@@ -95,7 +95,11 @@ jobs:
           --target homerun \
           --title "${TITLE}" \
           --system "${SYSTEM}" \
-          --info "${MESSAGE_BODY}" \
+          --message "${MESSAGE_BODY}" \
           --tags "${TAGS}" \
           --author "${AUTHOR}" \
-          --severity "${WORKFLOW_SEVERITY}"
+          --severity "${WORKFLOW_SEVERITY}" \
+          --assignee "patrick.hermann" \
+          --assigneeUrl "patrick.hermann@sva.de"  \
+          --artifacts "INFO" \
+          --url "https://github.com/stuttgart-things/stuttgart-things/actions/runs/10639438939"
