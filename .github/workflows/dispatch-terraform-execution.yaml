@@ -32,6 +32,7 @@ on:
         description: RUNNER NAME
         type: string
         default: ghr-stuttgart-things-labul-automation
+
 jobs:
   Execute-Terraform:
     name: Execute Terraform
@@ -59,28 +60,3 @@ jobs:
       machineshop-image: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:a460d6349913bbe0902a18eee32aa1aca9d575633da9ab1ab
       continue-on-error: true
     secrets: inherit
-
-    # run: |
-    #   TITLE_PREFIX="Terraform execution ${{ inputs.operation }} for ${{ inputs.folder }} on github actions"
-    #   SYSTEM="github"
-    #   TAGS="terraform,github-actions"
-    #   WORKFLOW_RESULT="succeded"
-    #   WORKFLOW_SEVERITY="SUCCESS"
-    #   BODY="REPOSITORY: ${GITHUB_REPOSITORY} WORKFLOW: ${GITHUB_WORKFLOW} ARTIFACT: ${{ inputs.folder }}@${{ inputs.branch-name }} RUNNER_NAME: ${RUNNER_NAME} WORKFLOW-IMAGE: ${{ inputs.kaniko-image }} ENV: ${{ inputs.environment-name }}"
-
-    #   if [ "${{ needs.Execute-Terraform.result }}" != "success" ]; then
-    #     WORKFLOW_RESULT="failed"
-    #     WORKFLOW_SEVERITY="ERROR"
-    #   fi
-
-    #   TITLE="${TITLE_PREFIX} ${WORKFLOW_RESULT}"
-
-    #   machineshop push \
-    #   --destination https://homerun.homerun-dev.sthings-vsphere.labul.sva.de/generic \
-    #   --target homerun \
-    #   --title "${TITLE}" \
-    #   --system "${SYSTEM}" \
-    #   --info "${BODY}" \
-    #   --tags "${TAGS}" \
-    #   --author "${GITHUB_ACTOR}" \
-    #   --severity "${WORKFLOW_SEVERITY}"
