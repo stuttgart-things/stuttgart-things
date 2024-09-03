@@ -41,10 +41,10 @@ on:
         description: WORKING IMAGE
         type: string
         default: eu.gcr.io/stuttgart-things/sthings-ansible:10.3.0
-     machineshop-image:
-        description: MACHINESHOP IMAGE
-        type: string
-        default: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:a460d6349913bbe0902a18eee32aa1aca9d575633da9ab1ab52519ee1a437cdb
+      machineshop-image:
+          description: MACHINESHOP IMAGE
+          type: string
+          default: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:a460d6349913bbe0902a18eee32aa1aca9d575633da9ab1ab52519ee1a437cdb
 
 jobs:
   Execute-Ansible:
