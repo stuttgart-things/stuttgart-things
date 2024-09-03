@@ -41,7 +41,8 @@ on:
       working-image:
         description: WORKING IMAGE
         type: string
-        default: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:0aa1134306ca79c47141f05ede01afb373dcea3aab76175ac897b6b89ce4342c
+        default: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:a460d6349913bbe0902a18eee32aa1aca9d575633da9ab1ab
+52519ee1a437cdb
       runner:
         description: RUNNER NAME
         required: true
