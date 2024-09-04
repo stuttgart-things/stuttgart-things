@@ -3,30 +3,30 @@ name: Send homerun notification
 on:
   workflow_call:
     inputs:
-      notification-title:
+      notification-artifact:
         default: "unset"
         type: string
         required: false
-      notification-severity:
-        default: "unset"
-        type: string
-        required: false
-      notification-message:
-        default: "unset"
-        type: string
-        required: false
+      # notification-severity:
+      #   default: "unset"
+      #   type: string
+      #   required: false
+      # notification-message:
+      #   default: "unset"
+      #   type: string
+      #   required: false
       notification-url:
         default: "https://homerun.homerun-dev.sthings-vsphere.labul.sva.de/generic"
         type: string
         required: false
-      notification-tags:
-        default: "unset"
-        type: string
-        required: false
-      notification-author:
-        default: "unset"
-        type: string
-        required: false
+      # notification-tags:
+      #   default: "unset"
+      #   type: string
+      #   required: false
+      # notification-author:
+      #   default: "unset"
+      #   type: string
+      #   required: false
       runs-on:
         type: string
         default: ghr-stuttgart-things-labul-automation
@@ -52,54 +52,65 @@ jobs:
     environment: ${{ inputs.environment-name }}
     continue-on-error: ${{ inputs.continue-on-error }}
     steps:
-      - name: Send notification to homerun
+      - uses: actions/download-artifact@v4.1.8
+        with:
+          name: ${{ inputs.notification-artifact }}
+          path: |-
+            /tmp/homerun
+
+      - name: Check artifact
         run: |
-          printenv
+          ls -la /tmp/homerun
+          cat /tmp/homerun
 
-          SYSTEM="github"
-          WORKFLOW_RESULT="failed"
-          WORKFLOW_SEVERITY="ERROR"
-          AUTHOR="${GITHUB_ACTOR}"
-          TAGS="github-actions"
-          MESSAGE_BODY="REPOSITORY: ${GITHUB_REPOSITORY} WORKFLOW: ${GITHUB_WORKFLOW} ARTIFACT: ? BUILD-PARAMETER: ? w/ RUNNER_NAME: ${RUNNER_NAME} ENV: ?"
+      # - name: Send notification to homerun
+      #   run: |
+      #     printenv
 
-          if [ "${{ inputs.notification-message }}" != "unset" ] && [ -n "${{ inputs.notification-message }}" ]; then
-            WORKFLOW_RESULT="successful"
-            WORKFLOW_SEVERITY="SUCCESS"
-            MESSAGE_BODY="${MESSAGE_BODY} ${{ inputs.notification-message }}"
-          fi
+      #     SYSTEM="github"
+      #     WORKFLOW_RESULT="failed"
+      #     WORKFLOW_SEVERITY="ERROR"
+      #     AUTHOR="${GITHUB_ACTOR}"
+      #     TAGS="github-actions"
+      #     MESSAGE_BODY="REPOSITORY: ${GITHUB_REPOSITORY} WORKFLOW: ${GITHUB_WORKFLOW} ARTIFACT: ? BUILD-PARAMETER: ? w/ RUNNER_NAME: ${RUNNER_NAME} ENV: ?"
 
-          TITLE="Workflow ${GITHUB_WORKFLOW} on ${SYSTEM} was ${WORKFLOW_RESULT}"
+      #     if [ "${{ inputs.notification-message }}" != "unset" ] && [ -n "${{ inputs.notification-message }}" ]; then
+      #       WORKFLOW_RESULT="successful"
+      #       WORKFLOW_SEVERITY="SUCCESS"
+      #       MESSAGE_BODY="${MESSAGE_BODY} ${{ inputs.notification-message }}"
+      #     fi
 
-          if [ "${{ inputs.notification-title }}" != "unset" ] && [ -n "${{ inputs.notification-title }}" ]; then
-            TITLE="${{ inputs.notification-title }}"
-          fi
+      #     TITLE="Workflow ${GITHUB_WORKFLOW} on ${SYSTEM} was ${WORKFLOW_RESULT}"
 
-          if [ "${{ inputs.notification-author }}" != "unset" ] && [ -n "${{ inputs.notification-author }}" ]; then
-            AUTHOR="${{ inputs.notification-author }}"
-          fi
+      #     if [ "${{ inputs.notification-title }}" != "unset" ] && [ -n "${{ inputs.notification-title }}" ]; then
+      #       TITLE="${{ inputs.notification-title }}"
+      #     fi
 
-          if [ "${{ inputs.notification-tags }}" != "unset" ] && [ -n "${{ inputs.notification-tags }}" ]; then
-            TAGS="${{ inputs.notification-tags }}"
-          fi
+      #     if [ "${{ inputs.notification-author }}" != "unset" ] && [ -n "${{ inputs.notification-author }}" ]; then
+      #       AUTHOR="${{ inputs.notification-author }}"
+      #     fi
 
-          echo TITLE: ${TITLE}
-          echo SYSTEM: ${SYSTEM}
-          echo SEVERITY: ${WORKFLOW_SEVERITY}
-          echo RESULT: ${WORKFLOW_RESULT}
-          echo AUTHOR: ${AUTHOR}
-          echo TAGS: ${TAGS}
+      #     if [ "${{ inputs.notification-tags }}" != "unset" ] && [ -n "${{ inputs.notification-tags }}" ]; then
+      #       TAGS="${{ inputs.notification-tags }}"
+      #     fi
 
-          machineshop push \
-          --destination ${{ inputs.notification-url }} \
-          --target homerun \
-          --title "${TITLE}" \
-          --system "${SYSTEM}" \
-          --message "${MESSAGE_BODY}" \
-          --tags "${TAGS}" \
-          --author "${AUTHOR}" \
-          --severity "${WORKFLOW_SEVERITY}" \
-          --assignee "patrick.hermann" \
-          --assigneeUrl "patrick.hermann@sva.de"  \
-          --artifacts "INFO" \
-          --url "https://github.com/stuttgart-things/stuttgart-things/actions/runs/10639438939"
+      #     echo TITLE: ${TITLE}
+      #     echo SYSTEM: ${SYSTEM}
+      #     echo SEVERITY: ${WORKFLOW_SEVERITY}
+      #     echo RESULT: ${WORKFLOW_RESULT}
+      #     echo AUTHOR: ${AUTHOR}
+      #     echo TAGS: ${TAGS}
+
+      #     machineshop push \
+      #     --destination ${{ inputs.notification-url }} \
+      #     --target homerun \
+      #     --title "${TITLE}" \
+      #     --system "${SYSTEM}" \
+      #     --message "${MESSAGE_BODY}" \
+      #     --tags "${TAGS}" \
+      #     --author "${AUTHOR}" \
+      #     --severity "${WORKFLOW_SEVERITY}" \
+      #     --assignee "patrick.hermann" \
+      #     --assigneeUrl "patrick.hermann@sva.de"  \
+      #     --artifacts "INFO" \
+      #     --url "https://github.com/stuttgart-things/stuttgart-things/actions/runs/10639438939"
