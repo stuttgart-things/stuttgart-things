@@ -454,13 +454,22 @@ jobs:
         run: |
           echo "title: PullRequest for vm-build w/ ${{ inputs.build-engine }} ${{ inputs.count-vm }}x${{ inputs.vm-name }} on github" >> homerun.yaml
           echo "system: github" >> homerun.yaml
-          echo "tags: ${{ inputs.build-engine }}, github-actions" >> homerun.yaml
           echo "message: REPOSITORY: ${GITHUB_REPOSITORY} WORKFLOW: ${GITHUB_WORKFLOW} ARTIFACT: ${{ inputs.count-vm }}x${{ inputs.vm-name }} ${{ inputs.lab-cloud }} RUNNER_NAME: ${RUNNER_NAME} WORKFLOW-IMAGE: ${{ inputs.kaniko-image }} ENV: k8s" >> homerun.yaml
-          echo "severity: SUCCESS" >> homerun.yaml
+          echo "tags: ${{ inputs.build-engine }}, github-actions" >> homerun.yaml
           echo "author: ${GITHUB_ACTOR}" >> homerun.yaml
+          echo "severity: SUCCESS" >> homerun.yaml
+          echo "assignee: ${GITHUB_ACTOR}" >> homerun.yaml
+          echo "assigneeUrl: ''" >> homerun.yaml
+          echo "artifacts: ${{ env.destination }}/README.md; ${{ env.destination }}/${{ env.provider_name }}.${{ env.extension }}" >> homerun.yaml
+          echo "url: ''" >> homerun.yaml
 
           cat homerun.yaml
 
+      - uses: actions/upload-@v4.4.0
+        with:
+          name: homerun
+          path: |-
+            homerun.yaml
   # Send-Homerun-Notification:
   #   if: ${{ always() }}
   #   name: Send-Homerun-Notification
