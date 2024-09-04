@@ -57,11 +57,20 @@ jobs:
           name: ${{ inputs.notification-artifact }}
           path: |-
             /tmp/homerun
+        if: ${{ inputs.notification-artifact != 'unset' }}
 
       - name: Check artifact
         run: |
           ls -la /tmp/homerun
-          cat /tmp/homerun
+          cat /tmp/homerun/homerun.yaml
+        if: ${{ inputs.notification-artifact != 'unset' }}
+
+      - name: Check status
+        run: |
+          seems like the artifact is not set
+        if: ${{ inputs.notification-artifact == 'unset' }}
+
+
 
       # - name: Send notification to homerun
       #   run: |
