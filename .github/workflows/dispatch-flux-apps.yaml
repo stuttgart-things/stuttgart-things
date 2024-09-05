@@ -78,6 +78,7 @@ jobs:
           echo FLUX_DEFAULTS="defaults.yaml" >> $GITHUB_ENV
           echo BRANCH_NAME="flux-updated-cluster-${{ inputs.lab }}-${{ inputs.cloud }}-${{ inputs.cluster-name }}" >> $GITHUB_ENV
           echo PR_TITLE="flux applications ${{ inputs.apps }} for cluster ${{ inputs.cluster-name }} on lab ${{ inputs.lab }}-${{ inputs.cloud }} created" >> $GITHUB_ENV
+          echo WORKFLOW_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" >> $GITHUB_ENV
 
           mkdir -p /tmp/flux
           echo FLUX_TMP_DIR="/tmp/flux" >> $GITHUB_ENV
@@ -215,7 +216,7 @@ jobs:
           echo "assignee: ${GITHUB_ACTOR}" >> homerun.yaml
           echo "assigneeUrl: ''" >> homerun.yaml
           echo "artifacts: ${{ env.BRANCH_COMMIT_STRING }}" >> homerun.yaml
-          echo "url: ''" >> homerun.yaml
+          echo "url: ${{ env.WORKFLOW_URL }}" >> homerun.yaml
 
           cat homerun.yaml
 

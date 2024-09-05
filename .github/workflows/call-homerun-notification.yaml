@@ -90,8 +90,7 @@ jobs:
       - name: Send notification to homerun
         run: |
 
-          JOB_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
-          echo $JOB_URL
+
 
           machineshop push \
           --destination ${{ inputs.notification-url }} \
