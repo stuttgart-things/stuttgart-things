@@ -68,7 +68,7 @@ jobs:
       - name: Check status
         id: checkStatus
         run: |
-          seems like the artifact is not set
+          echo seems like the artifact is not set
           echo TITLE="FAILED" >> $GITHUB_ENV
         if: always()
 
