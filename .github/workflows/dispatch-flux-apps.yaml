@@ -234,7 +234,7 @@ jobs:
     name: Send-Homerun-Notification
     uses: stuttgart-things/stuttgart-things/.github/workflows/call-homerun-notification.yaml@main
     needs:
-      -  Create-Flux-Config
+      -  Create-Flux-Apps
     with:
       notification-artifact: homerun
       # notification-message: "terraform vm"
