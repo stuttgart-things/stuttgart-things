@@ -77,6 +77,7 @@ jobs:
           echo FLUX_SOPS_TEMPLATE="secrets-${{ inputs.lab }}-${{ inputs.cloud }}.yaml.tpl" >> $GITHUB_ENV
           echo FLUX_DEFAULTS="defaults.yaml" >> $GITHUB_ENV
           echo BRANCH_NAME="flux-updated-cluster-${{ inputs.lab }}-${{ inputs.cloud }}-${{ inputs.cluster-name }}" >> $GITHUB_ENV
+          echo PR_TITLE="flux applications ${{ inputs.apps }} for cluster ${{ inputs.cluster-name }} on lab ${{ inputs.lab }}-${{ inputs.cloud }} created" >> $GITHUB_ENV
 
           mkdir -p /tmp/flux
           echo FLUX_TMP_DIR="/tmp/flux" >> $GITHUB_ENV
@@ -193,25 +194,68 @@ jobs:
       - name: Create pr for (newly created) flux branch into main
         id: createPR
         run: |
+
+
           machineshop create \
           --kind pr \
-          --title "flux applications ${{ inputs.apps }} for cluster ${{ inputs.cluster-name }} on lab ${{ inputs.lab }}-${{ inputs.cloud }} created" \
+          --title "${{ env.PR_TITLE }}" \
           --branch ${{ env.BRANCH_NAME }} \
           --repository stuttgart-things \
           --group stuttgart-things \
           --labels "flux, k8s"
+
+      - name: Create homerun notification artifact
+        id: homerunConfigCreation
+        run: |
+          echo "---" >> homerun.yaml
+          echo "title: ${{ env.PR_TITLE }} from Branch ${{ env.BRANCH_NAME }}" >> homerun.yaml
+          echo "system: github" >> homerun.yaml
+          echo "message: 'REPOSITORY: ${GITHUB_REPOSITORY} WORKFLOW: ${GITHUB_WORKFLOW} RUNNER_NAME: ${RUNNER_NAME} WORKFLOW-IMAGE: ${{ inputs.kaniko-image }} ENV: k8s'" >> homerun.yaml
+          echo "tags: flux, k8s, apps, github-actions" >> homerun.yaml
+          echo "author: ${GITHUB_ACTOR}" >> homerun.yaml
+          echo "severity: SUCCESS" >> homerun.yaml
+          echo "assignee: ${GITHUB_ACTOR}" >> homerun.yaml
+          echo "assigneeUrl: ''" >> homerun.yaml
+          echo "artifacts: ${{ steps.renderFluxApps.outputs.APPS }}" >> homerun.yaml
+          echo "url: ''" >> homerun.yaml
+
+          cat homerun.yaml
+
+      - name: Upload homerun notification artifact
+        uses: actions/upload-artifact@v4.4.0
+        id: homerunConfigUpload
+        with:
+          name: homerun
+          path: |-
+            homerun.yaml
 
   Send-Homerun-Notification:
     if: ${{ always() }}
     name: Send-Homerun-Notification
     uses: stuttgart-things/stuttgart-things/.github/workflows/call-homerun-notification.yaml@main
     needs:
-      - Create-Flux-Apps
+      -  Create-Flux-Config
     with:
-      notification-tags: "flux, github-actions"
-      notification-message: ${{ needs.Create-Flux-Apps.outputs.rendered_apps }}
+      notification-artifact: homerun
+      # notification-message: "terraform vm"
       runs-on: ${{ inputs.runner }}
       environment-name: ${{ inputs.environment-name }}
       machineshop-image: ${{ inputs.working-image }}
       continue-on-error: true
     secrets: inherit
+
+
+  # Send-Homerun-Notification:
+  #   if: ${{ always() }}
+  #   name: Send-Homerun-Notification
+  #   uses: stuttgart-things/stuttgart-things/.github/workflows/call-homerun-notification.yaml@main
+  #   needs:
+  #     - Create-Flux-Apps
+  #   with:
+  #     notification-tags: "flux, github-actions"
+  #     notification-message: ${{ needs.Create-Flux-Apps.outputs.rendered_apps }}
+  #     runs-on: ${{ inputs.runner }}
+  #     environment-name: ${{ inputs.environment-name }}
+  #     machineshop-image: ${{ inputs.working-image }}
+  #     continue-on-error: true
+  #   secrets: inherit
