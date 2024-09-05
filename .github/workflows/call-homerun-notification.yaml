@@ -76,29 +76,32 @@ jobs:
         id: setNotificationVariables
         run: |
           echo TITLE="$(yq e '.title' ${{ env.CONFIG_DIR }}/${{ env.CONFIG_NAME }})" >> $GITHUB_ENV
+          echo SYSTEM="$(yq e '.system' ${{ env.CONFIG_DIR }}/${{ env.CONFIG_NAME }})" >> $GITHUB_ENV
+          echo MESSAGE="$(yq e '.message' ${{ env.CONFIG_DIR }}/${{ env.CONFIG_NAME }})" >> $GITHUB_ENV
+          echo TAGS="$(yq e '.tags' ${{ env.CONFIG_DIR }}/${{ env.CONFIG_NAME }})" >> $GITHUB_ENV
+          echo AUTHOR="$(yq e '.author' ${{ env.CONFIG_DIR }}/${{ env.CONFIG_NAME }})" >> $GITHUB_ENV
+          echo SEVERITY="$(yq e '.severity' ${{ env.CONFIG_DIR }}/${{ env.CONFIG_NAME }})" >> $GITHUB_ENV
+          echo ASSIGNEE="$(yq e '.assignee' ${{ env.CONFIG_DIR }}/${{ env.CONFIG_NAME }})" >> $GITHUB_ENV
+          echo ASSIGNEE_URL="$(yq e '.assigneeUrl' ${{ env.CONFIG_DIR }}/${{ env.CONFIG_NAME }})" >> $GITHUB_ENV
+          echo ARTIFACTS="$(yq e '.artifacts' ${{ env.CONFIG_DIR }}/${{ env.CONFIG_NAME }})" >> $GITHUB_ENV
+          echo URL="$(yq e '.url' ${{ env.CONFIG_DIR }}/${{ env.CONFIG_NAME }})" >> $GITHUB_ENV
         if: ${{ inputs.notification-artifact != 'unset' }}
 
       - name: Send notification to homerun
         run: |
-          echo TITLE: ${{ env.TITLE }}
-
-      # - name: Send notification to homerun
-      #   run: |
-      #     printenv
-
-      #     machineshop push \
-      #     --destination ${{ inputs.notification-url }} \
-      #     --target homerun \
-      #     --title "${TITLE}" \
-      #     --system "${SYSTEM}" \
-      #     --message "${MESSAGE_BODY}" \
-      #     --tags "${TAGS}" \
-      #     --author "${AUTHOR}" \
-      #     --severity "${WORKFLOW_SEVERITY}" \
-      #     --assignee "patrick.hermann" \
-      #     --assigneeUrl "patrick.hermann@sva.de"  \
-      #     --artifacts "INFO" \
-      #     --url "https://github.com/stuttgart-things/stuttgart-things/actions/runs/10639438939"
+          machineshop push \
+          --destination ${{ inputs.notification-url }} \
+          --target homerun \
+          --title "${{ env.TITLE }}" \
+          --system "${{ env.SYSTEM }}" \
+          --message "${{ env.MESSAGE }}" \
+          --tags "${{ env.TAGS }}" \
+          --author "${{ env.AUTHOR }}" \
+          --severity "${{ env.SEVERITY }}" \
+          --assignee "${{ env.ASSIGNEE }}" \
+          --assigneeUrl "${{ env.ASSIGNEE_URL }}"  \
+          --artifacts "${{ env.ARTIFACTS }}" \
+          --url "${{ env.URL }}"
 
 
 
