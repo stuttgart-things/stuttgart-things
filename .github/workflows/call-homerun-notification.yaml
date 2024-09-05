@@ -68,8 +68,15 @@ jobs:
       - name: Check status
         id: checkStatus
         run: |
-          echo seems like the artifact is not set
           echo TITLE="FAILED" >> $GITHUB_ENV
+          echo SYSTEM="github" >> $GITHUB_ENV
+          echo MESSAGE="github" >> $GITHUB_ENV
+          echo AUTHOR="${GITHUB_ACTOR}" >> $GITHUB_ENV
+          echo SEVERITY="ERROR" >> $GITHUB_ENV
+          echo ASSIGNEE="${GITHUB_ACTOR}" >> $GITHUB_ENV
+          echo ASSIGNEE_URL="" >> $GITHUB_ENV
+          echo ARTIFACTS="" >> $GITHUB_ENV
+          echo URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" >> $GITHUB_ENV
         if: always()
 
       - name: Check artifact
@@ -107,6 +114,7 @@ jobs:
           --assigneeUrl "${{ env.ASSIGNEE_URL }}"  \
           --artifacts "${{ env.ARTIFACTS }}" \
           --url "${{ env.URL }}"
+        if: always()
 
 
 
