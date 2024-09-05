@@ -123,3 +123,10 @@ jobs:
               echo "${play} playbook executed successfully"
           done
         shell: bash
+
+      - name: Send Notification to homerun
+        if: always()
+        run: |
+          ansible/playbooks/send-homerun-notification.yaml
+
+        shell: bash

@@ -62,20 +62,20 @@ jobs:
       extra-vars: ${{ inputs.extra-vars }}
     secrets: inherit
 
-  Send-Homerun-Notification:
-    if: ${{ always() }}
-    name: Send-Homerun-Notification
-    uses: stuttgart-things/stuttgart-things/.github/workflows/call-homerun-notification.yaml@main
-    needs:
-      -  Execute-Ansible
-    with:
-      notification-tags: "ansible, github-actions"
-      notification-message: "test"
-      runs-on: ${{ inputs.runner }}
-      environment-name: ${{ inputs.environment-name }}
-      machineshop-image: ${{ inputs.machineshop-image }}
-      continue-on-error: true
-    secrets: inherit
+  # Send-Homerun-Notification:
+  #   if: ${{ always() }}
+  #   name: Send-Homerun-Notification
+  #   uses: stuttgart-things/stuttgart-things/.github/workflows/call-homerun-notification.yaml@main
+  #   needs:
+  #     -  Execute-Ansible
+  #   with:
+  #     notification-tags: "ansible, github-actions"
+  #     notification-message: "test"
+  #     runs-on: ${{ inputs.runner }}
+  #     environment-name: ${{ inputs.environment-name }}
+  #     machineshop-image: ${{ inputs.machineshop-image }}
+  #     continue-on-error: true
+  #   secrets: inherit
 
   # Send-Homerun-Notification:
   #   if: ${{ always() }}
