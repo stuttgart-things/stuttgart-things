@@ -64,13 +64,13 @@ jobs:
           name: ${{ inputs.notification-artifact }}
           path: |-
             ${{ env.CONFIG_DIR }}
-        if: ${{ inputs.notification-artifact != 'unset' }}
 
       - name: Check status
         id: checkStatus
         run: |
           seems like the artifact is not set
-        if: ${{ inputs.notification-artifact == 'unset' }}
+          echo TITLE="FAILED" >> $GITHUB_ENV
+        if: always()
 
       - name: Check artifact
         id: setNotificationVariables
@@ -85,13 +85,15 @@ jobs:
           echo ASSIGNEE_URL="$(yq e '.assigneeUrl' ${{ env.CONFIG_DIR }}/${{ env.CONFIG_NAME }})" >> $GITHUB_ENV
           echo ARTIFACTS="$(yq e '.artifacts' ${{ env.CONFIG_DIR }}/${{ env.CONFIG_NAME }})" >> $GITHUB_ENV
           echo URL="$(yq e '.url' ${{ env.CONFIG_DIR }}/${{ env.CONFIG_NAME }})" >> $GITHUB_ENV
-        if: ${{ inputs.notification-artifact != 'unset' }}
+
+      - name: Test status
+        id: testStatus
+        run: |
+          echo TITLE: ${{ env.TITLE }}
+        if: always()
 
       - name: Send notification to homerun
         run: |
-
-
-
           machineshop push \
           --destination ${{ inputs.notification-url }} \
           --target homerun \
