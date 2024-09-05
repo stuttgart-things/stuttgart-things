@@ -1,0 +1,11 @@
+---
+title: flux applications nfs-csi for cluster fluxdev on lab labul-proxmox created from Branch flux-updated-cluster-labul-proxmox-fluxdev
+system: github
+message: 'REPOSITORY: stuttgart-things/stuttgart-things WORKFLOW: Dispatch Flux Apps RUNNER_NAME: ghr-stuttgart-things-labul-automation-r8p72-runner-2cv54 WORKFLOW-IMAGE:  ENV: k8s'
+tags: flux, k8s, apps, github-actions
+author: patrick-hermann-sva
+severity: SUCCESS
+assignee: patrick-hermann-sva
+assigneeUrl: ''
+artifacts: nfs-csi
+url: ''

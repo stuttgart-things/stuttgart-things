@@ -52,23 +52,46 @@ jobs:
     environment: ${{ inputs.environment-name }}
     continue-on-error: ${{ inputs.continue-on-error }}
     steps:
+      - name: Set variables
+        run: |
+          echo CONFIG_DIR="/tmp/homerun" >> $GITHUB_ENV
+          echo CONFIG_NAME="homerun.yaml" >> $GITHUB_ENV
+
       - uses: actions/download-artifact@v4.1.8
         with:
           name: ${{ inputs.notification-artifact }}
           path: |-
-            /tmp/homerun
-        if: ${{ inputs.notification-artifact != 'unset' }}
-
-      - name: Check artifact
-        run: |
-          ls -la /tmp/homerun
-          cat /tmp/homerun/homerun.yaml
+            ${{ env.CONFIG_DIR }}
         if: ${{ inputs.notification-artifact != 'unset' }}
 
       - name: Check status
         run: |
           seems like the artifact is not set
         if: ${{ inputs.notification-artifact == 'unset' }}
+
+      - name: Check artifact
+        run: |
+          ls -la /tmp/homerun
+          cat ${{ env.CONFIG_DIR }}/${{ env.CONFIG_NAME }}
+        if: ${{ inputs.notification-artifact != 'unset' }}
+
+      - name: Send notification to homerun
+        run: |
+          printenv
+
+          machineshop push \
+          --destination ${{ inputs.notification-url }} \
+          --target homerun \
+          --title "${TITLE}" \
+          --system "${SYSTEM}" \
+          --message "${MESSAGE_BODY}" \
+          --tags "${TAGS}" \
+          --author "${AUTHOR}" \
+          --severity "${WORKFLOW_SEVERITY}" \
+          --assignee "patrick.hermann" \
+          --assigneeUrl "patrick.hermann@sva.de"  \
+          --artifacts "INFO" \
+          --url "https://github.com/stuttgart-things/stuttgart-things/actions/runs/10639438939"
 
 
 

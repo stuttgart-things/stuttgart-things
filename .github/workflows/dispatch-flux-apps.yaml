@@ -194,8 +194,6 @@ jobs:
       - name: Create pr for (newly created) flux branch into main
         id: createPR
         run: |
-
-
           machineshop create \
           --kind pr \
           --title "${{ env.PR_TITLE }}" \
@@ -216,7 +214,7 @@ jobs:
           echo "severity: SUCCESS" >> homerun.yaml
           echo "assignee: ${GITHUB_ACTOR}" >> homerun.yaml
           echo "assigneeUrl: ''" >> homerun.yaml
-          echo "artifacts: ${{ steps.renderFluxApps.outputs.APPS }}" >> homerun.yaml
+          echo "artifacts: ${{ env.BRANCH_COMMIT_STRING }}" >> homerun.yaml
           echo "url: ''" >> homerun.yaml
 
           cat homerun.yaml
