@@ -53,11 +53,13 @@ jobs:
     continue-on-error: ${{ inputs.continue-on-error }}
     steps:
       - name: Set variables
+        id: setVariables
         run: |
           echo CONFIG_DIR="/tmp/homerun" >> $GITHUB_ENV
           echo CONFIG_NAME="homerun.yaml" >> $GITHUB_ENV
 
       - uses: actions/download-artifact@v4.1.8
+        id: downloadConfig
         with:
           name: ${{ inputs.notification-artifact }}
           path: |-
@@ -65,33 +67,38 @@ jobs:
         if: ${{ inputs.notification-artifact != 'unset' }}
 
       - name: Check status
+        id: checkStatus
         run: |
           seems like the artifact is not set
         if: ${{ inputs.notification-artifact == 'unset' }}
 
       - name: Check artifact
+        id: setNotificationVariables
         run: |
-          ls -la /tmp/homerun
-          cat ${{ env.CONFIG_DIR }}/${{ env.CONFIG_NAME }}
+          echo TITLE="$(yq e '.title' ${{ env.CONFIG_DIR }}/${{ env.CONFIG_NAME }})" >> $GITHUB_ENV
         if: ${{ inputs.notification-artifact != 'unset' }}
 
       - name: Send notification to homerun
         run: |
-          printenv
+          echo TITLE: ${{ env.TITLE }}
 
-          machineshop push \
-          --destination ${{ inputs.notification-url }} \
-          --target homerun \
-          --title "${TITLE}" \
-          --system "${SYSTEM}" \
-          --message "${MESSAGE_BODY}" \
-          --tags "${TAGS}" \
-          --author "${AUTHOR}" \
-          --severity "${WORKFLOW_SEVERITY}" \
-          --assignee "patrick.hermann" \
-          --assigneeUrl "patrick.hermann@sva.de"  \
-          --artifacts "INFO" \
-          --url "https://github.com/stuttgart-things/stuttgart-things/actions/runs/10639438939"
+      # - name: Send notification to homerun
+      #   run: |
+      #     printenv
+
+      #     machineshop push \
+      #     --destination ${{ inputs.notification-url }} \
+      #     --target homerun \
+      #     --title "${TITLE}" \
+      #     --system "${SYSTEM}" \
+      #     --message "${MESSAGE_BODY}" \
+      #     --tags "${TAGS}" \
+      #     --author "${AUTHOR}" \
+      #     --severity "${WORKFLOW_SEVERITY}" \
+      #     --assignee "patrick.hermann" \
+      #     --assigneeUrl "patrick.hermann@sva.de"  \
+      #     --artifacts "INFO" \
+      #     --url "https://github.com/stuttgart-things/stuttgart-things/actions/runs/10639438939"
 
 
 
