@@ -134,6 +134,33 @@ jobs:
           --group stuttgart-things \
           --labels terraform
 
+      - name: Create homerun notification artifact
+        id: homerunConfigCreation
+        run: |
+          printenv
+
+          echo "---" >> homerun.yaml
+          echo "title: PullRequest for bootstrap cluster: ${{ inputs.cluster-name }} w/ flux on github" >> homerun.yaml
+          echo "system: github" >> homerun.yaml
+          echo "message: 'REPOSITORY: ${GITHUB_REPOSITORY} WORKFLOW: ${GITHUB_WORKFLOW} ARTIFACT: ${{ inputs.count-vm }}x${{ inputs.vm-name }} ${{ inputs.lab-cloud }} RUNNER_NAME: ${RUNNER_NAME} WORKFLOW-IMAGE: ${{ inputs.kaniko-image }} ENV: k8s'" >> homerun.yaml
+          echo "tags: flux, terraform, github-actions" >> homerun.yaml
+          echo "author: ${GITHUB_ACTOR}" >> homerun.yaml
+          echo "severity: SUCCESS" >> homerun.yaml
+          echo "assignee: ${GITHUB_ACTOR}" >> homerun.yaml
+          echo "assigneeUrl: ''" >> homerun.yaml
+          echo "artifacts: ${{ env.destination }}/README.md; ${{ env.destination }}/${{ env.provider_name }}.${{ env.extension }}" >> homerun.yaml
+          echo "url: ''" >> homerun.yaml
+
+          cat homerun.yaml
+
+      - name: Upload homerun notification artifact
+        uses: actions/upload-artifact@v4.4.0
+        id: homerunConfigUpload
+        with:
+          name: homerun
+          path: |-
+            homerun.yaml
+
   Send-Homerun-Notification:
     if: ${{ always() }}
     name: Send-Homerun-Notification
@@ -141,8 +168,8 @@ jobs:
     needs:
       -  Create-Flux-Config
     with:
-      notification-tags: "flux, k8s, github-actions"
-      notification-message: "flux"
+      notification-artifact: homerun
+      # notification-message: "terraform vm"
       runs-on: ${{ inputs.runner }}
       environment-name: ${{ inputs.environment-name }}
       machineshop-image: ${{ inputs.working-image }}
