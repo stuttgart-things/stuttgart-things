@@ -216,6 +216,7 @@ vars:
       helmfile_version: 0.166.0 # datasource=github-tags depName=helmfile/helmfile
       argocd_version: 2.12.3 # datasource=github-tags depName=argoproj/argo-cd
       flux_version: 2.3.0 # datasource=github-tags depName=fluxcd/flux2
+      glab_version: 1.46.0 # datasource=gitlab-tags depName=gitlab-org/cli
 
       bin:
         flux:
@@ -318,3 +319,13 @@ vars:
           bin_dir: "/usr/bin"
           version_cmd: " --version"
           target_version: "v{{ helmfile_version }}"
+        glab:
+          bin_name: "glab"
+          bin_version: "v{{ glab_version }}"
+          check_bin_version_before_installing: true
+          source_url: "https://gitlab.com/gitlab-org/cli/-/releases/v{{ glab_version }}/downloads/glab_{{ glab_version }}_Linux_x86_64.tar.gz"
+          bin_to_copy: "/bin/glab"
+          to_remove: "/bin/glab"
+          bin_dir: "/usr/local/bin"
+          version_cmd: " version"
+          target_version: "v{{ glab_version }}"
