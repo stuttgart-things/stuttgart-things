@@ -73,6 +73,26 @@ playbooks:
             ignore_errors: true
             when: send_to_msteams|bool
 
+
+          - name: Send webhook to homerun
+            ansible.builtin.include_role:
+              name: sthings.base_os.create_send_webhook
+            vars:
+              title: "Testnachricht"
+              message: "Das ist eine Testnachricht"
+              severity: "Info"
+              author: "Max Mustermann"
+              timestamp: "{{ ansible_date_time.date }} {{ ansible_date_time.hour }}:{{ ansible_date_time.minute }}:{{ ansible_date_time.second }}"
+              system: "Testsystem"
+              technologyTags: "Test"
+              assigneeAddress: ""
+              assigneeName: "Max Mustermann"
+              artifacts: "https://www.google.com"
+              url: "https://www.google.com"
+            tags: notify
+            ignore_errors: true
+            when: send_to_homerun|bool
+
   - name: ansible
     play: |
       ---
