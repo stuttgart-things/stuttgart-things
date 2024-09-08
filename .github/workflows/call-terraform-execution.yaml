@@ -210,7 +210,7 @@ jobs:
         id: homerunConfigCreation
         run: |
           echo "---" >> homerun.yaml
-          echo "title: ${GITHUB_WORKFLOW}: ${{ inputs.operation }} of ${{ inputs.folder }} was successful" >> homerun.yaml
+          echo "title: ${GITHUB_WORKFLOW} - ${{ inputs.operation }} of ${{ inputs.folder }} was successful" >> homerun.yaml
           echo "system: github" >> homerun.yaml
           echo "message: 'REPOSITORY: ${GITHUB_REPOSITORY} WORKFLOW: ${GITHUB_WORKFLOW} RUNNER_NAME: ${RUNNER_NAME} WORKFLOW-IMAGE: ${{ inputs.working-image }} ENV: k8s BRANCH: ${{ inputs.branch }}'" >> homerun.yaml
           echo "tags: terraform, ${{ inputs.operation }}, github-actions" >> homerun.yaml
