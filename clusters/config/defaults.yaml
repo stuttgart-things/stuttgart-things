@@ -22,6 +22,7 @@ clusterIngressClass: nginx
 
 # APPS
 crossplaneVersion: 1.17.0
+crossplaneName: crossplane
 crossplaneNamespace: crossplane-system
 crossplaneHelmProviderVersion: v1.19.0
 crossplaneK8sProviderVersion: v0.14.1

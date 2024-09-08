@@ -5,7 +5,7 @@ template:
     apiVersion: {{ .kustomizationApiVersion }}
     kind: {{ .kustomizationKind  }}
     metadata:
-      name: {{ .vaultName }}
+      name: {{ .crossplaneName }}
       namespace: {{ .fluxNamespace }}
     spec:
       interval: {{ .interval }}
@@ -14,7 +14,7 @@ template:
       sourceRef:
         kind: {{ .fluxSourceKind }}
         name: {{ .fluxGitRepository }}
-      path: {{ .infraPath }}/{{ .vaultName }}
+      path: {{ .infraPath }}/{{ .crossplaneName }}
       prune: {{ .prune }}
       wait: {{ .wait }}
       postBuild:
