@@ -210,15 +210,15 @@ jobs:
         id: homerunConfigCreation
         run: |
           echo "---" >> homerun.yaml
-          echo "title: ${GITHUB_WORKFLOW} ${{ inputs.operation }} of ${{ inputs.folder }} successful" >> homerun.yaml
+          echo "title: ${GITHUB_WORKFLOW}: ${{ inputs.operation }} of ${{ inputs.folder }} was successful" >> homerun.yaml
           echo "system: github" >> homerun.yaml
-          echo "message: 'REPOSITORY: ${GITHUB_REPOSITORY} WORKFLOW: ${GITHUB_WORKFLOW} RUNNER_NAME: ${RUNNER_NAME} WORKFLOW-IMAGE: ${{ inputs.working-image }} ENV: k8s BRANCH: ${{ env.BRANCH_NAME }}'" >> homerun.yaml
-          echo "tags: terraform, github-actions" >> homerun.yaml
+          echo "message: 'REPOSITORY: ${GITHUB_REPOSITORY} WORKFLOW: ${GITHUB_WORKFLOW} RUNNER_NAME: ${RUNNER_NAME} WORKFLOW-IMAGE: ${{ inputs.working-image }} ENV: k8s BRANCH: ${{ inputs.branch }}'" >> homerun.yaml
+          echo "tags: terraform, ${{ inputs.operation }}, github-actions" >> homerun.yaml
           echo "author: ${GITHUB_ACTOR}" >> homerun.yaml
           echo "severity: SUCCESS" >> homerun.yaml
           echo "assignee: ${GITHUB_ACTOR}" >> homerun.yaml
           echo "assigneeUrl: ''" >> homerun.yaml
-          echo "artifacts: ''" >> homerun.yaml
+          echo "artifacts: ${{ inputs.folder }}" >> homerun.yaml
           echo "url: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" >> homerun.yaml
 
           cat homerun.yaml
