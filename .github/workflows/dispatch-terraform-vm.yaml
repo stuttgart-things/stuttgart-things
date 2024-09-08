@@ -473,7 +473,6 @@ jobs:
           path: |-
             homerun.yaml
 
-
   Send-Homerun-Notification:
     if: ${{ always() }}
     name: Send-Homerun-Notification
@@ -488,38 +487,3 @@ jobs:
       machineshop-image: ${{ inputs.working-image }}
       continue-on-error: true
     secrets: inherit
-
-  # Send-Homerun-Notification:
-  #   if: ${{ always() }}
-  #   needs: Create-VM-Config
-  #   runs-on: ghr-stuttgart-things-labul-automation
-  #   environment: k8s
-  #   container:
-  #     image: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:5e0a8cc6701035f49d8ec7831be05655dfa9df3e54d8e2aaa16142049f34f9c5
-  #   steps:
-  #     - name: Send notification to homerun w/ machineshop
-  #       shell: bash
-  #       run: |
-  #         TITLE_PREFIX="PullRequest for vm-build w/ ${{ inputs.build-engine }} ${{ inputs.count-vm }}x${{ inputs.vm-name }} on github"
-  #         SYSTEM="github"
-  #         TAGS="${{ inputs.build-engine }}, github-actions"
-  #         WORKFLOW_RESULT="created successfully"
-  #         WORKFLOW_SEVERITY="SUCCESS"
-  #         BODY="REPOSITORY: ${GITHUB_REPOSITORY} WORKFLOW: ${GITHUB_WORKFLOW} ARTIFACT: ${{ inputs.count-vm }}x${{ inputs.vm-name }} ${{ inputs.lab-cloud }} RUNNER_NAME: ${RUNNER_NAME} WORKFLOW-IMAGE: ${{ inputs.kaniko-image }} ENV: k8s"
-
-  #         if [ "${{ needs.Create-VM-Config.result }}" != "success" ]; then
-  #           WORKFLOW_RESULT="failed to create"
-  #           WORKFLOW_SEVERITY="ERROR"
-  #         fi
-
-  #         TITLE="${TITLE_PREFIX} ${WORKFLOW_RESULT}"
-
-  #         machineshop push \
-  #         --destination https://homerun.homerun-dev.sthings-vsphere.labul.sva.de/generic \
-  #         --target homerun \
-  #         --title "${TITLE}" \
-  #         --system "${SYSTEM}" \
-  #         --info "${BODY}" \
-  #         --tags "${TAGS}" \
-  #         --author "${GITHUB_ACTOR}" \
-  #         --severity "${WORKFLOW_SEVERITY}"
