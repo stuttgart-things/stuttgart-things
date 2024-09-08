@@ -11,7 +11,7 @@ secrets:
   gitlab-runner:
     - gitlab:secretName=gitlab-runner-secret, secretNamespace=flux-system
   crossplane:
-    - s3:secretName=s3, secretNamespace=crossplane-system
+    - s3:secretName=s3, secretNamespace=flux-system
 
 template:
   s3: |

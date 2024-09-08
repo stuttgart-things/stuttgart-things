@@ -37,7 +37,7 @@ spec:
                   containers:
                   - envFrom:
                     - secretRef:
-                        name: ${S3_SECRET_NAME:-s3}
+                        name: ${CROSSPLANE_TERRAFORM_S3_SECRET_NAME:-s3}
                     name: package-runtime
                     image: ${CROSSPLANE_TERRAFORM_PROVIDER_IMAGE:-eu.gcr.io/stuttgart-things/sthings-cptf:1.9.5}
                     args:

@@ -25,7 +25,11 @@ template:
           CROSSPLANE_K8S_PROVIDER_VERSION: "{{ .crossplaneK8sProviderVersion }}"
           CROSSPLANE_TERRAFORM_PROVIDER_VERSION: "{{ .crossplaneTerraformProviderVersion }}"
           CROSSPLANE_TERRAFORM_PROVIDER_IMAGE: "{{ .crossplaneTerraformProviderImage }}"
-          S3_SECRET_NAME: "{{ .crossplaneTerraformS3SecretName }}"
+          CROSSPLANE_TERRAFORM_S3_SECRET_NAME: "{{ .crossplaneTerraformS3SecretName }}"
+        substituteFrom:
+          - kind: Secret
+            name: {{ .crossplaneTerraformS3SecretName }}
+
   vault: |
     ---
     apiVersion: {{ .kustomizationApiVersion }}
