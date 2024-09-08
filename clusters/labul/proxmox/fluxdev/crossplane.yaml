@@ -22,4 +22,7 @@ spec:
       CROSSPLANE_K8S_PROVIDER_VERSION: "v0.14.1"
       CROSSPLANE_TERRAFORM_PROVIDER_VERSION: "v0.18.0"
       CROSSPLANE_TERRAFORM_PROVIDER_IMAGE: "eu.gcr.io/stuttgart-things/sthings-cptf:1.9.5"
-      S3_SECRET_NAME: "s3"
+      CROSSPLANE_TERRAFORM_S3_SECRET_NAME: "s3"
+    substituteFrom:
+      - kind: Secret
+        name: s3
