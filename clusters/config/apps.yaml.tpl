@@ -1,5 +1,32 @@
 ---
 template:
+  awx: |
+    ---
+    apiVersion: {{ .kustomizationApiVersion }}
+    kind: {{ .kustomizationKind  }}
+    metadata:
+      name: {{ .awxName }}
+      namespace: {{ .fluxNamespace }}
+    spec:
+      interval: {{ .interval }}
+      retryInterval: {{ .retryInterval }}
+      timeout: {{ .timeout }}
+      sourceRef:
+        kind: {{ .fluxSourceKind }}
+        name: {{ .fluxGitRepository }}
+      path: {{ .appsPath }}/{{ .awxName }}
+      prune: {{ .prune }}
+      wait: {{ .wait }}
+      postBuild:
+        substitute:
+          AWX_NAMESPACE: {{ .awxNamespace }}
+          AWX_VERSION: {{ .awxVersion }}
+          ISSUER_NAME: {{ .clusterCertIssuerName }}
+          ISSUER_KIND: {{ .clusterCertIssuerKind }}
+          AWX_INGRESS_HOSTNAME: awx
+          AWX_INGRESS_DOMAIN:
+          INGRESS_SECRET_NAME: awx-ingress-tls
+
   crossplane: |
     ---
     apiVersion: {{ .kustomizationApiVersion }}

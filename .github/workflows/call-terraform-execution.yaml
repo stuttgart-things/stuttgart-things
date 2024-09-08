@@ -206,6 +206,32 @@ jobs:
           token: ${{ steps.generate-token.outputs.token }}
           branch: ${{ inputs.folder }}
 
+      - name: Create homerun notification artifact
+        id: homerunConfigCreation
+        run: |
+          echo "---" >> homerun.yaml
+          echo "title: TERRAFORM EXECUTION" >> homerun.yaml
+          echo "system: github" >> homerun.yaml
+          echo "message: 'REPOSITORY: ${GITHUB_REPOSITORY} WORKFLOW: ${GITHUB_WORKFLOW} RUNNER_NAME: ${RUNNER_NAME} WORKFLOW-IMAGE: ${{ inputs.working-image }} ENV: k8s BRANCH: ${{ env.BRANCH_NAME }}'" >> homerun.yaml
+          echo "tags: terraform, github-actions" >> homerun.yaml
+          echo "author: ${GITHUB_ACTOR}" >> homerun.yaml
+          echo "severity: SUCCESS" >> homerun.yaml
+          echo "assignee: ${GITHUB_ACTOR}" >> homerun.yaml
+          echo "assigneeUrl: ''" >> homerun.yaml
+          echo "artifacts: ''" >> homerun.yaml
+          echo "url: ${{ env.WORKFLOW_URL }}" >> homerun.yaml
+
+          cat homerun.yaml
+
+      - name: Upload homerun notification artifact
+        uses: actions/upload-artifact@v4.4.0
+        id: homerunConfigUpload
+        with:
+          name: homerun
+          path: |-
+            homerun.yaml
+
+
   Merge-Terraform-PR:
     name: Merge Terraform PR
     if: ${{ (inputs.operation == 'destroy') && (inputs.delete-folder == true || inputs.delete-folder  == 'true') && (inputs.branch == 'main') }}

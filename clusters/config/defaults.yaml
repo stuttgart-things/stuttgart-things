@@ -21,6 +21,13 @@ clusterStorageClass: nfs4-csi
 clusterIngressClass: nginx
 
 # APPS
+awxName: awx
+awxVersion: 2.19.1
+awxNamespace: awx
+
+
+
+
 crossplaneVersion: 1.17.0
 crossplaneName: crossplane
 crossplaneNamespace: crossplane-system

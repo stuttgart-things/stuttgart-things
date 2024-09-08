@@ -3,35 +3,35 @@ apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: awx-operator
-  namespace: awx
+  namespace: ${AWX_NAMESPACE:-awx}
 spec:
   interval: 30m
   chart:
     spec:
       chart: awx-operator
-      version: 2.10.0
+      version: ${AWX_VERSION:-2.19.1}
       sourceRef:
         kind: HelmRepository
         name: awx-operator
-        namespace: awx
+        namespace: ${AWX_NAMESPACE:-awx}
       interval: 12h
   values:
     installCRDs: true
     AWX:
-      enabled: true
-      name: awx
-      spec:
-        admin_user: ${ADMIN_USER}
-        ingress_type: ingress
-        ingress_class_name: ${INGRESS_CLASS}
-        hostname: ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}
-        ingress_tls_secret: ${INGRESS_SECRET_NAME}
-        projects_persistence: false
-        projects_storage_class: ${STORAGE_CLASS:-longhorn}
-        projects_storage_access_mode: ReadWriteMany
-        postgres_storage_class: ${STORAGE_CLASS:-longhorn}
-        postgres_storage_requirements:
-          requests:
-            storage: ${STORAGE_SIZE:-1Gi}
-          limits:
-            storage: ${STORAGE_SIZE:-8Gi}
+      enabled: false
+      # name: awx
+      # spec:
+      #   admin_user: ${ADMIN_USER}
+      #   ingress_type: ingress
+      #   ingress_class_name: ${INGRESS_CLASS}
+      #   hostname: ${AWX_INGRESS_HOSTNAME}.${AWX_INGRESS_DOMAIN}
+      #   ingress_tls_secret: ${INGRESS_SECRET_NAME}
+      #   projects_persistence: false
+      #   projects_storage_class: ${STORAGE_CLASS:-longhorn}
+      #   projects_storage_access_mode: ReadWriteMany
+      #   postgres_storage_class: ${STORAGE_CLASS:-longhorn}
+      #   postgres_storage_requirements:
+      #     requests:
+      #       storage: ${STORAGE_SIZE:-1Gi}
+      #     limits:
+      #       storage: ${STORAGE_SIZE:-8Gi}

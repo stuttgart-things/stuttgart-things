@@ -57,8 +57,7 @@ jobs:
     needs:
       -  Execute-Terraform
     with:
-      notification-tags: "terraform, github-actions"
-      notification-message: ${{ needs.Execute-Terraform.outputs.tf-output }}
+      notification-artifact: homerun
       runs-on: ${{ inputs.runner }}
       environment-name: ${{ inputs.environment-name }}
       machineshop-image: ${{ inputs.machineshop-image }}
