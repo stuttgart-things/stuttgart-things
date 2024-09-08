@@ -3,17 +3,17 @@ apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: crossplane-deployment
-  namespace: crossplane-system
+  namespace: ${CROSSPLANE_NAMESPACE:-crossplane-system}
 spec:
   interval: 30m
   chart:
     spec:
       chart: crossplane
-      version: 1.16.0
+      version: ${CROSSPLANE_VERSION:-1.17.0}
       sourceRef:
         kind: HelmRepository
         name: crossplane-stable
-        namespace: crossplane-system
+        namespace: ${CROSSPLANE_NAMESPACE:-crossplane-system}
       interval: 12h
   values:
     args:
@@ -22,5 +22,5 @@ spec:
       - '--enable-external-secret-stores'
     provider:
       packages:
-        - xpkg.upbound.io/crossplane-contrib/provider-helm:v0.17.0
-        - xpkg.upbound.io/crossplane-contrib/provider-kubernetes:v0.13.0
+        - xpkg.upbound.io/crossplane-contrib/provider-helm:${CROSSPLANE_HELM_PROVIDER_VERSION:-v1.19.0}
+        - xpkg.upbound.io/crossplane-contrib/provider-kubernetes:${CROSSPLANE_K8S_PROVIDER_VERSION:-v0.14.1}

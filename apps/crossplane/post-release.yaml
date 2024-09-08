@@ -3,12 +3,12 @@ apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: crossplane-configuration
-  namespace: crossplane-system
+  namespace: ${CROSSPLANE_NAMESPACE:-crossplane-system}
 spec:
   interval: 30m
   dependsOn:
     - name: crossplane-deployment
-      namespace: crossplane-system
+      namespace: ${CROSSPLANE_NAMESPACE:-crossplane-system}
   chart:
     spec:
       chart: sthings-cluster
@@ -16,7 +16,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: stuttgart-things
-        namespace: crossplane-system
+        namespace: ${CROSSPLANE_NAMESPACE:-crossplane-system}
       interval: 12h
   values:
     installCRDs: true
@@ -26,7 +26,7 @@ spec:
         kind: DeploymentRuntimeConfig
         metadata:
           name: cacerts-labul-vsphere
-          namespace: crossplane-system
+          namespace: ${CROSSPLANE_NAMESPACE:-crossplane-system}
         spec:
           deploymentTemplate:
             spec:
@@ -50,8 +50,8 @@ spec:
         kind: Provider
         metadata:
           name: provider-terraform
-          namespace: crossplane-system
+          namespace: ${CROSSPLANE_NAMESPACE:-crossplane-system}
         spec:
-          package: xpkg.upbound.io/upbound/provider-terraform:v0.16.0
+          package: xpkg.upbound.io/upbound/provider-terraform:${CROSSPLANE_TERRAFORM_PROVIDER_VERSION:-v0.18.0}
           runtimeConfigRef:
             name: cacerts-labul-vsphere
