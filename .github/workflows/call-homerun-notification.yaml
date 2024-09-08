@@ -68,9 +68,10 @@ jobs:
       - name: Check status
         id: checkStatus
         run: |
-          echo TITLE="FAILED" >> $GITHUB_ENV
+          echo TITLE="${GITHUB_WORKFLOW} FAILED" >> $GITHUB_ENV
           echo SYSTEM="github" >> $GITHUB_ENV
-          echo MESSAGE="github" >> $GITHUB_ENV
+          echo MESSAGE="REPOSITORY: ${GITHUB_REPOSITORY} WORKFLOW: ${GITHUB_WORKFLOW} RUNNER_NAME: ${RUNNER_NAME}" >> $GITHUB_ENV
+          echo TAGS="github-actions" >> $GITHUB_ENV
           echo AUTHOR="${GITHUB_ACTOR}" >> $GITHUB_ENV
           echo SEVERITY="ERROR" >> $GITHUB_ENV
           echo ASSIGNEE="${GITHUB_ACTOR}" >> $GITHUB_ENV

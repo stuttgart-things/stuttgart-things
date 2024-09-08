@@ -63,28 +63,3 @@ jobs:
       machineshop-image: ${{ inputs.machineshop-image }}
       continue-on-error: true
     secrets: inherit
-
-    # run: |
-    #   TITLE_PREFIX="Terraform execution ${{ inputs.operation }} for ${{ inputs.folder }} on github actions"
-    #   SYSTEM="github"
-    #   TAGS="terraform,github-actions"
-    #   WORKFLOW_RESULT="succeded"
-    #   WORKFLOW_SEVERITY="SUCCESS"
-    #   BODY="REPOSITORY: ${GITHUB_REPOSITORY} WORKFLOW: ${GITHUB_WORKFLOW} ARTIFACT: ${{ inputs.folder }}@${{ inputs.branch-name }} RUNNER_NAME: ${RUNNER_NAME} WORKFLOW-IMAGE: ${{ inputs.kaniko-image }} ENV: ${{ inputs.environment-name }}"
-
-    #   if [ "${{ needs.Execute-Terraform.result }}" != "success" ]; then
-    #     WORKFLOW_RESULT="failed"
-    #     WORKFLOW_SEVERITY="ERROR"
-    #   fi
-
-    #   TITLE="${TITLE_PREFIX} ${WORKFLOW_RESULT}"
-
-    #   machineshop push \
-    #   --destination https://homerun.homerun-dev.sthings-vsphere.labul.sva.de/generic \
-    #   --target homerun \
-    #   --title "${TITLE}" \
-    #   --system "${SYSTEM}" \
-    #   --info "${BODY}" \
-    #   --tags "${TAGS}" \
-    #   --author "${GITHUB_ACTOR}" \
-    #   --severity "${WORKFLOW_SEVERITY}"
