@@ -1,5 +1,31 @@
 ---
 template:
+  crossplane: |
+    ---
+    apiVersion: {{ .kustomizationApiVersion }}
+    kind: {{ .kustomizationKind  }}
+    metadata:
+      name: {{ .vaultName }}
+      namespace: {{ .fluxNamespace }}
+    spec:
+      interval: {{ .interval }}
+      retryInterval: {{ .retryInterval }}
+      timeout: {{ .timeout }}
+      sourceRef:
+        kind: {{ .fluxSourceKind }}
+        name: {{ .fluxGitRepository }}
+      path: {{ .infraPath }}/{{ .vaultName }}
+      prune: {{ .prune }}
+      wait: {{ .wait }}
+      postBuild:
+        substitute:
+          CROSSPLANE_NAMESPACE: {{ .crossplaneNamespace }}
+          CROSSPLANE_VERSION: {{ .crossplaneVersion }}
+          CROSSPLANE_HELM_PROVIDER_VERSION: "{{ .crossplaneHelmProviderVersion }}"
+          CROSSPLANE_K8S_PROVIDER_VERSION: "{{ .crossplaneK8sProviderVersion }}"
+          CROSSPLANE_TERRAFORM_PROVIDER_VERSION: "{{ .crossplaneTerraformProviderVersion }}"
+          CROSSPLANE_TERRAFORM_PROVIDER_IMAGE: "{{ .crossplaneTerraformProviderImage }}"
+          S3_SECRET_NAME: "{{ .crossplaneTerraformS3SecretName }}"
   vault: |
     ---
     apiVersion: {{ .kustomizationApiVersion }}
