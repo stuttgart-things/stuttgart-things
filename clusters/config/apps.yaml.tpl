@@ -14,7 +14,7 @@ template:
       sourceRef:
         kind: {{ .fluxSourceKind }}
         name: {{ .fluxGitRepository }}
-      path: {{ .infraPath }}/{{ .crossplaneName }}
+      path: {{ .appsPath }}/{{ .crossplaneName }}
       prune: {{ .prune }}
       wait: {{ .wait }}
       postBuild:
