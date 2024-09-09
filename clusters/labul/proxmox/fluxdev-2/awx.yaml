@@ -1,0 +1,27 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: awx
+  namespace: flux-system
+spec:
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./apps/awx
+  prune: true
+  wait: true
+  postBuild:
+    substitute:
+      AWX_NAMESPACE: awx
+      AWX_VERSION: 2.19.1
+      AWX_HOSTNAME: awx
+      ISSUER_NAME: cluster-issuer-approle
+      ISSUER_KIND: ClusterIssuer
+      INGRESS_SECRET_NAME: awx-ingress-tls
+    substituteFrom:
+      - kind: Secret
+        name: cluster-ingress-secret
