@@ -137,5 +137,5 @@ jobs:
         run: |
           echo ${STEPS_CONTEXT} | jq 'to_entries | map(select(.value.outcome == "failure" or .value.conclusion == "failure"))'
           printf "localhost ansible_connection=local\n" >> inventory
-          ansible-playbook ansible/playbooks/send-homerun-notification.yaml -i inventory -e target_host=localhost
+          ansible-playbook ansible/playbooks/send-homerun-notification.yaml -i inventory -e target_host=localhost -vv
         shell: bash
