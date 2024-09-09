@@ -24,7 +24,7 @@ spec:
       #   admin_user: ${ADMIN_USER}
       #   ingress_type: ingress
       #   ingress_class_name: ${INGRESS_CLASS}
-      #   hostname: ${DOMAIN}.${AWX_INGRESS_DOMAIN}
+      #   hostname: ${AWX_INGRESS_HOSTNAME}.${AWX_INGRESS_DOMAIN}
       #   ingress_tls_secret: ${INGRESS_SECRET_NAME}
       #   projects_persistence: false
       #   projects_storage_class: ${STORAGE_CLASS:-longhorn}
