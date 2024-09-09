@@ -116,7 +116,7 @@ jobs:
       - name: Create branch for flux config
         id: createBranch
         run: |
-          echo ARTIFACTS="flux.tf:${{ env.TF_PROJECT_DIR }}/flux.tf,state.tf:${{ env.TF_PROJECT_DIR }}/state.tf,file-secrets.yaml:${{ env.TF_PROJECT_DIR }}/file-secrets.yaml,terraform.tfvars:${{ env.TF_PROJECT_DIR }}/terraform.tfvars" >> $GITHUB_ENV
+          ARTIFACTS="flux.tf:${{ env.TF_PROJECT_DIR }}/flux.tf,state.tf:${{ env.TF_PROJECT_DIR }}/state.tf,file-secrets.yaml:${{ env.TF_PROJECT_DIR }}/file-secrets.yaml,terraform.tfvars:${{ env.TF_PROJECT_DIR }}/terraform.tfvars" >> $GITHUB_ENV
 
           machineshop create \
           --kind branch \
@@ -124,6 +124,8 @@ jobs:
           --repository stuttgart-things \
           --group stuttgart-things \
           --files "${ARTIFACTS}" \
+
+          echo ARTIFACTS=${ARTIFACTS}" >> $GITHUB_ENV
 
       - name: Create pr for (newly created) flux branch into main
         id: createPR
@@ -171,45 +173,8 @@ jobs:
       -  Create-Flux-Config
     with:
       notification-artifact: homerun
-      # notification-message: "terraform vm"
       runs-on: ${{ inputs.runner }}
       environment-name: ${{ inputs.environment-name }}
       machineshop-image: ${{ inputs.working-image }}
       continue-on-error: true
     secrets: inherit
-
-
-  # Send-Homerun-Notification:
-  #   if: ${{ always() }}
-  #   needs: Create-Flux-Config
-  #   runs-on: ${{ inputs.runner }}
-  #   environment: ${{ inputs.environment-name }}
-  #   container:
-  #     image: ${{ inputs.working-image }}
-  #   steps:
-  #     - name: Send notification to homerun w/ machineshop
-  #       shell: bash
-  #       run: |
-  #         TITLE_PREFIX="PullRequest for bootstrap cluster: ${{ inputs.cluster-name }} w/ flux on github"
-  #         SYSTEM="github"
-  #         TAGS="flux, terraform, github-actions"
-  #         WORKFLOW_RESULT="created successfully"
-  #         WORKFLOW_SEVERITY="SUCCESS"
-  #         BODY="REPOSITORY: ${GITHUB_REPOSITORY} WORKFLOW: ${GITHUB_WORKFLOW} ARTIFACT: ${{ inputs.cluster-name }} ${{ inputs.lab-cloud }} RUNNER_NAME: ${RUNNER_NAME} WORKFLOW-IMAGE: ${{ inputs.working-image }} ENV: ${{ inputs.environment-name }}"
-
-  #         if [ "${{ needs.Create-Flux-Config.result }}" != "success" ]; then
-  #           WORKFLOW_RESULT="failed to create"
-  #           WORKFLOW_SEVERITY="ERROR"
-  #         fi
-
-  #         TITLE="${TITLE_PREFIX} ${WORKFLOW_RESULT}"
-
-  #         machineshop push \
-  #         --destination https://homerun.homerun-dev.sthings-vsphere.labul.sva.de/generic \
-  #         --target homerun \
-  #         --title "${TITLE}" \
-  #         --system "${SYSTEM}" \
-  #         --info "${BODY}" \
-  #         --tags "${TAGS}" \
-  #         --author "${GITHUB_ACTOR}" \
-  #         --severity "${WORKFLOW_SEVERITY}"
