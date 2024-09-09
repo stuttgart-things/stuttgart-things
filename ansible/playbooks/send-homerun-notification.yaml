@@ -1,22 +1,23 @@
 ---
-- hosts: localhost
+- hosts: "{{ target_host | default('localhost') }}"
   vars:
-    title: "Testnachricht"
-    message: "Das ist eine Testnachricht"
-    severity: "Info"
-    author: "Max Mustermann"
+    title: "{{ lookup('ansible.builtin.env', 'GITHUB_WORKFLOW') }} was successful"
+    message: "REPOSITORY: {{ lookup('ansible.builtin.env', 'GITHUB_REPOSITORY') }} RUNNER_NAME: {{ lookup('ansible.builtin.env', 'RUNNER_NAME') }}'"
+    severity: "SUCCESS"
+    author: "{{ lookup('ansible.builtin.env', 'GITHUB_ACTOR') }}"
     timestamp: "{{ ansible_date_time.date }} {{ ansible_date_time.hour }}:{{ ansible_date_time.minute }}:{{ ansible_date_time.second }}"
-    system: "Testsystem"
-    technologyTags: "Test"
+    system: "github"
+    technologyTags: "github-actions, ansible"
     assigneeAddress: ""
-    assigneeName: "Max Mustermann"
-    artifacts: "https://www.google.com"
-    url: "https://www.google.com"
+    assigneeName: "{{ lookup('ansible.builtin.env', 'GITHUB_ACTOR') }}"
+    artifacts: ""
+    url: "{{ lookup('ansible.builtin.env', 'GITHUB_SERVER_URL') }}/{{ lookup('ansible.builtin.env', 'GITHUB_REPOSITORY') }}/actions/runs/{{ lookup('ansible.builtin.env', 'GITHUB_RUN_ID') }}"
+    homerun_url: "https://homerun.homerun-dev.sthings-vsphere.labul.sva.de/generic"
 
   tasks:
-    - name: Sende Daten an die API
+    - name: Send Notification to Homerun
       uri:
-        url: https://homerun.homerun-dev.sthings-vsphere.labul.sva.de/generic
+        url: "{{ homerun_url }}"
         method: POST
         body: |
           {
@@ -39,6 +40,6 @@
         status_code: 200
       register: response
 
-    - name: Zeige Antwort
-      debug:
+    - name: Show Response
+      ansible.builtin.debug:
         var: response
