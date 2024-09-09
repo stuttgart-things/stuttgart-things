@@ -53,12 +53,14 @@ jobs:
       ANSIBLE_HOST_KEY_CHECKING: False
     steps:
       - name: Checkout code
+        id: checkout-code
         uses: actions/checkout@v4.1.7
         with:
           fetch-depth: '0'
           ref: ${{ inputs.branch }}
 
       - name: Output Parameters
+        id: output-parameters
         run: |
           ansible --version
           echo PATH-TO-PRIVATEKEY: ${{ inputs.private-key }}
@@ -68,6 +70,7 @@ jobs:
         shell: bash
 
       - name: Get Private Key
+        id: get-private-key
         run: |
           mkdir ~/.ssh/
           machineshop get --path "${{ inputs.private-key }}" --b64 true | tail -n +8 > ~/.ssh/id_rsa
@@ -75,18 +78,20 @@ jobs:
         shell: bash
 
       - name: Create Inventory
+        id: create-inventory
         run: |
           if [[ ${{ inputs.inventory }} == *'['* ]] || [[ ${{ inputs.inventory }} == *']'* ]]; then
             echo ${{ inputs.inventory }} | tr '+' '\n' | sed 's/.\(.*\)/\0/'| sed 's/ //g' > inventory
           else
             echo ${{ inputs.inventory }} | tr ',' '\n' | sed 's/.\(.*\)/\0/'| sed 's/ //g' > inventory
           fi
-          printf "[[localhost]\nlocalhost ansible_connection=local\n" >> inventory
+          printf "[localhost]\nlocalhost ansible_connection=local\n" >> inventory
           printf "[all:vars]\nansible_user=${{ inputs.ansible-user }}\n" >> inventory
           cat inventory
         shell: bash
 
       - name: Wait for ssh
+        id: wait-for-ssh
         run: |
           cat << EOF > ./wait-for-ssh.yaml
           ---
@@ -111,6 +116,7 @@ jobs:
         shell: bash
 
       - name: Execute Ansible
+        id: execute-ansible
         run: |
           ansible-galaxy install -r ${{ inputs.requirements-file }} -f
 
@@ -126,6 +132,9 @@ jobs:
 
       - name: Send Notification to Homerun
         if: always()
+        env:
+          STEPS_CONTEXT: ${{ toJson(steps) }}
         run: |
-          ansible-playbook playbooks/send-homerun-notification.yaml -i inventory -e target_host=localhost
+          echo ${STEPS_CONTEXT} | jq
+          ansible-playbook ansible/playbooks/send-homerun-notification.yaml -i inventory -e target_host=localhost
         shell: bash
