@@ -65,8 +65,8 @@ jobs:
           path: |-
             ${{ env.CONFIG_DIR }}
 
-      - name: Check status
-        id: checkStatus
+      - name: Set defaults
+        id: setDefaults
         run: |
           echo TITLE="${GITHUB_WORKFLOW} FAILED" >> $GITHUB_ENV
           echo SYSTEM="github" >> $GITHUB_ENV
@@ -93,12 +93,6 @@ jobs:
           echo ASSIGNEE_URL="$(yq e '.assigneeUrl' ${{ env.CONFIG_DIR }}/${{ env.CONFIG_NAME }})" >> $GITHUB_ENV
           echo ARTIFACTS="$(yq e '.artifacts' ${{ env.CONFIG_DIR }}/${{ env.CONFIG_NAME }})" >> $GITHUB_ENV
           echo URL="$(yq e '.url' ${{ env.CONFIG_DIR }}/${{ env.CONFIG_NAME }})" >> $GITHUB_ENV
-
-      - name: Test status
-        id: testStatus
-        run: |
-          echo TITLE: ${{ env.TITLE }}
-        if: always()
 
       - name: Send notification to homerun
         run: |

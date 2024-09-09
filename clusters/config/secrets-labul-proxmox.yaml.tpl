@@ -2,7 +2,8 @@
 secrets:
   cert-manager:
     - vault:secretName=cert-manager-secret, secretNamespace=flux-system
-    - cluster:secretName=cluster-secret, secretNamespace=flux-system
+  ingress-nginx:
+    - cluster:secretName=cluster-ingress-secret, secretNamespace=flux-system
   tekton:
     - vault:secretName=tekton-vault-secret, secretNamespace=flux-system
   gh-rss:

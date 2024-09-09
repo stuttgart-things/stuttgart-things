@@ -276,6 +276,9 @@ template:
         substitute:
           INGRESS_NGINX_NAMESPACE: {{ .ingressNginxNamespace }}
           INGRESS_NGINX_CHART_VERSION: {{ .ingressNginxVersion }}
+        substituteFrom:
+          - kind: Secret
+            name: {{ .ingressNginxSecretName }}
 
   metallb: |
     ---

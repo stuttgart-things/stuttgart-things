@@ -97,6 +97,7 @@ zotPersistence: true
 ingressNginxName: ingress-nginx
 ingressNginxNamespace: ingress-nginx
 ingressNginxVersion: 4.11.2
+ingressNginxSecretName: cluster-ingress-secret
 
 metallbName: metallb
 metallbNamespace: metallb-system
