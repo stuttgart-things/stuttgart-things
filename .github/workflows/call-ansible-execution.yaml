@@ -135,7 +135,12 @@ jobs:
         env:
           STEPS_CONTEXT: ${{ toJson(steps) }}
         run: |
-          echo ${STEPS_CONTEXT} | jq 'to_entries | map(select(.value.outcome == "failure" or .value.conclusion == "failure"))'
+          if echo ${STEPS_CONTEXT} | jq 'to_entries | map(select(.value.outcome == "failure" or .value.conclusion == "failure"))'
+            WORKFLOW_STATUS="FAILED"
+          else
+            WORKFLOW_STATUS="SUCCESS"
+          fi
+
           printf "localhost ansible_connection=local\n" >> inventory
-          ansible-playbook ansible/playbooks/send-homerun-notification.yaml -i inventory -e target_host=localhost -vv
+          ansible-playbook ansible/playbooks/send-homerun-notification.yaml -e severity=${WORKFLOW_STATUS} -i inventory -e target_host=localhost -vv
         shell: bash

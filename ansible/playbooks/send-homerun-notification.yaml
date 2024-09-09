@@ -1,9 +1,9 @@
 ---
 - hosts: "{{ target_host | default('localhost') }}"
   vars:
-    title: "{{ lookup('ansible.builtin.env', 'GITHUB_WORKFLOW') }} was successful"
+    title: "{{ lookup('ansible.builtin.env', 'GITHUB_WORKFLOW') }} was a {{ severity | lower }}"
     message: "REPOSITORY: {{ lookup('ansible.builtin.env', 'GITHUB_REPOSITORY') }} RUNNER_NAME: {{ lookup('ansible.builtin.env', 'RUNNER_NAME') }}'"
-    severity: "SUCCESS"
+    severity: ""
     author: "{{ lookup('ansible.builtin.env', 'GITHUB_ACTOR') }}"
     timestamp: "{{ ansible_date_time.date }} {{ ansible_date_time.hour }}:{{ ansible_date_time.minute }}:{{ ansible_date_time.second }}"
     system: "github"
