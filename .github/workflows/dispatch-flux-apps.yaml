@@ -207,7 +207,7 @@ jobs:
         id: homerunConfigCreation
         run: |
           echo "---" >> homerun.yaml
-          echo "title: ${{ env.PR_TITLE }}" >> homerun.yaml
+          echo "title: '${{ env.PR_TITLE }}'" >> homerun.yaml
           echo "system: github" >> homerun.yaml
           echo "message: 'REPOSITORY: ${GITHUB_REPOSITORY} WORKFLOW: ${GITHUB_WORKFLOW} RUNNER_NAME: ${RUNNER_NAME} WORKFLOW-IMAGE: ${{ inputs.working-image }} ENV: k8s BRANCH: ${{ env.BRANCH_NAME }}'" >> homerun.yaml
           echo "tags: flux, k8s, apps, github-actions" >> homerun.yaml
