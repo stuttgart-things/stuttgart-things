@@ -125,7 +125,7 @@ jobs:
           --group stuttgart-things \
           --files "${ARTIFACTS}" \
 
-          echo ARTIFACTS=${ARTIFACTS}" >> $GITHUB_ENV
+          echo ARTIFACTS="${ARTIFACTS}" >> $GITHUB_ENV
 
       - name: Create pr for (newly created) flux branch into main
         id: createPR
