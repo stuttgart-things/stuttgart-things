@@ -81,7 +81,7 @@ jobs:
           else
             echo ${{ inputs.inventory }} | tr ',' '\n' | sed 's/.\(.*\)/\0/'| sed 's/ //g' > inventory
           fi
-
+          printf "[[localhost]\nlocalhost ansible_connection=local\n" >> inventory
           printf "[all:vars]\nansible_user=${{ inputs.ansible-user }}\n" >> inventory
           cat inventory
         shell: bash
