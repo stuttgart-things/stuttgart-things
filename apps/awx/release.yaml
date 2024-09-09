@@ -22,7 +22,15 @@ spec:
       name: awx
       spec:
         admin_user: admin
-    
+        postgres_storage_class: nfs4-csi
+        postgres_storage_requirements:
+          limits:
+            storage: 8Gi
+          requests:
+            storage: 1Gi
+        projects_persistence: false
+        projects_storage_access_mode: ReadWriteMany
+        projects_storage_class: nfs4-csi
 
       # name: awx
       # spec:
