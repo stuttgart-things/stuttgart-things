@@ -16,35 +16,22 @@ spec:
         namespace: ${AWX_NAMESPACE:-awx}
       interval: 12h
   values:
-    installCRDs: true
+    installCRDs: ${AWX_INSTALL_CRDS:-true}
     AWX:
-      enabled: true
-      name: awx
+      enabled:  ${AWX_CR_ENABLED:-true}
+      name: ${AWX_CR_NAME}
       spec:
-        admin_user: admin
-        postgres_storage_class: nfs4-csi
+        admin_user: ${AWX_ADMIN_USER:-admin}
+        postgres_storage_class: ${AWX_STORAGE_CLASS}
         postgres_storage_requirements:
           limits:
-            storage: 8Gi
+            storage: ${AWX_STORAGE_LIMIT:-8Gi}  
           requests:
-            storage: 1Gi
+            storage: ${AWX_STORAGE_REQUEST:-1Gi}  
         projects_persistence: false
-        projects_storage_access_mode: ReadWriteMany
-        projects_storage_class: nfs4-csi
-
-      # name: awx
-      # spec:
-      #   admin_user: ${ADMIN_USER}
-      #   ingress_type: ingress
-      #   ingress_class_name: ${INGRESS_CLASS}
-      #   hostname: ${AWX_INGRESS_HOSTNAME}.${AWX_INGRESS_DOMAIN}
-      #   ingress_tls_secret: ${INGRESS_SECRET_NAME}
-      #   projects_persistence: false
-      #   projects_storage_class: ${STORAGE_CLASS:-longhorn}
-      #   projects_storage_access_mode: ReadWriteMany
-      #   postgres_storage_class: ${STORAGE_CLASS:-longhorn}
-      #   postgres_storage_requirements:
-      #     requests:
-      #       storage: ${STORAGE_SIZE:-1Gi}
-      #     limits:
-      #       storage: ${STORAGE_SIZE:-8Gi}
+        projects_storage_access_mode: ${AWX_STORAGE_MODE:-ReadWriteMany} 
+        projects_storage_class: ${AWX_STORAGE_CLASS}
+        ingress_type: ingress
+        ingress_class_name: ${INGRESS_CLASS:-nginx}
+        hostname: ${AWX_HOSTNAME}.${DOMAIN}
+        ingress_tls_secret: ${INGRESS_SECRET_NAME}
