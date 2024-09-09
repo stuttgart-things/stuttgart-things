@@ -21,11 +21,13 @@ template:
         substitute:
           AWX_NAMESPACE: {{ .awxNamespace }}
           AWX_VERSION: {{ .awxVersion }}
+          AWX_HOSTNAME: {{ .awxHostname }}
           ISSUER_NAME: {{ .clusterCertIssuerName }}
           ISSUER_KIND: {{ .clusterCertIssuerKind }}
-          AWX_INGRESS_HOSTNAME: awx
-          AWX_INGRESS_DOMAIN:
-          INGRESS_SECRET_NAME: awx-ingress-tls
+          INGRESS_SECRET_NAME: {{ .awxIngressSecretName }}
+        substituteFrom:
+          - kind: Secret
+            name: {{ .ingressNginxSecretName }}
 
   crossplane: |
     ---

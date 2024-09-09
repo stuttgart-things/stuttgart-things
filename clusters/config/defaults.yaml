@@ -24,9 +24,8 @@ clusterIngressClass: nginx
 awxName: awx
 awxVersion: 2.19.1
 awxNamespace: awx
-
-
-
+awxHostname: awx
+awxIngressSecretName: awx-ingress-tls
 
 crossplaneVersion: 1.17.0
 crossplaneName: crossplane
