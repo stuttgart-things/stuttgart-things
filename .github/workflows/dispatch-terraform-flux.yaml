@@ -64,6 +64,7 @@ jobs:
           echo FLUX_STATE_TEMPLATE="terraform/state-provider.tf.tpl" >> $GITHUB_ENV
           echo FLUX_TFVARS_TEMPLATE="terraform/flux-tfvars.tf.tpl" >> $GITHUB_ENV
           echo FLUX_FILE_SECRETS="terraform/flux-file-secrets.yaml.tpl" >> $GITHUB_ENV
+          echo FLUX_LABELS="flux, flux-bootstrap, terraform, github-actions" >> $GITHUB_ENV
 
       - name: Create Flux config dir
         id: configDir
@@ -136,7 +137,7 @@ jobs:
           --branch ${{ env.TF_PROJECT_DIR }} \
           --repository stuttgart-things \
           --group stuttgart-things \
-          --labels terraform
+          --labels flux-bootstrap
 
       - name: Create homerun notification artifact
         id: homerunConfigCreation
@@ -147,7 +148,7 @@ jobs:
           echo "title: PullRequest for bootstrap cluster: ${{ inputs.cluster-name }} w/ flux on github" >> homerun.yaml
           echo "system: github" >> homerun.yaml
           echo "message: 'REPOSITORY: ${GITHUB_REPOSITORY} WORKFLOW: ${GITHUB_WORKFLOW} RUNNER_NAME: ${RUNNER_NAME} WORKFLOW-IMAGE: ${{ inputs.kaniko-image }} ENV: k8s'" >> homerun.yaml
-          echo "tags: flux, terraform, github-actions" >> homerun.yaml
+          echo "tags: ${{ env.FLUX_LABELS }}" >> homerun.yaml
           echo "author: ${GITHUB_ACTOR}" >> homerun.yaml
           echo "severity: SUCCESS" >> homerun.yaml
           echo "assignee: ${GITHUB_ACTOR}" >> homerun.yaml
