@@ -85,7 +85,7 @@ jobs:
           else
             echo ${{ inputs.inventory }} | tr ',' '\n' | sed 's/.\(.*\)/\0/'| sed 's/ //g' > inventory
           fi
-          printf "[localhost]\nlocalhost ansible_connection=local\n" >> inventory
+
           printf "[all:vars]\nansible_user=${{ inputs.ansible-user }}\n" >> inventory
           cat inventory
         shell: bash
@@ -135,6 +135,7 @@ jobs:
         env:
           STEPS_CONTEXT: ${{ toJson(steps) }}
         run: |
-          echo ${STEPS_CONTEXT} | jq
+          echo ${STEPS_CONTEXT} | jq 'to_entries | map(select(.value.outcome == "failure" or .value.conclusion == "failure"))'
+          printf "localhost ansible_connection=local\n" >> inventory
           ansible-playbook ansible/playbooks/send-homerun-notification.yaml -i inventory -e target_host=localhost
         shell: bash
