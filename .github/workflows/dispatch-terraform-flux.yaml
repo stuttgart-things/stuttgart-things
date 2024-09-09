@@ -137,7 +137,17 @@ jobs:
           --branch ${{ env.TF_PROJECT_DIR }} \
           --repository stuttgart-things \
           --group stuttgart-things \
-          --labels flux-bootstrap
+          --labels terraform | tee pr.txt
+
+          ID=$(cat pr.txt | sed -n 's/.*ID: \([0-9]*\).*/\1/p')
+          echo PR_ID="${ID}" >> $GITHUB_ENV
+
+      - name: Comment post-label
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          pr_number: ${{ env.PR_ID }}
+          message: |
+            :wave: post: none
 
       - name: Create homerun notification artifact
         id: homerunConfigCreation
