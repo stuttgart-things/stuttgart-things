@@ -18,7 +18,12 @@ spec:
   values:
     installCRDs: true
     AWX:
-      enabled: false
+      enabled: true
+      name: awx
+      spec:
+        admin_user: admin
+    
+
       # name: awx
       # spec:
       #   admin_user: ${ADMIN_USER}
