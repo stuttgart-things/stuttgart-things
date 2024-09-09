@@ -24,9 +24,9 @@ spec:
           name: awx-ingress
           namespace: ${AWX_NAMESPACE:-awx}
         spec:
-          commonName: ${AWX_HOSTNAME:-awx}.${AWX_INGRESS_DOMAIN}
+          commonName: ${AWX_HOSTNAME}.${DOMAIN}
           dnsNames:
-          - ${AWX_HOSTNAME:-awx}.${AWX_INGRESS_DOMAIN}
+          - ${AWX_HOSTNAME}.${DOMAIN}
           issuerRef:
             name: ${ISSUER_NAME}
             kind: ${ISSUER_KIND}
