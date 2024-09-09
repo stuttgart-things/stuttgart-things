@@ -25,6 +25,14 @@ template:
           ISSUER_NAME: {{ .clusterCertIssuerName }}
           ISSUER_KIND: {{ .clusterCertIssuerKind }}
           INGRESS_SECRET_NAME: {{ .awxIngressSecretName }}
+          AWX_STORAGE_LIMIT: {{ .awxStorageSizeLimit }}
+          AWX_STORAGE_REQUEST: {{ .awxStorageSizeRequest }}
+          AWX_STORAGE_CLASS: {{ .awxStorageClass }}
+          AWX_STORAGE_MODE: {{ .awxStorageMode }}
+          AWX_INSTALL_CRDS: "{{ .awxInstallCRDs }}"
+          AWX_CR_ENABLED: "{{ .awxCREnabled }}"
+          AWX_CR_NAME: "{{ .awxCRName }}"
+          AWX_ADMIN_USER: "{{ .awxAdminUser }}"
         substituteFrom:
           - kind: Secret
             name: {{ .ingressNginxSecretName }}
