@@ -140,6 +140,7 @@ jobs:
             WORKFLOW_STATUS="SUCCESS"
           else
             WORKFLOW_STATUS="FAILED"
+          fi
 
           printf "localhost ansible_connection=local\n" >> inventory
           ansible-playbook ansible/playbooks/send-homerun-notification.yaml -e severity=${WORKFLOW_STATUS} -i inventory -e target_host=localhost -vv
