@@ -216,7 +216,7 @@ vars:
       helmfile_version: 0.168.0 # datasource=github-tags depName=helmfile/helmfile
       argocd_version: 2.12.3 # datasource=github-tags depName=argoproj/argo-cd
       flux_version: 2.3.0 # datasource=github-tags depName=fluxcd/flux2
-      glab_version: 1.46.0 # datasource=gitlab-tags depName=gitlab-org/cli
+      glab_version: 1.46.1 # datasource=gitlab-tags depName=gitlab-org/cli
 
       bin:
         flux:
