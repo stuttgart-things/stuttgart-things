@@ -125,7 +125,7 @@ playbooks:
       - hosts: "{{ target_host | default('all') }}"
         become: true
         vars:
-          nerdctl_version: 1.7.6 # datasource=github-tags depName=containerd/nerdctl
+          nerdctl_version: 1.7.7 # datasource=github-tags depName=containerd/nerdctl
           bin:
             nerdctl:
               bin_name: "nerdctl"
