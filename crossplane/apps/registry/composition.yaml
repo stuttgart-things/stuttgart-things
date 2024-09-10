@@ -1,4 +1,14 @@
 ---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: registry
+  namespace: default
+type: Opaque
+stringData:
+  HTPASSWD: |
+    sthings:$2y$05$CrDbu7Cb7R9ZwF4HGmlFcOWIpW/W4OruCU.qbZYN2T/ZhTC0YW/ei
+---
 apiVersion: apiextensions.crossplane.io/v1
 kind: Composition
 metadata:
@@ -24,21 +34,48 @@ spec:
             name: in-cluster
           forProvider:
             chart:
-              name: registry
-              repository: twuni/docker-registry
+              name: docker-registry
+              repository: https://helm.twun.io
               version: 2.2.3
             namespace: registry
             insecureSkipTLSVerify: false
             skipCreateNamespace: false
             wait: true
             skipCRDs: false
+            set:
+              - name: secrets.htpasswd
+                valueFrom:
+                  secretKeyRef:
+                    key: HTPASSWD
+                    name: registry
+                    namespace: default
             values:
               persistence:
-                accessMode: ReadWriteOnce
                 enabled: true
-                size: 1Gi
-                storageClass: nfs4-csi
-                deleteEnabled: true
+              ingress:
+                enabled: true
+                className: nginx
+                path: /
+                annotations:
+                  nginx.ingress.kubernetes.io/secure-backends: "true"
+                  nginx.ingress.kubernetes.io/ssl-redirect: "false"
+                  nginx.ingress.kubernetes.io/proxy-body-size: 500m
+
+              configData:
+                storage:
+                  cache:
+                    blobdescriptor: true
+
+              secrets:
+                haSharedSecret: ""
+
+              garbageCollect:
+                enabled: true
+                deleteUntagged: true
+                schedule: "0 1 * * *"
+                resources: {}
+
+
       patches:
         - type: CombineFromComposite
           combine:
@@ -55,9 +92,30 @@ spec:
         - fromFieldPath: spec.version
           toFieldPath: spec.forProvider.chart.version
         - fromFieldPath: spec.storageClass
-          toFieldPath: spec.forProvider.values.server.dataStorage.storageClass
+          toFieldPath: spec.forProvider.values.persistence.storageClass
         - fromFieldPath: spec.storageSize
-          toFieldPath: spec.forProvider.values.server.dataStorage.size
+          toFieldPath: spec.forProvider.values.persistence.size
+        - type: CombineFromComposite
+          combine:
+            variables:
+              - fromFieldPath: spec.hostName
+              - fromFieldPath: spec.domainName
+            strategy: string
+            string:
+              fmt: "%s.%s"
+          toFieldPath: spec.forProvider.values.ingress.hosts[0]
+        - type: CombineFromComposite
+          combine:
+            variables:
+              - fromFieldPath: spec.hostName
+              - fromFieldPath: spec.domainName
+            strategy: string
+            string:
+              fmt: "%s.%s"
+          toFieldPath: spec.forProvider.values.ingress.tls[0].hosts[0]
+        - fromFieldPath: spec.cert.secretName
+          toFieldPath: spec.forProvider.values.ingress.tls[0].secretName
+
     - name: registry-ingresscert
       base:
         apiVersion: resources.stuttgart-things.com/v1alpha1

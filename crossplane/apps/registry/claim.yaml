@@ -1,15 +1,16 @@
 ---
 apiVersion: resources.stuttgart-things.com/v1alpha1
-kind: Vault
+kind: Registry
 metadata:
-  name: andre-dev
+  name: fluxdev-2
   namespace: crossplane-system
 spec:
-  clusterName: andre-dev
-  deploymentNamespace: vault
-  domainName: andre-dev.sthings-vsphere.labul.sva.de
-  storageClass: nfs-csi
-  version: 0.28.0
+  clusterName: kubernetes-incluster
+  deploymentNamespace: registry
+  domainName: fluxdev-2.sthings-vsphere.labul.sva.de
+  storageClass: nfs4-csi
+  storageSize: 2Gi
+  version: 2.2.3
   cert:
-    secretName: vault-ingress-tls
-    issuerName: vault-approle
+    secretName: registry-ingress-tls
+    issuerName: cluster-issuer-approle

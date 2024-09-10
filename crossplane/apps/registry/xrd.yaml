@@ -19,7 +19,7 @@ spec:
       referenceable: true
       schema:
         openAPIV3Schema:
-          description: A Registry is a composite resource that represents a helm release for a Registry deployment
+          description: A Registry is a composite resource that represents a helm release for a registry deployment
           type: object
           properties:
             spec:
@@ -27,8 +27,8 @@ spec:
               properties:
                 deploymentNamespace:
                   type: string
-                  default: Registry
-                  description: namespace for Registry
+                  default: registry
+                  description: namespace for registry
                 clusterName:
                   type: string
                   description: cluster name/helm provider name
@@ -38,7 +38,7 @@ spec:
                   description: helm chart version
                 storageClass:
                   type: string
-                  default: nfs-csi
+                  default: nfs4-csi
                   description: storage class name
                 storageSize:
                   type: string
@@ -46,7 +46,7 @@ spec:
                   description: storage size
                 hostName:
                   type: string
-                  default: Registry
+                  default: registry
                   description: hostname of ingress resource
                 domainName:
                   type: string
@@ -56,7 +56,7 @@ spec:
                   properties:
                     issuerName:
                       type: string
-                      default: Registry-approle
+                      default: registry-approle
                       description: name of cert-manager issuer
                     issuerKind:
                       type: string
@@ -65,7 +65,7 @@ spec:
                     secretName:
                       type: string
                       description: name of to be created secret
-                      default: Registry-ingress-tls
+                      default: registry-ingress-tls
               required:
                 - cert
                 - clusterName
