@@ -22,7 +22,7 @@ spec:
       ISSUER_NAME: cluster-issuer-approle
       ISSUER_KIND: ClusterIssuer
       INGRESS_SECRET_NAME: awx-ingress-tls
-      AWX_STORAGE_LIMIT: 10Gi
+      AWX_STORAGE_LIMIT: 8Gi
       AWX_STORAGE_REQUEST: 1Gi
       AWX_STORAGE_CLASS: nfs4-csi
       AWX_STORAGE_MODE: ReadWriteMany
