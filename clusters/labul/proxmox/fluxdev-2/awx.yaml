@@ -18,18 +18,18 @@ spec:
     substitute:
       AWX_NAMESPACE: awx
       AWX_VERSION: 2.19.1
-      AWX_HOSTNAME: awx
-      AWX_STORAGE_LIMIT: 8Gi 
-      AWX_STORAGE_REQUEST: 1Gi  
+      AWX_HOSTNAME: awx.fluxdev-2
+      ISSUER_NAME: cluster-issuer-approle
+      ISSUER_KIND: ClusterIssuer
+      INGRESS_SECRET_NAME: awx-ingress-tls
+      AWX_STORAGE_LIMIT: 10Gi
+      AWX_STORAGE_REQUEST: 1Gi
       AWX_STORAGE_CLASS: nfs4-csi
       AWX_STORAGE_MODE: ReadWriteMany
       AWX_INSTALL_CRDS: "true"
       AWX_CR_ENABLED: "true"
-      AWX_CR_NAME: awx
-      AWX_ADMIN_USER: sthings
-      ISSUER_NAME: cluster-issuer-approle
-      ISSUER_KIND: ClusterIssuer
-      INGRESS_SECRET_NAME: awx-ingress-tls
+      AWX_CR_NAME: "awx"
+      AWX_ADMIN_USER: "sthings"
     substituteFrom:
       - kind: Secret
         name: cluster-ingress-secret
