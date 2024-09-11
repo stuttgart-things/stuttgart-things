@@ -27,7 +27,7 @@ awxHostname: awx
 awxIngressSecretName: awx-ingress-tls
 awxStorageClass: nfs4-csi
 awxStorageMode: ReadWriteMany
-awxStorageSizeLimit: 10Gi
+awxStorageSizeLimit: 8Gi
 awxStorageSizeRequest: 1Gi
 awxInstallCRDs: true
 awxCREnabled: true
