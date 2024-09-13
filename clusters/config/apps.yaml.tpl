@@ -7,7 +7,7 @@ template:
     metadata:
       name: {{ .xplaneRegistryName }}
     spec:
-      package: {{ .xplaneGitHubPackageUrl }}/{{ .xplaneRegistryName }}:{{ xplaneRegistryVersion }}
+      package: {{ .xplaneGitHubPackageUrl }}/{{ .xplaneRegistryName }}:{{ .xplaneRegistryVersion }}
     ---
     apiVersion: resources.stuttgart-things.com/v1alpha1
     kind: Registry
