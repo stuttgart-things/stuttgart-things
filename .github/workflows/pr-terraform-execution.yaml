@@ -105,7 +105,7 @@ jobs:
 
       - name: Remove terraform label from PR
         if: ${{ env.POST_LABEL != 'none' }}
-        uses: actions/github-script@35b1cdd1b2c1fc704b1cd9758d10f67e833fcb02
+        uses: actions/github-script@58d7008c60bc638cd07845c89db844ed32ee7014
         with:
           github-token: ${{ steps.generate-token.outputs.token }}
           script: |
@@ -118,7 +118,7 @@ jobs:
 
       - name: Add tf-ansible label to PR
         if: ${{ env.POST_LABEL != 'none' }}
-        uses: actions/github-script@35b1cdd1b2c1fc704b1cd9758d10f67e833fcb02
+        uses: actions/github-script@58d7008c60bc638cd07845c89db844ed32ee7014
         with:
           github-token: ${{ steps.generate-token.outputs.token }}
           script: |
