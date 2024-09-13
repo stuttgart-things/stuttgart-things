@@ -19,6 +19,20 @@ clusterCertIssuerName: cluster-issuer-approle
 clusterStorageClass: nfs4-csi
 clusterIngressClass: nginx
 
+# CROSSPLANE APPS
+xplaneRegistryName: xplane-registry
+xplaneRegistryVersion: 2.2.3
+xplaneRegistryNamespace: registry
+xplaneRegistryStorageSize: 2Gi
+xplaneRegistryStorageClass: nfs4-csi
+xplaneRegistryCertSecretName: registry-ingress-tls
+xplaneRegistryTargetCluster: kubernetes-incluster
+xplaneRegistryDomainName: fluxdev-2.sthings-vsphere.labul.sva.de
+
+xplaneGitHubPackageUrl: ghcr.io/stuttgart-things/stuttgart-things
+crossplaneNamespace: crossplane-system
+
+
 # APPS
 awxName: awx
 awxVersion: 2.19.1

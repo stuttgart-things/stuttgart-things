@@ -1,5 +1,30 @@
 ---
 template:
+  xplane-registry: |
+    ---
+    apiVersion: pkg.crossplane.io/v1
+    kind: Configuration
+    metadata:
+      name: {{ .xplaneRegistryName }}
+    spec:
+      package: {{ xplaneGitHubPackageUrl }}/{{ .xplaneRegistryName }}:{{ xplaneRegistryVersion }}
+    ---
+    apiVersion: resources.stuttgart-things.com/v1alpha1
+    kind: Registry
+    metadata:
+      name: registry-{{ .xplaneRegistryTargetCluster }}
+      namespace: {{ .crossplaneNamespace }}
+    spec:
+      clusterName: {{ .xplaneRegistryTargetCluster }}
+      deploymentNamespace: {{ .xplaneRegistryDomainName }}
+      domainName: {{ .xplaneRegistryNamespace }}
+      storageClass: {{ .xplaneRegistryStorageClass }}
+      storageSize: {{ .xplaneRegistryNamespace }}
+      version: {{ xplaneRegistryStorageSize }}
+      cert:
+        secretName: {{ .xplaneRegistryCertSecretName }}
+        issuerName: {{ .clusterCertIssuerName }}
+
   awx: |
     ---
     apiVersion: {{ .kustomizationApiVersion }}

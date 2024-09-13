@@ -14,8 +14,41 @@ secrets:
     - gitlab:secretName=gitlab-runner-secret, secretNamespace=flux-system
   crossplane:
     - s3:secretName=s3, secretNamespace=flux-system
+  xplane-registry:
+    - s3:secretName=registry, secretNamespace=default
 
 template:
+  registry: |
+    ---
+    apiVersion: v1
+    kind: Secret
+    metadata:
+        name: {{ .secretName }}
+        namespace: {{ .secretNamespace }}
+    type: Opaque
+    stringData:
+        HTPASSWD: ENC[AES256_GCM,data:UNdubQqKhZcvVc3ud5Xoz/cGBcOkCJDxV6HRNDie75JoFg1h5vkGjWoCifpTuOxd7GyxPJCKpJf9eobTWG4CPwGLheJY,iv:DVP1Z9IOxpeRdAZTGutBeQXhatiq1NF19/OrqtSLYJ0=,tag:m/sOIaXJPsSpbIxYH5Cz2Q==,type:str]
+    sops:
+        kms: []
+        gcp_kms: []
+        azure_kv: []
+        hc_vault: []
+        age:
+            - recipient: age1g438n4lx6h7x7u42q652e9ygzrkkwlul49e8zsmsrfmxm9k3tvcsykhff4
+              enc: |
+                -----BEGIN AGE ENCRYPTED FILE-----
+                YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBncUdDVmFwa0tYOG56clUr
+                LzNObVRER0t0bDdCVm9jRkdzTlRxWCs2S1RjCk40VUQwSDhERy9DVFVzTWYrVzlW
+                cU80NG5XUDY2UWRBVXladjIxKzhlbDAKLS0tIFN3V1lpTDh3K1Uvd2hXVk5uV2xh
+                QThVYTZYTzMyeDNhTHJtZHBQM3IrMmcKxCxDM2FaCEX1qe7UjCxZlGvhVk4z0cS0
+                YlGzUL+2NPR+ShH2tete25N1GUU53hLQNTvLI40rwTW9Yf8AOdlwRg==
+                -----END AGE ENCRYPTED FILE-----
+        lastmodified: "2024-09-13T07:14:09Z"
+        mac: ENC[AES256_GCM,data:SqB5YconCqNXe9lHvvZR12aLQjqlFNYB2Rl6ZHq8cNDwUdbfQRWxuPBoPYWi5v+fknQKdh6B5hZt1cZcTQnhQovkIPXZR/B6AeUi8LBthRr+o8Z1kx1hjX1tzmmB81Pbb2wICv6sHjQ1PdlkjIN+GeWs7rWwG2Q5lvuLqD0XmGo=,iv:Sd/vmlRDDlkI7MrLtHR01W7T9Pcr7l1ps21HUi4GSeE=,tag:9LdB/PpKivqeOgPFCHs0cg==,type:str]
+        pgp: []
+        encrypted_regex: ^(data|stringData)$
+        version: 3.9.0
+
   s3: |
     ---
     apiVersion: v1
