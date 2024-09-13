@@ -13,7 +13,7 @@ template:
     kind: Registry
     metadata:
       name: registry-{{ .xplaneRegistryTargetCluster }}
-      namespace: {{ .crossplaneNamespace }}
+      namespace: {{ .xplaneCrossplaneNamespace }}
     spec:
       clusterName: {{ .xplaneRegistryTargetCluster }}
       deploymentNamespace: {{ .xplaneRegistryDomainName }}
