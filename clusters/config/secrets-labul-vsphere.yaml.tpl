@@ -12,7 +12,7 @@ secrets:
   gitlab-runner:
     - gitlab:secretName=gitlab-runner-secret, secretNamespace=flux-system
   xplane-registry:
-    - s3:secretName=registry, secretNamespace=default
+    - registry:secretName=registry, secretNamespace=default
 
 template:
   registry: |
