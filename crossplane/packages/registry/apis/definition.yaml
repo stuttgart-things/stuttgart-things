@@ -1,0 +1,72 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: xregistries.resources.stuttgart-things.com
+spec:
+  connectionSecretKeys:
+    - kubeconfig
+  group: resources.stuttgart-things.com
+  names:
+    kind: XRegistry
+    plural: xregistries
+  claimNames:
+    kind: Registry
+    plural: registries
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          description: A Registry is a composite resource that represents a helm release for a registry deployment
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                deploymentNamespace:
+                  type: string
+                  default: registry
+                  description: namespace for registry
+                clusterName:
+                  type: string
+                  description: cluster name/helm provider name
+                version:
+                  type: string
+                  default: 2.2.3
+                  description: helm chart version
+                storageClass:
+                  type: string
+                  default: nfs4-csi
+                  description: storage class name
+                storageSize:
+                  type: string
+                  default: 1Gi
+                  description: storage size
+                hostName:
+                  type: string
+                  default: registry
+                  description: hostname of ingress resource
+                domainName:
+                  type: string
+                  description: domain (name) of ingress resource
+                cert:
+                  type: object
+                  properties:
+                    issuerName:
+                      type: string
+                      default: registry-approle
+                      description: name of cert-manager issuer
+                    issuerKind:
+                      type: string
+                      default: ClusterIssuer
+                      description: kind of cert-manager issuer
+                    secretName:
+                      type: string
+                      description: name of to be created secret
+                      default: registry-ingress-tls
+              required:
+                - cert
+                - clusterName
+                - domainName

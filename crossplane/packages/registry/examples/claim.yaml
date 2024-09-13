@@ -1,0 +1,16 @@
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: Registry
+metadata:
+  name: fluxdev-2
+  namespace: crossplane-system
+spec:
+  clusterName: kubernetes-incluster # This is the name of the Helm provider
+  deploymentNamespace: registry
+  domainName: fluxdev-2.sthings-vsphere.labul.sva.de
+  storageClass: nfs4-csi
+  storageSize: 2Gi
+  version: 2.2.3
+  cert:
+    secretName: registry-ingress-tls
+    issuerName: cluster-issuer-approle
