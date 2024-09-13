@@ -7,7 +7,7 @@ template:
     metadata:
       name: {{ .xplaneRegistryName }}
     spec:
-      package: {{ .xplaneGitHubPackageUrl }}/{{ .xplaneRegistryName }}:{{ .xplaneRegistryVersion }}
+      package: {{ .xplaneGitHubPackageUrl }}/{{ .xplaneRegistryName }}:{{ .xplaneRegistryVersion }}
     ---
     apiVersion: resources.stuttgart-things.com/v1alpha1
     kind: Registry
@@ -19,8 +19,8 @@ template:
       deploymentNamespace: {{ .xplaneRegistryDomainName }}
       domainName: {{ .xplaneRegistryNamespace }}
       storageClass: {{ .xplaneRegistryStorageClass }}
-      storageSize: {{ .xplaneRegistryNamespace }}
-      version: {{ xplaneRegistryStorageSize }}
+      storageSize: {{ .xplaneRegistryStorageSize }}
+      version: {{ .xplaneRegistryVersion }}
       cert:
         secretName: {{ .xplaneRegistryCertSecretName }}
         issuerName: {{ .clusterCertIssuerName }}
