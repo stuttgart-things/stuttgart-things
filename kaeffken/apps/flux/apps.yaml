@@ -1,0 +1,25 @@
+---
+flux:
+  ingress-nginx:
+    # name: ingress-controller
+
+  metallb:
+    name: metal-lb
+    interval: 2h
+    spec:  
+      prune: true
+      wait: true
+      interval: 5h
+      retryInterval: 1m
+      timeout: 5m
+      sourceRef:
+        kind: GitRepository
+        name: blabla-system    
+    variables:
+      version: 
+        name: METALLB_CHART_VERSION
+        value: 6.3.20
+      ipRange: 
+        name: IP_RANGE
+        value: 10.31.103.9-10.31.103.10
+  argocd:

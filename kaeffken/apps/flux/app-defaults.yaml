@@ -1,0 +1,15 @@
+---
+fluxKustomization:
+  cr:
+    apiVersion: kustomize.toolkit.fluxcd.io/v1
+    kind: Kustomization
+    namespace: flux-system
+  spec:  
+    prune: true
+    wait: true
+    interval: 1h
+    retryInterval: 1m
+    timeout: 5m
+    sourceRef:
+      kind: GitRepository
+      name: flux-system

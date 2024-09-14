@@ -1,0 +1,27 @@
+---
+fluxAppDefaults:
+  ingress-nginx:
+    repository: https://github.com/stuttgart-things/stuttgart-things.git
+    revision: main
+    path: ./infra/ingress-nginx
+    variables:
+      namespace:
+        name: INGRESS_NGINX_NAMESPACE
+        value: ingress-nginx
+      version:
+        name: INGRESS_NGINX_CHART_VERSION
+        value: 4.11.2
+  metallb:
+    repository: https://github.com/stuttgart-things/stuttgart-things.git
+    revision: main
+    path: ./infra/metallb
+    variables:
+      namespace:
+        name: METALLB_NAMESPACE
+        value: metallb-system
+      version: 
+        name: METALLB_CHART_VERSION
+        value: 6.3.10
+      ipRange: 
+        name: IP_RANGE
+        value: ""
