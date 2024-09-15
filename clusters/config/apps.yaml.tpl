@@ -19,6 +19,7 @@ template:
       wait: {{ .wait }}
       postBuild:
         substitute:
+          ARGO_CD_VERSION: {{ .argoCDVersion }}
           ARGO_CD_NAMESPACE: {{ .argoCDNamespace }}
           SERVICE_TYPE: {{ .argoCDServiceType }}
           IMAGE_AVP: {{ .argoCDImageAVP }}
