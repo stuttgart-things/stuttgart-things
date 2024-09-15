@@ -10,7 +10,7 @@ on:
         required: true
         type: string
       golint-version:
-        default: v1.55
+        default: v1.61.0-alpine
         required: true
         type: string
       golang-version:
