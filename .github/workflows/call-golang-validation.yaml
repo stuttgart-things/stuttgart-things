@@ -14,7 +14,7 @@ on:
         required: true
         type: string
       golang-version:
-        default: 1.21.5
+        default: 1.23.1
         required: true
         type: string
       environment-name:
