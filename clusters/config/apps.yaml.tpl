@@ -28,6 +28,9 @@ template:
           INGRESS_SECRET_NAME: argocd-ingress-tls
           ISSUER_NAME: {{ .clusterCertIssuerName }}
           ISSUER_KIND: {{ .clusterCertIssuerKind }}
+        substituteFrom:
+          - kind: Secret
+            name: {{ .ingressNginxSecretName }}
 
   xplane-registry: |
     ---
