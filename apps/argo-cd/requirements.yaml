@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: argocd
+  name: ${ARGO_CD_NAMESPACE:-argocd}
   labels:
     toolkit.fluxcd.io/tenant: sthings-team
 ---
@@ -10,7 +10,7 @@ apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: HelmRepository
 metadata:
   name: stuttgart-things
-  namespace: argocd
+  namespace: ${ARGO_CD_NAMESPACE:-argocd}
 spec:
   type: oci
   interval: 1h
@@ -20,7 +20,7 @@ apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: HelmRepository
 metadata:
   name: argocd
-  namespace: argocd
+  namespace: ${ARGO_CD_NAMESPACE:-argocd}
 spec:
   interval: 24h
   url: https://argoproj.github.io/argo-helm

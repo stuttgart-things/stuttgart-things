@@ -1,5 +1,34 @@
 ---
 template:
+  argo-cd: |
+    ---
+    apiVersion: {{ .kustomizationApiVersion }}
+    kind: {{ .kustomizationKind  }}
+    metadata:
+      name: {{ .argoCDName }}
+      namespace: {{ .fluxNamespace }}
+    spec:
+      interval: {{ .interval }}
+      retryInterval: {{ .retryInterval }}
+      timeout: {{ .timeout }}
+      sourceRef:
+        kind: {{ .fluxSourceKind }}
+        name: {{ .fluxGitRepository }}
+      path: {{ .appsPath }}/{{ .argoCDName }}
+      prune: {{ .prune }}
+      wait: {{ .wait }}
+      postBuild:
+        substitute:
+          ARGO_CD_NAMESPACE: {{ .argoCDNamespace }}
+          SERVICE_TYPE: {{ .argoCDServiceType }}
+          IMAGE_AVP: {{ .argoCDImageAVP }}
+          IMAGE_HELMFILE: {{ .argoCDImageHelmFile }}
+          INGRESS_HOSTNAME: {{ .argoCDHostname }}
+          INGRESS_DOMAIN: {{ .clusterIngressDomain }}
+          INGRESS_SECRET_NAME: argocd-ingress-tls
+          ISSUER_NAME: {{ .clusterCertIssuerName }}
+          ISSUER_KIND: {{ .clusterCertIssuerKind }}
+
   xplane-registry: |
     ---
     apiVersion: pkg.crossplane.io/v1

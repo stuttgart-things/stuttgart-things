@@ -3,7 +3,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: argocd-configuration
-  namespace: argocd
+  namespace: ${ARGO_CD_NAMESPACE:-argocd}
 spec:
   interval: 30m
   chart:
@@ -13,13 +13,13 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: stuttgart-things
-        namespace: argocd
+        namespace: ${ARGO_CD_NAMESPACE:-argocd}
       interval: 12h
   values:
     secrets:
       argocd-vault-plugin-credentials:
         name: argocd-vault-plugin-credentials
-        namespace: argocd
+        namespace: ${ARGO_CD_NAMESPACE:-argocd}
         secretKVs:
           AVP_TYPE: vault
           TYPE: vault
@@ -35,12 +35,12 @@ spec:
         kind: Certificate
         metadata:
           name: argocd-ingress
-          namespace: argocd
+          namespace: ${ARGO_CD_NAMESPACE:-argocd}
         spec:
           commonName: ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}
           dnsNames:
           - ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}
           issuerRef:
-            name: cluster-issuer-approle
-            kind: ClusterIssuer
-          secretName: ${INGRESS_SECRET_NAME}
+            name: ${ISSUER_NAME}
+            kind: ${ISSUER_KIND}
+          secretName: ${INGRESS_SECRET_NAME:-awx-ingress-tls}

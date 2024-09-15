@@ -1,29 +1,29 @@
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: scr
-  namespace: argocd
-  labels:
-    argocd.argoproj.io/secret-type: repository
-stringData:
-  enableOCI: "true"
-  name: scr
-  type: helm
-  url: ${SCR_HOSTNAME}
-  username: ${SCR_USERNAME}
-  password: ${SCR_PASSWORD}
+# ---
+# apiVersion: v1
+# kind: Secret
+# metadata:
+#   name: scr
+#   namespace: ${ARGO_CD_NAMESPACE:-argocd}
+#   labels:
+#     argocd.argoproj.io/secret-type: repository
+# stringData:
+#   enableOCI: "true"
+#   name: scr
+#   type: helm
+#   url: ${SCR_HOSTNAME}
+#   username: ${SCR_USERNAME}
+#   password: ${SCR_PASSWORD}
 ---
 apiVersion: v1
 kind: Secret
 metadata:
   name: stuttgart-things-gcr
-  namespace: argocd
+  namespace: ${ARGO_CD_NAMESPACE:-argocd}
   labels:
     argocd.argoproj.io/secret-type: repository
 stringData:
   enableOCI: "true"
-  name: scr
+  name: gcr
   type: helm
   url: eu.gcr.io/stuttgart-things
 ---
@@ -31,7 +31,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: stuttgart-things
-  namespace: argocd
+  namespace: ${ARGO_CD_NAMESPACE:-argocd}
   annotations:
     managed-by: argocd.argoproj.io
   labels:
