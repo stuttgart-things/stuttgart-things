@@ -43,4 +43,4 @@ spec:
           issuerRef:
             name: ${ISSUER_NAME}
             kind: ${ISSUER_KIND}
-          secretName: ${INGRESS_SECRET_NAME:-awx-ingress-tls}
+          secretName: ${INGRESS_SECRET_NAME:-argocd-server-tls}
