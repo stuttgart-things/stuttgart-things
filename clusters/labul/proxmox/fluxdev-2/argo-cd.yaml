@@ -16,6 +16,7 @@ spec:
   wait: true
   postBuild:
     substitute:
+      ARGO_CD_VERSION: 7.5.2
       ARGO_CD_NAMESPACE: argocd
       SERVICE_TYPE: ClusterIP
       IMAGE_AVP: eu.gcr.io/stuttgart-things/sthings-avp:1.17.0-1
