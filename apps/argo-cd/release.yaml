@@ -31,7 +31,7 @@ spec:
     configs:
       secret:
         argocdServerAdminPassword: ${ARGO_CD_SERVER_ADMIN_PASSWORD}
-        argocdServerAdminPasswordMtime: "2024-09-16T12:51:06UTC"
+        argocdServerAdminPasswordMtime: ${ARGO_CD_PASSWORD_MTIME:-2024-09-16T12:51:06UTC}
     #   cmp:
     #     create: true
     #     plugins:

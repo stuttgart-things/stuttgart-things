@@ -29,6 +29,7 @@ template:
           INGRESS_SECRET_NAME: {{ .argocdIngressSecretName }}
           ISSUER_NAME: {{ .clusterCertIssuerName }}
           ISSUER_KIND: {{ .clusterCertIssuerKind }}
+          ARGO_CD_PASSWORD_MTIME: {{ .argoCDPasswordMtime }}
         substituteFrom:
           - kind: Secret
             name: {{ .ingressNginxSecretName }}
