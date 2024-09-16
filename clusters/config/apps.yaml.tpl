@@ -26,7 +26,7 @@ template:
           IMAGE_HELMFILE: {{ .argoCDImageHelmFile }}
           INGRESS_HOSTNAME: {{ .argoCDHostname }}
           INGRESS_DOMAIN: {{ .clusterIngressDomain }}
-          INGRESS_SECRET_NAME: argocd-ingress-tls
+          INGRESS_SECRET_NAME: {{ .argocdIngressSecretName }}
           ISSUER_NAME: {{ .clusterCertIssuerName }}
           ISSUER_KIND: {{ .clusterCertIssuerKind }}
         substituteFrom:

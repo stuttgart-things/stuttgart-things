@@ -40,6 +40,7 @@ argoCDImageHelmFile: ghcr.io/helmfile/helmfile:v0.159.0
 argoCDImageAVP: eu.gcr.io/stuttgart-things/sthings-avp:1.17.0-1
 argoCDServiceType: ClusterIP
 argoCDRunnerSecretName: argocd-secrets
+argocdIngressSecretName: argocd-server-tls
 
 awxName: awx
 awxVersion: 2.19.1
