@@ -1,0 +1,56 @@
+---
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  name: pdns-entry-vsphere-fluxdev-2
+  namespace: tektoncd
+spec:
+  pipelineRef:
+    resolver: git
+    params:
+      - name: url
+        value: https://github.com/stuttgart-things/stuttgart-things.git
+      - name: revision
+        value: main
+      - name: pathInRepo
+        value: stageTime/pipelines/execute-ansible-playbooks.yaml
+  workspaces:
+    - name: shared-workspace
+      volumeClaimTemplate:
+        spec:
+          storageClassName: nfs4-csi
+          accessModes:
+            - ReadWriteMany
+          resources:
+            requests:
+              storage: 50Mi
+  params:
+    - name: ansibleWorkingImage
+      value: "eu.gcr.io/stuttgart-things/sthings-ansible:10.3.0"
+    - name: createInventory
+      value: "false"
+    - name: gitRepoUrl
+      value: "https://github.com/stuttgart-things/stuttgart-things.git"
+    - name: gitRevision
+      value: "main"
+    - name: gitWorkspaceSubdirectory
+      value: "/ansible/pdns"
+    - name: vaultSecretName
+      value: vault-in-cluster
+    - name: installExtraRoles
+      value: "true"
+    - name: ansibleExtraRoles
+      value:
+        - "https://github.com/stuttgart-things/install-configure-powerdns.git"
+    - name: ansiblePlaybooks
+      value:
+        - "ansible/playbooks/pdns-ingress-entry.yaml"
+    - name: ansibleVarsFile
+      value:
+        - "pdns_url+-https://pdns-vsphere.labul.sva.de:8443"
+        - "entry_zone+-sthings-vsphere.labul.sva.de."
+        - "ip_address+-10.31.102.12"
+        - "hostname+-fluxdev-2"
+    - name: ansibleVarsInventory
+      value:
+        - "localhost"

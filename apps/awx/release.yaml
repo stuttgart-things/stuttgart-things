@@ -22,14 +22,15 @@ spec:
       name: ${AWX_CR_NAME}
       spec:
         admin_user: ${AWX_ADMIN_USER:-admin}
+        #admin_password_secret: ${AWX_PASSWORD_SECRET:-awx-password}
         postgres_storage_class: ${AWX_STORAGE_CLASS}
         postgres_storage_requirements:
           limits:
-            storage: ${AWX_STORAGE_LIMIT:-8Gi}  
+            storage: ${AWX_STORAGE_LIMIT:-8Gi}
           requests:
-            storage: ${AWX_STORAGE_REQUEST:-1Gi}  
+            storage: ${AWX_STORAGE_REQUEST:-1Gi}
         projects_persistence: false
-        projects_storage_access_mode: ${AWX_STORAGE_MODE:-ReadWriteMany} 
+        projects_storage_access_mode: ${AWX_STORAGE_MODE:-ReadWriteMany}
         projects_storage_class: ${AWX_STORAGE_CLASS}
         ingress_type: ingress
         ingress_class_name: ${INGRESS_CLASS:-nginx}
