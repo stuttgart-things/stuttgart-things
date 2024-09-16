@@ -22,7 +22,7 @@ spec:
       IMAGE_AVP: eu.gcr.io/stuttgart-things/sthings-avp:1.17.0-1
       IMAGE_HELMFILE: ghcr.io/helmfile/helmfile:v0.159.0
       INGRESS_HOSTNAME: argocd
-      INGRESS_DOMAIN: sandiego2.sthings-vsphere.labul.sva.de
+      INGRESS_DOMAIN: fluxdev-2.sthings-vsphere.labul.sva.de
       INGRESS_SECRET_NAME: argocd-server-tls
       ISSUER_NAME: cluster-issuer-approle
       ISSUER_KIND: ClusterIssuer
