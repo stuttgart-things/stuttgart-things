@@ -31,7 +31,6 @@ xplaneRegistryTargetCluster: kubernetes-incluster
 xplaneGitHubPackageUrl: ghcr.io/stuttgart-things/stuttgart-things
 xplaneCrossplaneNamespace: crossplane-system
 
-
 # APPS
 argoCDName: argo-cd #eu.gcr.io/stuttgart-things/sthings-argocd:v2.12.3
 argoCDVersion: 7.5.2
@@ -40,9 +39,7 @@ argoCDHostname: argocd
 argoCDImageHelmFile: ghcr.io/helmfile/helmfile:v0.159.0
 argoCDImageAVP: eu.gcr.io/stuttgart-things/sthings-avp:1.17.0-1
 argoCDServiceType: ClusterIP
-
-
-
+argoCDRunnerSecretName: argocd-secrets
 
 awxName: awx
 awxVersion: 2.19.1

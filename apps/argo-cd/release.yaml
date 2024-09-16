@@ -20,6 +20,8 @@ spec:
       interval: 12h
   values:
     configs:
+      secret:
+        argocdServerAdminPassword: ${ARGO_CD_SERVER_ADMIN_PASSWORD}
       cmp:
         create: true
         plugins:

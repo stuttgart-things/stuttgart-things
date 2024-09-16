@@ -32,6 +32,8 @@ template:
         substituteFrom:
           - kind: Secret
             name: {{ .ingressNginxSecretName }}
+          - kind: Secret
+            name: {{ .argoCDRunnerSecretName }}
 
   xplane-registry: |
     ---

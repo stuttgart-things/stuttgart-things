@@ -15,9 +15,43 @@ secrets:
   crossplane:
     - s3:secretName=s3, secretNamespace=flux-system
   xplane-registry:
-    - s3:secretName=registry, secretNamespace=default
+    - registry:secretName=registry, secretNamespace=default
+  argo-cd:
+    - argo-cd:secretName=argocd-secrets, secretNamespace=flux-system
+
 
 template:
+  argo-cd: |
+    ---
+    apiVersion: v1
+    kind: Secret
+    metadata:
+        name: {{ .secretName }}
+        namespace: {{ .secretNamespace }}
+    type: Opaque
+    stringData:
+        ARGO_CD_SERVER_ADMIN_PASSWORD: ENC[AES256_GCM,data:vPvPxtj+OU/cFJ33sGEJCy7XXQ86oswc7cFwdfHipRgV1R8QEuKZHDdE6EhCc/M5yHLGzUVkgmNu5QW2,iv:H6G4G8AnbtHoDOi9/ft25bihz24Hn81KEF0IsB74qZs=,tag:msTiSf+JRBEhkX6QYm6rZg==,type:str]
+    sops:
+        kms: []
+        gcp_kms: []
+        azure_kv: []
+        hc_vault: []
+        age:
+            - recipient: age1g438n4lx6h7x7u42q652e9ygzrkkwlul49e8zsmsrfmxm9k3tvcsykhff4
+              enc: |
+                -----BEGIN AGE ENCRYPTED FILE-----
+                YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBJQys1cFBZT0V1c3ZTQVoy
+                YUhickNoT0htanRNVldJRDVkQU9UVTFIWVUwClJIcDVzakN2TXA0N2ZxNWs1QjFU
+                cHViU2diUm1rN29yWGE2Qmh2QVZlVG8KLS0tIHVqYVUyT0V0UnYrS012S2VNVHRm
+                Tkt5Zm9pM2RQVC9iUWJJNUZEUXdteEkKEYGMrPpcrqhS0XRzrd4VyyWxjx3uy1vJ
+                3wIUz8WqeKclrH4wDXCOFj4UAYS/PCFUJBp9KGYu1DWavYWbDJd2qA==
+                -----END AGE ENCRYPTED FILE-----
+        lastmodified: "2024-09-16T08:56:00Z"
+        mac: ENC[AES256_GCM,data:oVkAsOYZ5gUuV/f6PShQC1fLIxzn1H616e7/ZZRs1+mOBpyBvQvG23SWChqbyazaOl9d1sA6DuhD1SrJ1jVjriqFyLoThp1+A/BZ8nWM1NZsXIhSEEMRDCvcAvzuitcD3AJMtqlz3/05/65fZ4AkAjgUv2yymkDWCtdPG2H3moE=,iv:0RCiok93I6xG8Whl4/ASoPcPXBgtvqG4rsq7DHl8kgU=,tag:UmJCoeetOtpH9huFED1Hxw==,type:str]
+        pgp: []
+        encrypted_regex: ^(data|stringData)$
+        version: 3.9.0
+
   registry: |
     ---
     apiVersion: v1
