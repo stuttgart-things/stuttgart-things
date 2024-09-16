@@ -23,9 +23,11 @@ spec:
       IMAGE_HELMFILE: ghcr.io/helmfile/helmfile:v0.159.0
       INGRESS_HOSTNAME: argocd
       INGRESS_DOMAIN: fluxdev-2.sthings-vsphere.labul.sva.de
-      INGRESS_SECRET_NAME: argocd-server-tls
+      INGRESS_SECRET_NAME: argocd-ingress-tls
       ISSUER_NAME: cluster-issuer-approle
       ISSUER_KIND: ClusterIssuer
     substituteFrom:
       - kind: Secret
         name: cluster-ingress-secret
+      - kind: Secret
+        name: argocd-secrets
