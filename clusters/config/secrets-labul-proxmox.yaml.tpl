@@ -19,7 +19,6 @@ secrets:
   argo-cd:
     - argo-cd:secretName=argocd-secrets, secretNamespace=flux-system
 
-
 template:
   argo-cd: |
     ---
