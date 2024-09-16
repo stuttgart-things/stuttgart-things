@@ -28,9 +28,9 @@ spec:
         ingressClassName: nginx
         hostname: ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}
         tls: true
-    configs:
-      secret:
-        argocdServerAdminPassword: ${ARGO_CD_SERVER_ADMIN_PASSWORD}
+    # configs:
+    #   secret:
+    #     argocdServerAdminPassword: ${ARGO_CD_SERVER_ADMIN_PASSWORD}
     #   cmp:
     #     create: true
     #     plugins:
