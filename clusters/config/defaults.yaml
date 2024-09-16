@@ -41,6 +41,7 @@ argoCDImageAVP: eu.gcr.io/stuttgart-things/sthings-avp:1.17.0-1
 argoCDServiceType: ClusterIP
 argoCDRunnerSecretName: argocd-secrets
 argocdIngressSecretName: argocd-server-tls
+argoCDPasswordMtime: 2024-09-16T12:51:06UTC # date +%FT%T%Z
 
 awxName: awx
 awxVersion: 2.19.1
