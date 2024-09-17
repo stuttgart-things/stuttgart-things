@@ -1,0 +1,21 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: xplane-registry
+  namespace: flux-system
+spec:
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./apps/crossplane-app
+  prune: true
+  wait: true
+  postBuild:
+    substitute:
+      XPLANE_APP: registry
+      XPLANE_APP_PACKAGE_URL: ghcr.io/stuttgart-things/stuttgart-things/xplane-registry
+      XPLANE_APP_PACKAGE_TAG: 2.2.3

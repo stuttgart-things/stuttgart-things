@@ -1,5 +1,9 @@
 ---
 template:
+
+
+
+
   redis-stack: |
     ---
     apiVersion: {{ .kustomizationApiVersion }}

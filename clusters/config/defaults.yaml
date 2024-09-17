@@ -20,6 +20,11 @@ clusterStorageClass: nfs4-csi
 clusterIngressClass: nginx
 
 # CROSSPLANE APPS
+
+
+
+xplaneAppPackageTag: 0.3.10
+
 xplaneRegistryName: xplane-registry
 xplaneRegistryVersion: 2.2.3
 xplaneRegistryNamespace: registry
