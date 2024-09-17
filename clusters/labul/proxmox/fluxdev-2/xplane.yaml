@@ -41,7 +41,7 @@ spec:
                   cert:
                     secretName: registry-ingress-tls
                     issuerName: cluster-issuer-approle
-        target:
-          kind: HelmRelease
-          name: crossplane-app-claim-${XPLANE_APP}
-          namespace: ${CROSSPLANE_NAMESPACE:-crossplane-system}
+      target:
+        kind: HelmRelease
+        name: crossplane-app-claim-registry
+        namespace: crossplane-system
