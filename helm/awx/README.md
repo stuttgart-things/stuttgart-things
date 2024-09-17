@@ -4,22 +4,22 @@
 
 ```bash
 helmfile init # install helmfile plugins
-helmfile deps -f awx.yaml # update helm dependencies
+helmfile deps -f helmfile.yaml # update helm dependencies
 ```
 
 ## TEMPLATE
 ```bash
-helmfile template --file awx.yaml -e labul-vsphere #Example ENV
+helmfile template --file helmfile.yaml -e labul-vsphere #Example ENV
 ```
 
 ## APPLY
 ```bash
-helmfile apply --file awx.yaml -e labul-vsphere #EXAMPLE ENV
+helmfile apply --file helmfile.yaml -e labul-vsphere #EXAMPLE ENV
 ```
 
 ## DESTROY
 ```bash
-helmfile destroy --file awx.yaml -e labul-vsphere #EXAMPLE ENV
+helmfile destroy --file helmfile.yaml -e labul-vsphere #EXAMPLE ENV
 kubectl delete pvc postgres-15-awx-postgres-15-0 -n awx #EXAMPLE PVC DELETION
 ```
 
