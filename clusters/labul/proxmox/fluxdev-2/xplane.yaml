@@ -19,21 +19,21 @@ spec:
       XPLANE_APP: registry
       XPLANE_APP_PACKAGE_URL: ghcr.io/stuttgart-things/stuttgart-things/xplane-registry
       XPLANE_APP_PACKAGE_TAG: 2.2.3
-  patches:
-    - patch: |-
-        - op: add
-          path: /spec/values/customresources/claim/0/spec/-
-          value:
-            clusterName: kubernetes-incluster
-            deploymentNamespace: fluxdev-2.sthings-vsphere.labul.sva.de
-            domainName: registry
-            storageClass: nfs4-csi
-            storageSize: 2Gi
-            version: 2.2.3
-            cert:
-              secretName: registry-ingress-tls
-              issuerName: cluster-issuer-approle
-      target:
-        kind: HelmRelease
-        name: crossplane-app-claim-registry
-        namespace: crossplane-system
+  # patches:
+  #   - patch: |-
+  #       - op: add
+  #         path: /spec/values/customresources/claim/0/spec/-
+  #         value:
+  #           clusterName: kubernetes-incluster
+  #           deploymentNamespace: fluxdev-2.sthings-vsphere.labul.sva.de
+  #           domainName: registry
+  #           storageClass: nfs4-csi
+  #           storageSize: 2Gi
+  #           version: 2.2.3
+  #           cert:
+  #             secretName: registry-ingress-tls
+  #             issuerName: cluster-issuer-approle
+  #     target:
+  #       kind: HelmRelease
+  #       name: crossplane-app-claim-registry
+  #       namespace: crossplane-system
