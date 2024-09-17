@@ -23,7 +23,7 @@ spec:
         metadata:
           name: registry-kubernetes-incluster
           namespace: crossplane-system
-        # spec:
+        spec: {}
         #   clusterName: kubernetes-incluster
         #   deploymentNamespace: fluxdev-2.sthings-vsphere.labul.sva.de
         #   domainName: registry

@@ -21,19 +21,18 @@ spec:
       XPLANE_APP_PACKAGE_TAG: 2.2.3
   patches:
     - patch: |-
-        - op: add
-          path: /spec/values/0/customresources/claim
+        - op: replace
+          path: /spec/values/customresources/claim/spec
           value:
-            spec:
-              clusterName: kubernetes-incluster
-              deploymentNamespace: fluxdev-2.sthings-vsphere.labul.sva.de
-              domainName: registry
-              storageClass: nfs4-csi
-              storageSize: 2Gi
-              version: 2.2.3
-              cert:
-                secretName: registry-ingress-tls
-                issuerName: cluster-issuer-approle
+            clusterName: kubernetes-incluster
+            deploymentNamespace: fluxdev-2.sthings-vsphere.labul.sva.de
+            domainName: registry
+            storageClass: nfs4-csi
+            storageSize: 2Gi
+            version: 2.2.3
+            cert:
+              secretName: registry-ingress-tls
+              issuerName: cluster-issuer-approle
       target:
         kind: HelmRelease
         name: crossplane-app-claim-registry
