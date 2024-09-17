@@ -11,7 +11,7 @@ releases:
     installed: true
     namespace: awx
     chart: stuttgart-things/sthings-cluster
-    version: 0.3.10
+    version: 0.3.15
     values:
       - "values/awx-certificates.values.yaml.gotmpl"
 
@@ -20,7 +20,7 @@ releases:
     installed: true
     namespace: awx
     chart: stuttgart-things/sthings-cluster
-    version: 0.3.10
+    version: 0.3.15
     values:
       - "values/awx-secrets.values.yaml.gotmpl"
 
@@ -40,7 +40,7 @@ releases:
     installed: true
     namespace: awx
     chart: stuttgart-things/sthings-cluster
-    version: 0.3.10
+    version: 0.3.15
     values:
       - "values/awx-instances.values.yaml.gotmpl"
 
