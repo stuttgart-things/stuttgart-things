@@ -22,7 +22,7 @@ spec:
   patches:
     - patch: |-
         - op: add
-          path: /spec/values/customresources/registry-claim
+          path: /spec/values/customresources/registry
           value:
             apiVersion: resources.stuttgart-things.com/v1alpha1
             kind: Registry
