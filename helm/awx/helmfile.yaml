@@ -29,7 +29,7 @@ releases:
     installed: true
     namespace: awx
     chart: awx/awx-operator
-    version: 2.17.0
+    version: 2.19.1
     needs:
       - awx/awx-certificates
     values:
