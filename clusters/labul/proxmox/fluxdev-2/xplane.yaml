@@ -22,7 +22,7 @@ spec:
   patches:
     - patch: |-
         - op: add
-          path: /spec/values/customresources/claim/spec/-
+          path: /spec/values/customresources/claim/0/spec/-
           value:
             clusterName: kubernetes-incluster
             deploymentNamespace: fluxdev-2.sthings-vsphere.labul.sva.de
