@@ -49,7 +49,7 @@ repositories:
     url: eu.gcr.io/stuttgart-things
     oci: true
   - name: awx
-    url: https://ansible.github.io/awx-operator
+    url: https://ansible-community.github.io/awx-operator-helm/
     oci: false
 
 helmDefaults:
