@@ -1,5 +1,32 @@
 ---
 template:
+  redis-stack: |
+    ---
+    apiVersion: {{ .kustomizationApiVersion }}
+    kind: {{ .kustomizationKind  }}
+    metadata:
+      name: {{ .redisStack }}
+      namespace: {{ .redisStackNamespace }}
+    spec:
+      interval: {{ .interval }}
+      retryInterval: {{ .retryInterval }}
+      timeout: {{ .timeout }}
+      sourceRef:
+        kind: {{ .fluxSourceKind }}
+        name: {{ .fluxGitRepository }}
+      path: {{ .appsPath }}/{{ .redisStack }}
+      prune: {{ .prune }}
+      wait: {{ .wait }}
+      postBuild:
+        substitute:
+          REDIS_STACK_NAMESPACE: {{ .redisStackNamespace }}
+          REDIS_STACK_SERVICE_TYPE: {{ .redisStackServiceType }}
+          REDIS_STACK_PERSISTENCE_ENBALED: "{{ .awxHostname }}"
+          REDIS_STACK_STORAGECLASS: {{ .redisStackStorageClass }}
+        substituteFrom:
+          - kind: Secret
+            name: {{ .ingressNginxSecretName }}
+
   argo-cd: |
     ---
     apiVersion: {{ .kustomizationApiVersion }}

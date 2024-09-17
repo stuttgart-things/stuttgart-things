@@ -1,0 +1,27 @@
+---
+environments:
+  aks:
+    values:
+      - env/defaults.yaml
+      - env/{{ .Environment.Name }}.yaml
+
+releases:
+  - name: redis-stack
+    installed: true
+    namespace: homerun
+    chart: redis/redis
+    version: 17.1.4
+    values:
+      - "values/redis-stack.yaml.gotmpl"
+
+helmDefaults:
+  verify: false
+  wait: true
+  timeout: 600
+  recreatePods: false
+  force: true
+
+repositories:
+  - name: redis
+    url: https://charts.bitnami.com/bitnami
+    oci: false

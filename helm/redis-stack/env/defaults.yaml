@@ -1,0 +1,4 @@
+---
+password: ref+vault://apps/homerun/redisPassword
+persistenceEnabled: false
+serviceType: ClusterIP #LoadBalancer

@@ -32,6 +32,12 @@ xplaneGitHubPackageUrl: ghcr.io/stuttgart-things/stuttgart-things
 xplaneCrossplaneNamespace: crossplane-system
 
 # APPS
+redisStack: redis-stack
+redisStackNamespace: redis-stack
+redisStackServiceType: ClusterIP
+redisStackStorageClass: nfs4-csi
+
+
 argoCDName: argo-cd #eu.gcr.io/stuttgart-things/sthings-argocd:v2.12.3
 argoCDVersion: 7.5.2
 argoCDNamespace: argocd
