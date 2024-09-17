@@ -22,24 +22,23 @@ spec:
   patches:
     - patch: |-
         - op: add
-          path: /spec/values/customresources
+          path: /spec/values/customresources/registry-claim
           value:
-            registry-claim:
-              apiVersion: resources.stuttgart-things.com/v1alpha1
-              kind: Registry
-              metadata:
-                name: registry-kubernetes-incluster
-                namespace: crossplane-system
-              spec:
-                clusterName: kubernetes-incluster
-                deploymentNamespace: fluxdev-2.sthings-vsphere.labul.sva.de
-                domainName: registry
-                storageClass: nfs4-csi
-                storageSize: 2Gi
-                version: 2.2.3
-                cert:
-                  secretName: registry-ingress-tls
-                  issuerName: cluster-issuer-approle
+            apiVersion: resources.stuttgart-things.com/v1alpha1
+            kind: Registry
+            metadata:
+              name: registry-kubernetes-incluster
+              namespace: crossplane-system
+            spec:
+              clusterName: kubernetes-incluster
+              deploymentNamespace: fluxdev-2.sthings-vsphere.labul.sva.de
+              domainName: registry
+              storageClass: nfs4-csi
+              storageSize: 2Gi
+              version: 2.2.3
+              cert:
+                secretName: registry-ingress-tls
+                issuerName: cluster-issuer-approle
       target:
         kind: HelmRelease
         name: crossplane-app-claim-registry
