@@ -25,7 +25,7 @@ spec:
         kind: HelmRelease
         name: crossplane-app-claim-registry
         namespace: crossplane-system
-      patch: |
+      patch: |-
         - op: replace
           path: /spec/values/customresources/claim
           value:
