@@ -17,9 +17,10 @@ spec:
       interval: 12h
   values:
     customresources:
-      apiVersion: pkg.crossplane.io/v1
-      kind: Configuration
-      metadata:
-        name: xplane-${XPLANE_APP}
-      spec:
-        package: ${XPLANE_APP_PACKAGE_URL}:${XPLANE_APP_PACKAGE_TAG}
+      configuration:
+        apiVersion: pkg.crossplane.io/v1
+        kind: Configuration
+        metadata:
+          name: xplane-${XPLANE_APP}
+        spec:
+          package: ${XPLANE_APP_PACKAGE_URL}:${XPLANE_APP_PACKAGE_TAG}
