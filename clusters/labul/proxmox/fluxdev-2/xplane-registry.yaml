@@ -1,11 +1,11 @@
----
-apiVersion: pkg.crossplane.io/v1
-kind: Configuration
-metadata:
-  name: xplane-registry
-spec:
-  package: ghcr.io/stuttgart-things/stuttgart-things/xplane-registry:2.2.3
-#---
+# ---
+# apiVersion: pkg.crossplane.io/v1
+# kind: Configuration
+# metadata:
+#   name: xplane-registry
+# spec:
+#   package: ghcr.io/stuttgart-things/stuttgart-things/xplane-registry:2.2.3
+# #---
 #apiVersion: resources.stuttgart-things.com/v1alpha1
 #kind: Registry
 #metadata:
