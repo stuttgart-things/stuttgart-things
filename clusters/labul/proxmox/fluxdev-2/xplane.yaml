@@ -22,7 +22,7 @@ spec:
   patches:
     - patch: |-
         - op: add
-          path: /spec/values/customresources/claim
+          path: /spec/values/0/customresources/claim
           value:
             spec:
               clusterName: kubernetes-incluster
