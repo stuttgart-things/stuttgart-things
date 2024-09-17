@@ -21,8 +21,8 @@ spec:
       XPLANE_APP_PACKAGE_TAG: 2.2.3
   patches:
     - patch: |-
-        - op: replace
-          path: /spec/values/customresources/claim/spec
+        - op: add
+          path: /spec/values/customresources/0/claim/spec/-
           value:
             clusterName: kubernetes-incluster
             deploymentNamespace: fluxdev-2.sthings-vsphere.labul.sva.de
