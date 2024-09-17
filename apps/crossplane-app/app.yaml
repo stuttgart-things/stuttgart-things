@@ -18,5 +18,3 @@ spec:
         name: stuttgart-things
         namespace: ${CROSSPLANE_NAMESPACE:-crossplane-system}
       interval: 12h
-  values:
-    customresources:
