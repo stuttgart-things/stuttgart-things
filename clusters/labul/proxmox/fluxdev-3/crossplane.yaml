@@ -28,11 +28,9 @@ spec:
         name: s3
   patches:
     - patch: |-
-        - op: replace
-          path: /spec/values/provider/packages
+        - op: add
+          path: /spec/values/configuration/packages
           value:
-            - xpkg.upbound.io/crossplane-contrib/provider-helm:v0.19.0                                                                                                                                                                     │
-            - xpkg.upbound.io/crossplane-contrib/provider-kubernetes:v0.14.1
             - ghcr.io/stuttgart-things/stuttgart-things/xplane-registry:v2.2.3
       target:
         kind: HelmRelease
