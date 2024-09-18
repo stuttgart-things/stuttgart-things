@@ -16,7 +16,7 @@ jobs:
       environment: ${{ steps.set.outputs.ENVIRONMENT }}
       inventory: ${{ steps.getInventory.outputs.INVENTORY }}
       playbook: ${{ steps.getPlaybook.outputs.PLAYBOOK }}
-    runs-on: ghr-stuttgart-things-labul-automation
+    runs-on: ghr-stuttgart-things-skyami-cicd
     steps:
       - name: Set Execution Details
         id: set
@@ -61,7 +61,7 @@ jobs:
     with:
       playbook: ${{ needs.Get-Ansible-Config.outputs.playbook }}
       branch: ${{ github.event.pull_request.head.ref }}
-      runs-on: ghr-stuttgart-things-labul-automation
+      runs-on: ghr-stuttgart-things-skyami-cicd
       inventory: ${{ needs.Get-Ansible-Config.outputs.inventory }}
       environment-name: ${{ needs.Get-Ansible-Config.outputs.environment }}
       private-key: "ssh/data/sthings:privateKey"
@@ -76,7 +76,7 @@ jobs:
       - Get-Ansible-Config
       - Execute-Ansible-Provisioning
     with:
-      runs-on: ghr-stuttgart-things-labul-automation
+      runs-on: ghr-stuttgart-things-skyami-cicd
       environment-name: k8s
       branch-name: ${{ github.event.pull_request.head.ref }}
       pr-id: ${{ github.event.pull_request.number }}

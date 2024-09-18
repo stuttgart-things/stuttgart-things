@@ -10,7 +10,7 @@ on:
       runner:
         description: NAME OF RUNNER FOR THIS WORKFLOW
         type: string
-        default: ghr-stuttgart-things-labul-automation
+        default: ghr-stuttgart-things-skyami-cicd
 
 jobs:
   Render-Runner-Config:

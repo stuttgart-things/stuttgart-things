@@ -239,7 +239,7 @@ jobs:
       - Execute-Terraform
       - Delete-Terraform-Config
     with:
-      runs-on: ghr-stuttgart-things-labul-automation
+      runs-on: ghr-stuttgart-things-skyami-cicd
       environment-name: k8s
       branch-name: ${{ inputs.folder }}
       pr-id: ${{ needs.Delete-Terraform-Config.outputs.pullrequest-id }}

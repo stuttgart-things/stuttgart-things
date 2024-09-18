@@ -39,7 +39,7 @@ on:
         description: RUNNER NAME
         required: true
         type: string
-        default: ghr-stuttgart-things-labul-automation
+        default: ghr-stuttgart-things-skyami-cicd
 
 jobs:
   Create-Packer-Config:
