@@ -35,9 +35,7 @@ spec:
       target:
         kind: HelmRelease
         name: crossplane-deployment
-        namespace: crossplane-system
   healthChecks:
     - apiVersion: helm.toolkit.fluxcd.io/v2beta1
       kind: HelmRelease
       name: crossplane-deployment
-      namespace: crossplane-system
