@@ -26,7 +26,7 @@ spec:
         namespace: crossplane-system
       patch: |-
         - op: add
-          path: /spec/values/customresources/claim/-
+          path: /spec/values/-
           value:
             customresources:
               claim:
