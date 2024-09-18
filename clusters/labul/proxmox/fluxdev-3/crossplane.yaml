@@ -33,6 +33,7 @@ spec:
           value:
             - xpkg.upbound.io/crossplane-contrib/provider-helm:v0.19.0                                                                                                                                                                     │
             - xpkg.upbound.io/crossplane-contrib/provider-kubernetes:v0.14.1
+            - ghcr.io/stuttgart-things/stuttgart-things/xplane-registry:v2.2.3
       target:
         kind: HelmRelease
         name: crossplane-deployment
