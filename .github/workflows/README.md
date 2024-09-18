@@ -68,11 +68,9 @@
 |-------------------|---------------------------|-------------------------------------------------------------------------------------|
 | INVENTORY         | inventory file as string  | [initial_master_node]+fluxdev-2.labul.sva.de+[additional_master_nodes]+fluxdev-2-2.labul.sva.de+fluxdev-2-3.labul.sva.de+ |
 | PLAYBOOK NAME     | name/path of playbook     | sthings.deploy_rke.rke2,ansible/playbooks/upload-kubeconfig-vault.yaml |
-| EXTRA VARS        | ansible vars (extra vars) | -e cluster_setup=multinode -e kubeconfig_path=/etc/rancher/rke2/rke2.yaml -e secret_path_kubeconfig=kubeconfigs -e cluster_name=fluxdev-2 -e target_host=fluxdev-2 -e rke2_k8s_version=1.28.9 -e rke2_release_kind=rke2r1 |
+| EXTRA VARS        | ansible vars (extra vars) | -e cluster_setup=multinode -e kubeconfig_path=/etc/rancher/rke2/rke2.yaml -e secret_path_kubeconfig=kubeconfigs -e cluster_name=fluxdev-2 -e target_host=fluxdev-2 -e rke2_k8s_version=1.31.0 -e rke2_release_kind=rke2r1 |
 | PRIVATE KEY       | vault secret path         | ssh/data/sthings:privateKey                                                         |
 | REQUIREMENTS FILE | path to requirements file | ansible/requirements.yaml                                                           |
-
-#-e cluster_setup=multinode -e kubeconfig_path=/etc/rancher/rke2/rke2.yaml -e secret_path_kubeconfig=kubeconfigs -e cluster_name=fluxdev-2 -e target_host=fluxdev-2 -e rke2_k8s_version=1.31.0 -e rke2_release_kind=rke2r1
 
 </details>
 
