@@ -27,6 +27,6 @@ spec:
       patch: |-
         - op: replace
           path: /spec/values/customresources/claim/spec/cert/-
-          value:
+          value: |
             secretName: registry-ingress-tls
             issuerName: cluster-issuer-approle

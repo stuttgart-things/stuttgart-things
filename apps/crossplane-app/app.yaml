@@ -30,6 +30,6 @@ spec:
           storageClass: nfs4-csi
           storageSize: 2Gi
           version: 2.2.3
-          cert:
+          cert: {}
           #   secretName: registry-ingress-tls
           #   issuerName: cluster-issuer-approle
