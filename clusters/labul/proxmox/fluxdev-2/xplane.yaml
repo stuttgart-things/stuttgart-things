@@ -25,9 +25,8 @@ spec:
         name: crossplane-app-claim-registry
         namespace: crossplane-system
       patch: |-
-        - op: add
-          path: /spec/values/customresources/claim/spec/-
+        - op: replace
+          path: /spec/values/customresources/claim/spec/cert/-
           value:
-            cert:
-              secretName: registry-ingress-tls
-              issuerName: cluster-issuer-approle
+            secretName: registry-ingress-tls
+            issuerName: cluster-issuer-approle
