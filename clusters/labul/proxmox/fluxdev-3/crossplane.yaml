@@ -28,7 +28,7 @@ spec:
         name: s3
   patches:
     - patch: |-
-        - op: add
+        - op: replace
           path: /spec/values/configuration/packages
           value:
             - ghcr.io/stuttgart-things/stuttgart-things/xplane-registry:v2.2.3
