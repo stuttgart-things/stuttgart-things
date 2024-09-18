@@ -72,6 +72,8 @@
 | PRIVATE KEY       | vault secret path         | ssh/data/sthings:privateKey                                                         |
 | REQUIREMENTS FILE | path to requirements file | ansible/requirements.yaml                                                           |
 
+#-e cluster_setup=multinode -e kubeconfig_path=/etc/rancher/rke2/rke2.yaml -e secret_path_kubeconfig=kubeconfigs -e cluster_name=fluxdev-2 -e target_host=fluxdev-2 -e rke2_k8s_version=1.31.0 -e rke2_release_kind=rke2r1
+
 </details>
 
 
