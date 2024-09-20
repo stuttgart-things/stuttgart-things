@@ -11,7 +11,7 @@ collections:
   - name: community.docker
     version: 3.12.2
   - name: community.vmware
-    version: 4.7.0
+    version: 5.0.0
   - name: awx.awx
     version: 24.6.1
   - name: community.hashi_vault
