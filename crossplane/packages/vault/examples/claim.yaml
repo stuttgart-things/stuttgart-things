@@ -2,13 +2,13 @@
 apiVersion: resources.stuttgart-things.com/v1alpha1
 kind: Vault
 metadata:
-  name: andre-dev
+  name: incluster
   namespace: crossplane-system
 spec:
-  clusterName: andre-dev
+  clusterName: incluster
   deploymentNamespace: vault
-  domainName: andre-dev.sthings-vsphere.labul.sva.de
-  storageClass: nfs-csi
+  domainName: fluxdev-3.sthings-vsphere.labul.sva.de
+  storageClass: nfs4-csi
   version: 0.28.0
   cert:
     secretName: vault-ingress-tls

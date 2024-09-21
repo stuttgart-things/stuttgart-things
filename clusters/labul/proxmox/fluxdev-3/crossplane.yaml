@@ -29,9 +29,10 @@ spec:
   patches:
     - patch: |-
         - op: add
-          path: /spec/values/configuration/packages
+          path: /spec/values/configuration
           value:
-            - ghcr.io/stuttgart-things/stuttgart-things/xplane-registry:v2.2.3
+            packages:
+              - ghcr.io/stuttgart-things/stuttgart-things/xplane-registry:v2.2.3
       target:
         kind: HelmRelease
         name: crossplane-deployment

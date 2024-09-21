@@ -2,65 +2,56 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: Composition
 metadata:
-  name: registry
+  name: vault
   labels:
-    crossplane.io/xrd: xregistry.resources.stuttgart-things.com
+    crossplane.io/xrd: xvault.resources.stuttgart-things.com
 spec:
   writeConnectionSecretsToNamespace: crossplane-system
   compositeTypeRef:
     apiVersion: resources.stuttgart-things.com/v1alpha1
-    kind: XRegistry
+    kind: XVault
   resources:
-    - name: registry-release
+    - name: vault-release
       base:
         apiVersion: helm.crossplane.io/v1beta1
         kind: Release
         metadata:
-          name: registry
+          name: vault
           annotations:
-            crossplane.io/external-name: registry
+            crossplane.io/external-name: vault
         spec:
           providerConfigRef:
             name: in-cluster
           forProvider:
             chart:
-              name: docker-registry
-              repository: https://helm.twun.io
-              version: 2.2.3
-            namespace: registry
+              name: vault
+              repository: https://helm.releases.hashicorp.com
+              version: 0.28.0
+            namespace: vault
             insecureSkipTLSVerify: false
             skipCreateNamespace: false
             wait: true
             skipCRDs: false
-            set:
-              - name: secrets.htpasswd
-                valueFrom:
-                  secretKeyRef:
-                    key: HTPASSWD
-                    name: registry
-                    namespace: default
             values:
-              persistence:
+              injector:
+                enabled: false
+              server:
                 enabled: true
-              ingress:
+                dataStorage:
+                  enabled: true
+                  storageClass: nfs-csi
+                  size: 1Gi
+                ingress:
+                  enabled: true
+                  # hosts:
+                  #   - host: vault.andre-dev.sthings-vsphere.labul.sva.de
+                  # tls:
+                  #   - hosts:
+                  #       - vault.andre-dev.sthings-vsphere.labul.sva.de
+                      # secretName: vault-ingress-tls
+                  ingressClassName: nginx
+              csi:
                 enabled: true
-                className: nginx
-                path: /
-                annotations:
-                  nginx.ingress.kubernetes.io/secure-backends: "true"
-                  nginx.ingress.kubernetes.io/ssl-redirect: "false"
-                  nginx.ingress.kubernetes.io/proxy-body-size: 500m
-              configData:
-                storage:
-                  cache:
-                    blobdescriptor: true
-              secrets:
-                haSharedSecret: ""
-              garbageCollect:
-                enabled: true
-                deleteUntagged: true
-                schedule: "0 1 * * *"
-                resources: {}
       patches:
         - type: CombineFromComposite
           combine:
@@ -68,7 +59,7 @@ spec:
               - fromFieldPath: spec.clusterName
             strategy: string
             string:
-              fmt: "registry-%s"
+              fmt: "vault-%s"
           toFieldPath: metadata.name
         - fromFieldPath: spec.deploymentNamespace
           toFieldPath: spec.forProvider.namespace
@@ -77,9 +68,9 @@ spec:
         - fromFieldPath: spec.version
           toFieldPath: spec.forProvider.chart.version
         - fromFieldPath: spec.storageClass
-          toFieldPath: spec.forProvider.values.persistence.storageClass
+          toFieldPath: spec.forProvider.values.server.dataStorage.storageClass
         - fromFieldPath: spec.storageSize
-          toFieldPath: spec.forProvider.values.persistence.size
+          toFieldPath: spec.forProvider.values.server.dataStorage.size
         - type: CombineFromComposite
           combine:
             variables:
@@ -88,7 +79,7 @@ spec:
             strategy: string
             string:
               fmt: "%s.%s"
-          toFieldPath: spec.forProvider.values.ingress.hosts[0]
+          toFieldPath: spec.forProvider.values.server.ingress.hosts[0].host
         - type: CombineFromComposite
           combine:
             variables:
@@ -97,11 +88,10 @@ spec:
             strategy: string
             string:
               fmt: "%s.%s"
-          toFieldPath: spec.forProvider.values.ingress.tls[0].hosts[0]
+          toFieldPath: spec.forProvider.values.server.ingress.tls[0].hosts[0].hosts
         - fromFieldPath: spec.cert.secretName
-          toFieldPath: spec.forProvider.values.ingress.tls[0].secretName
-
-    - name: registry-ingresscert
+          toFieldPath: spec.forProvider.values.server.ingress.tls[0].secretName
+    - name: vault-ingresscert
       base:
         apiVersion: resources.stuttgart-things.com/v1alpha1
         kind: XIngressCertificate
