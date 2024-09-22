@@ -43,7 +43,7 @@ jobs:
 
               mkdir -p ${folder}
 
-              machineShop render \
+              machineshop render \
               --source local \
               --template ${template} \
               --values "repositoryName=${repository}, namespace=${namespace}, targetClusterName=${cluster}" \
