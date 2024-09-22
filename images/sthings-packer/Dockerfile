@@ -1,12 +1,12 @@
-ARG REGISTRY=eu.gcr.io
+ARG REGISTRY=ghcr.io
 ARG REPOSITORY=stuttgart-things
 ARG IMAGE=sthings-ansible
-ARG TAG=1.11.2
+ARG TAG=10.4.0
 
 FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
 
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
-LABEL version=1.11.2-9.5.1
+LABEL version=1.11.2-10.4.0
 
 # USER
 USER root
@@ -31,5 +31,6 @@ RUN wget -q https://github.com/vmware/govmomi/releases/download/v${GOVC_VERSION}
 RUN wget -q https://github.com/stuttgart-things/machineShop/releases/download/${MACHINE_SHOP_VERSION}/machineShop_Linux_x86_64.tar.gz \
     && tar -xvf machineShop_Linux_x86_64.tar.gz -C /usr/bin/ machineShop \
     && rm -rf machineShop_Linux_x86_64.tar.gz
+
 # CREATE WORKDIR FOR GITHUB WORKFLOWS
 RUN mkdir -m 1777 /__w
