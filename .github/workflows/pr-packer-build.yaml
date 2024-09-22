@@ -18,7 +18,7 @@ jobs:
       runs-on: ghr-stuttgart-things-skyami-cicd
       build-path: packer/builds
     container:
-      image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2-2
+      image: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:5e0a8cc6701035f49d8ec7831be05655dfa9df3e54d8e2aaa16142049f34f9c5
     runs-on: ghr-stuttgart-things-skyami-cicd
     steps:
       - name: Set Build Details
@@ -97,7 +97,7 @@ jobs:
       - Build-Packer-Template
     environment: k8s
     container:
-      image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2-2
+      image: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:5e0a8cc6701035f49d8ec7831be05655dfa9df3e54d8e2aaa16142049f34f9c5
     runs-on: ${{ needs.Get-Packer-Config.outputs.runs-on }}
     steps:
       - name: Checkout code/branch
@@ -162,3 +162,44 @@ jobs:
           gh pr list
           gh pr close ${{ github.event.pull_request.number }}
           gh pr reopen ${{ github.event.pull_request.number }}
+
+      - name: Create homerun notification artifact
+        id: homerun
+        run: |
+          echo "---" >> homerun.yaml
+          echo "title: PullRequest for Creating Packer Test-VM ${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }} created on github" >> homerun.yaml
+          echo "system: github" >> homerun.yaml
+          echo "message: 'BUILD-DURATION: TO ADD REPOSITORY: ${GITHUB_REPOSITORY} WORKFLOW: ${GITHUB_WORKFLOW} ARTIFACT: ${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }} RUNNER_NAME: ${RUNNER_NAME} WORKFLOW-IMAGE: ${{ inputs.kaniko-image }} ENV: k8s'" >> homerun.yaml
+          echo "tags: packer, github-actions" >> homerun.yaml
+          echo "author: ${GITHUB_ACTOR}" >> homerun.yaml
+          echo "severity: SUCCESS" >> homerun.yaml
+          echo "assignee: ${GITHUB_ACTOR}" >> homerun.yaml
+          echo "assigneeUrl: ''" >> homerun.yaml
+          echo "artifacts: ${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}-${{ inputs.ansible-provisioning }}" >> homerun.yaml
+          echo "url: ''" >> homerun.yaml
+
+          cat homerun.yaml
+
+      - name: Upload homerun notification artifact
+        uses: actions/upload-artifact@v4.4.0
+        with:
+          name: homerun
+          path: |-
+            homerun.yaml
+
+  Send-Homerun-Notification:
+    if: ${{ always() }}
+    name: Send-Homerun-Notification
+    uses: stuttgart-things/stuttgart-things/.github/workflows/call-homerun-notification.yaml@main
+    needs:
+      - Get-Packer-Config
+      - Build-Packer-Template
+      - Update-Packer-PullRequest
+    with:
+      notification-artifact: homerun
+      # notification-message: "terraform vm"
+      runs-on: ${{ inputs.runner }}
+      environment-name: ${{ inputs.environment-name }}
+      machineshop-image: ${{ inputs.working-image }}
+      continue-on-error: true
+    secrets: inherit
