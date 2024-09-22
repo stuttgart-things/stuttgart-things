@@ -1,0 +1,13 @@
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: IngressCertificate
+metadata:
+  name: test-cert
+  namespace: crossplane-system
+spec:
+  clusterName: kubernetes-incluster
+  issuerName: cluster-issuer-approle
+  namespace: default
+  hostName: test
+  domainName: fluxdev-2.sthings-vsphere.labul.sva.de
+  certSecretName: test-fluxdev-2-tls

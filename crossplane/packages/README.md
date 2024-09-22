@@ -16,6 +16,7 @@ crossplane xpkg init ${PACKAGE_NAME} configuration-template
 ## BUILD PACKAGE
 
 ```bash
+cd ${PACKAGE_NAME}
 crossplane xpkg build
 ```
 
