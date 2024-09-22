@@ -203,7 +203,7 @@ jobs:
         id: homerun
         run: |
           echo "---" >> homerun.yaml
-          echo "title: PullRequest for Packer Config ${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}" created on github" >> homerun.yaml
+          echo "title: PullRequest for Packer Config ${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }} created on github" >> homerun.yaml
           echo "system: github" >> homerun.yaml
           echo "message: 'REPOSITORY: ${GITHUB_REPOSITORY} WORKFLOW: ${GITHUB_WORKFLOW} ARTIFACT: ${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }} RUNNER_NAME: ${RUNNER_NAME} WORKFLOW-IMAGE: ${{ inputs.kaniko-image }} ENV: k8s'" >> homerun.yaml
           echo "tags: packer, github-actions" >> homerun.yaml
