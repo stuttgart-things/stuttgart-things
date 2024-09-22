@@ -370,7 +370,7 @@ spec:
       GH_RSS_STORAGE_CLASS: openebs-hostpath
       GH_RSS_STORAGE_REQUEST: 50Mi
       GH_RSS_GITHUB_URL: https://github.com/stuttgart-things/clusterbook
-      GH_RSS_REPOSIORY_NAME: stuttgart-things
+      GH_RSS_REPOSIORY_NAME: clusterbook
       GH_RSS_CLUSTER_NAME: skyami-cicd
     substituteFrom:
       - kind: Secret
