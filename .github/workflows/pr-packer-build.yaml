@@ -91,6 +91,45 @@ jobs:
           name: ${{ needs.Get-Packer-Config.outputs.lab }}-${{ needs.Get-Packer-Config.outputs.cloud }}-${{ needs.Get-Packer-Config.outputs.os-version }}-${{ needs.Get-Packer-Config.outputs.build-date }}
           path: packer/builds/${{ github.event.pull_request.head.ref }}/packer.log
 
+      - name: Create homerun notification artifact
+        id: homerun
+        run: |
+          echo "---" >> homerun.yaml
+          echo "title: PullRequest for Creating Packer Test-VM ${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }} created on github" >> homerun.yaml
+          echo "system: github" >> homerun.yaml
+          echo "message: 'BUILD-DURATION: TO ADD REPOSITORY: ${GITHUB_REPOSITORY} WORKFLOW: ${GITHUB_WORKFLOW} ARTIFACT: ${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }} RUNNER_NAME: ${RUNNER_NAME} WORKFLOW-IMAGE: ${{ inputs.kaniko-image }} ENV: k8s'" >> homerun.yaml
+          echo "tags: packer, github-actions" >> homerun.yaml
+          echo "author: ${GITHUB_ACTOR}" >> homerun.yaml
+          echo "severity: SUCCESS" >> homerun.yaml
+          echo "assignee: ${GITHUB_ACTOR}" >> homerun.yaml
+          echo "assigneeUrl: ''" >> homerun.yaml
+          echo "artifacts: ${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}-${{ inputs.ansible-provisioning }}" >> homerun.yaml
+          echo "url: ''" >> homerun.yaml
+
+          cat homerun.yaml
+
+      - name: Upload homerun notification artifact
+        uses: actions/upload-artifact@v4.4.0
+        with:
+          name: homerun
+          path: |-
+            homerun.yaml
+
+  Send-Homerun-Notification:
+    if: ${{ always() }}
+    name: Send-Homerun-Notification
+    uses: stuttgart-things/stuttgart-things/.github/workflows/call-homerun-notification.yaml@main
+    needs:
+      - Get-Packer-Config
+      - Build-Packer-Template
+    with:
+      notification-artifact: homerun
+      runs-on: ${{ inputs.runner }}
+      environment-name: ${{ inputs.environment-name }}
+      machineshop-image: ${{ inputs.working-image }}
+      continue-on-error: true
+    secrets: inherit
+
   Update-Packer-PullRequest:
     needs:
       - Get-Packer-Config
@@ -162,44 +201,3 @@ jobs:
           gh pr list
           gh pr close ${{ github.event.pull_request.number }}
           gh pr reopen ${{ github.event.pull_request.number }}
-
-      - name: Create homerun notification artifact
-        id: homerun
-        run: |
-          echo "---" >> homerun.yaml
-          echo "title: PullRequest for Creating Packer Test-VM ${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }} created on github" >> homerun.yaml
-          echo "system: github" >> homerun.yaml
-          echo "message: 'BUILD-DURATION: TO ADD REPOSITORY: ${GITHUB_REPOSITORY} WORKFLOW: ${GITHUB_WORKFLOW} ARTIFACT: ${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }} RUNNER_NAME: ${RUNNER_NAME} WORKFLOW-IMAGE: ${{ inputs.kaniko-image }} ENV: k8s'" >> homerun.yaml
-          echo "tags: packer, github-actions" >> homerun.yaml
-          echo "author: ${GITHUB_ACTOR}" >> homerun.yaml
-          echo "severity: SUCCESS" >> homerun.yaml
-          echo "assignee: ${GITHUB_ACTOR}" >> homerun.yaml
-          echo "assigneeUrl: ''" >> homerun.yaml
-          echo "artifacts: ${{ inputs.os-version }}-${{ inputs.lab }}-${{ inputs.cloud }}-${{ inputs.ansible-provisioning }}" >> homerun.yaml
-          echo "url: ''" >> homerun.yaml
-
-          cat homerun.yaml
-
-      - name: Upload homerun notification artifact
-        uses: actions/upload-artifact@v4.4.0
-        with:
-          name: homerun
-          path: |-
-            homerun.yaml
-
-  Send-Homerun-Notification:
-    if: ${{ always() }}
-    name: Send-Homerun-Notification
-    uses: stuttgart-things/stuttgart-things/.github/workflows/call-homerun-notification.yaml@main
-    needs:
-      - Get-Packer-Config
-      - Build-Packer-Template
-      - Update-Packer-PullRequest
-    with:
-      notification-artifact: homerun
-      # notification-message: "terraform vm"
-      runs-on: ${{ inputs.runner }}
-      environment-name: ${{ inputs.environment-name }}
-      machineshop-image: ${{ inputs.working-image }}
-      continue-on-error: true
-    secrets: inherit
