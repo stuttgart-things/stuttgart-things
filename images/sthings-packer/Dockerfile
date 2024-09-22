@@ -12,7 +12,6 @@ LABEL version=1.11.2-10.4.0
 USER root
 
 ARG PACKER_VERSION=1.11.2
-ARG MACHINE_SHOP_VERSION=2.6.2
 ARG GOVC_VERSION=0.43.0
 RUN apk add --no-cache alpine-sdk build-base apk-tools alpine-conf busybox fakeroot syslinux xorriso squashfs-tools sudo mtools dosfstools grub-efi
 
@@ -26,11 +25,6 @@ RUN wget -q https://github.com/vmware/govmomi/releases/download/v${GOVC_VERSION}
     && tar xzfz govc_Linux_x86_64.tar.gz -C /usr/bin \
     && chmod +x /usr/bin/govc \
     && rm -rf govc_Linux_x86_64.tar.gz
-
-# MACHINE-SHOP
-RUN wget -q https://github.com/stuttgart-things/machineShop/releases/download/${MACHINE_SHOP_VERSION}/machineShop_Linux_x86_64.tar.gz \
-    && tar -xvf machineShop_Linux_x86_64.tar.gz -C /usr/bin/ machineShop \
-    && rm -rf machineShop_Linux_x86_64.tar.gz
 
 # CREATE WORKDIR FOR GITHUB WORKFLOWS
 RUN mkdir -m 1777 /__w
