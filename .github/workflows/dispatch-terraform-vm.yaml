@@ -453,7 +453,7 @@ jobs:
         id: homerun
         run: |
           echo "---" >> homerun.yaml
-          echo "title: PullRequest for vm-build w/ ${{ inputs.build-engine }} ${{ inputs.count-vm }}x${{ inputs.vm-name }} on github" >> homerun.yaml
+          echo "title: PullRequest for vm-build w/ ${{ inputs.build-engine }} ${{ inputs.count-vm }}x${{ inputs.vm-name }} created on github" >> homerun.yaml
           echo "system: github" >> homerun.yaml
           echo "message: 'REPOSITORY: ${GITHUB_REPOSITORY} WORKFLOW: ${GITHUB_WORKFLOW} ARTIFACT: ${{ inputs.count-vm }}x${{ inputs.vm-name }} ${{ inputs.lab-cloud }} RUNNER_NAME: ${RUNNER_NAME} WORKFLOW-IMAGE: ${{ inputs.kaniko-image }} ENV: k8s'" >> homerun.yaml
           echo "tags: ${{ inputs.build-engine }}, github-actions" >> homerun.yaml
