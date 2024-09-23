@@ -2,8 +2,8 @@ ARG FROM_TAG=3.12.6-alpine3.20
 FROM python:${FROM_TAG}
 
 # META INFORMATION
-LABEL version=3.9.20-alpine3.20
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
+LABEL version=3.9.20-alpine3.20
 LABEL org.opencontainers.image.source https://github.com/stuttgart-things/stuttgart-things
 
 # ENV VARIABLES
