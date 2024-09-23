@@ -44,7 +44,7 @@ jobs:
 
       - name: Scan image w/ trivy
         run: |
-          # SCAN LOCAL IMAGE FROM TARBALL
+          echo "Scanning image ${{ inputs.object }}"
           trivy image ${{ inputs.object }}
         if: ${{ inputs.kind == 'image' }}
         shell: bash
