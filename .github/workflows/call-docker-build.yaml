@@ -27,13 +27,6 @@ on:
         required: false
         type: string
         default: "latest"
-      # context-sub-path:
-      #   required: true
-      #   type: string
-      # registry-config:
-      #   required: false
-      #   default: images/dev-registries.yaml
-      #   type: string
 
 jobs:
   buildx-build-push:

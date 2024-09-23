@@ -62,7 +62,7 @@ jobs:
           echo "contexts=$JSON_CONTEXTS" >> "$GITHUB_OUTPUT"
         shell: bash
 
-  Build-Image:
+  Build-Image-Kaniko:
     needs: Get-Changed-Dockerfiles
     strategy:
       fail-fast: false
@@ -78,13 +78,30 @@ jobs:
       context-sub-path: images/${{ matrix.context-path }}
     secrets: inherit
 
+  Build-Image-Buildx:
+    needs: Get-Changed-Dockerfiles
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.Get-Changed-Dockerfiles.outputs.contexts) }}
+    uses: stuttgart-things/stuttgart-things/.github/workflows/call-docker-build.yaml@main
+    with:
+      runs-on: ghr-stuttgart-things-skyami-cicd
+      environment-name: labul-vsphere
+      # registry-config: images/dev-registries.yaml
+      # dockerfile: Dockerfile
+      image-destination: ghcr.io/stuttgart-things/${{ matrix.context-path }}
+      image-tag: 1.23
+      # kaniko-image: eu.gcr.io/stuttgart-things/sthings-container:1.23.2
+      context-path: images/${{ matrix.context-path }}
+    secrets: inherit
+
   #Get-Build-DevImages:
   # ask build reg for recently build images
   # get as json
   # matrix is used for following job
 
   Scan-Image:
-    needs: Build-Image
+    needs: Build-Image-Kaniko
     strategy:
       fail-fast: false
       matrix:

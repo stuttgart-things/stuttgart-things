@@ -25,3 +25,42 @@ fluxAppDefaults:
       ipRange:
         name: IP_RANGE
         value: ""
+  gitlab-runner:
+    secrets:
+      gitlab-runner-secret:
+        name: gitlab-runner-secret
+        namespace: flux-system
+        data:
+          - RUNNER_TOKEN:iNeedToBeChanged
+
+    repository: https://github.com/stuttgart-things/stuttgart-things.git
+    revision: main
+    path: ./apps/gitlab-runner
+    variables:
+      clusterName:
+        name: GITLAB_CLUSTER_NAME
+        value: ""
+      namespace:
+        name: GITLAB_RUNNER_NAMESPACE
+        value: gitlab
+      chartVersion:
+        name: GITLAB_CHART_VERSION
+        value: 0.68.1
+      concurrentJobs:
+        name: GITLAB_CONCURRENT_JOBS
+        value: 10
+      checkInterval:
+        name: GITLAB_CHECK_INTERVAL
+        value: 15
+      runnerUrl:
+        name: GITLAB_RUNNER_URL
+        value: https://codehub.sva.de
+# fluxAppDefaults:
+
+
+# secretDefaults:
+#   gitlabToken:
+#     metaName: github-token
+#     metaNamespace: flux-system
+#     data:
+#       - key:value
