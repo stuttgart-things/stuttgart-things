@@ -104,6 +104,19 @@ jobs:
           echo "BUILD_IMAGE=${REGISTRY_URL}/${{ inputs.context-sub-path }}:${BUILD_TAG}" >> $GITHUB_ENV
           echo "BUILD_TAG=${BUILD_TAG}" >> $GITHUB_ENV
 
+  Scan-Image:
+    needs:
+      - kaniko-build-push
+    uses: stuttgart-things/stuttgart-things/.github/workflows/call-trivy-scan.yaml@main
+    with:
+      runs-on: ghr-stuttgart-things-skyami-cicd
+      environment-name: labul-vsphere
+      kind: image
+      object: python:3.4-alpine
+      trivy-image: eu.gcr.io/stuttgart-things/sthings-container:1.23.2
+    secrets: inherit
+
+
       # - name: Push w/ skopeo to registries
       #   id: build
       #   run: |

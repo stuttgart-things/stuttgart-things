@@ -115,38 +115,38 @@ jobs:
       trivy-image: eu.gcr.io/stuttgart-things/sthings-container:1.23.2
     secrets: inherit
 
-  Send-Homerun-Notification:
-    if: ${{ always() }}
-    needs: Scan-Image
-    runs-on: ghr-stuttgart-things-skyami-cicd
-    environment: labul-vsphere
-    container:
-      image: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:5e0a8cc6701035f49d8ec7831be05655dfa9df3e54d8e2aaa16142049f34f9c5
-    steps:
-      - name: Send notification to homerun w/ machineshop
-        shell: bash
-        run: |
-          TITLE_PREFIX="Build of container image ${{ inputs.context-sub-path }} w/ kaniko on github actions"
-          SYSTEM="github"
-          TAGS="kaniko,github-actions"
-          WORKFLOW_RESULT="succeded"
-          WORKFLOW_SEVERITY="SUCCESS"
-          BODY="artifact was build"
+  # Send-Homerun-Notification:
+  #   if: ${{ always() }}
+  #   needs: Scan-Image
+  #   runs-on: ghr-stuttgart-things-skyami-cicd
+  #   environment: labul-vsphere
+  #   container:
+  #     image: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:5e0a8cc6701035f49d8ec7831be05655dfa9df3e54d8e2aaa16142049f34f9c5
+  #   steps:
+  #     - name: Send notification to homerun w/ machineshop
+  #       shell: bash
+  #       run: |
+  #         TITLE_PREFIX="Build of container image ${{ inputs.context-sub-path }} w/ kaniko on github actions"
+  #         SYSTEM="github"
+  #         TAGS="kaniko,github-actions"
+  #         WORKFLOW_RESULT="succeded"
+  #         WORKFLOW_SEVERITY="SUCCESS"
+  #         BODY="artifact was build"
 
-          if [ "${{ needs.Scan-Image.result }}" != "success" ]; then
-            WORKFLOW_RESULT="failed"
-            WORKFLOW_SEVERITY="ERROR"
-            BODY="no artifact was build"
-          fi
+  #         if [ "${{ needs.Scan-Image.result }}" != "success" ]; then
+  #           WORKFLOW_RESULT="failed"
+  #           WORKFLOW_SEVERITY="ERROR"
+  #           BODY="no artifact was build"
+  #         fi
 
-          TITLE="${TITLE_PREFIX} ${WORKFLOW_RESULT}"
+  #         TITLE="${TITLE_PREFIX} ${WORKFLOW_RESULT}"
 
-          machineshop push \
-          --destination https://homerun.homerun-dev.sthings-vsphere.labul.sva.de/generic \
-          --target homerun \
-          --title "${TITLE}" \
-          --system "${SYSTEM}" \
-          --info "${BODY}" \
-          --tags "${TAGS}" \
-          --author "${GITHUB_ACTOR}" \
-          --severity "${WORKFLOW_SEVERITY}"
+  #         machineshop push \
+  #         --destination https://homerun.homerun-dev.sthings-vsphere.labul.sva.de/generic \
+  #         --target homerun \
+  #         --title "${TITLE}" \
+  #         --system "${SYSTEM}" \
+  #         --info "${BODY}" \
+  #         --tags "${TAGS}" \
+  #         --author "${GITHUB_ACTOR}" \
+  #         --severity "${WORKFLOW_SEVERITY}"
