@@ -1,8 +1,8 @@
-ARG FROM_TAG=alpine3.20
+ARG FROM_TAG=3.9.20-alpine3.20
 FROM python:${FROM_TAG}
 
 # META INFORMATION
-LABEL version=alpine-3.20-1
+LABEL version=3.9.20-alpine3.20
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 
 # ENV VARIABLES
