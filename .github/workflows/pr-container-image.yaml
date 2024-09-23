@@ -85,7 +85,7 @@ jobs:
       matrix: ${{ fromJson(needs.Get-Changed-Dockerfiles.outputs.contexts) }}
     uses: stuttgart-things/stuttgart-things/.github/workflows/call-docker-build.yaml@main
     with:
-      runs-on: ghr-stuttgart-things-skyami-cicd
+      runs-on: docker
       environment-name: labul-vsphere
       # registry-config: images/dev-registries.yaml
       # dockerfile: Dockerfile
