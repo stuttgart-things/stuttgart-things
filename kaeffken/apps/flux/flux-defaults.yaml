@@ -19,9 +19,9 @@ fluxAppDefaults:
       namespace:
         name: METALLB_NAMESPACE
         value: metallb-system
-      version: 
+      version:
         name: METALLB_CHART_VERSION
         value: 6.3.10
-      ipRange: 
+      ipRange:
         name: IP_RANGE
         value: ""
