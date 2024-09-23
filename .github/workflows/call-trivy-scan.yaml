@@ -46,7 +46,7 @@ jobs:
         run: |
           # SCAN LOCAL IMAGE FROM TARBALL
           trivy image ${{ inputs.object }}
-        if: ${{ inputs.object == 'image' }}
+        if: ${{ inputs.kind == 'image' }}
         shell: bash
 
       # - name: Build and push image w/ trivy
