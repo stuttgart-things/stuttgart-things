@@ -4,7 +4,6 @@ FROM python:${FROM_TAG}
 # META INFORMATION
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 LABEL org.opencontainers.image.source https://github.com/stuttgart-things/stuttgart-things
-
 LABEL version=3.9.20-alpine3.20
 
 # ENV VARIABLES
