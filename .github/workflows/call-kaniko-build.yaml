@@ -110,7 +110,7 @@ jobs:
         id: set_artifact_output
         run: |
           # SET ENV VARS
-          echo "BUILD_IMAGE_ARTIFACT=${REGISTRY_URL}/${{ inputs.context-sub-path }}:${BUILD_TAG}" >> "$GITHUB_OUTPUT"
+          echo "BUILD_IMAGE_ARTIFACT=$(echo ${REGISTRY_URL}/${{ inputs.context-sub-path }}:${BUILD_TAG})" >> "$GITHUB_OUTPUT"
 
   Scan-Image:
     needs:
