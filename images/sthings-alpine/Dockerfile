@@ -17,6 +17,7 @@ ARG VAULT_URL_LABDA_VSPHERE=https://vault-vsphere.tiab.labda.sva.de:8200
 RUN apk update && apk add ca-certificates && rm -rf /var/cache/apk/* \
   mkdir /usr/local/share/ca-certificates/extra
 
+# INSTALL PACKAGES W/ APK
 RUN rm -rf /usr/local/share/ca-certificates/* \
     && wget -O /usr/local/share/ca-certificates/labul-ca.crt ${VAULT_URL_LABUL}/v1/pki/ca/pem --no-check-certificate \
     && wget -O /usr/local/share/ca-certificates/labda-ca.crt ${VAULT_URL_LABDA}/v1/pki/ca/pem --no-check-certificate \
