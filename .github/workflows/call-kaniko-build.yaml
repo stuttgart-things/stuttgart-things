@@ -31,8 +31,10 @@ on:
         type: string
 
 jobs:
-  kaniko-build-push:
+  Kaniko-Build-Push:
     runs-on: ${{ inputs.runs-on }}
+    outputs:
+      build-image-artifact: ${{ steps.set_artifact_output.outputs.BUILD_IMAGE_ARTIFACT }}
     environment: ${{ inputs.environment-name }}
     container:
       image: ${{ inputs.kaniko-image }}
@@ -104,18 +106,23 @@ jobs:
           echo "BUILD_IMAGE=${REGISTRY_URL}/${{ inputs.context-sub-path }}:${BUILD_TAG}" >> $GITHUB_ENV
           echo "BUILD_TAG=${BUILD_TAG}" >> $GITHUB_ENV
 
+      - name: Set Artifact output
+        id: set_artifact_output
+        run: |
+          # SET ENV VARS
+          echo "BUILD_IMAGE_ARTIFACT=${REGISTRY_URL}/${{ inputs.context-sub-path }}:${BUILD_TAG}" >> "$GITHUB_OUTPUT"
+
   Scan-Image:
     needs:
-      - kaniko-build-push
+      - Kaniko-Build-Push
     uses: stuttgart-things/stuttgart-things/.github/workflows/call-trivy-scan.yaml@main
     with:
       runs-on: ghr-stuttgart-things-skyami-cicd
       environment-name: labul-vsphere
       kind: image
-      object: python:3.4-alpine
+      object: ${{ needs.Kaniko-Build-Push.outputs.build-image-artifact }}
       trivy-image: eu.gcr.io/stuttgart-things/sthings-container:1.23.2
     secrets: inherit
-
 
       # - name: Push w/ skopeo to registries
       #   id: build
