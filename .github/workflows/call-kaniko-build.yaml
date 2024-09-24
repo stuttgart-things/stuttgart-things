@@ -39,7 +39,7 @@ jobs:
   Kaniko-Build-Push:
     runs-on: ${{ inputs.runs-on }}
     outputs:
-      build-image-artifact: nginx:latest #${{ steps.set_artifact_output.outputs.BUILD_IMAGE_ARTIFACT }}
+      build-image-artifact: ${{ steps.set.outputs.BUILD_IMAGE_ARTIFACT }}
     environment: ${{ inputs.environment-name }}
     container:
       image: ${{ inputs.kaniko-image }}
@@ -112,7 +112,7 @@ jobs:
           echo "BUILD_TAG=${BUILD_TAG}" >> $GITHUB_ENV
 
       - name: Set Artifact output
-        id: set_artifact_output
+        id: set
         run: |
           # SET ENV VARS
           echo "BUILD_IMAGE_ARTIFACT=$(echo ${{ env.BUILD_IMAGE }})" >> "$GITHUB_OUTPUT"
