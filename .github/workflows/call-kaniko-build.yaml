@@ -29,6 +29,11 @@ on:
         required: false
         default: images/dev-registries.yaml
         type: string
+    outputs:
+      build-image-artifact:
+        description: build image artifact
+        value: ${{ jobs.Kaniko-Build-Push.outputs.build-image-artifact }}
+
 
 jobs:
   Kaniko-Build-Push:
