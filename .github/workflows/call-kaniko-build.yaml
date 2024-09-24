@@ -39,7 +39,7 @@ jobs:
   Kaniko-Build-Push:
     runs-on: ${{ inputs.runs-on }}
     outputs:
-      build-image-artifact: ${{ steps.set_artifact_output.outputs.BUILD_IMAGE_ARTIFACT }}
+      build-image-artifact: nginx:latest #${{ steps.set_artifact_output.outputs.BUILD_IMAGE_ARTIFACT }}
     environment: ${{ inputs.environment-name }}
     container:
       image: ${{ inputs.kaniko-image }}
