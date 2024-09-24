@@ -39,7 +39,7 @@ jobs:
   Kaniko-Build-Push:
     runs-on: ${{ inputs.runs-on }}
     outputs:
-      build-image-artifact: ${{ steps.build.outputs.BUILD_IMAGE_ARTIFACT }}
+      build-image-artifact: ${{ steps.build.outputs.DIR_EXISTS }}
     environment: ${{ inputs.environment-name }}
     container:
       image: ${{ inputs.kaniko-image }}
@@ -111,7 +111,7 @@ jobs:
 
           echo "BUILD_IMAGE=${REGISTRY_URL}/${{ inputs.context-sub-path }}:${BUILD_TAG}" >> $GITHUB_ENV
           echo "BUILD_TAG=${BUILD_TAG}" >> $GITHUB_ENV
-          echo "BUILD_IMAGE_ARTIFACT=${REGISTRY_URL}/${{ inputs.context-sub-path }}:${BUILD_TAG}" >> $GITHUB_OUTPUT
+          echo "DIR_EXISTS=nginx" >> "$GITHUB_OUTPUT"
 
   Scan-Image:
     needs:
