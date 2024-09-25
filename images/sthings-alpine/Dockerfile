@@ -3,8 +3,8 @@ FROM python:${FROM_TAG}
 
 # META INFORMATION
 LABEL version=3.9.20-alpine3.20
-LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 LABEL org.opencontainers.image.source https://github.com/stuttgart-things/stuttgart-things
+LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 
 # ENV VARIABLES
 ARG VAULT_URL_LABUL=https://vault.labul.sva.de:8200
@@ -13,7 +13,7 @@ ARG VAULT_URL_LABUL_VSPHERE=https://vault-vsphere.labul.sva.de:8200
 ARG VAULT_URL_LABUL_PVE=https://raw.githubusercontent.com/stuttgart-things/stuttgart-things/main/images/sthings-alpine/labul-pve.crt
 ARG VAULT_URL_LABDA_VSPHERE=https://vault-vsphere.tiab.labda.sva.de:8200
 
-# INSTALL CA CERTIFICATES
+# INSTALL CA-CERTIFICATES
 RUN apk update && apk add ca-certificates && rm -rf /var/cache/apk/* \
   mkdir /usr/local/share/ca-certificates/extra
 
