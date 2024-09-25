@@ -27,6 +27,10 @@ on:
         required: false
         type: string
         default: "latest"
+      registry-config:
+        required: false
+        default: images/dev-registries.yaml
+        type: string
 
 jobs:
   buildx-build-push:
@@ -53,6 +57,19 @@ jobs:
           rm -rf LICENSE README.md
           sudo chmod +x /usr/bin/machineshop
           machineshop version
+
+      - name: Login into registry
+        shell: bash
+        id: login
+        run: |
+          # LOGIN INTO BUILD REGISTRY
+          REGISTRY_URL=$(yq -r ".build.reg.url" ${{ inputs.registry-config }})
+          vault_username_path=$(yq -r ".build.reg.username" ${{ inputs.registry-config }})
+          vault_password_path=$(yq -r ".build.reg.password" ${{ inputs.registry-config }})
+
+          docker login ${REGISTRY_URL} \
+          --username $(machineshop get --path ${vault_username_path} | tail -n +9) \
+          --password $(machineshop get --path ${vault_password_path} | tail -n +9)
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
