@@ -25,6 +25,10 @@ on:
         required: false
         type: boolean
         default: false
+      registry-config:
+        required: false
+        default: images/dev-registries.yaml
+        type: string
 
 jobs:
   trivy-build-push:
@@ -45,6 +49,19 @@ jobs:
         uses: actions/checkout@v4.1.7
         with:
           fetch-depth: '0'
+
+      - name: Registry login
+        shell: bash
+        id: build
+        run: |
+          # LOGIN INTO BUILD REGISTRY
+          REGISTRY_URL=$(yq -r ".build.reg.url" ${{ inputs.registry-config }})
+          vault_username_path=$(yq -r ".build.reg.username" ${{ inputs.registry-config }})
+          vault_password_path=$(yq -r ".build.reg.password" ${{ inputs.registry-config }})
+
+          skopeo login ${REGISTRY_URL} \
+          --username $(machineshop get --path ${vault_username_path} | tail -n +8) \
+          --password $(machineshop get --path ${vault_password_path} | tail -n +8)
 
       - name: Set object reference
         run: |
