@@ -76,7 +76,7 @@ jobs:
       #   shell: bash
 
       - name: Build and push image w/ kaniko
-        shell: bash
+        # shell: bash
         id: build
         run: |
           # CONFIGURE GIT
