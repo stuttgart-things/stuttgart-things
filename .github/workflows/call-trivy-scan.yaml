@@ -21,6 +21,10 @@ on:
         required: false
         type: string
         default: eu.gcr.io/stuttgart-things/sthings-container:1.23.2
+      object-reference-b64:
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   trivy-build-push:
@@ -42,10 +46,18 @@ jobs:
         with:
           fetch-depth: '0'
 
+      - name: Set object reference
+        run: |
+          if [ "${{ inputs.object-reference-b64 }}" == "true" ]; then
+            echo "SCAN_OBJECT=$(echo ${{ inputs.object }} | base64 -d)" >> $GITHUB_ENV
+          else
+            echo "SCAN_OBJECT=$(echo ${{ inputs.object }})" >> $GITHUB_ENV
+          fi
+
       - name: Scan image w/ trivy
         run: |
-          echo "Scanning image ${{ inputs.object }}"
-          trivy image ${{ inputs.object }}
+          echo "Scanning image ${{ env.SCAN_OBJECT }}"
+          trivy image ${{ env.SCAN_OBJECT }}
         if: ${{ inputs.kind == 'image' }}
         shell: bash
 

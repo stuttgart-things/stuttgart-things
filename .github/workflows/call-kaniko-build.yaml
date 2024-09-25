@@ -115,8 +115,7 @@ jobs:
           echo BUILD_IMAGE=$(echo ${REGISTRY_URL}/${{ inputs.context-sub-path }}:${BUILD_TAG})
           #echo "DIR_EXISTS=nginx" >> "$GITHUB_OUTPUT"
 
-          TO_SCAN=$(echo ${REGISTRY_URL}/${{ inputs.context-sub-path }}:${BUILD_TAG})
-          # TO_SCAN=$(echo ${REGISTRY_URL}/${{ inputs.context-sub-path }}:${BUILD_TAG} | base64 -w 0)
+          TO_SCAN=$(echo ${REGISTRY_URL}/${{ inputs.context-sub-path }}:${BUILD_TAG} | base64 -w 0)
 
           echo "DIR_EXISTS=$(echo ${TO_SCAN})" >> "$GITHUB_OUTPUT"
 
@@ -130,6 +129,7 @@ jobs:
       kind: image
       object: ${{ needs.Kaniko-Build-Push.outputs.build-image-artifact }}
       trivy-image: eu.gcr.io/stuttgart-things/sthings-container:1.23.2
+      object-reference-b64: true
     secrets: inherit
 
       # - name: Push w/ skopeo to registries
