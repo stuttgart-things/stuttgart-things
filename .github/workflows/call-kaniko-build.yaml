@@ -115,7 +115,8 @@ jobs:
           echo BUILD_IMAGE=$(echo ${REGISTRY_URL}/${{ inputs.context-sub-path }}:${BUILD_TAG})
           #echo "DIR_EXISTS=nginx" >> "$GITHUB_OUTPUT"
 
-          TO_SCAN=$(echo ${REGISTRY_URL}/${{ inputs.context-sub-path }}:${BUILD_TAG} | base64 -w 0)
+          TO_SCAN=$(echo ${REGISTRY_URL}/${{ inputs.context-sub-path }}:${BUILD_TAG})
+          # TO_SCAN=$(echo ${REGISTRY_URL}/${{ inputs.context-sub-path }}:${BUILD_TAG} | base64 -w 0)
 
           echo "DIR_EXISTS=$(echo ${TO_SCAN})" >> "$GITHUB_OUTPUT"
 
