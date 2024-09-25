@@ -42,6 +42,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Install machineshop
+        shell: bash
+        id: setup
+        run: |
+          VERSION=2.6.2
+          wget https://github.com/stuttgart-things/machineshop/releases/download/${VERSION}/machineshop_Linux_x86_64.tar.gz
+          tar xvfz machineshop_Linux_x86_64.tar.gz
+          sudo mv machineshop /usr/bin/machineshop
+          rm -rf LICENSE README.md
+          sudo chmod +x /usr/bin/machineshop
+          machineshop version
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
