@@ -1,5 +1,5 @@
 ---
-name: Golang Ko Image-Build
+name: Ko Image-Build
 on:
   workflow_call:
     inputs:
@@ -10,21 +10,23 @@ on:
         default: k8s
         required: false
         type: string
-      registry:
-        required: false
-        default: ghcr.io
+      registry-repo:
+        required: true
         type: string
       ko-image:
         required: false
         type: string
-        default: ghcr.io/ko-build/ko:b256278cc0edcf32bf33904f067eba2d99204d2b
+        default: ghcr.io/ko-build/ko:688e13270e5a3c28107101a7989c0a461781bc0a
+      module-name:
+        required: true
+        type: string
 
 jobs:
   ko-build:
     runs-on: ${{ inputs.runs-on }}
     environment: ${{ inputs.environment-name }}
     env:
-      IMAGE_TAG: ${{ inputs.tag }}
+      KO_DOCKER_REPO: ${{ inputs.registry-repo }}
     container:
       image: ${{ inputs.ko-image }}
     steps:
@@ -36,4 +38,4 @@ jobs:
 
       - name: Build and push image w/ ko
         run: |
-          ko version
+          ko build ${{ inputs.module-name }} --push
