@@ -42,7 +42,7 @@ jobs:
       VAULT_NAMESPACE: ${{ secrets.VAULT_NAMESPACE }}
       VAULT_ROLE_ID: ${{ secrets.VAULT_ROLE_ID }}
       VAULT_SECRET_ID: ${{ secrets.VAULT_SECRET_ID }}
-      DESTINATION: ${{ inputs.image-destination }}
+      # DESTINATION: ${{ inputs.image-destination }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -64,18 +64,19 @@ jobs:
         if: ${{ !contains(env.DESTINATION, 'ghcr.io') }} && ${{ inputs.push }}
         id: login
         run: |
-          # LOGIN INTO BUILD REGISTRY
-          REGISTRY_URL=$(yq -r ".build.reg.url" ${{ inputs.registry-config }})
-          vault_username_path=$(yq -r ".build.reg.username" ${{ inputs.registry-config }})
-          vault_password_path=$(yq -r ".build.reg.password" ${{ inputs.registry-config }})
+          if [[ "${{ inputs.image-destination }}" != *"ghcr.io"* ]] && [[ "${{ inputs.push }}" == "true" ]]; then
+              REGISTRY_URL=$(yq -r ".build.reg.url" ${{ inputs.registry-config }})
+              vault_username_path=$(yq -r ".build.reg.username" ${{ inputs.registry-config }})
+              vault_password_path=$(yq -r ".build.reg.password" ${{ inputs.registry-config }})
 
-          docker login ${REGISTRY_URL} \
-          --username $(machineshop get --path ${vault_username_path} | tail -n +9) \
-          --password $(machineshop get --path ${vault_password_path} | tail -n +9)
+              docker login ${REGISTRY_URL} \
+              --username $(machineshop get --path ${vault_username_path} | tail -n +9) \
+              --password $(machineshop get --path ${vault_password_path} | tail -n +9)
+          fi
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
-        if: contains(env.DESTINATION, 'ghcr.io') && ${{ inputs.push }}
+        if: contains(inputs.image-destination, 'ghcr.io') && ${{ inputs.push }}
         with:
           registry: ghcr.io
           username: ${{ github.actor }} ## GitHub organization or username
