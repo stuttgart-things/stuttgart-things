@@ -1,4 +1,4 @@
-FROM ghcr.io/stuttgart-things/sthings-alpine:1.23@sha256:486b343e3bac3148e8f4608b11cf68da01493335724d6db2d4fb168bd394b9f0
+FROM ghcr.io/ko-build/ko:688e13270e5a3c28107101a7989c0a461781bc0a
 
 ARG MACHINE_SHOP_VERSION=2.2.9
 
