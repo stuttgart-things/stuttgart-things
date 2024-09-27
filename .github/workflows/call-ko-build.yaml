@@ -16,10 +16,24 @@ on:
       ko-image:
         required: false
         type: string
-        default: ghcr.io/ko-build/ko:688e13270e5a3c28107101a7989c0a461781bc0a
+        default: ghcr.io/stuttgart-things/sthings-ko:1.23.1
       module-name:
         required: true
         type: string
+      registry:
+        required: false
+        type: string
+        default: ghcr.io
+      vault-path-username:
+        required: false
+        type: string
+      vault-path-password:
+        required: false
+        type: string
+      ko-build-args:
+        required: false
+        type: string
+        default: --insecure-registry
 
 jobs:
   ko-build:
@@ -27,6 +41,11 @@ jobs:
     environment: ${{ inputs.environment-name }}
     env:
       KO_DOCKER_REPO: ${{ inputs.registry-repo }}
+      VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
+      VAULT_AUTH_METHOD: ${{ secrets.VAULT_AUTH_METHOD }}
+      VAULT_NAMESPACE: ${{ secrets.VAULT_NAMESPACE }}
+      VAULT_ROLE_ID: ${{ secrets.VAULT_ROLE_ID }}
+      VAULT_SECRET_ID: ${{ secrets.VAULT_SECRET_ID }}
     container:
       image: ${{ inputs.ko-image }}
     steps:
@@ -36,9 +55,13 @@ jobs:
         with:
           fetch-depth: '0'
 
+      - name: Login into registry
+        id: registryLogin
+        shell: bash
+        run: |
+          ko login ${{ inputs.registry }} -u $(machineshop get --path ${{ inputs.vault-path-username }} | tail -n +9) -p $(machineshop get --path ${{ inputs.vault-path-password }} | tail -n +9)
+
       - name: Build and push image w/ ko
         run: |
-          ls -lta
-          ko version
           git config --global --add safe.directory '*'
-          ko build ${{ inputs.module-name }} --push
+          ko build ${{ inputs.module-name }} ${{ inputs.ko-build-args }} --push

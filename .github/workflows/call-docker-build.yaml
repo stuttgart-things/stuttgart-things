@@ -72,6 +72,8 @@ jobs:
               docker login ${REGISTRY_URL} \
               --username $(machineshop get --path ${vault_username_path} | tail -n +9) \
               --password $(machineshop get --path ${vault_password_path} | tail -n +9)
+          else
+              echo "Registry is ghcr.io, skipping login"
           fi
 
       - name: Log in to GitHub Container Registry
