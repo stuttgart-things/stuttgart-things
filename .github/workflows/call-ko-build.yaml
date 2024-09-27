@@ -40,4 +40,5 @@ jobs:
         run: |
           ls -lta
           ko version
-          #ko build ${{ inputs.module-name }} --push
+          git config --global --add safe.directory '*'
+          ko build ${{ inputs.module-name }} --push
