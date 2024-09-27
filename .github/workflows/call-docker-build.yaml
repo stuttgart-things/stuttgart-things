@@ -80,7 +80,6 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }} ## GitHub organization or username
           password: ${{ secrets.GITHUB_TOKEN }}
-        if: !
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
