@@ -38,4 +38,6 @@ jobs:
 
       - name: Build and push image w/ ko
         run: |
-          ko build ${{ inputs.module-name }} --push
+          ls -lta
+          ko version
+          #ko build ${{ inputs.module-name }} --push

@@ -9,7 +9,7 @@ persistence:
   storageClass: nfs-csi
 
 service:
-  type: LoadBalancer
+  type: ClusterIP
 
 authentication:
   adminUser: ref+vault://apps/mosquitto/user
