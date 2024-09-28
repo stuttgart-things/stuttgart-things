@@ -55,11 +55,11 @@ jobs:
         with:
           fetch-depth: '0'
 
-      - name: Login into registry
-        id: registryLogin
-        shell: bash
-        run: |
-          ko login ${{ inputs.registry }} -u $(machineshop get --path ${{ inputs.vault-path-username }} | tail -n +9) -p $(machineshop get --path ${{ inputs.vault-path-password }} | tail -n +9)
+      #- name: Login into registry
+      #  id: registryLogin
+      #  shell: bash
+      #  run: |
+      #    ko login ${{ inputs.registry }} -u $(machineshop get --path ${{ inputs.vault-path-username }} | tail -n +9) -p $(machineshop get --path ${{ inputs.vault-path-password }} | tail -n +9)
 
       - name: Build and push image w/ ko
         run: |
