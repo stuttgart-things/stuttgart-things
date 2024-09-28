@@ -64,6 +64,7 @@ jobs:
 
       - name: Build and push image w/ ko
         run: |
+          ko login ghcr.io -u patrick-hermann-sva -p $GITHUB_TOKEN
           git config --global --add safe.directory '*'
           ko build 
           #ko build ${{ inputs.module-name }} ${{ inputs.ko-build-args }} --push
