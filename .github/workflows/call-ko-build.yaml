@@ -46,6 +46,7 @@ jobs:
       VAULT_NAMESPACE: ${{ secrets.VAULT_NAMESPACE }}
       VAULT_ROLE_ID: ${{ secrets.VAULT_ROLE_ID }}
       VAULT_SECRET_ID: ${{ secrets.VAULT_SECRET_ID }}
+      GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
     container:
       image: ${{ inputs.ko-image }}
     steps:
