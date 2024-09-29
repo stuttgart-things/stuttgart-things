@@ -10,9 +10,10 @@ on:
         default: k8s
         required: false
         type: string
-      # registry-repo:
-      #   required: true
-      #   type: string
+      golang-version:
+        required: false
+        type: string
+        default: 1.23.1
       # ko-image:
       #   required: false
       #   type: string
@@ -42,9 +43,9 @@ jobs:
     environment: ${{ inputs.environment-name }}
     steps:
       - name: Setup golang
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@v5.0.2
         with:
-          go-version: 1.23.1
+          go-version: ${{ inputs.golang-version }}
 
       - name: Checkout code/branch
         id: checkout
@@ -55,7 +56,7 @@ jobs:
       - name: Setup ko
         uses: ko-build/setup-ko@v0.6
 
-      - name: Setup ko
+      - name: Build KO Image
         run: ko build
 
     # runs-on: ${{ inputs.runs-on }}
