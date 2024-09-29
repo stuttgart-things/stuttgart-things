@@ -10,61 +10,79 @@ on:
         default: k8s
         required: false
         type: string
-      registry-repo:
-        required: true
-        type: string
-      ko-image:
-        required: false
-        type: string
-        default: ghcr.io/stuttgart-things/sthings-ko:1.23-2
-      module-name:
-        required: true
-        type: string
-      registry:
-        required: false
-        type: string
-        default: ghcr.io
-      vault-path-username:
-        required: false
-        type: string
-      vault-path-password:
-        required: false
-        type: string
-      ko-build-args:
-        required: false
-        type: string
-        default: --insecure-registry
+      # registry-repo:
+      #   required: true
+      #   type: string
+      # ko-image:
+      #   required: false
+      #   type: string
+      #   default: ghcr.io/stuttgart-things/sthings-ko:1.23-2
+      # module-name:
+      #   required: true
+      #   type: string
+      # registry:
+      #   required: false
+      #   type: string
+      #   default: ghcr.io
+      # vault-path-username:
+      #   required: false
+      #   type: string
+      # vault-path-password:
+      #   required: false
+      #   type: string
+      # ko-build-args:
+      #   required: false
+      #   type: string
+      #   default: --insecure-registry
 
 jobs:
   ko-build:
+    name: KO build
     runs-on: ${{ inputs.runs-on }}
     environment: ${{ inputs.environment-name }}
-    env:
-      KO_DOCKER_REPO: ${{ inputs.registry-repo }}
-      VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
-      VAULT_AUTH_METHOD: ${{ secrets.VAULT_AUTH_METHOD }}
-      VAULT_NAMESPACE: ${{ secrets.VAULT_NAMESPACE }}
-      VAULT_ROLE_ID: ${{ secrets.VAULT_ROLE_ID }}
-      VAULT_SECRET_ID: ${{ secrets.VAULT_SECRET_ID }}
-      GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-    container:
-      image: ${{ inputs.ko-image }}
     steps:
+      - name: Setup golang
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.23.1
+
       - name: Checkout code/branch
         id: checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: '0'
 
-      #- name: Login into registry
-      #  id: registryLogin
-      #  shell: bash
-      #  run: |
-      #    ko login ${{ inputs.registry }} -u $(machineshop get --path ${{ inputs.vault-path-username }} | tail -n +9) -p $(machineshop get --path ${{ inputs.vault-path-password }} | tail -n +9)
+      - name: Setup ko
+        uses: ko-build/setup-ko@v0.6
 
-      - name: Build and push image w/ ko
-        run: |
-          ko login ghcr.io -u patrick-hermann-sva -p $GITHUB_TOKEN
-          git config --global --add safe.directory '*'
-          ko build
-          #ko build ${{ inputs.module-name }} ${{ inputs.ko-build-args }} --push
+      - name: Setup ko
+        run: ko build
+
+    # runs-on: ${{ inputs.runs-on }}
+    # environment: ${{ inputs.environment-name }}
+    # env:
+    #   KO_DOCKER_REPO: ${{ inputs.registry-repo }}
+    #   VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
+    #   VAULT_AUTH_METHOD: ${{ secrets.VAULT_AUTH_METHOD }}
+    #   VAULT_NAMESPACE: ${{ secrets.VAULT_NAMESPACE }}
+    #   VAULT_ROLE_ID: ${{ secrets.VAULT_ROLE_ID }}
+    #   VAULT_SECRET_ID: ${{ secrets.VAULT_SECRET_ID }}
+    # container:
+    #   image: ${{ inputs.ko-image }}
+    # steps:
+    #   - name: Checkout code/branch
+    #     id: checkout
+    #     uses: actions/checkout@v4
+    #     with:
+    #       fetch-depth: '0'
+
+    #   - name: Login into registry
+    #     id: registryLogin
+    #     shell: bash
+    #     run: |
+    #       ko login ${{ inputs.registry }} -u $(machineshop get --path ${{ inputs.vault-path-username }} | tail -n +9) -p $(machineshop get --path ${{ inputs.vault-path-password }} | tail -n +9)
+
+    #   - name: Build and push image w/ ko
+    #     run: |
+    #       git config --global --add safe.directory '*'
+    #       ko build ${{ inputs.module-name }} ${{ inputs.ko-build-args }} --push
