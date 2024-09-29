@@ -42,7 +42,7 @@ jobs:
     environment: ${{ inputs.environment-name }}
     steps:
       - name: Setup golang
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@v5
         with:
           go-version: 1.23.1
 
