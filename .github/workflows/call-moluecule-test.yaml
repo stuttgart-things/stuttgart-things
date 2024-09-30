@@ -3,7 +3,7 @@ name: Run Molecule tests
 on:
   workflow_call:
     inputs:
-      scenario_names:
+      scenario-names:
         description: COMMA-SEPARATED LIST OF MOLECULE SCENARIOS E.G. "default","docker"
         required: false
         type: string
@@ -30,7 +30,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        scenario: ${{ fromJSON(format('[{0}]', inputs.scenario_names || '"default"')) }}
+        scenario: ${{ fromJSON(format('[{0}]', inputs.scenario-names) }}
 
     steps:
       - name: Checkout
