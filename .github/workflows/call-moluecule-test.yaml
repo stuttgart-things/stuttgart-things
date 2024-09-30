@@ -13,7 +13,7 @@ on:
         required: false
         type: string
         default: test
-      environment:
+      environment-name:
         description: ENVIRONMENT NAME
         required: false
         type: string
@@ -25,7 +25,7 @@ on:
 
 jobs:
   molecule:
-    environment: ${{ inputs.environment }}
+    environment: ${{ inputs.environment-name }}
     runs-on: ${{ inputs.runs-on }}
     strategy:
       fail-fast: false
