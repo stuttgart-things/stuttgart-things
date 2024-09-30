@@ -7,7 +7,7 @@ on:
         description: COMMA-SEPARATED LIST OF MOLECULE SCENARIOS E.G. "default","docker"
         required: false
         type: string
-        default: '["default"]'
+        default: "['default']"
       molecule-command:
         description: MOLECULE COMMAND
         required: false
@@ -41,7 +41,7 @@ jobs:
       - name: Molecule
         uses: gofrolist/molecule-action@v2
         with:
-          molecule_command: ${{ inputs.molecule_command }}
+          molecule_command: ${{ inputs.molecule-command }}
           molecule_args: --scenario-name ${{ matrix.scenario }}
         env:
           ANSIBLE_FORCE_COLOR: '1'
