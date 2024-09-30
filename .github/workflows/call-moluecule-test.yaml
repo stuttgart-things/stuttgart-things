@@ -8,7 +8,7 @@ on:
         required: false
         type: string
         default: '["default"]'
-      molecule_command:
+      molecule-command:
         description: MOLECULE COMMAND
         required: false
         type: string
