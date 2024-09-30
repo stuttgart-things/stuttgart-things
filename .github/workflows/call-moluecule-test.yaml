@@ -7,7 +7,7 @@ on:
         description: COMMA-SEPARATED LIST OF MOLECULE SCENARIOS E.G. "default","docker"
         required: false
         type: string
-        default: default
+        default: '["default"]'
       molecule_command:
         description: MOLECULE COMMAND
         required: false
@@ -21,7 +21,7 @@ on:
         description: RUNNER NAME
         required: false
         type: string
-        default: '"default"'
+        default: docker
 
 jobs:
   molecule:
@@ -30,7 +30,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        scenario: ${{ fromJSON(format('[{0}]', inputs.scenario-names) }}
+        scenario: ${{ fromJSON(inputs.scenario-names)}}
 
     steps:
       - name: Checkout
