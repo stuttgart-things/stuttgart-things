@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: pdns-entry-vsphere-fluxdev-2
+  name: pdns-entry-vsphere-fluxdev-3
   namespace: tektoncd
 spec:
   pipelineRef:
@@ -49,8 +49,8 @@ spec:
       value:
         - "pdns_url+-https://pdns-vsphere.labul.sva.de:8443"
         - "entry_zone+-sthings-vsphere.labul.sva.de."
-        - "ip_address+-10.31.102.12"
-        - "hostname+-fluxdev-2"
+        - "ip_address+-10.31.101.8"
+        - "hostname+-fluxdev-3"
     - name: ansibleVarsInventory
       value:
         - "localhost"
