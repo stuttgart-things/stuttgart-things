@@ -5,7 +5,7 @@ requirements: |
   roles:
     - src: https://github.com/stuttgart-things/install-configure-docker.git
       scm: git
-      version: 2024.04.30
+      version: 2024.10.01
     - src: https://github.com/stuttgart-things/install-configure-podman.git
       scm: git
       version: 2024.05.08
