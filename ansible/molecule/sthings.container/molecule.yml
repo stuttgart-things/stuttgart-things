@@ -4,7 +4,7 @@ dependency:
   enabled: True
   options:
     ignore-certs: True
-    requirements-file: ../../requirements-dev.yaml
+    requirements-file: requirements.yaml
     ignore-errors: false
 
 driver:

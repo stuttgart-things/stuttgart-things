@@ -24,7 +24,7 @@ tasks:
   run-molecule:
     preconditions: *venv
     cmds:
-      - molecule test -s default
+      - cd ansible && molecule test -s sthings.container
 
   setup-molecule:
     preconditions: *venv
@@ -38,7 +38,7 @@ tasks:
     cmds:
       - rm -rf ansible/.venv
       - python3 -m venv ansible/.venv
-      - echo "Don't forget to run\nsource ansible/.venv/bin/activate"
+      - echo "DON'T FORGET TO RUN - source ansible/.venv/bin/activate"
 
   branch:
     desc: Create branch from main
