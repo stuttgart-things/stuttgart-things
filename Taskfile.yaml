@@ -31,17 +31,20 @@ tasks:
   commit:
     desc: Commit + push code into branch
     cmds:
-      - git status | grep -q "modified" && echo "Code changes detected" || echo "No code changes detected"
+      - rm -rf dist/
       - git branch --set-upstream-to=origin/{{ .BRANCH }}
       - git pull
       - |
-        echo "ENTER COMMIT MESSAGE"
-        read COMMIT_MESSAGE;
         git add *
-        git add .github/workflows/*
-        git commit -am "$(echo ${COMMIT_MESSAGE})"
+        if [[ -n $(git status --porcelain) ]]; then
+          echo "ENTER COMMIT MESSAGE"
+          read COMMIT_MESSAGE;
+          echo "COMMITTING CHANGES"
+          git commit --allow-empty -a -m "$(echo ${COMMIT_MESSAGE})"
+        else
+          echo "NO CHANGES"
+        fi
         git push origin -u {{ .BRANCH }}
-
   pr:
     desc: Create pull request into main
     cmds:
