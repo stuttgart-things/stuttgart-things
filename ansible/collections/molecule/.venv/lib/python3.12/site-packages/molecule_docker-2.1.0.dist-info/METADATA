@@ -1,0 +1,131 @@
+Metadata-Version: 2.1
+Name: molecule-docker
+Version: 2.1.0
+Summary: Molecule aids in the development and testing of Ansible roles
+Home-page: https://github.com/ansible-community/molecule-docker
+Author: Ansible by Red Hat
+Author-email: info@ansible.com
+Maintainer: Ansible by Red Hat
+Maintainer-email: info@ansible.com
+License: MIT
+Project-URL: Bug Tracker, https://github.com/ansible-community/molecule-docker/issues
+Project-URL: Release Management, https://github.com/ansible-community/molecule-docker/releases
+Project-URL: CI, https://github.com/ansible-community/molecule-docker/actions
+Project-URL: Code of Conduct, https://docs.ansible.com/ansible/latest/community/code_of_conduct.html
+Project-URL: Documentation, https://molecule.readthedocs.io
+Project-URL: Discussions, https://github.com/ansible-community/molecule/discussions
+Project-URL: Source Code, https://github.com/ansible-community/molecule-docker
+Keywords: ansible,docker,testing,molecule
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Information Technology
+Classifier: Intended Audience :: System Administrators
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Topic :: System :: Systems Administration
+Classifier: Topic :: Utilities
+Requires-Python: >=3.8
+Description-Content-Type: text/x-rst
+License-File: LICENSE
+Requires-Dist: molecule (>=4.0.0)
+Requires-Dist: docker (>=4.3.1)
+Requires-Dist: requests
+Requires-Dist: selinux ; sys_platform == "linux"
+Requires-Dist: selinux ; sys_platform == "linux2"
+Provides-Extra: docs
+Requires-Dist: simplejson ; extra == 'docs'
+Requires-Dist: Sphinx ; extra == 'docs'
+Requires-Dist: sphinx-ansible-theme (>=0.2.2) ; extra == 'docs'
+Provides-Extra: lint
+Requires-Dist: pre-commit (>=1.21.0) ; extra == 'lint'
+Provides-Extra: test
+Requires-Dist: molecule[test] ; extra == 'test'
+
+**********************
+Molecule Docker Plugin
+**********************
+
+.. image:: https://badge.fury.io/py/molecule-docker.svg
+   :target: https://badge.fury.io/py/molecule-docker
+   :alt: PyPI Package
+
+.. image:: https://github.com/ansible-community/molecule-docker/workflows/tox/badge.svg
+   :target: https://github.com/ansible-community/molecule-docker/actions
+
+.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
+   :target: https://github.com/python/black
+   :alt: Python Black Code Style
+
+.. image:: https://img.shields.io/badge/license-MIT-brightgreen.svg
+   :target: LICENSE
+   :alt: Repository License
+
+Molecule Docker Plugin is designed to allow use docker containers for
+provisioning test resources.
+
+Please note that this driver is currently in its early stage of development.
+
+This plugin will function only if you also install `community.docker` ansible
+collection. Keep in mind that this requires newer version of docker python
+module which may not come with system-packaged versions of ansible like
+Ubuntu ones.
+
+Please do not file bugs towards molecule or this plugin if Ansible fails to
+execute any docker modules (missing or incorrect versions of docker or requests
+python modules). Instead file them on `community.docker <https://github.com/ansible-collections/community.docker>`_.
+
+.. _get-involved:
+
+Get Involved
+============
+
+* Join us in the ``#ansible-devtools`` channel on `Libera`_.
+* Join the discussion in `molecule-users Forum`_.
+* Join the community working group by checking the `wiki`_.
+* Want to know about releases, subscribe to `ansible-announce list`_.
+* For the full list of Ansible email Lists, IRC channels see the
+  `communication page`_.
+
+.. _`Libera`: https://web.libera.chat/?channel=#ansible-devtools
+.. _`molecule-users Forum`: https://groups.google.com/forum/#!forum/molecule-users
+.. _`wiki`: https://github.com/ansible/community/wiki/Molecule
+.. _`ansible-announce list`: https://groups.google.com/group/ansible-announce
+.. _`communication page`: https://docs.ansible.com/ansible/latest/community/communication.html
+
+.. _faq:
+
+FAQ
+============
+
+Q: How can I use Docker Context?
+
+A: ``molecule-docker`` depends directly on
+`community.docker.docker_container`_. Currently, `Docker Context` is not
+supported, but as a workaround,
+`docker_host in community.docker.docker_container`_ can be used to connect to
+the Docker API.
+
+.. _`community.docker.docker_container`: https://docs.ansible.com/ansible/latest/collections/community/docker/docker_container_module.html
+.. _`docker_host in community.docker.docker_container`: https://docs.ansible.com/ansible/latest/collections/community/docker/docker_container_module.html#parameter-docker_host
+
+.. _license:
+
+License
+=======
+
+The `MIT`_ License.
+
+.. _`MIT`: https://github.com/ansible/molecule/blob/main/LICENSE
+
+The logo is licensed under the `Creative Commons NoDerivatives 4.0 License`_.
+
+If you have some other use in mind, contact us.
+
+.. _`Creative Commons NoDerivatives 4.0 License`: https://creativecommons.org/licenses/by-nd/4.0/
