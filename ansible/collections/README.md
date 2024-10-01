@@ -5,9 +5,15 @@
 ### INSTALLATION
 
 ```bash
+# RELEASE
 VERSION=0.5.6
 ansible-galaxy collection install -f \
 https://github.com/stuttgart-things/stuttgart-things/releases/download/${VERSION}/sthings-base_os-${VERSION}.tar.gz
+
+# DEV-EXAMPLE
+VERSION=24.2741.18
+ansible-galaxy collection install -f \
+https://artifacts.homerun-dev.sthings-vsphere.labul.sva.de/ansible-collections/sthings-base_os-${VERSION}.tar.gz
 ```
 
 ### PLAYBOOKS
@@ -160,9 +166,15 @@ ansible-playbook -i /path/to/inventory sthings.base_os.get_execute_terraform -vv
 ### INSTALLATION
 
 ```bash
+# RELEASE
 VERSION=0.0.22
 ansible-galaxy collection install -f \
 https://github.com/stuttgart-things/stuttgart-things/releases/download/${VERSION}/sthings-container-${VERSION}.tar.gz
+
+# DEV-EXAMPLE
+VERSION=24.33.47
+ansible-galaxy collection install -f \
+https://artifacts.homerun-dev.sthings-vsphere.labul.sva.de/ansible-collections/sthings-container-${VERSION}.tar.gz
 ```
 
 ### PLAYBOOKS
