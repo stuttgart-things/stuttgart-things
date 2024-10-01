@@ -50,6 +50,6 @@ spec:
       resourcePolicy: ''
       persistentVolumeClaim:
         registry:
-          size: 64Gi
+          size: 12Gi
         trivy:
           size: 5Gi
