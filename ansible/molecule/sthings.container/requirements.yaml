@@ -11,7 +11,7 @@ collections:
   - name: community.docker
     version: 3.12.2
   - name: awx.awx
-    version: 24.6.0
+    version: 24.6.1
   - name: community.hashi_vault
     version: 6.2.0
   - name: https://artifacts.homerun-dev.sthings-vsphere.labul.sva.de/ansible-collections/sthings-container-24.114.5.tar.gz
