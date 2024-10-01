@@ -1,0 +1,37 @@
+---
+dependency:
+  name: galaxy
+  enabled: True
+  options:
+    ignore-certs: True
+    requirements-file: ../../requirements-dev.yaml
+    ignore-errors: false
+
+driver:
+  name: docker
+platforms:
+  - name: instance
+    image: "geerlingguy/docker-${MOLECULE_DISTRO:-rockylinux9}-ansible:latest"
+    command: ${MOLECULE_DOCKER_COMMAND:-""}
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+    cgroupns_mode: host
+    privileged: true
+    pre_build_image: true
+provisioner:
+  name: ansible
+  playbooks:
+    converge: ${MOLECULE_PLAYBOOK:-converge.yaml}
+
+verifier:
+  name: ansible
+
+scenario:
+  name: sthings.container
+  test_sequence:
+    - destroy
+    - dependency
+    - syntax
+    - create
+    - prepare
+    - converge

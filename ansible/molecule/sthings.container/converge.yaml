@@ -1,0 +1,6 @@
+---
+- name: Install container tools
+  ansible.builtin.import_playbook: sthings.container.tools
+
+- name: Install podman
+  ansible.builtin.import_playbook: sthings.container.podman

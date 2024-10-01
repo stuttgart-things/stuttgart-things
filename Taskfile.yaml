@@ -13,7 +13,33 @@ vars:
   BRANCH:
     sh: if [ $(git rev-parse --abbrev-ref HEAD) != "main" ]; then echo $(git rev-parse --abbrev-ref HEAD); else echo main ; fi
 
+
+# PRECONDITION TO CHECK IF THE VIRTUAL ENVIRONMENT IS ACTIVATED
+venv-precondition: &venv
+  - sh: |
+      pip -V | grep '.venv' >/dev/null 2>&1
+    msg: "The pip version output does not contain .venv, Halting. Run task setup-molecule and/or source .venv/bin/activate"
+
 tasks:
+  run-molecule:
+    preconditions: *venv
+    cmds:
+      - molecule test -s default
+
+  setup-molecule:
+    preconditions: *venv
+    cmds:
+      - pip install -U setuptools pip 'molecule'
+      - pip install molecule-docker
+      - molecule --version
+
+  setup-venv:
+    desc: "Setup python virtual environment"
+    cmds:
+      - rm -rf ansible/.venv
+      - python3 -m venv ansible/.venv
+      - echo "Don't forget to run\nsource ansible/.venv/bin/activate"
+
   branch:
     desc: Create branch from main
     cmds:
