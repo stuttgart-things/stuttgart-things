@@ -24,7 +24,10 @@ tasks:
   run-molecule:
     preconditions: *venv
     cmds:
-      - cd ansible && molecule test -s sthings.container
+      - |
+        echo "Enter to be tested collection name (base_os|container - sthings. is prefixed):"
+        read COLLECTION_NAME;
+        cd ansible && molecule test -s sthings.${COLLECTION_NAME} #container
 
   setup-molecule:
     preconditions: *venv

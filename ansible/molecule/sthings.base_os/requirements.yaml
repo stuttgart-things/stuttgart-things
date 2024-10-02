@@ -1,0 +1,19 @@
+---
+collections:
+  - name: community.crypto
+    version: 2.20.0
+  - name: community.general
+    version: 9.1.0
+  - name: ansible.posix
+    version: 1.5.4
+  - name: kubernetes.core
+    version: 5.0.0
+  - name: community.docker
+    version: 3.10.4
+  - name: community.vmware
+    version: 4.4.0
+  - name: awx.awx
+    version: 24.6.0
+  - name: community.hashi_vault
+    version: 6.2.0
+  - name: https://artifacts.homerun-dev.sthings-vsphere.labul.sva.de/ansible-collections/sthings-base_os-24.213.21.tar.gz
