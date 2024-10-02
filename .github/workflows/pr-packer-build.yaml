@@ -124,8 +124,8 @@ jobs:
       - Build-Packer-Template
     with:
       notification-artifact: homerun
-      runs-on: ${{ inputs.runner }}
-      environment-name: ${{ inputs.environment-name }}
+      runs-on: ghr-stuttgart-things-skyami-cicd
+      environment-name: k8s
       machineshop-image: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:5e0a8cc6701035f49d8ec7831be05655dfa9df3e54d8e2aaa16142049f34f9c5
       continue-on-error: true
     secrets: inherit
