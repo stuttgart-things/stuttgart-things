@@ -1,0 +1,21 @@
+---
+- name: Create user for golang setup and to test users creation
+  ansible.builtin.import_playbook: sthings.base_os.users
+  vars:
+    profile: {}
+    users:
+      - username: sthings
+        name: sthings user
+        groups: ['{{ admin_group }}']
+        uid: 1005
+        home: /home/rke
+        profile: |
+          alias ll='ls -ahl'
+        generate_ssh_key: false
+        enable_ssh_tcp_forwarding: true
+
+- name: Install binaries
+  ansible.builtin.import_playbook: sthings.base_os.binaries
+
+- name: Install golang
+  ansible.builtin.import_playbook: sthings.base_os.golang
