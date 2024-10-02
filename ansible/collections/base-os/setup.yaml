@@ -108,15 +108,15 @@ playbooks:
 
           python_modules:
             - name: ansible
-              version: 9.6.0
+              version: 10.4.0
             - name: kubernetes
-              version: 29.0.0
+              version: 31.0.0
             - name: openshift
               version: 0.13.2
             - name: hvac[parser]
-              version: 2.2.0
+              version: 2.3.0
             - name: pyvmomi
-              version: 8.0.2.0.1
+              version: 8.0.3.0.1
 
         roles:
           - install-requirements
@@ -132,18 +132,6 @@ playbooks:
               ansible --version
               ansible-galaxy install -r /tmp/requirements.yaml -f
             become_user: "{{ ansible_username }}"
-
-  - name: kcl
-    play: |
-      ---
-      - hosts: "{{ target_host | default('all') }}"
-        become: true
-
-        tasks:
-          - name: Install kcl-cli
-            ansible.builtin.shell: |
-              wget -q https://kcl-lang.io/script/install-cli.sh -O - | /bin/bash
-              wget -q https://kcl-lang.io/script/install-kcl-lsp.sh -O - | /bin/bash
 
   - name: users
     play: |
