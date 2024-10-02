@@ -8,12 +8,13 @@ playbooks:
         vars:
           golang_version: 1.23.2
           #golang_checksum: 5fb8b3ed4a78a8eab444dfcb472b8c07a06980dcaee62ce3645edd6d130004c6 #1.22.3
-          go_checksum_type: "sha256"
+          #go_checksum_type: "sha256"
           source_url: "https://go.dev/dl/go{{ golang_version }}.linux-amd64.tar.gz"
           golang_install_dir: /usr/local
           golangci_version: 1.61.0 # datasource=github-tags depName=golangci/golangci-lint
           goreleaser_version: 2.3.2 # datasource=github-tags depName=goreleaser/goreleaser
           ko_version: 0.16.0 # datasource=github-tags depName=ko-build/ko
+          cobracli_version: 1.8.1 # datasource=github-tags depName=spf13/cobra
 
           # USE WITH EXISTING USER
           go_username: sthings
@@ -97,7 +98,7 @@ playbooks:
         post_tasks:
           - name: Install addons
             ansible.builtin.shell: |
-              ./go install github.com/spf13/cobra-cli@v1.3.0
+              ./go install github.com/spf13/cobra-cli@v{{ cobracli_version }}
               ./go install github.com/golangci/golangci-lint/cmd/golangci-lint@{{ golangci_version }}
             args:
               chdir: "{{ golang_install_dir }}/go/bin/"

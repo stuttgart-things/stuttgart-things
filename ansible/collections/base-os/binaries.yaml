@@ -12,7 +12,6 @@ playbooks:
           - "{{ path | default('.') }}/{{ profile | default('binaries') }}.yaml"
         roles:
           - role: sthings.base_os.download_install_binary
-
 vars:
   - name: binaries
     file: |
