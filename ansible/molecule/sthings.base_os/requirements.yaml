@@ -13,7 +13,7 @@ collections:
   - name: community.vmware
     version: 4.4.0
   - name: awx.awx
-    version: 24.6.0
+    version: 24.6.1
   - name: community.hashi_vault
     version: 6.2.0
   - name: https://artifacts.homerun-dev.sthings-vsphere.labul.sva.de/ansible-collections/sthings-base_os-24.237.45.tar.gz
