@@ -6,13 +6,13 @@ playbooks:
       - hosts: "{{ target_host | default('all') }}"
         become: true
         vars:
-          golang_version: 1.22.4
+          golang_version: 1.23.2
           #golang_checksum: 5fb8b3ed4a78a8eab444dfcb472b8c07a06980dcaee62ce3645edd6d130004c6 #1.22.3
           go_checksum_type: "sha256"
           source_url: "https://go.dev/dl/go{{ golang_version }}.linux-amd64.tar.gz"
           golang_install_dir: /usr/local
           golangci_version: 1.61.0 # datasource=github-tags depName=golangci/golangci-lint
-          goreleaser_version: 1.26.2 # datasource=github-tags depName=goreleaser/goreleaser
+          goreleaser_version: 2.3.2 # datasource=github-tags depName=goreleaser/goreleaser
           ko_version: 0.16.0 # datasource=github-tags depName=ko-build/ko
 
           # USE WITH EXISTING USER
@@ -26,7 +26,6 @@ playbooks:
               bin_version: "{{ goreleaser_version }}"
               check_bin_version_before_installing: true
               source_url: "https://github.com/goreleaser/goreleaser/releases/download/v{{ goreleaser_version }}/goreleaser_Linux_x86_64.tar.gz"
-              bin_to_copy: goreleaser
               to_remove: goreleaser_Linux_x86_64.tar.gz
               bin_dir: "/usr/local/bin"
               version_cmd: "-- version"
