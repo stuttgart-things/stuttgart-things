@@ -4,3 +4,12 @@
 
 - name: Install podman
   ansible.builtin.import_playbook: sthings.container.podman
+
+- name: Install docker
+  ansible.builtin.import_playbook: sthings.container.docker
+
+- name: Install kind
+  ansible.builtin.import_playbook: sthings.container.kind
+
+- name: Install nerdctl
+  ansible.builtin.import_playbook: sthings.container.nerdctl
