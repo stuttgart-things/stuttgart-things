@@ -28,7 +28,7 @@ verifier:
   name: ansible
 
 scenario:
-  name: sthings.container
+  name: sthings.base_os
   test_sequence:
     - destroy
     - dependency
