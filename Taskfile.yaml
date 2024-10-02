@@ -18,7 +18,7 @@ vars:
 venv-precondition: &venv
   - sh: |
       pip -V | grep '.venv' >/dev/null 2>&1
-    msg: "The pip version output does not contain .venv, Halting. Run task setup-molecule and/or source .venv/bin/activate"
+    msg: "The pip version output does not contain .venv, Halting. Run task setup-molecule and/or source ansible/.venv/bin/activate"
 
 tasks:
   run-molecule:
