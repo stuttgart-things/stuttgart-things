@@ -3,6 +3,7 @@
   ansible.builtin.import_playbook: sthings.base_os.users
   vars:
     profile: {}
+    install_addons: false
     users:
       - username: sthings
         name: sthings user
@@ -19,3 +20,8 @@
 
 - name: Install golang
   ansible.builtin.import_playbook: sthings.base_os.golang
+  vars:
+    install_addons: false
+
+- name: Install ansible
+  ansible.builtin.import_playbook: sthings.base_os.ansible

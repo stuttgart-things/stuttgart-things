@@ -1,0 +1,72 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: xharbor.resources.stuttgart-things.com
+spec:
+  connectionSecretKeys:
+    - kubeconfig
+  group: resources.stuttgart-things.com
+  names:
+    kind: XHarbor
+    plural: xharbor
+  claimNames:
+    kind: Harbor
+    plural: harbors
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          description: A Harbor is a composite resource that represents a helm release for a harbor deployment
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                deploymentNamespace:
+                  type: string
+                  default: harbor
+                  description: namespace for harbor
+                clusterName:
+                  type: string
+                  description: cluster name/helm provider name
+                version:
+                  type: string
+                  default: 23.0.4
+                  description: helm chart version
+                storageClass:
+                  type: string
+                  default: longhorn
+                  description: storage class name
+                storageSize:
+                  type: string
+                  default: 1Gi
+                  description: storage size
+                hostName:
+                  type: string
+                  default: harbor
+                  description: hostname of ingress resource
+                domainName:
+                  type: string
+                  description: domain (name) of ingress resource
+                cert:
+                  type: object
+                  properties:
+                    issuerName:
+                      type: string
+                      default: vault-approle
+                      description: name of cert-manager issuer
+                    issuerKind:
+                      type: string
+                      default: ClusterIssuer
+                      description: kind of cert-manager issuer
+                    secretName:
+                      type: string
+                      description: name of to be created secret
+                      default: harbor-ingress-tls
+              required:
+                - cert
+                - clusterName
+                - domainName

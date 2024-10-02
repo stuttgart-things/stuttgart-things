@@ -1,0 +1,129 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: registry
+  labels:
+    crossplane.io/xrd: xregistry.resources.stuttgart-things.com
+spec:
+  writeConnectionSecretsToNamespace: crossplane-system
+  compositeTypeRef:
+    apiVersion: resources.stuttgart-things.com/v1alpha1
+    kind: XRegistry
+  resources:
+    - name: registry-release
+      base:
+        apiVersion: helm.crossplane.io/v1beta1
+        kind: Release
+        metadata:
+          name: registry
+          annotations:
+            crossplane.io/external-name: registry
+        spec:
+          providerConfigRef:
+            name: in-cluster
+          forProvider:
+            chart:
+              name: docker-registry
+              repository: https://helm.twun.io
+              version: 2.2.3
+            namespace: registry
+            insecureSkipTLSVerify: false
+            skipCreateNamespace: false
+            wait: true
+            skipCRDs: false
+            set:
+              - name: secrets.htpasswd
+                valueFrom:
+                  secretKeyRef:
+                    key: HTPASSWD
+                    name: registry
+                    namespace: default
+            values:
+              persistence:
+                enabled: true
+              ingress:
+                enabled: true
+                className: nginx
+                path: /
+                annotations:
+                  nginx.ingress.kubernetes.io/secure-backends: "true"
+                  nginx.ingress.kubernetes.io/ssl-redirect: "false"
+                  nginx.ingress.kubernetes.io/proxy-body-size: 500m
+              configData:
+                storage:
+                  cache:
+                    blobdescriptor: true
+              secrets:
+                haSharedSecret: ""
+              garbageCollect:
+                enabled: true
+                deleteUntagged: true
+                schedule: "0 1 * * *"
+                resources: {}
+      patches:
+        - type: CombineFromComposite
+          combine:
+            variables:
+              - fromFieldPath: spec.clusterName
+            strategy: string
+            string:
+              fmt: "registry-%s"
+          toFieldPath: metadata.name
+        - fromFieldPath: spec.deploymentNamespace
+          toFieldPath: spec.forProvider.namespace
+        - fromFieldPath: spec.clusterName
+          toFieldPath: spec.providerConfigRef.name
+        - fromFieldPath: spec.version
+          toFieldPath: spec.forProvider.chart.version
+        - fromFieldPath: spec.storageClass
+          toFieldPath: spec.forProvider.values.persistence.storageClass
+        - fromFieldPath: spec.storageSize
+          toFieldPath: spec.forProvider.values.persistence.size
+        - type: CombineFromComposite
+          combine:
+            variables:
+              - fromFieldPath: spec.hostName
+              - fromFieldPath: spec.domainName
+            strategy: string
+            string:
+              fmt: "%s.%s"
+          toFieldPath: spec.forProvider.values.ingress.hosts[0]
+        - type: CombineFromComposite
+          combine:
+            variables:
+              - fromFieldPath: spec.hostName
+              - fromFieldPath: spec.domainName
+            strategy: string
+            string:
+              fmt: "%s.%s"
+          toFieldPath: spec.forProvider.values.ingress.tls[0].hosts[0]
+        - fromFieldPath: spec.cert.secretName
+          toFieldPath: spec.forProvider.values.ingress.tls[0].secretName
+
+    - name: registry-ingresscert
+      base:
+        apiVersion: resources.stuttgart-things.com/v1alpha1
+        kind: XIngressCertificate
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.deploymentNamespace
+          toFieldPath: spec.namespace
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.clusterName
+          toFieldPath: spec.clusterName
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.cert.issuerName
+          toFieldPath: spec.issuerName
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.cert.issuerKind
+          toFieldPath: spec.issuerKind
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.cert.secretName
+          toFieldPath: spec.certSecretName
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.hostName
+          toFieldPath: spec.hostName
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.domainName
+          toFieldPath: spec.domainName
