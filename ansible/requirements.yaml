@@ -54,4 +54,4 @@ collections:
   - name: https://github.com/stuttgart-things/stuttgart-things/releases/download/0.0.30/sthings-container-0.0.30.tar.gz
   - name: https://github.com/stuttgart-things/stuttgart-things/releases/download/1.28.10/sthings-deploy_rke-1.28.10.tar.gz
   - name: https://github.com/stuttgart-things/stuttgart-things/releases/download/0.0.86/sthings-awx-0.0.86.tar.gz
-  - name: https://artifacts.homerun-dev.sthings-vsphere.labul.sva.de/ansible-collections/sthings-base_os-24.237.45.tar.gz
+  - name: https://artifacts.homerun-dev.sthings-vsphere.labul.sva.de/ansible-collections/sthings-base_os-24.253.26.tar.gz

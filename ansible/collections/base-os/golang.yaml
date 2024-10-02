@@ -6,6 +6,7 @@ playbooks:
       - hosts: "{{ target_host | default('all') }}"
         become: true
         vars:
+          install_addons: true
           golang_version: 1.23.2
           #golang_checksum: 5fb8b3ed4a78a8eab444dfcb472b8c07a06980dcaee62ce3645edd6d130004c6 #1.22.3
           #go_checksum_type: "sha256"
@@ -103,7 +104,7 @@ playbooks:
               ./go install github.com/golangci/golangci-lint/cmd/golangci-lint@{{ golangci_version }}
             args:
               chdir: "{{ golang_install_dir }}/go/bin/"
-
+            when: install_addons|bool
         roles:
           - role: sthings.base_os.download_install_binary
 
