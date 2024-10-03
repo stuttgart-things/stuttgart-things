@@ -8,6 +8,11 @@ on:
         required: false
         type: string
         default: "['default']"
+      molecule-workingdir:
+        description: MOLECULE WORKINGDIR
+        required: false
+        type: string
+        default: ""
       molecule-command:
         description: MOLECULE COMMAND
         required: false
@@ -43,5 +48,6 @@ jobs:
         with:
           molecule_command: ${{ inputs.molecule-command }}
           molecule_args: --scenario-name ${{ matrix.scenario }}
+          molecule_working_dir: ${{ github.repository }}/${{ inputs.molecule-workingdir }}
         env:
           ANSIBLE_FORCE_COLOR: '1'
