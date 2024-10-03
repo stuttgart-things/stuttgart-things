@@ -116,7 +116,6 @@ jobs:
             homerun.yaml
 
   Send-Homerun-Notification:
-    if: ${{ always() }}
     name: Send-Homerun-Notification
     uses: stuttgart-things/stuttgart-things/.github/workflows/call-homerun-notification.yaml@main
     needs:
