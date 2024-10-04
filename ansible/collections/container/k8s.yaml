@@ -9,15 +9,23 @@ playbooks:
         vars_files:
           - "{{ path | default('.') }}/{{ profile | default('k3s-dev-config') }}.yaml"
 
-        tasks:
+        post_tasks:
           - name: Create k3s config
             ansible.builtin.template:
-              src: k3s-dev-config.yaml
+              src: k3s.yaml
               dest: "{{ k3s_config_path }}"
 
           - name: Install k3s
             ansible.builtin.shell: |
               curl -sfL https://get.k3s.io | sh -s - --config={{ k3s_config_path }}
+
+          - name: Install k3s
+            ansible.builtin.shell: |
+              cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
+              chown $(id -u):$(id -g) $HOME/.kube/config
+
+        roles:
+          - role: sthings.container.download_install_binary
 
   - name: rancher_kubeconfig
     play: |
@@ -116,9 +124,10 @@ playbooks:
           - role: sthings.container.install_configure_docker
 
 vars:
-  - name: k3s_dev_cluster
+  - name: k3s
     file: |
       ---
+      k3s_config_path: /tmp/k3s-cluster.yaml
       flannel_backend: none
       disable_kube_proxy: true
       disable_network_policy: true
@@ -128,9 +137,45 @@ vars:
         - traefik
 
 templates:
-  - name: k3s-dev-config
+  - name: k3s
     file: |
       ---
+      cilium_version: 0.16.19 # datasource=gitlab-tags depName=cilium/cilium-cli
+      helm_version: 3.16.1 # datasource=github-tags depName=helm/helm
+      kubectl_version: v1.30.2 # datasource=github-tags depName=kubernetes/kubectl
+
+      bin:
+        cilium:
+          bin_name: cilium
+          bin_version: "{{ cilium_version }}"
+          check_bin_version_before_installing: true
+          source_url: "https://github.com/cilium/cilium-cli/releases/download/v{{ cilium_version }}/cilium-linux-amd64.tar.gz"
+          bin_to_copy: cilium
+          to_remove: ""
+          bin_dir: "/usr/bin/cilium"
+          version_cmd: "version"
+          target_version: "{{ cilium_version }}"
+        helm:
+          bin_name: "helm"
+          bin_version: "{{ helm_version }}"
+          check_bin_version_before_installing: true
+          source_url: "https://get.helm.sh/helm-v{{ helm_version }}-linux-amd64.tar.gz"
+          bin_to_copy: "linux-amd64/helm"
+          to_remove: "linux-amd64"
+          bin_dir: "/usr/local/bin"
+          version_cmd: " version"
+          target_version: "{{ helm_version }}"
+        kubectl:
+          bin_name: "kubectl"
+          bin_version: "{{ kubectl_version }}"
+          check_bin_version_before_installing: true
+          source_url: "https://dl.k8s.io/{{ kubectl_version }}/bin/linux/amd64/kubectl"
+          bin_to_copy: "kubectl"
+          to_remove: "kubectl"
+          bin_dir: "/usr/local/bin"
+          version_cmd: " version --client"
+          target_version: "{{ kubectl_version }}"
+
       k3s_config_path: /tmp/k3s-dev-config.yaml
       flannel-backend: {{ flannel_backend }}
       disable-kube-proxy: {{ disable_kube_proxy }}
