@@ -17,8 +17,6 @@ playbooks:
         roles:
           - role: sthings.deploy_rke.deploy_configure_rke
 
-
-
   - name: helm
     play: |
       ---
