@@ -1,17 +1,23 @@
 ---
 playbooks:
-  - name: k3s_dev_vm
+  - name: k3s_dev_cluster
     play: |
       ---
       - hosts: "{{ target_host | default('all') }}"
         become: true
         gather_facts: true
+        vars_files:
+          - "{{ path | default('.') }}/{{ profile | default('k3s-dev-config') }}.yaml"
 
         tasks:
           - name: Create k3s config
             ansible.builtin.template:
               src: k3s-dev-config.yaml
-              dest: "/tmp/k3s-dev-config.yaml"
+              dest: "{{ k3s_config_path }}"
+
+          - name: Install k3s
+            ansible.builtin.shell: |
+              curl -sfL https://get.k3s.io | sh -s - --config={{ k3s_config_path }}
 
   - name: rancher_kubeconfig
     play: |
@@ -109,14 +115,28 @@ playbooks:
         roles:
           - role: sthings.container.install_configure_docker
 
+vars:
+  - name: k3s_dev_cluster
+    file: |
+      ---
+      flannel_backend: none
+      disable_kube_proxy: true
+      disable_network_policy: true
+      cluster_init: true
+      disable:
+        - servicelb
+        - traefik
 
 templates:
   - name: k3s-dev-config
     file: |
-      flannel-backend: "none"
-      disable-kube-proxy: true
-      disable-network-policy: true
-      cluster-init: true
+      ---
+      k3s_config_path: /tmp/k3s-dev-config.yaml
+      flannel-backend: {{ flannel_backend }}
+      disable-kube-proxy: {{ disable_kube_proxy }}
+      disable-network-policy: {{ disable_network_policy }}
+      cluster-init: {{ cluster_init }}
       disable:
-        - servicelb
-        - traefik
+      {% for item in disable %}
+        - {{ item }}
+      {% endfor %}
