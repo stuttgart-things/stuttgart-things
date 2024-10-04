@@ -1,5 +1,18 @@
 ---
 playbooks:
+  - name: k3s_dev_vm
+    play: |
+      ---
+      - hosts: "{{ target_host | default('all') }}"
+        become: true
+        gather_facts: true
+
+        tasks:
+          - name: Create k3s config
+            ansible.builtin.template:
+              src: k3s-dev-config.yaml
+              dest: "/tmp/k3s-dev-config.yaml"
+
   - name: rancher_kubeconfig
     play: |
       ---
@@ -95,3 +108,15 @@ playbooks:
 
         roles:
           - role: sthings.container.install_configure_docker
+
+
+templates:
+  - name: k3s-dev-config
+    file: |
+      flannel-backend: "none"
+      disable-kube-proxy: true
+      disable-network-policy: true
+      cluster-init: true
+      disable:
+        - servicelb
+        - traefik
