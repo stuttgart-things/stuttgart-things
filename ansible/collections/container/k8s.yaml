@@ -136,20 +136,6 @@ vars:
   - name: k3s
     file: |
       ---
-      k3s_config_path: /tmp/k3s-cluster.yaml
-      flannel_backend: none
-      disable_kube_proxy: true
-      disable_network_policy: true
-      cluster_init: true
-      disable:
-        - servicelb
-        - traefik
-
-templates:
-  - name: k3s
-    file: |
-      ---
-      k3s_config_path: /tmp/k3s-dev-config.yaml
       cilium_version: 0.16.19 # datasource=gitlab-tags depName=cilium/cilium-cli
       helm_version: 3.16.1 # datasource=github-tags depName=helm/helm
       kubectl_version: v1.30.2 # datasource=github-tags depName=kubernetes/kubectl
@@ -191,6 +177,19 @@ templates:
           version_cmd: " version --client"
           target_version: "{{ kubectl_version }}"
 
+      k3s_config_path: /tmp/k3s-cluster.yaml
+      flannel_backend: none
+      disable_kube_proxy: true
+      disable_network_policy: true
+      cluster_init: true
+      disable:
+        - servicelb
+        - traefik
+
+templates:
+  - name: k3s
+    file: |
+      ---
       flannel-backend: {{ flannel_backend }}
       disable-kube-proxy: {{ disable_kube_proxy }}
       disable-network-policy: {{ disable_network_policy }}
