@@ -1,13 +1,15 @@
 ---
 playbooks:
-  - name: k3s_dev_cluster
+  - name: k3s
     play: |
       ---
       - hosts: "{{ target_host | default('all') }}"
         become: true
         gather_facts: true
         vars_files:
-          - "{{ path | default('.') }}/{{ profile | default('k3s-dev-config') }}.yaml"
+          - "{{ path | default('.') }}/{{ profile | default('k3s') }}.yaml"
+        environment:
+          KUBECONFIG: "{{ path_kubeconfig }}"
 
         post_tasks:
           - name: Create k3s config
@@ -19,10 +21,17 @@ playbooks:
             ansible.builtin.shell: |
               curl -sfL https://get.k3s.io | sh -s - --config={{ k3s_config_path }}
 
-          - name: Install k3s
+          - name: Install cilium
             ansible.builtin.shell: |
-              cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
-              chown $(id -u):$(id -g) $HOME/.kube/config
+              cilium install \
+                --set k8sServiceHost={{ api_server_ip }} \
+                --set k8sServicePort={{ api_server_port }} \
+                --set kubeProxyReplacement={{ kube_proxy_replacement }} \
+                --helm-set=operator.replicas={{ operator_replicas }}
+
+          - name: Wait for cilium to be ready
+            ansible.builtin.shell: |
+              cilium status --wait
 
         roles:
           - role: sthings.container.download_install_binary
@@ -140,9 +149,15 @@ templates:
   - name: k3s
     file: |
       ---
+      k3s_config_path: /tmp/k3s-dev-config.yaml
       cilium_version: 0.16.19 # datasource=gitlab-tags depName=cilium/cilium-cli
       helm_version: 3.16.1 # datasource=github-tags depName=helm/helm
       kubectl_version: v1.30.2 # datasource=github-tags depName=kubernetes/kubectl
+      kube_proxy_replacement: true
+      operator_replicas: 1
+      api_server_ip: "{{ ansible_default_ipv4.address }}"
+      api_server_port: 6443
+      path_kubeconfig: /etc/rancher/k3s/k3s.yaml
 
       bin:
         cilium:
@@ -176,7 +191,6 @@ templates:
           version_cmd: " version --client"
           target_version: "{{ kubectl_version }}"
 
-      k3s_config_path: /tmp/k3s-dev-config.yaml
       flannel-backend: {{ flannel_backend }}
       disable-kube-proxy: {{ disable_kube_proxy }}
       disable-network-policy: {{ disable_network_policy }}
