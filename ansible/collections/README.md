@@ -187,8 +187,15 @@ ansible-playbook sthings.container.k3s -vv -i /tmp/inv
 
 </details>
 
+<details><summary>DEPLOY HELM CHART (BY PROFILE)</summary>
+
 ```bash
-ansible-playbook sthings.container.deploy_to_k8s -e path_to_kubeconfig=/home/sthings/.kube/k3s-test -e profile=cert-manager -e state=present -e path_remote_kubeconfig=/etc/rancher/k3s/k3s.yaml -i /tmp/inv -e target_host=all
+ansible-playbook sthings.container.deploy_to_k8s \
+-e path_to_kubeconfig=/etc/rancher/k3s/k3s.yaml \
+-e profile=cert-manager \
+-e state=present \
+-i /tmp/inv \
+-e target_host=all \
 -vv
 ```
 

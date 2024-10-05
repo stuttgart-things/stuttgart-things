@@ -118,6 +118,11 @@ tasks:
   #     VERSION_NUMBER_PREFIX:
   #       sh: echo $(yq e '.version' ./charts/{{ .PROJECT }}/Chart.yaml | awk -F'[.=]' ' { print $1"."$2"." }')
 
+  collections:
+    desc: Install ansible collections
+    cmds:
+      - ansible-galaxy collection install -r ansible/requirements.yaml --force
+
   package:
     desc: Package & push chart
     cmds:
