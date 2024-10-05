@@ -118,6 +118,87 @@ playbooks:
             delegate_to: localhost
             when: upload_vault|bool
 
+  - name: deploy_to_k8s
+    play: |
+      ---
+      - hosts: "{{ target_host | default('localhost') }}"
+        vars_files:
+          - "{{ path | default('.') }}/{{ profile }}.yaml"
+          - "{{ deployment_vars | default(omit) }}"
+        #path_to_kubeconfig: ~/.kube/rancher
+
+        tasks:
+          - name: Create pre manifests
+            ansible.builtin.include_tasks: manifests.yaml
+            loop: "{{ q('ansible.builtin.dict', pre_manifests) }}"
+            when: pre_manifests is defined
+
+          - name: Configure and (un)install helm charts
+            block:
+              - name: Install helm requirements
+                ansible.builtin.include_tasks: helm_config.yaml
+
+              - name: Deploy helm chart(s)
+                ansible.builtin.include_tasks: helm.yaml
+                loop: "{{ q('ansible.builtin.dict', helm_releases) }}"
+            when: helm_releases is defined
+
+          - name: Create post manifests
+            ansible.builtin.include_tasks: manifests.yaml
+            loop: "{{ q('ansible.builtin.dict', post_manifests) }}"
+
+  - name: helm
+    play: |
+      ---
+      - name: Create helm values on disk
+        ansible.builtin.copy:
+          content: "{{ item.value.release_values }}" #().0
+          dest: "/tmp/{{ item.key }}-values.yaml.j2"
+        when: state == "present" and item.value.values is defined
+
+      - name: Deploy helm charts
+        kubernetes.core.helm:
+          kubeconfig: "{{ path_to_kubeconfig }}"
+          name: "{{ item.key }}"
+          chart_ref: "{{ item.value.ref }}"
+          chart_version: "{{ item.value.version | default('latest') }}"
+          release_namespace: "{{ item.value.namespace }}"
+          create_namespace: true
+          state: "{{ state | default('present') }}"
+          values: "{{ lookup('template', '/tmp/{{ item.key }}-values.yaml.j2') | from_yaml | default(omit) }}"
+          wait: "{{ item.values.wait | default(omit) }}"
+        when: helm_releases is defined
+        ignore_errors: "{{ item.value.ignore | default(omit) }}"
+
+      - name: Wait until pods are running
+        kubernetes.core.k8s_info:
+          kubeconfig: "{{ path_to_kubeconfig }}"
+          api_version: v1
+          kind: Pod
+          namespace: "{{ item.value.namespace }}"
+          wait_sleep: 30
+          wait_timeout: 360
+        register: pod_list
+        retries: "{{ item.values.wait_retries | default(15) }}"
+        delay: "{{ item.values.wait_delay | default(30) }}"
+        until: pod_list|json_query('resources[*].status.phase')|unique == ["Running"]
+        when: state == "present" and item.value.values is defined
+
+  - name: manifests
+    play: |
+      ---
+      - name: Create template on disk
+        ansible.builtin.copy:
+          content: "{{ item.value }}"
+          dest: "/tmp/{{ item.key }}.yaml.j2"
+        when: state == "present"
+
+      - name: Deploy additional manifests
+        kubernetes.core.k8s:
+          kubeconfig: "{{ path_to_kubeconfig }}"
+          state: "{{ state | default('present') }}"
+          definition: "{{ lookup('template', '/tmp/{{ item.key }}.yaml.j2') | from_yaml }}"
+
   - name: kind
     play: |
       ---
@@ -133,6 +214,24 @@ playbooks:
           - role: sthings.container.install_configure_docker
 
 vars:
+  - name: cert-manager
+    file: |
+      ---
+      deployment_namespace: cert-manager
+      helm_repositories:
+        cert-manager:
+          url: https://charts.jetstack.io
+
+      helm_releases:
+        cert-manager:
+          ref: cert-manager/cert-manager
+          version: v1.16.0
+          namespace: "{{ deployment_namespace }}"
+          ignore: false
+          wait: true
+          release_values: |
+            installCRDs: true
+
   - name: k3s
     file: |
       ---
