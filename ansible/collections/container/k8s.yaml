@@ -132,7 +132,8 @@ playbooks:
           - name: Fetch kubeconfig from remote system
             ansible.builtin.fetch:
               src: "{{ path_remote_kubeconfig }}"
-              dest: "{{ path_to_kubeconfig }}""
+              dest: "{{ path_to_kubeconfig }}"
+              flat: yes
             when: path_remote_kubeconfig is defined
 
           - name: Create pre manifests
