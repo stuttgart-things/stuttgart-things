@@ -122,12 +122,19 @@ playbooks:
     play: |
       ---
       - hosts: "{{ target_host | default('localhost') }}"
+        become: true
+
         vars_files:
           - "{{ path | default('.') }}/{{ profile }}.yaml"
           - "{{ deployment_vars | default(omit) }}"
-        #path_to_kubeconfig: ~/.kube/rancher
 
         tasks:
+          - name: Fetch kubeconfig from remote system
+            ansible.builtin.fetch:
+              src: "{{ path_remote_kubeconfig }}"
+              dest: "{{ path_to_kubeconfig }}""
+            when: path_remote_kubeconfig is defined
+
           - name: Create pre manifests
             ansible.builtin.include_tasks: manifests.yaml
             loop: "{{ q('ansible.builtin.dict', pre_manifests) }}"
