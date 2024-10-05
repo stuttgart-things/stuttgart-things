@@ -51,7 +51,7 @@ collections:
     version: 24.6.1
   - name: community.hashi_vault
     version: 6.2.0
-  - name: https://artifacts.homerun-dev.sthings-vsphere.labul.sva.de/ansible-collections/sthings-container-24.543.58.tar.gz
+  - name: https://artifacts.homerun-dev.sthings-vsphere.labul.sva.de/ansible-collections/sthings-container-24.557.28.tar.gz
   - name: https://github.com/stuttgart-things/stuttgart-things/releases/download/1.28.10/sthings-deploy_rke-1.28.10.tar.gz
   - name: https://github.com/stuttgart-things/stuttgart-things/releases/download/0.0.86/sthings-awx-0.0.86.tar.gz
   - name: https://artifacts.homerun-dev.sthings-vsphere.labul.sva.de/ansible-collections/sthings-base_os-24.21.29.tar.gz
