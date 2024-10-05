@@ -179,6 +179,22 @@ https://artifacts.homerun-dev.sthings-vsphere.labul.sva.de/ansible-collections/s
 
 ### PLAYBOOKS
 
+<details><summary>K3S</summary>
+
+```bash
+ansible-playbook sthings.container.k3s -vv -i /tmp/inv
+```
+
+</details>
+
+```bash
+ansible-playbook sthings.container.deploy_to_k8s -e path_to_kubeconfig=/home/sthings/.kube/k3s-test -e profile=cert-manager -e state=present -e path_remote_kubeconfig=/etc/rancher/k3s/k3s.yaml -i /tmp/inv -e target_host=all
+-vv
+```
+
+</details>
+
+
 <details><summary>DOCKER</summary>
 
 ###ADD DESCRIPTION
