@@ -155,6 +155,7 @@ playbooks:
         ansible.builtin.copy:
           content: "{{ item.value.release_values }}" #().0
           dest: "/tmp/{{ item.key }}-values.yaml.j2"
+        delegate_to: 127.0.0.1
         when: state == "present" and item.value.values is defined
 
       - name: Deploy helm charts
@@ -250,6 +251,7 @@ vars:
           release_values: |
             installCRDs: true
 
+      post_manifests: {}
   - name: ingress-nginx-k3s
     file: |
       ---
@@ -266,10 +268,11 @@ vars:
           namespace: "{{ deployment_namespace }}"
           ignore: false
           wait: true
-          release_values:
+          release_values: |
             controller:
               hostNetwork: true
 
+        post_manifests: {}
   - name: k3s
     file: |
       ---
