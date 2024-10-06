@@ -202,11 +202,11 @@ ansible-playbook sthings.container.deploy_to_k8s \
 ```bash
 ansible-playbook sthings.container.deploy_to_k8s \
 -e path_to_kubeconfig=/etc/rancher/k3s/k3s.yaml \
--e profile=argo-cd \
+-e profile=argo-cd-k3s \
 -e state=present \
 -i /tmp/inv \
 -e target_host=all \
--e ingress_host=michigan.labul.sva.de
+-e ingress_host=host.domain
 -vv
 ```
 
