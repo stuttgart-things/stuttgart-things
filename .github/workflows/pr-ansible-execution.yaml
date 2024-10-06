@@ -10,7 +10,7 @@ jobs:
     if: contains(github.event.pull_request.labels.*.name, 'ansible')
     environment: k8s
     container:
-      image: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:e446ef5a395cb0a33843ffa2ecc69ef9541ff4b2e63e36394265a15abd0c3a6d
+      image: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:9c590b96c74557030ad0ab05361f2267723591e17575b86187571ed2d654b36f
     outputs:
       tf_working_dir: ${{ steps.set.outputs.TF_WORKING_DIR }}
       environment: ${{ steps.set.outputs.ENVIRONMENT }}
