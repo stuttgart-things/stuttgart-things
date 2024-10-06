@@ -199,6 +199,17 @@ ansible-playbook sthings.container.deploy_to_k8s \
 -vv
 ```
 
+```bash
+ansible-playbook sthings.container.deploy_to_k8s \
+-e path_to_kubeconfig=/etc/rancher/k3s/k3s.yaml \
+-e profile=argo-cd \
+-e state=present \
+-i /tmp/inv \
+-e target_host=all \
+-e ingress_host=michigan.labul.sva.de
+-vv
+```
+
 </details>
 
 
