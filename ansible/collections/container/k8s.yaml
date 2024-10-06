@@ -33,6 +33,23 @@ playbooks:
             ansible.builtin.shell: |
               cilium status --wait
 
+          - name: Create root certificate
+            block:
+              - name: Generate self-signed certificate
+                ansible.builtin.shell: |
+                  mkdir -p .ssl
+                  openssl genrsa -out .ssl/root-ca-key.pem 2048
+                  openssl req -x509 -new -nodes -key .ssl/root-ca-key.pem \
+                  -days 3650 -sha256 -out .ssl/root-ca.pem -subj "/CN=stuttgart-things"
+
+              - name: Create cert-manager namespace and secret
+                ansible.builtin.shell: |
+                  kubectl create ns cert-manager
+                  kubectl create secret tls -n cert-manager root-ca \
+                  --cert=.ssl/root-ca.pem \
+                  --key=.ssl/root-ca-key.pem
+            when: create_root_cert|bool
+
         roles:
           - role: sthings.container.download_install_binary
 
@@ -286,6 +303,7 @@ vars:
       api_server_ip: "{{ ansible_default_ipv4.address }}"
       api_server_port: 6443
       path_kubeconfig: /etc/rancher/k3s/k3s.yaml
+      create_root_cert: true
 
       bin:
         cilium:
