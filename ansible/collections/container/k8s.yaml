@@ -250,6 +250,38 @@ playbooks:
         when: state == "present"
 
 vars:
+  - name: argo-cd
+    file: |
+      ---
+      deployment_namespace: argo-cd
+      helm_repositories:
+        argo:
+          url: https://argoproj.github.io/argo-helm
+
+      helm_releases:
+        argo-cd:
+          ref: argo/argo-cd
+          version: 7.6.8
+          namespace: "{{ deployment_namespace }}"
+          ignore: false
+          wait: true
+          release_values: |
+            global:
+              domain: {{ ingress_host }}
+            configs:
+              params:
+                server.insecure: true
+            server:
+              ingress:
+                enabled: true
+                ingressClassName: nginx
+                annotations:
+                  nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+                  nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+                extraTls:
+                  - hosts:
+                    - {{ ingress_host }}
+      post_manifests: {}
   - name: cert-manager
     file: |
       ---
