@@ -24,27 +24,27 @@ spec:
             name: in-cluster
           forProvider:
             chart:
-              name: docker-harbor
-              repository: https://helm.twun.io
-              version: 2.2.3
+              name: harbor
+              repository: https://charts.bitnami.com/bitnami
+              version: 16.7.2
             namespace: harbor
             insecureSkipTLSVerify: false
             skipCreateNamespace: false
             wait: true
             skipCRDs: false
-            set:
-              - name: secrets.htpasswd
-                valueFrom:
-                  secretKeyRef:
-                    key: HTPASSWD
-                    name: harbor
-                    namespace: default
+            # set:
+            #   - name: secrets.htpasswd
+            #     valueFrom:
+            #       secretKeyRef:
+            #         key: HTPASSWD
+            #         name: harbor
+            #         namespace: default
             values:
               global:
-                storageClass: ${STORAGE_CLASS}
-              externalURL: ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}
-              clusterDomain: ${INGRESS_DOMAIN}
-              adminPassword: ${HARBOR_ADMIN_PASSWORD}
+                storageClass: longhorn
+              externalURL: scr.fluxdev-3.sthings-vsphere.labul.sva.de
+              clusterDomain: fluxdev-3.sthings-vsphere.labul.sva.de
+              adminPassword: Atlan7is2024
               exposureType: ingress
               service:
                 type: ClusterIP
@@ -56,12 +56,12 @@ spec:
               ingress:
                 core:
                   ingressClassName: nginx
-                  hostname: ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}
+                  hostname: scr.fluxdev-3.sthings-vsphere.labul.sva.de
                   tls: true
                   extraTls:
                     - hosts:
-                        - ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}
-                      secretName: ${INGRESS_HOSTNAME}.${INGRESS_DOMAIN}-tls
+                        - scr.fluxdev-3.sthings-vsphere.labul.sva.de
+                      secretName: scr.fluxdev-3.sthings-vsphere.labul.sva.de-tls
                   annotations:
                     nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
               persistence:
@@ -83,35 +83,34 @@ spec:
           toFieldPath: metadata.name
         - fromFieldPath: spec.deploymentNamespace
           toFieldPath: spec.forProvider.namespace
-        - fromFieldPath: spec.clusterName
-          toFieldPath: spec.providerConfigRef.name
-        - fromFieldPath: spec.version
-          toFieldPath: spec.forProvider.chart.version
-        - fromFieldPath: spec.storageClass
-          toFieldPath: spec.forProvider.values.persistence.storageClass
-        - fromFieldPath: spec.storageSize
-          toFieldPath: spec.forProvider.values.persistence.size
-        - type: CombineFromComposite
-          combine:
-            variables:
-              - fromFieldPath: spec.hostName
-              - fromFieldPath: spec.domainName
-            strategy: string
-            string:
-              fmt: "%s.%s"
-          toFieldPath: spec.forProvider.values.ingress.hosts[0]
-        - type: CombineFromComposite
-          combine:
-            variables:
-              - fromFieldPath: spec.hostName
-              - fromFieldPath: spec.domainName
-            strategy: string
-            string:
-              fmt: "%s.%s"
-          toFieldPath: spec.forProvider.values.ingress.tls[0].hosts[0]
-        - fromFieldPath: spec.cert.secretName
-          toFieldPath: spec.forProvider.values.ingress.tls[0].secretName
-
+        # - fromFieldPath: spec.clusterName
+        #   toFieldPath: spec.providerConfigRef.name
+        # - fromFieldPath: spec.version
+        #   toFieldPath: spec.forProvider.chart.version
+        # - fromFieldPath: spec.storageClass
+        #   toFieldPath: spec.forProvider.values.persistence.storageClass
+        # - fromFieldPath: spec.storageSize
+        #   toFieldPath: spec.forProvider.values.persistence.size
+        # - type: CombineFromComposite
+        #   combine:
+        #     variables:
+        #       - fromFieldPath: spec.hostName
+        #       - fromFieldPath: spec.domainName
+        #     strategy: string
+        #     string:
+        #       fmt: "%s.%s"
+        #   toFieldPath: spec.forProvider.values.ingress.hosts[0]
+        # - type: CombineFromComposite
+        #   combine:
+        #     variables:
+        #       - fromFieldPath: spec.hostName
+        #       - fromFieldPath: spec.domainName
+        #     strategy: string
+        #     string:
+        #       fmt: "%s.%s"
+        #   toFieldPath: spec.forProvider.values.ingress.tls[0].hosts[0]
+        # - fromFieldPath: spec.cert.secretName
+        #   toFieldPath: spec.forProvider.values.ingress.tls[0].secretName
     - name: harbor-ingresscert
       base:
         apiVersion: resources.stuttgart-things.com/v1alpha1

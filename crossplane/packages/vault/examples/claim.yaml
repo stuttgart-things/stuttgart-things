@@ -12,4 +12,4 @@ spec:
   version: 0.28.0
   cert:
     secretName: vault-ingress-tls
-    issuerName: vault-approle
+    issuerName: cluster-issuer-approle
