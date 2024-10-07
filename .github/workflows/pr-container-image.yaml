@@ -20,7 +20,7 @@ jobs:
     steps:
       - name: Checkout code
         id: git
-        uses: actions/checkout@v4.2.0
+        uses: actions/checkout@v4.2.1
         with:
           path: source
           fetch-depth: '0'
