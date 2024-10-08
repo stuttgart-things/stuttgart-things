@@ -1,0 +1,16 @@
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: Harbor
+metadata:
+  name: incluster
+  namespace: crossplane-system
+spec:
+  clusterName: incluster
+  deploymentNamespace: harbor
+  domainName: fluxdev-3.sthings-vsphere.labul.sva.de
+  storageClass: nfs4-csi
+  storageSize: 2Gi
+  version: 23.0.4
+  cert:
+    secretName: scr.fluxdev-3.sthings-vsphere.labul.sva.de-tls
+    issuerName: cluster-issuer-approle
