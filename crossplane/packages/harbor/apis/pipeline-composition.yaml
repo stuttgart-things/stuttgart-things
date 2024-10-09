@@ -1,7 +1,7 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: Composition
 metadata:
-  creationTimestamp: "2024-10-08T20:27:35Z"
+  creationTimestamp: "2024-10-09T11:04:55Z"
   labels:
     crossplane.io/xrd: xharbor.resources.stuttgart-things.com
   name: harbor
@@ -36,11 +36,15 @@ spec:
               namespace: harbor
               skipCRDs: false
               skipCreateNamespace: false
+              set:
+                - name: adminPassword
+                  valueFrom:
+                    secretKeyRef:
+                      key: ADMIN_PASSWORD
+                      name: harbor
+                      namespace: default
               values:
-                adminPassword: Atlan7is2024
-                clusterDomain: fluxdev-3.sthings-vsphere.labul.sva.de
                 exposureType: ingress
-                externalURL: scr.fluxdev-3.sthings-vsphere.labul.sva.de
                 ingress:
                   core:
                     annotations:
@@ -49,11 +53,6 @@ spec:
                       nginx.ingress.kubernetes.io/proxy-body-size: "0"
                       nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
                       nginx.ingress.kubernetes.io/ssl-redirect: "true"
-                    extraTls:
-                    - hosts:
-                      - scr.fluxdev-3.sthings-vsphere.labul.sva.de
-                      secretName: scr.fluxdev-3.sthings-vsphere.labul.sva.de-tls
-                    hostname: scr.fluxdev-3.sthings-vsphere.labul.sva.de
                     ingressClassName: nginx
                     tls: true
                 ipFamily:
@@ -63,11 +62,6 @@ spec:
                     enabled: false
                 persistence:
                   enabled: true
-                  persistentVolumeClaim:
-                    registry:
-                      size: 12Gi
-                    trivy:
-                      size: 5Gi
                   resourcePolicy: ""
                 service:
                   type: ClusterIP
@@ -84,8 +78,44 @@ spec:
             - fromFieldPath: spec.clusterName
           toFieldPath: metadata.name
           type: CombineFromComposite
+        - combine:
+            strategy: string
+            string:
+              fmt: '%s.%s'
+            variables:
+            - fromFieldPath: spec.hostName
+            - fromFieldPath: spec.domainName
+          toFieldPath: spec.forProvider.values.ingress.core.hostname
+          type: CombineFromComposite
+        - combine:
+            strategy: string
+            string:
+              fmt: '%s.%s'
+            variables:
+            - fromFieldPath: spec.hostName
+            - fromFieldPath: spec.domainName
+          toFieldPath: spec.forProvider.values.ingress.core.extraTls.hosts[0]
+          type: CombineFromComposite
+        - fromFieldPath: spec.cert.secretName
+          toFieldPath: spec.forProvider.values.ingress.core.extraTls.secretName
+          type: FromCompositeFieldPath
+        - combine:
+            strategy: string
+            string:
+              fmt: '%s.%s'
+            variables:
+            - fromFieldPath: spec.hostName
+            - fromFieldPath: spec.domainName
+          toFieldPath: spec.forProvider.values.externalURL
+          type: CombineFromComposite
         - fromFieldPath: spec.deploymentNamespace
           toFieldPath: spec.forProvider.namespace
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.storageSizeRegistry
+          toFieldPath: spec.forProvider.values.persistence.persistentVolumeClaim.registry.size
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.storageSizeTrivy
+          toFieldPath: spec.forProvider.values.persistence.persistentVolumeClaim.trivy.size
           type: FromCompositeFieldPath
         - fromFieldPath: spec.clusterName
           toFieldPath: spec.providerConfigRef.name
@@ -95,6 +125,9 @@ spec:
           type: FromCompositeFieldPath
         - fromFieldPath: spec.storageClass
           toFieldPath: spec.forProvider.values.global.storageClass
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.domainName
+          toFieldPath: spec.forProvider.values.clusterDomain
           type: FromCompositeFieldPath
       - base:
           apiVersion: resources.stuttgart-things.com/v1alpha1

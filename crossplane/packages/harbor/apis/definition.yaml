@@ -40,10 +40,14 @@ spec:
                   type: string
                   default: longhorn
                   description: storage class name
-                storageSize:
+                storageSizeRegistry:
                   type: string
                   default: 1Gi
-                  description: storage size
+                  description: storage size registry
+                storageSizeTrivy:
+                  type: string
+                  default: 1Gi
+                  description: storage size trivy
                 hostName:
                   type: string
                   default: harbor
