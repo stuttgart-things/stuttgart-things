@@ -10,7 +10,7 @@ releases:
     installed: true
     namespace: homerun
     chart: redis/redis
-    version: 20.1.7
+    version: 20.2.0
     values:
       - "values/redis-stack.yaml.gotmpl"
 
