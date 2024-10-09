@@ -7,10 +7,11 @@ metadata:
 spec:
   clusterName: incluster
   deploymentNamespace: harbor
+  hostName: scr
   domainName: fluxdev-3.sthings-vsphere.labul.sva.de
   storageClass: nfs4-csi
   storageSize: 2Gi
-  version: 23.0.4
+  version: 24.0.0
   cert:
     secretName: scr.fluxdev-3.sthings-vsphere.labul.sva.de-tls
     issuerName: cluster-issuer-approle

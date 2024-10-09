@@ -40,8 +40,8 @@ spec:
             #         name: harbor
             #         namespace: default
             values:
-              global:
-                storageClass: nfs4-csi #longhorn
+              # global:
+              #   storageClass: nfs4-csi #longhorn
               externalURL: scr.fluxdev-3.sthings-vsphere.labul.sva.de
               clusterDomain: fluxdev-3.sthings-vsphere.labul.sva.de
               adminPassword: Atlan7is2024
@@ -91,8 +91,8 @@ spec:
           toFieldPath: spec.providerConfigRef.name
         - fromFieldPath: spec.version
           toFieldPath: spec.forProvider.chart.version
-        # - fromFieldPath: spec.storageClass
-        #   toFieldPath: spec.forProvider.values.persistence.storageClass
+        - fromFieldPath: spec.storageClass
+          toFieldPath: spec.forProvider.values.global.storageClass
         # - fromFieldPath: spec.storageSize
         #   toFieldPath: spec.forProvider.values.persistence.size
         # - type: CombineFromComposite

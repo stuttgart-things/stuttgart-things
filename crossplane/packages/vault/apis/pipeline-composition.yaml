@@ -1,0 +1,129 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  creationTimestamp: "2024-10-08T20:03:22Z"
+  labels:
+    crossplane.io/xrd: xvault.resources.stuttgart-things.com
+  name: vault
+spec:
+  compositeTypeRef:
+    apiVersion: resources.stuttgart-things.com/v1alpha1
+    kind: XVault
+  mode: Pipeline
+  pipeline:
+  - functionRef:
+      name: function-patch-and-transform
+    input:
+      apiVersion: pt.fn.crossplane.io/v1beta1
+      environment: null
+      kind: Resources
+      patchSets: []
+      resources:
+      - base:
+          apiVersion: helm.crossplane.io/v1beta1
+          kind: Release
+          metadata:
+            annotations:
+              crossplane.io/external-name: vault
+            name: vault
+          spec:
+            forProvider:
+              chart:
+                name: vault
+                repository: https://helm.releases.hashicorp.com
+                version: 0.28.0
+              insecureSkipTLSVerify: false
+              namespace: vault
+              skipCRDs: false
+              skipCreateNamespace: false
+              values:
+                csi:
+                  enabled: true
+                injector:
+                  enabled: false
+                server:
+                  dataStorage:
+                    enabled: true
+                    size: 1Gi
+                    storageClass: nfs-csi
+                  enabled: true
+                  ingress:
+                    enabled: true
+                    ingressClassName: nginx
+              wait: true
+            providerConfigRef:
+              name: in-cluster
+        name: vault-release
+        patches:
+        - combine:
+            strategy: string
+            string:
+              fmt: vault-%s
+            variables:
+            - fromFieldPath: spec.clusterName
+          toFieldPath: metadata.name
+          type: CombineFromComposite
+        - fromFieldPath: spec.deploymentNamespace
+          toFieldPath: spec.forProvider.namespace
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.clusterName
+          toFieldPath: spec.providerConfigRef.name
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.version
+          toFieldPath: spec.forProvider.chart.version
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.storageClass
+          toFieldPath: spec.forProvider.values.server.dataStorage.storageClass
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.storageSize
+          toFieldPath: spec.forProvider.values.server.dataStorage.size
+          type: FromCompositeFieldPath
+        - combine:
+            strategy: string
+            string:
+              fmt: '%s.%s'
+            variables:
+            - fromFieldPath: spec.hostName
+            - fromFieldPath: spec.domainName
+          toFieldPath: spec.forProvider.values.server.ingress.hosts[0].host
+          type: CombineFromComposite
+        - combine:
+            strategy: string
+            string:
+              fmt: '%s.%s'
+            variables:
+            - fromFieldPath: spec.hostName
+            - fromFieldPath: spec.domainName
+          toFieldPath: spec.forProvider.values.server.ingress.tls[0].hosts[0].hosts
+          type: CombineFromComposite
+        - fromFieldPath: spec.cert.secretName
+          toFieldPath: spec.forProvider.values.server.ingress.tls[0].secretName
+          type: FromCompositeFieldPath
+      - base:
+          apiVersion: resources.stuttgart-things.com/v1alpha1
+          kind: XIngressCertificate
+        name: vault-ingresscert
+        patches:
+        - fromFieldPath: spec.deploymentNamespace
+          toFieldPath: spec.namespace
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.clusterName
+          toFieldPath: spec.clusterName
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.cert.issuerName
+          toFieldPath: spec.issuerName
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.cert.issuerKind
+          toFieldPath: spec.issuerKind
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.cert.secretName
+          toFieldPath: spec.certSecretName
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.hostName
+          toFieldPath: spec.hostName
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.domainName
+          toFieldPath: spec.domainName
+          type: FromCompositeFieldPath
+    step: patch-and-transform
+  writeConnectionSecretsToNamespace: crossplane-system

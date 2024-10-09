@@ -1,0 +1,126 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  creationTimestamp: "2024-10-08T20:27:35Z"
+  labels:
+    crossplane.io/xrd: xharbor.resources.stuttgart-things.com
+  name: harbor
+spec:
+  compositeTypeRef:
+    apiVersion: resources.stuttgart-things.com/v1alpha1
+    kind: XHarbor
+  mode: Pipeline
+  pipeline:
+  - functionRef:
+      name: function-patch-and-transform
+    input:
+      apiVersion: pt.fn.crossplane.io/v1beta1
+      environment: null
+      kind: Resources
+      patchSets: []
+      resources:
+      - base:
+          apiVersion: helm.crossplane.io/v1beta1
+          kind: Release
+          metadata:
+            annotations:
+              crossplane.io/external-name: harbor
+            name: harbor
+          spec:
+            forProvider:
+              chart:
+                name: harbor
+                repository: https://charts.bitnami.com/bitnami
+                version: 23.0.4
+              insecureSkipTLSVerify: false
+              namespace: harbor
+              skipCRDs: false
+              skipCreateNamespace: false
+              values:
+                adminPassword: Atlan7is2024
+                clusterDomain: fluxdev-3.sthings-vsphere.labul.sva.de
+                exposureType: ingress
+                externalURL: scr.fluxdev-3.sthings-vsphere.labul.sva.de
+                ingress:
+                  core:
+                    annotations:
+                      ingress.kubernetes.io/proxy-body-size: "0"
+                      ingress.kubernetes.io/ssl-redirect: "true"
+                      nginx.ingress.kubernetes.io/proxy-body-size: "0"
+                      nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+                      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+                    extraTls:
+                    - hosts:
+                      - scr.fluxdev-3.sthings-vsphere.labul.sva.de
+                      secretName: scr.fluxdev-3.sthings-vsphere.labul.sva.de-tls
+                    hostname: scr.fluxdev-3.sthings-vsphere.labul.sva.de
+                    ingressClassName: nginx
+                    tls: true
+                ipFamily:
+                  ipv4:
+                    enabled: true
+                  ipv6:
+                    enabled: false
+                persistence:
+                  enabled: true
+                  persistentVolumeClaim:
+                    registry:
+                      size: 12Gi
+                    trivy:
+                      size: 5Gi
+                  resourcePolicy: ""
+                service:
+                  type: ClusterIP
+              wait: true
+            providerConfigRef:
+              name: in-cluster
+        name: harbor-release
+        patches:
+        - combine:
+            strategy: string
+            string:
+              fmt: harbor-%s
+            variables:
+            - fromFieldPath: spec.clusterName
+          toFieldPath: metadata.name
+          type: CombineFromComposite
+        - fromFieldPath: spec.deploymentNamespace
+          toFieldPath: spec.forProvider.namespace
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.clusterName
+          toFieldPath: spec.providerConfigRef.name
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.version
+          toFieldPath: spec.forProvider.chart.version
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.storageClass
+          toFieldPath: spec.forProvider.values.global.storageClass
+          type: FromCompositeFieldPath
+      - base:
+          apiVersion: resources.stuttgart-things.com/v1alpha1
+          kind: XIngressCertificate
+        name: harbor-ingresscert
+        patches:
+        - fromFieldPath: spec.deploymentNamespace
+          toFieldPath: spec.namespace
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.clusterName
+          toFieldPath: spec.clusterName
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.cert.issuerName
+          toFieldPath: spec.issuerName
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.cert.issuerKind
+          toFieldPath: spec.issuerKind
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.cert.secretName
+          toFieldPath: spec.certSecretName
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.hostName
+          toFieldPath: spec.hostName
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.domainName
+          toFieldPath: spec.domainName
+          type: FromCompositeFieldPath
+    step: patch-and-transform
+  writeConnectionSecretsToNamespace: crossplane-system
