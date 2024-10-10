@@ -40,14 +40,14 @@ jobs:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
 
       - name: Comment PR with execution number
-        uses: thollander/actions-comment-pull-request@v2
+        uses: thollander/actions-comment-pull-request@v3
         with:
           message: |
             _(execution **${{ github.run_id }}** / attempt **${{ github.run_attempt }}**)_
           comment_tag: execution
 
       - name: Comment PR
-        uses: thollander/actions-comment-pull-request@v2
+        uses: thollander/actions-comment-pull-request@v3
         with:
           message: |
             :wave: successful build of vm template: ubuntu23-vsphere-base-os
