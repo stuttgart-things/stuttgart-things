@@ -44,7 +44,7 @@ collections:
   - name: kubernetes.core
     version: 5.0.0
   - name: community.docker
-    version: 3.13.0
+    version: 3.13.1
   - name: community.vmware
     version: 5.0.1
   - name: awx.awx
