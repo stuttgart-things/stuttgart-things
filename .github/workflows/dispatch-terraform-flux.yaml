@@ -143,7 +143,7 @@ jobs:
           echo PR_ID="${ID}" >> $GITHUB_ENV
 
       - name: Comment post-label
-        uses: thollander/actions-comment-pull-request@v3
+        uses: thollander/actions-comment-pull-request@v2.5.0
         with:
           pr_number: ${{ env.PR_ID }}
           message: |

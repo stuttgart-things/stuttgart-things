@@ -443,7 +443,7 @@ jobs:
             ${{ inputs.build-engine }}
 
       - name: Comment ansible provisioning to PR as post-label
-        uses: thollander/actions-comment-pull-request@v3
+        uses: thollander/actions-comment-pull-request@v2.5.0
         with:
           pr_number: ${{ steps.pr.outputs.pull-request-number }}"
           message: |

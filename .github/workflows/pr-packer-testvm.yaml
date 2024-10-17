@@ -148,7 +148,7 @@ jobs:
           private_key: ${{ secrets.PULLREQUESTER_APP_KEY }}
 
       - name: Comment status to PR
-        uses: thollander/actions-comment-pull-request@v3
+        uses: thollander/actions-comment-pull-request@v2.5.0
         with:
           message: |
             Test VM created, provisioned and destroyed
