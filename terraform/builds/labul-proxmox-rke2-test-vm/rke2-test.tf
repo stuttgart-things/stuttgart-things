@@ -7,7 +7,7 @@ module "rke2-test" {
   vm_disk_size            = "96G"
   vm_template             = "ubuntu24"
   pve_cluster_node        = "sthings-pve1"
-  pve_datastore           = "v3700"
+  pve_datastore           = "datastore"
   pve_folder_path         = "stuttgart-things"
   pve_network             = "vmbr101"
   vm_notes                = "VSPHERE-VM rke2-test ubuntu24 BUILD w/ TERRAFORM FOR STUTTGART-THINGS"
