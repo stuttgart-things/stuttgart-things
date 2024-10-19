@@ -1,6 +1,6 @@
 FROM docker.io/bitnami/minio:2024.10.13-debian-12-r0
 
-LABEL version=14.6.13
+LABEL version=2024.10.13
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 
 # SWITCH TO ROOT USER
