@@ -37,11 +37,13 @@ xplaneGitHubPackageUrl: ghcr.io/stuttgart-things/stuttgart-things
 xplaneCrossplaneNamespace: crossplane-system
 
 # APPS
-redisStack: redis-stack
-redisStackNamespace: redis-stack
-redisStackServiceType: ClusterIP
-redisStackStorageClass: nfs4-csi
-
+minioName: minio
+minioVersion: 14.8.0
+minioNamespace: minio
+miniStorageClass: nfs4-csi
+minioHostnameApi: artifacts
+minioHostnameConsole: artifacts-console
+minioSecretName: s3-flux-secrets
 
 argoCDName: argo-cd #eu.gcr.io/stuttgart-things/sthings-argocd:v2.12.3
 argoCDVersion: 7.5.2

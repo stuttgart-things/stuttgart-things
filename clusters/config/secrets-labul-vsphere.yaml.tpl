@@ -17,6 +17,8 @@ secrets:
     - registry:secretName=registry, secretNamespace=default
   argo-cd:
     - argo-cd:secretName=argocd-secrets, secretNamespace=flux-system
+  minio:
+    - minio:secretName=s3-flux-secrets, secretNamespace=flux-system
 
 template:
   argo-cd: |
@@ -241,6 +243,38 @@ template:
                 -----END AGE ENCRYPTED FILE-----
         lastmodified: "2024-09-09T11:41:50Z"
         mac: ENC[AES256_GCM,data:LnTYaRmiIjSBwIwARXf9aXnxZvp85Niy3y5XV9RH6VX78Ypn3Fxx9QdLslqdS8Y3XvujxLdgdFnuAQLf6yzRSiMBOtNbR/4cAbRs60ruCX7jQrpfXGu4XDe3q0M0MZp3tE9uiTO3Hxklsxvy7Mjw935FD9lceq6qLLHejQV8Ow8=,iv:ysKj6o8jM5omUWymHAkk2jqTINqsuEesdKNZbIjA7fM=,tag:w3698jCc750TLHIaU3IyqA==,type:str]
+        pgp: []
+        encrypted_regex: ^(data|stringData)$
+        version: 3.9.0
+
+  minio: |
+    ---
+    apiVersion: v1
+    kind: Secret
+    metadata:
+        name: s3-flux-secrets
+        namespace: flux-system
+    type: Opaque
+    stringData:
+        MINIO_ADMIN_USER: ENC[AES256_GCM,data:wPGpJqhuAg==,iv:tEpoj+cvlkfcEZy3UPVU4UxUp1BKYspZonHf9nrnHZ8=,tag:NXvmIMCKorEHj5+Fkdt5Qg==,type:str]
+        MINIO_ADMIN_PASSWORD: ENC[AES256_GCM,data:tbgfEKMZpwc=,iv:fo8KC9bJDr5BDwmtxaBiXWKVvSx0OsyBcEfykVtjr64=,tag:iq1sLfnkHREjrggvIslZGQ==,type:str]
+    sops:
+        kms: []
+        gcp_kms: []
+        azure_kv: []
+        hc_vault: []
+        age:
+            - recipient: age1g438n4lx6h7x7u42q652e9ygzrkkwlul49e8zsmsrfmxm9k3tvcsykhff4
+              enc: |
+                -----BEGIN AGE ENCRYPTED FILE-----
+                YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBOQTNTSGY4OUk5WHdXTmtX
+                eGxQT0NlYlcvTEQvaS9BUHZRemJRSTMyclNzCkQ1RDZVa3dCclgxYmFyVXVKaDRT
+                My9NQmp6bnRKMVh1NnJVV2tLWlBzczgKLS0tIHNMbWF2Mk1tZWhRK0FyNkVjU2Zq
+                dEpMUGVuZUJZL3k0V1p0S3lJSkpIREkKZRWQS93036gLNLWOo1latfaMBLzT9Lrx
+                EcenjQCN/GdUlVwH7FOJamIR5zUwDiDADmHT3pG8A733z8Q+n8st2g==
+                -----END AGE ENCRYPTED FILE-----
+        lastmodified: "2024-10-19T09:42:40Z"
+        mac: ENC[AES256_GCM,data:YBV/pbgTKyxHsWikSkbkj2U8lW9PrR5XIP0RFdQK5lU/+Aw9bwa3Vi0zx5u3nAbVQja1mdT1QZONaj6sGRus8flpp5rgb8nSYPJGPwJdwxKZrIkG4ipInxE3loeb3aCWD6uYzT45CD0oSk4PmDKTBGO0OqpE5WLMvVmB4Io7Zk4=,iv:WYBxxx3Dtbd7nqhNpK0fxxtDkLGVIPmXyAVrm6dY8AY=,tag:+XplknIPymdvJB8DboISQA==,type:str]
         pgp: []
         encrypted_regex: ^(data|stringData)$
         version: 3.9.0

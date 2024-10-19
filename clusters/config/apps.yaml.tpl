@@ -1,16 +1,12 @@
 ---
 template:
-
-
-
-
-  redis-stack: |
+  minio: |
     ---
     apiVersion: {{ .kustomizationApiVersion }}
     kind: {{ .kustomizationKind  }}
     metadata:
-      name: {{ .redisStack }}
-      namespace: {{ .redisStackNamespace }}
+      name: {{ .minioName }}
+      namespace: {{ .fluxNamespace }}
     spec:
       interval: {{ .interval }}
       retryInterval: {{ .retryInterval }}
@@ -18,18 +14,21 @@ template:
       sourceRef:
         kind: {{ .fluxSourceKind }}
         name: {{ .fluxGitRepository }}
-      path: {{ .appsPath }}/{{ .redisStack }}
+      path: {{ .appsPath }}/{{ .minioName }}
       prune: {{ .prune }}
       wait: {{ .wait }}
       postBuild:
         substitute:
-          REDIS_STACK_NAMESPACE: {{ .redisStackNamespace }}
-          REDIS_STACK_SERVICE_TYPE: {{ .redisStackServiceType }}
-          REDIS_STACK_PERSISTENCE_ENBALED: "{{ .awxHostname }}"
-          REDIS_STACK_STORAGECLASS: {{ .redisStackStorageClass }}
+          INGRESS_HOSTNAME_API: {{ .minioHostnameApi }}
+          INGRESS_HOSTNAME_CONSOLE: {{ .minioHostnameConsole }}
+          INGRESS_DOMAIN: {{ .clusterIngressDomain }}
+          CLUSTER_ISSUER: {{ .clusterCertIssuerName }}
+          STORAGE_CLASS: {{ .miniStorageClass }}
+          MINIO_VERSION: {{ .minioVersion }}
+          MINIO_NAMESPACE: {{ .minioNamespace }}
         substituteFrom:
           - kind: Secret
-            name: {{ .ingressNginxSecretName }}
+            name: {{ .minioSecretName }}
 
   argo-cd: |
     ---
