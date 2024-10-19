@@ -12,17 +12,17 @@ spec:
   chart:
     spec:
       chart: minio
-      version: 13.3.3
+      version: ${MINIO_VERSION:-14.8.0}
       sourceRef:
         kind: HelmRepository
         name: bitnami
-        namespace: minio
+        namespace: ${MINIO_NAMESPACE:-minio}
       interval: 12h
   values:
     image:
-      registry: eu.gcr.io
+      registry: ghcr.io
       repository: stuttgart-things/sthings-minio
-      tag: 13.3.3
+      tag: 2024.10.13
     networkPolicy:
       enabled: true
       allowExternal: true
