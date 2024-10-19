@@ -1,0 +1,15 @@
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: Minio
+metadata:
+  name: incluster
+  namespace: crossplane-system
+spec:
+  clusterName: incluster
+  deploymentNamespace: harbor
+  storageClass: nfs4-csi
+  storageSize: 8Gi
+  version: 14.8.0
+  domainName: fluxdev-3.sthings-vsphere.labul.sva.de
+  cert:
+    issuerName: cluster-issuer-approle

@@ -44,10 +44,14 @@ spec:
                   type: string
                   default: 1Gi
                   description: storage size
-                hostName:
+                hostNameApi:
                   type: string
-                  default: registry
-                  description: hostname of ingress resource
+                  default: artifacts
+                  description: hostname of api ingress resource
+                hostNameConsole:
+                  type: string
+                  default: artifacts-console
+                  description: hostname of console ingress resource
                 domainName:
                   type: string
                   description: domain (name) of ingress resource
@@ -62,10 +66,14 @@ spec:
                       type: string
                       default: ClusterIssuer
                       description: kind of cert-manager issuer
-                    secretName:
+                    certSecretApi:
                       type: string
-                      description: name of to be created secret
-                      default: registry-ingress-tls
+                      description: name of to be created secret for api
+                      default: artifacts-ingress-tls
+                    certSecretConsole:
+                      type: string
+                      description: name of to be created secret for console
+                      default: artifacts-console-ingress-tls
               required:
                 - cert
                 - clusterName

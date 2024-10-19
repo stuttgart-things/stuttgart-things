@@ -19,7 +19,7 @@ provisioner:
   env:
     ANSIBLE_VERBOSITY: 3
   playbooks:
-    converge: ${MOLECULE_PLAYBOOK:-rke2.yaml}
+    converge: ${RKE2_PLAYBOOK:-rke2.yaml}
   inventory:
     links:
       hosts: cluster-inventory.yaml
@@ -29,5 +29,4 @@ scenario:
   test_sequence:
     - dependency
     - syntax
-    - prepare
     - converge

@@ -23,3 +23,9 @@
         name: rke2-cilium
         namespace: kube-system
         release_values: "{{ values_cilium }}"
+
+- name: Destroy rke2
+  ansible.builtin.import_playbook: sthings.deploy_rke.rke2
+  vars:
+    rke_state: absent
+    rke_version: 2
