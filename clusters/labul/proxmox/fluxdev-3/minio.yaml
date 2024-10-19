@@ -21,7 +21,7 @@ spec:
     substitute:
       INGRESS_HOSTNAME_API: artifacts
       INGRESS_HOSTNAME_CONSOLE: artifacts-console
-      INGRESS_DOMAIN: fluxdev-3..sthings-vsphere.labul.sva.de
+      INGRESS_DOMAIN: fluxdev-3.sthings-vsphere.labul.sva.de
       CLUSTER_ISSUER: cluster-issuer-approle
       STORAGE_CLASS: nfs4-csi
       MINIO_VERSION: 14.8.0
