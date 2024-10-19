@@ -1,0 +1,21 @@
+---
+apiVersion: meta.pkg.crossplane.io/v1
+kind: Configuration
+metadata:
+  name: minio
+  annotations:
+    meta.crossplane.io/maintainer: patrick.hermann@sva.de
+    meta.crossplane.io/source: github.com/stuttgart-things/stuttgart-things
+    meta.crossplane.io/license: Apache-2.0
+    meta.crossplane.io/description: |
+      deploys minio with crossplane based on the official minio helm chart
+    meta.crossplane.io/readme: |
+      deploys minio with crossplane based on the official minio helm chart
+spec:
+  crossplane:
+    version: ">=v1.14.1-0"
+  dependsOn:
+    - provider: xpkg.upbound.io/crossplane-contrib/provider-helm
+      version: "v0.19.0"
+    - provider: xpkg.upbound.io/crossplane-contrib/provider-kubernetes
+      version: "v0.14.1"
