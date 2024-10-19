@@ -1,0 +1,8 @@
+---
+initial_master_node:
+  hosts:
+    rke2-test-molecule.labul.sva.de
+additional_master_nodes:
+  hosts:
+    rke2-test-molecule-2.labul.sva.de:
+    rke2-test-molecule-3.labul.sva.de:

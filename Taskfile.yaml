@@ -25,7 +25,7 @@ tasks:
     preconditions: *venv
     cmds:
       - |
-        echo "Enter to be tested collection name (base_os|container - sthings. is prefixed):"
+        echo "Enter to be tested collection name (base_os|container|deploy_rke - sthings. is prefixed):"
         read COLLECTION_NAME;
         cd ansible && molecule test -s sthings.${COLLECTION_NAME} #container
 
@@ -34,6 +34,7 @@ tasks:
     cmds:
       - pip install -U setuptools pip 'molecule'
       - pip install molecule-docker
+      - pip install netaddr
       - molecule --version
 
   setup-venv:

@@ -1,0 +1,25 @@
+---
+- name: Deploy rke2
+  ansible.builtin.import_playbook: sthings.deploy_rke.rke2
+  vars:
+    rke_state: present #absent
+    rke_version: 2
+    rke2_k8s_version: 1.30.4
+    rke2_airgapped_installation: true
+    rke2_release_kind: rke2r1 #rke2r2
+    rke2_cni: cilium
+    disable_rke2_components:
+      - rke2-ingress-nginx
+      - rke-snapshot-controller
+    cluster_setup: multinode
+    rke2_cni: cilium
+    values_cilium: |
+      ---
+      eni:
+        enabled: true
+
+    helmChartConfig:
+      cilium:
+        name: rke2-cilium
+        namespace: kube-system
+        release_values: "{{ values_cilium }}"

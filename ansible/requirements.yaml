@@ -1,39 +1,4 @@
 ---
-# roles:
-#   - src: https://github.com/stuttgart-things/deploy-configure-rke.git
-#     scm: git
-#   - src: https://github.com/stuttgart-things/install-configure-powerdns.git
-#     scm: git
-#   - src: https://github.com/stuttgart-things/configure-rke-node.git
-#     scm: git
-#   - src: https://github.com/stuttgart-things/install-requirements.git
-#     scm: git
-#   - src: https://github.com/stuttgart-things/create-send-webhook.git
-#     version: 2024.09.06
-#     scm: git
-#   - src: https://github.com/stuttgart-things/install-configure-vault.git
-#     scm: git
-#   - src: https://github.com/stuttgart-things/install-configure-nfs.git
-#     scm: git
-#   - src: https://github.com/stuttgart-things/manage-filesystem.git
-#     version: 2024.06.07
-#     scm: git
-#   - src: https://github.com/stuttgart-things/download-install-binary.git
-#     scm: git
-#     version: 2024.09.06
-#   - src: https://github.com/stuttgart-things/create-os-user.git
-#     scm: git
-#     version: 2024.05.03
-#   - src: https://github.com/stuttgart-things/install-configure-docker.git
-#     scm: git
-#     version: 2024.09.06
-#   - src: https://github.com/stuttgart-things/install-configure-podman.git
-#     scm: git
-#     version: 2024.05.08
-#   - src: https://github.com/stuttgart-things/manage-proxmox-resources.git
-#     scm: git
-#     version: 2024.05.27
-
 collections:
   - name: community.crypto
     version: 2.22.2
@@ -51,7 +16,9 @@ collections:
     version: 24.6.1
   - name: community.hashi_vault
     version: 6.2.0
+  - name: ansible.netcommon
+    version: 7.1.0
   - name: https://artifacts.homerun-dev.sthings-vsphere.labul.sva.de/ansible-collections/sthings-container-24.612.59.tar.gz
-  - name: https://github.com/stuttgart-things/stuttgart-things/releases/download/1.28.10/sthings-deploy_rke-1.28.10.tar.gz
+  - name: https://artifacts.homerun-dev.sthings-vsphere.labul.sva.de/ansible-collections/sthings-deploy_rke-24.1933.2.tar.gz
   - name: https://github.com/stuttgart-things/stuttgart-things/releases/download/0.0.86/sthings-awx-0.0.86.tar.gz
   - name: https://artifacts.homerun-dev.sthings-vsphere.labul.sva.de/ansible-collections/sthings-base_os-24.21.29.tar.gz
