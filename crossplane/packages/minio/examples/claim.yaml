@@ -11,10 +11,12 @@ spec:
   storageSize: 8Gi
   version: 14.8.0
   hostNameApi: artifacts
+  hostNameConsole: artifacts-console
   domainName: fluxdev-3.sthings-vsphere.labul.sva.de
   cert:
     issuerName: cluster-issuer-
     certSecretApi: artifacts-ingress-tls
+    certSecretConsole: artifacts-console-ingress-tls
   image:
     registry: ghcr.io
     repository: stuttgart-things/sthings-minio

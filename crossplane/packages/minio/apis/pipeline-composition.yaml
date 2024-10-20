@@ -57,18 +57,11 @@ spec:
                   tls: true
                 extraEnvVars:
                 - name: MINIO_SERVER_URL
-                  value: https://artifacts.fluxdev-3.sthings-vsphere.labul.sva.de
                 - name: MINIO_BROWSER_REDIRECT_URL
-                  value: https://artifacts-console.fluxdev-3.sthings-vsphere.labul.sva.de:9001
                 ingress:
                   annotations:
                     nginx.ingress.kubernetes.io/proxy-body-size: 500m
                   enabled: true
-                  extraTls:
-                  - hosts:
-                    - artifacts-console.fluxdev-3.sthings-vsphere.labul.sva.de
-                    secretName: artifacts-console-ingress-tls
-                  hostname: artifacts-console.fluxdev-3.sthings-vsphere.labul.sva.de
                   ingressClassName: nginx
                   tls: true
                 networkPolicy:
@@ -120,8 +113,47 @@ spec:
             - fromFieldPath: spec.domainName
           toFieldPath: spec.forProvider.values.apiIngress.extraTls.hosts[0]
           type: CombineFromComposite
+        - combine:
+            strategy: string
+            string:
+              fmt: '%s.%s'
+            variables:
+            - fromFieldPath: spec.hostNameConsole
+            - fromFieldPath: spec.domainName
+          toFieldPath: spec.forProvider.values.ingress.hostname
+          type: CombineFromComposite
+        - combine:
+            strategy: string
+            string:
+              fmt: '%s.%s'
+            variables:
+            - fromFieldPath: spec.hostNameConsole
+            - fromFieldPath: spec.domainName
+          toFieldPath: spec.forProvider.values.ingress.extraTls.hosts[0]
+          type: CombineFromComposite
+        - combine:
+            strategy: string
+            string:
+              fmt: 'https://%s.%s'
+            variables:
+            - fromFieldPath: spec.hostNameApi
+            - fromFieldPath: spec.domainName
+          toFieldPath: spec.forProvider.values.extraEnvVars[0].value
+          type: CombineFromComposite
+        - combine:
+            strategy: string
+            string:
+              fmt: 'https://%s.%s:9001'
+            variables:
+            - fromFieldPath: spec.hostNameApi
+            - fromFieldPath: spec.domainName
+          toFieldPath: spec.forProvider.values.extraEnvVars[1].value
+          type: CombineFromComposite
         - fromFieldPath: spec.cert.certSecretApi
           toFieldPath: spec.forProvider.values.apiIngress.extraTls.secretName
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.cert.certSecretConsole
+          toFieldPath: spec.forProvider.values.ingress.extraTls.secretName
           type: FromCompositeFieldPath
         - combine:
             strategy: string
@@ -139,7 +171,7 @@ spec:
             variables:
             - fromFieldPath: spec.hostNameApi
             - fromFieldPath: spec.domainName
-          toFieldPath: spec.forProvider.values.ingress.hostname
+          toFieldPath: spec.forProvider.values.apiIngress.hostname
           type: CombineFromComposite
         - fromFieldPath: spec.image.registry
           toFieldPath: spec.forProvider.values.image.registry
@@ -150,15 +182,6 @@ spec:
         - fromFieldPath: spec.image.tag
           toFieldPath: spec.forProvider.values.image.tag
           type: FromCompositeFieldPath
-        - combine:
-            strategy: string
-            string:
-              fmt: '%s.%s'
-            variables:
-            - fromFieldPath: spec.hostNameApi
-            - fromFieldPath: spec.domainName
-          toFieldPath: spec.forProvider.values.ingress.hosts[0]
-          type: CombineFromComposite
       - base:
           apiVersion: resources.stuttgart-things.com/v1alpha1
           kind: XIngressCertificate
