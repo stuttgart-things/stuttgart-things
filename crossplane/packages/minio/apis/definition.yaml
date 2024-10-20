@@ -40,6 +40,10 @@ spec:
                   type: string
                   default: nfs4-csi
                   description: storage class name
+
+
+
+
                 storageSize:
                   type: string
                   default: 1Gi
@@ -55,6 +59,21 @@ spec:
                 domainName:
                   type: string
                   description: domain (name) of ingress resource
+                image:
+                  type: object
+                  properties:
+                    registry:
+                      type: string
+                      default: ghcr.io
+                      description: registry of minio image
+                    repository:
+                      type: string
+                      default: stuttgart-things/sthings-minio
+                      description: repository of minio image
+                    tag:
+                      type: string
+                      description: name of to be created secret for api
+                      default: tag of minio image
                 cert:
                   type: object
                   properties:

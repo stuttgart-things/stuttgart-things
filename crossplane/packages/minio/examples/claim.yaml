@@ -6,10 +6,14 @@ metadata:
   namespace: crossplane-system
 spec:
   clusterName: incluster
-  deploymentNamespace: harbor
+  deploymentNamespace: minio
   storageClass: nfs4-csi
   storageSize: 8Gi
   version: 14.8.0
   domainName: fluxdev-3.sthings-vsphere.labul.sva.de
   cert:
     issuerName: cluster-issuer-approle
+  image:
+    registry: ghcr.io
+    repository: stuttgart-things/sthings-minio
+    tag: 2024.10.13

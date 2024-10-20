@@ -1,174 +1,184 @@
----
-apiVersion: apiextensions.crossplane.io/v1
-kind: Composition
-metadata:
-  name: minio
-  labels:
-    crossplane.io/xrd: xminio.resources.stuttgart-things.com
-spec:
-  writeConnectionSecretsToNamespace: crossplane-system
-  compositeTypeRef:
-    apiVersion: resources.stuttgart-things.com/v1alpha1
-    kind: XMinio
-  resources:
-    - name: minio-release
-      base:
-        apiVersion: helm.crossplane.io/v1beta1
-        kind: Release
-        metadata:
-          name: minio
-          annotations:
-            crossplane.io/external-name: minio
-        spec:
-          providerConfigRef:
-            name: in-cluster
-          forProvider:
-            chart:
-              name: minio
-              repository: https://charts.bitnami.com/bitnami
-              version: 14.8.0
-            namespace: minio
-            insecureSkipTLSVerify: false
-            skipCreateNamespace: false
-            wait: true
-            skipCRDs: false
-            # set:
-            #   - name: secrets.htpasswd
-            #     valueFrom:
-            #       secretKeyRef:
-            #         key: HTPASSWD
-            #         name: minio
-            #         namespace: default
-            values:
-              image:
-                registry: ghcr.io
-                repository: stuttgart-things/sthings-minio
-                tag: 2024.10.13
-              networkPolicy:
-                enabled: true
-                allowExternal: true
-              # auth:
-              #   rootUser: ${MINIO_ADMIN_USER}
-              #   rootPassword: ${MINIO_ADMIN_PASSWORD}
-              ingress:
-                enabled: true
-                ingressClassName: nginx
-                tls: true
-                annotations:
-                  nginx.ingress.kubernetes.io/proxy-body-size: 500m
-                extraTls:
-                  - hosts:
-                      - artifacts-console.fluxdev-3.sthings-vsphere.labul.sva.de
-                    secretName: artifacts-console-ingress-tls
-                hostname: artifacts-console.fluxdev-3.sthings-vsphere.labul.sva.de
-              apiIngress:
-                enabled: true
-                ingressClassName: nginx
-                annotations:
-                  nginx.ingress.kubernetes.io/proxy-body-size: 500m
-                tls: true
-                extraTls:
-                  - hosts:
-                      - artifacts.fluxdev-3.sthings-vsphere.labul.sva.de
-                    secretName: artifacts-ingress-tls
-                hostname: artifacts.fluxdev-3.sthings-vsphere.labul.sva.de
-              persistence:
-                enabled: true
-                storageClass: nfs4-csi
-              extraEnvVars:
-                - name: MINIO_SERVER_URL
-                  value: https://artifacts.fluxdev-3.sthings-vsphere.labul.sva.de
-                - name: MINIO_BROWSER_REDIRECT_URL
-                  value: https://artifacts-console.fluxdev-3.sthings-vsphere.labul.sva.de:9001
+# ---
+# apiVersion: apiextensions.crossplane.io/v1
+# kind: Composition
+# metadata:
+#   name: minio
+#   labels:
+#     crossplane.io/xrd: xminio.resources.stuttgart-things.com
+# spec:
+#   writeConnectionSecretsToNamespace: crossplane-system
+#   compositeTypeRef:
+#     apiVersion: resources.stuttgart-things.com/v1alpha1
+#     kind: XMinio
+#   resources:
+#     - name: minio-release
+#       base:
+#         apiVersion: helm.crossplane.io/v1beta1
+#         kind: Release
+#         metadata:
+#           name: minio
+#           annotations:
+#             crossplane.io/external-name: minio
+#         spec:
+#           providerConfigRef:
+#             name: incluster
+#           forProvider:
+#             chart:
+#               name: minio
+#               repository: https://charts.bitnami.com/bitnami
+#               version: 14.8.0
+#             namespace: minio
+#             insecureSkipTLSVerify: false
+#             skipCreateNamespace: false
+#             wait: true
+#             skipCRDs: false
+#             set:
+#               - name: auth.rootUser
+#                 valueFrom:
+#                   secretKeyRef:
+#                     key: MINIO_ADMIN_USER
+#                     name: minio-creds
+#                     namespace: crossplane-system
+#             set:
+#               - name: auth.rootPassword
+#                 valueFrom:
+#                   secretKeyRef:
+#                     key: MINIO_ADMIN_PASSWORD
+#                     name: minio-creds
+#                     namespace: crossplane-system
+#             values:
+#               networkPolicy:
+#                 enabled: true
+#                 allowExternal: true
+#               # auth:
+#               #   rootUser: ${MINIO_ADMIN_USER}
+#               #   rootPassword: ${MINIO_ADMIN_PASSWORD}
+#               ingress:
+#                 enabled: true
+#                 ingressClassName: nginx
+#                 tls: true
+#                 annotations:
+#                   nginx.ingress.kubernetes.io/proxy-body-size: 500m
+#                 extraTls:
+#                   - hosts:
+#                       - artifacts-console.fluxdev-3.sthings-vsphere.labul.sva.de
+#                     secretName: artifacts-console-ingress-tls
+#                 hostname: artifacts-console.fluxdev-3.sthings-vsphere.labul.sva.de
+#               apiIngress:
+#                 enabled: true
+#                 ingressClassName: nginx
+#                 annotations:
+#                   nginx.ingress.kubernetes.io/proxy-body-size: 500m
+#                 tls: true
+#                 extraTls:
+#                   - hosts:
+#                       - artifacts.fluxdev-3.sthings-vsphere.labul.sva.de
+#                     secretName: artifacts-ingress-tls
+#                 hostname: artifacts.fluxdev-3.sthings-vsphere.labul.sva.de
+#               extraEnvVars:
+#                 - name: MINIO_SERVER_URL
+#                   value: https://artifacts.fluxdev-3.sthings-vsphere.labul.sva.de
+#                 - name: MINIO_BROWSER_REDIRECT_URL
+#                   value: https://artifacts-console.fluxdev-3.sthings-vsphere.labul.sva.de:9001
 
-      patches:
-        - type: CombineFromComposite
-          combine:
-            variables:
-              - fromFieldPath: spec.clusterName
-            strategy: string
-            string:
-              fmt: "minio-%s"
-          toFieldPath: metadata.name
-        - fromFieldPath: spec.deploymentNamespace
-          toFieldPath: spec.forProvider.namespace
-        - fromFieldPath: spec.clusterName
-          toFieldPath: spec.providerConfigRef.name
-        - fromFieldPath: spec.version
-          toFieldPath: spec.forProvider.chart.version
-        - fromFieldPath: spec.storageClass
-          toFieldPath: spec.forProvider.values.persistence.storageClass
-        - fromFieldPath: spec.storageSize
-          toFieldPath: spec.forProvider.values.persistence.size
-        - type: CombineFromComposite
-          combine:
-            variables:
-              - fromFieldPath: spec.hostNameApi
-              - fromFieldPath: spec.domainName
-            strategy: string
-            string:
-              fmt: "%s.%s"
-          toFieldPath: spec.forProvider.values.ingress.hosts[0]
-        - type: CombineFromComposite
-          combine:
-            variables:
-              - fromFieldPath: spec.hostNameApi
-              - fromFieldPath: spec.domainName
-            strategy: string
-            string:
-              fmt: "%s.%s"
-          toFieldPath: spec.forProvider.values.ingress.tls[0].hosts[0]
-        - fromFieldPath: spec.cert.certSecretConsole
-          toFieldPath: spec.forProvider.values.ingress.tls[0].secretName
-    - name: minio-ingresscert-api
-      base:
-        apiVersion: resources.stuttgart-things.com/v1alpha1
-        kind: XIngressCertificate
-      patches:
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.deploymentNamespace
-          toFieldPath: spec.namespace
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.clusterName
-          toFieldPath: spec.clusterName
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.cert.issuerName
-          toFieldPath: spec.issuerName
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.cert.issuerKind
-          toFieldPath: spec.issuerKind
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.cert.certSecretApi
-          toFieldPath: spec.certSecretName
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.hostNameApi
-          toFieldPath: spec.hostName
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.domainName
-          toFieldPath: spec.domainName
-    - name: minio-ingresscert-console
-      base:
-        apiVersion: resources.stuttgart-things.com/v1alpha1
-        kind: XIngressCertificate
-      patches:
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.deploymentNamespace
-          toFieldPath: spec.namespace
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.clusterName
-          toFieldPath: spec.clusterName
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.cert.issuerName
-          toFieldPath: spec.issuerName
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.cert.issuerKind
-          toFieldPath: spec.issuerKind
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.cert.certSecretConsole
-          toFieldPath: spec.certSecretName
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.hostNameConsole
-          toFieldPath: spec.hostName
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.domainName
-          toFieldPath: spec.domainName
+#       patches:
+#         - type: CombineFromComposite
+#           combine:
+#             variables:
+#               - fromFieldPath: spec.clusterName
+#             strategy: string
+#             string:
+#               fmt: "minio-%s"
+#           toFieldPath: metadata.name
+#         - fromFieldPath: spec.deploymentNamespace
+#           toFieldPath: spec.forProvider.namespace
+#         - fromFieldPath: spec.clusterName
+#           toFieldPath: spec.providerConfigRef.name
+#         - fromFieldPath: spec.version
+#           toFieldPath: spec.forProvider.chart.version
+#         - fromFieldPath: spec.storageClass
+#           toFieldPath: spec.forProvider.values.persistence.storageClass
+#         - fromFieldPath: spec.storageSize
+#           toFieldPath: spec.forProvider.values.persistence.size
+#         - fromFieldPath: spec.image.registry
+#           toFieldPath: spec.forProvider.values.image.registry
+#         - fromFieldPath: spec.image.repository
+#           toFieldPath: spec.forProvider.values.image.repository
+#         - fromFieldPath: spec.image.tag
+#           toFieldPath: spec.forProvider.values.image.tag
+
+
+
+
+#         - type: CombineFromComposite
+#           combine:
+#             variables:
+#               - fromFieldPath: spec.hostNameApi
+#               - fromFieldPath: spec.domainName
+#             strategy: string
+#             string:
+#               fmt: "%s.%s"
+#           toFieldPath: spec.forProvider.values.ingress.hosts[0]
+#         # - type: CombineFromComposite
+#         #   combine:
+#         #     variables:
+#         #       - fromFieldPath: spec.hostNameApi
+#         #       - fromFieldPath: spec.domainName
+#         #     strategy: string
+#         #     string:
+#         #       fmt: "%s.%s"
+#         #   toFieldPath: spec.forProvider.values.ingress.tls[0].hosts[0]
+#         # - fromFieldPath: spec.cert.certSecretConsole
+#         #   toFieldPath: spec.forProvider.values.ingress.tls[0].secretName
+#     - name: minio-ingresscert-api
+#       base:
+#         apiVersion: resources.stuttgart-things.com/v1alpha1
+#         kind: XIngressCertificate
+#       patches:
+#         - type: FromCompositeFieldPath
+#           fromFieldPath: spec.deploymentNamespace
+#           toFieldPath: spec.namespace
+#         - type: FromCompositeFieldPath
+#           fromFieldPath: spec.clusterName
+#           toFieldPath: spec.clusterName
+#         - type: FromCompositeFieldPath
+#           fromFieldPath: spec.cert.issuerName
+#           toFieldPath: spec.issuerName
+#         - type: FromCompositeFieldPath
+#           fromFieldPath: spec.cert.issuerKind
+#           toFieldPath: spec.issuerKind
+#         - type: FromCompositeFieldPath
+#           fromFieldPath: spec.cert.certSecretApi
+#           toFieldPath: spec.certSecretName
+#         - type: FromCompositeFieldPath
+#           fromFieldPath: spec.hostNameApi
+#           toFieldPath: spec.hostName
+#         - type: FromCompositeFieldPath
+#           fromFieldPath: spec.domainName
+#           toFieldPath: spec.domainName
+#     - name: minio-ingresscert-console
+#       base:
+#         apiVersion: resources.stuttgart-things.com/v1alpha1
+#         kind: XIngressCertificate
+#       patches:
+#         - type: FromCompositeFieldPath
+#           fromFieldPath: spec.deploymentNamespace
+#           toFieldPath: spec.namespace
+#         - type: FromCompositeFieldPath
+#           fromFieldPath: spec.clusterName
+#           toFieldPath: spec.clusterName
+#         - type: FromCompositeFieldPath
+#           fromFieldPath: spec.cert.issuerName
+#           toFieldPath: spec.issuerName
+#         - type: FromCompositeFieldPath
+#           fromFieldPath: spec.cert.issuerKind
+#           toFieldPath: spec.issuerKind
+#         - type: FromCompositeFieldPath
+#           fromFieldPath: spec.cert.certSecretConsole
+#           toFieldPath: spec.certSecretName
+#         - type: FromCompositeFieldPath
+#           fromFieldPath: spec.hostNameConsole
+#           toFieldPath: spec.hostName
+#         - type: FromCompositeFieldPath
+#           fromFieldPath: spec.domainName
+#           toFieldPath: spec.domainName
