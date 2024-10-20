@@ -10,9 +10,11 @@ spec:
   storageClass: nfs4-csi
   storageSize: 8Gi
   version: 14.8.0
+  hostNameApi: artifacts
   domainName: fluxdev-3.sthings-vsphere.labul.sva.de
   cert:
-    issuerName: cluster-issuer-approle
+    issuerName: cluster-issuer-
+    certSecretApi: artifacts-ingress-tls
   image:
     registry: ghcr.io
     repository: stuttgart-things/sthings-minio

@@ -54,12 +54,6 @@ spec:
                   annotations:
                     nginx.ingress.kubernetes.io/proxy-body-size: 500m
                   enabled: true
-                  extraTls:
-                  - hosts:
-                    - artifacts.fluxdev-3.sthings-vsphere.labul.sva.de
-                    secretName: artifacts-ingress-tls
-                  hostname: artifacts.fluxdev-3.sthings-vsphere.labul.sva.de
-                  ingressClassName: nginx
                   tls: true
                 extraEnvVars:
                 - name: MINIO_SERVER_URL
@@ -108,6 +102,45 @@ spec:
         - fromFieldPath: spec.storageSize
           toFieldPath: spec.forProvider.values.persistence.size
           type: FromCompositeFieldPath
+        - combine:
+            strategy: string
+            string:
+              fmt: '%s.%s'
+            variables:
+            - fromFieldPath: spec.hostNameApi
+            - fromFieldPath: spec.domainName
+          toFieldPath: spec.forProvider.values.apiIngress.hostname
+          type: CombineFromComposite
+        - combine:
+            strategy: string
+            string:
+              fmt: '%s.%s'
+            variables:
+            - fromFieldPath: spec.hostNameApi
+            - fromFieldPath: spec.domainName
+          toFieldPath: spec.forProvider.values.apiIngress.extraTls.hosts[0]
+          type: CombineFromComposite
+        - fromFieldPath: spec.cert.certSecretApi
+          toFieldPath: spec.forProvider.values.apiIngress.extraTls.secretName
+          type: FromCompositeFieldPath
+        - combine:
+            strategy: string
+            string:
+              fmt: '%s.%s'
+            variables:
+            - fromFieldPath: spec.hostNameConsole
+            - fromFieldPath: spec.domainName
+          toFieldPath: spec.forProvider.values.ingress.extraTls.hosts[0]
+          type: CombineFromComposite
+        - combine:
+            strategy: string
+            string:
+              fmt: '%s.%s'
+            variables:
+            - fromFieldPath: spec.hostNameApi
+            - fromFieldPath: spec.domainName
+          toFieldPath: spec.forProvider.values.ingress.hostname
+          type: CombineFromComposite
         - fromFieldPath: spec.image.registry
           toFieldPath: spec.forProvider.values.image.registry
           type: FromCompositeFieldPath

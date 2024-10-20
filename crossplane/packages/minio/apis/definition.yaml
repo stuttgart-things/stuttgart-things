@@ -40,10 +40,6 @@ spec:
                   type: string
                   default: nfs4-csi
                   description: storage class name
-
-
-
-
                 storageSize:
                   type: string
                   default: 1Gi
