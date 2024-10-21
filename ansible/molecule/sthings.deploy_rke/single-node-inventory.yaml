@@ -1,0 +1,5 @@
+---
+initial_master_node:
+  hosts:
+    cluster-test1.labul.sva.de
+additional_master_nodes:
