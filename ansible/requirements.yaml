@@ -19,6 +19,6 @@ collections:
   - name: ansible.netcommon
     version: 7.1.0
   - name: https://artifacts.homerun-dev.sthings-vsphere.labul.sva.de/ansible-collections/sthings-container-24.612.59.tar.gz
-  - name: https://artifacts.homerun-dev.sthings-vsphere.labul.sva.de/ansible-collections/sthings-deploy_rke-24.2751.56.tar.gz
+  - name: https://artifacts.homerun-dev.sthings-vsphere.labul.sva.de/ansible-collections/sthings-deploy_rke-24.271.51.tar.gz
   - name: https://github.com/stuttgart-things/stuttgart-things/releases/download/0.0.86/sthings-awx-0.0.86.tar.gz
   - name: https://artifacts.homerun-dev.sthings-vsphere.labul.sva.de/ansible-collections/sthings-base_os-24.21.29.tar.gz
