@@ -39,6 +39,20 @@ task pr
 
 </details>
 
+<details><summary>TEST ANSIBLE COLLECTIO w/ MOLECULE</summary>
+
+```bash
+task setup-venv
+source ./.venv/bin/activate
+task setup-molecule
+
+task run-molecule
+# e.g. deploy_rke_rke2
+```
+
+</details>
+
+
 ## INFRASTRUCTURE AS CODE
 
 ### ANSIBLE
