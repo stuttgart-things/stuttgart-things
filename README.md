@@ -1,10 +1,7 @@
 # stuttgart-things
 
-* * *
-
 <img alt="Ansible" src="https://img.shields.io/badge/ansible-%231A1918.svg?style=for-the-badge&logo=ansible&logoColor=white"/><img alt="Docker" src="https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white"/><img alt="Kubernetes" src="https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white"/><img alt="Terraform" src="https://img.shields.io/badge/terraform-%235835CC.svg?style=for-the-badge&logo=terraform&logoColor=white"/><img alt="Static Badge" src="https://img.shields.io/badge/CROSSPLANE-%2322ADF6?style=for-the-badge&logoColor=white&labelColor=orange&color=orange">![Packer](https://img.shields.io/badge/packer-%23E7EEF0.svg?style=for-the-badge&logo=packer&logoColor=%2302A8EF)
 
-* * *
 
 <img src="https://github.com/stuttgart-things/docs/blob/main/hugo/sthings-remote.png" align="left" width="50">
 
