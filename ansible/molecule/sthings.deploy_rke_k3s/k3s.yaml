@@ -1,15 +1,16 @@
 ---
-# - name: Destroy k3s
-#   ansible.builtin.import_playbook: sthings.deploy_rke.k3s
-#   vars:
-#     k3s_state: absent
-#     install_k3s: true
+- name: Destroy k3s
+  ansible.builtin.import_playbook: sthings.deploy_rke.k3s
+  vars:
+    k3s_state: absent
+    install_k3s: true
+    deploy_helm_charts: false
 
 # - name: Install container tools
 #   ansible.builtin.import_playbook: sthings.container.tools
 
-- name: Install nerdctl
-  ansible.builtin.import_playbook: sthings.container.nerdctl
+# - name: Install nerdctl
+#   ansible.builtin.import_playbook: sthings.container.nerdctl
 
 - name: Deploy k3s
   ansible.builtin.import_playbook: sthings.deploy_rke.k3s
