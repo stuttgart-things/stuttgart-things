@@ -473,7 +473,37 @@ ansible-playbook sthings.deploy_rke.rke2 \
 
 </details>
 
-<details><summary>INSTALL SINGLE-NODE CLUSTER</summary>
+<details><summary>DEPLOY SINGLE-NODE K3S CLUSTER</summary>
+
+Deploys a k3s single-node cluster.
+
+```bash
+# CREATE INVENTORY
+cat <<EOF > k3s.yaml
+---
+initial_master_node:
+  hosts:
+    cluster-test1.labul.sva.de
+additional_master_nodes:
+EOF
+
+# PLAYBOOK CALL
+CLUSTER_NAME=rke2
+
+ansible-playbook sthings.deploy_rke.rke2 \
+-i k3s.yaml -vv \
+-e rke2_fetched_kubeconfig_path=~/.kube/${CLUSTER_NAME} \
+-e cluster_setup=singlenode \
+-vv
+```
+
+</details>
+
+
+</details>
+
+
+<details><summary>DEPLOY SINGLE-NODE RKE2 CLUSTER</summary>
 
 Deploys a rke2 single-node cluster.
 

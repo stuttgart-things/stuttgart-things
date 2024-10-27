@@ -28,7 +28,6 @@ task: Available tasks for this project:
 * tag:                Tag repo
 ```
 
-
 <details><summary>BUILD ANSIBLE COLLECTION</summary>
 
 ```bash
@@ -39,7 +38,7 @@ task pr
 
 </details>
 
-<details><summary>TEST ANSIBLE COLLECTIO w/ MOLECULE</summary>
+<details><summary>TEST ANSIBLE COLLECTION w/ MOLECULE</summary>
 
 ```bash
 task setup-venv
