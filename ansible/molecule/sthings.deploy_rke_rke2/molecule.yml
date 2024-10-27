@@ -22,10 +22,10 @@ provisioner:
     converge: ${RKE2_PLAYBOOK:-rke2.yaml}
   inventory:
     links:
-      hosts: cluster-inventory.yaml
+      hosts: inventory.yaml
 
 scenario:
-  name: sthings.deploy_rke
+  name: sthings.deploy_rke_rke2
   test_sequence:
     - dependency
     - syntax

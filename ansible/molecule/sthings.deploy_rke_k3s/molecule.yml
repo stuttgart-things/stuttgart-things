@@ -1,0 +1,32 @@
+---
+dependency:
+  name: galaxy
+  enabled: True
+  options:
+    ignore-certs: True
+    requirements-file: requirements.yaml
+    ignore-errors: false
+    force: True
+
+role_name_check: 1
+driver:
+  name: default
+  managed: False
+platforms:
+  - name: cluster-test1.labul.sva.de
+provisioner:
+  name: ansible
+  env:
+    ANSIBLE_VERBOSITY: 1
+  playbooks:
+    converge: ${RKE2_PLAYBOOK:-k3s.yaml}
+  inventory:
+    links:
+      hosts: inventory.yaml
+
+scenario:
+  name: sthings.deploy_rke_k3s
+  test_sequence:
+    - dependency
+    - syntax
+    - converge

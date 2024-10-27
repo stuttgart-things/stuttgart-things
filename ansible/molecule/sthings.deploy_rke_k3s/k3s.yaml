@@ -1,4 +1,10 @@
 ---
+- name: Destroy k3s
+  ansible.builtin.import_playbook: sthings.deploy_rke.k3s
+  vars:
+    k3s_state: absent
+    install_k3s: true
+
 # - name: Install container tools
 #   ansible.builtin.import_playbook: sthings.container.tools
 
@@ -16,8 +22,8 @@
 #       - "--write-kubeconfig-mode 644"
 #     cluster_setup: singlenode
 
-- name: Destroy k3s
-  ansible.builtin.import_playbook: sthings.deploy_rke.rke2
-  vars:
-    k3s_state: absent
-    install_k3s: true
+# - name: Destroy k3s
+#   ansible.builtin.import_playbook: sthings.deploy_rke.rke2
+#   vars:
+#     k3s_state: absent
+#     install_k3s: true
