@@ -24,7 +24,7 @@ tasks:
     preconditions: *venv
     cmds:
       - |
-        echo "Enter to be tested collection name (base_os|container|deploy_rke - sthings. is prefixed):"
+        echo "Enter to be tested collection name (base_os|container|deploy_rke_k3s|deploy_rke_rke2 - sthings. is prefixed):"
         read COLLECTION_NAME;
         cd ansible && molecule test -s sthings.${COLLECTION_NAME} #container
 
