@@ -1,5 +1,4 @@
 # stuttgart-things
-[sˈθɪŋz] - using modularity to speed up parallel builds
 
 * * *
 
@@ -16,6 +15,7 @@
 
 <img src="https://github.com/stuttgart-things/docs/blob/main/hugo/sthings-boat.png" alt="GeeksforGeeks logo" align="right" width="200">
 
+[sˈθɪŋz] - using modularity to speed up parallel builds
 
 used for configuration code like gitops configuration, ansible playbooks, Dockerfiles or helm charts.
 
@@ -46,8 +46,6 @@ task pr
 ```
 
 </details>
-
-
 
 ## INFRASTRUCTURE AS CODE
 
