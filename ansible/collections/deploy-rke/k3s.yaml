@@ -43,7 +43,7 @@ playbooks:
                 crds:
                   enabled: true
 
-          additional_helm_manifests:
+          manifests:
             cluster_issuer:
               manifest: |
                 apiVersion: cert-manager.io/v1
@@ -53,6 +53,29 @@ playbooks:
                 spec:
                   ca:
                     secretName: root-ca
+
+            # lb_pool:
+            #   manifest: |
+            #     apiVersion: cilium.io/v2alpha1
+            #     kind: CiliumLoadBalancerIPPool
+            #     metadata:
+            #       name: first-pool
+            #     spec:
+            #       blocks:
+            #         - start: 10.31.103.11
+            #           stop: 10.31.103.12
+
+            # announcement_policy:
+            #   manifest: |
+            #     ---
+            #     apiVersion: cilium.io/v2alpha1
+            #     kind: CiliumL2AnnouncementPolicy
+            #     metadata:
+            #       name: default-l2-announcement-policy
+            #       namespace: kube-system
+            #     spec:
+            #       externalIPs: true
+            #       loadBalancerIPs: true
 
         roles:
           - role: sthings.deploy_rke.deploy_configure_rke

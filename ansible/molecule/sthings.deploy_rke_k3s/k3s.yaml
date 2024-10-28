@@ -12,15 +12,15 @@
 # - name: Install nerdctl
 #   ansible.builtin.import_playbook: sthings.container.nerdctl
 
-- name: Deploy k3s
-  ansible.builtin.import_playbook: sthings.deploy_rke.k3s
-  vars:
-    install_k3s: true
-    k3s_state: present
-    k3s_k8s_version: 1.31.1
-    k3s_release_kind: k3s1
-    cluster_setup: singlenode
-
+# - name: Deploy k3s
+#   ansible.builtin.import_playbook: sthings.deploy_rke.k3s
+#   vars:
+#     install_k3s: true
+#     k3s_state: present
+#     k3s_k8s_version: 1.31.1
+#     k3s_release_kind: k3s1
+#     cluster_setup: singlenode
+#     install_cilium: true
 # - name: Destroy k3s
 #   ansible.builtin.import_playbook: sthings.deploy_rke.rke2
 #   vars:
