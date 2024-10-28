@@ -73,6 +73,9 @@ spec:
       - name: {{ $envVar.Values.deployment.initContainer.name }}
         image: {{ $envVar.Values.deployment.initContainer.image }}:{{ $envVar.Values.deployment.initContainer.initTag | default "latest" }}
         imagePullPolicy: {{ $envVar.Values.deployment.initContainerimagePullPolicy | default "Always" }}
+        {{- if $envVar.Values.deployment.initContainer.lifecycle }}
+        lifecycle:
+          {{- toYaml $envVar.Values.deployment.initContainer.lifecycle | nindent 10 }}{{- end }}
         securityContext:
           allowPrivilegeEscalation: {{ $envVar.Values.deployment.initContainer.allowPrivilegeEscalation | default "true" }}
           privileged: {{ $envVar.Values.deployment.initContainer.privileged | default "true" }}
@@ -285,6 +288,14 @@ examples:
         tag: go-1.19
         replicaCount: 1
         imagePullPolicy: Always
+        #lifecycle:
+        #  postStart:
+        #    exec:
+        #      command:
+        #      - /bin/sh
+        #      - -c
+        #      - sleep 10; update-ca-certificates
+
         ports:
           app-port:
             containerPort: 8080
