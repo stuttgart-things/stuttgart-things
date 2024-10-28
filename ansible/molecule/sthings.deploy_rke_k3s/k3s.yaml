@@ -1,26 +1,23 @@
 ---
-- name: Destroy k3s
-  ansible.builtin.import_playbook: sthings.deploy_rke.k3s
-  vars:
-    k3s_state: absent
-    install_k3s: true
-    deploy_helm_charts: false
+# - name: Destroy k3s
+#   ansible.builtin.import_playbook: sthings.deploy_rke.k3s
+#   vars:
+#     k3s_state: absent
+#     install_k3s: true
+#     deploy_helm_charts: false
 
 # - name: Install container tools
 #   ansible.builtin.import_playbook: sthings.container.tools
 
-# - name: Install nerdctl
-#   ansible.builtin.import_playbook: sthings.container.nerdctl
+- name: Install nerdctl
+  ansible.builtin.import_playbook: sthings.container.nerdctl
 
-# - name: Deploy k3s
-#   ansible.builtin.import_playbook: sthings.deploy_rke.k3s
-#   vars:
-#     install_k3s: true
-#     k3s_state: present
-#     k3s_k8s_version: 1.31.1
-#     k3s_release_kind: k3s1
-#     cluster_setup: singlenode
-#     install_cilium: true
+- name: Deploy k3s
+  ansible.builtin.import_playbook: sthings.deploy_rke.k3s
+  vars:
+    install_k3s: true
+    k3s_state: present
+
 # - name: Destroy k3s
 #   ansible.builtin.import_playbook: sthings.deploy_rke.rke2
 #   vars:

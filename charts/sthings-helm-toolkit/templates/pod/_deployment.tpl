@@ -119,6 +119,9 @@ spec:
         - name: {{ $k }}
           image: {{ $v.image }}:{{ $v.tag }}
           imagePullPolicy: {{ $v.imagePullPolicy | default "Always" }}
+          {{- if $v.lifecycle }}
+          lifecycle:
+            {{- toYaml $v.lifecycle | nindent 12 }}{{- end }}
           securityContext:
             {{- if $v.securityContext.capabilities }}
             capabilities:
