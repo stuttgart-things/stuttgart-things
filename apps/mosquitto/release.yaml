@@ -19,17 +19,17 @@ spec:
     service:
       type: ${SERVICE_TYPE:-ClusterIP}
     persistence:
-      enabled: ${PERSISTENCE_ENABLED:-true}
-    authentication:
-      passwordFilePath: /etc/mosquitto/passwordfile
-      passwordEntries: |-
-        ${CREDENTIALS}
-    config: |
-      persistence ${PERSISTENCE_ENABLED:-true}
-      persistence_location /mosquitto/data/
-      persistence_file mosquitto.db
-      log_dest stdout
-      log_dest file /mosquitto/log/mosquitto.log
-      listener 1883
-      listener 9090
-      protocol websockets
+      enabled: "${PERSISTENCE_ENABLED:-true}"
+    # authentication:
+    #   passwordFilePath: /etc/mosquitto/passwordfile
+    #   passwordEntries: |-
+    #     ${CREDENTIALS}
+    # config: |
+    #   persistence ${PERSISTENCE_ENABLED:-true}
+    #   persistence_location /mosquitto/data/
+    #   persistence_file mosquitto.db
+    #   log_dest stdout
+    #   log_dest file /mosquitto/log/mosquitto.log
+    #   listener 1883
+    #   listener 9090
+    #   protocol websockets
