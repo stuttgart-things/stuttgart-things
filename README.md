@@ -28,6 +28,16 @@ task: Available tasks for this project:
 * tag:                Tag repo
 ```
 
+<details><summary>PACKAGE HELM CHART</summary>
+
+```bash
+export PROJECT=sthings-helm-toolkit
+task package
+```
+
+</details>
+
+
 <details><summary>BUILD ANSIBLE COLLECTION</summary>
 
 ```bash
