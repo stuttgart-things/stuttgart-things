@@ -20,7 +20,7 @@ spec:
      MOSQUITTO_VERSION: 2.5.1
      SERVICE_TYPE: LoadBalancer
      PERSISTENCE_ENABLED: "true"
-     STORAGE_CLASS: nfs-client
+     STORAGE_CLASS: nfs4-csi
      STORAGE_SIZE: 1Gi
    substituteFrom:
      - kind: Secret
