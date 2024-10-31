@@ -1,0 +1,35 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: mosquitto-deployment
+  namespace: ${MOSQUITTO_NAMESPACE:-mqtt}
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: minio
+      version: ${MOSQUITTO_VERSION:-2.5.1}
+      sourceRef:
+        kind: HelmRepository
+        name: k8sonlab
+        namespace: ${MOSQUITTO_NAMESPACE:-mqtt}
+      interval: 12h
+  values:
+    service:
+      type: ${SERVICE_TYPE:-ClusterIP}
+    persistence:
+      enabled: ${PERSISTENCE_ENABLED:-true}
+    authentication:
+      passwordFilePath: /etc/mosquitto/passwordfile
+      passwordEntries: |-
+        ${CREDENTIALS}
+    config: |
+      persistence ${PERSISTENCE_ENABLED:-true}
+      persistence_location /mosquitto/data/
+      persistence_file mosquitto.db
+      log_dest stdout
+      log_dest file /mosquitto/log/mosquitto.log
+      listener 1883
+      listener 9090
+      protocol websockets
