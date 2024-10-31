@@ -1,0 +1,25 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: mosquitto
+  namespace: flux-system
+spec:
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: panda-test
+  path: ./apps/mosquitto
+  prune: true
+  wait: true
+  postBuild:
+    substitute:
+      MOSQUITTO_NAMESPACE: mqtt
+      MOSQUITTO_VERSION: 2.5.1
+      SERVICE_TYPE: LoadBalancer
+      PERSISTENCE_ENABLED: "true"
+    substituteFrom:
+      - kind: Secret
+        name: mqtt-secret
