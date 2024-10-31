@@ -22,16 +22,16 @@ spec:
       enabled: "${PERSISTENCE_ENABLED:-true}"
       storageClass: ${STORAGE_CLASS}
       size: ${STORAGE_SIZE:-1Gi}
-    # authentication:
-    #   passwordFilePath: /etc/mosquitto/passwordfile
-    #   passwordEntries: |-
-    #     ${CREDENTIALS}
-    # config: |
-    #   persistence ${PERSISTENCE_ENABLED:-true}
-    #   persistence_location /mosquitto/data/
-    #   persistence_file mosquitto.db
-    #   log_dest stdout
-    #   log_dest file /mosquitto/log/mosquitto.log
-    #   listener 1883
-    #   listener 9090
-    #   protocol websockets
+    authentication:
+      passwordFilePath: /etc/mosquitto/passwordfile
+      passwordEntries: |-
+        ${passwordfile}
+    config: |
+      persistence ${PERSISTENCE_ENABLED:-true}
+      persistence_location /mosquitto/data/
+      persistence_file mosquitto.db
+      log_dest stdout
+      log_dest file /mosquitto/log/mosquitto.log
+      listener 1883
+      listener 9090
+      protocol websockets
