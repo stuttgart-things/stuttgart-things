@@ -11,6 +11,19 @@ spec:
     name: flux-system
   url: ssh://git@github.com/stuttgart-things/stuttgart-things
 ---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: flux-system
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  path: ./clusters/homerun/panda
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: panda-test
+---    
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: GitRepository
 metadata:
