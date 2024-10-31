@@ -24,7 +24,9 @@ spec:
       size: ${STORAGE_SIZE:-1Gi}
     authentication:
       passwordFilePath: /etc/mosquitto/passwordfile
-      #passwordEntries: "${passwordfile}"
+      passwordEntries: |-
+        sthings: $7$101$Yym6JfAaMaweeGMB$0AsoRjDinIg9e3hg0ZChgomNqkM0abV0j │
+│ mmuPAMUeXj9cPmwNdgPBqdW1vLRDAI6tuFr4o6/oxa57W9drpfN8g==
     config: |
       persistence ${PERSISTENCE_ENABLED:-true}
       persistence_location /mosquitto/data/
