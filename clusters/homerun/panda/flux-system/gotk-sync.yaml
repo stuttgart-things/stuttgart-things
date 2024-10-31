@@ -18,7 +18,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 10m0s
-  path: ./clusters/homerun/panda
+  path: ./clusters/homerun/panda/homerun
   prune: true
   sourceRef:
     kind: GitRepository
