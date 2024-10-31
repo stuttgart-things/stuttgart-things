@@ -20,6 +20,8 @@ spec:
       type: ${SERVICE_TYPE:-ClusterIP}
     persistence:
       enabled: "${PERSISTENCE_ENABLED:-true}"
+      storageClass: ${STORAGE_CLASS}
+      size: ${STORAGE_SIZE:-1Gi}
     # authentication:
     #   passwordFilePath: /etc/mosquitto/passwordfile
     #   passwordEntries: |-
