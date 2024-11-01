@@ -25,7 +25,7 @@ spec:
     authentication:
       passwordFilePath: /etc/mosquitto/passwordfile
       passwordEntries: |-
-        ${MQTT_USER:-sthings}: $7$101$Yym6JfAaMaweeGMB$0AsoRjDinIg9e3hg0ZChgomNqkM0abV0jmmuPAMUeXj9cPmwNdgPBqdW1vLRDAI6tuFr4o6/oxa57W9drpfN8g==
+        ${MQTT_USER:-sthings}: ${PASSWORD}
     config: |
       persistence ${PERSISTENCE_ENABLED:-true}
       persistence_location /mosquitto/data/

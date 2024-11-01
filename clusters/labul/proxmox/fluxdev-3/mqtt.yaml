@@ -22,6 +22,7 @@ spec:
      PERSISTENCE_ENABLED: "true"
      STORAGE_CLASS: nfs4-csi
      STORAGE_SIZE: 1Gi
+     MQTT_USER: sthings
    substituteFrom:
      - kind: Secret
        name: mqtt-secret
