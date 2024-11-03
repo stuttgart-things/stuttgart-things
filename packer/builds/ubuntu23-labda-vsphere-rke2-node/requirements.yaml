@@ -3,7 +3,7 @@ collections:
   - name: community.crypto
     version: 2.22.3
   - name: community.general
-    version: 9.5.0
+    version: 9.5.1
   - name: ansible.posix
     version: 1.6.2
   - name: kubernetes.core
