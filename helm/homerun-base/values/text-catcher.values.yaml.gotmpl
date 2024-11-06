@@ -1,0 +1,17 @@
+---
+text-catcher:
+  enabled: {{ .Values.textCatcher.enabled }}
+  configmaps:
+    homerun-text-catcher:
+      REDIS_STREAM: {{ .Values.stream }}
+      LOGGING: {{ .Values.textCatcher.logging }}
+  secrets:
+    redis-connection-{{ .Values.textCatcher.name }}:
+      name: redis-connection-{{ .Values.textCatcher.name }}
+      labels:
+        app: {{ .Values.textCatcher.name }}
+      dataType: stringData
+      secretKVs:
+        REDIS_SERVER: {{ .Values.redisStack.serviceName }}.{{ .Release.Namespace }}.svc.cluster.local
+        REDIS_PORT: {{ .Values.redisStack.port }}
+        REDIS_PASSWORD: {{ .Values.redisStack.password }}

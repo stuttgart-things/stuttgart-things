@@ -1,0 +1,65 @@
+---
+generic-pitcher:
+  enabled: {{ .Values.genericPitcher.enabled }}
+
+  configmaps:
+    {{ .Values.genericPitcher.name }}:
+      API_PATH: {{ .Values.genericPitcher.apiPath }}
+      PORT: "{{ .Values.genericPitcher.port }}"
+      REDIS_STREAM: {{ .Values.stream }}
+      REDISEARCH_INDEX: {{ .Values.searchIndex }}
+
+  secrets:
+    generic-token:
+      name: generic-token
+      labels:
+        app: {{ .Values.genericPitcher.name }}
+      dataType: stringData
+      secretKVs:
+        WEBHOOK_TOKEN: {{ .Values.genericPitcher.token }}
+
+    redis-connection-{{ .Values.genericPitcher.name }}:
+      name: redis-connection-{{ .Values.genericPitcher.name }}
+      labels:
+        app: {{ .Values.genericPitcher.name }}
+      dataType: stringData
+      secretKVs:
+        REDIS_SERVER: {{ .Values.redisStack.serviceName }}.{{ .Release.Namespace }}.svc.cluster.local
+        REDIS_PORT: {{ .Values.redisStack.port }}
+        REDIS_PASSWORD: {{ .Values.redisStack.password }}
+
+  customresources:
+    {{ .Values.genericPitcher.name }}-certificate:
+      apiVersion: cert-manager.io/v1
+      kind: Certificate
+      metadata:
+        name: {{ .Values.genericPitcher.name }}-ingress
+        labels:
+          app: {{ .Values.genericPitcher.name }}
+      spec:
+        commonName: {{ .Values.hostname }}.{{ .Values.domain }}
+        dnsNames:
+          - {{ .Values.hostname }}.{{ .Values.domain }}
+        issuerRef:
+          name: {{ .Values.issuerName }}
+          kind: {{ .Values.issuerKind }}
+        secretName: {{ .Values.genericPitcher.name }}-ingress-tls
+
+  ingress:
+    {{ .Values.genericPitcher.name }}-ingress:
+      labels:
+        app: {{ .Values.genericPitcher.name }}
+      name: {{ .Values.genericPitcher.name }}
+      ingressClassName: {{ .Values.ingressClass }}
+      annotations:
+        nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      service:
+        name: {{ .Values.genericPitcher.name }}-service
+        port: {{ .Values.ingressPort }}
+        path: /{{ .Values.genericPitcher.apiPath }}
+        pathType: Prefix
+      hostname: {{ .Values.hostname }}
+      domain: {{ .Values.domain }}
+      tls:
+        secretName: {{ .Values.genericPitcher.name }}-ingress-tls
+        host: {{ .Values.hostname }}.{{ .Values.domain }}

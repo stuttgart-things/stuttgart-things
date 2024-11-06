@@ -1,0 +1,18 @@
+---
+redis-stack:
+  enabled: {{ .Values.persistenceEabled }}
+  global:
+    redis:
+      password: {{ .Values.redisStack.password }}
+
+  master:
+    persistence:
+      enabled: {{ .Values.redisStack.enabled }}
+      storageClass: {{ .Values.storageClass }}
+      size: {{ .Values.redisStack.storageSize }}
+
+  replica:
+    persistence:
+      enabled: {{ .Values.redisStack.enabled }}
+      storageClass: {{ .Values.storageClass }}
+      size: {{ .Values.redisStack.storageSize }}

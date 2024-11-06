@@ -1,0 +1,43 @@
+---
+environments:
+  k3s:
+    values:
+      - env/defaults.yaml
+      - env/{{ .Environment.Name }}.yaml
+
+releases:
+  - name: homerun-redis-stack
+    installed: true
+    namespace: homerun
+    chart: stuttgart-things/homerun
+    version: v0.0.6
+    values:
+      - "values/redis-stack.values.yaml.gotmpl"
+
+  - name: homerun-generic-pitcher
+    installed: true
+    namespace: homerun
+    chart: stuttgart-things/homerun
+    version: v0.0.6
+    values:
+      - "values/generic-pitcher.values.yaml.gotmpl"
+
+  - name: homerun-text-catcher
+    installed: true
+    namespace: homerun
+    chart: stuttgart-things/homerun
+    version: v0.0.6
+    values:
+      - "values/text-catcher.values.yaml.gotmpl"
+
+repositories:
+  - name: stuttgart-things
+    url: ghcr.io/stuttgart-things
+    oci: true
+
+helmDefaults:
+  verify: false
+  wait: true
+  timeout: 600
+  recreatePods: false
+  force: true

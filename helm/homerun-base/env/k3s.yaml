@@ -1,0 +1,22 @@
+---
+persistenceEabled: true
+storageClass: local-path
+stream: homerun
+searchIndex: homerun
+
+hostname: cluster-test1
+domain: labul.sva.de
+issuerKind: ClusterIssuer
+issuerName: vault-approle
+
+genericPitcher:
+  enabled: true
+  name: homerun-generic-pitcher
+  port: 4000
+  apiPath: generic
+  token: ref+vault://apps/homerun/genericPitcherToken
+
+textCatcher:
+  enabled: true
+  name: homerun-text-catcher
+  logging: terminal
