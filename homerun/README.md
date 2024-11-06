@@ -1,3 +1,0 @@
-# stuttgart-things/homerun
-
-## Overview
