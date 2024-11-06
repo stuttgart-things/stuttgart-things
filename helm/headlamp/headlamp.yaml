@@ -1,0 +1,42 @@
+---
+environments:
+  homerun-dev:
+    values:
+      - env/defaults.yaml
+      - env/{{ .Environment.Name }}.yaml
+
+releases:
+  - name: headlamp-configuration
+    disableValidationOnInstall: true
+    installed: true
+    namespace: kube-system
+    chart: stuttgart-things/sthings-cluster
+    version: 0.3.10
+    values:
+      - "values/headlamp-certs.values.yaml.gotmpl"
+
+  - name: headlamp-deployment
+    disableValidationOnInstall: true
+    installed: true
+    namespace: kube-system
+    chart: headlamp/headlamp
+    version: 0.25.0
+    needs:
+      - kube-system/headlamp-configuration
+    values:
+      - "values/headlamp.values.yaml.gotmpl"
+
+repositories:
+  - name: stuttgart-things
+    url: eu.gcr.io/stuttgart-things
+    oci: true
+  - name: headlamp
+    url: https://headlamp-k8s.github.io/headlamp/
+    oci: false
+
+helmDefaults:
+  verify: false
+  wait: true
+  timeout: 600
+  recreatePods: false
+  force: true

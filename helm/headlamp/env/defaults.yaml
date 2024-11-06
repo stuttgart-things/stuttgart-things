@@ -1,0 +1,6 @@
+---
+storageEnabled: false
+storageSize: 1Gi
+hostname: headlamp
+storageAccessModes: ReadWriteOnce
+baseURL: /
