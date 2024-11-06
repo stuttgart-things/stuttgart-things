@@ -1,0 +1,171 @@
+---
+demo-pitcher:
+  enabled: {{ .Values.demoPitcher.enabled }}
+
+  deployment:
+    volumes:
+      event-config:
+        volumeKind: configMap
+    containers:
+      {{ .Values.demoPitcher.name }}:
+        volumeMounts:
+          event-config:
+            mountPath: /{{ .Values.demoPitcher.mountPath }}/
+            volumeKind: emptyDir
+
+  secrets:
+    redis-connection-{{ .Values.demoPitcher.name }}:
+      name: redis-connection-{{ .Values.demoPitcher.name }}
+      labels:
+        app: {{ .Values.demoPitcher.name }}
+      dataType: stringData
+      secretKVs:
+        REDIS_SERVER: {{ .Values.redisStack.serviceName }}.{{ .Release.Namespace }}.svc.cluster.local
+        REDIS_PORT: {{ .Values.redisStack.port }}
+        REDIS_PASSWORD: {{ .Values.redisStack.password }}
+
+  configmaps:
+    {{ .Values.demoPitcher.name }}:
+      REDIS_STREAM: {{ .Values.stream }}
+      COUNT_JOBS: "{{ .Values.demoPitcher.countJobs }}"
+      INTERVAL_IN_SECONDS: "{{ .Values.demoPitcher.intervalInSeconds }}"
+      PATH_TO_CONFIG: {{ .Values.demoPitcher.mountPath }}/{{ .Values.demoPitcher.configFileName }}
+      OUTPUT: {{ .Values.demoPitcher.output }}
+
+    event-config:
+      {{ .Values.demoPitcher.configFileName }}: |
+        ---
+        systems:
+          - github
+          - gitlab
+          - ansible
+
+        severity:
+          - INFO
+          - FAILED
+          - SUCCESS
+
+        authors: # pick author first and then randomly pick a assignee
+          - sina
+          - patrick
+          - quolf
+          - gude
+          - andreu
+          - ana
+
+        author:
+          sina:
+            name: Schlatter, Sina
+            email: sschlatter@sva.de
+          patrick:
+            name: Hermann, Patrick
+            email: phermann@sva.de
+
+        templates:
+          github:
+            eventTypes: git
+          gitlab:
+            eventTypes: git
+          ansible:
+            eventTypes: iac
+
+        events:
+          git:
+            title: |
+              [[ .objectType ]] [[ .objectName ]] [[ .status ]]
+            message: |
+              [[ .objectType ]] [[ .objectName ]] [[ .status ]] on [[ .system ]] at [[ .timestamp ]] triggered by [[ .author ]]
+
+        objectTypes:
+          git:
+            - pipeline
+            - repository
+          iac:
+            - playbook
+            - role
+            - collection
+
+        objectNames:
+          repository:
+            - homerun
+            - homerun-demo-pitcher
+            - homerun-demo-catcher
+          pipeline:
+            - build-kaniko-image
+            - publish-helm-chart
+          playbook:
+            - create-vm.yaml
+          role:
+            - deploy-configure-rke
+          collection:
+            - sthings.deploy_rke
+            - sthings.base_os
+            - sthings.container
+
+        tags:
+          sthings.deploy_rke:
+            - rke
+            - deploy
+            - ansible
+            - collection
+            - demo
+          sthings.base_os:
+            - base
+            - ansible
+            - collection
+            - demo
+          sthings.container:
+            - container
+            - collection
+            - demo
+            - ansible
+          build-kaniko-image:
+            - kaniko
+            - build
+            - image
+            - demo
+          create-vm.yaml:
+            - vm
+            - create
+            - playbook
+            - demo
+          deploy-configure-rke:
+            - rke
+            - deploy
+            - configure
+            - role
+            - demo
+          publish-helm-chart:
+            - helm
+            - publish
+            - chart
+            - demo
+          homerun:
+            - homerun
+            - demo
+          homerun-demo-pitcher:
+            - homerun
+            - demo
+            - pitcher
+          homerun-demo-catcher:
+            - homerun
+            - demo
+            - catcher
+
+        status:
+          pipeline:
+            failed: did fail
+            success: did run successfully
+            info: did run
+          playbook:
+            failed: did fail
+            success: did run successfully
+            info: did run
+          repository:
+            failed: was not created
+            success: was created successfully
+            info: was created
+          collection:
+            failed: was not build
+            success: was build successfully
+            info: was build

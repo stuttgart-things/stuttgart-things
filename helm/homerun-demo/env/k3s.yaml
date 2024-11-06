@@ -1,0 +1,9 @@
+---
+demoPitcher:
+  enabled: true
+  name: homerun-demo-pitcher
+  countJobs: 15
+  intervalInSeconds: 500
+  output: redis
+  configFileName: event-templates.yaml
+  mountPath: homerun
