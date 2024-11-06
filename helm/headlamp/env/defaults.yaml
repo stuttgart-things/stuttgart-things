@@ -1,5 +1,6 @@
 ---
 storageEnabled: false
+ingressEnabled: true
 storageSize: 1Gi
 hostname: headlamp
 storageAccessModes: ReadWriteOnce
