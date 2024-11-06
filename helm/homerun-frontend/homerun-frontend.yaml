@@ -1,0 +1,27 @@
+---
+environments:
+  k3s:
+    values:
+      - env/defaults.yaml
+      - env/{{ .Environment.Name }}.yaml
+
+releases:
+  - name: homerun-event-catcher
+    installed: true
+    namespace: homerun
+    chart: stuttgart-things/homerun
+    version: v0.2.1
+    values:
+      - "values/event-catcher.values.yaml.gotmpl"
+
+repositories:
+  - name: stuttgart-things
+    url: ghcr.io/stuttgart-things
+    oci: true
+
+helmDefaults:
+  verify: false
+  wait: true
+  timeout: 600
+  recreatePods: false
+  force: true

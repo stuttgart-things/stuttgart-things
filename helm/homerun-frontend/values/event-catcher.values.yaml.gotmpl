@@ -1,0 +1,128 @@
+---
+event-catcher:
+  enabled: {{ .Values.eventCatcher.enabled }}
+  deployment:
+    volumes:
+      certs:
+        volumeKind: configMap
+    containers:
+      {{ .Values.eventCatcher.name }}:
+        lifecycle:
+          postStart:
+            exec:
+              command:
+              - /bin/sh
+              - -c
+              - sleep 10; update-ca-certificates
+    volumeMounts:
+      certs:
+        mountPath: /usr/local/share/ca-certificates/
+        volumeKind: emptyDir
+
+  configmaps:
+    {{ .Values.eventCatcher.name }}:
+      API_PATH: "{{ .Values.eventCatcher.apiPath }}"
+      PORT: "{{ .Values.eventCatcher.targetPort }}"
+      REDIS_STREAM: {{ .Values.stream }}
+      REDISEARCH_INDEX: {{ .Values.searchIndex }}
+
+    certs:
+      pub-cert.pem: |
+        -----BEGIN CERTIFICATE-----
+        MIIDFzCCAf+gAwIBAgIUMeSIstKZWEfb5a0qQ1ARmrkk0hkwDQYJKoZIhvcNAQEL
+        BQAwGzEZMBcGA1UEAwwQc3R1dHRnYXJ0LXRoaW5nczAeFw0yNDEwMjgxMzExNDda
+        Fw0zNDEwMjYxMzExNDdaMBsxGTAXBgNVBAMMEHN0dXR0Z2FydC10aGluZ3MwggEi
+        MA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCcKGLIkaDTxjEVjBCzC3TTrFkD
+        /6Aho5xBtibW9b9i15lVbqJsYnR+3HlS8SJE+cIhrWsWSCq4NHS714Iw/xYN9l5T
+        zk6swckHgzloMYWQBLExyeLORMjgdEpmR2wAlwGY3islbF6iKyTjc5MeCw+Mv/oW
+        VaAZHH0EgLzf/sXitJ7s/JZiY9nB1/23WdaVUjpsaGFHYh0uJW1fKm7lImnITl0A
+        xtyU8IbezGr+Z8FdbHSdvarToGokQ6Tl3Gxtbix9VD/IPA7/d/YSv2Ms5QQPmOFJ
+        U9+jV5waHHQQkh2rJBKzNc4IUW1JNa4S0Ag1/TyZotyGI1RytkI/1eQ6FcuPAgMB
+        AAGjUzBRMB0GA1UdDgQWBBQlz03hj+Rhlsmsgt09HnRs6l/oQDAfBgNVHSMEGDAW
+        gBQlz03hj+Rhlsmsgt09HnRs6l/oQDAPBgNVHRMBAf8EBTADAQH/MA0GCSqGSIb3
+        DQEBCwUAA4IBAQBHP1jWrUUoaCMvVaM7iqXaf5gVi04G4qrytXKJNR1xuHCUTnd8
+        aWMLRuHS0D6h0S7TKTy72oUFmx0wMbZrWPtIrbo8zKSA6P2fW5VKKutDv+8mN5Wy
+        GQ+bBKIrFEIPx9r84hNg2QipUnKAlCR2bUppLejijFwEzlGYlO0Jlih2A1MMKBr+
+        s9Eckva5IFaU/KVK9kZhEyEmMEyCL3K/rX4kpZK1XEYuhW8k3Y84z+ICoQoWSsvF
+        YTjABLGVdaStneXt+2Il1ddhkSheQTu3xGihCo2C559MDIzSezG7N7P0IkNGoXMj
+        qTiA/YdOhNYlljNDEtTEWIW21cGUXn5Y3mtI
+        -----END CERTIFICATE-----
+
+  secrets:
+    redis-connection-{{ .Values.eventCatcher.name }}:
+      name: redis-connection-{{ .Values.eventCatcher.name }}
+      labels:
+        app: {{ .Values.eventCatcher.name }}
+      dataType: stringData
+      secretKVs:
+        REDIS_SERVER: {{ .Values.redisStack.serviceName }}.{{ .Release.Namespace }}.svc.cluster.local
+        REDIS_PORT: {{ .Values.redisStack.port }}
+        REDIS_PASSWORD: {{ .Values.redisStack.password }}
+
+  services:
+    {{ .Values.eventCatcher.name }}:
+      labels:
+        app: {{ .Values.eventCatcher.name }}
+      ports:
+        - name: ingress-port
+          protocol: TCP
+          value: {{ .Values.eventCatcher.targetPort }}
+          expose:
+            service:
+              type: ClusterIP
+              port: {{ .Values.eventCatcher.targetPort }}
+      selectorLabels:
+        app: {{ .Values.eventCatcher.name }}
+
+  ingress:
+    {{ .Values.eventCatcher.name }}-events:
+      labels:
+        app: {{ .Values.eventCatcher.name }}
+      name: {{ .Values.eventCatcher.name }}-events
+      ingressClassName: {{ .Values.ingressClass }}
+      annotations:
+        nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      service:
+        name: {{ .Values.eventCatcher.name }}-service
+        port: {{ .Values.eventCatcher.targetPort }}
+        path: /{{ .Values.eventCatcher.eventsPath }}
+        pathType: Prefix
+      hostname: {{ .Values.hostname }}
+      domain: {{ .Values.domain }}
+      tls:
+        secretName: {{ .Values.eventCatcher.name }}-ingress-tls
+        host: {{ .Values.hostname }}.{{ .Values.domain }}
+    {{ .Values.eventCatcher.name }}-documents:
+      labels:
+        app: {{ .Values.eventCatcher.name }}
+      name: {{ .Values.eventCatcher.name }}-documents
+      ingressClassName: {{ .Values.ingressClass }}
+      annotations:
+        nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      service:
+        name: {{ .Values.eventCatcher.name }}-service
+        port: {{ .Values.eventCatcher.targetPort }}
+        path: /{{ .Values.eventCatcher.documentsPath }}
+        pathType: Prefix
+      hostname: {{ .Values.hostname }}
+      domain: {{ .Values.domain }}
+      tls:
+        secretName: {{ .Values.eventCatcher.name }}-ingress-tls
+        host: {{ .Values.hostname }}.{{ .Values.domain }}
+
+  customresources:
+    {{ .Values.eventCatcher.name }}-certificate:
+      apiVersion: cert-manager.io/v1
+      kind: Certificate
+      metadata:
+        name: {{ .Values.eventCatcher.name }}-ingress
+        labels:
+          app: {{ .Values.eventCatcher.name }}
+      spec:
+        commonName: {{ .Values.hostname }}.{{ .Values.domain }}
+        dnsNames:
+          - {{ .Values.hostname }}.{{ .Values.domain }}
+        issuerRef:
+          name: {{ .Values.issuerName }}
+          kind: {{ .Values.issuerKind }}
+        secretName: {{ .Values.eventCatcher.name }}-ingress-tls

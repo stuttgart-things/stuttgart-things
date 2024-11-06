@@ -10,7 +10,7 @@ releases:
     installed: true
     namespace: homerun
     chart: stuttgart-things/homerun
-    version: v0.0.6
+    version: v0.2.1
     values:
       - "values/redis-stack.values.yaml.gotmpl"
 
@@ -18,7 +18,7 @@ releases:
     installed: true
     namespace: homerun
     chart: stuttgart-things/homerun
-    version: v0.0.6
+    version: v0.2.1
     values:
       - "values/generic-pitcher.values.yaml.gotmpl"
 
@@ -26,7 +26,7 @@ releases:
     installed: true
     namespace: homerun
     chart: stuttgart-things/homerun
-    version: v0.0.6
+    version: v0.2.1
     values:
       - "values/text-catcher.values.yaml.gotmpl"
 

@@ -1,0 +1,16 @@
+---
+stream: homerun
+searchIndex: homerun
+
+hostname: cluster-test1
+domain: labul.sva.de
+issuerKind: ClusterIssuer
+issuerName: vault-approle
+
+eventCatcher:
+  enabled: true
+  name: homerun-event-catcher
+  apiPath: ""
+  targetPort: 8080
+  eventsPath: events
+  documentsPath: documents

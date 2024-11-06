@@ -1,0 +1,9 @@
+---
+stream: homerun
+ingressClass: nginx
+ingressPort: 80
+redisStack:
+  enabled: true
+  password: ref+vault://apps/homerun/redisPassword
+  port: 6379
+  serviceName: homerun-redis-stack-headless
