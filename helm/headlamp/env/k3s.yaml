@@ -1,0 +1,4 @@
+---
+hostname: cluster-test1
+domain: labul.sva.de
+clusterIssuer: ca-issuer

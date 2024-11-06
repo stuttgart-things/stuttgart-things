@@ -4,6 +4,10 @@ environments:
     values:
       - env/defaults.yaml
       - env/{{ .Environment.Name }}.yaml
+  k3s:
+    values:
+      - env/defaults.yaml
+      - env/{{ .Environment.Name }}.yaml
 
 releases:
   - name: headlamp-configuration
@@ -11,9 +15,9 @@ releases:
     installed: true
     namespace: kube-system
     chart: stuttgart-things/sthings-cluster
-    version: 0.3.10
+    version: 0.3.15
     values:
-      - "values/headlamp-certs.values.yaml.gotmpl"
+      - "values/headlamp-configuration.values.yaml.gotmpl"
 
   - name: headlamp-deployment
     disableValidationOnInstall: true

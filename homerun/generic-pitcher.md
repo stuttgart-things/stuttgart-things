@@ -1,9 +1,9 @@
 # HOMERUN/GENERIC-PITCHER
 
 ```bash
-ADDRESS=https://homerun.homerun-dev.sthings-vsphere.labul.sva.de/generic
+ADDRESS=https://cluster-test1.labul.sva.de/generic
 
-curl -X POST ${ADDRESS} \
+curl -k -X POST ${ADDRESS} \
      -H "Content-Type: application/json" \
      -H "X-Auth-Token: IhrGeheimerToken" \
      -d '{
