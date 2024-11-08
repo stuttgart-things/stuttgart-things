@@ -173,7 +173,7 @@ playbooks:
         vars:
           docker_install_compose: true
           install_kind: true
-          kind_version: 0.24.0 # datasource=github-tags depName=kubernetes-sigs/kind
+          kind_version: 0.25.0 # datasource=github-tags depName=kubernetes-sigs/kind
           kubectl_version: v1.30.2 # datasource=github-tags depName=kubernetes/kubectl
 
         roles:
