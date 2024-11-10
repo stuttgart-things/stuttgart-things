@@ -12,7 +12,7 @@ playbooks:
           #go_checksum_type: "sha256"
           source_url: "https://go.dev/dl/go{{ golang_version }}.linux-amd64.tar.gz"
           golang_install_dir: /usr/local
-          golangci_version: 1.61.0 # datasource=github-tags depName=golangci/golangci-lint
+          golangci_version: 1.62.0 # datasource=github-tags depName=golangci/golangci-lint
           goreleaser_version: 2.4.4 # datasource=github-tags depName=goreleaser/goreleaser
           ko_version: 0.17.1 # datasource=github-tags depName=ko-build/ko
           cobracli_version: 1.8.1 # datasource=github-tags depName=spf13/cobra
