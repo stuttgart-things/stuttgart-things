@@ -30,7 +30,7 @@ binary:
   - helm:
       url: https://get.helm.sh/helm-v{{ or .helmVersion "3.13.0" }}-linux-amd64.tar.gz
       bin: linux-amd64/helm
-      version: 3.13.0 # datasource=github-tags depName=helm/helm
+      version: 3.16.2 # datasource=github-tags depName=helm/helm
   - kompose:
       url: https://github.com/kubernetes/kompose/releases/download/v{{ or .komposeVersion "1.26.0" }}/kompose-linux-amd64
       bin: kompose-linux-amd64
