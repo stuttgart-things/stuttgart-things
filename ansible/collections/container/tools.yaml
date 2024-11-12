@@ -30,7 +30,7 @@ vars:
       flux_version: 2.4.0 # datasource=github-tags depName=fluxcd/flux2
       glab_version: 1.48.0 # datasource=gitlab-tags depName=gitlab-org/cli
       cilium_version: 0.16.20 # datasource=github-tags depName=cilium/cilium-cli
-      dagger_version: 0.13.3 # datasource=github-tags depName=dagger/dagger
+      dagger_version: 0.14.0 # datasource=github-tags depName=dagger/dagger
 
       bin:
         flux:
