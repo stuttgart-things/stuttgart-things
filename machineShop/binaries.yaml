@@ -3,11 +3,11 @@ binary:
   - argocd:
       url: https://github.com/argoproj/argo-cd/releases/download/v{{ or .argocdVersion "2.8.4" }}/argocd-linux-amd64
       bin: argocd-linux-amd64
-      version: 2.11.0 # datasource=github-tags depName=argoproj/argo-cd
+      argocdVersion: 2.11.0 # datasource=github-tags depName=argoproj/argo-cd
   - kubectl:
       url: https://dl.k8s.io/release/v{{ or .kubectlVersion "1.28.2" }}/bin/linux/amd64/kubectl
       bin: kubectl
-      version: v1.29.2 # datasource=github-tags depName=kubernetes/kubectl
+      kubectlVersion: v1.29.2 # datasource=github-tags depName=kubernetes/kubectl
   - sops:
       url: https://github.com/getsops/sops/releases/download/v{{ or .sopsVersion "3.8.1" }}/sops-v{{ or .sopsVersion "3.8.1" }}.linux.amd64
       bin: sops-v3.8.1.linux.amd64
