@@ -47,7 +47,7 @@ binary:
   - task:
       url: https://github.com/go-task/task/releases/download/v{{ or .taskVersion "3.30.1" }}/task_linux_386.tar.gz
       bin: task
-      version: 3.30.1 # datasource=github-tags depName=go-task/task
+      version: 3.40.0 # datasource=github-tags depName=go-task/task
   - flux:
       url: https://github.com/fluxcd/flux2/releases/download/v{{ or .fluxVersion "2.1.2" }}/flux_{{ or .fluxVersion "2.1.2" }}_linux_amd64.tar.gz
       bin: flux
