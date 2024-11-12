@@ -22,7 +22,7 @@ vars:
       skopeo_version: 1.14.4 # datasource=github-tags depName=lework/skopeo-binary
       helm_version: 3.16.2 # datasource=github-tags depName=helm/helm
       kubectl_version: v1.30.2 # datasource=github-tags depName=kubernetes/kubectl
-      k9s_version: v0.32.5 # datasource=github-tags depName=derailed/k9s
+      k9s_version: 0.32.6 # datasource=github-tags depName=derailed/k9s
       velero_version: 1.15.0 # datasource=github-tags depName=vmware-tanzu/velero
       kubectl_slice_version: 1.4.0 # datasource=github-tags depName=patrickdappollonio/kubectl-slice
       helmfile_version: 0.169.1 # datasource=github-tags depName=helmfile/helmfile
