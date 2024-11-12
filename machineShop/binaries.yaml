@@ -3,11 +3,11 @@ binary:
   - argocd:
       url: https://github.com/argoproj/argo-cd/releases/download/v{{ or .argocdVersion "2.8.4" }}/argocd-linux-amd64
       bin: argocd-linux-amd64
-      argocdVersion: 2.13.0 # datasource=github-tags depName=argoproj/argo-cd
+      version: 2.13.0 # datasource=github-tags depName=argoproj/argo-cd
   - kubectl:
       url: https://dl.k8s.io/release/v{{ or .kubectlVersion "1.28.2" }}/bin/linux/amd64/kubectl
       bin: kubectl
-      kubectlVersion: v1.29.2 # datasource=github-tags depName=kubernetes/kubectl
+      version: v1.29.2 # datasource=github-tags depName=kubernetes/kubectl
   - sops:
       url: https://github.com/getsops/sops/releases/download/v{{ or .sopsVersion "3.8.1" }}/sops-v{{ or .sopsVersion "3.8.1" }}.linux.amd64
       bin: sops-v3.8.1.linux.amd64
@@ -20,7 +20,7 @@ binary:
   - kind:
       url: https://kind.sigs.k8s.io/dl/v{{ or .kindVersion "0.20.0" }}/kind-linux-amd64
       bin: kind-linux-amd64
-      kindVersion: 0.25.0 # datasource=github-tags depName=kubernetes-sigs/kind
+      version: 0.25.0 # datasource=github-tags depName=kubernetes-sigs/kind
   - velero:
       url: https://github.com/vmware-tanzu/velero/releases/download/v{{ or .veleroVersion "1.13.0" }}/velero-v{{ or .veleroVersion "1.13.0" }}-linux-amd64.tar.gz
       bin: velero-v1.13.0-linux-amd64/velero
@@ -93,6 +93,10 @@ binary:
   - polaris:
       url: https://github.com/FairwindsOps/polaris/releases/download/{{ or .polaris "8.5.3" }}/polaris_linux_amd64.tar.gz
       bin: polaris
+  - ko:
+      url: https://github.com/ko-build/ko/releases/download/v{ or .koVersion "0.17.1" }}/ko_Linux_x86_64.tar.gz
+      bin: ko
+      version: 0.17.1 # datasource=github-tags depName=ko-build/ko
 
 # https://github.com/vmware/govmomi/releases/download/v0.34.2/govc_Linux_x86_64.tar.gz
 
