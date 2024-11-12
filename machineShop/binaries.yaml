@@ -20,7 +20,7 @@ binary:
   - kind:
       url: https://kind.sigs.k8s.io/dl/v{{ or .kindVersion "0.20.0" }}/kind-linux-amd64
       bin: kind-linux-amd64
-      kindVersion: 0.23.0 # datasource=github-tags depName=kubernetes-sigs/kind
+      kindVersion: 0.25.0 # datasource=github-tags depName=kubernetes-sigs/kind
   - velero:
       url: https://github.com/vmware-tanzu/velero/releases/download/v{{ or .veleroVersion "1.13.0" }}/velero-v{{ or .veleroVersion "1.13.0" }}-linux-amd64.tar.gz
       bin: velero-v1.13.0-linux-amd64/velero
