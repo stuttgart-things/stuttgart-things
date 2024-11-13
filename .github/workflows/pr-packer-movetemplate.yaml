@@ -19,7 +19,7 @@ jobs:
       golden-image-folder: ${{ steps.set.outputs.GOLDEN_IMAGE_FOLDER }}
       target-template-name: ${{ steps.set.outputs.TARGET_NAME }}
     container:
-      image: eu.gcr.io/stuttgart-things/machineshop:v1.7.2
+      image: eu.gcr.io/stuttgart-things/machineshop:v2.6.3
     permissions:
       contents: read
       pull-requests: read
