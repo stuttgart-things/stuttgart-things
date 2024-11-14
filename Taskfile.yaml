@@ -20,6 +20,12 @@ venv-precondition: &venv
     msg: "The pip version output does not contain .venv, Halting. Run task setup-molecule and/or source ansible/.venv/bin/activate"
 
 tasks:
+
+  collections:
+    desc: Install ansible collections
+    cmds:
+      - ansible-galaxy install -r ansible/requirements.yaml -f
+
   run-molecule:
     preconditions: *venv
     cmds:

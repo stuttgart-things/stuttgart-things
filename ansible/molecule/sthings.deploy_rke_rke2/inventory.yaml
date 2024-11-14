@@ -1,8 +1,8 @@
 ---
 initial_master_node:
   hosts:
-    cluster-test1-2.labul.sva.de
+    rke2-28.labul.sva.de
 additional_master_nodes:
-  hosts:
-    cluster-test1-3.labul.sva.de:
-    cluster-test1-4.labul.sva.de:
+#   hosts:
+#     rke2-28-2.labul.sva.de:
+#     rke2-28-3.labul.sva.de:

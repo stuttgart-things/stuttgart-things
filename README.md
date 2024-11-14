@@ -52,6 +52,7 @@ task pr
 
 ```bash
 task setup-venv
+# cd ansible
 source ./.venv/bin/activate
 task setup-molecule
 

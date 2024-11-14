@@ -1,0 +1,20 @@
+---
+providers:
+  - xpkg.upbound.io/crossplane-contrib/provider-helm:v0.19.0
+  - xpkg.upbound.io/crossplane-contrib/provider-kubernetes:v0.16.0
+
+terraform:
+  configName: tf-provider
+  image: eu.gcr.io/stuttgart-things/sthings-cptf:1.9.5
+  package: xpkg.upbound.io/upbound/provider-terraform
+  version: v0.19.0
+  poll: 10m
+  reconcileRate: 10
+  s3SecretName: s3
+
+secrets:
+  s3:
+    namespace: crossplane-system
+    kvs:
+      AWS_ACCESS_KEY_ID: ref+vault://apps/artifacts/accessKey
+      AWS_SECRET_ACCESS_KEY: ref+vault://apps/artifacts/secretKey

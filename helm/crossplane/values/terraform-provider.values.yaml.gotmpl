@@ -1,0 +1,46 @@
+---
+secrets:
+{{- range $k, $v := .Values.secrets }}
+  {{ $k }}:
+    name: {{ $k }}
+    namespace: {{ $v.namespace }}
+    secretKVs:
+    {{- range $key, $value := $v.kvs }}
+      {{ $key }}: {{ $value | quote }}{{ end }}
+{{- end }}
+
+customresources:
+  deploymentTemplate:
+    apiVersion: pkg.crossplane.io/v1beta1
+    kind: DeploymentRuntimeConfig
+    metadata:
+      name: {{ .Values.terraform.configName }}
+      namespace: {{ .Release.Namespace }}
+    spec:
+      deploymentTemplate:
+        spec:
+          selector: {}
+          strategy: {}
+          template:
+            spec:
+              containers:
+              - envFrom:
+                - secretRef:
+                    name: {{ .Values.terraform.s3SecretName }}
+                name: package-runtime
+                image: {{ .Values.terraform.image }}
+                args:
+                  - -d
+                  - --poll={{ .Values.terraform.poll }}
+                  - --max-reconcile-rate={{ .Values.terraform.reconcileRate }}
+                resources: {}
+  provider:
+    apiVersion: pkg.crossplane.io/v1
+    kind: Provider
+    metadata:
+      name: provider-terraform
+      namespace: {{ .Release.Namespace }}
+    spec:
+      package: {{ .Values.terraform.package }}:{{ .Values.terraform.version }}
+      runtimeConfigRef:
+        name: {{ .Values.terraform.configName }}
