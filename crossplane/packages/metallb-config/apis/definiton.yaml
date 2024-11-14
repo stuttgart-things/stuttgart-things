@@ -2,24 +2,24 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: CompositeResourceDefinition
 metadata:
-  name: xmetallbs.resources.stuttgart-things.com
+  name: xmetallbconfigs.resources.stuttgart-things.com
 spec:
   connectionSecretKeys:
     - kubeconfig
   group: resources.stuttgart-things.com
   names:
-    kind: XMetalLB
-    plural: xmetallbs
+    kind: XMetalLBconfig
+    plural: xmetallbconfigs
   claimNames:
-    kind: MetalLB
-    plural: metallbs
+    kind: MetalLBconfig
+    plural: metallbconfigs
   versions:
     - name: v1alpha1
       served: true
       referenceable: true
       schema:
         openAPIV3Schema:
-          description: A MetalLB is a composite resource that represents a helm release for a metallb deployment
+          description: A MetalLBconfig is a composite resource that represents a helm release for a metallb deployment and configuration
           type: object
           properties:
             spec:
@@ -33,12 +33,22 @@ spec:
                   type: string
                   default: in-cluster
                   description: cluster name/helm provider name
+                ipPoolName:
+                  type: string
+                  default: ip-pool
+                  description: name of ip pool
                 version:
                   type: string
-                  default: 5.0.3
+                  default: 6.3.15
                   description: helm chart version for metallb
+                ipRanges:
+                  type: array
+                  description: IP-Ranges
+                  items:
+                    type: string
               required:
                 - clusterName
+                - ipRanges
             status:
               description: A Status represents the observed state
               properties:

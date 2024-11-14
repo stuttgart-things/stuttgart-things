@@ -26,9 +26,9 @@ spec:
             chart:
               name: metallb
               repository: https://charts.bitnami.com/bitnami
-              version: 5.0.3
+              version: 6.3.15
             namespace: metallb-system
-            insecureSkipTLSVerify: true
+            insecureSkipTLSVerify: false
             skipCreateNamespace: false
             wait: true
             skipCRDs: false
@@ -54,11 +54,11 @@ spec:
           toFieldPath: spec.providerConfigRef.name
         - fromFieldPath: spec.version
           toFieldPath: spec.forProvider.chart.version
-        - type: ToCompositeFieldPath
-          fromFieldPath: status.atProvider.revision
-          toFieldPath: status.share.revision
-          policy:
-            fromFieldPath: Required
+        # - type: ToCompositeFieldPath
+        #   fromFieldPath: status.atProvider.revision
+        #   toFieldPath: status.share.revision
+        #   policy:
+        #     fromFieldPath: Required
       connectionDetails:
         - name: config
           fromConnectionSecretKey: config

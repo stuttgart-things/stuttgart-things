@@ -1,0 +1,12 @@
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: MetalLBconfig
+metadata:
+  name: local
+  namespace: crossplane-system
+spec:
+  clusterName: local
+  ipPoolName: pool1
+  version: 6.3.15
+  ipRanges:
+    - 10.31.103.18-10.31.103.18
