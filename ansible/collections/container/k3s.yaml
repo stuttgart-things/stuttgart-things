@@ -123,7 +123,7 @@ vars:
     file: |
       ---
       cilium_version: 0.16.20 # datasource=github-tags depName=cilium/cilium-cli
-      helm_version: 3.16.2 # datasource=github-tags depName=helm/helm
+      helm_version: 3.16.3 # datasource=github-tags depName=helm/helm
       kubectl_version: v1.30.2 # datasource=github-tags depName=kubernetes/kubectl
       k9s_version: v0.32.5 # datasource=github-tags depName=kubernetes/kubectl
 
