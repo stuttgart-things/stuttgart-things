@@ -2,11 +2,12 @@
 apiVersion: resources.stuttgart-things.com/v1alpha1
 kind: CertManagerConfig
 metadata:
-  name: labda-test
+  name: local
   namespace: crossplane-system
 spec:
-  clusterName: labda-test
+  clusterName: local
   issuerName: vault-approle
+  version: v1.16.1
   approle:
     secretName: cert-manager
     secretNamespace: crossplane-system

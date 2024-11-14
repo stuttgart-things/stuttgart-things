@@ -6,3 +6,4 @@ metadata:
   namespace: crossplane-system
 spec:
   clusterName: labda-test
+  version: v1.16.1
