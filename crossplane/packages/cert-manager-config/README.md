@@ -17,8 +17,3 @@ data:
   caBundle: LS0tLS1CRUdJTis#...
 EOF
 ```
-
-
-1d42d7e7-8c14-e5f9-801d-b3ecef416616
-
-623c991f-dd76-c437-2723-bb2ef5b02d87

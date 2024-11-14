@@ -1,0 +1,3 @@
+---
+domain: rke2.sthings-vsphere.labul.sva.de
+clusterIssuer: vault-approle

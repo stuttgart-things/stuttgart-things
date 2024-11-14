@@ -1,0 +1,40 @@
+---
+environments:
+  rke2:
+    values:
+      - env/defaults.yaml
+      - env/{{ .Environment.Name }}.yaml
+
+releases:
+  - name: komoplane-certificates
+    disableValidationOnInstall: true
+    installed: true
+    namespace: komoplane
+    chart: stuttgart-things/sthings-cluster
+    version: 0.3.15
+    values:
+      - "values/komoplane-certificates.values.yaml.gotmpl"
+
+  - name: komoplane-deployment
+    disableValidationOnInstall: true
+    installed: true
+    namespace: komoplane
+    chart: komodorio/komoplane
+    version: 0.1.5
+    values:
+      - "values/komoplane.values.yaml.gotmpl"
+
+repositories:
+  - name: stuttgart-things
+    url: eu.gcr.io/stuttgart-things
+    oci: true
+  - name: komodorio
+    url: https://helm-charts.komodor.io
+    oci: false
+
+helmDefaults:
+  verify: false
+  wait: true
+  timeout: 600
+  recreatePods: false
+  force: true

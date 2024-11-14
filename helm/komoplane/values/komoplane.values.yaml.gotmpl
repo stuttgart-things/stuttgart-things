@@ -1,0 +1,13 @@
+---
+ingress:
+  enabled: true
+  className: nginx
+  hosts:
+    - host: {{ .Values.hostname }}.{{ .Values.domain }}
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - hosts:
+        - {{ .Values.hostname }}.{{ .Values.domain }}
+      secretName: {{ .Values.hostname }}-ingress-tls

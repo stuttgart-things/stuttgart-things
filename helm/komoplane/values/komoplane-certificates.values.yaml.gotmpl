@@ -1,0 +1,16 @@
+---
+customresources:
+  ingress-certificate-komoplane:
+    apiVersion: cert-manager.io/v1
+    kind: Certificate
+    metadata:
+      name: minio-ingress-komoplane
+      namespace: {{ .Release.Namespace }}
+    spec:
+      commonName: {{ .Values.hostname }}.{{ .Values.domain }}
+      dnsNames:
+        - {{ .Values.hostname }}.{{ .Values.domain }}
+      issuerRef:
+        name: {{ .Values.clusterIssuer }}
+        kind: {{ .Values.issuerKind }}
+      secretName: {{ .Values.hostname }}-ingress-tls
