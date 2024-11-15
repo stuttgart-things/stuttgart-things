@@ -38,9 +38,9 @@ spec:
               name: tekton-base
               url: https://github.com/stuttgart-things/stuttgart-things/releases/download/tekton-base-v0.60.4/tekton-base-v0.60.4.tgz
               version: v0.60.4
-              pullSecretRef:
-                name: ghcr
-                namespace: crossplane-system
+              # pullSecretRef:
+              #   name: ghcr
+              #   namespace: crossplane-system
             namespace: tekton-pipelines
             insecureSkipTLSVerify: false
             skipCreateNamespace: false
