@@ -1,0 +1,20 @@
+---
+releases:
+  - name: tekton-pipelines
+    disableValidationOnInstall: true
+    installed: true
+    namespace: tekton-pipelines
+    chart: stuttgart-things/tekton-base
+    version: v0.65.1
+
+repositories:
+  - name: stuttgart-things
+    url: eu.gcr.io/stuttgart-things
+    oci: true
+
+helmDefaults:
+  verify: false
+  wait: true
+  timeout: 600
+  recreatePods: false
+  force: true
