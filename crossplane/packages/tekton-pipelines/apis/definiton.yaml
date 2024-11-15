@@ -35,7 +35,7 @@ spec:
                   description: cluster name/helm provider name
                 version:
                   type: string
-                  default: v0.60.4
+                  default: v0.65.1
                   description: helm chart version for tekton
                 vaultSecret:
                   type: object
