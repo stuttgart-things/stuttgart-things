@@ -27,7 +27,7 @@ on:
       working-image:
         description: WORKING IMAGE
         type: string
-        default: eu.gcr.io/stuttgart-things/sthings-terraform:1.9.4-2
+        default: ghcr.io/stuttgart-things/sthings-terraform:1.9.8
       machineshop-image:
         description: MACHINESHOP IMAGE
         type: string
