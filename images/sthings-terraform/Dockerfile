@@ -40,10 +40,9 @@ RUN wget -O terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_V
        && rm terraform.zip
 
 # MACHINE-SHOP
-RUN wget -q https://github.com/stuttgart-things/machineshop/releases/download/${MACHINE_SHOP_VERSION}/machineshop_Linux_x86_64.tar.gz \
+RUN wget -q https://github.com/stuttgart-things/machineshop/releases/download/v${MACHINE_SHOP_VERSION}/machineshop_Linux_x86_64.tar.gz \
     && tar -xvf machineshop_Linux_x86_64.tar.gz -C /usr/bin/ machineshop \
     && rm -rf machineshop_Linux_x86_64.tar.gz
-
 # INSTALL YQ
 RUN wget -q https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_linux_amd64.tar.gz \
     && tar xvfz yq_linux_amd64.tar.gz -C /usr/bin \
