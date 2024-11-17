@@ -1,17 +1,17 @@
-ARG REGISTRY=eu.gcr.io
+ARG REGISTRY=ghcr.io
 ARG REPOSITORY=stuttgart-things
 ARG IMAGE=sthings-alpine
-ARG TAG=alpine-3.20-1
+ARG TAG=3.9.20-alpine3.20
 FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
 
 # META INFORMATION
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
-LABEL version=1.9.4-2
+LABEL version=1.9.8
 
 # VERSIONS
-ARG TERRAFORM_VERSION=1.9.4 # datasource=custom.hashicorp
-ARG YQ_VERSION=4.44.2
-ARG MACHINE_SHOP_VERSION=2.2.9
+ARG TERRAFORM_VERSION=1.9.8 # datasource=custom.hashicorp
+ARG YQ_VERSION=4.44.5
+ARG MACHINE_SHOP_VERSION=2.6.3
 
 # INSTALL OS PACKAGES
 RUN apk add --no-cache aws-cli \
