@@ -18,7 +18,7 @@ spec:
     substitute:
       GH_RSS_NAMESPACE: arc-runners
       GH_RSS_VERSION: 0.9.3
-      GH_RSS_RUNNER_VERSION: 2.319.1
+      GH_RSS_RUNNER_VERSION: 2.321.0
       GH_RSS_STORAGE_CLASS: openebs-hostpath
       GH_RSS_STORAGE_REQUEST: 50Mi
       GH_RSS_GITHUB_URL: https://github.com/stuttgart-things/kaeffken
@@ -47,7 +47,7 @@ spec:
     substitute:
       GH_RSS_NAMESPACE: arc-runners
       GH_RSS_VERSION: 0.9.3
-      GH_RSS_RUNNER_VERSION: 2.319.1
+      GH_RSS_RUNNER_VERSION: 2.321.0
       GH_RSS_STORAGE_CLASS: openebs-hostpath
       GH_RSS_STORAGE_REQUEST: 50Mi
       GH_RSS_GITHUB_URL: https://github.com/stuttgart-things/machineshop
@@ -76,7 +76,7 @@ spec:
     substitute:
       GH_RSS_NAMESPACE: arc-runners
       GH_RSS_VERSION: 0.9.3
-      GH_RSS_RUNNER_VERSION: 2.319.1
+      GH_RSS_RUNNER_VERSION: 2.321.0
       GH_RSS_STORAGE_CLASS: openebs-hostpath
       GH_RSS_STORAGE_REQUEST: 50Mi
       GH_RSS_GITHUB_URL: https://github.com/stuttgart-things/vault-base-setup
@@ -105,7 +105,7 @@ spec:
     substitute:
       GH_RSS_NAMESPACE: arc-runners
       GH_RSS_VERSION: 0.9.3
-      GH_RSS_RUNNER_VERSION: 2.319.1
+      GH_RSS_RUNNER_VERSION: 2.321.0
       GH_RSS_STORAGE_CLASS: openebs-hostpath
       GH_RSS_STORAGE_REQUEST: 50Mi
       GH_RSS_GITHUB_URL: https://github.com/stuttgart-things/deploy-configure-rke
@@ -134,7 +134,7 @@ spec:
     substitute:
       GH_RSS_NAMESPACE: arc-runners
       GH_RSS_VERSION: 0.9.3
-      GH_RSS_RUNNER_VERSION: 2.319.1
+      GH_RSS_RUNNER_VERSION: 2.321.0
       GH_RSS_STORAGE_CLASS: openebs-hostpath
       GH_RSS_STORAGE_REQUEST: 50Mi
       GH_RSS_GITHUB_URL: https://github.com/stuttgart-things/blog
@@ -163,7 +163,7 @@ spec:
     substitute:
       GH_RSS_NAMESPACE: arc-runners
       GH_RSS_VERSION: 0.9.3
-      GH_RSS_RUNNER_VERSION: 2.319.1
+      GH_RSS_RUNNER_VERSION: 2.321.0
       GH_RSS_STORAGE_CLASS: openebs-hostpath
       GH_RSS_STORAGE_REQUEST: 50Mi
       GH_RSS_GITHUB_URL: https://github.com/stuttgart-things/docs
@@ -192,7 +192,7 @@ spec:
     substitute:
       GH_RSS_NAMESPACE: arc-runners
       GH_RSS_VERSION: 0.9.3
-      GH_RSS_RUNNER_VERSION: 2.319.1
+      GH_RSS_RUNNER_VERSION: 2.321.0
       GH_RSS_STORAGE_CLASS: openebs-hostpath
       GH_RSS_STORAGE_REQUEST: 50Mi
       GH_RSS_GITHUB_URL: https://github.com/stuttgart-things/flux2-cluster-bootstrap
@@ -221,7 +221,7 @@ spec:
     substitute:
       GH_RSS_NAMESPACE: arc-runners
       GH_RSS_VERSION: 0.9.3
-      GH_RSS_RUNNER_VERSION: 2.319.1
+      GH_RSS_RUNNER_VERSION: 2.321.0
       GH_RSS_STORAGE_CLASS: openebs-hostpath
       GH_RSS_STORAGE_REQUEST: 50Mi
       GH_RSS_GITHUB_URL: https://github.com/stuttgart-things/install-configure-docker
@@ -250,7 +250,7 @@ spec:
     substitute:
       GH_RSS_NAMESPACE: arc-runners
       GH_RSS_VERSION: 0.9.3
-      GH_RSS_RUNNER_VERSION: 2.319.1
+      GH_RSS_RUNNER_VERSION: 2.321.0
       GH_RSS_STORAGE_CLASS: openebs-hostpath
       GH_RSS_STORAGE_REQUEST: 50Mi
       GH_RSS_GITHUB_URL: https://github.com/stuttgart-things/download-install-binary
@@ -279,7 +279,7 @@ spec:
     substitute:
       GH_RSS_NAMESPACE: arc-runners
       GH_RSS_VERSION: 0.9.3
-      GH_RSS_RUNNER_VERSION: 2.319.1
+      GH_RSS_RUNNER_VERSION: 2.321.0
       GH_RSS_STORAGE_CLASS: openebs-hostpath
       GH_RSS_STORAGE_REQUEST: 50Mi
       GH_RSS_GITHUB_URL: https://github.com/stuttgart-things/create-send-webhook
@@ -308,7 +308,7 @@ spec:
     substitute:
       GH_RSS_NAMESPACE: arc-runners
       GH_RSS_VERSION: 0.9.3
-      GH_RSS_RUNNER_VERSION: 2.319.1
+      GH_RSS_RUNNER_VERSION: 2.321.0
       GH_RSS_STORAGE_CLASS: openebs-hostpath
       GH_RSS_STORAGE_REQUEST: 50Mi
       GH_RSS_GITHUB_URL: https://github.com/stuttgart-things/stuttgart-things
@@ -337,7 +337,7 @@ spec:
     substitute:
       GH_RSS_NAMESPACE: arc-runners
       GH_RSS_VERSION: 0.9.3
-      GH_RSS_RUNNER_VERSION: 2.319.1
+      GH_RSS_RUNNER_VERSION: 2.321.0
       GH_RSS_STORAGE_CLASS: openebs-hostpath
       GH_RSS_STORAGE_REQUEST: 50Mi
       GH_RSS_GITHUB_URL: https://github.com/stuttgart-things/cameo
@@ -366,7 +366,7 @@ spec:
     substitute:
       GH_RSS_NAMESPACE: arc-runners
       GH_RSS_VERSION: 0.9.3
-      GH_RSS_RUNNER_VERSION: 2.319.1
+      GH_RSS_RUNNER_VERSION: 2.321.0
       GH_RSS_STORAGE_CLASS: openebs-hostpath
       GH_RSS_STORAGE_REQUEST: 50Mi
       GH_RSS_GITHUB_URL: https://github.com/stuttgart-things/clusterbook
