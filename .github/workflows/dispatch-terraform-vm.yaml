@@ -75,7 +75,7 @@ jobs:
     runs-on: ${{ inputs.runner }}
     environment: k8s
     container:
-      image: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:463ee205e6d9e8d6d1bc564a8cbd075c084bd5562c16e90a5a9d11d83d091ec1
+      image: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:388d3c825b3d625d0db0c75654ce446d446e55b5cef61f2d26233c404af59a30
     continue-on-error: false
     steps:
       - name: Pip install
