@@ -18,7 +18,7 @@ jobs:
       runs-on: ghr-stuttgart-things-skyami-cicd
       build-path: packer/builds
     container:
-      image: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:388d3c825b3d625d0db0c75654ce446d446e55b5cef61f2d26233c404af59a30
+      image: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:a95571d417d21f021c7cd5e62eabea699bd30bf0d88910ba3debb1c5b03b8892
     runs-on: ghr-stuttgart-things-skyami-cicd
     steps:
       - name: Set Build Details
@@ -135,7 +135,7 @@ jobs:
       - Build-Packer-Template
     environment: k8s
     container:
-      image: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:388d3c825b3d625d0db0c75654ce446d446e55b5cef61f2d26233c404af59a30
+      image: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:a95571d417d21f021c7cd5e62eabea699bd30bf0d88910ba3debb1c5b03b8892
     runs-on: ${{ needs.Get-Packer-Config.outputs.runs-on }}
     steps:
       - name: Checkout code/branch
