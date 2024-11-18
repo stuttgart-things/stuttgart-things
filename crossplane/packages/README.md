@@ -24,7 +24,7 @@ crossplane xpkg build
 
 ```bash
 PACKAGE_NAME=registry
-crossplane xpkg init ${PACKAGE_NAME} configuration-template
+echo YourGitHubPersonalAccessTokenHere | docker login ghcr.io -u YourAccountOrGHOrgaNameHere --password-stdin
 ```
 
 ## PUSH TO REGISTRY

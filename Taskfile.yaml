@@ -12,7 +12,9 @@ vars:
     sh: date +"%y.%m%d.%H%M"
   BRANCH:
     sh: if [ $(git rev-parse --abbrev-ref HEAD) != "main" ]; then echo $(git rev-parse --abbrev-ref HEAD); else echo main ; fi
-
+  DAGGER_CROSSPLANE_MODULE: github.com/stuttgart-things/dagger/crossplane
+  DAGGER_CROSSPLANE_MODULE_VERSION: v0.0.2
+  CROSSPLANE_PACKAGE_REGISTRY: ghcr.io
 # PRECONDITION TO CHECK IF THE VIRTUAL ENVIRONMENT IS ACTIVATED
 venv-precondition: &venv
   - sh: |
@@ -20,6 +22,21 @@ venv-precondition: &venv
     msg: "The pip version output does not contain .venv, Halting. Run task setup-molecule and/or source ansible/.venv/bin/activate"
 
 tasks:
+
+  xplane-push:
+    desc: Push crossplane package
+    cmds:
+      - |
+        echo "Enter to be pushed crossplane package:"
+        read PACKAGE_NAME;
+        echo "Enter to be pushed tag version:"
+        read TAG;
+
+        dagger call -m {{ .DAGGER_CROSSPLANE_MODULE }} push --src crossplane/packages/${PACKAGE_NAME} --progress plain --username={{ .USER }} --password=env:GITHUB_TOKEN --registry={{ .CROSSPLANE_PACKAGE_REGISTRY }} --destination={{ .DESTINATION }}/xplane-${PACKAGE_NAME}:${TAG}
+    vars:
+      DESTINATION: "{{ .CROSSPLANE_PACKAGE_REGISTRY }}/stuttgart-things/stuttgart-things"
+      USER: stuttgart-things
+
   collections:
     desc: Install ansible collections
     cmds:
