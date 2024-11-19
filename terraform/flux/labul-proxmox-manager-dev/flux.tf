@@ -19,16 +19,6 @@ module "labul-proxmox-manager-dev" {
   additional_manifests = [
     {
       content = <<-EOT
-kind: Namespace
-apiVersion: v1
-metadata:
-  name: flux-system
-  labels:
-    app: flux
-EOT
-    },
-    {
-      content = <<-EOT
 apiVersion: v1
 kind: ConfigMap
 metadata:
