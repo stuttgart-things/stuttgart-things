@@ -1,0 +1,16 @@
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: Tekton
+metadata:
+  name: in-cluster
+  namespace: crossplane-system
+spec:
+  clusterName: in-cluster
+  version: v0.65.1
+  deploymentNamespace: tekton-pipelines
+  vaultSecret:
+    vaultAddr: https://vault-vsphere.labul.sva.de:8200
+    approleID: 1d42d7e7-8c14-e5f9-801d-b3ecef416616
+    vaultNamespace: root
+    secretName: tekton-vault
+    secretNamespace: crossplane-system
