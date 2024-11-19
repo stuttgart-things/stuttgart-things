@@ -22,3 +22,27 @@ spec:
       name: in-cluster
       namespace: crossplane-system
       key: manager-dev
+---
+apiVersion: kubernetes.crossplane.io/v1alpha1
+kind: ProviderConfig
+metadata:
+  name: fluxdev-2
+spec:
+  credentials:
+    source: Secret
+    secretRef:
+      name: fluxdev-2
+      namespace: crossplane-system
+      key: fluxdev-2
+---
+apiVersion: helm.crossplane.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: fluxdev-2
+spec:
+  credentials:
+    source: Secret
+    secretRef:
+      name: fluxdev-2
+      namespace: crossplane-system
+      key: fluxdev-2
