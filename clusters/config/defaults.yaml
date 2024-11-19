@@ -70,12 +70,12 @@ awxCREnabled: true
 awxCRName: awx
 awxAdminUser: sthings
 
-crossplaneVersion: 1.17.0
+crossplaneVersion: 1.18.0
 crossplaneName: crossplane
 crossplaneNamespace: crossplane-system
 crossplaneHelmProviderVersion: v0.19.0
-crossplaneK8sProviderVersion: v0.14.1
-crossplaneTerraformProviderVersion: v0.18.0
+crossplaneK8sProviderVersion: v0.15.0
+crossplaneTerraformProviderVersion: v0.19.0
 crossplaneTerraformProviderImage: eu.gcr.io/stuttgart-things/sthings-cptf:1.9.5
 crossplaneTerraformS3SecretName: s3
 
