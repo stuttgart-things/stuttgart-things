@@ -5,3 +5,39 @@ metadata:
   name: tekton-pipelines
 spec:
   package: ghcr.io/stuttgart-things/stuttgart-things/xplane-tekton-pipelines:v0.65.1
+---
+apiVersion: pkg.crossplane.io/v1
+kind: Configuration
+metadata:
+  name: metallb
+spec:
+  package: ghcr.io/stuttgart-things/stuttgart-things/xplane-metallb:6.3.15
+---
+apiVersion: pkg.crossplane.io/v1
+kind: Configuration
+metadata:
+  name: metallb-config
+spec:
+  package: ghcr.io/stuttgart-things/stuttgart-things/xplane-metallb-config:6.3.15
+---
+apiVersion: pkg.crossplane.io/v1
+kind: Configuration
+metadata:
+  name: cert-manager
+spec:
+  package: ghcr.io/stuttgart-things/stuttgart-things/xplane-cert-manager:v1.16.1
+---
+apiVersion: pkg.crossplane.io/v1
+kind: Configuration
+metadata:
+  name: cert-manager-config
+spec:
+  package: ghcr.io/stuttgart-things/stuttgart-things/xplane-cert-manager-config:v1.16.1
+---
+apiVersion: pkg.crossplane.io/v1
+kind: Configuration
+metadata:
+  name: ingress-nginx
+spec:
+  package: ghcr.io/stuttgart-things/stuttgart-things/xplane-ingress-nginx:4.11.3
+---
