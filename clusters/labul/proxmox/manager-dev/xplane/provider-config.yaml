@@ -1,0 +1,24 @@
+---
+apiVersion: kubernetes.crossplane.io/v1alpha1
+kind: ProviderConfig
+metadata:
+  name: in-cluster
+spec:
+  credentials:
+    source: Secret
+    secretRef:
+      name: in-cluster
+      namespace: crossplane-system
+      key: manager-dev
+---
+apiVersion: helm.crossplane.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: in-cluster
+spec:
+  credentials:
+    source: Secret
+    secretRef:
+      name: in-cluster
+      namespace: crossplane-system
+      key: manager-dev
