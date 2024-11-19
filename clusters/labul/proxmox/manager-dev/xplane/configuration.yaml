@@ -1,0 +1,7 @@
+---
+apiVersion: pkg.crossplane.io/v1
+kind: Configuration
+metadata:
+  name: tekton-pipelines
+spec:
+  package: ghcr.io/stuttgart-things/stuttgart-things/xplane-tekton-pipelines:v0.65.1

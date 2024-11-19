@@ -36,8 +36,8 @@ spec:
           forProvider:
             chart:
               name: tekton-base
-              url: https://github.com/stuttgart-things/stuttgart-things/releases/download/tekton-base-v0.60.4/tekton-base-v0.60.4.tgz
-              version: v0.60.4
+              url: https://github.com/stuttgart-things/stuttgart-things/releases/download/tekton-base-v0.65.1/tekton-base-v0.65.1.tgz
+              version: v0.65.1
               # pullSecretRef:
               #   name: ghcr
               #   namespace: crossplane-system
