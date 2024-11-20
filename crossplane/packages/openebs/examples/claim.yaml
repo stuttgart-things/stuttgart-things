@@ -1,0 +1,14 @@
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: OpenEbs
+metadata:
+  name: in-cluster
+  namespace: crossplane-system
+spec:
+  clusterName: in-cluster
+  version: 4.1.1
+  parameters:
+    mayastor: false
+    volumeSnapshots: false
+    lvmEnabled: false
+    zfsEnabled: false

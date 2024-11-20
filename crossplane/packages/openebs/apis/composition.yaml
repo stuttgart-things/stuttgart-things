@@ -24,8 +24,8 @@ spec:
           forProvider:
             chart:
               name: openebs
-              repository: https://openebs.github.io/charts
-              version: 3.10.0
+              repository: https://openebs.github.io/openebs
+              version: 4.1.1
             namespace: openebs
             insecureSkipTLSVerify: true
             skipCreateNamespace: false
@@ -46,3 +46,13 @@ spec:
           toFieldPath: spec.providerConfigRef.name
         - fromFieldPath: spec.version
           toFieldPath: spec.forProvider.chart.version
+        - fromFieldPath: spec.parameters.mayastor
+          toFieldPath: spec.forProvider.values.mayastor.enabled
+        - fromFieldPath: spec.parameters.volumeSnapshots
+          toFieldPath: spec.forProvider.values.openebs-crds.csi.volumeSnapshots.enabled
+        - fromFieldPath: spec.parameters.lvmEnabled
+          toFieldPath: spec.forProvider.values.engines.local.lvm.enabled
+        - fromFieldPath: spec.parameters.zfsEnabled
+          toFieldPath: spec.forProvider.values.engines.local.zfs.enabled
+        - fromFieldPath: spec.parameters.mayastor
+          toFieldPath: spec.forProvider.values.replicated.mayastor.enabled

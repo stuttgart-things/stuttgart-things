@@ -35,8 +35,23 @@ spec:
                   description: cluster name/helm provider name
                 version:
                   type: string
-                  default: 3.10.0
+                  default: 4.1.1
                   description: helm chart version for open ebs
+                parameters:
+                  type: object
+                  properties:
+                    mayastor:
+                      type: boolean
+                      default: false
+                    volumeSnapshots:
+                      type: boolean
+                      default: false
+                    lvmEnabled:
+                      type: boolean
+                      default: false
+                    zfsEnabled:
+                      type: boolean
+                      default: false
               required:
                 - clusterName
             status:

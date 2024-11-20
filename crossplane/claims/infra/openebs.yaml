@@ -1,8 +1,0 @@
----
-apiVersion: resources.stuttgart-things.com/v1alpha1
-kind: OpenEbs
-metadata:
-  name: labda-test
-  namespace: crossplane-system
-spec:
-  clusterName: labda-test
