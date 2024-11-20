@@ -55,4 +55,4 @@ spec:
         - fromFieldPath: spec.parameters.zfsEnabled
           toFieldPath: spec.forProvider.values.engines.local.zfs.enabled
         - fromFieldPath: spec.parameters.mayastor
-          toFieldPath: spec.forProvider.values.replicated.mayastor.enabled
+          toFieldPath: spec.forProvider.values.engines.replicated.mayastor.enabled
