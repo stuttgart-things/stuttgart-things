@@ -14,3 +14,15 @@ spec:
     vaultNamespace: root
     secretName: tekton-vault
     secretNamespace: crossplane-system
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: MetalLBconfig
+metadata:
+  name: fluxdev-2
+  namespace: crossplane-system
+spec:
+  clusterName: fluxdev-2
+  ipPoolName: pool1
+  version: 6.3.15
+  ipRanges:
+    - 10.31.102.8-10.31.102.8
