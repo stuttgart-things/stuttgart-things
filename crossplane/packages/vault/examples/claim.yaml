@@ -8,7 +8,7 @@ spec:
   clusterName: incluster
   deploymentNamespace: vault
   domainName: fluxdev-3.sthings-vsphere.labul.sva.de
-  storageClass: nfs4-csi
+  storageClass: nfs-csi
   version: 0.28.0
   cert:
     secretName: vault-ingress-tls
