@@ -1,4 +1,4 @@
-ARG REGISTRY=eu.gcr.io
+ARG REGISTRY=ghcr.io
 ARG REPOSITORY=stuttgart-things
 ARG IMAGE=sthings-alpine
 ARG TAG=3.9.20-alpine3.20
