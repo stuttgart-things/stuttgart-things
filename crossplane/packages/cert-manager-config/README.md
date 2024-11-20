@@ -1,5 +1,4 @@
-
-
+# stuttgart-things/crossplane/cert-manager-config
 
 ## REGISTRY SECRET
 
@@ -12,8 +11,10 @@ metadata:
   namespace: crossplane-system
 type: Opaque
 data:
-  approleId: MWQ0MmQ3ZTctOGMxNC1lNWY5LTgwMWQtYjNlY2VmNDE2NjE2
-  approleSecret: NjIzYzk5MWYtZGQ3Ni1jNDM3LTI3MjMtYmIyZWY1YjAyZDg3
+  approleId: MWQ0MmQ..
+  approleSecret: NjIzYzk5MWYt..
   caBundle: LS0tLS1CRUdJTis#...
 EOF
 ```
+
+## CLAIM

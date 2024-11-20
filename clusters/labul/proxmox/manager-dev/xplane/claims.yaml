@@ -35,3 +35,19 @@ metadata:
 spec:
   clusterName: fluxdev-2
   version: 4.11.3
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: CertManagerConfig
+metadata:
+  name: fluxdev-2
+  namespace: crossplane-system
+spec:
+  clusterName: fluxdev-2
+  issuerName: vault-approle
+  version: v1.16.1
+  approle:
+    secretName: certmanager
+    secretNamespace: crossplane-system
+    pkiPath: pki/sign/sthings-vsphere.labul.sva.de
+    vaultAddr: https://vault-vsphere.labul.sva.de:8200
+    approleID: 1d42d7e7-8c14-e5f9-801d-b3ecef416616
