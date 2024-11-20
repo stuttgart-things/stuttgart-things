@@ -62,3 +62,17 @@ metadata:
 spec:
   package: ghcr.io/stuttgart-things/stuttgart-things/xplane-vault:0.28.0
 ---
+apiVersion: pkg.crossplane.io/v1
+kind: Configuration
+metadata:
+  name: nfs-csi
+spec:
+  package: ghcr.io/stuttgart-things/stuttgart-things/xplane-nfs-csi:v4.9.0
+---
+apiVersion: pkg.crossplane.io/v1
+kind: Configuration
+metadata:
+  name: nfs-csi-config
+spec:
+  package: ghcr.io/stuttgart-things/stuttgart-things/xplane-nfs-csi-config:v4.9.0
+---
