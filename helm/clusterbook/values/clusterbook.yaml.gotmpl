@@ -1,0 +1,46 @@
+---
+deployment:
+  containers:
+    clusterbook:
+      tag: {{ .Values.imageTag}}
+
+{{ if .Values.enableCertificateRequest }}
+customresources:
+  stagetime-ingress-certificate:
+    apiVersion: cert-manager.io/v1
+    kind: Certificate
+    metadata:
+      name: {{ .Values.app }}-ingress
+      labels:
+        app: {{ .Values.app }}
+    spec:
+      commonName: {{ .Values.hostname }}.{{ .Values.ingressDomain }}
+      dnsNames:
+        - {{ .Values.hostname }}.{{ .Values.ingressDomain }}
+      issuerRef:
+        name: {{ .Values.issuerName }}
+        kind: {{ .Values.issuerKind }}
+      secretName: {{ .Values.tlsSecretName }}
+{{ end }}
+
+{{ if .Values.enableIngress }}
+ingress:
+  clusterbook:
+    labels:
+      app: {{ .Values.app }}
+    name: {{ .Values.app }}
+    ingressClassName: nginx
+    annotations:
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
+    service:
+      name: clusterbook-service
+      port: 80
+      path: /
+      pathType: Prefix
+    hostname: {{ .Values.hostname }}
+    domain: {{ .Values.ingressDomain }}
+    tls:
+      secretName: {{ .Values.tlsSecretName }}
+      host: {{ .Values.hostname }}.{{ .Values.ingressDomain }}
+{{ end }}
