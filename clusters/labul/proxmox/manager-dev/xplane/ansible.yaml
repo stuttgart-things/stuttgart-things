@@ -1,0 +1,26 @@
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: AnsibleRun
+metadata:
+  name: pdns-entry-fluxdev-2
+  namespace: tekton-pipelines
+spec:
+  pipelineRunName: pdns-entry-labul-fluxdev-2
+  inventory:
+    - "all+[\"localhost\"]"
+  playbooks:
+    - "ansible/playbooks/pdns-ingress-entry.yaml"
+  ansibleVarsFile:
+    - pdns_url+-https://pdns-vsphere.labul.sva.de:8443
+    - entry_zone+-sthings-vsphere.labul.sva.de.
+    - ip_address+-10.31.102.8
+    - hostname+-fluxdev-2
+  gitRepoUrl: https://github.com/stuttgart-things/stuttgart-things.git
+  gitRevision: main
+  providerRef:
+    name: in-cluster
+  vaultSecretName: vault
+  pipelineNamespace: tekton-pipelines
+  workingImage: ghcr.io/stuttgart-things/sthings-ansible:11.0.0
+  roles:
+    - "https://github.com/stuttgart-things/install-configure-powerdns.git"
