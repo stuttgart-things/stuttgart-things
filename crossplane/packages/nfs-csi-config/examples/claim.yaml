@@ -6,10 +6,10 @@ metadata:
   namespace: crossplane-system
 spec:
   clusterName: andre-dev
+  version: v4.9.0
   storageClass:
     name: nfs-csi
     server: /data/col1/sthings
     share: 10.31.101.26
     reclaimPolicy: Delete
     volumeBindingMode: Immediate
----

@@ -23,7 +23,7 @@ spec:
             chart:
               name: csi-driver-nfs
               repository: https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/charts
-              version: v4.7.0
+              version: v4.9.0
             namespace: kube-system
             insecureSkipTLSVerify: true
             skipCreateNamespace: false

@@ -65,3 +65,18 @@ spec:
     volumeSnapshots: false
     lvmEnabled: false
     zfsEnabled: false
+---
+# apiVersion: resources.stuttgart-things.com/v1alpha1
+# kind: Vault
+# metadata:
+#   name: fluxdev-2
+#   namespace: crossplane-system
+# spec:
+#   clusterName: fluxdev-2
+#   deploymentNamespace: vault
+#   domainName: fluxdev-3.sthings-vsphere.labul.sva.de
+#   storageClass: nfs4-csi
+#   version: 0.28.0
+#   cert:
+#     secretName: vault-ingress-tls
+#     issuerName: cluster-issuer-approle

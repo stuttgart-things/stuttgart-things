@@ -6,3 +6,4 @@ metadata:
   namespace: crossplane-system
 spec:
   clusterName: andre-dev
+  version: v4.9.0
