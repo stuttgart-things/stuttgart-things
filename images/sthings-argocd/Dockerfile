@@ -1,7 +1,7 @@
 ARG REGISTRY=quay.io
 ARG REPOSITORY=argoproj
 ARG IMAGE=argocd
-ARG TAG=v2.13.0
+ARG TAG=v2.13.1
 FROM ${REGISTRY}/${REPOSITORY}/${IMAGE}:${TAG}
 
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
