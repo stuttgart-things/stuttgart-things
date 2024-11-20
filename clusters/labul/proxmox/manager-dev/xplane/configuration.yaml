@@ -55,3 +55,10 @@ metadata:
 spec:
   package: ghcr.io/stuttgart-things/stuttgart-things/xplane-openebs:4.1.1
 ---
+apiVersion: pkg.crossplane.io/v1
+kind: Configuration
+metadata:
+  name: vault
+spec:
+  package: ghcr.io/stuttgart-things/stuttgart-things/xplane-vault:0.28.0
+---
