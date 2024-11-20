@@ -66,6 +66,23 @@ spec:
     lvmEnabled: false
     zfsEnabled: false
 ---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: NfsCsiConfig
+metadata:
+  name: fluxdev-2
+  namespace: crossplane-system
+spec:
+  clusterName: fluxdev-2
+  version: v4.9.0
+  storageClass:
+    name: nfs-csi
+    server: /data/col1/sthings
+    share: 10.31.101.26
+    reclaimPolicy: Delete
+    volumeBindingMode: Immediate
+---
+
+
 # apiVersion: resources.stuttgart-things.com/v1alpha1
 # kind: Vault
 # metadata:
