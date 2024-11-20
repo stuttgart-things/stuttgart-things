@@ -26,6 +26,7 @@ task: Available tasks for this project:
 * pull-request:       Create pull request into main
 * setup-venv:         Setup python virtual environment
 * tag:                Tag repo
+* xplane-push:        Push crossplane package
 ```
 
 <details><summary>PACKAGE HELM CHART</summary>
