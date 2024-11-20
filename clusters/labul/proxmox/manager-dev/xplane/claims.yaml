@@ -26,3 +26,12 @@ spec:
   version: 6.3.15
   ipRanges:
     - 10.31.102.8-10.31.102.8
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: IngressNginx
+metadata:
+  name: fluxdev-2
+  namespace: crossplane-system
+spec:
+  clusterName: fluxdev-2
+  version: 4.11.3
