@@ -1,0 +1,6 @@
+---
+enableIngress: false
+enableCertificateRequest: false
+hostname: clusterbook
+tlsSecretName: clusterbook-ingress-tls
+app: clusterbook

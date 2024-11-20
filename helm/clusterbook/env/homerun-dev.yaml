@@ -1,0 +1,7 @@
+---
+enableIngress: true
+enableCertificateRequest: true
+ingressDomain: homerun-dev.sthings-vsphere.labul.sva.de
+issuerKind: ClusterIssuer
+issuerName: vault-approle
+imageTag: bf9c1bff0308f0978e5cc1ef96a60e4a7e94fa92fe6923732d1ef035d4af70a9
