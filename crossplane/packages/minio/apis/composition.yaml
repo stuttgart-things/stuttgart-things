@@ -53,7 +53,7 @@ spec:
                 apiIngress:
                   annotations:
                     nginx.ingress.kubernetes.io/proxy-body-size: 500m
-                  enabled: true
+                  enabled: true #true
                   tls: true
                 extraEnvVars:
                 - name: MINIO_SERVER_URL
@@ -61,7 +61,7 @@ spec:
                 ingress:
                   annotations:
                     nginx.ingress.kubernetes.io/proxy-body-size: 500m
-                  enabled: true
+                  enabled: true #true
                   ingressClassName: nginx
                   tls: true
                 networkPolicy:
@@ -104,15 +104,15 @@ spec:
             - fromFieldPath: spec.domainName
           toFieldPath: spec.forProvider.values.apiIngress.hostname
           type: CombineFromComposite
-        - combine:
-            strategy: string
-            string:
-              fmt: '%s.%s'
-            variables:
-            - fromFieldPath: spec.hostNameApi
-            - fromFieldPath: spec.domainName
-          toFieldPath: spec.forProvider.values.apiIngress.extraTls.hosts[0]
-          type: CombineFromComposite
+        # - combine:
+        #     strategy: string
+        #     string:
+        #       fmt: '%s.%s'
+        #     variables:
+        #     - fromFieldPath: spec.hostNameApi
+        #     - fromFieldPath: spec.domainName
+        #   toFieldPath: spec.forProvider.values.apiIngress.extraTls.hosts[0]
+        #   type: CombineFromComposite
         - combine:
             strategy: string
             string:
@@ -121,15 +121,6 @@ spec:
             - fromFieldPath: spec.hostNameConsole
             - fromFieldPath: spec.domainName
           toFieldPath: spec.forProvider.values.ingress.hostname
-          type: CombineFromComposite
-        - combine:
-            strategy: string
-            string:
-              fmt: '%s.%s'
-            variables:
-            - fromFieldPath: spec.hostNameConsole
-            - fromFieldPath: spec.domainName
-          toFieldPath: spec.forProvider.values.ingress.extraTls.hosts[0]
           type: CombineFromComposite
         - combine:
             strategy: string
@@ -149,21 +140,21 @@ spec:
             - fromFieldPath: spec.domainName
           toFieldPath: spec.forProvider.values.extraEnvVars[1].value
           type: CombineFromComposite
-        - fromFieldPath: spec.cert.certSecretApi
-          toFieldPath: spec.forProvider.values.apiIngress.extraTls.secretName
-          type: FromCompositeFieldPath
-        - fromFieldPath: spec.cert.certSecretConsole
-          toFieldPath: spec.forProvider.values.ingress.extraTls.secretName
-          type: FromCompositeFieldPath
-        - combine:
-            strategy: string
-            string:
-              fmt: '%s.%s'
-            variables:
-            - fromFieldPath: spec.hostNameConsole
-            - fromFieldPath: spec.domainName
-          toFieldPath: spec.forProvider.values.ingress.extraTls.hosts[0]
-          type: CombineFromComposite
+        # - fromFieldPath: spec.cert.certSecretApi
+        #   toFieldPath: spec.forProvider.values.apiIngress.extraTls.secretName
+        #   type: FromCompositeFieldPath
+        # - fromFieldPath: spec.cert.certSecretConsole
+        #   toFieldPath: spec.forProvider.values.ingress.extraTls.secretName
+        #   type: FromCompositeFieldPath
+        # - combine:
+        #     strategy: string
+        #     string:
+        #       fmt: '%s.%s'
+        #     variables:
+        #     - fromFieldPath: spec.hostNameConsole
+        #     - fromFieldPath: spec.domainName
+        #   toFieldPath: spec.forProvider.values.ingress.extraTls[0].hosts[0]
+        #   type: CombineFromComposite
         - combine:
             strategy: string
             string:
