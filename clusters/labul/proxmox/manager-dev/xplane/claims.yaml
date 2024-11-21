@@ -102,7 +102,7 @@ metadata:
   name: fluxdev-2
   namespace: crossplane-system
 spec:
-  clusterName: incluster
+  clusterName: fluxdev-2
   deploymentNamespace: harbor
   hostName: scr
   domainName: fluxdev-2.sthings-vsphere.labul.sva.de
