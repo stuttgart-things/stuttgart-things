@@ -130,6 +130,15 @@ spec:
         - fromFieldPath: spec.domainName
           toFieldPath: spec.forProvider.values.clusterDomain
           type: FromCompositeFieldPath
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.adminPassword.secretName
+          toFieldPath: spec.forProvider.set[0].valueFrom.secretKeyRef.name
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.adminPassword.secretNamespace
+          toFieldPath: spec.forProvider.set[0].valueFrom.secretKeyRef.namespace
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.adminPassword.secretKey
+          toFieldPath: spec.forProvider.set[0].valueFrom.secretKeyRef.key
       - base:
           apiVersion: resources.stuttgart-things.com/v1alpha1
           kind: XIngressCertificate

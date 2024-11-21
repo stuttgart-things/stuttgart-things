@@ -55,6 +55,21 @@ spec:
                 domainName:
                   type: string
                   description: domain (name) of ingress resource
+                adminPassword:
+                  type: object
+                  properties:
+                    secretName:
+                      type: string
+                      default: harbor
+                      description: name of harbor admin secret
+                    secretNamespace:
+                      type: string
+                      default: crossplane-system
+                      description: namespace of harbor admin secret
+                    secretKey:
+                      type: string
+                      default: password
+                      description: key of harbor admin secret
                 cert:
                   type: object
                   properties:
