@@ -109,7 +109,7 @@ spec:
   storageClass: nfs-csi
   storageSizeRegistry: 2Gi
   storageSizeTrivy: 1Gi
-  version: 24.0.0
+  version: 24.0.2
   adminPassword:
     secretName: harbor
     secretNamespace: crossplane-system
