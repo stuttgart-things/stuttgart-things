@@ -117,3 +117,71 @@ spec:
   cert:
     secretName: scr.fluxdev-2.sthings-vsphere.labul.sva.de-tls
     issuerName: vault-approle
+# ---
+# kind: Ingress
+# metadata:
+#   annotations:
+#     ingress.kubernetes.io/proxy-body-size: "0"
+#     ingress.kubernetes.io/ssl-redirect: "true"
+#     meta.helm.sh/release-name: harbor
+#     meta.helm.sh/release-namespace: harbor
+#     nginx.ingress.kubernetes.io/proxy-body-size: "0"
+#     nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+#     nginx.ingress.kubernetes.io/ssl-redirect: "true"
+#   labels:
+#     app.kubernetes.io/instance: harbor
+#     app.kubernetes.io/managed-by: Helm
+#     app.kubernetes.io/name: harbor
+#     app.kubernetes.io/version: 2.11.1
+#     helm.sh/chart: harbor-24.0.0
+#   name: harbor-ingress
+#   namespace: harbor
+# spec:
+#   ingressClassName: nginx
+#   rules:
+#   - host: scr.fluxdev-3.sthings-vsphere.labul.sva.de
+#     http:
+#       paths:
+#       - backend:
+#           service:
+#             name: harbor-core
+#             port:
+#               name: http
+#         path: /api/
+#         pathType: ImplementationSpecific
+#       - backend:
+#           service:
+#             name: harbor-core
+#             port:
+#               name: http
+#         path: /service/
+#         pathType: ImplementationSpecific
+#       - backend:
+#           service:
+#             name: harbor-core
+#             port:
+#               name: http
+#         path: /v2
+#         pathType: ImplementationSpecific
+#       - backend:
+#           service:
+#             name: harbor-core
+#             port:
+#               name: http
+#         path: /chartrepo/
+#         pathType: ImplementationSpecific
+#       - backend:
+#           service:
+#             name: harbor-core
+#             port:
+#               name: http
+#         path: /c/
+#         pathType: ImplementationSpecific
+#       - backend:
+#           service:
+#             name: harbor-portal
+#             port:
+#               name: http
+#         path: /
+#         pathType: ImplementationSpecific
+#   tls:

@@ -88,5 +88,5 @@ kind: Configuration
 metadata:
   name: harbor
 spec:
-  package: ghcr.io/stuttgart-things/stuttgart-things/xplane-harbor:24.0.0
+  package: ghcr.io/stuttgart-things/stuttgart-things/xplane-harbor:24.0.2
 ---

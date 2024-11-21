@@ -12,7 +12,7 @@ spec:
   storageClass: nfs4-csi
   storageSizeRegistry: 2Gi
   storageSizeTrivy: 1Gi
-  version: 24.0.0
+  version: 24.0.2
   cert:
     secretName: scr.fluxdev-3.sthings-vsphere.labul.sva.de-tls
     issuerName: cluster-issuer-approle
