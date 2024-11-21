@@ -76,8 +76,8 @@ spec:
   version: v4.9.0
   storageClass:
     name: nfs-csi
-    server: /data/col1/sthings
-    share: 10.31.101.26
+    server: 10.31.101.26
+    share: /data/col1/sthings
     reclaimPolicy: Delete
     volumeBindingMode: Immediate
 ---
