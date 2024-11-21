@@ -95,7 +95,7 @@ spec:
             variables:
             - fromFieldPath: spec.hostName
             - fromFieldPath: spec.domainName
-          toFieldPath: spec.forProvider.values.ingress.core.extraTls[0].hosts[0]  #.tls[0].hosts[0]
+          toFieldPath: spec.forProvider.values.ingress.core.extraTls.hosts[0]  #.tls[0].hosts[0]
           type: CombineFromComposite
         - fromFieldPath: spec.cert.secretName
           toFieldPath: spec.forProvider.values.ingress.core.extraTls.secretName

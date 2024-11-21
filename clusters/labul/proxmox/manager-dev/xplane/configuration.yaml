@@ -90,3 +90,10 @@ metadata:
 spec:
   package: ghcr.io/stuttgart-things/stuttgart-things/xplane-harbor:24.0.2
 ---
+apiVersion: pkg.crossplane.io/v1
+kind: Configuration
+metadata:
+  name: minio
+spec:
+  package: ghcr.io/stuttgart-things/stuttgart-things/xplane-hminio:14.8.0
+---

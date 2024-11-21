@@ -34,7 +34,7 @@ spec:
                   description: cluster name/helm provider name
                 version:
                   type: string
-                  default: 2.2.3
+                  default: 14.8.0
                   description: helm chart version
                 storageClass:
                   type: string
