@@ -97,26 +97,49 @@ spec:
     issuerName: vault-approle
 ---
 apiVersion: resources.stuttgart-things.com/v1alpha1
-kind: Harbor
+kind: Minio
 metadata:
   name: fluxdev-2
   namespace: crossplane-system
 spec:
   clusterName: fluxdev-2
-  deploymentNamespace: harbor
-  hostName: scr
-  domainName: fluxdev-2.sthings-vsphere.labul.sva.de
+  deploymentNamespace: minio
   storageClass: nfs-csi
-  storageSizeRegistry: 2Gi
-  storageSizeTrivy: 1Gi
-  version: 24.0.2
-  adminPassword:
-    secretName: harbor
-    secretNamespace: crossplane-system
-    secretKey: password
+  storageSize: 8Gi
+  version: 14.8.0
+  hostNameApi: artifacts
+  hostNameConsole: artifacts-console
+  domainName: fluxdev-2.sthings-vsphere.labul.sva.de
   cert:
-    secretName: scr.fluxdev-2.sthings-vsphere.labul.sva.de-tls
     issuerName: vault-approle
+    certSecretApi: artifacts-ingress-tls
+    certSecretConsole: artifacts-console-ingress-tls
+  image:
+    registry: ghcr.io
+    repository: stuttgart-things/sthings-minio
+    tag: 2024.10.13
+---
+# apiVersion: resources.stuttgart-things.com/v1alpha1
+# kind: Harbor
+# metadata:
+#   name: fluxdev-2
+#   namespace: crossplane-system
+# spec:
+#   clusterName: fluxdev-2
+#   deploymentNamespace: harbor
+#   hostName: scr
+#   domainName: fluxdev-2.sthings-vsphere.labul.sva.de
+#   storageClass: nfs-csi
+#   storageSizeRegistry: 2Gi
+#   storageSizeTrivy: 1Gi
+#   version: 24.0.2
+#   adminPassword:
+#     secretName: harbor
+#     secretNamespace: crossplane-system
+#     secretKey: password
+#   cert:
+#     secretName: scr.fluxdev-2.sthings-vsphere.labul.sva.de-tls
+#     issuerName: vault-approle
 # ---
 # kind: Ingress
 # metadata:

@@ -95,5 +95,5 @@ kind: Configuration
 metadata:
   name: minio
 spec:
-  package: ghcr.io/stuttgart-things/stuttgart-things/xplane-hminio:14.8.0
+  package: ghcr.io/stuttgart-things/stuttgart-things/xplane-minio:14.8.0
 ---
