@@ -95,3 +95,21 @@ spec:
   cert:
     secretName: vault-ingress-tls
     issuerName: vault-approle
+---
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: Harbor
+metadata:
+  name: fluxdev-2
+  namespace: crossplane-system
+spec:
+  clusterName: incluster
+  deploymentNamespace: harbor
+  hostName: scr
+  domainName: fluxdev-2.sthings-vsphere.labul.sva.de
+  storageClass: nfs-csi
+  storageSizeRegistry: 2Gi
+  storageSizeTrivy: 1Gi
+  version: 24.0.0
+  cert:
+    secretName: scr.fluxdev-2.sthings-vsphere.labul.sva.de-tls
+    issuerName: vault-approle
