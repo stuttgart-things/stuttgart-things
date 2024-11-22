@@ -1,4 +1,14 @@
-# HELM/HOMERUN-BASE
+# STUTTGART-THINGS/HELM/HOMERUN-BASE
+
+## PREPARATION
+
+* FOR NEW CLUSTER ADD ENV FILE IN .env
+* ADD ENV IN HELMFILE homerun-base.yaml
+* RENDER ENV
+
+```bash
+helmfile apply -f homerun-base.yaml -e ${ENV_NAME}
+```
 
 ## DEPLOY
 
@@ -7,15 +17,14 @@ ENV_NAME=fluxdev-2
 helmfile apply -f homerun-base.yaml -e ${ENV_NAME}
 ```
 
+## TEST REDIS
 
+```bash
 kubectl -n homerun port-forward services/homerun-redis-stack-headless 5000:6379
-redis-cli -h localhost -p 5000 -a Atlan7is2024
-
-
+redis-cli -h localhost -p 5000 -a ${PASSWORD}
+```
 
 ## TEST HOMERUN-GENERIC-PITCHER
-
-Test
 
 ```bash
 ADDRESS=https://homerun.fluxdev-2.sthings-vsphere.labul.sva.de/generic #https://cluster-test1.labul.sva.de/generic
@@ -37,3 +46,5 @@ curl -k -X POST "${ADDRESS}" \
            "url": "Admin"
          }'
 ```
+
+## TEST HOMERUN-TEXT-CATCHER
