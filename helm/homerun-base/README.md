@@ -1,16 +1,26 @@
 # HELM/HOMERUN-BASE
 
-## REDIS-STACK
+## DEPLOY
+
+```bash
+ENV_NAME=fluxdev-2
+helmfile apply -f homerun-base.yaml -e ${ENV_NAME}
+```
 
 
-## HOMERUN-GENERIC-PITCHER
+kubectl -n homerun port-forward services/homerun-redis-stack-headless 5000:6379
+redis-cli -h localhost -p 5000 -a Atlan7is2024
+
+
+
+## TEST HOMERUN-GENERIC-PITCHER
 
 Test
 
 ```bash
-ADDRESS=https://cluster-test1.labul.sva.de/generic
+ADDRESS=https://homerun.fluxdev-2.sthings-vsphere.labul.sva.de/generic #https://cluster-test1.labul.sva.de/generic
 
-curl -k -X POST ${ADDRESS} \
+curl -k -X POST "${ADDRESS}" \
      -H "Content-Type: application/json" \
      -H "X-Auth-Token: IhrGeheimerToken" \
      -d '{

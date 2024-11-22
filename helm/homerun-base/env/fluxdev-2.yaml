@@ -1,0 +1,22 @@
+---
+persistenceEabled: true
+storageClass: nfs-csi
+stream: homerun
+searchIndex: homerun
+
+hostname: homerun
+domain: fluxdev-2.sthings-vsphere.labul.sva.de
+issuerKind: ClusterIssuer
+issuerName: vault-approle
+
+genericPitcher:
+  enabled: true
+  name: homerun-generic-pitcher
+  port: 4000
+  apiPath: generic
+  token: ref+vault://apps/homerun/genericPitcherToken
+
+textCatcher:
+  enabled: true
+  name: homerun-text-catcher
+  logging: terminal
