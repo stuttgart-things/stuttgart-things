@@ -16,5 +16,5 @@ TEST DOCUMENT (API-ENDPOINT)
 ENDPOINT=cluster-test1.labul.sva.de
 
 curl -k https://${ENDPOINT}/documents
-curl -k https://${ENDPOINT}/documents?system=gitlab&limit=1
+curl -k https://${ENDPOINT}/documents?system=flux&limit=1
 ```

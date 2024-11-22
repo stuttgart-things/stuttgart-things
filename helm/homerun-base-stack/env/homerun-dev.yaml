@@ -7,7 +7,7 @@ searchIndex: homerun
 hostname: k3s-sprechstunde
 domain: labul.sva.de
 issuerKind: ClusterIssuer
-issuerName: vault-approle
+issuerName: ca-issuer
 
 genericPitcher:
   enabled: true
