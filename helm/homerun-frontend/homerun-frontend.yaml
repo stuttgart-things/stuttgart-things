@@ -4,6 +4,10 @@ environments:
     values:
       - env/defaults.yaml
       - env/{{ .Environment.Name }}.yaml
+  fluxdev-2:
+    values:
+      - env/defaults.yaml
+      - env/{{ .Environment.Name }}.yaml
 
 releases:
   - name: homerun-event-catcher

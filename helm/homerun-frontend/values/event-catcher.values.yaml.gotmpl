@@ -13,11 +13,11 @@ event-catcher:
               command:
               - /bin/sh
               - -c
-              - sleep 10; update-ca-certificates
-    volumeMounts:
-      certs:
-        mountPath: /usr/local/share/ca-certificates/
-        volumeKind: emptyDir
+              - sleep 10; cat {{ .Values.tmpCertDir }}/{{ .Values.pubCertName }} | base64 -d > {{ .Values.certDir }}/{{ .Values.pubCertName }};  update-ca-certificates
+        volumeMounts:
+          certs:
+            mountPath: {{ .Values.tmpCertDir }}/
+            volumeKind: emptyDir
 
   configmaps:
     {{ .Values.eventCatcher.name }}:
@@ -27,26 +27,8 @@ event-catcher:
       REDISEARCH_INDEX: {{ .Values.searchIndex }}
 
     certs:
-      pub-cert.pem: |
-        -----BEGIN CERTIFICATE-----
-        MIIDFzCCAf+gAwIBAgIUMeSIstKZWEfb5a0qQ1ARmrkk0hkwDQYJKoZIhvcNAQEL
-        BQAwGzEZMBcGA1UEAwwQc3R1dHRnYXJ0LXRoaW5nczAeFw0yNDEwMjgxMzExNDda
-        Fw0zNDEwMjYxMzExNDdaMBsxGTAXBgNVBAMMEHN0dXR0Z2FydC10aGluZ3MwggEi
-        MA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCcKGLIkaDTxjEVjBCzC3TTrFkD
-        /6Aho5xBtibW9b9i15lVbqJsYnR+3HlS8SJE+cIhrWsWSCq4NHS714Iw/xYN9l5T
-        zk6swckHgzloMYWQBLExyeLORMjgdEpmR2wAlwGY3islbF6iKyTjc5MeCw+Mv/oW
-        VaAZHH0EgLzf/sXitJ7s/JZiY9nB1/23WdaVUjpsaGFHYh0uJW1fKm7lImnITl0A
-        xtyU8IbezGr+Z8FdbHSdvarToGokQ6Tl3Gxtbix9VD/IPA7/d/YSv2Ms5QQPmOFJ
-        U9+jV5waHHQQkh2rJBKzNc4IUW1JNa4S0Ag1/TyZotyGI1RytkI/1eQ6FcuPAgMB
-        AAGjUzBRMB0GA1UdDgQWBBQlz03hj+Rhlsmsgt09HnRs6l/oQDAfBgNVHSMEGDAW
-        gBQlz03hj+Rhlsmsgt09HnRs6l/oQDAPBgNVHRMBAf8EBTADAQH/MA0GCSqGSIb3
-        DQEBCwUAA4IBAQBHP1jWrUUoaCMvVaM7iqXaf5gVi04G4qrytXKJNR1xuHCUTnd8
-        aWMLRuHS0D6h0S7TKTy72oUFmx0wMbZrWPtIrbo8zKSA6P2fW5VKKutDv+8mN5Wy
-        GQ+bBKIrFEIPx9r84hNg2QipUnKAlCR2bUppLejijFwEzlGYlO0Jlih2A1MMKBr+
-        s9Eckva5IFaU/KVK9kZhEyEmMEyCL3K/rX4kpZK1XEYuhW8k3Y84z+ICoQoWSsvF
-        YTjABLGVdaStneXt+2Il1ddhkSheQTu3xGihCo2C559MDIzSezG7N7P0IkNGoXMj
-        qTiA/YdOhNYlljNDEtTEWIW21cGUXn5Y3mtI
-        -----END CERTIFICATE-----
+      {{ .Values.pubCertName }}: |
+        {{ .Values.pubCert }}
 
   secrets:
     redis-connection-{{ .Values.eventCatcher.name }}:

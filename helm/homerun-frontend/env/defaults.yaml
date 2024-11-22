@@ -1,9 +1,14 @@
 ---
 stream: homerun
 ingressClass: nginx
+certDir: /usr/local/share/ca-certificates/
+tmpCertDir: /cert
+pubCertName: pub-cert.pem
 ingressPort: 80
 redisStack:
   enabled: true
   password: ref+vault://apps/homerun/redisPassword
   port: 6379
   serviceName: homerun-redis-stack-headless
+
+pubCert: ""
