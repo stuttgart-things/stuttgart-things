@@ -15,8 +15,11 @@
     rke2_cni: cilium
     values_cilium: |
       ---
-      eni:
-        enabled: true
+      kubeProxyReplacement: true
+      k8sServiceHost: 127.0.0.1
+      k8sServicePort: 6443
+      cni:
+        chainingMode: "none"
 
     helmChartConfig:
       cilium:
