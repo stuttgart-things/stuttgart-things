@@ -2,8 +2,8 @@
 
 ## PREPARATION
 
-* FOR NEW CLUSTER ADD ENV FILE IN .env
-* ADD ENV IN HELMFILE homerun-base.yaml
+* FOR NEW CLUSTER ADD ENV FILE IN ./env/${ENV_NAME}.yaml
+* ADD ENV IN HELMFILE homerun-base.yaml (environments)
 * RENDER ENV
 
 ```bash
