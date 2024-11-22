@@ -9,6 +9,9 @@ domain: fluxdev-2.sthings-vsphere.labul.sva.de
 issuerKind: ClusterIssuer
 issuerName: vault-approle
 
+redisStack:
+  serviceType: ClusterIP #LoadBalancer
+
 genericPitcher:
   enabled: true
   name: homerun-generic-pitcher

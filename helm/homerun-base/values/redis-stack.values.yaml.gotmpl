@@ -1,11 +1,18 @@
 ---
 redis-stack:
+  sentinel:
+    service:
+      type: {{ .Values.redisStack.serviceType }}
+
   enabled: {{ .Values.persistenceEabled }}
   global:
     redis:
       password: {{ .Values.redisStack.password }}
 
   master:
+    service:
+      type: {{ .Values.redisStack.serviceType }}
+
     persistence:
       enabled: {{ .Values.redisStack.enabled }}
       storageClass: {{ .Values.storageClass }}

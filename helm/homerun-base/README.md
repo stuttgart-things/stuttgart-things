@@ -7,7 +7,7 @@
 * RENDER ENV
 
 ```bash
-helmfile apply -f homerun-base.yaml -e ${ENV_NAME}
+helmfile template -f homerun-base.yaml -e ${ENV_NAME}
 ```
 
 ## DEPLOY
