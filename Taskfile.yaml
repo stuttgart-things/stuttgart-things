@@ -23,6 +23,8 @@ venv-precondition: &venv
 
 tasks:
 
+#dagger call -m crossplane init-custom-package --kind argocd --progress plain export --path=/home/sthings/projects/stuttgart-things/crossplane/packages/argocd
+
   xplane-push:
     desc: Push crossplane package
     cmds:

@@ -1,0 +1,6 @@
+apiVersion: resources.stuttgart-things.com/v1alpha1
+kind: Argocd
+metadata:
+  name: incluster
+  namespace: crossplane-system
+spec:

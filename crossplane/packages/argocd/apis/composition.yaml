@@ -1,0 +1,12 @@
+apiVersion: 
+kind: Composition
+metadata:
+  labels:
+    crossplane.io/xrd: xargocd.resources.stuttgart-things.com
+  name: argocd
+spec:
+  compositeTypeRef:
+    apiVersion: resources.stuttgart-things.com/v1alpha1
+    kind: XArgocd
+  mode: Pipeline
+  pipeline:

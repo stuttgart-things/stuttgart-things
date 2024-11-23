@@ -18,9 +18,17 @@ releases:
     installed: true
     namespace: homerun
     chart: stuttgart-things/homerun
-    version: v0.2.1
+    version: v0.2.2
     values:
       - "values/event-catcher.values.yaml.gotmpl"
+
+  - name: homerun-feed-catcher
+    installed: true
+    namespace: homerun
+    chart: stuttgart-things/homerun
+    version: v0.2.2
+    values:
+      - "values/feed-catcher.values.yaml.gotmpl"
 
 repositories:
   - name: stuttgart-things

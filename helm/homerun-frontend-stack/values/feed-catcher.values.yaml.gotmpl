@@ -1,1 +1,68 @@
 ---
+feed-catcher:
+  enabled: {{ .Values.feedCatcher.enabled }}
+
+  deployment:
+    volumes:
+      certs-{{ .Values.feedCatcher.name }}:
+        volumeKind: configMap
+    containers:
+      {{ .Values.feedCatcher.name }}:
+        lifecycle:
+          postStart:
+            exec:
+              command:
+              - /bin/sh
+              - -c
+              - sleep 10; cat {{ .Values.tmpCertDir }}/{{ .Values.pubCertName }} | base64 -d > {{ .Values.certDir }}/{{ .Values.pubCertName }}; update-ca-certificates
+    volumeMounts:
+      certs-{{ .Values.feedCatcher.name }}:
+        mountPath: {{ .Values.tmpCertDir }}/
+        volumeKind: emptyDir
+
+  configmaps:
+    {{ .Values.feedCatcher.name }}:
+      VITE_API_ADDR: https://{{ .Values.hostname }}.{{ .Values.domain }}/{{ .Values.eventCatcher.eventsPath }}
+      VITE_API_ADDR_GENERIC: https://{{ .Values.hostname }}.{{ .Values.domain }}/{{ .Values.eventCatcher.eventsPath }}
+      VITE_API_ADDR_GITHUB: https://{{ .Values.hostname }}.{{ .Values.domain }}/{{ .Values.eventCatcher.documentsPath }}?system=github
+      VITE_API_ADDR_GITLAB: https://{{ .Values.hostname }}.{{ .Values.domain }}/{{ .Values.eventCatcher.documentsPath }}?system=gitlab
+
+    certs-{{ .Values.feedCatcher.name }}:
+      {{ .Values.pubCertName }}: |
+        {{ .Values.pubCert }}
+
+  ingress:
+    {{ .Values.feedCatcher.name }}-ingress:
+      labels:
+        app: {{ .Values.feedCatcher.name }}
+      name: {{ .Values.feedCatcher.name }}
+      ingressClassName: {{ .Values.ingressClass }}
+      annotations:
+        nginx.ingress.kubernetes.io/rewrite-target: /
+      service:
+        name: {{ .Values.feedCatcher.name }}-service
+        port: {{ .Values.feedCatcher.port }}
+        path: {{ .Values.feedCatcher.path }}
+        pathType: Prefix
+      hostname: {{ .Values.hostname }}
+      domain: {{ .Values.domain }}
+      tls:
+        secretName: {{ .Values.feedCatcher.name }}-tls
+        host: {{ .Values.hostname }}.{{ .Values.domain }}
+
+  customresources:
+    {{ .Values.feedCatcher.name }}-certificate:
+      apiVersion: cert-manager.io/v1
+      kind: Certificate
+      metadata:
+        name: {{ .Values.feedCatcher.name }}-ingress
+        labels:
+          app: {{ .Values.feedCatcher.name }}
+      spec:
+        commonName: {{ .Values.hostname }}.{{ .Values.domain }}
+        dnsNames:
+          - {{ .Values.hostname }}.{{ .Values.domain }}
+        issuerRef:
+          name: {{ .Values.issuerName }}
+          kind: {{ .Values.issuerKind }}
+        secretName: {{ .Values.feedCatcher.name }}-tls
