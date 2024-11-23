@@ -1,7 +1,7 @@
 ---
 stream: homerun
 ingressClass: nginx
-certDir: /usr/local/share/ca-certificates/
+certDir: /usr/local/share/ca-certificates
 tmpCertDir: /cert
 pubCertName: pub-cert.pem
 ingressPort: 80
@@ -12,3 +12,17 @@ redisStack:
   serviceName: homerun-redis-stack-headless
 
 pubCert: ""
+
+eventCatcher:
+  enabled: true
+  name: homerun-event-catcher
+  apiPath: ""
+  targetPort: 8080
+  eventsPath: events
+  documentsPath: documents
+
+feedCatcher:
+  enabled: true
+  name: homerun-feed-catcher
+  port: 5173
+  path: /
