@@ -1,6 +1,6 @@
 # stuttgart-things/crossplane/vsphere-vm
 
-## CREATE TFVARS
+## CREATE TFVARS FOR SECRETS
 
 ```bash
 # CREATE terraform.tfvars
