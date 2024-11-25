@@ -1,0 +1,18 @@
+image:
+  pullPolicy: {{ .Values.image.pullPolicy }}
+
+service:
+  type: {{ .Values.service.type }}
+
+persistence:
+  enabled: {{ .Values.persistence.enabled }}
+  mountPath: {{ .Values.persistence.mountPath }}
+  storageClass: {{ .Values.persistence.storageClass }}
+
+authentication:
+  passwordFilePath: {{ .Values.authentication.passwordFilePath }}
+  passwordEntries: |-
+    {{ .Values.authentication.adminUser }} : {{ .Values.authentication.adminPassword }}
+
+config:
+{{- toYaml .Values.config | nindent 2 }}

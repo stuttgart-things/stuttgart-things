@@ -1,0 +1,29 @@
+---
+environments:
+  fluxdev-2:
+    values:
+      - env/defaults.yaml
+      - env/{{ .Environment.Name }}.yaml
+
+releases:
+  - name: mosquitto
+    disableValidationOnInstall: true
+    installed: true
+    namespace: mosquitto
+    chart: k8sonlab/mosquitto
+    version: 2.5.1
+    values:
+      - "values/mosquitto.values.yaml.gotmpl"
+
+
+repositories:
+  - name: stuttgart-things
+    url: ghcr.io/stuttgart-things
+    oci: true
+
+helmDefaults:
+  verify: false
+  wait: true
+  timeout: 600
+  recreatePods: false
+  force: true

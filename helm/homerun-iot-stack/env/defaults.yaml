@@ -1,0 +1,26 @@
+---
+image:
+  pullPolicy: IfNotPresent
+
+persistence:
+  enabled: true
+  mountPath: /mosquitto/data
+  storageClass: nfs-csi
+
+service:
+  type: ClusterIP
+
+authentication:
+  adminUser: ref+vault://apps/mosquitto/user
+  adminPassword: ref+vault://apps/mosquitto/password
+  passwordFilePath: /etc/mosquitto/passwordfile
+
+config: |
+  persistence true
+  persistence_location /mosquitto/data/
+  persistence_file mosquitto.db
+  log_dest stdout
+  log_dest file /mosquitto/log/mosquitto.log
+  listener 1883
+  listener 9090
+  protocol websockets
