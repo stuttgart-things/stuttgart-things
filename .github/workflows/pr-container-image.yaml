@@ -12,7 +12,7 @@ jobs:
   Get-Changed-Dockerfiles:
     runs-on: ghr-stuttgart-things-skyami-cicd
     container:
-      image: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:3be9edc2fb60094915a21500a194b0abb01ebbe72a4e3c7ff9d91640813d29a4
+      image: ghcr.io/stuttgart-things/machineshop/machineshop-9c3178088556daa12a17db5edcc6b5b7@sha256:d815f148f8a69cd5095bcf52a41f9af6f221e4a9bb1836d649c3a94c3db7961e
     environment: labul-vsphere #k8s
     outputs:
       contexts: ${{ steps.json.outputs.contexts }}
