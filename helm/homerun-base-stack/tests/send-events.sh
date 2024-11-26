@@ -1,6 +1,7 @@
 #!/bin/bash
 #ADDRESS=https://homerun.fluxdev-2.sthings-vsphere.labul.sva.de/generic
-ADDRESS=https://homerun.homerun-dev.sthings-vsphere.labul.sva.de/generic
+#ADDRESS=https://homerun.homerun-dev.sthings-vsphere.labul.sva.de/generic
+ADDRESS=https://k3s-sprechstunde.labul.sva.de/generic
 
 SYSTEMS=("github" "gitlab") #) "flux" "ansible")
 TITLES=("System Alert" "System Incident" "Incident")
