@@ -143,3 +143,8 @@ spec:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.providerRef.name
           toFieldPath: spec.providerConfigRef.name
+        - type: ToCompositeFieldPath
+          fromFieldPath: status.atProvider.outputs.ip
+          toFieldPath: status.share.ip
+          policy:
+            fromFieldPath: Optional

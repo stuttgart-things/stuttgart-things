@@ -7,6 +7,7 @@ API_USER=""
 API_PW=""
 SSH_USER=""
 SSH_PW=""
+VSPHERE_SERVER=10.31.101.51
 SECRET_NAME=vsphere-tfvars
 NAMESPACE=crossplane-system
 # CREATE terraform.tfvars
@@ -16,7 +17,9 @@ vsphere_user = "${API_USER}"
 vsphere_password = "${API_PW}"
 vm_ssh_user = "${SSH_USER}"
 vm_ssh_password = "${SSH_PW}"
+vsphere_server="${VSPHERE_SERVER}"
 EOF
+
 kubectl create secret generic ${SECRET_NAME} --from-file=${VARS_FILE} -n ${NAMESPACE}
 rm -rf ${VARS_FILE}
 ```
