@@ -1,8 +1,21 @@
 #!/bin/bash
 #ADDRESS=https://homerun.fluxdev-2.sthings-vsphere.labul.sva.de/generic
 #ADDRESS=https://homerun.homerun-dev.sthings-vsphere.labul.sva.de/generic
-ADDRESS=https://k3s-sprechstunde.labul.sva.de/generic
+#ADDRESS=https://k3s-sprechstunde.labul.sva.de/generic
 
+read -p "ENTER COUNT MESSAGES [5]: " COUNT_MESSAGE
+COUNT_MESSAGE=${COUNT_MESSAGE:-5}
+echo $COUNT_MESSAGE
+
+read -p "ENTER ADDRESS [https://homerun.homerun-dev.sthings-vsphere.labul.sva.de/generic]: " ADDRESS
+ADDRESS=${ADDRESS:-https://homerun.homerun-dev.sthings-vsphere.labul.sva.de/generic}
+echo $ADDRESS
+
+read -p "ENTER DELAY [10]: " DELAY
+DELAY=${DELAY:-5}
+echo $DELAY
+
+# POSSIBLE DATA
 SYSTEMS=("github" "gitlab") #) "flux" "ansible")
 TITLES=("System Alert" "System Incident" "Incident")
 MESSAGES=("Memory usage is high" "CPU usage is high" "Memory and CPU usage is high")
@@ -76,60 +89,61 @@ generate_random_url() {
     echo "${protocol}://${subdomain}.${domain}/${path}"
 }
 
-
-COUNT_MESSAGE=10
-
 for ((i=1; i<=${COUNT_MESSAGE}; i++)); do
 
-# Example usage of the function
-RANDOM_TIMESTAMP=$(generate_random_timestamp)
-echo "RANDOM TIMESTAMP: ${RANDOM_TIMESTAMP}"
+  RANDOM_TIMESTAMP=$(generate_random_timestamp)
+  #echo "RANDOM TIMESTAMP: ${RANDOM_TIMESTAMP}"
 
-SYSTEM=$(get_random_item "${SYSTEMS[@]}")
-echo "RANDOMLY SELECTED SYSTEM: ${SYSTEM}"
+  SYSTEM=$(get_random_item "${SYSTEMS[@]}")
+  echo "SYSTEM: ${SYSTEM}"
 
-TITLE=$(get_random_item "${TITLES[@]}")
-echo "RANDOMLY SELECTED TITLE: ${TITLE}"
+  TITLE=$(get_random_item "${TITLES[@]}")
+  echo "TITLE: ${TITLE}"
 
-MESSAGE=$(get_random_item "${MESSAGES[@]}")
-echo "RANDOMLY SELECTED MESSAGE: ${MESSAGE}"
+  MESSAGE=$(get_random_item "${MESSAGES[@]}")
+  echo "MESSAGE: ${MESSAGE}"
 
-SEVERITY=$(get_random_item "${SEVERITES[@]}")
-echo "RANDOMLY SELECTED SEVERITY: ${SEVERITY}"
+  SEVERITY=$(get_random_item "${SEVERITES[@]}")
+  echo "SEVERITY: ${SEVERITY}"
 
-AUTHOR=$(get_random_item "${AUTHORS[@]}")
-echo "RANDOMLY SELECTED AUTHOR: ${AUTHOR}"
+  AUTHOR=$(get_random_item "${AUTHORS[@]}")
+  echo "AUTHOR: ${AUTHOR}"
 
-MAIL=$(generate_random_email)
-echo "RANDOMLY GENERATED E-MAIL: ${MAIL}"
+  MAIL=$(generate_random_email)
+  #echo "RANDOMLY GENERATED E-MAIL: ${MAIL}"
 
-ASSIGNE=$(get_random_item "${AUTHORS[@]}")
-echo "RANDOMLY SELECTED ASSIGNE: ${ASSIGNE}"
+  ASSIGNE=$(get_random_item "${AUTHORS[@]}")
+  #echo "ASSIGNE: ${ASSIGNE}"
 
-TAG=$(get_random_item "${TAGS[@]}")
-echo "RANDOMLY SELECTED TAG: ${TAG}"
+  TAG=$(get_random_item "${TAGS[@]}")
+  echo "TAGS: ${TAG}"
 
-RANDOM_URL=$(generate_random_url)
-echo "RANDOMLY SELECTED URL: ${RANDOM_URL}"
+  RANDOM_URL=$(generate_random_url)
+  #echo "URLS: ${RANDOM_URL}"
 
-ARTIFACT=$(get_random_item "${ARTIFACTS[@]}")
-echo "RANDOMLY SELECTED ARTIFACT: ${ARTIFACT}"
+  ARTIFACT=$(get_random_item "${ARTIFACTS[@]}")
+  #echo "ARTIFACT: ${ARTIFACT}"
 
-curl -k -X POST "${ADDRESS}" \
-     -H "Content-Type: application/json" \
-     -H "X-Auth-Token: IhrGeheimerToken" \
-     -d "{
-           \"title\": \"${TITLE}\",
-           \"message\": \"${MESSAGE}\",
-           \"severity\": \"${SEVERITY}\",
-           \"author\": \"${AUTHOR}\",
-           \"timestamp\": \"${RANDOM_TIMESTAMP}\",
-           \"system\": \"${SYSTEM}\",
-           \"tags\": \"${TAG}\",
-           \"assigneeaddress\": \"${MAIL}\",
-           \"assigneename\": \"${ASSIGNE}\",
-           \"artifacts\": \"${ARTIFACT}\",
-           \"url\": \"${RANDOM_URL}\"
-         }"
+  printf "\nWAITING FOR ${DELAY} SECONDS BEFORE SENDING THE (NEXT) EVENT\n"
+  sleep "$DELAY"  # Pause für die angegebene Anzahl von Sekunden zwischen den Events
+
+  curl -k -X POST "${ADDRESS}" \
+      -H "Content-Type: application/json" \
+      -H "X-Auth-Token: IhrGeheimerToken" \
+      -d "{
+            \"title\": \"${TITLE}\",
+            \"message\": \"${MESSAGE}\",
+            \"severity\": \"${SEVERITY}\",
+            \"author\": \"${AUTHOR}\",
+            \"timestamp\": \"${RANDOM_TIMESTAMP}\",
+            \"system\": \"${SYSTEM}\",
+            \"tags\": \"${TAG}\",
+            \"assigneeaddress\": \"${MAIL}\",
+            \"assigneename\": \"${ASSIGNE}\",
+            \"artifacts\": \"${ARTIFACT}\",
+            \"url\": \"${RANDOM_URL}\"
+          }"
+
+  printf "\n\n"
 
 done
