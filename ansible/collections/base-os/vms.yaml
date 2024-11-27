@@ -15,7 +15,7 @@ playbooks:
           path: "vars"
           install_terraform: "true"
           s3: "homerun-dev"
-          terraform_version: 1.9.8 # datasource=custom.hashicorp
+          terraform_version: 1.10.0 # datasource=custom.hashicorp
 
           bin:
             terraform:
