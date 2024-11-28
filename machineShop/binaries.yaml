@@ -3,7 +3,7 @@ binary:
   - glab:
       url: https://gitlab.com/gitlab-org/cli/-/releases/v1.49.0/downloads/glab_1.49.0_linux_amd64.tar.gz
       bin: bin/glab
-      version: 1.49.0 # datasource=gitlab-tags depName=gitlab-org/cli
+      version: 1.50.0 # datasource=gitlab-tags depName=gitlab-org/cli
   - argocd:
       url: https://github.com/argoproj/argo-cd/releases/download/v{{ or .argocdVersion "2.8.4" }}/argocd-linux-amd64
       bin: argocd-linux-amd64
