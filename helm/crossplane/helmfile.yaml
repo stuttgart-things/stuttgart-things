@@ -9,7 +9,7 @@ releases:
     installed: true
     namespace: crossplane-system
     chart: crossplane-stable/crossplane
-    version: 1.18.0
+    version: 1.18.1
     values:
       - "values/crossplane.values.yaml.gotmpl"
 
