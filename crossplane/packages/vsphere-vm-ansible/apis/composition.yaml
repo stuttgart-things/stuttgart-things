@@ -85,3 +85,50 @@ spec:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.providerRef.name
           toFieldPath: spec.providerRef.name
+    - name: ansible-run
+      base:
+        apiVersion: resources.stuttgart-things.com/v1alpha1
+        kind: XAnsibleRun
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: metadata.name
+          toFieldPath: metadata.name
+        - type: FromCompositeFieldPath
+          fromFieldPath: metadata.namespace
+          toFieldPath: metadata.namespace
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.ansible.pipelineRunName
+          toFieldPath: spec.pipelineRunName
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.ansible.pipelineNamespace
+          toFieldPath: spec.pipelineNamespace
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.ansible.workingImage
+          toFieldPath: spec.workingImage
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.ansible.vaultSecretName
+          toFieldPath: spec.vaultSecretName
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.ansible.gitRepoUrl
+          toFieldPath: spec.gitRepoUrl
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.ansible.gitRevision
+          toFieldPath: spec.gitRevision
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.ansible.ansibleVarsFile
+          toFieldPath: spec.ansibleVarsFile
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.ansible.inventory
+          toFieldPath: spec.inventory
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.ansible.roles
+          toFieldPath: spec.roles
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.ansible.collections
+          toFieldPath: spec.collections
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.ansible.playbooks
+          toFieldPath: spec.playbooks
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.ansible.providerRef.name
+          toFieldPath: spec.providerRef.name
