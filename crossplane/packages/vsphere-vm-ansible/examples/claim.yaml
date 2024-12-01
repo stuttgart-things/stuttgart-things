@@ -1,7 +1,8 @@
+---
 apiVersion: resources.stuttgart-things.com/v1alpha1
 kind: VsphereVmAnsible
 metadata:
-  name: xplane-new3
+  name: xplane-new20
   namespace: crossplane-system
 spec:
   compositionRef:
@@ -10,7 +11,7 @@ spec:
     name: default
   vm:
     count: "1"
-    name: xplane-new3
+    name: xplane-new20
     cpu: "8"
     ram: "4096"
     disk: "64"
@@ -29,12 +30,12 @@ spec:
     secretNamespace: crossplane-system
     secretKey: terraform.tfvars
   connectionSecret:
-    name: xplane-new3
+    name: xplane-new20
     namespace: crossplane-system
   ansible:
-    pipelineRunName: baseos-xplane-new3
+    pipelineRunName: baseos-xplane-new20
     inventory:
-      - "all+[\"labul-automation.labul.sva.de rancher_cluster_cmd='--controlplane --etcd --worker'\"]"
+      - "all+[\"xplane-new20.labul.sva.de\"]"
     playbooks:
       - "ansible/playbooks/prepare-env.yaml"
       - "ansible/playbooks/base-os.yaml"

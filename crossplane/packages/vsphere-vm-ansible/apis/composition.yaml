@@ -85,6 +85,11 @@ spec:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.providerRef.name
           toFieldPath: spec.providerRef.name
+        - type: ToCompositeFieldPath
+          fromFieldPath: status.share.ip
+          policy:
+            fromFieldPath: Required
+          toFieldPath: status.share.ip
     - name: ansible-run
       base:
         apiVersion: resources.stuttgart-things.com/v1alpha1
@@ -96,6 +101,30 @@ spec:
         - type: FromCompositeFieldPath
           fromFieldPath: metadata.namespace
           toFieldPath: metadata.namespace
+
+          #fromFieldPath: spec.ansible.inventory
+        - fromFieldPath: status.share.ip
+          toFieldPath: spec.inventory
+          policy:
+            fromFieldPath: Required
+          # transforms:
+          #   - type: string
+          #     string:
+          #       type: Join
+          #       join:
+          #         separator: ","
+          #   - type: string
+          #     string:
+          #       type: TrimPrefix
+          #       trim: "["
+          #   - type: string
+          #     string:
+          #       type: TrimSuffix
+          #       trim: "]"
+          #   - type: string
+          #     string:
+          #       type: Format
+          #       fmt: 'all+[\"%s\"]'
         - type: FromCompositeFieldPath
           fromFieldPath: spec.ansible.pipelineRunName
           toFieldPath: spec.pipelineRunName
@@ -117,9 +146,6 @@ spec:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.ansible.ansibleVarsFile
           toFieldPath: spec.ansibleVarsFile
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.ansible.inventory
-          toFieldPath: spec.inventory
         - type: FromCompositeFieldPath
           fromFieldPath: spec.ansible.roles
           toFieldPath: spec.roles
