@@ -90,6 +90,24 @@ spec:
           policy:
             fromFieldPath: Required
           toFieldPath: status.share.ip
+          transforms:
+            - type: string
+              string:
+                type: Join
+                join:
+                  separator: ","
+            - type: string
+              string:
+                type: TrimPrefix
+                trim: "["
+            - type: string
+              string:
+                type: TrimSuffix
+                trim: "]"
+            - type: string
+              string:
+                type: Format
+                fmt: "all+[\"%s\"]"
     - name: ansible-run
       base:
         apiVersion: resources.stuttgart-things.com/v1alpha1
@@ -101,10 +119,9 @@ spec:
         - type: FromCompositeFieldPath
           fromFieldPath: metadata.namespace
           toFieldPath: metadata.namespace
-
           #fromFieldPath: spec.ansible.inventory
         - fromFieldPath: status.share.ip
-          toFieldPath: spec.inventory
+          toFieldPath: spec.inventory[0]
           policy:
             fromFieldPath: Required
           # transforms:

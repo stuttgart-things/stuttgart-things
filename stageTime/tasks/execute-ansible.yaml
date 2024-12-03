@@ -102,8 +102,6 @@ spec:
       script: |
         #!/usr/bin/env sh
 
-        whoami
-
         set -eu
 
         echo "creating vars file"
@@ -116,7 +114,21 @@ spec:
 
         for param in "$@"
         do
-          yq -i '.inventory_groups.host_groups.'$(echo "$param" | cut -d "+" -f1)' += '$(echo "$param" | cut -d "+" -f2)'' ./vars.yaml
+          group=$(echo "$param" | cut -d "+" -f1)
+          host=$(echo "$param" | cut -d "+" -f2)
+          echo $group
+          echo $host
+
+          if [[ $host =~ \[\".*\"\] ]]; then
+              echo "String is already correctly formatted: $host"
+          else
+              echo "String is not correctly formatted: $host"
+              host=$(echo $host | sed 's/\[/\[\"/g; s/\]/\"]/g')
+          fi
+
+          echo $host
+
+          yq -i '.inventory_groups.host_groups.'$(echo ${group})' += '$(echo ${host})'' ./vars.yaml
         done
 
         else
