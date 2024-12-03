@@ -1,15 +1,15 @@
 apiVersion: meta.pkg.crossplane.io/v1
 kind: Configuration
 metadata:
-  name: XArgocd
+  name: XArgoCd
   annotations:
     meta.crossplane.io/maintainer: patrick.hermann@sva.de
     meta.crossplane.io/source: github.com/stuttgart-things/stuttgart-things
     meta.crossplane.io/license: Apache-2.0
     meta.crossplane.io/description: |
-      deploys XArgocd w/ crossplane
+      deploys XArgoCd w/ crossplane
     meta.crossplane.io/readme: |
-      deploys XArgocd w/ crossplane
+      deploys XArgoCd w/ crossplane
 spec:
   crossplane:
     version: ">=&gt;=v1.14.1-0"

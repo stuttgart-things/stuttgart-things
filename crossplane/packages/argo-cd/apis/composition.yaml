@@ -1,0 +1,42 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  creationTimestamp: "2024-12-03T12:34:18Z"
+  labels:
+    crossplane.io/xrd: xargocds.resources.stuttgart-things.com
+  name: argo-cd
+spec:
+  compositeTypeRef:
+    apiVersion: resources.stuttgart-things.com/v1alpha1
+    kind: XArgoCd
+  mode: Pipeline
+  pipeline:
+    - step: deploy-argo-cd
+      functionRef:
+        name: function-go-templating
+      input:
+        apiVersion: gotemplating.fn.crossplane.io/v1beta1
+        kind: GoTemplate
+        source: Inline
+        inline:
+          template: |
+            apiVersion: helm.crossplane.io/v1beta1
+            kind: Release
+            metadata:
+              annotations:
+                gotemplating.fn.crossplane.io/composition-resource-name: deploy-argo-cd
+                crossplane.io/external-name: argo-cd
+              name: argo-cd-{{ .observed.composite.resource.spec.clusterName }}
+            spec:
+              providerConfigRef:
+                name: {{ .observed.composite.resource.spec.clusterName }}
+              forProvider:
+                chart:
+                  name: argo-cd
+                  repository: https://argoproj.github.io/argo-helm
+                  version: {{ .observed.composite.resource.spec.version }}
+                insecureSkipTLSVerify: true
+                namespace: {{ .observed.composite.resource.spec.deploymentNamespace }}
+                skipCRDs: false
+                skipCreateNamespace: false
+                wait: true

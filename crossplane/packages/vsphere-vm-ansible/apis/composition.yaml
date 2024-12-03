@@ -124,24 +124,6 @@ spec:
           toFieldPath: spec.inventory[0]
           policy:
             fromFieldPath: Required
-          # transforms:
-          #   - type: string
-          #     string:
-          #       type: Join
-          #       join:
-          #         separator: ","
-          #   - type: string
-          #     string:
-          #       type: TrimPrefix
-          #       trim: "["
-          #   - type: string
-          #     string:
-          #       type: TrimSuffix
-          #       trim: "]"
-          #   - type: string
-          #     string:
-          #       type: Format
-          #       fmt: 'all+[\"%s\"]'
         - type: FromCompositeFieldPath
           fromFieldPath: spec.ansible.pipelineRunName
           toFieldPath: spec.pipelineRunName
