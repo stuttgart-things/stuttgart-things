@@ -1,6 +1,10 @@
+---
 apiVersion: resources.stuttgart-things.com/v1alpha1
-kind: Argocd
+kind: ArgoCd
 metadata:
   name: incluster
   namespace: crossplane-system
 spec:
+  deploymentNamespace: argo-cd
+  version: 7.5.2
+  clusterName: fluxdev-2
