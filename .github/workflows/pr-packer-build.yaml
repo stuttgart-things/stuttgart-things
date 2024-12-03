@@ -150,19 +150,19 @@ jobs:
           private_key: ${{ secrets.PULLREQUESTER_APP_KEY }}
 
       - name: Comment template name to PR
-        uses: thollander/actions-comment-pull-request@v2.5.0
+        uses: thollander/actions-comment-pull-request@v3.0.1
         with:
           message: |
             :wave: successful build of vm template: ${{ needs.Get-Packer-Config.outputs.os-version }}-${{ needs.Get-Packer-Config.outputs.build-date }}-${{ needs.Get-Packer-Config.outputs.provisioning }}
 
       - name: Comment test-vm path to PR
-        uses: thollander/actions-comment-pull-request@v2.5.0
+        uses: thollander/actions-comment-pull-request@v3.0.1
         with:
           message: |
             :wave: test vm path: ${{ needs.Get-Packer-Config.outputs.build-path }}/${{ github.event.pull_request.head.ref }}/test-vm
 
       - name: Comment output name to pr
-        uses: thollander/actions-comment-pull-request@v2.5.0
+        uses: thollander/actions-comment-pull-request@v3.0.1
         with:
           message: |
             :wave: output name: ${{ needs.Build-Packer-Template.outputs.output-name }}
