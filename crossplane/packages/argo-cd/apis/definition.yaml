@@ -36,6 +36,28 @@ spec:
                   type: string
                   default: 7.5.2
                   description: helm chart version for argo-cd
+                hostName:
+                  type: string
+                  default: argo-cd
+                  description: hostname of ingress resource
+                domainName:
+                  type: string
+                  description: domain (name) of ingress resource
+                cert:
+                  type: object
+                  properties:
+                    issuerName:
+                      type: string
+                      default: vault-approle
+                      description: name of cert-manager issuer
+                    issuerKind:
+                      type: string
+                      default: ClusterIssuer
+                      description: kind of cert-manager issuer
+                    secretName:
+                      type: string
+                      description: name of to be created secret
+                      default: argocd-ingress-tls
               required:
                 - clusterName
             status:
