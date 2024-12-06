@@ -17,7 +17,7 @@ vars:
     file: |
       ---
       gh_version: 2.63.1 # datasource=github-tags depName=cli/cli
-      task_version: 3.40.0 # datasource=github-tags depName=go-task/task
+      task_version: 3.40.1 # datasource=github-tags depName=go-task/task
       hugo_version: 0.139.3 # datasource=github-tags depName=gohugoio/hugo
       terraform_version: 1.10.1 # datasource=custom.hashicorp
       packer_version: 1.11.2 # datasource=custom.hashicorp
