@@ -1,17 +1,17 @@
 ---
 apiVersion: resources.stuttgart-things.com/v1alpha1
-kind: VsphereVmAnsible
+kind: VsphereRke2Cluster
 metadata:
-  name: xplane-new49
+  name: xplane-new51
   namespace: crossplane-system
 spec:
   compositionRef:
-    name: vsphere-vm-ansible
+    name: vsphere-rke2-cluster
   providerRef:
     name: default
   vm:
     count: "1"
-    name: xplane-new49
+    name: xplane-new51
     cpu: "6"
     ram: "4096"
     disk: "64"
@@ -30,12 +30,12 @@ spec:
     secretNamespace: crossplane-system
     secretKey: terraform.tfvars
   connectionSecret:
-    name: xplane-new49
+    name: xplane-new51
     namespace: crossplane-system
   ansible:
-    pipelineRunName: baseos-xplane-new49
+    pipelineRunName: baseos-xplane-new51
     # inventory:
-    #   - "all+[\"xplane-new49.labul.sva.de\"]"
+    #   - "all+[\"xplane-new51.labul.sva.de\"]"
     playbooks:
       - "ansible/playbooks/prepare-env.yaml"
       - "ansible/playbooks/base-os.yaml"

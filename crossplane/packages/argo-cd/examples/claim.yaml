@@ -9,7 +9,7 @@ spec:
   version: 7.5.2
   clusterName: fluxdev-2
   hostName: argo-cd
-  domainName: fluxdev-3.sthings-vsphere.labul.sva.de
+  domainName: fluxdev-2.sthings-vsphere.labul.sva.de
   cert:
-    secretName: argocd-ingress-tls
+    secretName: argocd-server-tls
     issuerName: vault-approle

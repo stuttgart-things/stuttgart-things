@@ -1,7 +1,8 @@
----
+
 apiVersion: apiextensions.crossplane.io/v1
 kind: Composition
 metadata:
+  creationTimestamp: "2024-12-08T07:49:55Z"
   labels:
     crossplane.io/xrd: xvspherevmansibles.resources.stuttgart-things.com
   name: vsphere-vm-ansible
@@ -9,151 +10,161 @@ spec:
   compositeTypeRef:
     apiVersion: resources.stuttgart-things.com/v1alpha1
     kind: XVsphereVmAnsible
-  writeConnectionSecretsToNamespace: crossplane-system
-  resources:
-    - name: vsphere-vm
-      base:
-        apiVersion: resources.stuttgart-things.com/v1alpha1
-        kind: XVsphereVM
-      patches:
-        - type: FromCompositeFieldPath
-          fromFieldPath: metadata.name
+  mode: Pipeline
+  pipeline:
+  - functionRef:
+      name: function-patch-and-transform
+    input:
+      apiVersion: pt.fn.crossplane.io/v1beta1
+      environment: null
+      kind: Resources
+      patchSets: []
+      resources:
+      - base:
+          apiVersion: resources.stuttgart-things.com/v1alpha1
+          kind: XVsphereVM
+        name: vsphere-vm
+        patches:
+        - fromFieldPath: metadata.name
           toFieldPath: metadata.name
-        - type: FromCompositeFieldPath
-          fromFieldPath: metadata.namespace
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.namespace
           toFieldPath: metadata.namespace
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.vm.count
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.vm.count
           toFieldPath: spec.vm.count
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.vm.name
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.vm.name
           toFieldPath: spec.vm.name
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.vm.cpu
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.vm.cpu
           toFieldPath: spec.vm.cpu
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.vm.ram
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.vm.ram
           toFieldPath: spec.vm.ram
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.vm.disk
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.vm.disk
           toFieldPath: spec.vm.disk
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.vm.firmware
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.vm.firmware
           toFieldPath: spec.vm.firmware
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.vm.folderPath
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.vm.folderPath
           toFieldPath: spec.vm.folderPath
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.vm.datacenter
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.vm.datacenter
           toFieldPath: spec.vm.datacenter
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.vm.datastore
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.vm.datastore
           toFieldPath: spec.vm.datastore
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.vm.resourcePool
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.vm.resourcePool
           toFieldPath: spec.vm.resourcePool
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.vm.network
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.vm.network
           toFieldPath: spec.vm.network
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.vm.template
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.vm.template
           toFieldPath: spec.vm.template
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.vm.bootstrap
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.vm.bootstrap
           toFieldPath: spec.vm.bootstrap
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.vm.annotation
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.vm.annotation
           toFieldPath: spec.vm.annotation
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.vm.unverifiedSsl
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.vm.unverifiedSsl
           toFieldPath: spec.vm.unverifiedSsl
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.tfvars.secretName
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.tfvars.secretName
           toFieldPath: spec.tfvars.secretName
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.tfvars.secretNamespace
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.tfvars.secretNamespace
           toFieldPath: spec.tfvars.secretNamespace
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.tfvars.secretKey
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.tfvars.secretKey
           toFieldPath: spec.tfvars.secretKey
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.connectionSecret.name
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.connectionSecret.name
           toFieldPath: spec.connectionSecret.name
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.connectionSecret.namespace
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.connectionSecret.namespace
           toFieldPath: spec.connectionSecret.namespace
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.providerRef.name
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.providerRef.name
           toFieldPath: spec.providerRef.name
-        - type: ToCompositeFieldPath
-          fromFieldPath: status.share.ip
+          type: FromCompositeFieldPath
+        - fromFieldPath: status.share.ip
           policy:
             fromFieldPath: Required
           toFieldPath: status.share.ip
           transforms:
-            - type: string
-              string:
-                type: Join
-                join:
-                  separator: ","
-            - type: string
-              string:
-                type: TrimPrefix
-                trim: "["
-            - type: string
-              string:
-                type: TrimSuffix
-                trim: "]"
-            - type: string
-              string:
-                type: Format
-                fmt: "all+[\"%s\"]"
-    - name: ansible-run
-      base:
-        apiVersion: resources.stuttgart-things.com/v1alpha1
-        kind: XAnsibleRun
-      patches:
-        - type: FromCompositeFieldPath
-          fromFieldPath: metadata.name
+          - string:
+              join:
+                separator: ','
+              type: Join
+            type: string
+          - string:
+              trim: '['
+              type: TrimPrefix
+            type: string
+          - string:
+              trim: ']'
+              type: TrimSuffix
+            type: string
+          - string:
+              fmt: all+["%s"]
+              type: Format
+            type: string
+          type: ToCompositeFieldPath
+      - base:
+          apiVersion: resources.stuttgart-things.com/v1alpha1
+          kind: XAnsibleRun
+        name: ansible-run
+        patches:
+        - fromFieldPath: metadata.name
           toFieldPath: metadata.name
-        - type: FromCompositeFieldPath
-          fromFieldPath: metadata.namespace
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.namespace
           toFieldPath: metadata.namespace
-          #fromFieldPath: spec.ansible.inventory
+          type: FromCompositeFieldPath
         - fromFieldPath: status.share.ip
-          toFieldPath: spec.inventory[0]
           policy:
             fromFieldPath: Required
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.ansible.pipelineRunName
+          toFieldPath: spec.inventory[0]
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.ansible.pipelineRunName
           toFieldPath: spec.pipelineRunName
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.ansible.pipelineNamespace
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.ansible.pipelineNamespace
           toFieldPath: spec.pipelineNamespace
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.ansible.workingImage
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.ansible.workingImage
           toFieldPath: spec.workingImage
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.ansible.vaultSecretName
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.ansible.vaultSecretName
           toFieldPath: spec.vaultSecretName
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.ansible.gitRepoUrl
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.ansible.gitRepoUrl
           toFieldPath: spec.gitRepoUrl
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.ansible.gitRevision
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.ansible.gitRevision
           toFieldPath: spec.gitRevision
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.ansible.ansibleVarsFile
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.ansible.ansibleVarsFile
           toFieldPath: spec.ansibleVarsFile
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.ansible.roles
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.ansible.roles
           toFieldPath: spec.roles
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.ansible.collections
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.ansible.collections
           toFieldPath: spec.collections
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.ansible.playbooks
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.ansible.playbooks
           toFieldPath: spec.playbooks
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.ansible.providerRef.name
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.ansible.providerRef.name
           toFieldPath: spec.providerRef.name
+          type: FromCompositeFieldPath
+    step: patch-and-transform
+  writeConnectionSecretsToNamespace: crossplane-system

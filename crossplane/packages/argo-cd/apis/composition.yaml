@@ -59,7 +59,8 @@ spec:
             kind: Release
             metadata:
               annotations:
-                gotemplating.fn.crossplane.io/composition-resource-name: deploy-argo-cd
+                gotemplating.fn.crossplane.io/composition-resource-name: argo-cd
+                gotemplating.fn.crossplane.io/ready: "True"
                 crossplane.io/external-name: argo-cd
               name: argo-cd-{{ .observed.composite.resource.spec.clusterName }}
             spec:
@@ -75,3 +76,13 @@ spec:
                 skipCRDs: false
                 skipCreateNamespace: false
                 wait: true
+                values:
+                  server:
+                    ingress:
+                      enabled: true
+                      annotations:
+                        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+                        nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+                      ingressClassName: nginx
+                      hostname: {{ .observed.composite.resource.spec.hostName }}.{{ .observed.composite.resource.spec.domainName }}
+                      tls: true

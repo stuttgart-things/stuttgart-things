@@ -1,0 +1,111 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  labels:
+    crossplane.io/xrd: xvsphererke2clusters.resources.stuttgart-things.com
+  name: vsphere-rke2-cluster
+spec:
+  compositeTypeRef:
+    apiVersion: resources.stuttgart-things.com/v1alpha1
+    kind: XVsphereRke2Cluster
+  mode: Pipeline
+  pipeline:
+    - step: inline-test
+      functionRef:
+        name: function-go-templating
+      input:
+        apiVersion: gotemplating.fn.crossplane.io/v1beta1
+        kind: GoTemplate
+        source: Inline
+        inline:
+          template: |
+            apiVersion: tf.upbound.io/v1beta1
+            kind: Workspace
+            metadata:
+              name: example-inline
+              annotations:
+                gotemplating.fn.crossplane.io/composition-resource-name: inline-test
+                gotemplating.fn.crossplane.io/ready: "True"
+            spec:
+              forProvider:
+                source: Inline
+                module: |
+                  output "hello_world" {
+                    value = "{{ .observed.composite.resource.spec.name }}!"
+                  }
+              writeConnectionSecretToRef:
+                namespace: default
+                name: terraform-workspace-example-inline
+            ---
+            apiVersion: resources.stuttgart-things.com/v1alpha1
+            kind: XVsphereRke2Cluster
+            status:
+            {{ if eq $.observed.resources nil }}
+              dummy: cool-status
+            {{ else }}
+              dummy: {{ (index $.observed.resources "inline-test").resource.status.atProvider.outputs.hello_world }}
+            {{ end }}
+            ---
+    - step: inline-wks-2
+      functionRef:
+        name: function-patch-and-transform
+      input:
+        apiVersion: pt.fn.crossplane.io/v1beta1
+        environment: null
+        kind: Resources
+        patchSets: []
+        resources:
+          - name: example-inline-2
+            base:
+              apiVersion: tf.upbound.io/v1beta1
+              kind: Workspace
+              metadata:
+                name: example-inline-2
+                annotations:
+                  crossplane.io/external-name: inline-wks-2
+              spec:
+                forProvider:
+                  source: Inline
+                  vars:
+                    - key: vpcName
+                      value: pat
+
+                  module: |
+                    output "hello_world" {
+                      value = var.vpcName
+                    }
+                    provider "random" {}
+                    variable "ip_addresses" {
+                      default = ["192.168.1.1", "192.168.1.2", "192.168.1.3"]
+                    }
+
+                    resource "random_shuffle" "shuffled_ips" {
+                      input        = var.ip_addresses
+                      result_count = length(var.ip_addresses) # Shuffle all IPs
+                    }
+
+                    output "ansible_inventory" {
+                      value = <<EOT
+                    [initial_master_node]
+                    ${random_shuffle.shuffled_ips.result[0]}
+
+                    [additional_master_nodes]
+                    %{ for ip in slice(random_shuffle.shuffled_ips.result, 1, length(var.ip_addresses)) ~}
+                    ${ip}
+                    %{ endfor ~}
+                    EOT
+                    }
+
+                    variable "vpcName" {
+                      description = "VPC name"
+                      type        = string
+                    }
+                writeConnectionSecretToRef:
+                  namespace: default
+                  name: terraform-workspace-example-inline-2
+            patches:
+              - fromFieldPath: status.dummy
+                toFieldPath: spec.forProvider.vars[0].value
+                policy:
+                  fromFieldPath: Required

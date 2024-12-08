@@ -1,0 +1,175 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: xvsphererke2clusters.resources.stuttgart-things.com
+spec:
+  group: resources.stuttgart-things.com
+  names:
+    kind: XVsphereRke2Cluster
+    plural: xvsphererke2clusters
+  claimNames:
+    kind: VsphereRke2Cluster
+    plural: vsphererke2clusters
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                ansible:
+                  type: object
+                  properties:
+                    pipelineRunName:
+                      type: string
+                      description: Name of pipelineRun resource
+                    pipelineNamespace:
+                      type: string
+                      default: tektoncd
+                      description: Namespace of pipelineRun resource
+                    workingImage:
+                      type: string
+                      default: eu.gcr.io/stuttgart-things/sthings-ansible:10.3.0
+                      description: Name of pipelineRun resource
+                    vaultSecretName:
+                      type: string
+                      default: vault
+                      description: Name of vault secret
+                    gitRepoUrl:
+                      type: string
+                      default: https://github.com/stuttgart-things/stuttgart-things.git
+                      description: Git repo url
+                    gitRevision:
+                      type: string
+                      default: main
+                      description: Git revision
+                    ansibleVarsFile:
+                      type: array
+                      description: Ansible vars file as a list
+                      items:
+                        type: string
+                    roles:
+                      type: array
+                      description: Ansible roles
+                      items:
+                        type: string
+                    collections:
+                      type: array
+                      description: Ansible collections
+                      items:
+                        type: string
+                    playbooks:
+                      type: array
+                      description: Ansible playbooks
+                      items:
+                        type: string
+                    providerRef:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                      required:
+                        - name
+                  required:
+                    - pipelineRunName
+                    - providerRef
+                vm:
+                  type: object
+                  properties:
+                    count:
+                      type: string
+                      default: "1"
+                    name:
+                      type: string
+                    ram:
+                      type: string
+                      default: "4096"
+                    disk:
+                      type: string
+                      default: "64"
+                    cpu:
+                      type: string
+                      default: "4"
+                    firmware:
+                      type: string
+                      default: "bios"
+                    folderPath:
+                      type: string
+                    datacenter:
+                      type: string
+                    datastore:
+                      type: string
+                    resourcePool:
+                      type: string
+                    network:
+                      type: string
+                    template:
+                      type: string
+                    bootstrap:
+                      type: string
+                      default: '["echo STUTTGART-THINGS"]'
+                    annotation:
+                      type: string
+                      default: VSPHERE-VM BUILD w/ CROSSPLANE FOR STUTTGART-THINGS
+                    unverifiedSsl:
+                      type: string
+                      default: "true"
+                  required:
+                    - name
+                    - ram
+                    - disk
+                    - cpu
+                    - folderPath
+                    - datacenter
+                    - datastore
+                    - resourcePool
+                    - network
+                    - template
+                tfvars:
+                  type: object
+                  properties:
+                    secretName:
+                      type: string
+                    secretNamespace:
+                      type: string
+                      default: default
+                    secretKey:
+                      type: string
+                      default: terraform.tfvars
+                  required:
+                    - secretName
+                connectionSecret:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    namespace:
+                      type: string
+                      default: default
+                  required:
+                    - name
+                providerRef:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                  required:
+                    - name
+              required:
+                - vm
+                - tfvars
+                - connectionSecret
+                - providerRef
+            status:
+              description: A Status represents the observed state
+              properties:
+                share:
+                  description: Freeform field containing status information
+                  type: object
+                  x-kubernetes-preserve-unknown-fields: true
+              type: object

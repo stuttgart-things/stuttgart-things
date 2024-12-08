@@ -2,17 +2,17 @@
 apiVersion: resources.stuttgart-things.com/v1alpha1
 kind: Minio
 metadata:
-  name: incluster
+  name: fluxdev-2
   namespace: crossplane-system
 spec:
-  clusterName: incluster
+  clusterName: fluxdev-2
   deploymentNamespace: minio
   storageClass: nfs4-csi
   storageSize: 8Gi
   version: 14.8.0
   hostNameApi: artifacts
   hostNameConsole: artifacts-console
-  domainName: fluxdev-3.sthings-vsphere.labul.sva.de
+  domainName: fluxdev-2.sthings-vsphere.labul.sva.de
   cert:
     issuerName: cluster-issuer-
     certSecretApi: artifacts-ingress-tls
