@@ -99,23 +99,28 @@ spec:
             fromFieldPath: Required
           toFieldPath: status.share.ip
           transforms:
-          - string:
-              join:
-                separator: ','
-              type: Join
-            type: string
-          - string:
-              trim: '['
-              type: TrimPrefix
-            type: string
-          - string:
-              trim: ']'
-              type: TrimSuffix
-            type: string
-          - string:
-              fmt: all+["%s"]
-              type: Format
-            type: string
+            - string:
+                join:
+                  separator: ','
+                type: Join
+              type: string
+            - string:
+                trim: '['
+                type: TrimPrefix
+              type: string
+            - string:
+                trim: ']'
+                type: TrimSuffix
+              type: string
+            - string:
+                fmt: all+["%s"]
+                type: Format
+              type: string
+          type: ToCompositeFieldPath
+        - fromFieldPath: status.share.ip
+          policy:
+            fromFieldPath: Required
+          toFieldPath: status.share.ips
           type: ToCompositeFieldPath
       - base:
           apiVersion: resources.stuttgart-things.com/v1alpha1
