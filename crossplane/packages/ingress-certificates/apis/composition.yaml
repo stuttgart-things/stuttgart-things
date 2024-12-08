@@ -64,5 +64,12 @@ spec:
           toFieldPath: spec.forProvider.manifest.spec.issuerRef.kind
         - fromFieldPath: spec.certSecretName
           toFieldPath: spec.forProvider.manifest.spec.secretName
-        - fromFieldPath: spec.hostName
+        - type: CombineFromComposite
+          combine:
+            variables:
+              - fromFieldPath: spec.hostName
+              - fromFieldPath: spec.clusterName
+            strategy: string
+            string:
+              fmt: "%s-%s"
           toFieldPath: metadata.name

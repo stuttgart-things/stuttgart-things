@@ -121,6 +121,12 @@ spec:
           policy:
             fromFieldPath: Required
           toFieldPath: status.share.ips
+          transforms:
+            - string:
+                join:
+                  separator: '-'
+                type: Join
+              type: string
           type: ToCompositeFieldPath
       - base:
           apiVersion: resources.stuttgart-things.com/v1alpha1
@@ -138,9 +144,15 @@ spec:
             fromFieldPath: Required
           toFieldPath: spec.inventory[0]
           type: FromCompositeFieldPath
-        - fromFieldPath: spec.ansible.pipelineRunName
+        - combine:
+            strategy: string
+            string:
+              fmt: '%s-%s'
+            variables:
+            - fromFieldPath: metadata.name
+            - fromFieldPath: status.share.ips
           toFieldPath: spec.pipelineRunName
-          type: FromCompositeFieldPath
+          type: CombineFromComposite
         - fromFieldPath: spec.ansible.pipelineNamespace
           toFieldPath: spec.pipelineNamespace
           type: FromCompositeFieldPath

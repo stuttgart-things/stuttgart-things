@@ -10,7 +10,7 @@ spec:
   providerRef:
     name: default
   vm:
-    count: "2"
+    count: "1"
     name: xplane-new53
     cpu: "6"
     ram: "4096"

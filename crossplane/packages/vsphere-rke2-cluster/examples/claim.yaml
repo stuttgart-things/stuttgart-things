@@ -2,7 +2,7 @@
 apiVersion: resources.stuttgart-things.com/v1alpha1
 kind: VsphereRke2Cluster
 metadata:
-  name: xplane-new51
+  name: xplane-new53
   namespace: crossplane-system
 spec:
   compositionRef:
@@ -10,8 +10,8 @@ spec:
   providerRef:
     name: default
   vm:
-    count: "1"
-    name: xplane-new51
+    count: "2"
+    name: xplane-new53
     cpu: "6"
     ram: "4096"
     disk: "64"
@@ -22,20 +22,17 @@ spec:
     resourcePool: /LabUL/host/Cluster-V6.5/Resources
     network: /LabUL/network/LAB-10.31.103
     template: sthings-u24
-    bootstrap: '["echo STUTTGART-THINGS"]'
-    annotation: VSPHERE-VM BUILD w/ CROSSPLANE FOR STUTTGART-THINGS
-    unverifiedSsl: "true"
   tfvars:
     secretName: vsphere-tfvars
     secretNamespace: crossplane-system
     secretKey: terraform.tfvars
   connectionSecret:
-    name: xplane-new51
+    name: xplane-new53
     namespace: crossplane-system
   ansible:
-    pipelineRunName: baseos-xplane-new51
+    pipelineRunName: baseos-xplane-new53
     # inventory:
-    #   - "all+[\"xplane-new51.labul.sva.de\"]"
+    #   - "all+[\"xplane-new53.labul.sva.de\"]"
     playbooks:
       - "ansible/playbooks/prepare-env.yaml"
       - "ansible/playbooks/base-os.yaml"

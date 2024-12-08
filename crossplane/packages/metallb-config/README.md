@@ -1,36 +1,49 @@
 # stuttgart-things/crossplane/metallb-config
 
+## CLAIM
+
+
+
+
+## CONFIGURATION
+
+
+
+
+## FUNCTIONS
+
+```bash
+kubectl apply -f - <<EOF
+---
+apiVersion: pkg.crossplane.io/v1beta1
+kind: Function
+metadata:
+  name: function-go-templating
+spec:
+  package: xpkg.upbound.io/crossplane-contrib/function-go-templating:v0.8.0
+---
+apiVersion: pkg.crossplane.io/v1beta1
+kind: Function
+metadata:
+  name: function-patch-and-transform
+spec:
+  package: xpkg.upbound.io/crossplane-contrib/function-patch-and-transform:v0.7.0
+EOF
+```
+
 ## PROVIDER-CONFIG
 
 ### CREATE KUBECONFIG AS A SECRET FROM LOCAL FILE
 
 ```bash
 CROSSPLANE_NAMESPACE=crossplane-system
-CLUSTER_NAME=local
+CLUSTER_NAME=test-cluster
 FOLDER_KUBECONFIG=~/.kube/
 FILENAME_KUBECONFIG=rke2.yaml
 ```
 
 ```bash
 kubectl -n ${CROSSPLANE_NAMESPACE} create secret generic ${CLUSTER_NAME} --from-file=${FOLDER_KUBECONFIG}/${FILENAME_KUBECONFIG}
-```
-
-### CREATE KUBERNETES PROVIDER CONFIG
-
-```bash
-kubectl apply -f - <<EOF
-apiVersion: kubernetes.crossplane.io/v1alpha1
-kind: ProviderConfig
-metadata:
-  name: ${CLUSTER_NAME}
-spec:
-  credentials:
-    source: Secret
-    secretRef:
-      namespace: ${CROSSPLANE_NAMESPACE}
-      name: ${CLUSTER_NAME}
-      key: ${FILENAME_KUBECONFIG}
-EOF
 ```
 
 ### CREATE KUBERNETES PROVIDER CONFIG

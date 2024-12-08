@@ -12,7 +12,7 @@ metadata:
       deploys XArgoCd w/ crossplane
 spec:
   crossplane:
-    version: ">=&gt;=v1.14.1-0"
+    version: ">=v1.14.1-0"
   dependsOn:
     - provider: xpkg.upbound.io/crossplane-contrib/provider-helm
       version: ">=v0.19.0"
