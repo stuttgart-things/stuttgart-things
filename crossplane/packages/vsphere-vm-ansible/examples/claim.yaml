@@ -12,7 +12,7 @@ spec:
   vm:
     count: "1"
     name: xplane-new53
-    cpu: "6"
+    cpu: "8kube"
     ram: "4096"
     disk: "96"
     firmware: bios
@@ -34,8 +34,6 @@ spec:
     namespace: crossplane-system
   ansible:
     pipelineRunName: baseos-xplane-new53
-    # inventory:
-    #   - "all+[\"xplane-new53.labul.sva.de\"]"
     playbooks:
       - "ansible/playbooks/prepare-env.yaml"
       - "ansible/playbooks/base-os.yaml"
@@ -59,9 +57,20 @@ spec:
     workingImage: ghcr.io/stuttgart-things/sthings-ansible:11.0.0
     roles:
       - "https://github.com/stuttgart-things/install-requirements.git,2024.05.11"
-      - "https://github.com/stuttgart-things/manage-filesystem.git,2024.05.15"
+      - "https://github.com/stuttgart-things/manage-filesystem.git,2024.06.07"
       - "https://github.com/stuttgart-things/install-configure-vault.git"
       - "https://github.com/stuttgart-things/create-send-webhook.git,2024-06-06"
     collections:
-      - https://github.com/stuttgart-things/stuttgart-things/releases/download/0.5.0/sthings-base_os-0.5.0.tar.gz
-      - community.crypto:2.10.0
+      - community.crypto:2.22.3
+      - community.general:10.1.0
+      - ansible.posix:2.0.0
+      - kubernetes.core:5.0.0
+      - community.docker:4.1.0
+      - community.vmware:5.2.0
+      - awx.awx:24.6.1
+      - community.hashi_vault:6.2.0
+      - ansible.netcommon:7.1.0
+      - https://artifacts.homerun-dev.sthings-vsphere.labul.sva.de/ansible-collections/sthings-container-24.612.59.tar.gz
+      - https://artifacts.homerun-dev.sthings-vsphere.labul.sva.de/ansible-collections/sthings-deploy_rke-24.2843.39.tar.gz
+      - https://github.com/stuttgart-things/stuttgart-things/releases/download/0.0.86/sthings-awx-0.0.86.tar.gz
+      - https://artifacts.homerun-dev.sthings-vsphere.labul.sva.de/ansible-collections/sthings-base_os-24.21.29.tar.gz
