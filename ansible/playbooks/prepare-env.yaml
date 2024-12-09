@@ -18,6 +18,7 @@
       ansible.builtin.set_fact:
         target_hosts: "{{ targets_list | join('\n') }}"
       when: inventory_groups is not defined
+      ignore_errors: true
 
     - name: Write vars on inv file
       ansible.builtin.blockinfile:
@@ -25,11 +26,19 @@
         block: |
           [all]
           {{ target_hosts }}
+      when: inventory_groups is not defined
+      ignore_errors: true
 
+    - name: Append lines to the end of the file
+      ansible.builtin.blockinfile:
+        path: "{{ inv_path }}"
+        block: |
           [all:vars]
           ansible_user=sthings
           host_key_checking=false
+        insertafter: EOF
       when: inventory_groups is not defined
+      ignore_errors: false
 
     - ansible.builtin.set_fact:
         inventory_file: |
