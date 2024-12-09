@@ -197,12 +197,11 @@ spec:
         #!/usr/bin/env sh
         set -eu
 
-        # Check if the variable is empty
         if [[ -z "${INVENTORY}" ]]; then
           echo "INVENTORY IS EMPTY - CREATING DEFAULT INVENTORY"
           touch ./inventory
         else
-          echo "${INVENTORY}" | base64 --decode > ./inventory 2>/dev/null
+          echo ${INVENTORY} | base64 -d > ./inventory
           cat ./inventory
         fi
 
