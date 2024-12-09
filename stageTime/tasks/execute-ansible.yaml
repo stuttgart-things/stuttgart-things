@@ -202,8 +202,7 @@ spec:
           echo "INVENTORY IS EMPTY - CREATING DEFAULT INVENTORY"
           touch ./inventory
         else
-          echo "${INVENTORY}" | base64 --decode > ./inventory 2>/dev/null; then
-          echo "DECODED BASE64 DATA HAS BEEN WRITTEN TO ./inventory"
+          echo "${INVENTORY}" | base64 --decode > ./inventory 2>/dev/null
           cat ./inventory
         fi
 
