@@ -107,8 +107,6 @@ spec:
           value: $(params.installExtraRoles)
         - name: INSTALL_EXTRA_COLLECTIONS
           value: $(params.installExtraCollections)
-        - name: INSTALL_EXTRA_COLLECTIONS
-          value: $(params.installExtraCollections)
         - name: INVENTORY
           value: $(params.inventory)
         - name: PLAYBOOKS
