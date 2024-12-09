@@ -12,7 +12,8 @@ spec:
     kind: XVsphereVmAnsible
   mode: Pipeline
   pipeline:
-  - functionRef:
+  - step: create-vsphere-vm
+    functionRef:
       name: function-patch-and-transform
     input:
       apiVersion: pt.fn.crossplane.io/v1beta1
@@ -128,60 +129,216 @@ spec:
                 type: Join
               type: string
           type: ToCompositeFieldPath
-      - base:
-          apiVersion: resources.stuttgart-things.com/v1alpha1
-          kind: XAnsibleRun
-        name: ansible-run
-        patches:
-        - fromFieldPath: metadata.name
-          toFieldPath: metadata.name
-          type: FromCompositeFieldPath
-        - fromFieldPath: metadata.namespace
-          toFieldPath: metadata.namespace
-          type: FromCompositeFieldPath
-        - fromFieldPath: status.share.ip
-          policy:
-            fromFieldPath: Required
-          toFieldPath: spec.inventory[0]
-          type: FromCompositeFieldPath
-        - combine:
-            strategy: string
-            string:
-              fmt: '%s-%s'
-            variables:
-            - fromFieldPath: metadata.name
+  - step: create-ansible-inventory
+    functionRef:
+      name: function-patch-and-transform
+    input:
+      apiVersion: pt.fn.crossplane.io/v1beta1
+      environment: null
+      kind: Resources
+      patchSets: []
+      resources:
+        - name: create-ansible-inventory
+          base:
+            apiVersion: tf.upbound.io/v1beta1
+            kind: Workspace
+            metadata:
+              name: create-ansible-inventory
+              annotations:
+                crossplane.io/external-name: create-ansible-inventory
+            spec:
+              forProvider:
+                source: Inline
+                vars:
+                  - key: ipAddrs
+                    value: pat
+                module: |
+                  provider "random" {}
+
+                  locals {
+                    ip_addresses = split("-", var.ipAddrs)
+                  }
+
+                  resource "random_shuffle" "shuffled_ips" {
+                    input        = local.ip_addresses
+                    result_count = length(local.ip_addresses) # Shuffle all IPs
+                  }
+
+                  output "ips" {
+                    value = var.ipAddrs
+                  }
+
+                  output "ansible_inventory" {
+                    value = <<EOT
+                  [initial_master_node]
+                  ${random_shuffle.shuffled_ips.result[0]}
+
+                  [additional_master_nodes]
+                  %{ for ip in slice(random_shuffle.shuffled_ips.result, 1, length(local.ip_addresses)) ~}
+                  ${ip}
+                  %{ endfor ~}
+                  EOT
+                  }
+
+                  variable "ipAddrs" {
+                    description = "Ip addresses"
+                    type        = string
+                  }
+              writeConnectionSecretToRef:
+                namespace: default
+                name: terraform-workspace-create-ansible-inventory
+          patches:
             - fromFieldPath: status.share.ips
-          toFieldPath: spec.pipelineRunName
-          type: CombineFromComposite
-        - fromFieldPath: spec.ansible.pipelineNamespace
-          toFieldPath: spec.pipelineNamespace
-          type: FromCompositeFieldPath
-        - fromFieldPath: spec.ansible.workingImage
-          toFieldPath: spec.workingImage
-          type: FromCompositeFieldPath
-        - fromFieldPath: spec.ansible.vaultSecretName
-          toFieldPath: spec.vaultSecretName
-          type: FromCompositeFieldPath
-        - fromFieldPath: spec.ansible.gitRepoUrl
-          toFieldPath: spec.gitRepoUrl
-          type: FromCompositeFieldPath
-        - fromFieldPath: spec.ansible.gitRevision
-          toFieldPath: spec.gitRevision
-          type: FromCompositeFieldPath
-        - fromFieldPath: spec.ansible.ansibleVarsFile
-          toFieldPath: spec.ansibleVarsFile
-          type: FromCompositeFieldPath
-        - fromFieldPath: spec.ansible.roles
-          toFieldPath: spec.roles
-          type: FromCompositeFieldPath
-        - fromFieldPath: spec.ansible.collections
-          toFieldPath: spec.collections
-          type: FromCompositeFieldPath
-        - fromFieldPath: spec.ansible.playbooks
-          toFieldPath: spec.playbooks
-          type: FromCompositeFieldPath
-        - fromFieldPath: spec.ansible.providerRef.name
-          toFieldPath: spec.providerRef.name
-          type: FromCompositeFieldPath
-    step: patch-and-transform
-  writeConnectionSecretsToNamespace: crossplane-system
+              toFieldPath: spec.forProvider.vars[0].value
+              policy:
+                fromFieldPath: Required
+            - type: ToCompositeFieldPath
+              fromFieldPath: status.atProvider.outputs.ansible_inventory
+              toFieldPath: status.share.ansible_inventory
+              policy:
+                fromFieldPath: Required
+              transforms:
+                - type: string
+                  string:
+                    type: Convert
+                    convert: "ToBase64"
+  - step: create-pipelinerun-id
+    functionRef:
+      name: function-patch-and-transform
+    input:
+      apiVersion: pt.fn.crossplane.io/v1beta1
+      environment: null
+      kind: Resources
+      patchSets: []
+      resources:
+        - name: create-pipelinerun-id
+          base:
+            apiVersion: tf.upbound.io/v1beta1
+            kind: Workspace
+            metadata:
+              name: create-pipelinerun-id
+              annotations:
+                crossplane.io/external-name: create-pipelinerun-id
+            spec:
+              forProvider:
+                source: Inline
+                vars:
+                  - key: ipAddrs
+                    value: pat
+                module: |
+                  provider "local" {}
+
+                  locals {
+                    ip_addresses = split("-", var.ipAddrs)
+                  }
+
+                  # Combine the calendar date and IP addresses to create a unique, deterministic ID
+                  resource "null_resource" "generate_id" {
+                    triggers = {
+                      # Format the current timestamp to get only the calendar date (YYYY-MM-DD)
+                      current_day = formatdate("YYYY-MM-DD", timestamp())
+                      ips         = join(",", local.ip_addresses)
+                    }
+                  }
+
+                  output "generated_id" {
+                    value = substr(sha256("${null_resource.generate_id.triggers.current_day}-${null_resource.generate_id.triggers.ips}"), -10, -1)
+                  }
+
+                  variable "ipAddrs" {
+                    description = "Ip addresses"
+                    type        = string
+                  }
+              writeConnectionSecretToRef:
+                namespace: default
+                name: terraform-workspace-create-pipelinerun-id
+          patches:
+            - fromFieldPath: status.share.ips
+              toFieldPath: spec.forProvider.vars[0].value
+              policy:
+                fromFieldPath: Required
+            - type: ToCompositeFieldPath
+              fromFieldPath: status.atProvider.outputs.generated_id
+              toFieldPath: status.share.pid
+              policy:
+                fromFieldPath: Required
+  - step: tekton-ansible-run
+    functionRef:
+      name: function-patch-and-transform
+    input:
+      apiVersion: pt.fn.crossplane.io/v1beta1
+      environment: null
+      kind: Resources
+      patchSets: []
+      resources:
+        - name: ansible-run
+          base:
+            apiVersion: resources.stuttgart-things.com/v1alpha1
+            kind: XAnsibleRun
+          name: ansible-run
+          patches:
+          - fromFieldPath: metadata.name
+            toFieldPath: metadata.name
+            type: FromCompositeFieldPath
+          - fromFieldPath: metadata.namespace
+            toFieldPath: metadata.namespace
+            type: FromCompositeFieldPath
+          - fromFieldPath: status.share.ip
+            policy:
+              fromFieldPath: Required
+            toFieldPath: spec.inventory[0]
+            type: FromCompositeFieldPath
+          - combine:
+              strategy: string
+              string:
+                fmt: '%s-%s'
+              variables:
+              - fromFieldPath: metadata.name
+              - fromFieldPath: status.share.pid
+            toFieldPath: spec.pipelineRunName
+            type: CombineFromComposite
+          - fromFieldPath: spec.ansible.pipelineNamespace
+            toFieldPath: spec.pipelineNamespace
+            type: FromCompositeFieldPath
+          - fromFieldPath: spec.ansible.workingImage
+            toFieldPath: spec.workingImage
+            type: FromCompositeFieldPath
+          - fromFieldPath: spec.ansible.vaultSecretName
+            toFieldPath: spec.vaultSecretName
+            type: FromCompositeFieldPath
+          - fromFieldPath: spec.ansible.gitRepoUrl
+            toFieldPath: spec.gitRepoUrl
+            type: FromCompositeFieldPath
+          - fromFieldPath: spec.ansible.gitRevision
+            toFieldPath: spec.gitRevision
+            type: FromCompositeFieldPath
+          - fromFieldPath: spec.ansible.ansibleVarsFile
+            toFieldPath: spec.ansibleVarsFile
+            type: FromCompositeFieldPath
+          - fromFieldPath: spec.ansible.roles
+            toFieldPath: spec.roles
+            type: FromCompositeFieldPath
+          - fromFieldPath: spec.ansible.collections
+            toFieldPath: spec.collections
+            type: FromCompositeFieldPath
+          - fromFieldPath: spec.ansible.playbooks
+            toFieldPath: spec.playbooks
+            type: FromCompositeFieldPath
+          - fromFieldPath: spec.ansible.providerRef.name
+            toFieldPath: spec.providerRef.name
+            type: FromCompositeFieldPath
+          - type: ToCompositeFieldPath
+            fromFieldPath: status.share.completionMessage
+            toFieldPath: status.share.completionMessage
+            policy:
+              fromFieldPath: Required
+          - type: ToCompositeFieldPath
+            fromFieldPath: status.share.prStatus
+            toFieldPath: status.share.prStatus
+            policy:
+              fromFieldPath: Required
+          - type: ToCompositeFieldPath
+            fromFieldPath: status.share.prCompletion
+            toFieldPath: status.share.prCompletion
+            policy:
+              fromFieldPath: Required

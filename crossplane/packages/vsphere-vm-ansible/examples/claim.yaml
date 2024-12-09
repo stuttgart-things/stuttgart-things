@@ -2,7 +2,7 @@
 apiVersion: resources.stuttgart-things.com/v1alpha1
 kind: VsphereVmAnsible
 metadata:
-  name: xplane-new53
+  name: monday4
   namespace: crossplane-system
 spec:
   compositionRef:
@@ -11,8 +11,8 @@ spec:
     name: default
   vm:
     count: "1"
-    name: xplane-new53
-    cpu: "8kube"
+    name: monday4
+    cpu: "8"
     ram: "4096"
     disk: "96"
     firmware: bios
@@ -30,10 +30,10 @@ spec:
     secretNamespace: crossplane-system
     secretKey: terraform.tfvars
   connectionSecret:
-    name: xplane-new53
+    name: monday4
     namespace: crossplane-system
   ansible:
-    pipelineRunName: baseos-xplane-new53
+    pipelineRunName: baseos-monday4-1
     playbooks:
       - "ansible/playbooks/prepare-env.yaml"
       - "ansible/playbooks/base-os.yaml"

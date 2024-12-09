@@ -46,6 +46,10 @@ spec:
       type: string
       default: "false"
       description: create inventory
+    - name: inventory
+      type: string
+      default: ""
+      description: inventory as b64 string
     - name: vaultSecretName
       type: string
       default: vault
@@ -103,8 +107,10 @@ spec:
           value: $(params.installExtraRoles)
         - name: INSTALL_EXTRA_COLLECTIONS
           value: $(params.installExtraCollections)
-        - name: INVENTORY_VARS
-          value: $(params.ansibleVarsInventory[*])
+        - name: INSTALL_EXTRA_COLLECTIONS
+          value: $(params.installExtraCollections)
+        - name: INVENTORY
+          value: $(params.inventory)
         - name: PLAYBOOKS
           value: $(params.ansiblePlaybooks[*])
         - name: TARGET_HOST

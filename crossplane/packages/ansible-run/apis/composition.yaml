@@ -18,6 +18,10 @@ spec:
           providerConfigRef:
             name: kubernetes-labul-bootstrap
           forProvider:
+            readinessChecks:
+              - type: MatchString
+                fieldPath: "status.conditions[?(@.type=='Succeeded')].status"
+                matchString: "True"
             manifest:
               apiVersion: tekton.dev/v1
               kind: PipelineRun
