@@ -110,7 +110,7 @@ spec:
         - name: INVENTORY
           value: $(params.inventory)
         - name: INVENTORY_VARS
-          value: $(params.ansibleVarsInventory)
+          value: $(params.ansibleVarsInventory[*])
         - name: PLAYBOOKS
           value: $(params.ansiblePlaybooks[*])
         - name: TARGET_HOST

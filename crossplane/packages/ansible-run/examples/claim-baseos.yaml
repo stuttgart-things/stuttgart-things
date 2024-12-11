@@ -3,10 +3,10 @@
 apiVersion: resources.stuttgart-things.com/v1alpha1
 kind: AnsibleRun
 metadata:
-  name: baseos-k3s-sprechstunde7
+  name: baseos-k3s-sprechstunde10
   namespace: crossplane-system
 spec:
-  pipelineRunName: baseos-k3s-sprechstunde7
+  pipelineRunName: baseos-k3s-sprechstunde10
   inventory:
    - "all+[\"k3s-sprechstunde.labul.sva.de'\"]"
   createInventory: "true"
