@@ -69,6 +69,8 @@ spec:
                     - community.crypto:2.10.0
                   - name: installExtraCollections
                     value: "true"
+                  - name: inventory
+                    value: ""
       patches:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.pipelineRunName
@@ -79,6 +81,9 @@ spec:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.workingImage
           toFieldPath: spec.forProvider.manifest.spec.params[0].value
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.createInventory
+          toFieldPath: spec.forProvider.manifest.spec.params[1].value
         - type: FromCompositeFieldPath
           fromFieldPath: spec.gitRepoUrl
           toFieldPath: spec.forProvider.manifest.spec.params[2].value
@@ -103,6 +108,9 @@ spec:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.collections
           toFieldPath: spec.forProvider.manifest.spec.params[11].value
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.inventoryFile
+          toFieldPath: spec.forProvider.manifest.spec.params[13].value
         - type: FromCompositeFieldPath
           fromFieldPath: spec.providerRef.name
           toFieldPath: spec.providerConfigRef.name

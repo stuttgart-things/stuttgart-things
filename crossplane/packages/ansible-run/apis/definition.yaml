@@ -58,6 +58,15 @@ spec:
                   description: Ansible inventory as a list
                   items:
                     type: string
+                  default:
+                    - ""
+                createInventory:
+                  type: string
+                  description: create inventory from list values in inventory field or not
+                  default: "true"
+                inventoryFile:
+                  type: string
+                  description: inventory file (b64 encoded)
                 roles:
                   type: array
                   description: Ansible roles

@@ -47,14 +47,14 @@ metadata:
   name: ingress-certificates
 spec:
   package: ghcr.io/stuttgart-things/stuttgart-things/xplane-ingress-certificates:0.1.0
----
-apiVersion: pkg.crossplane.io/v1
-kind: Configuration
-metadata:
-  name: ansible-run
-spec:
-  package: ghcr.io/stuttgart-things/stuttgart-things/xplane-ansible-run:0.1.0
----
+# ---
+# apiVersion: pkg.crossplane.io/v1
+# kind: Configuration
+# metadata:
+#   name: ansible-run
+# spec:
+#   package: ghcr.io/stuttgart-things/stuttgart-things/xplane-ansible-run:0.1.0
+# ---
 apiVersion: pkg.crossplane.io/v1
 kind: Configuration
 metadata:
