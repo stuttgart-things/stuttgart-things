@@ -55,16 +55,19 @@ spec:
                       description: Ansible vars file as a list
                       items:
                         type: string
-                    # inventory:
-                    #   type: array
-                    #   description: Ansible inventory as a list
-                    #   items:
-                    #     type: string
+                    createInventory:
+                      type: string
+                      default: "false"
+                      description: Create ansible inventory or not
                     roles:
                       type: array
                       description: Ansible roles
                       items:
                         type: string
+                    provisioningName:
+                      type: string
+                      default: initial
+                      description: name of provisioning
                     collections:
                       type: array
                       description: Ansible collections

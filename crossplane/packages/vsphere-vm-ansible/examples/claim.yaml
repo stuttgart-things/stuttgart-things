@@ -2,7 +2,7 @@
 apiVersion: resources.stuttgart-things.com/v1alpha1
 kind: VsphereVmAnsible
 metadata:
-  name: monday4
+  name: wednesday6
   namespace: crossplane-system
 spec:
   compositionRef:
@@ -11,7 +11,7 @@ spec:
     name: default
   vm:
     count: "1"
-    name: monday4
+    name: wednesday6
     cpu: "8"
     ram: "4096"
     disk: "96"
@@ -34,6 +34,7 @@ spec:
     namespace: crossplane-system
   ansible:
     pipelineRunName: baseos-monday4-1
+    provisioningName: baseAgain
     playbooks:
       - "ansible/playbooks/prepare-env.yaml"
       - "ansible/playbooks/base-os.yaml"

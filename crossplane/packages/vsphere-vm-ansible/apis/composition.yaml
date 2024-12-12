@@ -224,7 +224,9 @@ spec:
                 source: Inline
                 vars:
                   - key: ipAddrs
-                    value: pat
+                    value: unset
+                  - key: provisioning
+                    value: unset
                 module: |
                   provider "local" {}
 
@@ -242,11 +244,17 @@ spec:
                   }
 
                   output "generated_id" {
-                    value = substr(sha256("${null_resource.generate_id.triggers.current_day}-${null_resource.generate_id.triggers.ips}"), -10, -1)
+                    value = substr(sha256("${null_resource.generate_id.triggers.current_day}-${null_resource.generate_id.triggers.ips}-${var.provisioning}"), -12, -1)
                   }
 
                   variable "ipAddrs" {
                     description = "Ip addresses"
+                    type        = string
+                  }
+
+                  variable "provisioning" {
+                    description = "provisioning name"
+                    default     = "initial"
                     type        = string
                   }
               writeConnectionSecretToRef:
@@ -257,6 +265,9 @@ spec:
               toFieldPath: spec.forProvider.vars[0].value
               policy:
                 fromFieldPath: Required
+            - fromFieldPath: spec.ansible.provisioningName
+              toFieldPath: spec.forProvider.vars[1].value
+              type: FromCompositeFieldPath
             - type: ToCompositeFieldPath
               fromFieldPath: status.atProvider.outputs.generated_id
               toFieldPath: status.share.pid
@@ -327,18 +338,11 @@ spec:
           - fromFieldPath: spec.ansible.providerRef.name
             toFieldPath: spec.providerRef.name
             type: FromCompositeFieldPath
-          - type: ToCompositeFieldPath
-            fromFieldPath: status.share.completionMessage
-            toFieldPath: status.share.completionMessage
+          - fromFieldPath: spec.ansible.createInventory
+            toFieldPath: spec.createInventory
+            type: FromCompositeFieldPath
+          - fromFieldPath: status.share.ansible_inventory
             policy:
               fromFieldPath: Required
-          - type: ToCompositeFieldPath
-            fromFieldPath: status.share.prStatus
-            toFieldPath: status.share.prStatus
-            policy:
-              fromFieldPath: Required
-          - type: ToCompositeFieldPath
-            fromFieldPath: status.share.prCompletion
-            toFieldPath: status.share.prCompletion
-            policy:
-              fromFieldPath: Required
+            toFieldPath: spec.inventoryFile
+            type: FromCompositeFieldPath

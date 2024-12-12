@@ -16,6 +16,22 @@
     send_to_msteams: true
     msteams_webhook_url: "https://365sva.webhook.office.com/webhookb2/2f14a9f8-4736-46dd-9c8c-31547ec37180@0a65cb1e-37d5-41ff-980a-647d9d0e4f0b/IncomingWebhook/37a805a0a2624dc2ac1aedd7dec6ad49/dc3a27ed-396c-40b7-a9b2-f1a2b6b44efe"
 
+    # HOMERUN
+    address: "https://homerun.homerun-dev.sthings-vsphere.labul.sva.de/generic"
+    auth_token: "IhrGeheimerToken"
+    event_title: "BaseOS Setup executed"
+    event_message: "BaseOS Setup executed on {{ ansible_fqdn }}"
+    event_severity: "INFO"
+    event_author: "{{ ansible_user_id }}"
+    event_timestamp: "{{ ansible_date_time.date }}"
+    event_system: "ansible"
+    event_tags: "ansible,baseos"
+    assignee_address: "patrick.hermann@sva.de"
+    assignee_name: "patrick.hermann"
+    event_artifacts: "vm: {{ ansible_fqdn }}"
+    event_url: "https://10.31.101.51/"
+
+
     vault_instances:
       - https://vault.tiab.labda.sva.de:8200
       - https://vault.labul.sva.de:8200
@@ -66,3 +82,32 @@
       tags: notify
       ignore_errors: true
       when: send_to_msteams|bool
+
+    - name: Send event notification to homerun
+      ansible.builtin.uri:
+        url: "{{ address }}"
+        method: POST
+        headers:
+          Content-Type: "application/json"
+          X-Auth-Token: "{{ auth_token }}"
+        body: >
+          {
+            "title": "{{ event_title }}",
+            "message": "{{ event_message }}",
+            "severity": "{{ event_severity }}",
+            "author": "{{ event_author }}",
+            "timestamp": "{{ event_timestamp }}",
+            "system": "{{ event_system }}",
+            "tags": "{{ event_tags }}",
+            "assigneeaddress": "{{ assignee_address }}",
+            "assigneename": "{{ assignee_name }}",
+            "artifacts": "{{ event_artifacts }}",
+            "url": "{{ event_url }}"
+          }
+        body_format: json
+        validate_certs: false
+      register: homerun_result_message
+
+    - name: Debug the response from homerun
+      debug:
+        var: homerun_result_message
