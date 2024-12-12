@@ -1,7 +1,7 @@
 ---
 binary:
   - glab:
-      url: https://gitlab.com/gitlab-org/cli/-/releases/v1.49.0/downloads/glab_1.49.0_linux_amd64.tar.gz
+      url: https://gitlab.com/gitlab-org/cli/-/releases/v{{ .version }}/downloads/glab_{{ .version }}_linux_amd64.tar.gz
       bin: bin/glab
       version: 1.50.0 # datasource=gitlab-tags depName=gitlab-org/cli
   - argocd:

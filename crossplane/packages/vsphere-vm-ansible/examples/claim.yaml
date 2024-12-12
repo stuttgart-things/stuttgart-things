@@ -34,7 +34,7 @@ spec:
     namespace: crossplane-system
   ansible:
     pipelineRunName: baseos-monday4-1
-    provisioningName: baseAgain
+    provisioningName: testHomerun
     playbooks:
       - "ansible/playbooks/prepare-env.yaml"
       - "ansible/playbooks/base-os.yaml"
